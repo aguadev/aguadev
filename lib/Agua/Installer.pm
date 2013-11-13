@@ -981,9 +981,9 @@ sub installPerlMods {
     
     #### INSTALL MODULES IN LIST
     my @modules = split "\n", $contents;
-    foreach my $module ( @modules )
-    {
+    foreach my $module ( @modules ) {
         next if $module =~ /^#/;
+		next if $module =~ /^\s+$/;
 		print "Agua::Installer::installPerlMods    installing module: $module\n";
     	print "Agua::Installer::installPerlMods    Problem installing module $module\n" if not $self->cpanminusInstall($module);
     }
