@@ -33,9 +33,8 @@ constructor : function(args) {
 	this.startup();
 },
 startup : function () {
-	console.log("data.Controller.startup    plugins.data.Controller.startup()");
-	console.log("data.Controller.startup    Data: " + Data);
-	//console.dir({data:Data.data});
+	console.log("data.Controller.startup    Data.data: ");
+	console.dir({data:Data.data});
 	
 	if ( Data != null )
 	{
