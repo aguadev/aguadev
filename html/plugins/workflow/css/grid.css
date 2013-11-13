@@ -1,0 +1,191 @@
+/* ORIGINAL DndGridContainer.css STYLING, WITH CHANGE FOR
+  .dojoDndItemOver .dojoDndItemAnchor
+*/
+.dojoDndItemOver {
+    background-color: #FFEEBB !important;
+}
+.dojoDndItemSelected {
+    background: none repeat scroll 0 0 #CCCCFF;
+    color: #444444;
+}
+.dojoDndItemBefore {
+    border-top: 3px solid red;
+}
+.dojoDndItemAfter {
+    border-bottom: 3px solid red;
+}
+.dojoDndItemAnchor {
+    background: none repeat scroll 0 0 #CCCCFF;
+    color: black;
+}
+.dojoDndItemOver.dojoDndItemSelected {
+    background: none repeat scroll 0 0 #EECC88;
+}
+.dojoDndItemOver.dojoDndItemAnchor {
+    /*background: none repeat scroll 0 0 #FFEEBB !important;*/
+}
+.dojoDndAvatarItem {
+    background: none repeat scroll 0 0 #EEEEEE;
+}
+.dndDropIndicator {
+    border: 1px dashed #FF6600;
+    cursor: default;
+}
+
+
+/* PROJECT COMBO */
+.workflow .grid .projectCombo {
+    background: url() !important;
+    font-family: sans-serif;
+    font-size: 18px;
+    width: 185px;
+	/*text-indent: 2px;*/
+}
+
+.grid .gridContainerTable tbody,
+.grid .gridContainerTable tr {
+	height: auto !important;
+}
+
+.grid .dijitTitlePane .gripNode {
+    cursor: move;
+}
+
+.grid .dijitTitlePane .gripNode span {
+    cursor: pointer;
+}
+
+.grid .cpane{
+    font:bold 12px Arial;
+    color:#666;
+    background:#FFF;
+    margin:2px;
+}
+
+.grid .gridContainerZone > * {
+    margin: 0px !important;
+	outline: none !important;
+}
+
+.grid .gridContainerZone {
+    background-color: #FFF !important;
+    height: auto;
+    vertical-align: top;
+}
+
+.grid .workflowContainer {
+	/* NO DOTTED BORDER AROUND DIALOG */
+	outline: 0 none !important;
+    min-height: 100px;
+    height: auto;
+    width: 100% !important;
+    border:1px solid #ededed;
+    overflow-x:hidden;
+    overflow-y:auto;
+    border-collapse:collapse;
+    border : 1px solid #ededed;
+}
+
+.grid .stageContainer {
+    height: auto;
+    width: 98% !important;
+    overflow-x:hidden;
+    overflow-y:auto;
+    border-collapse:collapse;
+    border : 1px solid #ededed;
+}
+
+.grid .workflow {
+    min-height: 50px;
+    height: auto;
+}
+
+.grid .workflowContainer .gridContainerTable {
+    border-collapse:collapse;
+} 
+
+.grid .gridTable {
+    min-width: 250px;
+    width: auto !important;
+}
+
+.grid .stagerow {
+	width: 95% !important;
+}
+
+.grid .stagerow .name {
+	font-weight: bolder;
+	color: #222;
+	font-size: 14px;
+	text-align: left !important;
+
+	background-image: url(../../../plugins/workflow/images/app-18.png);
+	text-indent: 22px;
+	background-repeat: no-repeat;
+	height: 18px;
+}
+
+.grid .stagerow .number {
+	font-weight: bolder;
+    width: 30px !important;
+}
+
+.grid .dijitTitlePaneNumberNode {
+	color: #F00;
+	float: right;
+    font-weight: bold;
+}
+
+.grid .dojoDndContainerOver {
+	border: 0;
+}
+
+
+/* ALL BUTTONS */
+.grid .play,
+.grid .pause,
+.grid .stop {
+	background-color: #FFF;
+	border: 2px solid #EEE;
+	border-bottom-color: #DDD;	
+	border-left-color: #DDD;	
+	vertical-align: middle;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-image: url();
+	width: 32px;
+	height: 32px;
+}
+
+.grid .play:hover,
+.grid .pause:hover,
+.grid .stop:hover {
+	background-color: #FF0 !important;
+}
+
+.grid .play:active,
+.grid .pause:active,
+.grid .stop:active {
+	background-color: #0F0;
+}
+
+/* PLAY, PAUSE AND STOP */
+.grid .play {
+	background-image: url(../../../plugins/workflow/images/play-28.png);	
+}
+.grid .pause {
+	background-image: url(../../../plugins/workflow/images/pause-28.png);	
+}
+.grid .stop {
+	background-image: url(../../../plugins/workflow/images/stop-28.png);	
+}
+.grid .play:hover {
+	background-image: url(../../../plugins/workflow/images/play-wide-green-28.png);	
+}
+.grid .pause:hover {
+	background-image: url(../../../plugins/workflow/images/pause-orange-28.png);	
+}
+.grid .stop:hover {
+	background-image: url(../../../plugins/workflow/images/stop-red-28.png);	
+}
+

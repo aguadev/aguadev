@@ -1,0 +1,166 @@
+<div dojoAttachPoint="containerNode">
+    <table class="clusterRow" width="100%">
+        
+        <tr>
+			<td colspan="3" width="100%">
+			
+				<table width="100%">
+					<tr width="100%">
+						<td
+							dojoAttachEvent="onclick:toggle"
+							dojoAttachPoint="cluster"
+							class="cluster"
+							title="Cluster Name"
+						>${cluster}</td>
+						
+						<td class="nodesLabel">Min nodes</td>
+						<td class="minnodes">
+							<input
+								dojoAttachPoint="minnodes"
+								dojoAttachEvent="onKeyPress:checkEnterNodes"
+								class="minnodes"
+								type="text"
+								value="${minnodes}"
+								dojoType="dijit.form.NumberTextBox"
+								value="0"
+								constraints="{min:0,max:99999,places:0}"
+								maxlength="4" 
+								promptMessage="Minimum nodes: from 1 to 99999" 
+								invalidMessage="Minimum nodes: from 1 to 99999"
+								tooltipPosition="above, below"
+								style="display: table-cell; text-align: center; width: 25px !important;"
+							>
+						</td>
+						
+						<td class="nodesLabel">Max nodes</td>
+						<td class="maxnodes">
+							<div
+								dojoAttachPoint="maxnodes"
+								dojoAttachEvent="onKeyPress:checkEnterNodes"
+								class="maxnodes"
+								dojoType="dijit.form.NumberTextBox"
+								value="${maxnodes}"
+								constraints="{min:0,max:99999,places:0}"
+								maxlength="4" 
+								promptMessage="Maximum nodes: from 1 to 99999" 
+								invalidMessage="Maximum nodes: from 1 to 99999"
+								tooltipPosition="above, below"
+								style="display: table-cell; text-align: center; width: 25px !important;"
+							</div>
+						</td>
+					</tr>
+				</table>
+			</td>
+        </tr>
+            
+        <tr>
+			<td colspan="3">
+				<table>
+					<tr>
+						<td
+							style="display: none;"
+							dojoAttachPoint="amiidContainer"
+							>
+							<input
+								dojoAttachPoint="amiid"
+								dojoAttachEvent="onChange:setAmiInfo"
+								dojoType="dijit.form.ComboBox"
+								class="amiid"
+								type="text"
+								value="ami-d1c42db8"
+								title="AMI ID of the Starcluster image used for all cluster nodes (The base x86_64 StarCluster AMI is ami-d1c42db8)"
+								dojoType="dijit.form.ValidationTextBox"
+								regExp="^ami-[A-F0-9a-f]{8}$"
+								maxlength="12"
+								promptMessage="Amazon Machine Image (AMI) identifier. Must be 'ami-XXXXXXXX' in hexadecimal (a-f0-09), e.g., ami-d1c42db8" 
+								invalidMessage="Amazon Machine Image (AMI) identifier. Must be 'ami-XXXXXXXX' in hexadecimal (a-f0-09), e.g., ami-d1c42db8" 
+								tooltipPosition="below"
+								wrap="off"
+							>
+						</td>
+						<td
+							dojoAttachPoint="aminame"
+							class="aminame"
+						>
+						</td>
+						<td
+							dojoAttachPoint="amitype"
+							class="amitype"
+						>
+						</td>
+					</tr>
+				</table>
+			</td>
+        </tr>
+
+        <tr>
+            <td align="center"
+                dojoAttachPoint="instancetypeContainer"
+                style="display: none;"
+                >
+                <select
+                    dojoAttachPoint="instancetype"
+                    class="instancetype">
+					<option value="t1.micro">t1.micro</option> 
+					<option value="m1.small">m1.small</option>
+					<option value="m1.large">m1.large</option>
+					<option value="m1.xlarge">m1.xlarge</option>
+					<option value="m1.xlarge">m2.xlarge</option>
+					<option value="m2.2xlarge">m2.2xlarge</option>
+					<option value="m2.4xlarge">m2.4xlarge</option>
+					<option value="c1.medium">c1.medium</option>
+					<option value="c1.xlarge">c1.xlarge</option>
+					<option value="cc1.4xlarge">cc1.4xlarge</option>
+					<option value="cg1.4xlarge">cg1.4xlarge</option>
+                </select>
+            </td>
+            <td align="center"
+				dojoAttachPoint="regionContainer"
+				style="display: none;"
+			>
+				<select
+					dojoAttachPoint="region"
+					dojoAttachEvent="onchange:setAvailzoneCombo"
+					class="region">
+					<option value="us-east-1">us-east-1</option> 
+					<option value="us-west-1">us-west-1</option> 
+					<option value="eu-west-1">eu-west-1</option> 
+					<option value="ap-northeast-1">ap-northeast-1</option> 
+					<option value="ap-southeast-1">ap-southeast-1</option> 
+				</select>
+			</td>
+			<td align="center"
+				dojoAttachPoint="availzoneContainer"
+				style="display: none;"
+			>
+				<div
+					dojoAttachPoint="availzone"
+					dojoType="dijit.form.ComboBox"
+	                dojoAttachEvent="onchange:saveInputs"
+					class="availzone"
+					type="text"
+					popupClass="clusters availzone dijitReset dijitMenu"
+					autocomplete="true"
+					hasDownArrow="true"
+					disabled="false"
+					style="width: 50px;">
+				</div>
+			</td>
+        </tr>
+
+		<tr width="95%">
+			<td
+                align="center"
+                colspan="3"
+                dojoAttachPoint="description"
+                dojoAttachEvent="onclick:editCluster"
+                class="description"
+                style="display: none;"
+                width="100%"
+                title="A brief description of the cluster group"
+            >${description}</td>
+		</tr>
+
+    </table>
+
+</div>

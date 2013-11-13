@@ -1,0 +1,14 @@
+##### HTML
+INSTALLDIR/html                 WWWDIR/html/URLPREFIX
+WWWDIR/html/URLPREFIX/dojo-1.8.3    WWWDIR/html/URLPREFIX/dojo
+
+##### CGI
+INSTALLDIR/cgi-bin              WWWDIR/cgi-bin/URLPREFIX
+INSTALLDIR/lib                  WWWDIR/cgi-bin/URLPREFIX/lib
+INSTALLDIR/bin/sql              WWWDIR/cgi-bin/URLPREFIX/sql
+INSTALLDIR/conf                 WWWDIR/cgi-bin/URLPREFIX/conf
+INSTALLDIR/log                  WWWDIR/cgi-bin/URLPREFIX/log
+
+##### TEST
+INSTALLDIR/t/html               WWWDIR/html/URLPREFIX/t
+INSTALLDIR/t/cgi-bin            WWWDIR/cgi-bin/URLPREFIX/t

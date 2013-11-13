@@ -1,0 +1,100 @@
+-- MySQL dump 10.13  Distrib 5.1.54, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: agua
+-- ------------------------------------------------------
+-- Server version	5.1.54-1ubuntu4
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `view`
+--
+
+DROP TABLE IF EXISTS `view`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `view` (
+  `username` varchar(30) NOT NULL,
+  `project` varchar(20) NOT NULL,
+  `view` varchar(20) NOT NULL,
+  `species` varchar(20) DEFAULT NULL,
+  `build` varchar(20) DEFAULT NULL,
+  `chromosome` varchar(20) DEFAULT NULL,
+  `tracklist` text,
+  `start` int(15) DEFAULT NULL,
+  `stop` int(15) DEFAULT NULL,
+  `notes` text,
+  `status` VARCHAR(20),
+  `datetime` datetime NOT NULL,
+  PRIMARY KEY (`username`,`project`,`view`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `view`
+--
+
+LOCK TABLES `view` WRITE;
+/*!40000 ALTER TABLE `view` DISABLE KEYS */;
+
+INSERT INTO `view` VALUES ('admin','Project1','View1','human','hg19','chr22','control1,ntHumChimp',24290687,24454086,'','ready','2011-12-03 21:28:39'),('admin','Project1','View2','human','hg19','chr22','control2,control1,knownGene',22366653,22453953,'','ready','2011-12-03 15:21:41');
+
+
+/*!40000 ALTER TABLE `view` ENABLE KEYS */;
+
+
+UNLOCK TABLES;
+
+--
+-- Table structure for table `viewfeature`
+--
+
+DROP TABLE IF EXISTS `viewfeature`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `viewfeature` (
+  `username` varchar(30) NOT NULL,
+  `project` varchar(20) NOT NULL,
+  `view` varchar(20) NOT NULL,
+  `feature` varchar(30) NOT NULL,
+  `species` varchar(20) DEFAULT NULL,
+  `build` varchar(20) DEFAULT NULL,
+  `location` varchar(255) NOT NULL,
+  PRIMARY KEY (`username`,`project`,`view`,`feature`,`location`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `viewfeature`
+--
+
+LOCK TABLES `viewfeature` WRITE;
+/*!40000 ALTER TABLE `viewfeature` DISABLE KEYS */;
+
+/*!40000 ALTER TABLE `viewfeature` DISABLE KEYS */;
+
+INSERT INTO `viewfeature` VALUES ('admin','Project1','View2','control1','human','hg19','/nethome/syoung/agua/Project1/Workflow9/jbrowse/control1'),('admin','Project1','View1','ntHumChimp','human','hg19','/nethome/syoung/agua/Project1/Workflow9/jbrowse/ntHumChimp'),('admin','Project1','View2','control2','human','hg19','/nethome/syoung/agua/Project1/Workflow9/jbrowse/control2'),('admin','Project1','View1','test1','human','hg19','/nethome/syoung/agua/Project1/Workflow9/jbrowse/test1');
+/*!40000 ALTER TABLE `viewfeature` ENABLE KEYS */;
+
+/*!40000 ALTER TABLE `viewfeature` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2011-06-12  6:52:34

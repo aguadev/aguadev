@@ -1,0 +1,14 @@
+admin	admin	Project1	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != '') return referencedir; if ( outputdir != null && outputdir != '') return outputdir; if ( inputdir != null && inputdir != '') return inputdir;	1
+admin	admin	Project1	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != '') return referencedir; if ( outputdir != null && outputdir != '') return outputdir; if ( inputdir != null && inputdir != '') return inputdir;	1
+admin	admin	Project1	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	admin	Project1	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	admin	Project1	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	admin	Project1	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	admin	Project1	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	admin	Project1	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	admin	Project1	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	admin	Project1	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	admin	Project1	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		1
+admin	admin	Project1	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		1
+admin	admin	Project1	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	admin	Project1	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0

@@ -1,0 +1,121 @@
+/* DND ITEM OVER */
+.folders .dojoDndItemOver {
+	background-color: #8F8 !important;
+}
+
+/* NO BORDER ON MOUSEOVER DND CONTAINER */
+.folders .dojoDndContainerOver {
+	border : none !important;
+}
+
+/* DISPLAY MUST BE inline-block FOR HORIZONTAL PANE EXPANSION */
+.folders .dijitContentPane {
+    display: inline-block !important;
+}
+
+/* MOVE DOWN TAB TO BOTTOM OF TAB LABEL */
+.dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient {
+	position: relative;
+	top: 24px !important;
+}
+
+.folders .dijitContainer .dijitBorderContainer .dijitTabPane .dijitTabContainerTop-dijitBorderContainer
+{
+	top: 70px;
+	overflow: scroll;
+}
+
+.dijitTabContainer .tabs .dijitContainer .dijitTabContainerTop .dijitAlignNone .dijitLayoutContainer {
+	/*position: absolute;*/
+	/*top: 24px !important;*/
+	overflow: scroll !important;	
+}
+
+.dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient {
+	overflow: scroll !important;	
+}
+
+/* FILEDRAG - NO BORDER ON CONTAINEROVER */
+.fileDrag .dojoDndSource .dojoDndTarget .dojoDndContainer,
+.fileDrag .dojoDndSource .dojoDndTarget .dojoDndContainerOver {
+	border : 0 !important;
+}
+
+/* SCROLL ON OVERFLOW */
+.folders .dijitContainer .dijitBorderContainer .dijitTabPane .dijitTabContainerTop-dijitBorderContainer {
+	overflow: scroll !important;
+}
+
+.folders .directories .dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient {
+	position: absolute !important;
+	top: 0px !important;
+	overflow: scroll !important;
+}
+
+.tabs .dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient {
+	overflow: scroll !important;	
+}
+
+.folders .directories {
+}
+
+/* ALIGN FILES TO TOP OF PANE */
+.folders .dojoxRollingListPane {
+	vertical-align: top !important;
+	height: auto !important;
+	/*max-height: 250px;*/
+	/*min-width: 40px;*/
+	/*max-width: 250px !important;*/
+	overflow: scroll;
+}
+
+.folders .fileDrag .dojoDndSource .dojoDndTarget .dojoDndContainer {
+	border: 0;
+}
+
+.tundra .folders .dijitClosed .dijitTitlePaneTextNode,
+.soria .folders .dijitClosed .dijitTitlePaneTextNode {
+	height: auto !important;
+}
+
+.tundra .folders .dijitClosed .dijitTitlePaneTextNode,
+.soria .folders .dijitClosed .dijitTitlePaneTextNode {
+	color: #448 !important;	
+	font-size: 12px !important;
+	font-family: Verdana;
+	font-weight: bold !important;
+}
+
+.tundra .folders .dijitOpen .dijitTitlePaneTextNode,
+.soria .folders .dijitOpen .dijitTitlePaneTextNode {
+	color: #FFF !important;	
+	font-size: 16px !important;
+	font-family: Verdana;
+	font-weight: bolder !important;
+}
+
+.folders .dijitTitlePaneContentInner {
+	padding:0.05em;
+	margin : 0px;
+}
+
+.folders .dojoxRollingList,
+.folders .dojoxFileDrag {
+	padding:0.05em;
+	margin: 0px;
+}
+
+
+.dojoxFileDrag {
+	height: auto;
+}
+
+
+
+
+
+
+
+
+
+

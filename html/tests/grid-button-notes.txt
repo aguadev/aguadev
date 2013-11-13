@@ -1,0 +1,45 @@
+		
+
+		var formatHref = function(value, rowIndex) {
+
+					//return "<a href=\"" + value + "\" target=\"_blank\"> value: " + value + ", rowIndex: " + rowIndex + "</a>";
+			//return "<a href=\"" + value + "\" target=\"_blank\">Image Link</a>";
+			//return "<button onclick='workflow.openProjects(rowIndex)'>Browse</button>";
+			//return "<button onclick='console.log(this); getDetail(rowIndex)'>Browse</button>";
+
+		//var defaultsButton = new dijit.form.Button( { label: "Defaults", style: "height: 20px; font-weight: bold", onClick: function (e) { workflow.defaultsGrid(e, containerId) } } );
+			//return "<button onclick='" + workflow.openProjects(rowIndex) + "'>Browse</button>";
+
+			return "<button onclick='" + workflow.openProjects + "'>Browse</button>";
+			//return "<button>Browse</button>";
+
+		}
+		
+		// SET APPLICATION LAYOUT
+		var applicationLayout = [
+			{
+				type: 'dojox.GridRowView', width: '0px'
+			},
+			{
+				defaultCell: { width: 8, styles: 'text-align: center;'  },
+				cells: [
+					[
+						{ name: ' ', height: '0px',  width: 14 },
+						{ name: ' ', editor: dojox.grid.editors.Input, width: 20 },
+						//{ name: "Image URL", field: "imageUrl", width: '15', formatter: formatHref}
+
+						{ name: ' ', value: "<button onclick='" + workflow.openProjects + "'>Browse</button>" }
+
+						//{ name: ' ', cellType: dijit.form.Button }
+						//{ name: ' ', value: "<button onclick='function(e) { workflow.openProjects(e.rowIndex); }'>Browse</button>" }
+						//{ name: ' ', value: "<button onclick='function(e) { workflow.openProjects(e.rowIndex); }'>Browse</button>" }
+
+						//{ name: ' ', value: '<button onclick=open(grid)>Browse</button>' }
+						//{ name: ' ', widgetClass: "dijit.form.Button", constraint: {label: "Browser"}  }
+						//{ name: ' ', widgetClass: "dijit.form.Button", label: "Browser"  }
+						//{ name: ' ', type: dijit.form.Button, label: "label"	}
+					]
+				]
+			}
+		];
+	

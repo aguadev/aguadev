@@ -1,0 +1,201 @@
+/* SPECIFIC MAX-HEIGHT FOR EACH TABLE */
+.details .sample .information {
+    max-height: 95px !important;
+}
+.details .sample .list {
+    max-height: 900px !important;
+}
+.details .sample .currentRequeues {
+    max-height: 70px !important;
+}
+.details .sample .workflows {
+    max-height: 290px !important;
+}
+
+
+/* GRID SCROLLER TOP MARGINS */
+/* SUMMARY */
+.details .sample .summary {
+    max-height: 70px !important;
+}
+.details .sample .summary .dgrid-scroller{
+    margin-top: 23px !important;
+}
+
+/* REQUEUED */
+.details .sample .requeued {
+    max-height: 80px !important;
+}
+.details .sample .requeued .dgrid-scroller {
+    margin-top: 35px !important;
+}
+
+
+.details .sample .list .dgrid-scroller {
+    margin-top: 60px !important;
+}
+
+.details .summary {
+    top: 30px !important;
+}
+
+
+/* INFORMATION */
+.details sample .information .dgrid-column-status {
+    width: 60px !important;
+}
+
+.details .sample .information .dgrid-header .dgrid-column-project_name,
+.details .sample .information .dgrid-column-project_name {
+    width: 30px !important;
+}
+
+.details .sample .information .field-project_name,
+.details .sample .information .dgrid-header .field-project_name {
+    width: 150px !important;
+}
+.details .sample .information .field-sample_barcode,
+.details .sample .information .dgrid-header .field-sample_barcode {
+    width: 150px !important;
+}
+.details .sample .information .field-status,
+.details .sample .information .dgrid-header .field-status {
+    width: 40px !important;
+}
+.details .sample .information .field-sample_name,
+.details .sample .information .dgrid-header .field-sample_name {
+    width: 150px !important;
+}
+.details .sample .information .field-target_fold_coverage,
+.details .sample .information .dgrid-header .field-target_fold_coverage {
+    width: 40px !important;
+}
+.details .sample .information .field-species,
+.details .sample .information .dgrid-header .field-species {
+    width: 70px !important;
+}
+.details .sample .information .field-cancer,
+.details .sample .information .dgrid-header .field-cancer,
+.details .sample .information .field-gt_call_rate,
+.details .sample .information .dgrid-header .field-gt_call_rate,
+.details .sample .information .field-gender,
+.details .sample .information .dgrid-header .field-gender,
+.details .sample .information .field-gt_gender,
+.details .sample .information .dgrid-header .field-gt_gender {
+    width: 50px !important;
+}
+.details .sample .information .field-gt_p99_cr,
+.details .sample .information .dgrid-header .field-gt_p99_cr {
+    width: 60px !important;
+}
+
+.details .sample .information .field-ethnicity,
+.details .sample .information .dgrid-header .field-ethnicity {
+    width: 70px !important;
+}
+.details .sample .information .field-delivered_date,
+.details .sample .information .dgrid-header .field-delivered_date,
+.details .sample .information .field-due_date,
+.details .sample .information .dgrid-header .field-due_date,
+.details .sample .information .field-loaded_date,
+.details .sample .information .dgrid-header .field-loaded_date {
+    width: 70px !important;
+}
+
+
+.details .sample .information .dgrid-scroller {
+    margin-top: 35px !important;
+}
+
+
+/* LIST */
+.details .sample .list .field-date_updated,
+.details .sample .list .dgrid-header .field-date_updated {
+    width: 150px !important;
+}
+.details .sample .list .dgrid-scroller {
+    margin-top: 35px !important;
+}
+
+.details .sample .list .field-align_status,
+.details .sample .list .dgrid-header .field-align_status,
+.details .sample .list .field-lane_status,
+.details .sample .list .dgrid-header .field-lane_status,
+.details .sample .list .field-lane_id,
+.details .sample .list .dgrid-header .field-lane_id,
+.details .sample .list .field-flowcell_status,
+.details .sample .list .dgrid-header .field-flowcell_status {
+    width: 50px !important;
+}
+.details .sample .list .field-lib_insert,
+.details .sample .list .dgrid-header .field-lib_insert,
+.details .sample .list .field-yield_trimmed,
+.details .sample .list .dgrid-header .field-yield_trimmed,
+.details .sample .list .field-yield_aligned,
+.details .sample .list .dgrid-header .field-yield_aligned {
+    width: 60px !important;
+}
+.details .sample .list .field-flowcell_barcode,
+.details .sample .list .dgrid-header .field-flowcell_barcode,
+.details .sample .list .field-lib_insert,
+.details .sample .list .dgrid-header .field-lib_insert {
+    width: 110px !important;
+}
+
+.details .sample .list.field-*,
+.details .sample .list .dgrid-header .field-* {
+    top:    50px !important;
+    height: 20px !important;
+}
+
+
+/* SUMMARY */
+.details .sample .summary .field-requeued_lanes,
+.details .sample .summary .field-sequencing_lanes,
+.details .sample .summary .field-bad_lanes,
+.details .sample .summary .field-good_lanes,
+.details .sample .summary .field-total_lanes,
+.details .sample .summary .field-aligned_yield,
+.details .sample .summary .field-trimmed_yield {
+    text-align: center !important;
+    width: 14% !important;
+}
+
+
+/* REQUEUED */
+.details .sample .requeued .dgrid-header .field-target_yield
+.details .sample .requeued .field-target_yield {
+    width: 150px !important;    
+}
+
+
+
+
+/* CURRENT REQUEUES */
+
+
+
+
+/* WORKFLOWS */
+
+
+
+/* FIX TESTS */
+.details .dijitTabPaneWrapper.dijitTabContainerTop-container.dijitAlignClient {
+	min-height: 900px !important;
+}	
+
+.details .dijitContentPane.dijitTabPane.dijitTabContainerTop-child.dijitTabContainerTop-dijitContentPane {
+	min-height: 900px !important;
+	padding: 0px !important;
+}
+
+
+/* DOESN'T WORK -- ALLOW USER TO SELECT & COPY FROM PAGE */
+.details,
+.details .flowcell {
+    -webkit-user-select: all !important;
+    user-select: all !important;
+    -moz-user-select: text !important;
+}
+

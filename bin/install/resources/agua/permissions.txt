@@ -1,0 +1,36 @@
+#### html
+#find INSTALLDIR/html -exec chown WWWUSER:root {} \;;
+#find INSTALLDIR/html -type d -exec chmod 0755 {} \;;
+#find INSTALLDIR/html -type f -exec chmod 0644 {} \;
+###### cgi-bin
+chown -R root:root INSTALLDIR/cgi-bin
+find INSTALLDIR/cgi-bin -type d -exec chmod 0755 {} \;;
+find INSTALLDIR/cgi-bin -type f -exec chmod 0644 {} \;
+find INSTALLDIR/cgi-bin -type f -name '*cgi' -exec chmod 6755 {} \;
+find INSTALLDIR/cgi-bin -type f -name '*pl' -exec chmod 6755 {} \;
+#### lib
+find INSTALLDIR/lib -type d -exec chmod 0755 {} \;;
+find INSTALLDIR/lib -type f -exec chmod 0644 {} \;
+#### conf
+chown -R root:root INSTALLDIR/conf
+find INSTALLDIR/conf -type d -exec chmod 0700 {} \;;
+find INSTALLDIR/conf -type f -exec chmod 0600 {} \;
+#### log
+chown -R root:root INSTALLDIR/log
+find INSTALLDIR/log -type d -exec chmod 0700 {} \;;
+find INSTALLDIR/log -type f -exec chmod 0600 {} \;
+#### bin
+find INSTALLDIR/bin -type d -exec chmod 0755 {} \;;
+find INSTALLDIR/bin -type f -exec chmod 0644 {} \;
+find INSTALLDIR/bin -type f -name '*pl' -exec chmod 0755 {} \;
+
+#### t
+find INSTALLDIR/t -type f -name *.t -exec chmod 0755 {} \;;
+
+#### JBROWSE
+#chown -R WWWUSER:WWWUSER USERDIR/jbrowse/users
+
+#### REPOS
+#chown -R root:WWWUSER INSTALLDIR/repos
+#find INSTALLDIR/repos -type d -exec chmod 0775 {} \;;
+#find INSTALLDIR/repos -type f -exec chmod 0664 {} \;;

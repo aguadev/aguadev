@@ -1,0 +1,14 @@
+{
+	name: "plugins.request.Controller",
+
+	version : "0.01",
+	
+	url : '',
+	
+	description : "Allow users to search downloadable genomic files in GNOS repositories using metadata",
+		
+	dependencies :
+	[
+		{	name: "plugins.core.Agua", version: 0.01	}
+	]
+}

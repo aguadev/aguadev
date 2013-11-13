@@ -1,0 +1,157 @@
+/* KEEP MENU ITEM HEIGHT CONSTRAINED */
+
+.infusion .projectmenu .dijitFakeInput,
+.infusion .projectmenu .dijitInline .dijitFileInputText,
+.infusion .projectmenu .dijitInline .dijitFileInputButton {
+	display: none !important;
+}
+
+.infusion .projectmenu .dijitFocused  {
+/* BORDER OF FOCUSED MENU ITEM IS SAME AS UNFOCUSED ITEM */
+	/*height: 15px;*/
+	/*padding: 3px;*/
+	border: solid 1px #0F0;
+}
+
+.infusion .projectmenu .dijitFileInput .Focused .dijitFocused {
+	border-color: #0F0;
+}
+
+/* NB: WANT TO LIMIT WIDTH OF MENU ITEM BECAUSE 
+  FILE INPUT ELEMENT OVERSHOOTS ON RIGHT SIDE */
+
+.infusion .projectmenu .dijitMenuItem {
+	max-width: 80px !important;
+	border: 1px solid #888;
+}
+
+.infusion .projectmenu .dijitMenuItem td,
+.infusion .projectmenu .dijitReset .dijitMenuArrowCell,
+.infusion .projectmenu .dijitReset .dijitMenuItemLabel {
+	height: 18px !important;
+}
+
+/* INPUT BOX - ONCLICK OPENS LOCAL FILE MENU */
+.infusion .projectmenu .dijitFakeInput {
+	height: 20px !important;
+	width: 80px !important;
+}
+
+/* UPLOAD PROGRESS OVERLAY */
+.infusion .projectmenu .dijitProgressOverlay {
+	position: relative;
+	top: -20px;
+	left: -15px;	
+	height: 10px !important;
+	width: 80px !important;
+}
+
+/**** IMPORTANT: SET dijitFileInput HEIGHT TO ZERO TO REMOVE EXTRA HEIGHT ****/
+.infusion .projectmenu .dijitFileInput {
+	position: relative;
+	top: -20px;
+	left: -15px;
+	height: 0px !important;
+	width: 80px !important;
+	z-index: 10;
+	border: 0px;
+	opacity: 0.4;
+}
+
+.infusion .projectmenu .dijitFileInputReal {
+	height: 20px !important;
+	width: 80px !important;
+	background: black;
+	z-index: 11;
+}
+
+
+.infusion .projectmenu .fileInputMask {
+	background-color: #F00;
+	position: relative;
+	top: -20px !important;
+	left: 100px !important;
+	height: 0px !important;
+	width: 100px !important;
+	z-index: 12;
+}
+
+/***************** END FILE UPLOAD *****************/
+
+
+/***************** FILE MENU *****************/
+.infusion .projectmenu {
+    font-family: Verdana;
+	text-indent: 4px;
+	font-size: 16px;
+	color: darkred;
+	font-weight: bold;
+}
+
+.infusion .projectmenu .title {
+	background-color: #000 !important;
+    color: #FFF !important;
+    font-weight: bolder;
+    background-color: #EEE;
+    text-align: left;
+	text-indent: 5px;
+	font-size: 18px !important;
+}
+
+.infusion .projectmenu .refresh .dijitMenuItemIconCell ,
+.infusion .projectmenu .newFolder .dijitMenuItemIconCell ,
+.infusion .projectmenu .rename .dijitMenuItemIconCell ,
+.infusion .projectmenu .delete .dijitMenuItemIconCell ,
+.infusion .projectmenu .openWorkflow .dijitMenuItemIconCell ,
+.infusion .projectmenu .upload .dijitMenuItemIconCell ,
+.infusion .projectmenu .download .dijitMenuItemIconCell ,
+.infusion .projectmenu .select .dijitMenuItemIconCell ,
+.infusion .projectmenu .add .dijitMenuItemIconCell {
+	background-repeat: no-repeat !important;
+	background-position: 5px 0 !important;
+}
+
+.infusion .projectmenu .select .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/select-20.png);
+}
+.infusion .projectmenu .add .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/add-20.png);
+}
+
+.infusion .projectmenu .newFolder .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/newfolder-20.png) !important;
+}
+.infusion .projectmenu .rename .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/rename-20.png) !important;
+}
+.infusion .projectmenu .delete .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/delete-20.png) !important;
+}
+.infusion .projectmenu .openWorkflow .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/workflow-20.png) !important;
+}
+.infusion .projectmenu .upload .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/upload-20.png) !important;
+}
+.infusion .projectmenu .download .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/download-20.png) !important;
+}
+.infusion .projectmenu .refresh .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/refresh-20.png) !important;
+}
+
+
+.download .dijitMenuItemDisabled {
+	background-image: url(../../../plugins/files/images/delete-20.png) !important;
+	background-color: black !important;
+	opacity: 0.5 !important;
+}
+.download .dijitMenuItemDisabled {
+	visibility: hidden;
+	opacity: 0.5 !important;
+	background-color: black !important;	
+}
+.dijitReset .dijitMenuItem .download .dijitMenuItemDisabled {
+	opacity: 0.5 !important;
+	background-color: black !important;	  	
+}

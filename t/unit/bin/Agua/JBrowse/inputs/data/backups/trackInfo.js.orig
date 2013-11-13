@@ -1,0 +1,444 @@
+trackInfo = 
+[
+   {
+      "url" : "data/seq/{refseq}/",
+      "args" : {
+         "chunkSize" : 20000
+      },
+      "label" : "DNA",
+      "type" : "SequenceTrack",
+      "key" : "DNA"
+   },
+   {
+      "url" : "data/tracks/{refseq}/cytoBand/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "cytoBand",
+      "key" : "Chromosome Band"
+   },
+   {
+      "url" : "data/tracks/{refseq}/omimGene/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "omimGene",
+      "key" : "OMIM Genes"
+   },
+   {
+      "url" : "data/tracks/{refseq}/knownGene/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "knownGene",
+      "key" : "UCSC Genes"
+   },
+   {
+      "url" : "data/tracks/{refseq}/cytoBandIdeo/trackData.json",
+      "label" : "cytoBandIdeo",
+      "type" : "FeatureTrack",
+      "key" : "Chromosome Band (Ideogram)"
+   },
+   {
+      "url" : "data/tracks/{refseq}/hinv70Coding/trackData.json",
+      "label" : "hinv70Coding",
+      "type" : "FeatureTrack",
+      "key" : "H-Inv genes"
+   },
+   {
+      "url" : "data/tracks/{refseq}/pgVenter/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "pgVenter",
+      "key" : "Venter"
+   },
+   {
+      "url" : "data/tracks/{refseq}/hinv70NonCoding/trackData.json",
+      "label" : "hinv70NonCoding",
+      "type" : "FeatureTrack",
+      "key" : "H-Inv non-coding"
+   },
+   {
+      "url" : "data/tracks/{refseq}/pgWatson/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "pgWatson",
+      "key" : "Watson"
+   },
+   {
+      "url" : "data/tracks/{refseq}/hinv70PseudoGene/trackData.json",
+      "label" : "hinv70PseudoGene",
+      "type" : "FeatureTrack",
+      "key" : "H-Inv pseudo-genes"
+   },
+   {
+      "url" : "data/tracks/{refseq}/stsMap/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "stsMap",
+      "key" : "STS Markers"
+   },
+   {
+      "url" : "data/tracks/{refseq}/pgYoruban3/trackData.json",
+      "label" : "pgYoruban3",
+      "type" : "FeatureTrack",
+      "key" : "YRI NA18507"
+   },
+   {
+      "url" : "data/tracks/{refseq}/pgYh1/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "pgYh1",
+      "key" : "YanHuang"
+   },
+   {
+      "url" : "data/tracks/{refseq}/pgSjk/trackData.json",
+      "label" : "pgSjk",
+      "type" : "FeatureTrack",
+      "key" : "SJK"
+   },
+   {
+      "url" : "data/tracks/{refseq}/pgNA12878/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "pgNA12878",
+      "key" : "CEU daught '2878"
+   },
+   {
+      "url" : "data/tracks/{refseq}/pgNA12891/trackData.json",
+      "label" : "pgNA12891",
+      "type" : "FeatureTrack",
+      "key" : "CEU father '2891"
+   },
+   {
+      "url" : "data/tracks/{refseq}/gold/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "gold",
+      "key" : "Assembly"
+   },
+   {
+      "url" : "data/tracks/{refseq}/pgNA12892/trackData.json",
+      "label" : "pgNA12892",
+      "type" : "FeatureTrack",
+      "key" : "CEU mother '2892"
+   },
+   {
+      "url" : "data/tracks/{refseq}/gap/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "gap",
+      "key" : "Gap"
+   },
+   {
+      "url" : "data/tracks/{refseq}/pgNA19240/trackData.json",
+      "label" : "pgNA19240",
+      "type" : "FeatureTrack",
+      "key" : "YRI daught '9240"
+   },
+   {
+      "url" : "data/tracks/{refseq}/bacEndPairs/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "bacEndPairs",
+      "key" : "BAC End Pairs"
+   },
+   {
+      "url" : "data/tracks/{refseq}/phastConsElements46wayPrimates/trackData.json",
+      "label" : "phastConsElements46wayPrimates",
+      "type" : "FeatureTrack",
+      "key" : "Primate El"
+   },
+   {
+      "url" : "data/tracks/{refseq}/phastConsElements46wayPlacental/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "phastConsElements46wayPlacental",
+      "key" : "Mammal El"
+   },
+   {
+      "url" : "data/tracks/{refseq}/phastConsElements46way/trackData.json",
+      "label" : "phastConsElements46way",
+      "type" : "FeatureTrack",
+      "key" : "Vertebrate El"
+   },
+   {
+      "url" : "data/tracks/{refseq}/knownAlt/trackData.json",
+      "label" : "knownAlt",
+      "type" : "FeatureTrack",
+      "key" : "Alt Events"
+   },
+   {
+      "url" : "data/tracks/{refseq}/gwasCatalog/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "gwasCatalog",
+      "key" : "GWAS Catalog"
+   },
+   {
+      "url" : "data/tracks/{refseq}/tRNAs/trackData.json",
+      "label" : "tRNAs",
+      "type" : "FeatureTrack",
+      "key" : "tRNA Genes"
+   },
+   {
+      "url" : "data/tracks/{refseq}/hgIkmc/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "hgIkmc",
+      "key" : "IKMC Genes Mapped"
+   },
+   {
+      "url" : "data/tracks/{refseq}/snp131/trackData.json",
+      "label" : "snp131",
+      "type" : "FeatureTrack",
+      "key" : "SNPs (131)"
+   },
+   {
+      "url" : "data/tracks/{refseq}/snp130/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "snp130",
+      "key" : "SNPs (130)"
+   },
+   {
+      "url" : "data/tracks/{refseq}/cpgIslandExt/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "cpgIslandExt",
+      "key" : "CpG Islands"
+   },
+   {
+      "url" : "data/tracks/{refseq}/dgv/trackData.json",
+      "label" : "dgv",
+      "type" : "FeatureTrack",
+      "key" : "DGV Struct Var"
+   },
+   {
+      "url" : "data/tracks/{refseq}/genomicSuperDups/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "genomicSuperDups",
+      "key" : "Segmental Dups"
+   },
+   {
+      "url" : "data/tracks/{refseq}/nestedRepeats/trackData.json",
+      "label" : "nestedRepeats",
+      "type" : "FeatureTrack",
+      "key" : "Interrupted Rpts"
+   },
+   {
+      "url" : "data/tracks/{refseq}/simpleRepeat/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "simpleRepeat",
+      "key" : "Simple Repeats"
+   },
+   {
+      "url" : "data/tracks/{refseq}/burgeRnaSeqGemMapperAlignBT474/trackData.json",
+      "label" : "burgeRnaSeqGemMapperAlignBT474",
+      "type" : "FeatureTrack",
+      "key" : "RNA-seq BT474"
+   },
+   {
+      "url" : "data/tracks/{refseq}/wgEncodeGencodeManualV4/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "wgEncodeGencodeManualV4",
+      "key" : "Gencode Manual"
+   },
+   {
+      "url" : "data/tracks/{refseq}/vegaGene/trackData.json",
+      "label" : "vegaGene",
+      "type" : "FeatureTrack",
+      "key" : "Vega Protein Genes"
+   },
+   {
+      "url" : "data/tracks/{refseq}/wgEncodeGencodeAutoV4/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "wgEncodeGencodeAutoV4",
+      "key" : "Gencode Auto"
+   },
+   {
+      "url" : "data/tracks/{refseq}/vegaPseudoGene/trackData.json",
+      "label" : "vegaPseudoGene",
+      "type" : "FeatureTrack",
+      "key" : "Vega Pseudogenes"
+   },
+   {
+      "url" : "data/tracks/{refseq}/wgEncodeGencodePolyaV4/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "wgEncodeGencodePolyaV4",
+      "key" : "Gencode PolyA"
+   },
+   {
+      "url" : "data/tracks/{refseq}/wgEncodeGencode2wayConsPseudoV4/trackData.json",
+      "label" : "wgEncodeGencode2wayConsPseudoV4",
+      "type" : "FeatureTrack",
+      "key" : "Gencode Pseudo"
+   },
+   {
+      "url" : "data/tracks/{refseq}/ccdsGene/trackData.json",
+      "label" : "ccdsGene",
+      "type" : "FeatureTrack",
+      "key" : "CCDS"
+   },
+   {
+      "url" : "data/tracks/{refseq}/refGene/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "refGene",
+      "key" : "RefSeq Genes"
+   },
+   {
+      "url" : "data/tracks/{refseq}/xenoRefGene/trackData.json",
+      "label" : "xenoRefGene",
+      "type" : "FeatureTrack",
+      "key" : "Other RefSeq"
+   },
+   {
+      "url" : "data/tracks/{refseq}/ensGene/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "ensGene",
+      "key" : "Ensembl Genes"
+   },
+   {
+      "url" : "data/tracks/{refseq}/nscanGene/trackData.json",
+      "label" : "nscanGene",
+      "type" : "FeatureTrack",
+      "key" : "N-SCAN"
+   },
+   {
+      "url" : "data/tracks/{refseq}/sgpGene/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "sgpGene",
+      "key" : "SGP Genes"
+   },
+   {
+      "url" : "data/tracks/{refseq}/geneid/trackData.json",
+      "label" : "geneid",
+      "type" : "FeatureTrack",
+      "key" : "Geneid Genes"
+   },
+   {
+      "url" : "data/tracks/{refseq}/exoniphy/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "exoniphy",
+      "key" : "Exoniphy"
+   },
+   {
+      "url" : "data/tracks/{refseq}/bam_sim/trackData.jsonz",
+      "label" : "bam_sim",
+      "type" : "FeatureTrack",
+      "key" : "Simulated Next-gen reads"
+   },
+   {
+      "url" : "data/tracks/{refseq}/burgeRnaSeqGemMapperAlignViewAlignments/trackData.json",
+      "label" : "burgeRnaSeqGemMapperAlignViewAlignments",
+      "type" : "FeatureTrack",
+      "key" : "Alignments"
+   },
+   {
+      "url" : "data/tracks/{refseq}/cons46wayViewphyloP/trackData.json",
+      "label" : "cons46wayViewphyloP",
+      "type" : "FeatureTrack",
+      "key" : "Basewise Conservation (phyloP)"
+   },
+   {
+      "url" : "data/tracks/{refseq}/cons46wayViewelements/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "cons46wayViewelements",
+      "key" : "Conserved Elements"
+   },
+   {
+      "url" : "data/tracks/{refseq}/cons46wayViewphastcons/trackData.json",
+      "label" : "cons46wayViewphastcons",
+      "type" : "FeatureTrack",
+      "key" : "Element Conservation (phastCons)"
+   },
+   {
+      "url" : "data/tracks/{refseq}/cons46wayViewalign/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "cons46wayViewalign",
+      "key" : "Multiz Alignments"
+   },
+   {
+      "url" : "data/tracks/{refseq}/primateChainNetViewchain/trackData.json",
+      "label" : "primateChainNetViewchain",
+      "type" : "FeatureTrack",
+      "key" : "Chains"
+   },
+   {
+      "url" : "data/tracks/{refseq}/primateChainNetViewnet/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "primateChainNetViewnet",
+      "key" : "Nets"
+   },
+   {
+      "url" : "data/tracks/{refseq}/chainNetAplCal1Viewchain/trackData.json",
+      "label" : "chainNetAplCal1Viewchain",
+      "type" : "FeatureTrack",
+      "key" : "Chain"
+   },
+   {
+      "url" : "data/tracks/{refseq}/chainNetAplCal1Viewnet/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "chainNetAplCal1Viewnet",
+      "key" : "Net"
+   },
+   {
+      "url" : "data/tracks/{refseq}/burgeRnaSeqGemMapperAlignHME/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "burgeRnaSeqGemMapperAlignHME",
+      "key" : "RNA-seq HME"
+   },
+   {
+      "url" : "data/tracks/{refseq}/burgeRnaSeqGemMapperAlignMB435/trackData.json",
+      "label" : "burgeRnaSeqGemMapperAlignMB435",
+      "type" : "FeatureTrack",
+      "key" : "RNA-seq MB435"
+   },
+   {
+      "url" : "data/tracks/{refseq}/burgeRnaSeqGemMapperAlignMCF7/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "burgeRnaSeqGemMapperAlignMCF7",
+      "key" : "RNA-seq MCF7"
+   },
+   {
+      "url" : "data/tracks/{refseq}/burgeRnaSeqGemMapperAlignT47D/trackData.json",
+      "label" : "burgeRnaSeqGemMapperAlignT47D",
+      "type" : "FeatureTrack",
+      "key" : "RNA-seq T47D"
+   },
+   {
+      "url" : "data/tracks/{refseq}/burgeRnaSeqGemMapperAlignAdipose/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "burgeRnaSeqGemMapperAlignAdipose",
+      "key" : "RNA-seq Adipose"
+   },
+   {
+      "url" : "data/tracks/{refseq}/burgeRnaSeqGemMapperAlignBrain/trackData.json",
+      "label" : "burgeRnaSeqGemMapperAlignBrain",
+      "type" : "FeatureTrack",
+      "key" : "RNA-seq Brain"
+   },
+   {
+      "url" : "data/tracks/{refseq}/burgeRnaSeqGemMapperAlignBreast/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "burgeRnaSeqGemMapperAlignBreast",
+      "key" : "RNA-seq Breast"
+   },
+   {
+      "url" : "data/tracks/{refseq}/burgeRnaSeqGemMapperAlignColon/trackData.json",
+      "label" : "burgeRnaSeqGemMapperAlignColon",
+      "type" : "FeatureTrack",
+      "key" : "RNA-seq Colon"
+   },
+   {
+      "url" : "data/tracks/{refseq}/burgeRnaSeqGemMapperAlignHeart/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "burgeRnaSeqGemMapperAlignHeart",
+      "key" : "RNA-seq Heart"
+   },
+   {
+      "url" : "data/tracks/{refseq}/burgeRnaSeqGemMapperAlignLiver/trackData.json",
+      "label" : "burgeRnaSeqGemMapperAlignLiver",
+      "type" : "FeatureTrack",
+      "key" : "RNA-seq Liver"
+   },
+   {
+      "url" : "data/tracks/{refseq}/burgeRnaSeqGemMapperAlignLymphNode/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "burgeRnaSeqGemMapperAlignLymphNode",
+      "key" : "RNA-seq Lymph Node"
+   },
+   {
+      "url" : "data/tracks/{refseq}/burgeRnaSeqGemMapperAlignSkelMuscle/trackData.json",
+      "label" : "burgeRnaSeqGemMapperAlignSkelMuscle",
+      "type" : "FeatureTrack",
+      "key" : "RNA-seq Muscle"
+   },
+   {
+      "url" : "data/tracks/{refseq}/burgeRnaSeqGemMapperAlignTestes/trackData.json",
+      "type" : "FeatureTrack",
+      "label" : "burgeRnaSeqGemMapperAlignTestes",
+      "key" : "RNA-seq Testes"
+   }
+]

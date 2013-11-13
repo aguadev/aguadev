@@ -1,0 +1,226 @@
+/* Background colors to match menus */
+.tundra .fileDrag .dojoxRollingList {
+	border-color: #b3b3b3;
+}
+.tundra .fileDrag .dijitPopup .dojoxRollingList {
+	border-color: #406b9b;
+}
+.tundra .fileDrag .dojoxRollingListPane {
+	background-color: #f7f7f7;
+}
+.tundra .fileDrag .dojoxRollingListPane .dojoxRollingListItemHover,
+.tundra .fileDrag .dojoxRollingListPane .dojoxRollingListItemFocus {
+	background-color: #e3e3e3;
+}
+.tundra .fileDrag .dojoxRollingListPane .dojoxRollingListItemSelected {
+	color: #fff;
+	background-color: #3559ac;
+	font-weight: bold;
+}
+.tundra .fileDrag .dojoxRollingListPane .dojoxRollingListItemHoverSelected,
+.tundra .fileDrag .dojoxRollingListPane .dojoxRollingListItemFocusSelected {
+	background-color: #9aacd6;
+}
+.tundra .fileDrag .dojoxRollingListItem {
+	font-family: inherit;
+}
+
+.soria .fileDrag .dojoxRollingList {
+	border-color: #8ba0bd;
+}
+.soria .fileDrag .dijitPopup .dojoxRollingList {
+	border-color: #406b9b;
+}
+.soria .fileDrag .dojoxRollingListPane {
+	background-color: #fff;
+}
+
+
+
+/* INFOPANE */
+.dojoxFileInfoPane {
+	/*max-width: 100% !important;*/
+	width: 400px !important;
+	height: 300px !important;
+	/*max-height: 100% !important;*/
+	white-space: normal !important; 
+}
+.dojoxFileInfoName,
+.dojoxFileInfoSize,
+.dojoxFileInfoSample,
+.dojoxFileInfoBytes {
+	font-size: 14px !important;
+	text-indent: 10px !important;
+	height: 15px !important;
+	/*max-width: 380px !important;*/
+    width: 380px !important;
+	width: 150px !important;
+	/*float: left !important;*/
+}
+.dojoxFileInfoNameLabel,
+.dojoxFileInfoSizeLabel,
+.dojoxFileInfoSampleLabel,
+.dojoxFileInfoBytesLabel {
+	font-size: 12px !important;	
+	font-weight: 900 !important;
+	width: 120px !important;
+}
+.dojoxFileInfoSample {
+	white-space: normal !important;
+	word-wrap: break-word !important;	
+}
+
+
+/* ROLLING LIST PANE */
+.project .dojoxRollingListPane {
+	/* ALIGN FILES TO TOP OF PANE */
+	vertical-align: top !important;
+	height: auto !important;
+	/*min-height: 50px !important;*/
+	max-height: 300px !important;
+	width: auto !important;
+	min-width: 100px !important;
+	max-width: 400px !important;
+	max-width: 400px !important;
+	/*overflow-y: auto !important;*/
+	/*overflow-x: auto !important;*/
+	border: 2px #333 solid !important;
+}
+
+.project .fileDrag .dojoDndSource .dojoDndTarget .dojoDndContainer {
+	border: 0;
+}
+
+.project .dojoxRollingList,
+.project .dojoxFileDrag {
+	padding:0.05em;
+	margin: 0px;
+	overflow-x: hidden !important;
+}
+
+.tundra .dojoxRollingList {
+	height: auto !important;
+}
+
+.dojoxFileDrag {
+	height: auto;
+}
+
+/* ALIGN FILES TO TOP OF PANE */
+/* AND MAKE SURE THE PANE ISN'T TALLER THAN THE PAGE */
+.fileManager .dojoxFileDragPane {
+	vertical-align: top;
+	height: auto !important;
+	max-height: 200px !important;
+	min-width: 60px !important;
+}
+
+.fileDragInlineEditBox {
+	position: relative;
+	left: 20px;
+	font-size: 25px;
+}
+
+.fileDrag .directory,
+.fileDrag .directory .dojoDndItemOver,
+.fileDrag .directory .dojoDndItemAnchor,
+.directory,
+.directory .dojoDndItemOver,
+.directory .dojoDndItemAnchor {
+	text-indent: 18px;
+	background-repeat: no-repeat !important;
+	background-image: url(../../../../plugins/files/FileDrag/images/directory-closed.png) !important;
+	background-position: 0px !important;
+	position: relative;
+	top: 1px;
+}
+
+.tundra .dojoDndItem .fileDrag .directory .dojoDndItemAnchor,
+.fileDrag .directory .dojoDndItemAnchor {
+	text-indent: 18px;
+	background-color: #8F8 !important;
+	background-repeat: no-repeat;
+	background-image: url(../../../../plugins/files/FileDrag/images/directory-open.png) !important;
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+}
+
+.fileDrag .file .dojoDndItemAnchor {
+	text-indent: 18px;
+	/*background-color:#99CC99;*/
+	/*color: #F00;*/
+	background-repeat: no-repeat;
+	background-image: url(../../../../plugins/files/FileDrag/images/file-open.png);
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+}
+
+.fileDrag .file {
+	text-indent: 18px;
+	/*color: #F00;*/
+	background-repeat: no-repeat;
+	background-image: url(../../../../plugins/files/FileDrag/images/file-closed.png);
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+	min-height: 20px;
+}
+
+.directoryIcon {
+	background-image: url(../../../../plugins/files/FileDrag/images/soriaFileIcons.gif);
+	background-repeat: no-repeat;
+	color: #FFF;
+	font-size: 14px !important;
+	font-family: Arial !important;
+	font-weight: bolder !important;
+	background-position: 0px;
+	width: 16px;
+	height: 18px;
+	/*text-align: center;*/
+	position: relative;
+	top: 1px;
+}
+
+.copyDialog{
+	/*width: 200px;*/
+	/*height: 200px;*/
+	background-color: #000;
+	color: #FFF;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 20px;
+	/*overflow: hidden;*/
+	opacity: 0.7;
+}
+
+.titleDiv{
+	color: #FFF;
+	text-align: center;
+	vertical-align: middle;
+	position: relative;
+	top: 43%;
+}
+
+
+.fileManager .dojoxFileInfoPane *{
+	white-space: normal;
+}
+
+.fileManager .dojoxFileInfoLabel {
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+.fileManager .dojoxFileInfoPane {
+	width: 20em;
+	overflow: inherit !important;
+}
+
+
+.tundra .dojoxFileDragItem .dijitMenuItemIcon {
+	background-image: url("images/tundraFileIcons.gif");
+	background-repeat: no-repeat;
+}
+

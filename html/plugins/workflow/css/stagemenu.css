@@ -1,0 +1,61 @@
+.stagemenu {
+    font-family: Verdana !important;
+	text-indent: 4px !important;
+	font-size: 16px !important;
+	font-weight: bolder !important;
+}
+
+.stagemenu .title {
+    color: #822 !important;
+    font-weight: bolder !important;
+    background-color: #EEE !important;
+    text-align: left !important;
+	text-indent: 0px !important;
+}
+
+.stagemenu .dijitMenuItem {
+	background-color: #FFF !important;	
+	text-align: center !important;
+}
+
+.stagemenu .dijitMenuItemSelected {
+	/*background-color: #3e6da3 !important;*/
+	background-color: #428ce0 !important;
+	color: white !important;
+}
+
+.stagemenu .runIcon .dijitMenuItemIconCell {
+	background-image: url(../../../../plugins/workflow/images/run-20.png);
+	background-repeat: no-repeat;
+	background-position: 0.3em 0.09em !important;
+}
+
+.stagemenu .runAllIcon .dijitMenuItemIconCell {
+	background-image: url(../../../../plugins/workflow/images/runall-20.png);
+	background-repeat: no-repeat;
+	background-position: 0.3em 0.09em !important;
+}
+
+.stagemenu .chainIcon .dijitMenuItemIconCell {
+	background-image: url(../../../../plugins/workflow/images/chain-20-red.png);
+	background-repeat: no-repeat;
+	background-position: 0.3em 0.09em !important;
+}
+
+.stagemenu .refreshIcon .dijitMenuItemIconCell {
+	background-image: url(../../../../plugins/workflow/images/refresh-20.png);
+	background-repeat: no-repeat;
+	background-position: 0.3em 0.09em !important;
+}
+
+.stagemenu .stopIcon .dijitMenuItemIconCell {
+	background-image: url(../../../../plugins/workflow/images/stopped-24.png);
+	background-repeat: no-repeat;
+	background-position: 0.22em -0.12em !important;
+}
+
+.stagemenu .deleteIcon .dijitMenuItemIconCell {
+	background-image: url(../../../../plugins/workflow/images/delete-20.png);
+	background-repeat: no-repeat;
+	background-position: 0.3em 0.09em !important;
+}

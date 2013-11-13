@@ -1,0 +1,33 @@
+socketioserver.sockets.on		connection: [object Object]
+{ connection: 
+   { id: 'H3kC8HJeGfEdiS_8wZ9W',
+     namespace: 
+      { manager: [Object],
+        name: '',
+        sockets: [Object],
+        auth: false,
+        flags: [Object],
+        _events: [Object] },
+     manager: 
+      { server: [Object],
+        namespaces: [Object],
+        sockets: [Object],
+        _events: [Object],
+        settings: [Object],
+        handshaken: [Object],
+        connected: [Object],
+        open: [Object],
+        closed: {},
+        rooms: [Object],
+        roomClients: [Object],
+        oldListeners: [Object],
+        sequenceNumber: 2109841238,
+        gc: [Object] },
+     disconnected: false,
+     ackPackets: 0,
+     acks: {},
+     flags: { endpoint: '', room: '' },
+     readable: true,
+     store: { store: [Object], id: 'H3kC8HJeGfEdiS_8wZ9W', data: {} },
+     _events: { error: [Function] } } }
+socketioserver.sockets.on    connection.manager.sequenceNumber: 2109841238

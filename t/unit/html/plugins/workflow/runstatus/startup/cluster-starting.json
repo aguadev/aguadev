@@ -1,0 +1,25 @@
+{
+    "queuestatus":{
+        "queue":"admin-Project1-Workflow1",
+        "status":""
+    },
+
+    "clusterstatus":{
+        "cluster"	:   "aguatest-testcluster",
+        "status"    :   "cluster starting",
+        "list"      :   "",
+        "log"       :   "",
+        "balancer"  :   ""
+    },
+
+    "stagestatus": {
+        "status":"pending",
+        "project":"Project1",
+        "workflow":"Workflow1",
+        "stages":[
+            {"stagedescription":"","stagepid":"7860","number":"1","status":"completed","project":"Project1","submit":"0","workflowpid":"0","stagenotes":"","stagename":"","stagejobid":"0","completed":"2012-02-26 04:36:30","owner":"aguatest","workflownumber":"1","cluster":"","stderrfile":"/nethome/admin/agua/Project1/Workflow1/stdout/1-FTP.stderr","location":"bin/utils/FTP.pl","version":"0.6.0","installdir":"/agua/bioapps","executor":"/usr/bin/perl","name":"FTP","stdoutfile":"/nethome/admin/agua/Project1/Workflow1/stdout/1-FTP.stdout","package":"bioapps","username":"aguatest","workflow":"Workflow1","now":"2012-11-09 19:07:01","started":"2012-02-26 04:24:14","type":"utility","queued":"0000-00-00 00:00:00"},
+            {"stagedescription":"","stagepid":"8997","number":"2","status":"completed","project":"Project1","submit":"0","workflowpid":"0","stagenotes":"","stagename":"","stagejobid":"0","completed":"2012-02-27 03:39:27","owner":"aguatest","workflownumber":"1","cluster":"","stderrfile":"/nethome/admin/agua/Project1/Workflow1/stdout/2-unzipFiles.stderr","location":"bin/utils/unzipFiles.pl","version":"0.6.0","installdir":"/agua/bioapps","executor":"/usr/bin/perl","name":"unzipFiles","stdoutfile":"/nethome/admin/agua/Project1/Workflow1/stdout/2-unzipFiles.stdout","package":"bioapps","username":"aguatest","workflow":"Workflow1","now":"2012-11-09 19:07:01","started":"2012-02-27 03:39:00","type":"utility","queued":"0000-00-00 00:00:00"},
+            {"stagedescription":"","stagepid":"0","number":"3","status":"","project":"Project1","submit":"0","workflowpid":"0","stagenotes":"","stagename":"","stagejobid":"0","completed":"0000-00-00 00:00:00","owner":"aguatest","workflownumber":"1","cluster":"","stderrfile":"","location":"bin/converters/elandIndex.pl","version":"0.6.0","installdir":"/agua/bioapps","executor":"/usr/bin/perl","name":"elandIndex","stdoutfile":"","package":"bioapps","username":"aguatest","workflow":"Workflow1","now":"2012-11-09 19:07:01","started":"0000-00-00 00:00:00","type":"converter","queued":"0000-00-00 00:00:00"}
+        ],
+    }
+}

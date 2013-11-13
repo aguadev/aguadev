@@ -1,0 +1,137 @@
+#### AGUA CONFIGURATION
+[agua]
+INITCOMPLETE            0
+SETUPCOMPLETE           0
+VERSION                 0.6
+INSTALLDIR              /agua/0.6
+DATADIR                 /data
+USERDIR                 /nethome
+TEMPDIR                 /tmp
+EXECUTION_TEMPDIR       /tmp
+CLUSTERTYPE             SGE
+HTMLURL                 http://my.domain.com
+HTMLDIR                 /var/www/html/agua/0.6
+HTMLROOT                /var/www/html/agua/0.6
+CGIDIR                  /var/www/cgi-bin/agua/0.6
+CGIROOT                 /var/www/cgi-bin/agua/0.6
+APACHECONF              /etc/apache2/apache2.conf
+AGUAUSER                agua
+AGUADIR                 agua
+ADMINUSER               admin
+ADMINS                  admin,syoung
+#LDAP_SERVER             ldap.ccs.miami.edu
+APACHEBINARY            /etc/init.d/apache2
+APACHEUSER              www-data
+
+#### DATABASE
+[database]
+DBTYPE                  MySQL
+DATABASE                agua
+USER                    agua
+PASSWORD                open4agua
+TESTDATABASE            aguatest
+TESTUSER                aguatest
+TESTPASSWORD            99999999
+DUMPFILE                bin/sql/dump/agua.dump
+SESSIONTIMEOUT          24
+#DBFILE                  /data/agua/0.6/bin/db/data.dbl
+MYSQLDATA               /usr/local/mysql/data
+CLUSTER_MYSQLDATA       /private/var/mysql
+
+#### STARCLUSTER
+[starcluster mounts]
+SOURCEDIRS              /agua,/data,/nethome
+MOUNTPOINTS             /mnt/agua,/mnt/data,/mnt/nethome
+DEVICES                 /dev/sdh,/dev/sdi,/dev/sdj
+MOUNTBASE               /mnt
+
+[starcluster images]
+DEFAULT64BIT            ami-38847a51
+DEFAULT32BIT            ami-1e4dbf77
+
+[starcluster nfs]
+PORTMAPPORT             111
+NFSPORT                 2049
+MOUNTDPORT              32767
+
+[starcluster data]
+SNAPSHOT                snap-4b4fcf26
+VOLUMESIZE              100
+DEVICE                  /dev/sdj
+REMOTEDIR               /data
+LOCALDIR                /starclusters
+
+#### AMAZON WEB SERVICES
+[aws]
+DATASNAPSHOT            snap-55fe4a3f
+AVAILZONE               us-east-1a
+DATAVOLUMESIZE          40
+DATADEVICE              /dev/sdh
+USERVOLUMESIZE          40
+USERDEVICE              /dev/sdi
+EC2HOME                 /usr
+JAVAHOME                /usr
+JAVA                    /usr/java
+ADMINKEY                syoung,test
+
+#### CLUSTER
+[cluster]
+SGEROOT                 /opt/sge6
+SGEQMASTERPORT          63231
+SGEEXECDPORT            63232
+SGEBIN                 /opt/sge6/bin/lx24-amd64
+QSUB                    /opt/sge6/bin/lx24-amd64/qsub
+QSTAT                   /opt/sge6/bin/lx24-amd64/qstat
+SLEEP                   5
+CANCELJOB               /opt/sge6/bin/lx24-amd64/qdel -j
+
+#SGEROOT                 /var/lib/gridengine
+#SGEQMASTERPORT          701
+#SGEEXECDPORT            702
+#SGEBIN                  /var/lib/gridengine/bin/lx24-amd64
+#QSUB                    /var/lib/gridengine/bin/lx24-amd64/qsub
+#QSTAT                   /var/lib/gridengine/bin/lx24-amd64/qstat
+#SLEEP                   5
+#CANCELJOB               /var/lib/gridengine/bin/lx24-amd64/qdel -j
+
+#### APPLICATIONS
+[applications]
+BOWTIE                  /data/apps/bowtie/0.12.2
+CASAVA                  /data/apps/casava/1.6.0/bin
+CROSSMATCH              /data/apps/crossmatch/0.990329/cross_match
+CUFFLINKS               /data/apps/cufflinks/0.8.2
+DELTAFILTER             /data/apps/mummer/delta-filter
+EC2                     /usr/bin
+#EC2                     /usr/share/ec2/1.4.2.4/bin
+IAM                     /usr/share/iam/1.2.0/bin
+ERANGE                  /data/pipeline/erange2
+GATK                    /data/apps/gatk/1.0.4705
+JBROWSE                 /data/apps/jbrowse/100511/bin
+MAQ                     /data/apps/maq/0.7.1
+MIRA                    /data/apps/mira/bin/mira
+NOVOALIGN               /data/apps/novoalign/2.05.33
+NUCMER                  /data/apps/mummer/nucmer
+PYTHON                  /data/apps/python/2.6.1/bin/python
+REPMASK                 /data/apps/erange2/data/repMask/rmask.db
+RUNMAPPING              /data/apps/454/2.0.00.20-64/bin/runMapping
+SAMTOOLS                /data/apps/samtools/0.1.6
+SHOWCOORDS              /data/apps/mummer/show-coords
+SQUASH                  /data/apps/GAPipeline/1.5.1/bin/squashGenome
+STARCLUSTER             /data/starcluster/0.92rc2/bin/starcluster
+TANDEMREPEATSFINDER     /data/apps/tandemrepeats/4.04/trf
+TOPHAT                  /data/apps/tophat/1.0.12/bin
+VCAKE                   /data/apps/vcake/VCAKE_1.0.pl
+VELVET                  /data/apps/velvet/velvet
+
+#### DATA SOURCES
+[data]
+JBROWSEDATA             /data/jbrowse/species
+SAMTOOLSMOUSE           /data/sequence/reference/mouse/mm9/samtools
+SAMTOOLSRAT             /data/sequence/reference/rat/rn4/samtools
+SAMTOOLSHUMAN           /data/sequence/reference/human/hg19/samtools
+MOUSE                   /data/sequence/reference/mouse
+RAT                     /data/sequence/reference/rat
+HUMAN                   /data/sequence/reference/human
+HUMANLATESTBUILD        hg19
+MOUSELATESTBUILD        mm9
+RATLATESTBUILD          rn4

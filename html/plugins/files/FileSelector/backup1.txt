@@ -1,0 +1,110 @@
+		// ADD dojo.connect TO DND SOURCE NODES
+		var allNodes = this._menu.getAllNodes();
+		////////console.log("    allNodes.length: " + allNodes.length);
+		for ( var i = 0; i < allNodes.length; i++ )
+		{
+			//////////console.log("allNodes[" + i + "].innerHTML: " + allNodes[i].innerHTML);
+			var node = allNodes[i];
+			////////console.log("node: " + node);
+			var applicationName = node.innerHTML;
+
+			// GET indexInParent - THE LEVEL OF THIS MENU IN THE PARENT
+			var indexInParent = this.getIndexInParent();
+
+			// SET nodeType BASED ON THE indexInParent TO COINCIDE WITH accept PARAMETER
+			// OF DND SOURCE OF SAME LEVEL (E.G., Stages CAN BE DRAGGED NEXT TO OTHER
+			// WORKFLOWS BUT NOT INTO THE LOWER FILE DIRECTORIES)
+			var nodeType;
+			if ( indexInParent == 0 )
+			{
+				nodeType = 'workflow';
+			}
+			else
+			{
+				nodeType = "file";
+			}
+			
+			////////console.log("SETTING NODE TEXT TYPE TO: " + nodeType);
+			node.setAttribute("dndType", nodeType),
+			
+			//////////console.log("node.firstChild: " + node.firstChild);
+			//////////console.log("node.firstChild.type: " + node.firstChild.type);
+
+			// ADD CLASS FROM type TO NODE
+			//dojo.addClass(node, nodeClass);
+			node.type = [ nodeClass ];
+			
+			// IF ITEM CLASS IS isDraggable, SHOW APPLICATION INFO WHEN CLICKED
+			//if ( nodeClass == 'isDraggable' )
+			//{
+			
+			var groupDragPane = this;
+			
+			//////////console.log("    Doing dojo.connect(node, 'onclick')");
+			dojo.connect(
+				node,
+				"onclick",
+				null,
+				function(e)
+				{
+					////////console.log("    ++++ dojo.connect onclick function");
+					//////////console.log("    e.target.innerHTML: " + e.target.innerHTML);
+					//////////console.log("    e.target.item: " + e.target.item);
+					//////////console.log("    e.target.item: " + dojo.toJson(e.target.item));
+
+					// CALL dojox.widget.RollingList._getPaneForItem AS INHERITED METHOD
+					// FOR plugins.project.FileDrag OBJECT
+					// 	_getPaneForItem: function(/* item? */ item, /* dijit._Contained? */ parentPane, /* item[]? */ children){
+
+					// summary: gets the pane for the given item, and mixes in our needed parts
+					// Returns the pane for the given item (null if the root pane) - after mixing in
+					// its stuff.
+					
+					//////////console.log("++++ dojox.widget.RollingList._getPaneForItem(item: " + item + ", parentPane: " + parentPane + ", children: " + children + ")");
+					//
+					//	var ret = this.getPaneForItem(item, parentPane, children);
+					//	ret.store = this.store;
+					//	ret.parentWidget = this;
+					//	ret.parentPane = parentPane||null;
+					//	if(!item){
+					//		ret.query = this.query;
+					//		ret.queryOptions = this.queryOptions;
+					//	}else if(children){
+					//		ret.items = children;
+					//	}else{
+					//		ret.items = [item];
+					//	}
+					//	return ret;
+
+
+					var item = groupDragPane.items[i];
+					////////console.log("groupDragPane: " + groupDragPane);
+					////////console.log("groupDragPane.items: " + groupDragPane.items);
+					//////////console.log("groupDragPane.items[" + i + "]: " + groupDragPane.items);
+					
+					var itemPane = groupDragPane.parentWidget._getPaneForItem(e.target.item, this, e.target.item.children);
+					////////console.log("itemPane: " + itemPane);
+
+					if(itemPane)
+					{
+						
+						// CALLS addChild IN plugins.project._GroupDragPane
+						// summary: adds a child to this rolling list - if passed an insertIndex,
+						//  then all children from that index on will be removed and destroyed
+						//  before adding the child.
+	
+						////////console.log("itemPane is defined. Calling groupDragPane.parentWidget.addChild(itemPane, groupDragPane.getIndexInParent() + 1)");	
+						
+						groupDragPane.parentWidget.addChild(itemPane, groupDragPane.getIndexInParent() + 1);
+					}
+					else
+					{
+						// CAUSES ERROR ON COMPRESSING:
+						// this.parentWidget.(this);
+						////////console.log("itemPane is NOT DEFINED. DOING groupDragPane.parentWidget(groupDragPane), THEN groupDragPane.parentWidget._onItemClick(null, groupDragPane, selectMenuItem.item, selectMenuItem.children);");
+						groupDragPane.parentWidget(groupDragPane);
+						groupDragPane.parentWidget._onItemClick(null, groupDragPane, selectMenuItem.item, selectMenuItem.children);
+					}
+				}
+				
+			); // dojo.connect

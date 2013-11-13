@@ -1,0 +1,87 @@
+<div>
+	<div dojoAttachPoint="borderContainer" dojoType="dijit.layout.BorderContainer" design="sidebar">		
+		<div dojoType="dijit.layout.ContentPane" region="trailing" class="rightContentPane">
+			<div dojoAttachPoint="buildOptionsContent" class="buildConfigPanel Modules simpleMode SearchOptionsOpen ModuleLayersOptionsOpen" dojoType="dwb.ui.BuildConfigPanel"></div>	    	
+		</div>					    	
+		<div dojoAttachPoint="center" dojoType="dijit.layout.ContentPane" region="center">		        
+			 <div dojoAttachPoint="tabContainer" dojoAttachEvent="selectChild:_tabChildSelect" dojoType="dijit.layout.TabContainer">
+				<div class="modulesPanel" dojoAttachPoint="modulesPane" dojoType="dijit.layout.ContentPane" title="Modules" selected="true">
+					<div class="failureMessage">
+						<img src="img/cross_48.png">	
+						<h2>Error!</h2>
+						<p>Unable to retrieve module list from server, error occurred. Please contact the system administrator.</p>
+					</div>
+					<div class="searchBox">
+						<div>
+							<input type="text" class="searchBoxInput" placeHolder="Enter search text here..." dojoAttachEvent="onKeyUp: checkForEnter" dojoAttachPoint="_searchInputField" dojoType="dijit.form.TextBox"></input>		
+							<button class="searchButton" dojoType="dijit.form.Button" dojoAttachEvent="onClick:updateModuleFilter">Search</button>
+						</div> 		
+					</div>
+					<div class="modulesGrid">
+						<div dojoAttachPoint="moduleCounter" class="moduleCounter">
+						0 - 0 of 0 modules	
+						</div>
+						<table dojoType="dwb.ui.ModuleGrid" dojoAttachEvent="onRowClick:_moduleGridRowClick" dojoAttachPoint="module_grid" height="100%" queryOptions="{'ignoreCase': true }" plugins="{indirectSelection: {name: 'Include', width: '70px', styles: 'text-align: center;'}}" >
+							<thead>
+						    	<tr>
+						      		<th field="name" width="30%">Module Name</th>
+						      		<th field="desc" width="70%">Description</th>
+						    	</tr>
+							</thead>
+						</table>
+					</div>		            
+			    </div>
+			    <div dojoAttachPoint="analysePane" dojoType="dwb.ui.AutoAnalysisModuleTab" title="Auto-Analyse">  
+		        </div>			
+			    <div dojoAttachPoint="layersPane" dojoType="dijit.layout.ContentPane" title="Layers" class="advancedMode">
+					<div dojoAttachPoint="layersTabContainer" dojoAttachEvent="selectChild:_layersTabChildSelect" dojoType="dijit.layout.TabContainer" tabPosition="top" tabStrip="true">	
+			        	<div dojoAttachPoint="baseLayerPane" title="dojo.js" closable="false" labelChange="false" dojoType="dwb.ui.ModuleTab" class="baseModuleLayerPane">			        	
+			        	</div>			        			            		
+					</div>
+				</div>        
+				<div dojoAttachPoint="helpPane" dojoType="dijit.layout.ContentPane" title="Help" href="js/dwb/ui/fragments/HelpPanelContent.html">			            
+		        </div>
+			</div>
+		</div>
+	</div> 
+	<div dojoAttachPoint="buildProgress" dojoAttachEvent="onHide:cancelCurrentBuild" dojoType="dijit.Dialog" title="Building Dojo Package..." class="buildProgressDialog">
+		<div class="successMessage endMessages">
+			<img src="img/accepted_48.png">	
+			<div>
+				<h2>Success!</h2>
+				<p >Build completed successfully, downloading...</p>
+			</div>
+		</div>
+		<div class="failureMessage endMessages">
+			<img src="img/cross_48.png">	
+			<div>
+				<h2>Failure!</h2>
+				<p>Error completing build, please try again...</p>
+			</div>
+		</div>
+		<div class="buildProgressMessage">
+			<div dojoType="dijit.ProgressBar" indeterminate="true"></div>
+			<div class="buildProgressContainer">
+				<table>
+                    <tbody>
+		    			<tr><td></td></tr>
+	    				<tr><td></td></tr>
+    					<tr><td></td></tr>
+					    <tr><td></td></tr>
+					    <tr><td></td></tr>
+                    </tbody>
+				</table>  
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+

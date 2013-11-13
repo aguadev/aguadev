@@ -1,0 +1,108 @@
+<div dojoAttachPoint="containerNode">
+
+    <div class="features">
+        
+        <table>
+            <tr>
+                <td class="title" colspan="3">Add Features</td>
+            </tr>
+
+            <tr>
+                <td class="subTitle" colspan="3">Project</td>
+            </tr>
+
+
+            <tr>
+                <td class="projectIcon">
+                </td>
+                
+                <td>
+                    <div dojoType="dijit.form.ComboBox"
+                        class="projectCombo"
+                        dojoAttachPoint="projectCombo"
+                        dojoAttachEvent="onChange:fireProjectCombo"
+                        autocomplete="false"
+                        title="Select a project containing features"
+                    >
+                    </div>
+                </td>
+                
+
+            </tr>
+            <tr>
+                <td class="subTitle" colspan="3">Workflow</td>
+            </tr>
+            <tr>
+
+                <td class="workflowIcon">
+                </td>
+                
+                <td>
+                    <div dojoType="dijit.form.ComboBox"
+                        class="workflowCombo"
+                        dojoAttachPoint="workflowCombo"
+                        autocomplete="false"
+                        title="Select a workflow containing features"
+                    >
+                    </div>
+                </td>
+    
+            </tr>
+    
+            <tr>
+                <td class="subTitle" colspan="3">Species</td>
+            </tr>
+            <tr>
+
+                <td class="speciesIcon">
+                </td>
+
+                <td>
+                    <select dojoType="dijit.form.ComboBox"
+                        class="speciesCombo"
+                        dojoAttachPoint="speciesCombo"
+                        autocomplete="false"
+                        title="Select a species and build to display features below"
+                    >
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="subTitle" colspan="3">Feature Tracks</td>
+            </tr>
+            
+            <tr>
+                <td class="featureIcon">
+                </td>
+
+                <td>
+                    <div dojoType="dijit.form.ComboBox"
+                        class="featureCombo"
+                        dojoAttachPoint="featureCombo"
+                        autocomplete="false"
+                        title="Select a feature to add to the selected view"
+                    >
+                    </div>
+                </td>
+            </tr>
+
+            <tr align="center">
+                <td colspan="3">
+                    <div
+                        dojoAttachPoint="addFeatureButton"
+                        dojoAttachEvent="onclick:addViewFeature"
+                        class="addFeatureButton"
+                        width="20%"
+                        align="center"
+                        class="fileUpload"
+                        title="Click to add the selected Feature to the selected View"
+                        >Add</div>
+                </td>					
+            </tr>
+
+        </table>
+
+    </div>
+    
+</div>

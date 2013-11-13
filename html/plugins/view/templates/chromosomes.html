@@ -1,0 +1,194 @@
+<div dojoAttachPoint="containerNode">
+
+	<div
+		dojoAttachPoint="mainTab"
+		class="view"
+		title="View"
+		dojoType="dijit.layout.BorderContainer"
+		iconClass="dijitEditorIcon dijitEditorIconView"
+		style="min-width: 1100px !important; width: auto !important; height: 800px !important; max-height: auto !important; padding: 0px !important; bottom: 0px !important;"
+		closable="true"
+	>
+		
+		<!-- LEFT PANE -->
+		<div
+			dojoAttachPoint="leftPane" 
+			class="leftPane" 
+			dojoType="dojox.layout.ExpandoPane" 
+			maxWidth="200px"
+			splitter="true" 
+			duration="125"
+			region="left"
+			startExpanded="false"
+			style="width: 200px; min-width: 25px; background: #FFF; padding: 0; overflow: visible;"
+			easeIn="dojo.fx.easing.expoOut" 
+			easeOut="dojo.fx.easing.expoInOut"
+			duration="100"
+		>
+			
+			<table width="200px">
+				<tr>
+					<td class="viewTitle" colspan="2">Project</td>
+				</tr>
+
+				<tr>
+					<td class="projectIcon">
+					</td>
+					
+					<td>
+						<div dojoType="dijit.form.ComboBox"
+							class="projectCombo"
+							dojoAttachPoint="projectCombo"
+							autocomplete="false"
+						>
+						</div>
+					</td>
+					
+
+				</tr>
+				<tr>
+					<td class="viewTitle" colspan="2">Workflow</td>
+				</tr>
+				<tr>
+
+					<td class="workflowIcon">
+					</td>
+					
+					<td>
+						<div dojoType="dijit.form.ComboBox"
+							class="workflowCombo"
+							dojoAttachPoint="workflowCombo"
+							autocomplete="false"
+						>
+						</div>
+					</td>
+		
+				</tr>
+		
+
+				<tr>
+					<td class="viewTitle" colspan="4">View</td>
+				</tr>
+				<tr>
+		
+					<td class="viewIcon">
+					</td>
+		
+					<td>
+		
+						<div dojoType="dijit.form.ComboBox"
+							class="viewCombo"
+							dojoAttachPoint="viewCombo"
+							autocomplete="false"
+						>
+						</div>
+					</td>
+					<td dojoAttachPoint="deleteViewButton"
+						class="deleteViewButton"
+						width="20%"
+						align="center"
+						class="fileUpload" ></td>
+				</tr>
+
+				<tr>
+					<td class="viewTitle" colspan="2">Species</td>
+				</tr>
+				<tr>
+
+					<td class="fileIcon">
+					</td>
+
+					<td>
+						<select dojoType="dijit.form.ComboBox"
+							class="viewCombo"
+							dojoAttachPoint="speciesCombo"
+							autocomplete="false"
+						>
+							<option value="human">human (hg19)</option>
+							<option value="mouse">mouse (mm9)</option>
+							<option value="rat">rat (rn4)</option>
+
+						</div>
+					</td>
+		
+				</tr>
+				
+			</table>
+
+
+		</div>
+		<!-- END OF LEFT PANE -->
+
+
+		<!-- RIGHT PANE -->
+		<div
+			dojoType="dijit.layout.TabContainer" 
+			dojoAttachPoint="rightPane"
+			class="rightPane" 
+			region="center"
+		>
+
+			<!--<div-->
+			<!--	dojoType="dijit.layout.ContentPane" -->
+			<!--	dojoAttachPoint="JBrowse"-->
+			<!--	title="JBrowse"-->
+			<!--	style="width: 920px !important; height: 800px !important;"-->
+			<!-->-->
+			<!--</div>-->
+
+			<!--<div-->
+			<!--	dojoAttachPoint="sparkle"-->
+			<!--	dojoType="dijit.layout.ContentPane" -->
+			<!--	title="Sparkle"-->
+			<!-->-->
+			<!---->
+			<!--	<!-- CHROMOSOMES -->	-->
+			<!--	<div-->
+			<!--		class="chromosomes"-->
+			<!--		style="-moz-user-select: none; overflow: scroll; height: 100%; background: #000;">-->
+			<!--		<div dojoAttachPoint="chr1"  class="chr1">1</div>-->
+			<!--		<div dojoAttachPoint="chr2"  class="chr2">2</div>-->
+			<!--		<div dojoAttachPoint="chr3"  class="chr3">3</div>-->
+			<!--		<div dojoAttachPoint="chr4"  class="chr4">4</div>-->
+			<!--		<div dojoAttachPoint="chr5"  class="chr5">5</div>-->
+			<!--		<div dojoAttachPoint="chr6"  class="chr6">6</div>-->
+			<!--		<div dojoAttachPoint="chr7"  class="chr7">7</div>-->
+			<!--		<div dojoAttachPoint="chr8"  class="chr8">8</div>-->
+			<!--		<div dojoAttachPoint="chr9"  class="chr9">9</div>-->
+			<!--		<div dojoAttachPoint="chr10"  class="chr10">10</div>-->
+			<!--		<div dojoAttachPoint="chr12"  class="chr12">12</div>-->
+			<!--		<div dojoAttachPoint="chr13"  class="chr13">13</div>-->
+			<!--		<div dojoAttachPoint="chr14"  class="chr14">14</div>-->
+			<!--		<div dojoAttachPoint="chr15"  class="chr15">15</div>-->
+			<!--		<div dojoAttachPoint="chr16"  class="chr16">16</div>-->
+			<!--		<div dojoAttachPoint="chr17"  class="chr17">17</div>-->
+			<!--		<div dojoAttachPoint="chr18"  class="chr18">18</div>-->
+			<!--		<div dojoAttachPoint="chr19"  class="chr19">19</div>-->
+			<!--		<div dojoAttachPoint="chr20"  class="chr20">20</div>-->
+			<!--		<div dojoAttachPoint="chr21"  class="chr21">21</div>-->
+			<!--		<div dojoAttachPoint="chr22"  class="chr22">22</div>-->
+			<!--		<div dojoAttachPoint="chrX"  class="chrX">X</div>-->
+			<!--		<div dojoAttachPoint="chrY"  class="chrY">Y</div>-->
+			<!--	</div>-->
+			<!--	<!-- END OF CHROMOSOMES -->	-->
+			<!--</div>-->
+
+		</div>
+		<!-- END OF RIGHT PANE -->
+
+	</div>
+	<!-- END OF VIEW TAB dijit.layout.BorderContainer -->
+
+
+<!--    <div
+        dojoAttachPoint="resizeHandle"
+        class="resizeHandle"
+        dojoType="dojox.layout.ResizeHandle"
+        targetId="controls"
+        activeResize="true" 
+        minHeight="100px"
+        minWidth="600px"
+        >
+    </div>
+-->
+</div> 

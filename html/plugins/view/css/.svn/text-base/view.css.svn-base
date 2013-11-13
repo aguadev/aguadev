@@ -1,0 +1,335 @@
+@import url("../../../dojo.1.2.2/dojox/layout/resources/ExpandoPane.css");
+@import url("../../../dojo.1.2.2/dojox/layout/tests/expando.css");
+@import url("../../../dojo.1.2.2/dijit/themes/tundra/tundra.css");
+
+
+.view .leftPane .projectTitle, .view .leftPane .workflowTitle,
+.view .leftPane .reportTitle, .view .leftPane .fileTitle,
+.view .leftPane .viewTitle {
+	text-align: center;
+	font-size: 14px;
+	font-weight: bolder;
+	font-family: Verdana;
+	font-style: oblique;
+	height: 20px;
+	vertical-align: bottom;
+	background: #EEE;
+}
+
+.view .leftPane .message {
+	color: #444;
+	font-family: Verdana;
+	font-size: 12px;
+	font-style: italic;
+	text-align: center;
+	padding-right: 35px;
+}
+
+
+.view .leftPane .fileIcon, .view .leftPane .reportIcon,
+.view .leftPane .viewIcon, .view .leftPane .workflowIcon,
+.view .leftPane .projectIcon {
+	background-repeat: no-repeat;
+	background-position: center;
+	min-width: 35px;
+	min-height: 35px;
+	width: 35px;
+	height: 35px;
+}
+
+.view .leftPane .fileIcon {
+	background-image: url("../../../plugins/view/images/file-28.png");
+}
+.view .leftPane .reportIcon {
+	background-image: url("../../../plugins/view/images/report-28.png");
+}
+.view .leftPane .viewIcon {
+	background-image: url("../../../plugins/view/images/view-28.png");
+}
+.view .leftPane .workflowIcon {
+	background-image: url("../../../plugins/view/images/workflow-28.png");
+}
+.view .leftPane .projectIcon {
+	background-image: url("../../../plugins/view/images/project-28.png");
+}
+
+
+.view .leftPane .saveViewButton, .view .leftPane .deleteViewButton,
+.view .leftPane .saveReportButton,  .view .leftPane .deleteReportButton,
+.view .leftPane .okButton {
+	background-color: #FFF;
+	border: 2px solid #EEE;
+	border-bottom-color: #DDD;	
+	border-left-color: #DDD;	
+	vertical-align: middle;
+	background-position: center;
+	background-repeat: no-repeat;
+	width: 28px;
+	height: 28px;
+}
+
+.view .leftPane .saveViewButton {
+	background-image: url("../../../plugins/view/images/save-24.png");
+}
+.view .leftPane .deleteViewButton {
+	background-image: url("../../../plugins/view/images/delete-24.png");
+}
+.view .leftPane .saveReportButton {
+	background-image: url("../../../plugins/view/images/save-24.png");
+}
+.view .leftPane .deleteReportButton {
+	background-image: url("../../../plugins/view/images/delete-24.png");
+}
+.view .leftPane .okButton {
+	background-image: url("../../../plugins/view/images/OK-34.png");
+}
+
+.view .leftPane .saveReportButton:hover, .view .leftPane .fileUpload:hover,
+.view .leftPane .fileBrowse:hover, .view .leftPane .deleteReportButton:hover,
+.view .leftPane .okButton:hover {
+	border-bottom-color: #BBB;	
+	border-left-color: #BBB;
+	background-color : #FF8;
+}
+
+.view .leftPane .saveReportButton:active, .view .leftPane .fileUpload:active,
+.view .leftPane .fileBrowse:active, .view .leftPane .deleteReportButton:active,
+.view .leftPane .okButton:active {
+	border-bottom-color: #BBB;	
+	border-left-color: #BBB;
+	background-color : #8F8;
+}
+
+
+.view .leftPane .completed {
+	background-image: url("../../../plugins/view/images/completed-18.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	min-width: 35px;
+	min-height: 35px;
+	width: 35px;
+	height: 35px;
+}
+
+.view .leftPane .loading {
+	background-image: url("../../../plugins/view/images/loading-32.gif") !important;
+	background-repeat: no-repeat;
+	background-position: center;
+	min-width: 35px;
+	min-height: 35px;
+	width: 35px;
+	height: 35px;
+}
+
+
+
+
+.view .leftPane .fileBrowse, .view .leftPane .fileUpload {
+	background-color: #FFF;
+	border: 2px solid #EEE;
+	border-bottom-color: #DDD;	
+	border-left-color: #DDD;	
+	vertical-align: middle;
+	float: inherit;
+	min-width: 28px;
+	background-position: center;
+	background-repeat: no-repeat;
+	width: 28px;
+	height: 28px;
+}
+
+.view .leftPane .fileBrowse td:hover, .view .leftPane .fileUpload td:hover {
+	background-image: url();
+	color: #F00;
+	border: 2px solid #FFD;
+	border-bottom-color: #EEC;	
+	border-left-color: #EEC;
+	background-color : #0F0;
+}
+
+.view .leftPane .fileBrowse {
+	background-image: url("../../../plugins/view/images/browse-28.png");
+}
+.view .leftPane .fileUpload {
+	background-image: url("../../../plugins/view/images/upload-28.png");
+}
+
+/* EXPOSE FILE UPLOAD ONCLICK ELEMENT */
+.view .leftPane .dijitFileInput {
+	position: relative;
+	top: -2px;
+	left: -3px;
+	height: 32px !important;
+	width: 32px !important;
+	z-index: 10;
+	border: 0px;
+}
+
+.view .leftPane .dijitFileInputReal {
+	background-color: #00F !important;
+	height: 30px !important;
+	width: 30px !important;
+	z-index: 11;
+}
+
+/* REMOVE BLANK AT RIGHT OF COMBO INPUT */
+.view .leftPane .dijitReset .dijitValidationIcon {
+	visibility: hidden;
+	display: none;
+}
+
+.view .leftPane .projectCombo, .view .leftPane .workflowCombo,
+.view .leftPane .reportCombo, .view .leftPane .viewCombo {
+    font-family: sans-serif;
+    font-size: 18px;
+    width: 130px;
+	text-indent: 2px;
+	/*color: #F00;*/
+    /*size: 250px;*/
+    /*max-width: 30px;*/
+    /*line-height: 50px !important;*/
+}
+
+
+
+.view .leftPaneTabContainer {
+	background-color: #000;
+}
+
+
+/* MIDDLE PANE */
+
+
+.view .middlePane div {
+	display: inline-block !important;
+	position: relative;
+}
+
+.view .middlePane {
+	background-color: #000;
+}
+
+
+.browserContainer {	
+	height:	900px;
+}
+
+
+.view .dijitLayoutContainer {
+	top: 0px;
+	left: 0px;
+}
+
+.view .dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient{
+	height: auto;
+	overflow:  
+}
+
+
+/*.view .searchBar {*/
+/*	position: relative;*/
+/*	left: -25px;*/
+/*	z-index: 999;*/
+/*}*/
+/**/
+/*.view .leftPane .open {*/
+/*	width: 275px !important;*/
+/*}*/
+/**/
+/*.view .dojoxExpandoClosed {*/
+/*	min-width: 25px;*/
+/*}*/
+/**/
+/*.view .dojoxExpandoPane {*/
+/*	width: 275px !important;*/
+/*}*/
+/**/
+/*.view .leftPane {*/
+/*	width: 275px !important;*/
+/*	min-width: 275px !important;*/
+/*}*/
+/**/
+/*.view .leftPane .dojoxExpandoPane .dojoxExpandClose{*/
+/*	width: 25px !important;*/
+/*}*/
+/**/
+/*.view .leftPane .dojoxExpandoPane {*/
+/*	width: 275px !important;*/
+/*}*/
+
+
+
+.chr1 { background-image: url("../../../plugins/view/images/chr1.png"); }
+.chr2 { background-image: url("../../../plugins/view/images/chr2.png"); }
+.chr3 { background-image: url("../../../plugins/view/images/chr3.png"); }
+.chr4 { background-image: url("../../../plugins/view/images/chr4.png"); }
+.chr5 { background-image: url("../../../plugins/view/images/chr5.png"); }
+.chr6 { background-image: url("../../../plugins/view/images/chr6.png"); }
+.chr7 { background-image: url("../../../plugins/view/images/chr7.png"); }
+.chr8 { background-image: url("../../../plugins/view/images/chr8.png"); }
+.chr9 { background-image: url("../../../plugins/view/images/chr9.png"); }
+.chr10 { background-image: url("../../../plugins/view/images/chr10.png"); }
+.chr11 { background-image: url("../../../plugins/view/images/chr11.png"); }
+.chr12 { background-image: url("../../../plugins/view/images/chr12.png"); }
+.chr13 { background-image: url("../../../plugins/view/images/chr13.png"); }
+.chr14 { background-image: url("../../../plugins/view/images/chr14.png"); }
+.chr15 { background-image: url("../../../plugins/view/images/chr15.png"); }
+.chr16 { background-image: url("../../../plugins/view/images/chr16.png"); }
+.chr17 { background-image: url("../../../plugins/view/images/chr17.png"); }
+.chr18 { background-image: url("../../../plugins/view/images/chr18.png"); }
+.chr19 { background-image: url("../../../plugins/view/images/chr19.png"); }
+.chr20 { background-image: url("../../../plugins/view/images/chr20.png"); }
+.chr21 { background-image: url("../../../plugins/view/images/chr21.png"); }
+.chr22 { background-image: url("../../../plugins/view/images/chr22.png"); }
+.chrX { background-image: url("../../../plugins/view/images/chrX.png"); }
+.chrY { background-image: url("../../../plugins/view/images/chrY.png"); }
+
+
+.chr1, .chr2, .chr3, .chr4, .chr5, .chr6, .chr7, .chr8, .chr9, .chr10, .chr11, .chr12, .chr13, .chr14, .chr15, .chr16, .chr17, .chr18, .chr19, .chr20, .chr21, .chr22, .chrX, .chrY {
+	background-color: #000;
+	border: 3px solid #888;
+	border-bottom-color: #444;	
+	border-left-color: #444;	
+	vertical-align: middle;
+	background-position: center;
+	background-repeat: no-repeat;
+	min-width: 100px !important;
+	min-height: 100px !important;
+	max-width: 100px !important;
+	max-height: 100px !important;
+	width: 100px !important;
+	height: 100px !important;
+	z-index: 999;
+	color: #DDF;
+	vertical-align: bottom;
+	text-align: center;
+	font-weight: bolder;
+	display: inline-block !important;
+
+}
+
+
+.chr1:hover, .chr2:hover, .chr3:hover, .chr4:hover, .chr5:hover, .chr6:hover, .chr7:hover, .chr8:hover, .chr9:hover, .chr10:hover, .chr11:hover, .chr12:hover, .chr13:hover, .chr14:hover, .chr15:hover, .chr16:hover, .chr17:hover, .chr18:hover, .chr19:hover, .chr20:hover, .chr21:hover, .chr22:hover, .chrX:hover, .chrY {
+	border: 3px solid #EEA;
+	border-bottom-color: #884;	
+	border-left-color: #884;
+	/*background-color : #FF8;*/
+}
+
+.chr1:active, .chr2:active, .chr3:active, .chr4:active, .chr5:active, .chr6:active, .chr7:active, .chr8:active, .chr9:active, .chr10:active, .chr11:active, .chr12:active, .chr13:active, .chr14:active, .chr15:active, .chr16:active, .chr17:active, .chr18:active, .chr19:active, .chr20:active, .chr21:active, .chr22:active, .chrX:active, .chrY {
+	border: 3px solid #8F8;
+	border-bottom-color: #8A8;	
+	border-left-color: #8A8;
+}
+	
+.viewIcon {
+	background-image: url("../../../plugins/view/images/view.png");
+	background-repeat: no-repeat;
+	width: 18px;
+	height: 18px;
+	position: relative;
+	top: 2px;
+	text-align: center;
+}
+
+.viewIcon* { background-position: 0px; }

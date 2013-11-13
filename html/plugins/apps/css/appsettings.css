@@ -1,0 +1,235 @@
+
+
+/* DOES THIS HELP AUTOSIZING? */
+.parameters {
+	height: auto !important;
+	font-family: Verdana;
+}
+
+.parameters .tabTitle {
+	background-color: #264eea;
+	text-align: center !important;
+	vertical-align: middle;
+	font-size: 20px;
+	font-stretch: expanded;
+	font-weight: bold;
+	color: #FFF;
+}
+
+.parameters .label {
+	text-align:	center !important;
+	font-weight: bolder;
+	font-size: 18px;
+	font-size: 14px;
+	font-style: oblique;
+	height: 20px;
+	vertical-align: bottom !important;
+	background: #EEE;
+}
+
+/*.parameters .addAppButton .dijitButton,*/
+/*.parameters .addAppButton .dijitButtonContents,*/
+/*.parameters .addAppButton .dijitReset .dijitInline,*/
+/*.parameters .addAppButton .dijitReset .dijitInline .dijitButtonNode,*/
+.parameters .addAppButton {
+	/*height: 16px !important;*/
+	width: 100px;
+	font-size: 16px;
+	color: #224;
+}
+
+.parameters .newName,
+.parameters .newType,
+.parameters .newLocation,
+.parameters .newExecutor,
+.parameters .newCluster,
+.parameters .newDescription,
+.parameters .newNotes
+{
+	height: 16px !important;
+	font-size: 14px;
+	color: #444;
+	text-align: left !important;
+	vertical-align: middle !important;
+	font-style: oblique;
+	font-weight: bolder !important;
+	padding-top: 4px;
+}
+
+.parameters .newName {
+	height: 20px !important;	
+}
+
+.parameters .invalid ,
+.parameters .newDescription .dijitTextArea .invalid,
+.parameters .newNotes .dijitTextArea .invalid
+{
+	border: 2px solid #F00 !important;
+}
+
+/* APPS COMBO */
+
+.parameters .parametersCombo,
+.parameters .dijitMenu li,
+.parameters .dijitMenuItem li
+{
+	text-indent: 10px;
+}
+
+.parameters .parametersCombo {
+	text-indent: 10px;
+	height: auto;
+	width: 150px;
+	color: #000;
+	font-size: 15px;
+	font-weight: bold;
+	text-align: center !important;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* HIDE VALIDATION ICON AT RIGHT OF COMBO SCROLLBOX */
+.parameters .parametersCombo .dijitValidationIcon {
+	/*visibility: hidden !important;*/
+	display: none !important;
+	/*width: 0px !important;*/
+}
+
+/* NOTE: THIS IS NECESSARY FOR THE NEXT RULE TO WORK!!! */
+.parameters .parametersCombo .dijitReset .dijitMenu li,
+.parameters .parametersCombo .dijitReset .dijitMenuItem li
+{
+	/*color: #0FF !important;*/
+}
+.parameters .dijitMenu li,
+.parameters .dijitMenuItem li
+{
+	color: #224 !important;
+	height: 25px;
+}
+
+
+/* NOTE: THIS DOESN'T WORK!!! */
+.parameters .parametersCombo .dijitReset .dijitInputField
+{
+	/*color: #0FF !important;*/
+	text-align: center !important;
+}
+
+
+
+/* DRAG SOURCE */
+
+.parameters .dragSource .notes .default
+{
+	color: #555;
+}
+
+.parameters .editAppRow {
+	width: 100%;
+	height: 100%;
+}
+
+
+.parameters .dragSource
+{
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+
+	/*margin-top: 5px;*/
+	width: 120px;	
+	height: 260px;
+	min-height: 100px;
+	
+	text-align: left !important;
+	/*color: #339;*/
+	/*color: darkred;*/
+	/*font-weight: bold;*/
+	
+	font-size: 12px;
+	border-color: #333;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	overflow:auto !important;
+}
+
+.parameters .dragSource .name {
+	font-size: 14px;
+	color: darkred;
+	font-weight: bolder;
+	text-align: left !important;
+
+	background-image: url(../../../plugins/apps/images/app-18.png);
+	text-indent: 22px;
+	background-repeat: no-repeat;
+	height: 18px;
+}
+
+.parameters .dragSource .type {
+	text-align: right;
+	width: 40px;
+	font-size: 12px;
+	color: darkblue;
+}
+
+.parameters .dragSource .executor,
+.parameters .dragSource .location,
+.parameters .dragSource .cluster {
+	color: #222;
+	font-size: 11px;
+	font-weight: bold;
+	text-align: left !important;
+	background: #EFEFEF;
+}	
+
+.parameters .dragSource .description {
+	color: #222;
+	font-size: 14px;
+	font-weight: bold;
+	text-align: left !important;
+	background: #EFEFEF;
+}
+
+.parameters .dragSource .notes {
+	color: #000;
+	font-weight: normal;
+	font-size: 12px;
+	font-style: italic;
+	text-align: left !important;
+	background: #EFEFEF;
+}
+
+.parameters .trash {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+
+	margin-top: 5px;
+	width: 150px;	
+	height: 60px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.parameters .trashIcon {
+	height: 100%;
+	width: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	
+	background-image: url(../../../plugins/apps/images/trash-60.png);
+	background-repeat: no-repeat;
+}
+

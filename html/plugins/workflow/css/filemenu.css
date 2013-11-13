@@ -1,0 +1,24 @@
+.filemenu {
+    font-family: Verdana;
+	text-indent: 4px;
+	font-size: 16px;
+	color: darkred;
+}
+
+.filemenu .title {
+    color: #822;
+    font-weight: bolder;
+    background-color: #EEE;
+    text-align: left;
+	text-indent: -5px;
+}
+
+.filemenu .runIcon {
+	background-image: url("../../../../plugins/workflow/images/run-20.png");
+	background-repeat: no-repeat;
+}
+
+.filemenu .chainIcon {
+	background-image: url("../../../../plugins/workflow/images/chain-20-red.png");
+	background-repeat: no-repeat;
+}

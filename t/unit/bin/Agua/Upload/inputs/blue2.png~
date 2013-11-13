@@ -1,0 +1,34 @@
+Content-type: text/html
+
+upload.cgi    htmlroot: /var/www/html/agua/0.6
+upload.cgi    boundary_number: 17316985621204646634638386356
+upload.cgi    tempdir: /tmp
+upload.cgi    Reading STDIN
+upload.cgi    filename: 
+0000000000000000000000
+**dctype.rdf**
+0000000000000000000000
+upload.cgi    details: 
+0000000000000000000000
+**
+Content-Disposition: form-data; name="path"
+
+
+-----------------------------17316985621204646634638386356
+Content-Disposition: form-data; name="username"
+
+admin
+-----------------------------17316985621204646634638386356
+Content-Disposition: form-data; name="sessionId"
+
+9999999999.9999.999
+-----------------------------17316985621204646634638386356--
+**
+0000000000000000000000
+upload.cgi    tempfile: /tmp/dctype.rdf528978.757365657
+upload.cgi    params:
+$VAR1 = {
+          'sessionId' => '9999999999.9999.999',
+          'path' => '-----------------------------17316985621204646634638386356'
+        };
+{ error: 'upload.cgi    username not defined' }

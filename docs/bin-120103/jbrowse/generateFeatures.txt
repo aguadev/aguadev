@@ -1,0 +1,130 @@
+
+h3. APPLICATION
+
+generateFeatures
+
+h3. PURPOSE
+
+1. GENERATE JBROWSE FEATURES FOR ALL CHROMOSOMES IN PARALLEL
+
+USING flatfile-to-json.pl
+
+2. SUPPORTS GFF, GFF2, BED AND BAM INPUT FILES
+
+3. PREPARE INPUT FILES BY USING columnSplit.pl TO GENERATE
+
+ONE INPUT FILE IN EACH chr
+ DIRECTORY
+
+h3. INPUTS
+
+1. DIRECTORY CONTAINING INPUT GFF OR BAM FILES
+
+OR
+
+A GFF OR BAM FILE
+
+2. refSeqs.js FILE CONTAINING REFERENCE GENOME INFO
+
+3. A WORKING JBROWSE INSTALLATION
+
+4. OUTPUT DIRECTORY TO CREATE JBROWSE data DIRECTORY
+
+h3. OUTPUTS
+
+1. CREATE DIRECTORIES FOR OUTPUT FILES
+
+2. COPY refSeqs.js TO EACH SUB DIRECTORY
+
+NOTES
+
+1. CREATE DIRECTORIES FOR OUTPUT FILES
+
+2. COPY refSeqs.js TO EACH SUB DIRECTORY
+
+3. RUN flatfile-to-json.pl AS ARRAY JOB
+
+h3. USAGE
+
+{code}
+./generateFeatures.pl \
+<--inputdir String> \
+<--outputdir String> \
+<--filename String> \
+<--filetype String> \
+<--label String> \
+<--key String> \
+<--species String> \
+<--build String> \
+[--jbrowse String] \
+[--maxjobs=i] \
+[--cpus=i] \
+[--cluster String] \
+[--queue String] \
+[--sleep=i] \
+[--verbose] \
+[--tempdir String] \
+[--cleanup String] \
+[--help]
+{code}
+
+REQUIRED JBROWSE-SPECIFIC ARGUMENTS
+
+inputdir        :       Directory with chromosome subdirs containing input file
+outputdir  :       JBrowse files will be printed to chromosome subdirs in this folder
+filename    :       Name of input file (e.g., out.bam). If not defined, process all files.
+filetype    :       Type of input file (bam or gff)
+label               :       Label for experiment (e.g., bowtie)
+key                 :       Key for features in JBrowse
+species     :       Reference species (e.g., human, mouse, rat)
+build               :       Reference species build (e.g., hg19, mm9, rn4)
+
+OPTIONAL (mostly CLUSTER) ARGUMENTS
+jbrowse     :       Location of JBrowse installation
+maxjobs         :       Maximum number of jobs to be run concurrently
+cpus                :       Number of cpus per job
+cluster     :       Type of cluster (e.g., LSF, PBS)
+queue               :       Name of queue (e.g., gsmall)
+sleep               :       Length of sleep between queue polls
+verbose             :       Print verbose/debug information
+tempdir     :       Use this temporary directory to write data on execution host
+cleanup     :       Remove all script files and logs after completion of runs
+help        :       Print this help information
+
+h3. EXAMPLES
+
+{code}
+./generateFeatures.pl \ build
+hg19 \ 
+--cluster PBS \ 
+--filename out.bam \ 
+--filetype bam \ 
+--inputdir /nethome/syoung/.agua/Project1/Workflow1/bowtie \ 
+--key bowtie \
+--label bowtie \ 
+--outputdir /nethome/syoung/.agua/Project1/Workflow1/jbrowse \ 
+--queue gsmall \
+--species human \ 
+--username syoung
+{code}
+
+
+h3. NOTES
+
+CALCULATE LOCATION OF refSeqs.js FILE USING SPECIES AND BUILD
+
+AND SAMTOOLS:
+
+1. CONF FILE CONTAINS SPECIES REFERENCE LOCATION, E.G.:
+
+{code}
+HUMAN   /data/sequence/chromosomes/human
+{code}
+
+2. refSeqs.js FILE IS PLACED IN <BUILD>/jbrowse SUBFOLDER, E.G.:
+
+{code}
+/data/sequence/chromosomes/human/hg19/jbrowse/refSeqs.js
+{code}
+
+

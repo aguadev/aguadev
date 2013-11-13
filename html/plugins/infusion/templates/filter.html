@@ -1,0 +1,147 @@
+<div data-dojo-attach-point="containerNode">
+
+	<div data-dojo-type="dijit.layout.ContentPane"
+		data-dojo-attach-point="mainTab"
+		class="drilldown"
+		title="Project List">
+
+		<div class="listContainer">
+
+			<div id="projectContainer"
+				class="projectContainer">
+				
+				<img
+					data-dojo-attach-point="addProjectButton"
+					class="addProjectButton">
+				</img>
+					
+				<div class="projects-header">Projects</div>
+				<input
+					data-dojo-attach-point="projectFilter"
+					id="projectFilter"
+					class="projectFilter"
+					data-dojo-type="dijit/form/TextBox"
+					data-dojo-props="
+						placeHolder: 'Filter by Keyword',
+						intermediateChanges:true
+						"
+				/>
+
+				<span class="selectOverlay"
+					data-dojo-attach-point="projectSelectOverlay"
+				>Filter by Status</span>	
+				<div
+					data-dojo-type="dijit/form/Select"
+					data-dojo-attach-point="projectSelect"
+					class="projectSelect"
+					autocomplete="false"
+					disabled="false"
+				>
+				</div>
+
+				<div
+					class="projectList"
+					id="projects"
+					data-dojo-attach-point="projectList"
+					data-dojo-type="plugins/infusion/SelectList"
+					data-dojo-props="
+						selectionMode: 'single'
+					"
+				></div>
+
+			</div>
+
+			<div id="sampleContainer"
+				class="sampleContainer">
+				<div class="samples-header">Samples</div>
+				<input
+					data-dojo-attach-point="sampleFilter"
+					id="sampleFilter"
+					class="sampleFilter"
+					data-dojo-type="dijit/form/TextBox"
+					data-dojo-props="
+						placeHolder: 'Filter by Sample',
+						intermediateChanges:true
+						"
+				/>
+
+				<div
+					data-dojo-type="dijit/form/Select"
+					data-dojo-attach-point="sampleSelect"
+					data-dojo-attach-event="onChange:runSelectSample"
+					class="sampleSelect"
+					autocomplete="false"
+					disabled="false"
+				>
+				</div>
+
+				<div class="sampleList"
+					id="samples"></div>
+
+			</div>
+
+			<div id="flowcellContainer"
+				class="flowcellContainer">
+				<div class="flowcells-header">Flowcells</div>
+				<input
+					data-dojo-attach-point="flowcellFilter"
+					id="flowcellFilter"
+					class="flowcellFilter"
+					data-dojo-type="dijit/form/TextBox"
+					data-dojo-props="
+						placeHolder: 'Filter by Flowcell',
+						intermediateChanges:true
+						"
+				/>
+
+				<div
+					data-dojo-type="dijit/form/Select"
+					data-dojo-attach-point="flowcellSelect"
+					data-dojo-attach-event="onChange:runSelectFlowcell"
+					class="flowcellSelect"
+					autocomplete="false"
+					disabled="false"
+				>
+				</div>
+
+				<div class="flowcellList"
+					id="flowcells"
+					data-dojo-attach-point="flowcellList"></div>
+
+			</div>
+
+			<div id="laneContainer"
+				class="laneContainer">
+				<div class="lanes-header">Lanes</div>
+				<input
+					data-dojo-attach-point="laneFilter"
+					id="laneFilter"
+					class="laneFilter"
+					data-dojo-type="dijit/form/TextBox"
+					data-dojo-props="
+						placeHolder: 'Filter by Lane',
+						intermediateChanges:true
+						"
+				/>
+
+				<div
+					data-dojo-type="dijit/form/Select"
+					data-dojo-attach-point="laneSelect"
+					data-dojo-attach-event="onChange:runSelectLane"
+					class="laneSelect"
+					autocomplete="false"
+					disabled="false"
+				>
+				</div>
+
+				<div
+					class="laneList"
+					id="lanes"></div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</div>

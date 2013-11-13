@@ -1,0 +1,15 @@
+{
+   "owner" : "agua",
+   "location" : "bin/aligners/ELAND.pl",
+   "executor" : "/usr/bin/perl",
+   "installdir" : "/agua/apps/bioapps",
+   "version" : "0.8.0-alpha.1+build.4",
+   "name" : "ELAND",
+   "localonly" : "0",
+   "description" : "Solexa/Illumina short read aligner (max 32 bps aligned)",
+   "package" : "bioapps",
+   "username" : "agua",
+   "notes" : " ",
+   "url" : "http://www.aguadev.org/confluence/display/howto/Bioapps+API",
+   "type" : "aligner"
+}

@@ -1,0 +1,91 @@
+<div dojoAttachPoint="containerNode">
+
+<div id="attachPoint" ></div>
+
+    <table
+        cellspacing="0px"
+        height="300px"
+        width="600px"
+        style="padding: 0; margin: 0;"
+		class="pageTable"
+	>
+        <tr>
+            <td align="center">
+			<td id="colForm">
+                
+                <div
+                    dojoAttachPoint="dialog"
+                    dojoType="dijit.Dialog"
+                    closeText="true"
+                    title="File Upload"
+                    class="uploader"
+					draggable="true"
+                    style="margin-right: auto; margin-left: auto; text-align: center;"
+				>
+
+				<form
+					method="post"
+					action="../../../../../../cgi-bin/aguadev/upload.cgi"
+					enctype="multipart/form-data" >
+
+					<fieldset>
+	
+						<input
+							dojoType="dojox.form.Uploader"
+							dojoAttachPoint="uploader"
+							class="browseButton"
+							name="uploadedfile"
+							selectMultipleFiles="true"
+							multiple="true"
+							type="file"
+							title="Click to Select Files"
+							id="${uploaderId}">
+
+<!--						<div class="destination">
+							Destination
+							<div dojoAttachPoint="destination"></div>
+						</div>
+
+-->						<input
+							dojoAttachPoint="path"
+							type="hidden"
+							name="path"
+							value="" />
+						
+						<input
+							type="hidden"
+							dojoAttachPoint="username"
+							name="username"
+							value="${username}" />
+						<input
+							type="hidden"
+							name="sessionid"
+							value="${sessionid}" />
+						<input
+							dojoType="dijit.form.Button"
+							dojoAttachEvent="onClick:clear"
+							label="Clear"
+							/>
+						<input
+							type="submit"
+							label="Submit"
+							dojoType="dijit.form.Button" />
+						<div
+							dojoType="dojox.form.uploader.FileList"
+							dojoAttachPoint="fileList"
+							uploaderId="${uploaderId}">
+						</div>
+					</fieldset>
+				</form>
+				
+			</td>
+			
+			<td
+				dojoAttachPoint="images"
+			>
+			</td>
+		</tr>
+	</table>
+
+
+</div>

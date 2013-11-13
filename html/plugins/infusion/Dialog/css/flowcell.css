@@ -1,0 +1,331 @@
+/* GLOBAL STYLES */
+
+.infusion .flowcell {
+    user-select: none !important;
+}
+
+.dojoxDialogNoTitle .dojoxDialogCloseIcon,
+.dijitDialogCloseIconHover,
+.dijitDialogCloseIcon {
+    background: url(http://localhost/infusiondev/dojo/dojox/widget/Dialog/images/dialogCloseButton.png) !important;
+    top: 5px !important;
+    left: 5px !important;
+    z-index: 99999999 !important;
+}
+
+/* LOGIN DIALOGUE */
+
+.tundra .dojoxDialog {
+    border: 1px solid #B7B7B7;
+    border-radius: 9pt 9pt 9pt 9pt;
+    box-shadow: -2px 5px 20px #888888 !important;
+    padding: 1.5em 3px 3px;
+}
+.infusion .dialog .dijitDialog {
+    min-height: 600px !important;
+    width: 810px !important;
+}
+
+.infusion .dialog .dojoxDialog .dojoxDialogPaneContent,
+.infusion .dialog .dojoxDialog .dojoxDialogWrapper {
+    border: none;
+    padding: 0;
+    width: 900px !important;
+    min-height: 540px !important;
+    height: auto !important;
+}
+
+.infusion .dialog .dojoxDialogNoTitle .dojoxDialogTitleBar {
+    display: inline-block !important;
+    width: 100% !important;
+}
+
+.infusion.dialog.flowcell .dojoxDialogTitle {
+   font-size: 30px !important;
+    font-weight: bolder !important;
+    text-align: center !important;
+    color: #888;
+}
+
+/* INPUT ERRORS */
+.infusion .dialog .flowcell .dijitError {
+	border: 2px solid #F00 !important;	
+}
+
+.dijitTextBoxError .dijitValidationContainer {
+    cursor: default;
+    display: none;
+}
+.dijitReset .dijitInputField .dijitValidationIcon .dijitValidationInner {
+	visibility: hidden !important;
+	left: 40px !important;	
+}
+
+/* TOOLTIP */
+.dijitTooltipContents {
+	background-color: #FFFFAA !important;
+	color: #55B !important;
+	border-radius:4pt;
+}
+
+
+/* LOCAL STYLES */
+
+/* DIALOGUE */
+.tundra .dojoxDialog {
+    border: 1px solid #B7B7B7;
+    border-radius: 9pt 9pt 9pt 9pt;
+    box-shadow: -2px 5px 20px #888888 !important;
+    padding: 1.5em 3px 3px;
+}
+.infusion.dialog.flowcell table {
+    top: 20px !important;
+	/*position: absolute;*/
+	/*top: 25%;*/
+;
+    position: relative;
+}
+.infusion .dialog .flowcell table tr td {
+}
+
+.infusion.dialog.flowcell {
+	text-align: center;
+	vertical-align: middle;
+	color: #224;
+	font-size: 14px;
+	font-family: Verdana;
+	font-weight: bold;
+	z-index: 1001;
+	width: 600px !important;
+	/*min-height: 580px !important;*/
+	height: auto !important;
+}
+.infusion.dialog.flowcell .dojoxDialogWrapper {
+	z-index: 1001;
+}
+
+.infusion.dialog.flowcell .dojoxDialogTitleBar {
+    height: 50px !important;
+	border-radius: 6pt;
+    position: absolute !important;
+    z-index: 999;
+}
+
+.infusion.dialog.flowcell .dijitDialog {
+   box-shadow: -2px 5px 20px #888;
+}
+
+/* LABEL WIDTH */
+.infusion .form.textArea .label,
+.infusion .form.validationTextBox .label {
+    min-width: 200px !important;
+}
+
+
+/* BUTTONS */
+.infusion.dialog.flowcell .saveButton {
+	/* SIZE, BORDER */
+	background-color: #FFF;
+	border: 3px solid #EEE;
+	border-bottom-color: #DDD;	
+	border-left-color: #DDD;	
+	vertical-align: middle;
+	background-position: center;
+	background-repeat: no-repeat;
+	width: 150px;
+	height: 40px;
+
+	/* TEXT */
+	-moz-user-select: none;
+    color: #222;
+    font-weight: bolder;
+    font-size: 28px;
+	vertical-align: middle;
+	text-align: center;
+	margin-top: 5px;
+}
+
+.infusion.dialog.flowcell .saveButton:hover,
+.infusion.dialog.flowcell .saveButton:active {
+	background-color: #8F8 !important;
+	border: 3px solid #DDD;
+	border-bottom-color: #BBB;	
+	border-left-color: #BBB;	
+}
+.infusion.dialog.flowcell .saveButton:active{
+	background-color: #0F0 !important;
+}
+
+/* LOGIN LOADING */
+.infusion.dialog.flowcell .error {
+    color: #F44;
+}
+
+.infusion.dialog.flowcell .accepted {
+    color: #4D4;
+}
+
+.infusion.dialog.flowcell .loading {
+    color: #444;
+	font-weight: 600;
+}
+
+.infusion.dialog.flowcell .progressBar {
+	width: 90%;
+}
+.infusion .dialog .flowcell .inactive,
+.infusion .dialog .flowcell .dijitProgressBar .dijitProgressBarEmpty .progressBar .inactive,
+.infusion .dialog .flowcell .dijitProgressBarFull .inactive,
+.infusion .dialog .flowcell .dijitProgressBarEmpty .inactive {
+	visibility: invisible !important;
+	display: none !important;
+}
+
+.log .dijitProgressBarFull,
+.log .dijitProgressBarEmpty {
+	visibility: visible !important;
+	display: inline !important;
+}
+
+/* PROGRESS MESSAGE */
+.infusion.dialog.flowcell .progressMessage {
+	font-family: Arial !important;
+	font-size: 20px;
+	color: #888;
+}
+/* LOGIN ICON */
+.infusion.dialog.flowcell .infusion .dialog .flowcellIcon {
+	width: 150px !important;
+    height: 150px !important;
+	/*background-image: url("../../../plugins/login/images/home-100.png");*/
+	background-image: url("../../../plugins/login/images/infusion-150.png");
+	background-repeat: no-repeat;
+    background-position: center !important;
+}
+
+.infusion.dialog.flowcell .hidden {
+	visibility: hidden;
+	display: none;
+}
+
+
+/* MAIN TABLE */
+.infusion.dialog.flowcell .mainTable {
+	background-color: #FFF !important;
+	vertical-align: text-top !important;
+	text-align: "center";
+	width: 600px !important;
+	min-height: 620px !important;
+}
+
+/* INIT TABLE */
+.infusion.dialog.flowcell .infusion .dialog .flowcellTable {
+	width: 850px !important;	
+
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius: 14pt;
+
+	background:#FFFFFF none repeat scroll 0 0;
+	border: 1px solid #DDD;
+	cursor:default;
+	height: 260px;
+	min-height: 100px;
+	
+	text-align: left !important;
+	color: #333;
+	font-weight: bold;	
+	font-family: Verdana;
+	font-size: 18px;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	overflow:auto !important;
+}
+
+/* PROGRESS BUTTON AND SAVE BUTTON */
+.infusion.dialog.flowcell .saveButton {
+	height: 50px !important;
+	width: 100% !important;
+	font-size: 30px !important;
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	border-radius: 8pt;
+	background: #DDF none repeat scroll 0 0;
+	height: 30px;
+	color: #222;	
+	border: 1pt solid #CCC;
+	font-weight: 900 !important;
+	-moz-user-select: none !important;
+	text-align: center !important;
+	position: relative;
+	top: 35px !important;
+}
+.infusion.dialog.flowcell .saveButton:hover {
+	background-color: #AAAAFF;
+}
+.infusion.dialog.flowcell .saveButton:active {
+	color: #FFF !important;
+	background-color: #7777DD;
+}
+
+/* LABELS */
+.infusion.dialog.flowcell .label {
+	text-align:	center !important;
+	font-weight: bolder !important;
+	font-size: 18px;
+	font-family: Verdana;
+	font-size: 14px;
+	font-style: oblique;
+	height: 100%;
+	background: #EEE;
+	min-height: 20px !important;
+	vertical-align: middle !important;
+}
+
+.infusion.dialog.flowcell .sublabel {
+	font-size: 12px;
+	text-align:	center !important;
+	vertical-align: center !important;
+	height: 15px !important;
+	color: darkblue !important;
+	padding: 0px !important;
+}
+
+/* USE FIXED-WIDTH FONT FOR PRE-LIKE SPACING IN TEXTAREA */
+.infusion.dialog.flowcell textarea {
+	white-space: pre-wrap !important;
+	font-weight: bold !important;
+	color: #111 !important;
+	font-family: arial !important;
+	font-size: 10px !important;
+	font-family: Courier New !important;
+	background-color: #FFA !important;
+}
+
+/* INPUT TURNS YELLOW ON HOVER */
+.infusion.dialog.flowcell .dijitHover,
+.infusion.dialog.flowcell .awsAccessKeyId:hover,
+.infusion.dialog.flowcell .secretAccessKey:hover {
+	background-color: #FFA !important;
+}
+
+.infusion.dialog.flowcell .dijitReset .dijitValidationContainer {
+	visibility: hidden !important;
+	left: 40px;
+}
+
+/* INPUTS */
+.infusion.dialog.flowcell .dijitTextBox INPUT {
+	background-color: #FFA !important;
+	float: none !important;	
+}
+
+.infusion.dialog.flowcell.dojoxDialog .dojoxDialogPaneContent {
+    opacity: 1 !important;
+    min-height: 530px !important;
+    height: auto !important;
+}
+

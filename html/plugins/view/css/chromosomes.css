@@ -1,0 +1,68 @@
+.view .chromosomes {
+	position: relative;
+	top: 24px !important;
+}
+
+.chr1 { background-image: url("../../../plugins/view/images/chr1.png"); }
+.chr2 { background-image: url("../../../plugins/view/images/chr2.png"); }
+.chr3 { background-image: url("../../../plugins/view/images/chr3.png"); }
+.chr4 { background-image: url("../../../plugins/view/images/chr4.png"); }
+.chr5 { background-image: url("../../../plugins/view/images/chr5.png"); }
+.chr6 { background-image: url("../../../plugins/view/images/chr6.png"); }
+.chr7 { background-image: url("../../../plugins/view/images/chr7.png"); }
+.chr8 { background-image: url("../../../plugins/view/images/chr8.png"); }
+.chr9 { background-image: url("../../../plugins/view/images/chr9.png"); }
+.chr10 { background-image: url("../../../plugins/view/images/chr10.png"); }
+.chr11 { background-image: url("../../../plugins/view/images/chr11.png"); }
+.chr12 { background-image: url("../../../plugins/view/images/chr12.png"); }
+.chr13 { background-image: url("../../../plugins/view/images/chr13.png"); }
+.chr14 { background-image: url("../../../plugins/view/images/chr14.png"); }
+.chr15 { background-image: url("../../../plugins/view/images/chr15.png"); }
+.chr16 { background-image: url("../../../plugins/view/images/chr16.png"); }
+.chr17 { background-image: url("../../../plugins/view/images/chr17.png"); }
+.chr18 { background-image: url("../../../plugins/view/images/chr18.png"); }
+.chr19 { background-image: url("../../../plugins/view/images/chr19.png"); }
+.chr20 { background-image: url("../../../plugins/view/images/chr20.png"); }
+.chr21 { background-image: url("../../../plugins/view/images/chr21.png"); }
+.chr22 { background-image: url("../../../plugins/view/images/chr22.png"); }
+.chrX { background-image: url("../../../plugins/view/images/chrX.png"); }
+.chrY { background-image: url("../../../plugins/view/images/chrY.png"); }
+
+
+.chr1, .chr2, .chr3, .chr4, .chr5, .chr6, .chr7, .chr8, .chr9, .chr10, .chr11, .chr12, .chr13, .chr14, .chr15, .chr16, .chr17, .chr18, .chr19, .chr20, .chr21, .chr22, .chrX, .chrY {
+	background-color: #000;
+	border: 3px solid #888;
+	border-bottom-color: #444;	
+	border-left-color: #444;	
+	vertical-align: middle;
+	background-position: center;
+	background-repeat: no-repeat;
+	min-width: 100px !important;
+	min-height: 100px !important;
+	max-width: 100px !important;
+	max-height: 100px !important;
+	width: 100px !important;
+	height: 100px !important;
+	z-index: 999;
+	color: #DDF;
+	vertical-align: bottom;
+	text-align: center;
+	font-weight: bolder;
+	display: inline-block !important;
+
+}
+
+
+.chr1:hover, .chr2:hover, .chr3:hover, .chr4:hover, .chr5:hover, .chr6:hover, .chr7:hover, .chr8:hover, .chr9:hover, .chr10:hover, .chr11:hover, .chr12:hover, .chr13:hover, .chr14:hover, .chr15:hover, .chr16:hover, .chr17:hover, .chr18:hover, .chr19:hover, .chr20:hover, .chr21:hover, .chr22:hover, .chrX:hover, .chrY {
+	border: 3px solid #EEA;
+	border-bottom-color: #884;	
+	border-left-color: #884;
+	/*background-color : #FF8;*/
+}
+
+.chr1:active, .chr2:active, .chr3:active, .chr4:active, .chr5:active, .chr6:active, .chr7:active, .chr8:active, .chr9:active, .chr10:active, .chr11:active, .chr12:active, .chr13:active, .chr14:active, .chr15:active, .chr16:active, .chr17:active, .chr18:active, .chr19:active, .chr20:active, .chr21:active, .chr22:active, .chrX:active, .chrY {
+	border: 3px solid #8F8;
+	border-bottom-color: #8A8;	
+	border-left-color: #8A8;
+}
+	

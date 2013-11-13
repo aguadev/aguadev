@@ -1,0 +1,17 @@
+[
+   {
+      "owner" : "agua",
+      "location" : "bin/NEWAPP",
+      "executor" : "",
+      "installdir" : "/aguadev/apps/NEWPACKAGE",
+      "version" : "6.4.0.0",
+      "name" : "NEWAPP",
+      "localonly" : "0",
+      "description" : "A NEW APP in a NEW PACKAGE",
+      "package" : "NEWPACKAGE",
+      "username" : "",
+      "notes" : "",
+      "url" : "",
+      "type" : "NEWAPP"
+   }
+]

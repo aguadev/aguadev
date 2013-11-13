@@ -1,0 +1,15 @@
+[
+    {
+        action      :   "AND",
+        field       :   "Disease",
+        operator    :   "CONTAINS",
+        value       :   "leukemia"
+    },
+    {
+        action      :   "OR",
+        field       :   "Disease",
+        operator    :   "CONTAINS",
+        value       :   "lymphoma"
+    }
+    
+]

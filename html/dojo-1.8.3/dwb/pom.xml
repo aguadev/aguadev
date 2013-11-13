@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.dtk</groupId>
+	<artifactId>dwb</artifactId>
+	<packaging>war</packaging>
+	<version>1.0-SNAPSHOT</version>
+	<name>dwb</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<dojo.version>1.8.0</dojo.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-jaxrs</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+		<dependency>
+			<groupId>rhino</groupId>
+			<artifactId>js</artifactId>
+			<version>1.7R1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.wink</groupId>
+			<artifactId>wink-common</artifactId>
+			<version>1.1.2-incubating</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.wink</groupId>
+			<artifactId>wink-server</artifactId>
+			<version>1.1.2-incubating</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-nop</artifactId>
+			<version>1.6.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>4.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.3.3</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.2</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>shrinksafe</groupId>
+			<artifactId>shrinksafe</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>${project.basedir}/src/main/webapp/WEB-INF/lib/shrinksafe.jar</systemPath>
+		</dependency>		
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>7.5.4.v20111024</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>rome</groupId>
+			<artifactId>rome</artifactId>
+			<version>1.0</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+	</dependencies>
+	<profiles>
+		<profile>
+			<id>standard</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>build_profile</id>
+								<phase>initialize</phase>
+								<configuration>
+									<tasks>
+										<taskdef resource="net/sf/antcontrib/antcontrib.properties"
+											classpathref="maven.plugin.classpath" />
+										<replace file="${project.basedir}/src/main/webapp/index.html"
+											token="inDebug=true" value="inDebug=false" />
+
+										<!-- Remove previous Dojo versions -->
+										<delete includeemptydirs="true">
+											<fileset dir="src/main/webapp/WEB-INF/config/packages/" />
+										</delete>
+
+										<!-- If user want to just expose a single version of Dojo, set 
+											up that package descriptor for them. -->
+										<if>
+											<isset property="dojo.source"></isset>
+											<then>
+												<!-- Copy package meta-data for desired version of Dojo -->
+												<copy
+													todir="src/main/webapp/WEB-INF/config/packages/dojo/${dojo.version}">
+													<fileset dir="src/main/config/packages/dojo/${dojo.version}" />
+												</copy>
+
+												<!-- Can't override property set on the command line, copy to 
+													temp prop to override if regex matches. -->
+												<property name="dojo.source.escaped" value="${dojo.source}"></property>
+
+												<!-- Convert backslashes to forward slashes in windows paths, 
+													if match fails it won't set a value -->
+												<propertyregex property="dojo.source.escaped"
+													input="${dojo.source}" regexp="\\" replace="/" override="true" />
+
+												<!-- Update meta-data to point to actual Dojo source location -->
+												<replaceregexp
+													file="src/main/webapp/WEB-INF/config/packages/dojo/${dojo.version}/package.json"
+													match='location\":.*,' replace='location\": \"${dojo.source.escaped}\",' />
+											</then>
+											<else>
+												<!-- Copy all Dojo package descriptors, reliant on user to have 
+													filled in the locations -->
+												<copy todir="src/main/webapp/WEB-INF/config/packages/dojo/">
+													<fileset dir="src/main/config/packages/dojo/" />
+												</copy>
+											</else>
+										</if>
+
+
+										<!-- Copy all additional package meta-data files, these have been 
+											manually generated by the user. Exclude Dojo packages, we've already copied 
+											the single Dojo instance we want. -->
+										<copy todir="src/main/webapp/WEB-INF/config/packages/">
+											<fileset dir="src/main/config/packages/">
+												<exclude name="**/dojo/**" />
+											</fileset>
+										</copy>
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal><!-- this is to call antrun:run -->
+								</goals>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>ant</groupId>
+								<artifactId>ant-nodeps</artifactId>
+								<version>1.6.5</version>
+							</dependency>
+							<dependency>
+								<groupId>ant</groupId>
+								<artifactId>ant-apache-regexp</artifactId>
+								<version>1.6.5</version>
+							</dependency>
+							<dependency>
+								<artifactId>jakarta-regexp</artifactId>
+								<groupId>jakarta-regexp</groupId>
+								<version>1.4</version>
+							</dependency>
+							<dependency>
+								<groupId>ant-contrib</groupId>
+								<artifactId>ant-contrib</artifactId>
+								<version>1.0b3</version>
+								<exclusions>
+									<exclusion>
+										<groupId>ant</groupId>
+										<artifactId>ant</artifactId>
+									</exclusion>
+								</exclusions>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>dev</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>build_profile</id>
+								<phase>initialize</phase>
+								<configuration>
+									<tasks>
+										<taskdef resource="net/sf/antcontrib/antcontrib.properties"
+											classpathref="maven.plugin.classpath" />
+										<replace file="${project.basedir}/src/main/webapp/index.html"
+											token="inDebug=false" value="inDebug=true" />
+
+										<!-- Remove previous Dojo versions -->
+										<delete includeemptydirs="true">
+											<fileset dir="src/main/webapp/WEB-INF/config/packages/" />
+										</delete>
+
+										<!-- If user want to just expose a single version of Dojo, set 
+											up that package descriptor for them. -->
+										<if>
+											<isset property="dojo.source"></isset>
+											<then>
+												<!-- Copy package meta-data for desired version of Dojo -->
+												<copy
+													todir="src/main/webapp/WEB-INF/config/packages/dojo/${dojo.version}">
+													<fileset dir="src/main/config/packages/dojo/${dojo.version}" />
+												</copy>
+
+												<!-- Can't override property set on the command line, copy to 
+													temp prop to override if regex matches. -->
+												<property name="dojo.source.escaped" value="${dojo.source}"></property>
+
+												<!-- Convert backslashes to forward slashes in windows paths, 
+													if match fails it won't set a value -->
+												<propertyregex property="dojo.source.escaped"
+													input="${dojo.source}" regexp="\\" replace="/" override="true" />
+
+												<!-- Update meta-data to point to actual Dojo source location -->
+												<replaceregexp
+													file="src/main/webapp/WEB-INF/config/packages/dojo/${dojo.version}/package.json"
+													match='location\":.*,' replace='location\": \"${dojo.source.escaped}\",' />
+											</then>
+											<else>
+												<!-- Copy all Dojo package descriptors, reliant on user to have 
+													filled in the locations -->
+												<copy todir="src/main/webapp/WEB-INF/config/packages/dojo/">
+													<fileset dir="src/main/config/packages/dojo/" />
+												</copy>
+											</else>
+										</if>
+
+
+										<!-- Copy all additional package meta-data files, these have been 
+											manually generated by the user. Exclude Dojo packages, we've already copied 
+											the single Dojo instance we want. -->
+										<copy todir="src/main/webapp/WEB-INF/config/packages/">
+											<fileset dir="src/main/config/packages/">
+												<exclude name="**/dojo/**" />
+											</fileset>
+										</copy>
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal><!-- this is to call antrun:run -->
+								</goals>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>ant</groupId>
+								<artifactId>ant-nodeps</artifactId>
+								<version>1.6.5</version>
+							</dependency>
+							<dependency>
+								<groupId>ant</groupId>
+								<artifactId>ant-apache-regexp</artifactId>
+								<version>1.6.5</version>
+							</dependency>
+							<dependency>
+								<artifactId>jakarta-regexp</artifactId>
+								<groupId>jakarta-regexp</groupId>
+								<version>1.4</version>
+							</dependency>
+							<dependency>
+								<groupId>ant-contrib</groupId>
+								<artifactId>ant-contrib</artifactId>
+								<version>1.0b3</version>
+								<exclusions>
+									<exclusion>
+										<groupId>ant</groupId>
+										<artifactId>ant</artifactId>
+									</exclusion>
+								</exclusions>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<configuration>
+							<executable>${java.home}/bin/java</executable>
+							<workingDirectory>
+								${dojo.source}/util/buildscripts
+                    		</workingDirectory>
+							<arguments>
+								<argument>-classpath</argument>
+								<argument>../shrinksafe/js.jar:../shrinksafe/shrinksafe.jar</argument>
+								<argument>org.mozilla.javascript.tools.shell.Main</argument>
+								<argument>build.js</argument>
+								<argument>profileFile=${project.basedir}/src/main/resources/dwb.profile.js</argument>
+								<argument>action=release</argument>
+							</arguments>
+						</configuration>
+						<executions>
+							<execution>
+								<id>dojo-custom-build</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>build_profile</id>
+								<phase>initialize</phase>
+								<configuration>
+									<tasks>
+										<replaceregexp file="src/main/resources/dwb.profile.js"
+											match='dwb\",.*]' replace='dwb\", \"${project.basedir}/src/main/webapp/js/dwb\"]' />
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal><!-- this is to call antrun:run -->
+								</goals>
+							</execution>
+							<execution>
+								<id>move_resources</id>
+								<phase>compile</phase>
+								<configuration>
+									<tasks>
+										<copy todir="src/main/webapp/js/release/dwb">
+											<fileset dir="${dojo.source}/release/dojo/dojo">
+												<include name="*dwb*" />
+											</fileset>
+										</copy>
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal><!-- this is to call antrun:run -->
+								</goals>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>ant</groupId>
+								<artifactId>ant-nodeps</artifactId>
+								<version>1.6.5</version>
+							</dependency>
+							<dependency>
+								<groupId>ant</groupId>
+								<artifactId>ant-apache-regexp</artifactId>
+								<version>1.6.5</version>
+							</dependency>
+							<dependency>
+								<artifactId>jakarta-regexp</artifactId>
+								<groupId>jakarta-regexp</groupId>
+								<version>1.4</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<build>
+		<finalName>dwb</finalName>
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.8.1</version>
+				<configuration>
+		          <excludes>
+		            <exclude>**/*IntegrationTest.java</exclude>
+		          </excludes>
+		        </configuration>				
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
+				<configuration>
+					<warName>${project.build.finalName}</warName>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>7.2.0.v20101020</version>
+				<configuration>
+					<scanIntervalSeconds>2</scanIntervalSeconds>
+					<webAppConfig>
+						<contextPath>/</contextPath>
+						<overrideDescriptor>src/main/webapp/WEB-INF/jetty-gzip.xml</overrideDescriptor>
+					</webAppConfig>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.eclipse.jetty</groupId>
+						<artifactId>jetty-servlets</artifactId>
+						<version>7.2.0.v20101020</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.12</version>
+				<configuration>
+					<includes>
+						<include>**/*IntegrationTest.java</include>
+					</includes>
+				</configuration>
+								
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/org/dtk/resources</directory>
+				<excludes>
+					<exclude>web.xml</exclude>
+				</excludes>
+			</resource>
+		</resources>
+	</build>
+</project>

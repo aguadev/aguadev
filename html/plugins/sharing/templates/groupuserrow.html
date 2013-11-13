@@ -1,0 +1,43 @@
+<div dojoAttachPoint="containerNode">
+    <table width="100%" cellspacing="0px">
+        <tr>
+            <td colspan="2"
+                dojoAttachPoint="username"
+                class="username"
+                width="100%"
+                >
+                ${username}</td>
+        </tr>
+        <tr class="email">
+            <td colspan="2"
+                dojoAttachPoint="email"
+                style="display: none;"
+                width="100%"
+                >
+                ${email}</td>
+        </tr>
+        <tr dojoAttachPoint="fullname"
+            style="display: none"
+            class="fullname"
+            >
+            <td dojoAttachPoint="firstname"
+                class="firstname"
+                style="display: inline"
+                width="100%"
+                >${firstname}</td>
+            <td dojoAttachPoint="lastname"
+                class="lastname"
+                style="display: inline"
+                width="100%"
+                >${lastname}</td>
+        </tr>
+        <tr>
+            <td colspan="2"
+                dojoAttachPoint="description"
+                class="description"
+                style="display: none;"
+                width="100%"
+                >${description}</td>
+        </tr>
+    </table>
+</div>

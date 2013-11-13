@@ -1,0 +1,43 @@
+
+h3. APPLICATION
+
+install
+
+h3. PURPOSE:
+
+1. INSTALL THE DEPENDENCIES FOR Agua
+
+2. CREATE THE REQUIRED DIRECTORY STRUCTURE
+
+h3. INPUT
+
+1. INSTALLATION DIRECTORY (DEFAULT: /agua)
+
+2. www DIRECTORY (DEFAULT: /var/www)
+
+h3. OUTPUT
+
+1. REQUIRED DIRECTORY STRUCTURE AND PERMISSIONS
+
+FOR PROPER RUNNING OF Agua
+
+2. RUNNING APACHE INSTALLATION CONFIGURED FOR Agua
+
+3. RUNNING MYSQL INSTALLATION AWAITING MYSQL DATABASE
+
+CONFIGURATION WITH CONFIG
+
+h3. USAGE
+
+{code}
+sudo ./install.pl <--installdir String> <--wwwdir String> [--help]
+ --installdir        :   Path to install directory (default: /agua)
+ --wwwdir                    :       Path to www dir (default: /var/www/html)
+ --help              :   Print help info
+{code}
+
+h3. EXAMPLES
+
+sudo install.pl --installdir /path/to/installdir
+
+

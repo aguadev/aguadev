@@ -1,0 +1,239 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+	<title> fisheyelite prog 1: text items </title>
+	<style type="text/css">
+
+	    body, html { margin:0; padding:0; width:100%;
+			font-family:Arial,sans-serif;
+		}
+		a { letter-spacing:0.1em; }
+		#list {
+			position:absolute; left:0px; cursor:pointer;
+		}
+		#container { margin:0 auto; width:400px; }
+		#list ul {
+			width:150px;
+			list-style-type:none;
+		}
+		.fisheyeTarget {
+			font-weight:bold;
+			font-size:19px;
+		}
+		#container li {
+			text-align:right;
+			padding-bottom:12px;
+		}
+		.ilk {
+			border-top:1px solid #999;
+			color:#666;
+			font:14px Arial,sans-serif;
+		}
+		#inlineList li {
+			margin-top:20px;
+			margin-bottom:20px;
+			padding:20px;
+			border:2px solid #ededed;
+			display:inline;
+			background:#fff;
+		}
+		
+		#lineHeightTest {
+			text-align:center;
+			position:relative;
+			overflow:visible;
+		}
+		span.line {
+			margin:10px;
+			padding:3px;
+			line-height:22px;
+			font:10px Arial,sans-serif;
+			display:block;
+		}
+		.imgBounce {
+			padding:0;
+			width:  35px; height:35px;
+			vertical-align:middle;
+			position:relative;
+			top:0;
+		}
+	</style>
+    
+    
+	<script type="text/javascript">
+		var djConfig = { isDebug:true, parseOnLoad:true };
+	</script>
+	
+    <script type="text/javascript" src="dojo.1.2.2/dojo/dojo.js"></script>
+	<script type="text/javascript" src="dojo.1.2.2/dojox/widget/FisheyeLite.js"></script>
+	
+    <script type="text/javascript">
+		dojo.require("dojo.parser");
+		dojo.require("dojox.widget.FisheyeLite");
+
+        function loadRightPane (event)
+        {
+            console.log("++++ loadRightPane(event)");
+            console.log("event.target.id: " + event.target.id);
+        }
+
+		var beenDestroyed = false;
+		var hasInit = false;
+		var init = function(e)
+        {
+            // GENERATE THE FISHEYELITE ITEMS UNORDERED LIST
+            var headings = [
+                [   "Users", "Add, Remove & Administer Users"   ],
+                [   "Groups", "Add, Remove & Administer Groups" ],
+                [   "Sources ", "Administer Group access to Data Sources"   ],
+                [   "Projects", "Add, Remove & Rename Projects" ],
+                [   "Workflows", "Add, Remove & Rename Workflows"   ],
+                [   "Permissions", "Administer Group Permissions"   ]
+            ];
+    
+            // START OF container DIV CREATION
+            var containerNode = document.createElement('div');
+            containerNode.id = "container";
+            document.body.appendChild(containerNode);
+    
+            var innerContainerNode = document.createElement('div');
+            innerContainerNode.id = "list";
+            containerNode.appendChild(innerContainerNode);
+
+            var unorderedListNode = document.createElement('ul');
+            innerContainerNode.appendChild(unorderedListNode);
+    
+            for ( var i = 0; i < headings.length; i++ )
+            {
+                var listItemNode = document.createElement('li');
+                listItemNode.setAttribute("class", "bounce");
+                unorderedListNode.appendChild(listItemNode);
+    
+                    var spanNode = document.createElement('span');
+                    spanNode.id = headings[i][0];
+                    spanNode.onclick = function(e)  {   loadRightPane(e);  }
+                    spanNode.setAttribute("class", "fisheyeTarget");
+                    spanNode.appendChild(document.createTextNode(headings[i][0]));
+                    listItemNode.appendChild(spanNode);
+                
+                    var brNode = document.createElement('br');
+                    listItemNode.appendChild(brNode);
+                    
+                    var ilkNode = document.createElement('div');
+                    ilkNode.innerHTML = headings[i][1];
+                    ilkNode.setAttribute("class", "ilk");
+                    listItemNode.appendChild(ilkNode);
+            }
+                    
+            // END OF container DIV CREATION
+            
+        }; // init
+        
+        
+        var startFisheye = function(e)
+        {
+			
+			if(e && !beenDestroyed){ return; }
+			e && e.preventDefault();
+			
+			// turn li's in this page into fisheye items, presumtiously:	
+			dojo.query("li.bounce").instantiate(dojox.widget.FisheyeLite,{
+    			properties: { fontSize: 1.50 }
+                //itemMaxWidth:   20,
+                //itemMaxHeight:  20
+            });
+
+			var l = dojo.query("span.line")
+				.instantiate(dojox.widget.FisheyeLite,{
+				// make a widget from each of the lines in the lineHeightTest
+					properties: {
+						fontSize:1.75
+					},
+					easeOut: dojo.fx.easing.backInOut,
+					durationOut: 500
+				});
+				
+			if(!hasInit){
+				l.connect("onclick",function(e){
+				// you can still access the onclick of the real node
+					alert(e.target.innerHTML);
+				});
+			}
+
+			var lm = dojo.query("a").instantiate(dojox.widget.FisheyeLite,{
+				properties:{
+					fontSize:       1.15,
+					letterSpacing:  2.85
+                    //,
+                    //itemMaxWidth:   20,
+                    //itemMaxHeight:  20
+                    
+				}
+			});
+            
+			if(!hasInit){
+			// stop anchors from doing _anything_	
+				lm.connect("onclick",dojo,"stopEvent");
+			}
+
+			dojo.query(".imgBounce").instantiate(dojox.widget.FisheyeLite,{
+				// all the images need a width and a height (well, not need,
+				// but to scale you do)				
+				properties: {
+					height:1.75,
+					width:1.75
+				}
+			});
+			
+
+			// 
+			var vv = 0;
+			var r = dijit.registry.byClass("dojox.widget.FisheyeLite")._hash;
+			for(var l in r){
+				vv++;
+			}
+			// a few in markup, mostly from the query()'ies:
+			console.log("fisheyes on this page: ", vv);
+				
+			beenDestroyed = false;
+			hasInit = true;
+		};
+        
+        
+		dojo.addOnLoad(init);
+        
+        dojo.addOnLoad(startFisheye);
+		
+		dojo.addOnLoad(function(){
+			dojo.query("#restore").connect("onclick",init);
+			dojo.query("#destroy").connect("onclick",destroyAll);
+		});
+		
+		var destroyAll = function(e){
+			e && e.preventDefault();
+			if(confirm("really?")){
+				dijit.registry.filter(function(w){
+					return w && w.declaredClass == "dojox.widget.FisheyeLite";
+				}).forEach(function(w){
+					w.destroy(true);
+				});
+				beenDestroyed = true;
+			}
+		};
+			
+	</script>
+    </head>
+    <body class="tundra">
+        
+        <h3 style="position: relative; left: 10px;"> fisheyelite prog 1: text items </h3>
+    
+    
+    <div style="position: relative; top: 450px; left: 10px;">
+    <br>
+    Source:
+        http://localhost:8080/bioptic1/dojo.1.2.2/dojox/widget/tests/test_FisheyeLite.html
+    </div>
+
+
+    </body>
+</html>

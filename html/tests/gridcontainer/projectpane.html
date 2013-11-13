@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+		<title>Demo GridContainer</title>
+
+		<link rel="stylesheet" href="projectpane.css">
+
+		<link rel="stylesheet" href="../../dojo-1.6.1rc2/dojox/layout/resources/GridContainer.css">
+		<link rel="stylesheet" href="../../dojo-1.6.1rc2/dojox/layout/resources/DndGridContainer.css">
+		
+		<script type="text/javascript" src="../../dojo-1.6.1rc2/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
+		<script type="text/javascript" src="../../dojo-1.6.1rc2/dijit/tests/_testCommon.js"></script>
+		<script type="text/javascript" src="../../dojo-1.6.1rc2/dojox/layout/GridContainer.js"></script>
+
+		<script type="text/javascript">
+			dojo.require("dojo.parser");
+			dojo.require("dijit.TitlePane");
+			dojo.require("dojox.layout.GridContainer");
+
+			// REGISTER module path FOR PLUGINS
+			dojo.registerModulePath("plugins","../../../plugins");	
+
+			// PROJECT PANE
+			dojo.require("plugins.workflow.ProjectPane");
+
+			// DEBUG LOADER
+			dojo.require("dojoc.util.loader");
+
+dojo.addOnLoad(function(){
+
+// example subscribe to events
+
+dojo.subscribe("/dojox/mdnd/adapter/dndToDojo/over", null,  function(arg) {
+	console.log("dndToDojo/over");
+});
+dojo.subscribe("/dojox/mdnd/adapter/dndToDojo/out", null, function(arg) {
+	console.log("dndToDojo/out");
+});
+dojo.subscribe("/dojox/mdnd/adapter/dndToDojo/drop", null, function(arg) {
+	console.log("dndToDojo/drop");
+});
+dojo.subscribe("/dojox/mdnd/adapter/dndToDojo/cancel", null, function(arg) {
+	console.log("dndToDojo/cancel");
+});
+
+dojo.subscribe("/dojo/dnd/manager/overSource", function(source){
+	console.debug("/dojo/dnd/manager/overSource", source);
+});
+
+dojo.subscribe("/dojox/mdnd/drag/start", function(node, targetArea, indexChild){
+	console.dir({node: node});
+	console.log("Doing /dojox/mdnd/drag/start    targetArea: ");
+	console.dir({targetArea: targetArea})
+	console.log("Doing /dojox/mdnd/drag/start    indexChild: " + indexChild);
+});
+
+dojo.subscribe("/dojox/mdnd/drop", null, function(node, targetArea, indexChild){
+	console.log("Doing /dojox/mdnd/drop    node: " + node);
+	console.log("Doing /dojox/mdnd/drop    targetArea: " + targetArea);
+	console.dir({targetArea: targetArea})
+	console.log("Doing /dojox/mdnd/drop    indexChild: " + indexChild);
+});
+
+dojo.subscribe("/dojox/mdnd/dropMode.OverDropMode/getDragPoint", function(node, targetArea, indexChild){
+	console.log("Doing /dojox/mdnd/dropMode.OverDropMode/getDragPoint    node: " + node);
+	console.log("Doing /dojox/mdnd/drop    targetArea: " + targetArea);
+	console.dir({targetArea: targetArea})
+	console.log("Doing /dojox/mdnd/drop    indexChild: " + indexChild);
+});
+
+//dojo.subscribe("/dojox/mdnd/drag/over", function(source){
+//	console.debug("over", source);
+//});
+
+//dojo.subscribe("/dojox/mdnd/drag/cancel", function(source, nodes, copy, target) {
+//	console.debug("cancel", source);
+//});
+
+//dojo.subscribe("/dojox/mdnd/out", function(source){
+//	console.debug("out", source);
+//});
+//dojo.subscribe("/dojox/mdnd/cancel", function(source){
+//	console.debug("cancel", source);
+//});
+
+
+});
+
+		</script>
+
+	</head>
+
+	<body class="tundra">
+		
+		<h1 class="testTitle">Grid Container With Title Panes</h1>
+		
+		<div>
+			<div id="GC1" dojoType="dojox.layout.GridContainer" 
+				nbZones="1"
+				opacity="0.7" 
+				allowAutoScroll="true" 
+				hasResizableColumns="false"
+				withHandles="true"
+				acceptTypes="TitlePane">
+					<div dojoType="dijit.TitlePane" dndType="TitlePane" title="Title Pane 3">Title Pane 3<br><br><br><br><br>Some more content
+					</div>
+					<div dojoType="dijit.TitlePane" dndType="TitlePane" title="Ergo">
+						Non ergo erunt homines deliciis diffluentes audiendi, si quando de amicitia, quam nec usu nec ratione habent cognitam, disputabunt. Nam quis est, pro deorum fidem atque hominum!
+					</div>
+			</div>
+		</div>
+
+		<div height="100">
+			FORK : CONDITIONAL?
+			<div id="GC2" dojoType="dojox.layout.GridContainer" 
+				nbZones="1"
+				opacity="0.7" 
+				allowAutoScroll="true" 
+				hasResizableColumns="false"
+				withHandles="true"
+				acceptTypes="TitlePane">
+	
+				<div dojoType="dijit.TitlePane" dndType="TitlePane" title="Title Pane 1">Title Pane 1<br><br><br><br><br>Some more content</div>
+			</div>
+	
+			<div id="GC3" dojoType="dojox.layout.GridContainer" 
+				nbZones="1"
+				opacity="0.7" 
+				allowAutoScroll="true" 
+				hasResizableColumns="false"
+				withHandles="true"
+				acceptTypes="TitlePane">
+	
+				<div dojoType="dijit.TitlePane" dndType="TitlePane" title="Title Pane 1">Title Pane 1<br><br><br><br><br>Some more content</div>
+			</div>
+		</div>
+
+		<div id="GC4" dojoType="dojox.layout.GridContainer" 
+			nbZones="1"
+			opacity="0.7" 
+			allowAutoScroll="true" 
+			hasResizableColumns="false"
+			withHandles="true"
+			acceptTypes="TitlePane">
+
+			<div dojoType="dijit.TitlePane" dndType="TitlePane" title="Title Pane 2">Title Pane 2<br><br><br><br><br>Some more content</div>
+		</div>
+
+
+	</body>
+</html>

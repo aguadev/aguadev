@@ -1,0 +1,98 @@
+<html>
+<head>
+<title>socket 4</title>
+</head>
+
+<body>
+
+<h1> socket 4</h1>
+
+
+<!-- LOAD DOJO -->
+<script type="text/javascript"
+		src="../../dojo-1.6.1rc2/dojo/dojo.js"
+		djConfig="parseOnLoad: true, isDebug: true, useCommentedJson: true"></script>	
+
+		
+<script src="/aguadev/socketio/lib/socket.js"></script>
+
+<script>
+
+// Create SocketIO instance, connect
+var socket = new io.Socket('localhost',{
+	port: 8080
+});
+socket.connect(); 
+
+// Add a connect listener
+socket.on('connect',function() {
+	console.log('Client has connected to the server!');
+});
+// Add a connect listener
+socket.on('message',function(data) {
+	console.log('Received a message from the server!',data);
+});
+// Add a disconnect listener
+socket.on('disconnect',function() {
+	console.log('The client has disconnected!');
+});
+
+// Sends a message to the server via sockets
+function sendMessageToServer(message) {
+	console.log("sendMessageToServer    message: " + message);
+	console.log("sendMessageToServer    socket: " + socket);
+	console.dir({socket:socket});
+	
+	socket.send(message);
+}
+
+//dojo.require("dojox.socket");
+
+  //var socket = io.connect('http://localhost');
+  //socket.on('news', function (data) {
+  //  console.log(data);
+  //  socket.emit('my other event', { my: 'data' });
+  //});
+
+//var output = dojo.byId("output");
+//	
+//var socket = dojox.socket("ws://localhost:8080");
+//
+//socket.on("message", function(event){
+//	var data = event.data;
+//	
+//	console.log("data");
+//	console.dir({data:data});
+//
+//	output.innerHTML += data;
+//});
+//
+sendMessage = function () {
+	var message = dojo.byId("message").innerHTML;
+	
+	console.log("sendMessage    message: " + message);
+	
+	sendMessageToServer(message);
+};
+
+
+</script>
+
+
+OUTPUT
+
+<div
+	id="output">
+	Messages go here<br>
+	
+</div>
+
+<input type="button"
+	onclick="javascript: sendMessage()"
+	value="Send Message"
+/>
+
+<input id="message" size="20"/>
+
+</body>
+</html>

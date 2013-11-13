@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title> Agua plugins compressed </title>
+
+<style type="text/css">
+
+	/* ../dojo.1.2.2 style */
+	@import "../dojo.1.2.2/../dojo.1.2.2/resources/../dojo.1.2.2.css";
+
+	/* SORIA style */
+	@import "../dojo.1.2.2/dijit/themes/soria/soria.css";
+
+	/* TESTS style */
+	@import "../dojo.1.2.2/dijit/tests/css/dijitTests.css";
+
+	@import "../css/style.css";
+
+
+</style>
+
+	<style type="text/css"> 
+		@import "../dojo.1.2.2/dojo/resources/dojo.css";
+		@import "../dojo.1.2.2/dijit/themes/dijit.css";
+		@import "../dojo.1.2.2/dijit/themes/tundra/tundra.css";
+		@import "../dojo.1.2.2/dijit/tests/css/dijitTests.css";
+		/*@import "../resources/ResizeHandle.css"; */
+		#programatic {
+			width:100px;
+			height:100px;
+			border:2px solid #333; 
+			position:relative;
+		}
+		
+	</style> 
+
+<script language="JavaScript" type="text/javascript"> 
+	dojo.require("dojo.parser"); 
+	dojo.require("dijit.layout.ContentPane");
+	dojo.require("dijit.form.Button");
+	dojo.require("dojox.layout.ResizeHandle");
+
+	function makeNewSizer(){
+		var handle = document.createElement('div');
+		dojo.byId("programatic").appendChild(handle);
+		var resizer = new dojox.layout.ResizeHandle({
+			targetId: "programatic",
+			activeResize: true
+		},handle);
+		resizer.startup();
+	}
+	dojo.addOnLoad(makeNewSizer);
+
+</script> 
+
+<link rel="stylesheet" href="plugins/project/css/project.css" />
+
+
+<link rel="stylesheet" href="../dojo.1.2.2/dojox/layout/resources/ResizeHandle.css" />
+<!--<script type="text/javascript" src="../build8/dojo/nls/en-us.js"></script>-->
+<!--<script type="text/javascript" src="../build8/dijit/nls/en-us.js"></script>-->
+
+<script type="text/javascript" src="../dojo.1.2.2/dojo/dojo.js"
+	djConfig="isDebug: true, parseOnLoad: true, useCommentedJson: true"></script>
+
+<script type="text/javascript" src="../dojo.1.2.2/dijit/nls/en-us.js"></script>
+<script type="text/javascript" src="../dojo.1.2.2/dijit/nls/common.js"></script>
+
+<script type="text/javascript" src="builds/plugins/dojo/plugins.js"></script>
+
+
+<script type="text/javascript">
+
+	var cgiurl = "../../../cgi-bin/agua/";
+
+	// REGISTER module path FOR PLUGINS
+	dojo.registerModulePath("plugins","../../plugins");	
+	
+	// LOAD PLUGINS
+	dojo.require("plugins.core.PluginManager");
+	console.log("++++ index.html After load PluginManager");
+
+</script>
+
+</head>
+
+<body class="soria">
+
+<div dojoType="dijit.layout.ContentPane"
+	title="Content Pane Programmatic"
+	style="width: 300px; height: 200px; padding:10px; border: 1px solid #dedede; position: relative; background: white;"
+	id="contentPaneProgrammatic"
+> 	
+	Content Pane Programmatic 
+</div> 
+
+
+<script type="text/javascript">
+
+	function makeNewSizer(){
+		var handle = document.createElement('div');
+		dojo.byId("contentPaneProgrammatic").appendChild(handle);
+		var resizer = new dojox.layout.ResizeHandle({
+			targetId: "contentPaneProgrammatic",
+			activeResize: true
+		},handle);
+		resizer.startup();
+	}
+	dojo.addOnLoad(makeNewSizer);
+</script>
+
+
+<div dojoType="dijit.layout.ContentPane"
+	title="Test window"
+	style="width: 300px; height: 200px; padding:10px; border: 1px solid #dedede; position: relative; background: white;"
+	id="testWindow"
+> 	
+	Content Pane (activeResize'ing only on layout Widgets?)
+	<div id="hand1" dojoType="dojox.layout.ResizeHandle" targetId="testWindow"></div> 
+</div> 
+
+
+ 
+
+<div id="programatic" class="programmatic" > This is text!</div>
+
+	<h5 style="position: relative; top: 100px; left: -15px"> Agua plugins compressed </h1>
+
+	<div id="controls" style="position: relative; top: 100px; left: -20px"=>
+	</div>
+
+</body>
+</html>

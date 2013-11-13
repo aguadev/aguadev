@@ -1,0 +1,82 @@
+<html>
+<head>
+<title>socket</title>
+</head>
+
+<body>
+
+<h1> socket </h1>
+
+
+<!-- LOAD DOJO -->
+<script type="text/javascript"
+		src="../../dojo-1.6.1rc2/dojo/dojo.js"
+		djConfig="parseOnLoad: true, isDebug: true, useCommentedJson: true"></script>	
+
+
+
+<script>
+
+dojo.require("dojox.socket");
+
+var args, ws = typeof WebSocket != "undefined";
+var socket = dojox.socket(args = {
+  url: ws ? "ws://localhost:8080" : "/socket.io/xhr-polling",
+  headers:{
+    "Content-Type":"application/x-www-urlencoded"
+  },
+  transport: function(args, message) {
+    args.content = message; // use URL-encoding to send the message instead of a raw body
+    dojo.xhrPost(args);
+  }
+});
+
+var sessionId;
+
+socket.on("message", function(){
+	if (!sessionId){
+		sessionId = message;
+		args.url += '/' + sessionId;
+	}else if(message.substr(0, 3) == '~h~'){	
+	  // a heartbeat
+	  console.log("HEARTBEAT");
+	}
+});
+
+
+//var output = dojo.byId("output");
+//	
+//var socket = dojox.socket("ws://localhost:8080");
+//
+//socket.on("message", function(event){
+//	var data = event.data;
+//	
+//	console.log("data");
+//	console.dir({data:data});
+//
+//	output.innerHTML += data;
+//});
+//
+//sendMessage = function () {
+//	console.log("sendMessage    ");	
+//};
+
+
+</script>
+
+
+OUTPUT
+
+<div
+	id="output">
+	Messages go here<br>
+	
+</div>
+
+<input type="button"
+	onclick="javascript: sendMessage()"
+	value="Send Message"
+/>
+  
+</body>
+</html>

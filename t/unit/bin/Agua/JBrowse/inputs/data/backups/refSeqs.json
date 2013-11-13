@@ -1,0 +1,204 @@
+{
+   refSeqs : [
+      {
+         "length" : 249250621,
+         "name" : "chr1",
+         "seqDir" : "data/seq/chr1",
+         "seqChunkSize" : 20000,
+         "end" : 249250621,
+         "start" : 0
+      },
+      {
+         "length" : 243199373,
+         "name" : "chr2",
+         "seqDir" : "data/seq/chr2",
+         "start" : 0,
+         "end" : 243199373,
+         "seqChunkSize" : 20000
+      },
+      {
+         "length" : 198022430,
+         "name" : "chr3",
+         "seqDir" : "data/seq/chr3",
+         "seqChunkSize" : 20000,
+         "end" : 198022430,
+         "start" : 0
+      },
+      {
+         "length" : 191154276,
+         "name" : "chr4",
+         "seqDir" : "data/seq/chr4",
+         "start" : 0,
+         "end" : 191154276,
+         "seqChunkSize" : 20000
+      },
+      {
+         "length" : 180915260,
+         "name" : "chr5",
+         "seqDir" : "data/seq/chr5",
+         "seqChunkSize" : 20000,
+         "end" : 180915260,
+         "start" : 0
+      },
+      {
+         "length" : 171115067,
+         "name" : "chr6",
+         "seqDir" : "data/seq/chr6",
+         "start" : 0,
+         "end" : 171115067,
+         "seqChunkSize" : 20000
+      },
+      {
+         "length" : 159138663,
+         "name" : "chr7",
+         "seqDir" : "data/seq/chr7",
+         "seqChunkSize" : 20000,
+         "end" : 159138663,
+         "start" : 0
+      },
+      {
+         "length" : 146364022,
+         "name" : "chr8",
+         "seqDir" : "data/seq/chr8",
+         "start" : 0,
+         "end" : 146364022,
+         "seqChunkSize" : 20000
+      },
+      {
+         "length" : 141213431,
+         "name" : "chr9",
+         "seqDir" : "data/seq/chr9",
+         "seqChunkSize" : 20000,
+         "end" : 141213431,
+         "start" : 0
+      },
+      {
+         "length" : 135534747,
+         "name" : "chr10",
+         "seqDir" : "data/seq/chr10",
+         "start" : 0,
+         "end" : 135534747,
+         "seqChunkSize" : 20000
+      },
+      {
+         "length" : 135006516,
+         "name" : "chr11",
+         "seqDir" : "data/seq/chr11",
+         "seqChunkSize" : 20000,
+         "end" : 135006516,
+         "start" : 0
+      },
+      {
+         "length" : 133851895,
+         "name" : "chr12",
+         "seqDir" : "data/seq/chr12",
+         "start" : 0,
+         "end" : 133851895,
+         "seqChunkSize" : 20000
+      },
+      {
+         "length" : 115169878,
+         "name" : "chr13",
+         "seqDir" : "data/seq/chr13",
+         "seqChunkSize" : 20000,
+         "end" : 115169878,
+         "start" : 0
+      },
+      {
+         "length" : 107349540,
+         "name" : "chr14",
+         "seqDir" : "data/seq/chr14",
+         "start" : 0,
+         "end" : 107349540,
+         "seqChunkSize" : 20000
+      },
+      {
+         "length" : 102531392,
+         "name" : "chr15",
+         "seqDir" : "data/seq/chr15",
+         "seqChunkSize" : 20000,
+         "end" : 102531392,
+         "start" : 0
+      },
+      {
+         "length" : 90354753,
+         "name" : "chr16",
+         "seqDir" : "data/seq/chr16",
+         "start" : 0,
+         "end" : 90354753,
+         "seqChunkSize" : 20000
+      },
+      {
+         "length" : 81195210,
+         "name" : "chr17",
+         "seqDir" : "data/seq/chr17",
+         "seqChunkSize" : 20000,
+         "end" : 81195210,
+         "start" : 0
+      },
+      {
+         "length" : 78077248,
+         "name" : "chr18",
+         "seqDir" : "data/seq/chr18",
+         "start" : 0,
+         "end" : 78077248,
+         "seqChunkSize" : 20000
+      },
+      {
+         "length" : 59128983,
+         "name" : "chr19",
+         "seqDir" : "data/seq/chr19",
+         "seqChunkSize" : 20000,
+         "end" : 59128983,
+         "start" : 0
+      },
+      {
+         "length" : 63025520,
+         "name" : "chr20",
+         "seqDir" : "data/seq/chr20",
+         "start" : 0,
+         "end" : 63025520,
+         "seqChunkSize" : 20000
+      },
+      {
+         "length" : 48129895,
+         "name" : "chr21",
+         "seqDir" : "data/seq/chr21",
+         "seqChunkSize" : 20000,
+         "end" : 48129895,
+         "start" : 0
+      },
+      {
+         "length" : 51304566,
+         "name" : "chr22",
+         "seqDir" : "data/seq/chr22",
+         "start" : 0,
+         "end" : 51304566,
+         "seqChunkSize" : 20000
+      },
+      {
+         "length" : 16571,
+         "name" : "chrM",
+         "seqDir" : "data/seq/chrM",
+         "seqChunkSize" : 20000,
+         "end" : 16571,
+         "start" : 0
+      },
+      {
+         "length" : 155270560,
+         "name" : "chrX",
+         "seqDir" : "data/seq/chrX",
+         "start" : 0,
+         "end" : 155270560,
+         "seqChunkSize" : 20000
+      },
+      {
+         "length" : 59373566,
+         "name" : "chrY",
+         "seqDir" : "data/seq/chrY",
+         "seqChunkSize" : 20000,
+         "end" : 59373566,
+         "start" : 0
+      }
+   ]
+}

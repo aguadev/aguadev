@@ -1,0 +1,84 @@
+<html>
+<head>
+<title>comet 1</title>
+</head>
+
+<body>
+
+<h1> comet 1 </h1>
+
+
+<!-- LOAD DOJO -->
+<script type="text/javascript"
+		src="../../dojo-1.6.1rc2/dojo/dojo.js"
+		djConfig="parseOnLoad: true, isDebug: true, useCommentedJson: true"></script>	
+
+
+
+<script>
+
+
+//var uniqueId = Math.random().toString();
+//$.ev.loop('/comet/channel/foo/'+uniqueId, {
+//  "*": function(ev) {
+//  }
+//});
+
+
+var c=0;
+var t;
+var timer_is_on=0;
+
+function timedCount()
+{
+    document.getElementById('txt').value=c;
+
+    var uniqueId = Math.random().toString();
+
+    dojo.xhrGet({
+        url : "http://localhost:5742/channel/foo/",
+        handleAs : 'json',
+        sync : false,
+        timeout: 10000,
+        load: function (data, ioArgs) {
+            console.log("comet data: " + dojo.toJson(data));
+
+            c=c+1;
+            t=setTimeout("timedCount()",1000);
+
+    	},
+			error: function(data, ioArgs) {
+				console.log("comet ERROR. data: " + dojo.toJson(data));
+				return data;
+			}
+		}
+	);	    
+}
+
+function doTimer()
+{
+    if (!timer_is_on)
+    {
+        timer_is_on=1;
+        timedCount();
+    }
+}
+
+function stopCount()
+{
+    clearTimeout(t);
+    timer_is_on=0;
+}
+
+
+</script>
+
+<form>
+<input type="button" value="Start count!" onclick="doTimer()">
+<input type="text" id="txt">
+<input type="button" value="Stop count!" onclick="stopCount()">
+</form>
+
+  
+</body>
+</html>

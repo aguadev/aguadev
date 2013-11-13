@@ -1,0 +1,108 @@
+<div dojoattachpoint="containerNode">
+
+	<!-- SOURCES TAB -->
+	<div
+		dojoAttachPoint="sourcesTab"
+		class="sources"
+		dojoType="dijit.layout.ContentPane"
+		title="Sources"
+		style="height: 100% !important; max-height: auto !important; width: 390px !important; padding: 0 !important;"
+		>
+
+		<table width="100%">
+			<tr valign="top" width="370">
+				<td colspan="2" class="tabTitle" align="center"> Sources </td>
+			</tr>
+
+			<tr valign="top" width="95%">
+				<td>
+					<div class="label"> New Source </div>
+					<table>
+						<tr>
+							<td>
+								<textarea
+									spellcheck="false"
+									dojoAttachPoint="name"
+									class="name"
+									style="width:100%; font-weight: bolder; font-family: Verdana;";
+									cols="30"
+									rows="1"
+									>Name</textarea>
+							</td>
+							<td>
+								<div
+									dojoAttachPoint="addSourceButton"
+									class="addSourceButton"
+									dojoType="dijit.form.Button"
+									label="Save"
+									>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<textarea
+									spellcheck="false"
+									dojoAttachPoint="description"
+									class="description"
+									style="width:100%; font-weight: bolder; font-family: Verdana;";
+									cols="40"
+									rows="1"
+									>Description</textarea>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<textarea
+									spellcheck="false"
+									dojoAttachPoint="location"
+									class="location"
+									value="Location"
+									style="width:100%; font-weight: bolder; font-family: Verdana;";
+									cols="40"
+									rows="1"
+									>Location</textarea>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			
+			<tr valign="top" width="95%">
+				<td width="95%">
+					<div class="label"> Sources </div>
+					<div
+						dojoAttachPoint="dragSourceNode"
+						class="dragSource"
+						style="height: 468px; width: 95%;"
+					>
+					</div>
+				</td>
+			</tr>
+
+			<tr align="center">
+				<td align="center">
+
+					<!-- TRASH CONTAINER -->
+					<div
+						dojoAttachPoint="trashContainer"
+						class="trash"
+						style="height: 60px; width: 150px; align: center;" 
+						>
+						<div
+							dojoAttachPoint="trashIcon"
+							class="trashIcon"
+							style="height: 60px; width: 60px;"
+							>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+
+	</div>
+	<!-- END SOURCES TAB -->
+	
+</div> 
+
+

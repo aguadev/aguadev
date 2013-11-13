@@ -1,0 +1,38 @@
+
+h3. APPLICATION
+
+chromosomeSizes
+
+h3. PURPOSE
+
+CALCULATE CHROMOSOME SIZES AND PRINT TO FILE
+
+h3. INPUT
+
+1. FULL PATH TO DIRECTORY CONTAINING FASTA FILES
+
+2. [optional] REFERENCE FILE SUFFIX (DEFAULT = .fa)
+
+h3. OUTPUT
+
+1. chromosome-sizes.txt FILE IN FASTA FILE DIRECTORY CONTAINING
+
+chromosome  start   stop    length
+
+h3. USAGE
+
+{code}
+./chromosomeSizes.pl <--inputdir String> [--suffix String] [-h]
+ --inputdir          :   /full/path/to/inputdir
+ --suffix            :       Fasta file suffix (DEFAULT=.fa)
+ --help          :   Print help info
+{code}
+
+h3. EXAMPLES
+
+{code}
+chromosomeSizes.pl \
+--inputdir /nethome/bioinfo/data/sequence/chromosomes/rat/rn4/fasta
+{code}
+
+

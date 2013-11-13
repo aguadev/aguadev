@@ -1,0 +1,2 @@
+  [-entry]             string     ID or Accession number (Any string)
+*  -outfile            outfile    [*.whichdb] Output file name

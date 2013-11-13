@@ -1,0 +1,479 @@
+<div dojoattachpoint="containerNode">
+
+	<!-- SOURCES TAB -->
+	<div
+		data-dojo-attach-point="mainTab"
+		class="parameters"
+		data-dojo-type="dijit.layout.ContentPane"
+		title="Parameters"
+		style="height: 100% !important; max-height: auto !important; width: 390px !important; padding: 0 !important;"
+		>
+
+<table width="100%">
+	<tr valign="top" width="100%">
+		<td colspan="2" class="tabTitle" align="center">
+			Parameters
+		</td>
+	</tr>
+
+	<tr class="inputs" valign="top" width="95%">
+		<td>
+			<table width="100%" style="padding: 0px;">
+				<tr width="100%">
+					
+					<td colspan="3" height="32px" width="100%">
+						
+						<table cellspacing="0px" cellpadding="0px" border="0" style="padding: 0; margin: 0;">
+							<tr>
+
+								<td align="center" >
+									<table>
+										<tr>
+											<td align="center">
+												<textarea
+													spellcheck="false"
+													data-dojo-attach-point="name"
+													class="name"
+													style="width: 220px !important; font-weight: bolder;"
+													cols="30"
+													rows="1"
+													title="name: Name of parameter"
+													>Name</textarea>
+											</td>
+											<td data-dojo-attach-point="locked"
+												data-dojo-attach-event="onclick:toggleLock"
+												class="unlocked"
+												title="locked: Click to lock/unlock user access to edit this parameter">
+											</td>
+										</tr>
+									</table>
+								</td>
+	
+								<td height="20px"
+									width="120px"
+									align="right">
+									
+									<div
+										data-dojo-attach-point="addParameterButton"
+										class="addParameterButton"
+										title="Click to create new parameter"
+									>
+									New Param
+									</div>
+								</td>
+					
+							</tr>
+						</table>
+					</td>
+
+				</tr>
+
+				<tr class="headerRow" width="100%" height="8px">
+					<td class="argumentHeader">Argument</td>
+					<td class="paramtypeHeader">ParamType</td>
+					<td class="discretionHeader">Discretion</td>
+				</tr>
+					
+				<tr width="100%">
+
+					<td width="160px">
+						<textarea
+							spellcheck="false"
+							data-dojo-attach-point="argument"
+							class="argument"
+							cols="40"
+							rows="1"
+							title="argument: Command line argument for parameter (e.g., '--inputfile')"
+							>Argument</textarea>
+					</td>
+
+
+					<td colspan="1">
+
+						<select
+							data-dojo-type="dijit/form/ComboBox"
+							data-dojo-attach-point="paramtype"
+							title="paramtype: Select type of parameter (input, resource or output)"
+							class="paramtype"
+							value="input"
+						>
+							<option value="input">input</option>
+							<option value="resource">resource</option>
+							<option value="output">output</option>	
+						</select>
+
+					</td>
+					<td colspan="1" width="100px">
+
+						<select
+							data-dojo-type="dijit/form/ComboBox"
+							data-dojo-attach-point="discretion"
+							class="discretion"
+							title="discretion: Select optional, required (must not be empty) or essential (file/directory must be present)"
+							>
+							<option value="optional">optional</option>
+							<option value="required">required</option>
+							<option value="essential">essential</option>
+						</select>
+
+					</td>
+
+				</tr>
+
+				<tr class="headerRow" width="100%" height="8px">
+					<td class="valueHeader">Value</td>
+					<td class="ordinalHeader">ValueType</td>
+					<td class="categoryHeader">Category</td>
+				</tr>
+
+				<tr width="100%">
+					<td colspan="1">
+						<textarea
+							spellcheck="false"
+							data-dojo-attach-point="value"
+							class="value"
+							cols="40"
+							rows="1"
+			                title="value: Default value of parameter (use '%project%/%workflow%/' for default file path)"
+							>Value</textarea>
+					</td>
+
+					<td width="100px">
+						<select
+							data-dojo-attach-point="valuetype"
+							data-dojo-type="dijit/form/ComboBox"
+							style="width: 100px !important; font-weight: bolder; font-family: Verdana;";
+							class="valuetype"
+		                    title="valuetype: Type of parameter may be physical (e.g., file or directory) or abstract (e.g., integer or text string)"
+							>
+							<option value="file">file</option>
+							<option value="files">files</option>
+							<option value="directory">directory</option>
+							<option value="directories">directories</option>
+							<option value="integer">integer</option>
+							<option value="string">string</option>
+							<option value="flag">flag</option>
+						</select>
+					</td>
+
+
+					<td width="100px"
+						style="padding-left: 5px;">
+						<textarea
+							spellcheck="false"
+							data-dojo-attach-point="category"
+							class="category"
+							style="width: 90px !important; font-weight: bolder; font-family: Verdana;";
+							cols="40"
+							rows="1"
+			                title="category: User-defined category for parameter to be used with input/output chaining. (E.g, the category 'inputfile' includes parameters with arguments '-i', '-infile' and '--inputfile'.)"
+							>Category</textarea>
+					</td>
+				</tr>
+
+				<tr class="headerRow">
+					<td width="100%"
+						colspan="3"
+						class="toggleTitle"
+						data-dojo-attach-event="onclick:toggleDescription"
+					> Details (Click to toggle)</td>
+				</tr>
+
+			</table>
+		</td>
+
+	</tr>
+	<tr class="inputs" >
+		<td>
+
+			<table
+				style="display: none"
+				data-dojo-attach-point="togglePoint"
+				width="100%"
+				style="padding: 0px;"
+			>
+
+				<tr class="headerRow">
+					<td width="67%"
+						colspan="2"
+					>Description</td>
+
+					<td width="33%"
+					>Ordinal</td>
+
+				</tr>
+
+				<tr>
+					<td
+					colspan="3">
+						
+						<table>
+							<tr>
+								<td colspan="2">
+									<textarea
+										spellcheck="false"
+										data-dojo-attach-point="description"
+										class="description"
+										cols="24"
+										rows="1"
+										title="description: A brief description of the parameter"
+									>Description</textarea>
+								</td>
+			
+								<td width="100px">
+									<select
+										data-dojo-attach-point="ordinal"
+										data-dojo-type="dijit/form/ComboBox"
+										class="ordinal"
+										title="ordinal: Adjust the ordinal value if your application requires the parameters to be in a certain order. Parameters with the same ordinal will be grouped together in alphabetical order."
+										>
+										<option selected="true" class="default" value="1">Ordinal</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+										<option value="4">4</option>
+										<option value="5">5</option>
+										<option value="6">6</option>
+										<option value="7">7</option>
+										<option value="8">8</option>
+										<option value="9">9</option>
+										<option value="10">10</option>
+										<option value="11">11</option>
+										<option value="12">12</option>
+										<option value="13">13</option>
+										<option value="14">14</option>
+										<option value="15">15</option>
+										<option value="16">16</option>
+										<option value="17">17</option>
+										<option value="18">18</option>
+										<option value="19">19</option>
+										<option value="20">20</option>
+									</select>
+								</td>
+			
+							</tr>
+			
+			
+							<tr class="headerRow" width="100%" height="8px">
+								<td width="160px">Format</td>
+								<td width="100px">Arguments</td>
+								<td width="100px">Parameters</td>
+							</tr>
+			
+							<tr width="100%">
+								<td width="162px">
+									<textarea
+										spellcheck="false"
+										data-dojo-attach-point="format"
+										class="format"
+										style="width: 162px !important; font-weight: bolder; font-family: Verdana;";
+										cols="24"
+										rows="1"
+										title="format: Special file format, to be used for parameter chaining or file checking (e.g., FASTA, FASTQ)"
+										>Format</textarea>
+								</td>
+								<td width="100px"
+									style="padding-left: 4px; padding-right: 4px;" >
+									<textarea
+										spellcheck="false"
+										data-dojo-attach-point="args"
+										class="args"
+										style="width: 100px !important; font-weight: bolder; font-family: Verdana;";
+										cols="40"
+										rows="1"
+										title="args: Arguments for input/output chaining function (e.g., 'input.inputfile.value')"
+										>Args</textarea>
+								</td>
+			
+								<td width="100px">
+									<textarea
+										spellcheck="false"
+										data-dojo-attach-point="inputParams"
+										class="inputParams"
+										style="width: 96px !important; font-weight: bolder; font-family: Verdana;";
+										cols="10"
+										rows="1"
+										title="inputParams: Comma-separated list of variable names for each arg in the list of args for the paramFunction (e.g., 'inputfile')"
+										>Params</textarea>
+								</td>
+							</tr>
+			
+							<tr class="headerRow" width="100%" height="8px">
+								<td colspan="3">Parameter Function</td>
+							</tr>
+			
+							<tr>
+								<td colspan="3" width="380px">
+									<textarea
+										spellcheck="false"
+										data-dojo-attach-point="paramFunction"
+										class="paramFunction"
+										style="width: 380px !important; font-weight: bolder; font-family: Verdana;";
+										cols="40"
+										rows="1"
+										title="paramFunction: Input/output chaining function to automatically determine parameter value from the application itself or the preceding application in the workflow (e.g., 'if ( inputfile != null ) return inputfile')"
+									>ParamFunction</textarea>
+								</td>
+							</tr>
+			
+						</table>
+					</td>
+				</tr>
+
+			</table>
+		</td>
+	</tr>
+	
+	<tr>
+		<td width="50%" align="center">
+			<table>
+				<tr>
+					<td>
+						
+
+						<table>			
+							<tr valign="top" width="95%">
+								<td width="95%">
+									<div class="label"> Application </div>
+								</td>
+							</tr>
+			
+							<tr>
+								<td>
+									<div
+										data-dojo-attach-point="appsCombo"
+										data-dojo-type="dijit.form.ComboBox"
+										class="appsCombo"
+										popupClass="parameters appsCombo dijitReset dijitMenu"
+										autocomplete="true"
+										hasDownArrow="true"
+										disabled="false"
+										style="width: 150px;"
+										title="Select the order of the displayed applications"
+									>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td align="center">
+									<div
+										data-dojo-attach-point="appNamesCombo"
+										data-dojo-type="dijit/form/ComboBox"
+										class="appNamesCombo"
+										autocomplete="true"
+										hasDownArrow="true"
+										disabled="false"
+										style="width: 150px;"
+										title="Select an application to view its inputs below"
+									>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td width="50%" align="center" valign="top">
+						<table valign="top">
+							<tr valign="top">
+								<td>
+									<div class="label paramTypes"> Parameters </div>
+			
+								</td>
+							</tr>
+							<tr>
+								<td align="center">
+				
+									<select
+										data-dojo-attach-point="paramOrderCombo"
+										data-dojo-type="dijit/form/ComboBox"
+										class='paramOrderCombo'
+										title="Filter displayed parameters"
+										>
+										<option 
+												class="option"
+												selected="true"
+												value="Order by Name">Order by Name</option>
+										<option 
+												class="option"
+												value="Order by Ordinal">Order by Ordinal</option>
+										<option
+												class="option"
+												value="Order by Type">Order by Type</option>
+									</select>
+				
+								</td>
+							</tr>			
+			
+			
+							<tr>
+								<td align="center">
+				
+									<select
+										data-dojo-attach-point="paramFilterCombo"
+										data-dojo-type="dijit/form/ComboBox"
+										class='paramFilterCombo'
+										title="Filter displayed parameters"
+										>
+										<option
+												class="option"
+												selected="true"
+												value="All">All</option>
+										<option
+												class="option"
+												value="input">input</option>
+										<option
+												class="option"
+												value="resource">resource</option>
+										<option
+												class="option"
+												value="output">output</option>
+									</select>
+								</td>
+							</tr>			
+
+
+						</table>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+
+	<tr>
+		<td>
+			<div
+				data-dojo-attach-point="dragSourceNode"
+				class="dragSource"
+				style="height: 361px; width: 94%;"
+			>
+			</div>
+		</td>
+	</tr>
+
+	<tr align="center">
+		<td align="center">
+
+			<!-- TRASH CONTAINER -->
+			<div
+				data-dojo-attach-point="trashContainer"
+				class="trash"
+				style="height: 60px; width: 150px; align: center;" 
+				>
+				<div
+					data-dojo-attach-point="trashIcon"
+					class="trashIcon"
+					style="height: 60px; width: 60px;"
+					>
+				</div>
+			</div>
+		</td>
+	</tr>
+</table>
+
+
+
+	</div>
+	<!-- END SOURCES TAB -->
+	
+</div> 
+
+

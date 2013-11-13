@@ -1,0 +1,12 @@
+chr1	hg19_snp130	exon	32505174	32508126	0.000000	+	.	gene_id "rs71727392"; transcript_id "rs71727392"; 
+chr1	hg19_snp130	exon	7863909	7869952	0.000000	+	.	gene_id "rs71715441"; transcript_id "rs71715441"; 
+chr1	hg19_snp130	exon	11140972	11141140	0.000000	+	.	gene_id "rs71864362"; transcript_id "rs71864362"; 
+chr1	hg19_snp130	exon	25818074	25824752	0.000000	+	.	gene_id "rs71693957"; transcript_id "rs71693957"; 
+chr1	hg19_snp130	exon	89521913	89522537	0.000000	+	.	gene_id "rs71701533"; transcript_id "rs71701533"; 
+chr1	hg19_snp130	exon	120845698	120848691	0.000000	-	.	gene_id "rs72488318"; transcript_id "rs72488318"; 
+chr1	hg19_snp130	exon	69453	69453	0.000000	-	.	gene_id "rs2854682"; transcript_id "rs2854682"; 
+chr1	hg19_snp130	exon	69511	69511	0.000000	-	.	gene_id "rs2691305"; transcript_id "rs2691305"; 
+chr1	hg19_snp130	exon	69552	69552	0.000000	+	.	gene_id "rs55874132"; transcript_id "rs55874132"; 
+chr1	hg19_snp130	exon	69552	69552	0.000000	+	.	gene_id "rs2531266"; transcript_id "rs2531266"; 
+chr1	hg19_snp130	exon	69569	69569	0.000000	+	.	gene_id "rs2531267"; transcript_id "rs2531267"; 
+chr1	hg19_snp130	exon	69751	69751	0.000000	+	.	gene_id "rs1419821"; transcript_id "rs1419821"; 

@@ -1,0 +1,130 @@
+.aws textarea, .aws td {
+    font-family: Arial !important;
+    min-height: 25px !important;
+    word-wrap: break-word !important;
+    z-index: 900 !important;
+}
+.aws textarea {
+    font-size: 8px !important;
+    white-space: pre-wrap !important;
+}
+.aws .tabTitle {
+	background-color: #264eea;
+	text-align: center !important;
+	vertical-align: middle;
+	font-size: 20px;
+	font-stretch: expanded;
+	font-weight: bold;
+	color: #FFF;
+}
+
+.aws .subPane {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding: 5px;
+	width: 95% !important;	
+	height: 260px;
+	min-height: 100px;
+	text-align: left !important;
+	font-family: Verdana;
+	font-size: 12px;
+	border-color: #333;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	overflow:auto !important;
+}
+
+.aws .label {
+	text-align:	center !important;
+	font-weight: bolder;
+	font-size: 18px;
+	font-family: Verdana;
+	font-size: 14px;
+	font-style: oblique;
+	height: 20px;
+	vertical-align: bottom !important;
+	background: #EEE;
+}
+
+.aws .sublabel {
+	font-size: 12px;
+	text-align:	center !important;
+	vertical-align: center !important;
+	height: 15px !important;
+	color: darkblue !important;
+	padding: 0px !important;
+}
+
+.aws .volumeSize {
+	height: 20px;
+	font-size: 14px;
+	color: #222;
+	vertical-align: middle !important;
+	font-weight: bolder !important;
+	font-family: Verdana;	
+}
+
+.aws .invalid {
+	border: 2px solid #F00 !important;
+}
+
+.aws .addUserButton,
+.aws .addAwsButton {
+	width: 100% !important;
+	text-align: center !important;
+	vertical-align: middle !important;
+	height: 20px !important;
+	padding-top: 4px;
+}
+
+.aws .addUserButton,
+.aws .addAwsButton {
+	width: 100% !important;
+	font-size: 20px !important;
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	border-radius: 8pt;
+	background: #DDD none repeat scroll 0 0;
+	height: 30px;
+	color: #888 !important;	
+	border: 1pt solid #CCC;
+	font-weight: 900 !important;
+	-moz-user-select: none !important;	
+}
+
+.aws .addUserButton:hover,
+.aws .addAwsButton:hover {
+	color: #FFFFFF !important;
+	background-color: #AAAAFF;
+}
+.aws .addUserButton:active,
+.aws .addAwsButton:active {
+	color: #AAFFAA !important;
+	background-color: #7777DD;
+}
+
+.aws .volumeSize {
+	width: 98% !important;
+	font-weight: bolder;
+	font-family: Verdana;
+	text-align: center !important;
+}
+
+.aws .amazonUserId,
+.aws .accessKeyId,
+.aws .secretAccessKey {
+	width: 98%;
+	font-weight: 600;
+	height: 20px !important;
+	padding-top: 5px;
+}
+
+

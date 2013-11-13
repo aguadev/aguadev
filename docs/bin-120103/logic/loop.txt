@@ -1,0 +1,68 @@
+
+h3. APPLICATION
+
+loop
+
+
+VERSION         0.02
+
+HISTORY
+
+VERSION 0.02    ADDED concurrent EXECUTION OF REPLICATES
+
+VERSION 0.01    BASIC LOOP USING BACKTICKS
+
+h3. PURPOSE
+
+1. REPEATEDLY EXECUTE AN APPLICATION, CHANGING THE VALUE OF
+
+A PARTICULAR PARAMETER EVERY TIME
+
+2. REPEAT FOR A SPECIFIED NUMBER OF REPLICATES
+
+h3. INPUT
+
+1. EXECUTABLE AND ITS ARGUMENTS
+
+2. PARAMETER TO BE CHANGED
+
+3. COMMA-SEPARATED LIST OF VALUES FOR THE PARAMETER
+
+4. COMMA-SEPARATED LIST OF REPLICATES
+
+h3. OUTPUT
+
+1. OUTPUTS OF EACH RUN OF THE EXECUTABLE USING A
+
+DIFFERENT VALUE FOR THE PARAMETER EACH TIME
+
+h3. USAGE
+
+{code}
+./loop.pl <--executable String> <--parameter String> <--values String> <--replicates String> [--concurrent] [... arguments for executable ...] [--help]
+ --executable    :       Location of executable
+ --parameter             :   Parameter to be changed
+ --values                :   Values to be used for the parameter
+ --concurrent    :       Run duplicates in parallel rather than in series
+ --help          :   print help info
+{code}
+
+h3. EXAMPLES
+
+chmod 755 /nethome/bioinfo/apps/agua/0.4/bin/apps/loop.pl
+
+/nethome/bioinfo/apps/agua/0.4/bin/apps/loop.pl \ --executable
+       /nethome/bioinfo/apps/agua/0.4/bin/apps/ELAND.pl \ --parameter
+       "--reads" \ --values
+       500000,1000000,1500000,2000000,2500000,3000000,3500000 \ --replicates
+       1,2,3,4 \ --inputtype fastq \ --cluster LSF \ --queue priority \
+ --tempdir /tmp \ --outputdir
+       /nethome/syoung/base/pipeline/benchmark/eland/eland%REPLICATE%-%PARAMETER%
+       \ --stdout
+       /nethome/syoung/base/pipeline/benchmark/eland/eland%REPLICATE%-%PARAMETER%/eland.outerr
+       \ --inputfile
+       /nethome/syoung/base/pipeline/benchmark/data/duan/run12/s_1_1_sequence.fastq
+       \ --referencedir /nethome/bioinfo/data/sequence/chromosomes/human-sq \
+ --jobs 600 \ --parallel
+
+

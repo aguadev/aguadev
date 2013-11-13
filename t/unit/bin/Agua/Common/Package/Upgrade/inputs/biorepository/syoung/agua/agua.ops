@@ -1,0 +1,46 @@
+{
+    name:           "agua",
+    version:        "0.6",
+    build:          "",
+    type:           "application",
+    source:         "git",
+    keywords:       ["bioinformatics", "workflows", "cloud", "next-generation", "sequencing", "analysis"],
+    description:    "A cloud bioinformatics workflow platform for next-generation sequencing",
+    website :       "http://www.aguadev.org",
+    installtype:    "ops",
+    opsfile:        "https://api.github.com/repos/syoung/biorepository/syoung/agua/agua.ops",
+    installfile:    "https://api.github.com/repos/syoung/biorepository/syoung/agua/agua.pm",
+    appfiles:       [ "https://api.github.com/repos/syoung/biorepository/syoung/agua/install.app" ],
+    licensefile:    "https://api.github.com/repos/syoung/biorepository/syoung/agua/LICENSE",
+    readmefile:     "https://api.github.com/repos/syoung/biorepository/syoung/agua/README",
+    installparams: [
+        {
+            name:         "version",
+            argument:     "--version",
+            ordinal:      "",
+            description:  "software version, e.g.: 0.6",
+            default:      ""
+        },
+        {
+            name:           "installdir",
+            argument:       "--installdir",
+            ordinal:        "",
+            description:    "path to install directory (final path: 'installdir/version')",
+            default:        "/agua"
+        },
+        {
+            name:           "tempdir",
+            argument:       "--tempdir",
+            ordinal:        "",
+            description:    "path to temporary directory for downloaded files",
+            default:        "/tmp"
+        }
+    ],
+    installtype:    "ops",
+    author:         [{ name: "Stuart", surname: "Young", email: "stuartpyoung@gmail.com" }],
+    publication:    [],
+    organisation:   [],
+    ISA:            {},
+    acknowledgements: [],
+    citations:      []
+}

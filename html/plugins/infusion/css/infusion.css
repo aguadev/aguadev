@@ -1,0 +1,373 @@
+@import "../../../dojo/dgrid/css/dgrid.css";
+@import "../../../dojo/dojo/resources/dojo.css";
+/* @import "../../../dojo/dijit/tests/css/dijitTests.css"; */
+
+.infusion .leftPane .nowrapTabStrip.dijitTabContainerTop-tabs {
+    z-index: 10 !important;
+}
+
+/* REMOVE ALL TAB PADDING */
+.claro .dijitTabContainerTop-tabs .dijitTabChecked {
+    padding: 0px !important;   
+}
+.wrap {
+	margin: 0;
+	padding: 15px;
+}
+.wrap h3 {
+	margin-top: 5px;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+body {
+    font-family: "Lucida Grande", sans-serif;
+    font-size: 12px;
+    position: relative;
+}
+
+.infusion .dgrid-row-even {
+    background-color: #EEF;
+}
+.infusion .dgrid-row-odd {
+    background-color: #AEF;
+}
+.infusion .dgrid-selected {
+    background-color: rgb(247, 226, 172);
+}
+.infusion .logo {
+    width: 30px;
+    height: 30px;
+    background-image: url(../../../../../../images/logo-30.png);
+    background-repeat: no-repeat !important;
+    display: inline-block;
+}
+
+/* RAISE UP DRILLDOWN TABS */
+.infusion .lists .dojoxExpandoContent {
+    top: -10px !important;
+}
+
+/* LIMIT WIDTH OF LIST CONTAINER */
+.infusion .listContainer {
+    position: absolute;
+    left: 0;
+    right: 0;
+
+    /* DON'T SPECIFY HEIGHT TO ENSURE SCROLL SHRINKS WITH SPLITTER */
+    top: 0px !important;
+    bottom: 55px;
+}
+
+.infusion .projects-header,
+.infusion .samples-header,
+.infusion .flowcells-header,
+.infusion .lanes-header{
+    font-family: Helvetica;
+    font-weight: bold;
+    display: inline-block;
+    position: absolute;
+    top: 3px;
+    left: 0px;
+    text-align: center;
+    font-family: Helvetica;
+    color: #444;
+    font-size: 18px;
+    z-index: 000;
+}
+.infusion .projects-header,
+.infusion .samples-header{
+    width: 90px;
+    position: absolute;
+    left: 35px;
+}
+
+.infusion .flowcells-header,
+.infusion .lanes-header{
+    width: 110px;
+}
+
+/* SELECT */
+.infusion .selectOverlay {
+    position: absolute;
+    top: 55px;
+    left: 8px;
+    display: block;
+    color: #AAA;
+    width: 140px;
+    z-index: 1000;
+    font-style: italic;
+}
+.infusion .selectOverlay.hidden {
+    visibility: hidden;
+	display: none;
+}
+	
+.infusion .projectSelect,
+.infusion .sampleSelect,
+.infusion .flowcellSelect,
+.infusion .laneSelect {
+    position: absolute;
+    top: 50px;
+    height: 20px;
+    margin-top: 0px !important;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+.infusion .projectSelect,
+.infusion .sampleSelect {
+    width: 150px;
+}
+
+.infusion .flowcellSelect,
+.infusion .laneSelect {
+    width: 110px;    
+}
+
+.claro .infusion .projectSelect.dijitSelect .dijitArrowButton,
+.claro .infusion .sampleSelect.dijitSelect .dijitArrowButton,
+.claro .infusion .flowcellSelect.dijitSelect .dijitArrowButton,
+.claro .infusion .laneSelect.dijitSelect .dijitArrowButton {
+    width: 30px !important;
+}
+.claro .infusion .projectSelect.dijitSelect .dijitArrowButton .dijitArrowButtonInner,
+.claro .infusion .sampleSelect.dijitSelect .dijitArrowButton .dijitArrowButtonInner,
+.claro .infusion .flowcellSelect.dijitSelect .dijitArrowButton .dijitArrowButtonInner,
+.claro .infusion .laneSelect.dijitSelect .dijitArrowButton .dijitArrowButtonInner {
+    height: 16px;
+    margin-left: 7px;
+}
+.claro .infusion .projectSelect .dijitSelectLabel,
+.claro .infusion .sampleSelect .dijitSelectLabel,
+.claro .infusion .flowcellSelect .dijitSelectLabel,
+.claro .infusion .laneSelect .dijitSelectLabel {
+    font-family: Helvetica !important;
+    font-size: 15px;
+}
+
+/* FILTERS */
+.infusion .projectFilter,
+.infusion .sampleFilter,
+.infusion .flowcellFilter,
+.infusion .laneFilter {
+    position: absolute;
+    top: 25px;
+    height: 20px;
+    margin-top: 0px !important;
+    -moz-box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    border-radius: 14px;
+    -webkit-border-radius: 14px;
+}
+
+.infusion .projectFilter:active,
+.infusion .sampleFilter:active,
+.infusion .flowcellFilter:active,
+.infusion .laneFilter:active {
+	box-shadow: -2px 2px 15px #88F
+}
+.infusion .projectFilter .dijitTextBoxFocused,
+.infusion .sampleFilter .dijitTextBoxFocused,
+.infusion .flowcellFilter .dijitTextBoxFocused,
+.infusion .laneFilter .dijitTextBoxFocused {
+	box-shadow: -2px 2px 15px #44F
+}
+
+.infusion .dijitTextBoxFocused {
+	box-shadow: -2px 2px 15px #44F
+}
+
+.infusion .projectFilter,
+.infusion .sampleFilter {
+    width: 150px !important;
+}
+.infusion .flowcellFilter,
+.infusion .laneFilter {
+    width: 110px !important;
+}
+
+.infusion .dijitPlaceHolder {
+    text-align: top !important;
+    position: absolute;
+    top:  5px;
+    margin-left: 5px;
+}
+
+.infusion .projectFilter .dijitReset,
+.infusion .sampleFilter .dijitReset,
+.infusion .flowcellFilter .dijitReset,
+.infusion .laneFilter .dijitReset {
+    height: 20px !important;
+    border-radius: 14px;
+    -webkit-border-radius: 14px;
+}
+.infusion .projectFilter .dijitReset .dijitInputInner,
+.infusion .sampleFilter .dijitReset .dijitInputInner,
+.infusion .flowcellFilter .dijitReset .dijitInputInner,
+.infusion .laneFilter .dijitReset .dijitInputInner {
+    font-size: 18px;    
+}
+
+input[type="text"] {
+    /*font-family: Arial, san-serif;*/
+    font-family: Helvetica;
+}
+
+/* LISTS */
+.projectList, .sampleList, .flowcellList, .laneList {
+    position: absolute;
+    top: 73px;
+    bottom: 0;
+    width: 160px;
+
+    /* ENSURE LIST HEIGHT IS 100% */
+    min-height: 20px;
+    height: 100% !important;
+}
+.projectList, .sampleList {
+    width: 160px;
+}
+.flowcellList, .laneList {
+    width: 110px;
+}
+
+/* IE<7 doesn't support height/width: auto w/ top/bottom / left/right. */
+.infusion .has-ie-6 .projectList, .has-ie-6 .sampleList, .has-ie-6 .sampleList, .has-ie-6 .flowcellList {
+    height: 120px;
+}
+.infusion .has-ie-6 .listContainer {
+    width: 100%;
+}
+
+
+/* CELL PADDING */
+.infusion .dgrid-cell-padding {
+    padding: 1px;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.infusion .projectContainer,
+.infusion .sampleContainer {
+    position: absolute !important;
+    height: 100%;
+    width: 160px !important;
+}
+
+.infusion .flowcellContainer,
+.infusion .laneContainer {
+    position: absolute !important;
+    height: 100%;
+    width: 120px !important;
+}
+
+.infusion .projectContainer {
+    left: 0px;
+}
+.infusion .sampleContainer {
+    left: 165px;
+}
+.infusion .flowcellContainer {
+    left: 330px;
+}
+.infusion .laneContainer {
+    left: 445px;
+}
+
+/* ENSURE GRID HEIGHT */
+.infusion .dgrid-scroller {
+    height: auto !important;
+}
+.infusion .dijitTitlePaneContentInner {
+    padding: 0px !important;
+    height: auto !important;
+}
+
+/* EXPANDOPANES */
+.claro .infusion .leftPane.dojoxExpandoClosed,
+.claro .infusion .rightPane.dojoxExpandoClosed {
+    width: 18px !important;
+}
+.claro .infusion .bottomPane.dojoxExpandoClosed {
+    height: 18px !important;
+}
+.claro .infusion .dojoxExpandoClosed {
+    background-color: white;
+}
+.infusion .dojoxExpandoClosed .dojoxExpandoIconRight,
+.infusion .dojoxExpandoClosed .dojoxExpandoIconLeft {
+    margin-right: 0px !important;
+}
+.claro .infusion .dojoxExpandoTitle {
+    margin: 0 !important;
+    min-height: 5px !important;
+    padding: 0 !important;
+    z-index: 0 !important;
+}
+
+
+/* TAB LIST WIDTH */
+.infusion .dijitTabListWrapper .dijitTabContainerTopStrip .dijitAlignClient {
+    width: 100% !important;
+}
+.claro .infusion .dijitTabPaneWrapper,
+.claro .infusion .dijitTabContainerTop-tabs,
+.claro .infusion .dijitTabContainerBottom-tabs,
+.claro .infusion .dijitTabContainerLeft-tabs,
+.claro .infusion .dijitTabContainerRight-tabs {
+	border: none !important;
+    width: 100% !important;
+	height: 100% !important;
+	z-index: 10 !important;
+}
+
+.claro .infusion .dijitSplitterHActive {
+    height: 10px !important;
+}
+
+.claro .infusion .dijitSplitterVActive {
+    width: 10px !important;
+}
+
+
+
+/* LEFT PANE */
+.infusion .leftPane .dojoxExpandoContent .dijitExpandoPaneSingleChild,
+.infusion .dojoxExpandoPane .dijitExpandoPane .leftPane .dojoxExpandoWrapper {
+    top: -5px !important;
+}
+
+/* SHOW LISTS IN LEFT PANE */
+.infusion .leftContainer {
+	height: 600px !important;
+	width: 600px !important;
+}
+.infusion .dijitHidden {
+	/*display: inline !important;*/
+}
+
+.infusion .dijitTabListContainer-top.dijitTabController.dijitScrollingTabController {
+    display: inline !important;
+}
+    
+.infusion .leftPaneContainer {
+    height: 100% !important;
+    width: 100% !important;
+}
+
+.infusion .centerPane .dijitTabListContainer-top.dijitTabController.dijitScrollingTabController {
+    display: none !important;
+    visibility: invisible !important;
+}
+
+   

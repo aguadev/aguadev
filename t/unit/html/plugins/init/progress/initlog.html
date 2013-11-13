@@ -1,0 +1,271 @@
+<html>
+<head>
+	<title>Init Progress Log</title>
+
+	<link href="../plugins/init/css/progress.css" rel="stylesheet" type="text/css">
+
+</head>
+<script>
+var waitSeconds = 10;
+function beginrefresh(){
+	if (waitSeconds==1) {
+		window.location.reload()
+	}
+	else { 
+		waitSeconds-=1
+		document.getElementById('cursec').innerHTML = waitSeconds + " seconds left until page refresh"
+	}
+	setTimeout("beginrefresh()",1000)
+}
+window.onload=beginrefresh
+</script>
+<body>
+<center>
+	<table class="header">
+		<tr>
+			<td class="logo"> </td>
+			<td class="title"> Progress Log </td>
+			<td>
+				<table class="clock">
+					<tr>
+						<td class="date">Started: Tue Oct  2 18:15:14 EDT 2012</td>
+					<tr>
+					</tr>
+						<td class="countdown" id="cursec"></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	</div>
+	<div class="message"> Please make a note of your IP address:</div>
+	<div class="address">ec2-54-242-18-137.compute-1.amazonaws.com</div>
+	<div class="message"> Click here to open Agua:</div>
+	<div class="url" onclick="window.open('http://localhost/agua/agua.html')">http://ec2-54-242-18-137.compute-1.amazonaws.com/agua/agua.html</div>
+	<br>
+</center>
+<hr>
+<div class="progress">
+
+2012-10-02 18:15:14    [DEBUG]   	Agua::Init::init	73	
+2012-10-02 18:15:14    [DEBUG]   	Agua::Init::checkInitialised	147	initcomplete: 0
+Agua::Init::init    Setting hostname
+2012-10-02 18:15:14    [DEBUG]   	Agua::Init::setHostname	156	
+2012-10-02 18:15:14    [DEBUG]   	Agua::Init::setHostname	158	installdir: /agua
+2012-10-02 18:15:14    [DEBUG]   	Agua::Init::setHostname	161	executable: /agua/bin/scripts/updateHostname.pl
+2012-10-02 18:18:15    [DEBUG]   	Agua::Init::setHostname	163	output: updateHostname.pl     printing to logfile: /tmp/agua.updatehostname.log
+
+Agua::Init::init    Setting startup file
+2012-10-02 18:18:15    [DEBUG]   	Agua::Init::setStartupScript	170	startupfile: /etc/rc.local
+2012-10-02 18:18:15    [DEBUG]   	Agua::Ops::Edit::fileContents	162	dir: /etc
+2012-10-02 18:18:15    [DEBUG]   	Agua::Ops::Edit::fileContents	164	BEFORE COMMAND dirfound: 1
+2012-10-02 18:18:15    [DEBUG]   	Agua::Ops::runCommand	206	command: if [ -f /etc/rc.local ]; then echo "1"; else echo "0"; fi
+2012-10-02 18:18:15    [DEBUG]   	Agua::Ops::runCommand	246	output: 1
+
+2012-10-02 18:18:15    [DEBUG]   	Agua::Ops::Files::foundFile	67	output: 1
+2012-10-02 18:18:15    [DEBUG]   	Agua::Ops::Files::foundFile	68	error: 
+2012-10-02 18:18:15    [DEBUG]   	Agua::Ops::runCommand	206	command: cat /etc/rc.local
+2012-10-02 18:18:15    [DEBUG]   	Agua::Ops::runCommand	246	output: #!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will "exit 0" on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+#### SET HOSTNAME
+
+/agua/bin/scripts/updateHostname.pl
+
+#### RESTART apache2
+
+/etc/init.d/apache2 restart
+
+#### EXIT 0 ON SUCCESS
+
+exit 0
+
+####  END ####
+
+2012-10-02 18:18:15    [DEBUG]   	Agua::Ops::Edit::removeLines	66	Ops::removeLines(lines, removes)
+2012-10-02 18:18:15    [DEBUG]   	Agua::Ops::Edit::addNoDups	189	lines: #!/bin/sh -e # # rc.local # # This script is executed at the end of each multiuser runlevel. # Make sure that the script will "exit 0" on success or any other # value on error. # # In order to enable or disable this script just change the execution # bits. # # By default this script does nothing.  #### SET HOSTNAME  /agua/bin/scripts/updateHostname.pl  #### RESTART apache2  /etc/init.d/apache2 restart  #### EXIT 0 ON SUCCESS   ####  END ####
+2012-10-02 18:18:15    [DEBUG]   	Agua::Ops::Edit::addNoDups	192	inserts: #### SET HOSTNAME /agua/bin/scripts/updateHostname.pl #### RESTART apache2 /etc/init.d/apache2 restart #### EXIT 0 ON SUCCESS exit 0 ####  END ####
+2012-10-02 18:18:15    [DEBUG]   	Agua::Ops::Edit::addNoDups	206	non-duplicate lines: #!/bin/sh -e # # rc.local # # This script is executed at the end of each multiuser runlevel. # Make sure that the script will "exit 0" on success or any other # value on error. # # In order to enable or disable this script just change the execution # bits. # # By default this script does nothing.  #### SET HOSTNAME  /agua/bin/scripts/updateHostname.pl  #### RESTART apache2  /etc/init.d/apache2 restart  #### EXIT 0 ON SUCCESS   ####  END ####
+2012-10-02 18:18:15    [DEBUG]   	Agua::Ops::Edit::writeFile	45	filename: rc.local
+2012-10-02 18:18:15    [DEBUG]   	Agua::Ops::Edit::writeFile	47	tempfile: /tmp/rc.local.12694.853596.709043817
+2012-10-02 18:18:15    [DEBUG]   	Agua::Ops::Files::copyFile	75	command: cp -r /tmp/rc.local.12694.853596.709043817 /etc/rc.local
+2012-10-02 18:18:15    [DEBUG]   	Agua::Ops::runCommand	206	command: cp -r /tmp/rc.local.12694.853596.709043817 /etc/rc.local
+2012-10-02 18:18:15    [DEBUG]   	Agua::Ops::runCommand	246	output: 
+Agua::Init::init    Mounting data volume
+Agua::Init:mountData    Skipping mountData. appsdir present: /data/apps
+Agua::Init::init    Mounting user home volume
+Agua::Init::mountNethome    mountpoint: /nethome
+Agua::Init::mountNethome    device: /dev/sdi
+Agua::Init::mountNethome    filetype: ext3
+2012-10-02 18:18:16    [DEBUG]   	Agua::Init::getAdminHome	772	adminuser: admin
+2012-10-02 18:18:16    [DEBUG]   	Agua::Init::getAdminHome	774	adminhome: /nethome/admin
+Agua::Init::mountNethome    Creating mountpoint.
+2012-10-02 18:18:16    [DEBUG]   	Agua::Init::nethomeExists	671	mysqldir: /nethome/mysql
+Agua::Init::mountNethome    instanceid: <HTML><HEAD>
+<TITLE>Network Error</TITLE>
+</HEAD>
+<BODY>
+<FONT face="Helvetica">
+<big><strong></strong></big><BR>
+</FONT>
+<blockquote>
+<TABLE border=0 cellPadding=1 width="80%">
+<TR><TD>
+<FONT face="Helvetica">
+<big>Network Error (tcp_error)</big>
+<BR>
+<BR>
+</FONT>
+</TD></TR>
+<TR><TD>
+<FONT face="Helvetica">
+A communication error occurred: "Operation timed out"
+</FONT>
+</TD></TR>
+<TR><TD>
+<FONT face="Helvetica">
+The Web Server may be down, too busy, or experiencing other problems preventing it from responding to requests. You may wish to try again at a later time.
+</FONT>
+</TD></TR>
+<TR><TD>
+<FONT face="Helvetica" SIZE=2>
+<BR>
+For assistance, contact your network support team.
+</FONT>
+</TD></TR>
+</TABLE>
+</blockquote>
+</FONT>
+</BODY></HTML>
+
+2012-10-02 18:20:46    [DEBUG]   	Agua::Init::detachNethome	714	device: /dev/sdi
+2012-10-02 18:20:46    [DEBUG]   	Agua::Init::detachNethome	715	mountpoint: /nethome
+Agua::Init::detachNethome    Detaching volume from device: /dev/sdi.
+2012-10-02 18:20:46    [DEBUG]   	Agua::Init::detachNethome	722	alternate: /dev/xvdi
+Agua::Init::mountNethome    Creating nethome volume.
+2012-10-02 18:20:46    [DEBUG]   	Agua::Common::Aws::getAvailabilityZone	317	
+2012-10-02 18:23:16    [DEBUG]   	Agua::Common::Aws::getAvailabilityZone	319	availzone: <HTML><HEAD>
+<TITLE>Network Error</TITLE>
+</HEAD>
+<BODY>
+<FONT face="Helvetica">
+<big><strong></strong></big><BR>
+</FONT>
+<blockquote>
+<TABLE border=0 cellPadding=1 width="80%">
+<TR><TD>
+<FONT face="Helvetica">
+<big>Network Error (tcp_error)</big>
+<BR>
+<BR>
+</FONT>
+</TD></TR>
+<TR><TD>
+<FONT face="Helvetica">
+A communication error occurred: "Operation timed out"
+</FONT>
+</TD></TR>
+<TR><TD>
+<FONT face="Helvetica">
+The Web Server may be down, too busy, or experiencing other problems preventing it from responding to requests. You may wish to try again at a later time.
+</FONT>
+</TD></TR>
+<TR><TD>
+<FONT face="Helvetica" SIZE=2>
+<BR>
+For assistance, contact your network support team.
+</FONT>
+</TD></TR>
+</TABLE>
+</blockquote>
+</FONT>
+</BODY></HTML>
+
+2012-10-02 18:23:16    [DEBUG]   	Agua::Ops::Ec2::_createVolume	47	command: ec2-create-volume -s 40 -z <HTML><HEAD>
+<TITLE>Network Error</TITLE>
+</HEAD>
+<BODY>
+<FONT face="Helvetica">
+<big><strong></strong></big><BR>
+</FONT>
+<blockquote>
+<TABLE border=0 cellPadding=1 width="80%">
+<TR><TD>
+<FONT face="Helvetica">
+<big>Network Error (tcp_error)</big>
+<BR>
+<BR>
+</FONT>
+</TD></TR>
+<TR><TD>
+<FONT face="Helvetica">
+A communication error occurred: "Operation timed out"
+</FONT>
+</TD></TR>
+<TR><TD>
+<FONT face="Helvetica">
+The Web Server may be down, too busy, or experiencing other problems preventing it from responding to requests. You may wish to try again at a later time.
+</FONT>
+</TD></TR>
+<TR><TD>
+<FONT face="Helvetica" SIZE=2>
+<BR>
+For assistance, contact your network support team.
+</FONT>
+</TD></TR>
+</TABLE>
+</blockquote>
+</FONT>
+</BODY></HTML>
+ -K /agua/conf/.ec2/admin/private.pem -C /agua/conf/.ec2/admin/public.pem | grep VOLUME | cut -f2
+2012-10-02 18:23:16    [DEBUG]   	Agua::Ops::runCommand	206	command: ec2-create-volume -s 40 -z <HTML><HEAD>
+<TITLE>Network Error</TITLE>
+</HEAD>
+<BODY>
+<FONT face="Helvetica">
+<big><strong></strong></big><BR>
+</FONT>
+<blockquote>
+<TABLE border=0 cellPadding=1 width="80%">
+<TR><TD>
+<FONT face="Helvetica">
+<big>Network Error (tcp_error)</big>
+<BR>
+<BR>
+</FONT>
+</TD></TR>
+<TR><TD>
+<FONT face="Helvetica">
+A communication error occurred: "Operation timed out"
+</FONT>
+</TD></TR>
+<TR><TD>
+<FONT face="Helvetica">
+The Web Server may be down, too busy, or experiencing other problems preventing it from responding to requests. You may wish to try again at a later time.
+</FONT>
+</TD></TR>
+<TR><TD>
+<FONT face="Helvetica" SIZE=2>
+<BR>
+For assistance, contact your network support team.
+</FONT>
+</TD></TR>
+</TABLE>
+</blockquote>
+</FONT>
+</BODY></HTML>
+ -K /agua/conf/.ec2/admin/private.pem -C /agua/conf/.ec2/admin/public.pem | grep VOLUME | cut -f2
+2012-10-02 18:23:16    [DEBUG]   	Agua::Ops::runCommand	246	output: 
+2012-10-02 18:23:16    [DEBUG]   	Agua::Ops::Ec2::_createVolume	49	volumeid: 
+Agua::Init::mountNethome    volumeid: 
+{"error":"volumeid not defined","subroutine":"Agua::Init::createNethomeVolume","linenumber":"692","filename":"lib/Agua/Init.pm","timestamp":"2012-10-02 18:23:16"}

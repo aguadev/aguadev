@@ -1,0 +1,40 @@
+<div dojoattachpoint="containerNode">
+
+    <div
+        class="form textArea"
+    >
+        <table>
+            <tr align="right">
+                <td colspan="2">
+                    <div
+                        class="letterCount"
+                        data-dojo-attach-point="letterCount"
+                    >
+                    </div>
+                </td>
+            </tr>
+            <tr valign="middle">
+                <td height="100%"
+                    valign="middle"
+                    data-dojo-attach-point="labelElement"
+                    class="label">${label}</td>
+                <td colspan="1">
+                    <input
+                        class="input"
+                        data-dojo-attach-point="input"
+                        type="text"
+                        dojoType="dijit.form.SimpleTextarea"
+                        required="false"
+                        data-dojo-props="
+                            cols    :   ${cols},
+                            rows    :   ${rows},
+                            disabled:   ${disabled}
+                        "
+                    /> 
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+</div>

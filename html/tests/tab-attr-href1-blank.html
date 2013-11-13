@@ -1,0 +1,37 @@
+<html>
+<head>
+<script type="text/javascript">
+     var djConfig = {
+             parseOnLoad:true,
+     };
+</script>
+<script type="text/javascript" src="../release-1.2.2/dojo/dojo.js"></script>
+<script type="text/javascript">
+     dojo.require("dijit.layout.ContentPane");
+   dojo.addOnLoad(function() {
+             dojo.connect(dijit.byId('contentPane'), '_setHrefAttr', function() {
+                     console.debug("attr('href') called");
+             });
+             dojo.connect(dijit.byId('contentPane'), 'cancel', function() {
+                     console.debug('cancel called');
+             });
+             dojo.connect(dijit.byId('contentPane'), 'onLoad', function() {
+                     console.debug('onLoad called');
+                     console.debug('this.href: ' + this.href);
+                     console.debug('this._xhrDfd: ' + this._xhrDfd);
+             });
+             dojo.connect(dijit.byId('contentPane'), 'onDownloadEnd', function() {
+                     console.debug('onDownloadEnd called');
+                     console.debug('this.href: ' + this.href);
+                     console.debug('this._xhrDfd: ' + this._xhrDfd);
+             });
+     });
+
+</script>
+</head>
+<body>
+<div id="contentPane-blank" dojoType="dijit.layout.ContentPane">this text is in a ContentPane</div>
+<button onclick="dijit.byId('contentPane').attr('href', 'tab-attr-href1-blank.html')">test</button>
+</body>
+</html>
+

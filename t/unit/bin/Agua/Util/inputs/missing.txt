@@ -1,0 +1,76 @@
+>>> Using default cluster template: syoung-smallcluster
+>>> Loaded plugin: automount.NfsShares
+>>> Loaded plugin: sge.CreateCell
+>>> Validating cluster template settings...
+>>> Cluster template settings are valid
+>>> Starting cluster...
+>>> Launching a 1-node cluster...
+>>> Launching a 1-node cluster...
+>>> Creating security group @sc-syoung-smallcluster...
+>>> Waiting for cluster to come up... (updating every 30s)
+>>> Waiting for all nodes to be in a 'running' state...
+1/1 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 100%  
+>>> Waiting for SSH to come up on all nodes...
+1/1 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 100%  
+>>> The master node is ec2-174-129-132-29.compute-1.amazonaws.com
+>>> Setting up the cluster...
+>>> Configuring hostnames...
+1/1 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 100%  
+>>> Creating cluster user: sgeadmin (uid: 1001, gid: 1001)
+1/1 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 100%  
+>>> Configuring scratch space for user: sgeadmin
+1/1 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 100%  
+>>> Configuring /etc/hosts on each node
+1/1 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 100%  
+>>> Configuring NFS...
+>>> _setup_nfs took 0.008 mins
+>>> Configuring passwordless ssh for root
+>>> Configuring passwordless ssh for sgeadmin
+>>> Removing previous SGE installation...
+>>> Installing Sun Grid Engine...
+>>> Shutting down threads...
+20/20 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 100%  
+>>> Running plugin automount
+>>> Running plugin: automount.NfsShares
+>>> Updating hostname on head node
+>>> Opening NFS ports
+>>> Setting mountd port on master
+>>> Mounting shared from head node to master
+>>> Adding /etc/fstab entry (/agua on master)
+>>> Adding /etc/fstab entry (/data on master)
+>>> Adding /etc/fstab entry (/nethome on master)
+>>> Adding /etc/exports entry (/agua to master)
+>>> Adding /etc/exports entry (/data to master)
+>>> Adding /etc/exports entry (/nethome to master)
+>>> Mounting NFS shares on master
+>>> mount -t nfs 10.122.13.145:/agua /agua
+>>> Mounting NFS shares on master
+>>> mount -t nfs 10.122.13.145:/data /data
+>>> Mounting NFS shares on master
+>>> mount -t nfs 10.122.13.145:/nethome /nethome
+>>> Completed running plugin: automount.NfsShares
+>>> Running plugin sge
+>>> Running plugin: sge.CreateCell
+>>> Opening SGE qmaster and execd ports
+>>> Copying cell directory on head node
+>>> Copying cell directory on master
+>>> mkdir /opt/sge6/syoung-smallcluster &> /dev/null
+!!! ERROR - command 'cd /opt/sge6/syoung-smallcluster/common; export SGE_ROOT=/opt/sge6; export SGE_CELL=syoung-smallcluster; export SGE_QMASTER_PORT=36251; export SGE_EXECD_PORT=36252; /opt/sge6/util/create_settings.sh /opt/sge6/syoung-smallcluster/common' failed with status 2
+>>> rsync -a /opt/sge6/default/* /opt/sge6/syoung-smallcluster --exclude *tar.gz
+>>> chown -R sgeadmin:sgeadmin /opt/sge6/syoung-smallcluster
+>>> Updating hostname on head node
+>>> Updating act_qmaster file
+>>> Restarting SGE qmaster and execd daemons
+>>> /bin/ps aux | grep sgeadmin | cut -c9-14 | xargs -n1 -iPID /bin/kill -9 PID &> /dev/null
+>>> Enabling job scheduling info
+denied: host "ip-10-122-13-145.ec2.internal" is neither submit nor admin host
+denied: host "ip-10-122-13-145.ec2.internal" is neither submit nor admin host
+>>> Adding 'threaded' parallel environment
+>>> Adding head node to submit hosts and admin hosts lists
+>>> Add master to @allhosts group
+>>> sge.addToAllhosts    command: /opt/sge6/bin/lx24-amd64/qconf -aattr hostgroup hostlist master @allhosts >> /tmp/allhosts.out; 
+>>> Restarting SGE qmaster and execd daemons
+>>> /bin/ps aux | grep sgeadmin | cut -c9-14 | xargs -n1 -iPID /bin/kill -9 PID &> /dev/null
+>>> Completed running plugin: sge.CreateCell
+
+

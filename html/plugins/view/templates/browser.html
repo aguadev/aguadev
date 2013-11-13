@@ -1,0 +1,118 @@
+<div data-dojo-attach-point="containerNode">
+
+	<div
+		data-dojo-attach-point="mainTab"
+		class="tundra"
+		title="JBrowse"
+		data-dojo-type="dijit.layout.BorderContainer"
+		iconClass="browserIcon"
+		style="top: -26px !important; min-width: 1000px !important; width: 100% !important; min-height: 1200px !important; height: 100% !important; padding: 0px !important; bottom: 0px !important;"
+		closable="true"
+	>
+		
+		<!-- LEFT PANE -->
+		<div
+			data-dojo-attach-point="leftPane" 
+			title="Features"
+			class="leftPane" 
+			data-dojo-type="plugins.dojox.layout.ExpandoPane" 
+			closable="false"
+			maxWidth="180px"
+			splitter="true" 
+			duration="125"
+			region="left"
+			startExpanded="true"
+			style="width: 180px; min-width: 25px; top: 30px !important; background: #FFF; padding: 0px !important; overflow: visible;"
+			easeIn="dojo.fx.easing.expoOut" 
+			easeOut="dojo.fx.easing.expoInOut"
+			duration="100"
+		>
+		</div>
+		
+		<!-- RIGHT PANE -->
+		<div
+			data-dojo-attach-point="rightPane"
+			data-dojo-type="dijit.layout.ContentPane" 
+			class="rightPane" 
+			region="center"
+			style="top: 26px !important; min-width: 800px !important; width: 100% !important; min-height: 800px !important; height: 100% !important; min-width: 25px; background: none; padding: 0; overflow: visible !important;"
+		>
+		
+			<div
+				splitter="true"
+				startExpanded="true"
+				data-dojo-type="dijit.layout.BorderContainer"
+			>
+		
+				<!-- RIGHT TOP PANE -->
+				<div
+					data-dojo-attach-point="topPane"
+					splitter="true"
+					startExpanded="true"
+					data-dojo-type="plugins.dojox.layout.ExpandoPane"
+					closable="false"
+					title="Navigation"
+					region="top"
+					class="jbrowse"
+					maxHeight="100"
+					style="height: 100px; min-width: 800px !important; width: 100% !important;"
+				>
+					
+					<div
+						data-dojo-attach-point="menuBar"
+						class="menuBar"
+					>
+					</div>
+
+					<div
+						data-dojo-attach-point="overview"
+						class="overview"
+					>
+					</div>
+					
+					<div
+						data-dojo-attach-point="navbox"
+						class="navbox"
+						style="text-align: center; padding: 2px; z-index: 10;";
+					>
+					</div>
+					
+				</div>
+
+
+				<!-- RIGHT CENTER PANE -->		
+				<div
+					data-dojo-attach-point="centerPane"
+					region="center"
+					class="dragWindow"
+					data-dojo-type="dijit.layout.ContentPane"
+					style="height: 500px; min-width: 800px !important; width: 100% !important;"
+				>
+					
+					<div
+						data-dojo-attach-point="browserWidget"
+						data-dojo-type="dijit.layout.ContentPane"
+						region="center"
+					>
+					</div>
+						
+					<div
+						data-dojo-attach-point="containerWidget"
+						data-dojo-type="dijit.layout.BorderContainer"
+						liveSplitters="false"
+						design="sidebar"
+						gutters="false"
+						class="containerWidget"
+					>
+							
+					</div>
+
+				</div>
+		
+		</div>
+		<!-- RIGHT PANE -->
+		
+	</div>
+	<!-- END OF VIEW TAB dijit.layout.BorderContainer -->
+		
+</div> 

@@ -1,0 +1,200 @@
+{
+   "tracks" : [
+      {
+         "urlTemplate" : "tracks/knownGene/{refseq}/trackData.json",
+         "style" : {
+            "className" : "generic_parent",
+            "featureCss" : "background-color: #0c0c78; height: 6px;",
+            "histCss" : "background-color: #0c0c78;"
+         },
+         "compress" : 0,
+         "label" : "knownGene",
+         "type" : "FeatureTrack",
+         "hooks" : {
+            "modify" : "function(track, feat, elem) {\n    var fType = feat.get(\"Type\");\n    if (fType) {\n        elem.className = \"basic\";\n        switch (fType) {\n        case \"CDS\":\n        case \"thick\":\n            elem.style.height = \"10px\";\n            elem.style.marginTop = \"-3px\";\n            break;\n        case \"UTR\":\n        case \"thin\":\n            elem.style.height = \"6px\";\n            elem.style.marginTop = \"-1px\";\n            break;\n        }\n        elem.style.backgroundColor = \"#0c0c78\";\n    }\n}\n"
+         },
+         "key" : "knownGene"
+      },
+      {
+         "urlTemplate" : "tracks/ccdsGene/{refseq}/trackData.json",
+         "compress" : 0,
+         "style" : {
+            "className" : "generic_parent",
+            "featureCss" : "background-color: #0c780c; height: 6px;",
+            "histCss" : "background-color: #0c780c;"
+         },
+         "type" : "FeatureTrack",
+         "label" : "ccdsGene",
+         "hooks" : {
+            "modify" : "function(track, feat, elem) {\n    var fType = feat.get(\"Type\");\n    if (fType) {\n        elem.className = \"basic\";\n        switch (fType) {\n        case \"CDS\":\n        case \"thick\":\n            elem.style.height = \"10px\";\n            elem.style.marginTop = \"-3px\";\n            break;\n        case \"UTR\":\n        case \"thin\":\n            elem.style.height = \"6px\";\n            elem.style.marginTop = \"-1px\";\n            break;\n        }\n        elem.style.backgroundColor = \"#0c780c\";\n    }\n}\n"
+         },
+         "key" : "ccdsGene"
+      },
+      {
+         "urlTemplate" : "tracks/dgv/{refseq}/trackData.json",
+         "style" : {
+            "className" : "generic_parent",
+            "featureCss" : "background-color: #000000; height: 6px;",
+            "histCss" : "background-color: #000000;"
+         },
+         "compress" : 0,
+         "label" : "dgv",
+         "type" : "FeatureTrack",
+         "hooks" : {
+            "modify" : "function(track, feat, elem) {\n    var fType = feat.get(\"Type\");\n    if (fType) {\n        elem.className = \"basic\";\n        switch (fType) {\n        case \"CDS\":\n        case \"thick\":\n            elem.style.height = \"10px\";\n            elem.style.marginTop = \"-3px\";\n            break;\n        case \"UTR\":\n        case \"thin\":\n            elem.style.height = \"6px\";\n            elem.style.marginTop = \"-1px\";\n            break;\n        }\n        elem.style.backgroundColor = \"#000000\";\n    }\n}\n"
+         },
+         "key" : "dgv"
+      },
+      {
+         "urlTemplate" : "tracks/exoniphy/{refseq}/trackData.json",
+         "compress" : 0,
+         "style" : {
+            "className" : "generic_parent",
+            "featureCss" : "background-color: #ad11a2; height: 6px;",
+            "histCss" : "background-color: #ad11a2;"
+         },
+         "type" : "FeatureTrack",
+         "label" : "exoniphy",
+         "hooks" : {
+            "modify" : "function(track, feat, elem) {\n    var fType = feat.get(\"Type\");\n    if (fType) {\n        elem.className = \"basic\";\n        switch (fType) {\n        case \"CDS\":\n        case \"thick\":\n            elem.style.height = \"10px\";\n            elem.style.marginTop = \"-3px\";\n            break;\n        case \"UTR\":\n        case \"thin\":\n            elem.style.height = \"6px\";\n            elem.style.marginTop = \"-1px\";\n            break;\n        }\n        elem.style.backgroundColor = \"#ad11a2\";\n    }\n}\n"
+         },
+         "key" : "exoniphy"
+      },
+      {
+         "urlTemplate" : "tracks/geneid/{refseq}/trackData.json",
+         "style" : {
+            "className" : "generic_parent",
+            "featureCss" : "background-color: #005a64; height: 6px;",
+            "histCss" : "background-color: #005a64;"
+         },
+         "compress" : 0,
+         "label" : "geneid",
+         "type" : "FeatureTrack",
+         "hooks" : {
+            "modify" : "function(track, feat, elem) {\n    var fType = feat.get(\"Type\");\n    if (fType) {\n        elem.className = \"basic\";\n        switch (fType) {\n        case \"CDS\":\n        case \"thick\":\n            elem.style.height = \"10px\";\n            elem.style.marginTop = \"-3px\";\n            break;\n        case \"UTR\":\n        case \"thin\":\n            elem.style.height = \"6px\";\n            elem.style.marginTop = \"-1px\";\n            break;\n        }\n        elem.style.backgroundColor = \"#005a64\";\n    }\n}\n"
+         },
+         "key" : "geneid"
+      },
+      {
+         "urlTemplate" : "tracks/hgIkmc/{refseq}/trackData.json",
+         "compress" : 0,
+         "style" : {
+            "className" : "generic_parent",
+            "featureCss" : "background-color: #000000; height: 6px;",
+            "histCss" : "background-color: #000000;"
+         },
+         "type" : "FeatureTrack",
+         "label" : "hgIkmc",
+         "hooks" : {
+            "modify" : "function(track, feat, elem) {\n    var fType = feat.get(\"Type\");\n    if (fType) {\n        elem.className = \"basic\";\n        switch (fType) {\n        case \"CDS\":\n        case \"thick\":\n            elem.style.height = \"10px\";\n            elem.style.marginTop = \"-3px\";\n            break;\n        case \"UTR\":\n        case \"thin\":\n            elem.style.height = \"6px\";\n            elem.style.marginTop = \"-1px\";\n            break;\n        }\n        elem.style.backgroundColor = \"#000000\";\n    }\n}\n"
+         },
+         "key" : "hgIkmc"
+      },
+      {
+         "urlTemplate" : "tracks/hinv70NonCoding/{refseq}/trackData.json",
+         "style" : {
+            "className" : "generic_parent",
+            "featureCss" : "background-color: #0f64b4; height: 6px;",
+            "histCss" : "background-color: #0f64b4;"
+         },
+         "compress" : 0,
+         "label" : "hinv70NonCoding",
+         "type" : "FeatureTrack",
+         "hooks" : {
+            "modify" : "function(track, feat, elem) {\n    var fType = feat.get(\"Type\");\n    if (fType) {\n        elem.className = \"basic\";\n        switch (fType) {\n        case \"CDS\":\n        case \"thick\":\n            elem.style.height = \"10px\";\n            elem.style.marginTop = \"-3px\";\n            break;\n        case \"UTR\":\n        case \"thin\":\n            elem.style.height = \"6px\";\n            elem.style.marginTop = \"-1px\";\n            break;\n        }\n        elem.style.backgroundColor = \"#0f64b4\";\n    }\n}\n"
+         },
+         "key" : "hinv70NonCoding"
+      },
+      {
+         "urlTemplate" : "tracks/hinv70PseudoGene/{refseq}/trackData.json",
+         "compress" : 0,
+         "style" : {
+            "className" : "generic_parent",
+            "featureCss" : "background-color: #1e82d2; height: 6px;",
+            "histCss" : "background-color: #1e82d2;"
+         },
+         "type" : "FeatureTrack",
+         "label" : "hinv70PseudoGene",
+         "hooks" : {
+            "modify" : "function(track, feat, elem) {\n    var fType = feat.get(\"Type\");\n    if (fType) {\n        elem.className = \"basic\";\n        switch (fType) {\n        case \"CDS\":\n        case \"thick\":\n            elem.style.height = \"10px\";\n            elem.style.marginTop = \"-3px\";\n            break;\n        case \"UTR\":\n        case \"thin\":\n            elem.style.height = \"6px\";\n            elem.style.marginTop = \"-1px\";\n            break;\n        }\n        elem.style.backgroundColor = \"#1e82d2\";\n    }\n}\n"
+         },
+         "key" : "hinv70PseudoGene"
+      },
+      {
+         "urlTemplate" : "tracks/nscanGene/{refseq}/trackData.json",
+         "compress" : 0,
+         "style" : {
+            "className" : "generic_parent",
+            "featureCss" : "background-color: #228b22; height: 6px;",
+            "histCss" : "background-color: #228b22;"
+         },
+         "type" : "FeatureTrack",
+         "label" : "nscanGene",
+         "hooks" : {
+            "modify" : "function(track, feat, elem) {\n    var fType = feat.get(\"Type\");\n    if (fType) {\n        elem.className = \"basic\";\n        switch (fType) {\n        case \"CDS\":\n        case \"thick\":\n            elem.style.height = \"10px\";\n            elem.style.marginTop = \"-3px\";\n            break;\n        case \"UTR\":\n        case \"thin\":\n            elem.style.height = \"6px\";\n            elem.style.marginTop = \"-1px\";\n            break;\n        }\n        elem.style.backgroundColor = \"#228b22\";\n    }\n}\n"
+         },
+         "key" : "nscanGene"
+      },
+      {
+         "urlTemplate" : "tracks/refGene/{refseq}/trackData.json",
+         "style" : {
+            "className" : "generic_parent",
+            "featureCss" : "background-color: #0c0c78; height: 6px;",
+            "histCss" : "background-color: #0c0c78;"
+         },
+         "compress" : 0,
+         "label" : "refGene",
+         "type" : "FeatureTrack",
+         "hooks" : {
+            "modify" : "function(track, feat, elem) {\n    var fType = feat.get(\"Type\");\n    if (fType) {\n        elem.className = \"basic\";\n        switch (fType) {\n        case \"CDS\":\n        case \"thick\":\n            elem.style.height = \"10px\";\n            elem.style.marginTop = \"-3px\";\n            break;\n        case \"UTR\":\n        case \"thin\":\n            elem.style.height = \"6px\";\n            elem.style.marginTop = \"-1px\";\n            break;\n        }\n        elem.style.backgroundColor = \"#0c0c78\";\n    }\n}\n"
+         },
+         "key" : "refGene"
+      },
+      {
+         "urlTemplate" : "tracks/sgpGene/{refseq}/trackData.json",
+         "compress" : 0,
+         "style" : {
+            "className" : "generic_parent",
+            "featureCss" : "background-color: #005a64; height: 6px;",
+            "histCss" : "background-color: #005a64;"
+         },
+         "type" : "FeatureTrack",
+         "label" : "sgpGene",
+         "hooks" : {
+            "modify" : "function(track, feat, elem) {\n    var fType = feat.get(\"Type\");\n    if (fType) {\n        elem.className = \"basic\";\n        switch (fType) {\n        case \"CDS\":\n        case \"thick\":\n            elem.style.height = \"10px\";\n            elem.style.marginTop = \"-3px\";\n            break;\n        case \"UTR\":\n        case \"thin\":\n            elem.style.height = \"6px\";\n            elem.style.marginTop = \"-1px\";\n            break;\n        }\n        elem.style.backgroundColor = \"#005a64\";\n    }\n}\n"
+         },
+         "key" : "sgpGene"
+      },
+      {
+         "urlTemplate" : "tracks/vegaGene/{refseq}/trackData.json",
+         "style" : {
+            "className" : "generic_parent",
+            "featureCss" : "background-color: #0032e1; height: 6px;",
+            "histCss" : "background-color: #0032e1;"
+         },
+         "compress" : 0,
+         "label" : "vegaGene",
+         "type" : "FeatureTrack",
+         "hooks" : {
+            "modify" : "function(track, feat, elem) {\n    var fType = feat.get(\"Type\");\n    if (fType) {\n        elem.className = \"basic\";\n        switch (fType) {\n        case \"CDS\":\n        case \"thick\":\n            elem.style.height = \"10px\";\n            elem.style.marginTop = \"-3px\";\n            break;\n        case \"UTR\":\n        case \"thin\":\n            elem.style.height = \"6px\";\n            elem.style.marginTop = \"-1px\";\n            break;\n        }\n        elem.style.backgroundColor = \"#0032e1\";\n    }\n}\n"
+         },
+         "key" : "vegaGene"
+      },
+      {
+         "urlTemplate" : "tracks/vegaPseudoGene/{refseq}/trackData.json",
+         "compress" : 0,
+         "style" : {
+            "className" : "generic_parent",
+            "featureCss" : "background-color: #1e82d2; height: 6px;",
+            "histCss" : "background-color: #1e82d2;"
+         },
+         "type" : "FeatureTrack",
+         "label" : "vegaPseudoGene",
+         "hooks" : {
+            "modify" : "function(track, feat, elem) {\n    var fType = feat.get(\"Type\");\n    if (fType) {\n        elem.className = \"basic\";\n        switch (fType) {\n        case \"CDS\":\n        case \"thick\":\n            elem.style.height = \"10px\";\n            elem.style.marginTop = \"-3px\";\n            break;\n        case \"UTR\":\n        case \"thin\":\n            elem.style.height = \"6px\";\n            elem.style.marginTop = \"-1px\";\n            break;\n        }\n        elem.style.backgroundColor = \"#1e82d2\";\n    }\n}\n"
+         },
+         "key" : "vegaPseudoGene"
+      }
+   ],
+   "formatVersion" : 1
+}

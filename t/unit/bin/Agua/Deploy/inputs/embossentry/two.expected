@@ -1,0 +1,7 @@
+{
+    "name":"two",
+    "argument":"-two",
+    "paramtype":"typetwo",
+    "value":"default cde",
+    "description":"Description of cde and rest of CDE description"
+}

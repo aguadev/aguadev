@@ -1,0 +1,247 @@
+<div dojoAttachPoint="containerNode">
+
+	<!-- APPS TAB -->
+	<div
+		dojoAttachPoint="mainTab"
+		class="packages"
+		dojoType="dijit.layout.ContentPane"
+		title="Packages"
+		style="height: 100% !important; max-height: auto !important; width: 390px !important; padding: 0 !important;"
+		>
+
+<table width="100%">
+	<tr valign="top" width="100%">
+		<td colspan="2" class="tabTitle" align="center">
+			<!--<div class="tabTitleIcon">-->
+				Packages
+			<!--</div>-->
+		</td>
+	</tr>
+
+	<tr valign="top" width="95%">
+		<td width="100%">
+			<!--<div class="label"> New Package </div>-->
+			<table width="100%">
+				<tr width="100%">
+
+					<td colspan="3" height="32px">
+						
+						<table cellspacing="0" cellpadding="0" border="0" style="padding: 0; margin: 0;">
+
+							<tr>
+
+								<td 
+									style="padding-right: 10px;" >
+									<textarea
+										spellcheck="false"
+										dojoAttachPoint="package"
+										class="package"
+										cols="30"
+										rows="1"
+										title="name: Name of package"
+										>Name</textarea>
+								</td>
+	
+								<td height="20px"
+									width="120px"
+									align="right">
+									
+									<div
+										dojoAttachPoint="addPackageButton"
+										class="addPackageButton"
+									>
+									New Package
+									</div>
+								</td>
+					
+							</tr>
+						</table>
+					</td>
+
+				</tr>
+
+				<tr class="headerRow" width="100%" height="8px">
+					<td >Version</td>
+					<td>Privacy</td>
+				</tr>
+
+				<tr width="100%">
+					<td >
+						<textarea
+							spellcheck="false"
+							dojoAttachPoint="version"
+							class="version"
+							cols="40"
+							rows="1"
+							title="version: Version of package (format: N.N.N, i.e., major.minor.patch)"
+							>0.0.1</textarea>
+					</td>
+					
+					<td>
+						<select
+							class="privacy"
+							dojoAttachPoint="privacy"
+						>
+							<option value="public">public</option>
+							<option value="private">private</option>
+						</select>
+					</td>
+				</tr>
+
+				<tr class="headerRow" width="100%" height="8px">
+					<td width="100%" colspan="3">Opsdir</td>
+				</tr>
+
+				<tr width="100%">
+					<td colspan="3">
+						<table>
+							<tr>
+								<td>
+									<div dojoAttachPoint="defaultOpsdir" class="defaultOpsdir">Default</div>
+								</td>
+								<td>
+									<textarea spellcheck="false" dojoAttachPoint="opsdir" class="opsdir" cols="40" rows="1" title="opsdir: Absolute path to directory containing *.ops file"></textarea>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+
+				<tr class="headerRow" width="100%" height="8px">
+					<td width="100%" colspan="3">Installdir</td>
+				</tr>
+
+				<tr width="100%">
+					<td colspan="3">
+						<table>
+							<tr>
+								<td>
+									<div dojoAttachPoint="defaultInstalldir" class="defaultInstalldir">Default</div>
+								</td>
+								<td>
+									<textarea spellcheck="false" dojoAttachPoint="installdir" class="installdir" style="width: 100%; font-weight: bolder; font-family: Verdana;" ;="" cols="40" rows="1" title="installdir: Absolute path to base installation directory">Installdir</textarea>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+
+				<tr class="headerRow" width="100%">
+					<td colspan="3"
+						class="toggleTitle"
+						dojoAttachEvent="onclick:toggle"
+						title="description: A brief description of the package"
+					> Details (Click to toggle)</td>
+				</tr>
+
+				<tr class="headerRow" width="100%">
+					<td colspan="3"
+						style="display: none;"
+						title="notes: A brief description of the package"
+						dojoAttachPoint="descriptionTitle"
+					>Description</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<textarea
+							spellcheck="false"
+							dojoAttachPoint="description"
+							class="description"
+							style="display: none; width:100%; font-weight: bolder; font-family: Verdana;";
+							cols="40"
+							rows="1"
+							title="description: A brief description of the package"
+						>Description</textarea>
+					</td>
+				</tr>
+
+				<tr class="headerRow" width="100%">
+					<td colspan="3"
+						style="display: none;"
+						title="notes: Notes on the package (e.g., release notes)"
+						dojoAttachPoint="notesTitle"
+					>Notes</td>
+				</tr>
+
+				<tr>
+					<td colspan="3">
+						<textarea
+							spellcheck="false"
+							dojoAttachPoint="notes"
+							class="notes"
+							value="Notes"
+							style="display: none; width:100%; font-weight: bolder; font-family: Verdana;";
+							cols="40"
+							rows="1"
+							title="notes: Notes on the package (e.g., release notes)"
+						>Notes</textarea>
+					</td>
+				</tr>
+
+				<tr class="headerRow" width="100%">
+					<td
+						colspan="3"
+						style="display: none;"
+						dojoAttachPoint="urlTitle"
+						title="url: Web address of website providing further details (e.g., http://mysite.com/packages)"
+						>URL</td>
+				</tr>
+
+				<tr>
+					<td colspan="3">
+						<textarea
+							spellcheck="false"
+							dojoAttachPoint="url"
+							class="url"
+							value="URL"
+							style="display: none; width:100%; font-weight: bolder; font-family: Verdana;";
+							cols="40"
+							rows="1"
+							title="url: Web address of website providing further details (e.g., http://mysite.com/packages)"
+						>URL</textarea>
+					</td>
+				</tr>
+
+			</table>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<div
+				dojoAttachPoint="dragSourceNode"
+				class="dragSource"
+				style="height: 385px; width: 96%;"
+			>
+			</div>
+		</td>
+	</tr>
+
+	<tr align="center">
+		<td align="center">
+
+			<!-- TRASH CONTAINER -->
+			<div
+				dojoAttachPoint="trashContainer"
+				class="trash"
+				style="height: 60px; width: 150px; align: center;" 
+				>
+				<div
+					dojoAttachPoint="trashIcon"
+					class="trashIcon"
+					style="height: 60px; width: 60px;"
+					>
+				</div>
+			</div>
+		</td>
+	</tr>
+</table>
+
+
+
+	</div>
+	<!-- END SOURCES TAB -->
+	
+</div> 
+
+

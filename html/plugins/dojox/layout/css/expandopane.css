@@ -1,0 +1,22 @@
+.verticalTitle {
+    display: block;
+	-webkit-transform: rotate(90deg);
+	text-indent: 10px;
+	font-size: 20px;	
+}
+.verticalTitle.hidden {
+    display: none;
+    visibility: invisible;
+}
+.dojoxExpandoPane.dijitExpandoPane.leftPane.dojoxExpandoLeft.dijitBorderContainer-child.dijitBorderContainer-dijitExpandoPane.dijitBorderContainerPane.dijitAlignLeft.dojoxExpandoClosed,
+.claro .dojoxExpandoPane.dijitExpandoPane.dojoxExpandoClosed,
+.claro .dojoxExpandoClosed {
+    background-color: #EEF !important;
+
+    font-size: 20px;
+}
+
+
+.claro .dojoxExpandoPane.dojoxExpandoClosed .dojoExpandoWrapper {
+    background-color: #444 !important;
+}

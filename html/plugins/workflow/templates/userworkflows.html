@@ -1,0 +1,203 @@
+<div dojoAttachPoint="containerNode">
+
+    <div
+        dojoAttachPoint="mainTab"
+        dojoType="dijit.layout.ContentPane"
+        parseOnLoad="false"
+        class="workflows"
+		title="Workflows"
+		style="height: 100%; width: 100%; padding: 0 !important;"
+    >
+    
+        <table width="100%">
+			<tr valign="top" width="100%">
+				<td colspan="4"class="tabTitle" align="center">
+                    My Workflows
+				</td>
+			</tr>
+		</table>
+		
+        <table align="center" width="100%">
+		<table width="100%">
+			<tr>
+				<td
+					colspan="3"
+					dojoAttachPoint="syncWorkflowsButton"
+					class="syncWorkflowsButton"
+					title="Click to sync workflows to biorepository"
+					dojoAttachEvent="onclick:showSyncDialog"
+				>
+					Sync
+				</td>
+			</tr>
+            <tr>
+                <td class="workflowTitle" colspan="5">Cluster</td>
+            </tr>
+
+            <tr align="center">
+
+                <td class="clusterIcon"></td>
+				<td>
+                    <div
+						dojoType="dijit.form.ComboBox"
+                        dojoAttachPoint="clusterCombo"
+						dojoAttachEvent="onChange:saveClusterWorkflow"
+                        class="clusterCombo"
+                        autocomplete="false"
+						disabled="false"
+                    >
+                    </div>
+				</td>
+				<td>
+					<table>
+						<tr class="headerRow">
+							<td colspan="2"><b>Nodes</b></td>
+						</tr>
+						<tr class="headerRow">
+							<td>Min</td>
+							<td>Max</td>
+						</tr>
+						<tr>
+							<td>
+								<div
+									dojoAttachPoint="minNodes"
+									dojoAttachEvent="onKeyPress:checkClusterNodes"
+									class="minNodes"
+									dojoType="dijit.form.NumberTextBox"
+									value="0"
+									constraints="{min:0,max:99999,places:0}"
+									maxlength="5" 
+									promptMessage="Minimum nodes: from 0 to 99999" 
+									invalidMessage="Minimum nodes: from 0 to 99999"
+									tooltipPosition="below"
+								</div>
+							</td>
+							<td>
+								<div
+									dojoAttachPoint="maxNodes"
+									dojoAttachEvent="onKeyPress:checkClusterNodes"
+									class="maxNodes"
+									dojoType="dijit.form.NumberTextBox"
+									value="0"
+									constraints="{min:0,max:99999,places:0}"
+									maxlength="5" 
+									promptMessage="Maximum nodes: from 0 to 99999" 
+									invalidMessage="Maximum nodes: from 0 to 99999"
+								</div>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		
+		
+		<table width="100%">
+            <tr>
+                <td class="projectTitle" colspan="4">Project</td>
+            </tr>
+            <tr>
+
+                <td class="projectIcon">
+                </td>
+                
+                <td>
+                    <div dojoType="dijit.form.ComboBox"
+                        dojoAttachPoint="projectCombo"
+                        class="projectCombo"
+                        autocomplete="false"
+                    >
+                    </div>
+                </td>
+                
+                <td
+                    dojoAttachPoint="copyProjectButton"
+					dojoAttachEvent="onclick:copyProject"
+                    class="copyProjectButton" 															width="20%"
+                    align="center"
+                    class="fileUpload" >
+                </td>
+
+                <td
+                    dojoAttachPoint="deleteProjectButton"
+                    class="deleteProjectButton" 															width="20%"
+                    align="center"
+                    class="fileUpload" >
+                </td>
+
+            </tr>
+            <tr>
+                <td class="workflowTitle" colspan="4">Workflow</td>
+            </tr>
+            <tr>
+
+                <td class="workflowIcon">
+                </td>
+
+                <td>
+                    <div dojoType="dijit.form.ComboBox"
+                        dojoAttachPoint="workflowCombo"
+                        class="workflowCombo"
+                        autocomplete="false"
+                    >
+                    </div>
+                </td>
+
+                <td 
+                    dojoAttachPoint="copyWorkflowButton"
+					dojoAttachEvent="onclick:copyWorkflow"
+                    class="copyWorkflowButton" 															width="20%"
+                    align="center"
+                    class="fileUpload" >
+                </td>
+
+                <td 
+                    dojoAttachPoint="deleteWorkflowButton"
+                    class="deleteWorkflowButton" 															width="20%"
+                    align="center"
+                    class="fileUpload" >
+                </td>
+
+            </tr>
+        </table>
+		
+        <table align="center" width="260px">
+            <tr align="center" >
+
+                <td width=80px
+                    colspan="3"
+                    dojoAttachPoint="runButton"
+                    class="runButton runButtonDisabled"
+                    width="100%"
+                    style="-moz-user-select: none !important; padding-left: 1px;">
+                    Run Workflow
+                </td>
+
+            </tr>
+
+            <tr>
+                <td 
+                    dojoAttachPoint="displayStatus"
+                    class="displayStatus"
+                    colspan="3"
+                    >
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="3">
+                    <div
+                        dojoAttachPoint="dropTargetContainer"
+                        class="dropTarget" >
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+
+    
+    </div>
+    <!-- END OF WORKFLOWS TAB -->
+    
+
+</div>

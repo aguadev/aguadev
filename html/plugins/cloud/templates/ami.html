@@ -1,0 +1,133 @@
+<div dojoattachpoint="containerNode">
+
+	<!--http://aws.amazon.com/ec2/instance-types/-->
+
+	<!-- ami TAB -->
+	<div
+		dojoAttachPoint="mainTab"
+		class="ami"
+		dojoType="dijit.layout.ContentPane"
+		title="AMIs"
+		style="height: 100% !important; max-height: auto !important; width: 390px !important; padding: 0 !important;"
+	>
+
+	<table align="center" width="100%">
+
+		<tr valign="top" width="100%">
+			<td colspan="3" class="tabTitle" align="center">AMIs</td>
+		</tr>
+
+		<tr height="20px">
+			<td align="center" colspan="3">
+				<div
+					dojoAttachPoint="addAmiButton"
+					class="addAmiButton"
+					>Add AMI</div>
+			</td>
+		</tr>
+
+		<tr class="headerRow">
+			<td>AMI ID</td>
+			<td>AMI Name</td>
+			<td>AMI Type</td>
+		</tr>
+
+		<tr>
+			<td>
+				<input
+					dojoAttachPoint="amiid"
+					class="amiid"
+					type="text"
+					value="ami-d1c42db8"
+					title="AMI ID of the Starcluster image used for all cluster nodes (The base x86_64 StarCluster AMI is ami-d1c42db8)"
+					dojoType="dijit.form.ValidationTextBox"
+					regExp="^ami-[A-F0-9a-f]{8}$"
+					maxlength="12" 
+					promptMessage="AMI identifier. Must be 'ami-XXXXXXXX' in hexadecimal (a-f0-09), e.g. ami-d1c42db8" 
+					invalidMessage="AMI identifier. Must be 'ami-XXXXXXXX' in hexadecimal (a-f0-09), e.g., ami-d1c42db8" 
+					tooltipPosition="below"
+					wrap="off"
+				>
+			</td>
+			<td>
+				<input
+					dojoAttachPoint="aminame"
+					class="aminame"
+					type="text"
+					value="myAmi"
+					dojoType="dijit.form.ValidationTextBox"
+					regExp="^\S{1,20}$"
+					maxlength="20" 
+					promptMessage="AMI name: up to 20 characters (no spaces)" 
+					invalidMessage="AMI name: up to 20 characters (no spaces)"
+					tooltipPosition="below"
+					wrap="off"
+					>
+			</td>
+			<td>
+				<select
+					dojoAttachPoint="amitype"
+					class="amitype"
+					title="AMI type: EBS-backed (stop/startable, retains its state) or emphemeral S3 type">
+					<option value="EBS">EBS</option> 
+					<option value="S3">S3</option>
+				</select>
+			</td>
+		</tr>
+
+		<tr class="headerRow" width="95%" height="8px">
+			<td colspan="3">Description</td>
+		</tr>
+
+		<tr width="95%" >
+			<td align="center" colspan="3">
+				<textarea
+					spellcheck="false"
+					dojoAttachPoint="description"
+					class="description"
+					cols="40"
+					rows="1"
+					title="A brief description of the cluster group"
+				>Description</textarea>
+			</td>
+		</tr>
+
+		<tr valign="top" width="95%">
+			<td colspan="3" width="95%">
+				<div class="label"> AMIs </div>
+				<div
+					dojoAttachPoint="dragSourceNode"
+					class="dragSource"
+					style="height: 327px; width: 95%;"
+				>
+				</div>
+			</td>
+		</tr>
+
+		<tr align="center">
+			<td colspan="3" align="center">
+
+				<!-- TRASH CONTAINER -->
+				<div
+					dojoAttachPoint="trashContainer"
+					class="trash"
+					style="height: 60px; width: 150px; align: center;" 
+					>
+					<div
+						dojoAttachPoint="trashIcon"
+						class="trashIcon"
+						style="height: 60px; width: 60px;"
+						>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+
+
+	</div>
+	<!-- END ami TAB -->
+	
+</div> 
+
+

@@ -1,0 +1,62 @@
+.dijitTitlePane .gripNode {
+    cursor: move;
+}
+
+.dijitTitlePane .gripNode span {
+    cursor: pointer;
+}
+.cpane{
+    /*border:1px solid #666;*/
+    font:bold 12px Arial;
+    color:#666;
+    background:#FFF;
+    /*padding:10px;*/
+    margin:2px;
+}
+
+.gridContainerZone > * {
+    margin: 0px !;
+}
+
+.gridContainerZone {
+    background-color: #FFF !important;
+    height: auto;
+    vertical-align: top;
+}
+
+#GC1, #GC2, #GC3, #GC4 {
+    min-height: 200px;
+    height: auto;
+    width: 300px;
+    margin:10px;
+    padding:2px;
+    border:1px solid #ededed;
+    overflow-x:hidden;
+    overflow-y:auto;
+    border-collapse:collapse;
+    border : 1px solid #ededed;
+}
+#GC2, #GC3, #GC4 {
+    min-height: 50px;
+    height: auto;
+}
+#GC3 {
+    /*position: relative;*/
+    /*left: 320px;*/
+    /*top: -180px;*/
+}
+#GC4 {
+    /*position: relative;*/
+    /*left: 0px;*/
+    /*top: 0px;*/
+}
+
+#GC1 .gridContainerTable,
+#GC2 .gridContainerTable,
+#GC4 .gridContainerTable {
+    border-collapse:collapse;
+} 
+
+.projectPanelTable {
+    min-width: 300px;
+}

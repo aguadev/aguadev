@@ -1,0 +1,19 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-utf-8" />
+        <title>object test</title>
+        <script type="text/javascript">
+            var test = function() {
+                var frm = window.frames['childFrame'].document.location.replace('embed/page2.html');
+            }
+        </script> 
+    </head>
+    <body>
+        <object  id="childFrame" name="childFrame" type="text/html" data="embed/page1.html" width=50% height=50%> 
+        </object>
+ 
+        <button id="btn" onclick="test()">replace object url</button>
+ 
+    </body>
+</html>

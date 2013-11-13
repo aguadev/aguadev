@@ -1,0 +1,76 @@
+<div ="containerNode">
+
+<div id="attachPoint" ></div>
+
+    <table
+        cellspacing="0px"
+        height="300px"
+        width="600px"
+        style="padding: 0; margin: 0;"
+		class="pageTable"
+	>
+        <tr>
+            <td align="center">
+			<td id="colForm">
+                
+                <div
+                    data-dojo-attach-point="dialog"
+                    data-dojo-type="dijit.Dialog"
+                    closeText="true"
+                    title="File Upload"
+                    class="uploader"
+					draggable="true"
+                    style="margin-right: auto; margin-left: auto; text-align: center;"
+				>
+
+				<form
+					method="post"
+					action="${action}"
+					enctype="multipart/form-data" >
+
+					<fieldset>
+	
+						<div
+							data-dojo-attach-point="alert"
+							class="alert"
+						>
+						</div>
+	
+						<input
+							data-dojo-type="plugins.dojox.form.Uploader"
+							data-dojo-attach-point="uploader"
+							class="browseButton"
+							name="uploadedfile"
+							selectMultipleFiles="true"
+							multiple="true"
+							type="file"
+							title="Select File"
+							id="${uploaderId}">
+						<span
+							class="submitButton"
+						>
+							<input
+								type="submit"
+								label="Submit"
+								data-dojo-type="dijit.form.Button" />
+						</span>
+
+						<div
+							data-dojo-type="dojox.form.uploader.FileList"
+							data-dojo-attach-point="fileList"
+							uploaderId="${uploaderId}">
+						</div>
+					</fieldset>
+				</form>
+				
+			</td>
+			
+			<td
+				="images"
+			>
+			</td>
+		</tr>
+	</table>
+
+
+</div>

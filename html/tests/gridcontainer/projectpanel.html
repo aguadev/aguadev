@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>Demo GridContainer</title>
+
+<link rel="stylesheet" href="../../dojo-1.6.1rc2/dojox/layout/resources/GridContainer.css">
+<link rel="stylesheet" href="../../dojo-1.6.1rc2/dojox/layout/resources/DndGridContainer.css">
+
+<script type="text/javascript" src="../../dojo-1.6.1rc2/dojo/dojo.js" djConfig="isDebug: true, parseOnLoad: true"></script>
+
+<script type="text/javascript">
+
+dojo.require("dojo.parser");
+
+// REGISTER module path FOR PLUGINS
+dojo.registerModulePath("plugins","../../plugins");	
+
+// PROJECT PANE
+dojo.require("plugins.core.Agua");
+dojo.require("plugins.workflow.ProjectPanel");
+
+// ATTACH NODE
+dojo.require("dijit.layout.TabContainer");
+
+// DEBUG LOADER
+dojo.require("dojoc.util.loader");
+
+var Agua;
+var Data;
+
+dojo.addOnLoad(function(){
+
+	Agua = new plugins.core.Agua( {
+		cgiUrl : "../../../../../../cgi-bin/agua/0.6/",
+		htmlUrl : "../../../../agua/0.6/",
+		dataUrl: "../../../../t/json/getData.json"
+	});
+
+	var projectPane = new plugins.workflow.ProjectPanel({
+		attachNode : Agua.tabs
+	});
+	
+	// GET DATA
+	data = t.doh.util.fetchJson("../../../../t/plugins/workflow/runstatus/test.json");
+
+
+});
+
+</script>
+
+	</head>
+
+	<body class="tundra">
+		
+		<h1 class="testTitle">Grid Container With Title Panes</h1>
+
+
+
+		<div id="attachPoint" class="workflow"></div>
+
+
+		<div
+			id="attachNode"
+			dojoType="dijit.layout.TabContainer"
+			tabStrip="true">
+		>
+		</div>
+		
+		<div>
+			<div id="GC1" dojoType="dojox.layout.GridContainer" 
+				nbZones="1"
+				opacity="0.7" 
+				allowAutoScroll="true" 
+				hasResizableColumns="false"
+				withHandles="true"
+				acceptTypes="TitlePane">
+					<div dojoType="dijit.TitlePane" dndType="TitlePane" title="Title Pane 3">Title Pane 3<br><br><br><br><br>Some more content
+					</div>
+					<div dojoType="dijit.TitlePane" dndType="TitlePane" title="Ergo">
+						Non ergo erunt homines deliciis diffluentes audiendi, si quando de amicitia, quam nec usu nec ratione habent cognitam, disputabunt. Nam quis est, pro deorum fidem atque hominum!
+					</div>
+			</div>
+		</div>
+		<!---->
+		<!--<div height="100">-->
+		<!--	FORK : CONDITIONAL?-->
+		<!--	<div id="GC2" dojoType="dojox.layout.GridContainer" -->
+		<!--		nbZones="1"-->
+		<!--		opacity="0.7" -->
+		<!--		allowAutoScroll="true" -->
+		<!--		hasResizableColumns="false"-->
+		<!--		withHandles="true"-->
+		<!--		acceptTypes="TitlePane">-->
+		<!---->
+		<!--		<div dojoType="dijit.TitlePane" dndType="TitlePane" title="Title Pane 1">Title Pane 1<br><br><br><br><br>Some more content</div>-->
+		<!--	</div>-->
+		<!---->
+		<!--	<div id="GC3" dojoType="dojox.layout.GridContainer" -->
+		<!--		nbZones="1"-->
+		<!--		opacity="0.7" -->
+		<!--		allowAutoScroll="true" -->
+		<!--		hasResizableColumns="false"-->
+		<!--		withHandles="true"-->
+		<!--		acceptTypes="TitlePane">-->
+		<!---->
+		<!--		<div dojoType="dijit.TitlePane" dndType="TitlePane" title="Title Pane 1">Title Pane 1<br><br><br><br><br>Some more content</div>-->
+		<!--	</div>-->
+		<!--</div>-->
+		<!---->
+		<!--<div id="GC4" dojoType="dojox.layout.GridContainer" -->
+		<!--	nbZones="1"-->
+		<!--	opacity="0.7" -->
+		<!--	allowAutoScroll="true" -->
+		<!--	hasResizableColumns="false"-->
+		<!--	withHandles="true"-->
+		<!--	acceptTypes="TitlePane">-->
+		<!---->
+		<!--	<div dojoType="dijit.TitlePane" dndType="TitlePane" title="Title Pane 2">Title Pane 2<br><br><br><br><br>Some more content</div>-->
+		<!--</div>-->
+
+
+	</body>
+</html>

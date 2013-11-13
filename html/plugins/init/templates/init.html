@@ -1,0 +1,372 @@
+<div dojoattachpoint="containerNode">
+
+	<!-- init TAB -->
+	<div
+		dojoAttachPoint="initTab"
+		class="init"
+		dojoType="dijit.layout.ContentPane"
+		title="Settings"
+		style="text-align: center; max-height: auto !important; min-width: 100% !important; padding: 0 !important;"
+		>
+
+		<table class="mainTable">
+			<tr class="aguaIconBackground">
+				<td align="center" class="aguaIcon"></td>
+			</tr>
+			<tr>
+				<td class="title"> Input user information and 'Save' to load data and user volumes </div>
+			</tr>
+			
+			<tr align="center" width="100%">
+				<td width="100%">
+					<div
+						dojoAttachPoint="initTable"
+						class="initTable"
+						style="height: 800px; "
+					>
+						<table width="840px" align="center">
+							<tr>
+								<td
+									colspan="3"
+									dojoAttachPoint="progressButton"
+									class="progressButton"
+									dojoAttachEvent="onclick:openProgressLog"
+								>
+									Progress Log
+								</td>
+							</tr>
+
+							<tr>
+								<td
+									colspan="3"
+									dojoAttachPoint="saveButton"
+									class="saveButton"
+									dojoAttachEvent="onclick:save"
+								>
+									Save
+								</td>
+							</tr>
+
+									
+							<tr>
+								<td colspan="3" align="center">
+									<table>
+										<tr>
+											<td class="sublabel">Admin User</td>
+											<td colspan="2">
+												<input
+													class="adminUser"
+													dojoAttachPoint="adminuser"
+													type="text"
+													dojoType="dijit.form.ValidationTextBox"
+													maxlength="20"
+													value="admin"
+													regExpGen="return '[a-z]{5,20}'"
+													invalidMessage="Lowercase letters (5-20)"
+													promptMessage="Lowercase letters (5-20)"
+													required="false"
+												/> 
+											</td>
+										</tr>
+										<tr>
+											<td class="sublabel">Admin Password</td>
+											<td colspan="2">
+												<input
+													dojoAttachPoint="password"
+													dojoType="plugins.dijit.form.ValidationTextBox"
+													required="true"
+													invalidMessage="Passwords don't match"
+													class="password"
+													type="password"
+													tooltipPosition="below"
+												>
+											</td>
+										</tr>
+										<tr>
+											<td class="sublabel">Confirm Password</td>
+											<td colspan="2">
+												<input
+													dojoAttachPoint="confirmPassword"
+													dojoType="plugins.dijit.form.ValidationTextBox"
+													required="true"
+													invalidMessage="Passwords don't match"
+													class="confirmPassword"
+													type="password"
+													tooltipPosition="below"
+												>
+											</td>	
+										</tr>
+									</table>
+								</td>
+							</tr>
+
+						
+							<tr>
+								<td align="center"
+									colspan="3"
+									class="sublabel"
+								>
+									Data Volume
+								</td>
+							</tr>
+
+							<tr>
+								<td colspan="1"
+									class="dataVolumeContainer"
+									align="right"
+									title="REQUIRED: Input snapshot ID (to copy) or volume ID (to mount).
+DEFAULT    : Data snapshot for the current version of Agua"
+								>
+									<input
+										class="dataVolume"
+										dojoAttachPoint="datavolume"
+										type="text"
+										dojoType="dijit.form.ValidationTextBox"
+										maxlength="13" 
+										value="snap-6341b301"
+										regExpGen="return '^(snap|vol)\-[A-F0-9a-f]{8}'"
+										invalidMessage="Required format: 'snap-abcdef09' or 'vol-abcdef09'"
+										promptMessage="Enter snapshot or volume ID"
+										required="true"
+									/> 
+								</td>
+
+								<td colspan="1"
+									align="left"
+									class="dataVolumeSizeContainer"
+									title="Size of data volume (10-1000 GB)"
+								>
+									<input
+										class="dataVolumeSize"
+										dojoAttachPoint="datavolumesize"
+										type="text"
+										dojoType="dijit.form.NumberTextBox"
+										name="elevation"
+										value="200"
+										constraints="{min:200,max:1000,places:0}"
+										required="true"
+										invalidMessage="Valid range: 200-1000 GB"
+										promptMessage="Valid range: 200-1000 GB"
+									/>
+								</td>
+
+								<td align="left"
+									class="dataVolumeSliderContainer"
+								>
+									<div
+										dojoAttachPoint="datavolumeslider"
+										dojoType="dijit.form.HorizontalSlider" 
+										value="200"
+										maximum="1000"
+										minimum="200"
+										pageIncrement="10"
+										showButtons="true"
+										intermediateChanges="true"
+										slideDuration="200"
+										disabled="false"
+										style="width: 150px;"
+										>
+									</div>
+								</td>
+							</tr>
+
+							<tr>
+								<td align="center"
+									colspan="3"
+									class="sublabel">
+									User Volume
+								</td>
+							</tr>
+
+							<tr>
+								<td colspan="1"
+									class="userVolumeContainer"
+									align="right"
+									title="OPTIONAL: Input snapshot ID (to copy) or volume ID (to mount).
+DEFAULT    : Create a new, empty volume"
+									dojoAttachEvent="onclick:toggleUserVolume"
+								>
+									<input
+										class="userVolume"
+										dojoAttachPoint="uservolume"
+										type="text"
+										dojoType="dijit.form.ValidationTextBox"
+										maxlength="13"
+										value=""
+										regExpGen="return '(snap|vol)\-[A-F0-9a-f]{8}'"
+										invalidMessage="Required format: 'snap-abcdef09' or 'vol-abcdef09'"
+										promptMessage="Required format: 'snap-abcdef09' or 'vol-abcdef09'"
+										required="false"
+									/> 
+								</td>
+
+								<td colspan="1"
+									align="left"
+									class="userVolumeSizeContainer">
+									<input
+										class="userVolumeSize"
+										dojoAttachPoint="uservolumesize"
+										type="text"
+										dojoType="dijit.form.NumberTextBox"
+										name="elevation"
+										value="100"
+										constraints="{min:10,max:1000,places:0}"
+										required="true"
+										invalidMessage="Valid range: 10-1000 GB"
+										promptMessage="Valid range: 10-1000 GB"
+									>
+								</td>
+
+								<td align="left">
+									<div
+										dojoAttachPoint="uservolumeslider"
+										dojoType="dijit.form.HorizontalSlider" 
+										value="10"
+										maximum="1000"
+										minimum="10"
+										pageIncrement="10"
+										showButtons="true"
+										intermediateChanges="true"
+										slideDuration="200"
+										disabled="false"
+										style="width: 150px;"
+										class="userVolumeSlider"
+										>
+									</div>
+								</td>
+							</tr>
+
+							</tr>
+
+							<tr>
+								<td align="center"
+									colspan="3"
+									class="sublabel">
+									Amazon User ID
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									<input
+										class="amazonUserId"
+										size="200"
+										dojoAttachPoint="amazonuserid"
+										style="width:100%; font-weight: bolder; font-family: Verdana;";
+										dojoType="dijit.form.ValidationTextBox"
+										regExp="^\d{12}$"
+										maxlength="12" 
+										promptMessage="Enter your 12-digit Amazon User ID (numbers only)" 
+										invalidMessage="Invalid User ID (Must be 12-digits, numbers only)."
+										value=""
+										required="true"
+										wrap="off"
+									>
+								</td>
+							</tr>
+
+							<tr>
+								<td align="center"
+									colspan="3"
+									class="sublabel"
+									>AWS Access Key ID
+								</td>
+							</tr>
+
+							<tr>
+								<td colspan="3">
+									<input
+										class="awsAccessKeyId"
+										dojoAttachPoint="awsaccesskeyid"
+										dojoType="dijit.form.ValidationTextBox"
+										value=""
+										type="text"
+										maxlength="20"
+										uppercase="true"
+										regExpGen="return '[A-Z0-9]{16,24}'"
+										invalidMessage="20 characters: capital letters or numbers"
+										promptMessage="20 characters: capital letters or numbers"
+										required="true"
+									>
+								</td>
+							</tr>
+
+							<tr>
+								<td align="center"
+									colspan="3"
+									class="sublabel">Secret Access Key
+								</td>
+							</tr>
+
+							<tr>
+								<td colspan="3">
+									<input
+										dojoAttachPoint="awssecretaccesskey"
+										class="secretAccessKey"
+										value=""
+										dojoType="dijit.form.ValidationTextBox"
+										type="text"
+										maxlength="40"
+										regExpGen="return '.{35,45}'"
+										invalidMessage="40 characters"
+										promptMessage="40 characters"
+										required="true"
+									>
+								</td>
+							</tr>
+
+							<tr>
+								<td align="center"
+									colspan="3"
+									class="sublabel">EC2 Private Key</td>
+							</tr>
+
+							<tr>
+								<td colspan="3">
+									<textarea
+										promptMessage="-----BEGIN PRIVATE KEY---- ... -----END PRIVATE KEY-----" 
+										dojoType="plugins.form.ValidationTextarea"
+										required="true"
+										dojoAttachPoint="ec2privatekey"
+										class="ec2privatekey"
+										style="width:100%; font-size: 10px; font-weight: bolder; font-family: Verdana;";
+										cols="40"
+										rows="14"
+									></textarea>
+								</td>
+							</tr>
+
+							<tr>
+								<td align="center"
+									colspan="3"
+									class="sublabel">EC2 Public Certificate</td>
+							</tr>
+
+							<tr>
+								<td colspan="3">
+									<textarea
+										dojoType="plugins.form.ValidationTextarea"
+										promptMessage="-----BEGIN CERTIFICATE----- ... -----END CERTIFICATE-----"
+										required="true"
+										dojoAttachPoint="ec2publiccert"
+										class="ec2publiccert"
+										style="width:100%; font-size: 10px; font-weight: bolder; font-family: Verdana;";
+										cols="40"
+										rows="14"
+									></textarea>
+								</td>
+							</tr>
+							
+						</table>
+		
+					</div>
+				</td>
+			</tr>
+		
+		</table>
+
+	</div>
+	<!-- END init TAB -->
+	
+</div> 
+
+

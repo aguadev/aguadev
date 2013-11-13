@@ -1,0 +1,186 @@
+/***************** FILE UPLOAD *****************/
+/*
+	PURPOSE
+
+		HIDE AND STUNT UNNECESSARY NODES: fakeNodeHolder
+		AND ITS CHILD NODES inputNode, titleNode, cancelNode
+
+	HTML
+
+		<div class="dijitFileInput " widgetid="plugins.files.FileMenu_0">
+	
+			WE WANT TO KEEP THIS
+	
+			<input type="file" dojoattachpoint="fileInput" class="dijitFileInputReal" name="uploadFile" id="plugins.files.FileMenu_0">
+	
+			AND GET RID OF THIS
+	
+			<div dojoattachpoint="fakeNodeHolder" class="dijitFakeInput">
+				<input type="text" dojoattachpoint="focusNode, inputNode" class="dijitFileInputVisible" id="plugins.files.FileMenu_0" tabindex="0">
+				<div dojoattachpoint="titleNode" class="dijitInline dijitFileInputText">Upload File</div>
+				<div dojoattachevent="onclick:reset" dojoattachpoint="cancelNode" class="dijitInline dijitFileInputButton">Cancel</div>
+			</div>
+			<div dojoattachpoint="overlay" class="dijitProgressOverlay">&nbsp;</div>
+		</div>
+
+*/
+
+
+
+/* KEEP MENU ITEM HEIGHT CONSTRAINED */
+
+.filemenu .dijitFakeInput,
+.filemenu .dijitInline .dijitFileInputText,
+.filemenu .dijitInline .dijitFileInputButton {
+	display: none !important;
+}
+
+.filemenu .dijitFocused  {
+/* BORDER OF FOCUSED MENU ITEM IS SAME AS UNFOCUSED ITEM */
+	/*height: 15px;*/
+	/*padding: 3px;*/
+	border: solid 1px #0F0;
+}
+
+.filemenu .dijitFileInput .Focused .dijitFocused {
+	border-color: #0F0;
+}
+
+/* NB: WANT TO LIMIT WIDTH OF MENU ITEM BECAUSE 
+  FILE INPUT ELEMENT OVERSHOOTS ON RIGHT SIDE */
+
+.filemenu .dijitMenuItem {
+	max-width: 80px !important;
+	border: 1px solid #888;
+}
+
+.filemenu .dijitMenuItem td,
+.filemenu .dijitReset .dijitMenuArrowCell,
+.filemenu .dijitReset .dijitMenuItemLabel {
+	height: 18px !important;
+}
+
+/* INPUT BOX - ONCLICK OPENS LOCAL FILE MENU */
+.filemenu .dijitFakeInput {
+	height: 20px !important;
+	width: 80px !important;
+}
+
+/* UPLOAD PROGRESS OVERLAY */
+.filemenu .dijitProgressOverlay {
+	position: relative;
+	top: -20px;
+	left: -15px;	
+	height: 10px !important;
+	width: 80px !important;
+}
+
+/**** IMPORTANT: SET dijitFileInput HEIGHT TO ZERO TO REMOVE EXTRA HEIGHT ****/
+.filemenu .dijitFileInput {
+	position: relative;
+	top: -20px;
+	left: -15px;
+	height: 0px !important;
+	width: 80px !important;
+	z-index: 10;
+	border: 0px;
+	opacity: 0.4;
+}
+
+.filemenu .dijitFileInputReal {
+	height: 20px !important;
+	width: 80px !important;
+	background: black;
+	z-index: 11;
+}
+
+
+.filemenu .fileInputMask {
+	background-color: #F00;
+	position: relative;
+	top: -20px !important;
+	left: 100px !important;
+	height: 0px !important;
+	width: 100px !important;
+	z-index: 12;
+}
+
+/***************** END FILE UPLOAD *****************/
+
+
+/***************** FILE MENU *****************/
+.filemenu {
+    font-family: Verdana;
+	text-indent: 4px;
+	font-size: 16px;
+	color: darkred;
+	font-weight: bold;
+}
+
+.filemenu .title {
+	background-color: #000 !important;
+    color: #FFF !important;
+    font-weight: bolder;
+    background-color: #EEE;
+    text-align: left;
+	text-indent: 5px;
+	font-size: 18px !important;
+}
+
+.filemenu .refresh .dijitMenuItemIconCell ,
+.filemenu .newFolder .dijitMenuItemIconCell ,
+.filemenu .rename .dijitMenuItemIconCell ,
+.filemenu .delete .dijitMenuItemIconCell ,
+.filemenu .openWorkflow .dijitMenuItemIconCell ,
+.filemenu .upload .dijitMenuItemIconCell ,
+.filemenu .download .dijitMenuItemIconCell ,
+.filemenu .select .dijitMenuItemIconCell ,
+.filemenu .add .dijitMenuItemIconCell {
+	background-repeat: no-repeat !important;
+	background-position: 5px 0 !important;
+}
+
+.filemenu .select .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/select-20.png);
+}
+.filemenu .add .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/add-20.png);
+}
+
+.filemenu .newFolder .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/newfolder-20.png) !important;
+}
+.filemenu .rename .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/rename-20.png) !important;
+}
+.filemenu .delete .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/delete-20.png) !important;
+}
+.filemenu .openWorkflow .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/workflow-20.png) !important;
+}
+.filemenu .upload .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/upload-20.png) !important;
+}
+.filemenu .download .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/download-20.png) !important;
+}
+.filemenu .refresh .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/refresh-20.png) !important;
+}
+
+
+.download .dijitMenuItemDisabled {
+	background-image: url(../../../plugins/files/images/delete-20.png) !important;
+	background-color: black !important;
+	opacity: 0.5 !important;
+}
+.download .dijitMenuItemDisabled {
+	visibility: hidden;
+	opacity: 0.5 !important;
+	background-color: black !important;	
+}
+.dijitReset .dijitMenuItem .download .dijitMenuItemDisabled {
+	opacity: 0.5 !important;
+	background-color: black !important;	  	
+}

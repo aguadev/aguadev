@@ -1,0 +1,52 @@
+Stages.setWorkflowCombo AT END DOING this.setDropTarget(Project1, abacus)
+Stages.setDropTarget plugins.workflow.Stages.setDropTarget(Project1, abacus)
+Stages._setDropTarget plugins.workflow.Stages.setDropTarget(stages)
+    StageRow.constructor plugins.workflow.StageRow.constructor()
+
+Stages.loadParametersPane plugins.workflow.Stages.node, shared)
+
+    Parameters.load (node, shared)
+    Parameters.loadTitlePane (input)
+
+********* WITH ARGS
+    Parameters.loadTitlePane stageObject:{"username":"syoung","project":"Project1","workflow":"abacus","name":"image2eland.pl","number":"1"}
+    Parameters.loadTitlePane parameter: { "project": "Project1", "args": "", "argument": "--inputfile", "appname": "image2eland.pl", "paramtype": "input", "category": "inputfile", "owner": "admin", "value": "", "name": "inputfile", "appnumber": "1", "chained": "0", "discretion": "essential", "description": "", "username": "syoung", "params": "", "workflow": "abacus", "format": "", "valuetype": "file", "paramFunction": "" }
+
+		ParameterRow.constructor (args)
+		ParameterRow.constructor args.parentWidget: [Widget plugins.workflow.Parameters, plugins_workflow_Parameters_0]
+		ParameterRow.constructor END
+		ParameterRow.setEditOnClicks plugins.workflow.ParameterRow.setEditOnClicks()
+
+StageRow.checkValidParameters plugins.workflow.StageRow.checkValidParameters(force)
+StageRow.checkValidParameters stageParameters[0]:
+{"project":"Project1","args":"","argument":"--inputfile","appname":"image2eland.pl","paramtype":"input","category":"inputfile","owner":"admin","value":"","name":"inputfile","appnumber":"1","chained":"0","discretion":"essential","description":"","username":"syoung","params":"","workflow":"abacus","format":"","valuetype":"file","paramFunction":""}
+StageRow.setInvalid SETTING node to UNSATISFIED
+Stages.updateValidity plugins.workflow.Stages.updateValidity()
+
+	Parameters.setParameterRowStyles workflow.Parameters.setParameterRowStyles()
+
+	********** NO ARGS
+	Parameters.setParameterRowStyles this.application: { "stagedescription": null, "childpid": null, "number": "1", "status": null, "project": "Project1", "workflowpid": null, "stagenotes": null, "stagename": null, "completed": null, "owner": "admin", "cluster": "", "stderrfile": null, "location": "bin/apps/image2eland.pl", "executor": "perl", "name": "image2eland.pl", "username": "syoung", "stdoutfile": null, "workflow": "abacus", "parentpid": null, "valuetype": "pipeline", "started": null, "queued": null, "description": "", "notes": "" }
+	
+	*********** WITH ARGS
+	Parameters.setParameterRowStyles stageParameters: [ { "project": "Project1", "args": "", "argument": "--outputdir", "appname": "image2eland.pl", "paramtype": "input", "category": "outputdir", "owner": "admin", "value": "Project1/abacus", "name": "outputdir", "appnumber": "1", "chained": "0", "discretion": "essential", "description": "", "username": "syoung", "params": "", "workflow": "abacus", "format": "", "valuetype": "directory", "paramFunction": "" }, { "project": "Project1", "args": "", "argument": "--outputfile", "appname": "image2eland.pl", "paramtype": "output", "category": "outputfile", "owner": "admin", "value": "", "name": "outputfile", "appnumber": "1", "chained": "0", "discretion": "required", "description": "", "username": "syoung", "params": "", "workflow": "abacus", "format": "", "valuetype": "file", "paramFunction": "" }, { "project": "Project1", "args": "", "argument": "", "appname": "image2eland.pl", "paramtype": "output", "category": "sortedfile", "owner": "admin", "value": "Project1/abacus/s_1_1_sorted.txt", "name": "sortedfile", "appnumber": "1", "chained": "0", "discretion": "required", "description": "", "username": "syoung", "params": "", "workflow": "abacus", "format": "", "valuetype": "file", "paramFunction": "" }, { "project": "Project1", "args": "", "argument": "--inputfile", "appname": "image2eland.pl", "paramtype": "input", "category": "inputfile", "owner": "admin", "value": "", "name": "inputfile", "appnumber": "1", "chained": "0", "discretion": "essential", "description": "", "username": "syoung", "params": "", "workflow": "abacus", "format": "", "valuetype": "file", "paramFunction": "", "isValid": false } ]
+
+
+	StageRow.checkValidParameters plugins.workflow.StageRow.checkValidParameters(force)
+	{"project":"Project1","args":"output.sortedfile.value","argument":"--inputfile","appname":"eland2ace.pl","paramtype":"input","category":"inputfile","owner":"admin","value":"Project1/abacus/s_1_1_sorted.txt","name":"inputfile","appnumber":"2","chained":"1","discretion":"essential","description":"","username":"syoung","params":"","workflow":"abacus","format":"ace","valuetype":"file","paramFunction":""}
+	
+	StageRow.setValid SETTING node to SATISFIED
+	StageRow.setValid this.stagesWidget: undefined
+
+Stages.updateValidity plugins.workflow.Stages.updateValidity()
+
+Controls.addOnLoad plugins.core.dojo.addOnLoad().
+Controls.addOnLoad Before new Controls
+Controls.constructor plugins.core.Controls.constructor(args)
+Controls.addOnLoad After new Controls
+
+
+
+
+invalid 'in' operand scope.params
+

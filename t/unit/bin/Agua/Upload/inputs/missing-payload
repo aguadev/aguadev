@@ -1,0 +1,46 @@
+------WebKitFormBoundaryKKwXU7fTbLCuzcck
+Content-Disposition: form-data; name="uploadedfiles[]"; filename="referees-Aug-2011.txt"
+Content-Type: text/plain
+
+
+------WebKitFormBoundaryKKwXU7fTbLCuzcck
+Content-Disposition: form-data; name="index"
+
+0
+------WebKitFormBoundaryKKwXU7fTbLCuzcck
+Content-Disposition: form-data; name="name"
+
+referees-Aug-2011.txt
+------WebKitFormBoundaryKKwXU7fTbLCuzcck
+Content-Disposition: form-data; name="database"
+
+aguatest
+------WebKitFormBoundaryKKwXU7fTbLCuzcck
+Content-Disposition: form-data; name="size"
+
+659
+------WebKitFormBoundaryKKwXU7fTbLCuzcck
+Content-Disposition: form-data; name="type"
+
+text/plain
+------WebKitFormBoundaryKKwXU7fTbLCuzcck
+Content-Disposition: form-data; name="username"
+
+admin
+------WebKitFormBoundaryKKwXU7fTbLCuzcck
+Content-Disposition: form-data; name="sessionid"
+
+0000000000.0000.000
+------WebKitFormBoundaryKKwXU7fTbLCuzcck
+Content-Disposition: form-data; name="token"
+
+
+------WebKitFormBoundaryKKwXU7fTbLCuzcck
+Content-Disposition: form-data; name="mode"
+
+undefined
+------WebKitFormBoundaryKKwXU7fTbLCuzcck
+Content-Disposition: form-data; name="uploadType"
+
+html5
+------WebKitFormBoundaryKKwXU7fTbLCuzcck--

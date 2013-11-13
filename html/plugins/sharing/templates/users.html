@@ -1,0 +1,159 @@
+<div dojoattachpoint="containerNode">
+
+	<!-- users TAB -->
+	<div
+		dojoAttachPoint="mainTab"
+		class="users"
+		dojoType="dijit.layout.ContentPane"
+		title="Users"
+		style="height: 100% !important; max-height: auto !important; width: 370px !important; padding: 0 !important;"
+		>
+
+		<table width="100%">
+			<tr valign="top" width="370">
+				<td colspan="2" class="tabTitle" align="center"> Users </td>
+			</tr>
+
+			<tr valign="top" width="95%">
+
+				<td>
+				
+					<table>
+
+						<tr>
+							<td colspan="3">
+								<div class="label"> Create New User </div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Username
+							</td>
+							<td>
+								<textarea
+									spellcheck="false"
+									dojoAttachPoint="username"
+									class="username"
+									style="width:100%; height: 20px; font-weight: bolder; font-family: Verdana;";
+									cols="30"
+									rows="1"
+									title="Username"
+									>Username</textarea>
+							</td>
+							<td>
+								<div
+									dojoAttachPoint="addUserButton"
+									class="addUserButton"
+									dojoType="dijit.form.Button"
+									label="Add"
+									>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								First name
+							</td>
+							<td colspan="2">
+								<textarea
+									spellcheck="false"
+									dojoAttachPoint="firstname"
+									class="firstname"
+									style="width:100%; height: 20px; font-weight: bolder; font-family: Verdana;";
+									cols="40"
+									rows="1"
+									title="Firstname"
+									>Firstname</textarea>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Last name
+							</td>
+							<td colspan="2">
+								<textarea
+									spellcheck="false"
+									dojoAttachPoint="lastname"
+									class="lastname"
+									style="width:100%; height: 20px; font-weight: bolder; font-family: Verdana;";
+									cols="40"
+									rows="1"
+									title="Lastname"
+									>Lastname</textarea>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Email
+							</td>
+							<td colspan="2">
+								<textarea
+									spellcheck="false"
+									dojoAttachPoint="email"
+									class="email"
+									value="Email"
+									style="width:100%; height: 20px; font-weight: bolder; font-family: Verdana;";
+									cols="40"
+									rows="1"
+									title="Email"
+									>Email</textarea>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Password
+							</td>
+							<td colspan="2">
+								<input
+									dojoAttachPoint="password"
+									class="password"
+									value=""
+									type="password"
+									style="width:100%; height: 20px; font-weight: bolder; font-family: Verdana;";
+									value=""
+									title="Password"
+								>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			
+			<tr valign="top" width="95%">
+				<td width="95%">
+					<div class="label"> Users </div>
+					<div
+						dojoAttachPoint="dragSourceNode"
+						class="dragSource"
+						style="height: 416px; width: 95%;"
+					>
+					</div>
+				</td>
+			</tr>
+
+			<tr align="center">
+				<td align="center">
+
+					<!-- TRASH CONTAINER -->
+					<div
+						dojoAttachPoint="trashContainer"
+						class="trash"
+						style="height: 60px; width: 150px; align: center;" 
+						>
+						<div
+							dojoAttachPoint="trashIcon"
+							class="trashIcon"
+							style="height: 60px; width: 60px;"
+							>
+						</div>
+					</div>
+				</td>
+			</tr>
+		</table>
+
+	</div>
+	<!-- END users TAB -->
+	
+</div> 
+
+

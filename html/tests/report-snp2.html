@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title> report snp 2 : build 8 uncompressed </title>
+
+<style type="text/css">
+
+	/* DOJO style */
+	@import "../dojo.1.2.2/dojo/resources/dojo.css";
+	/*@import "dojo.1.2.2/dijit/tests/css/dijitTests.css";*/
+
+	/* SORIA style */
+	@import "../dojo.1.2.2/dijit/themes/soria/soria.css";
+
+	/* TUNDRA style */
+	/*@import "dojo.1.2.2/dijit/themes/tundra/tundra.css";*/
+	/*@import "dojo.1.2.2/dijit/themes/tundra/tundra_rtl.css";*/
+
+	/* GRID style */
+	/*@import "dojo.1.2.2/dojox/grid/_grid/soriaGrid.css";*/
+
+	/* TESTS style */
+	@import "../dojo.1.2.2/dijit/tests/css/dijitTests.css";
+
+	/* Workflow CSS */
+	/*@import "plugins/workflow/css/workflow.css";*/
+
+	@import "../dojo.1.2.2/css/style.css";
+
+
+</style>
+
+<script type="text/javascript" src="../dojo.1.2.2/dojo/dojo.js"
+	djConfig="isDebug: true, parseOnLoad: true, useCommentedJson: true"></script>
+
+<script type="text/javascript" src="../build8/dojo/nls/report_en-us.js"></script>
+<script type="text/javascript" src="../build8/dojo/report.js.uncompressed.js"></script>
+
+<script type="text/javascript">
+	// REGISTER module path FOR PLUGINS
+	dojo.registerModulePath("plugins","../../plugins");	
+
+	// SET URL FOR CGI DIRECTORY
+	var cgiurl = "../../../../cgi-bin/Bioptic0.2.5/";
+
+	// LOAD PLUGINS
+	dojo.require("dojo.data.ItemFileReadStore");
+	dojo.require("plugins.report.Report.SNP");
+	console.log("++++ After dojo.require('plugins.report.Report.SNP')");
+
+    function init() {
+		console.log("init()");
+        document.getElementById('report-snp').appendChild(snp.domNode);   
+    }
+	dojo.addOnLoad(init);
+</script>
+</head>
+
+<body class="soria">
+	<h1 style="position: relative; top: -10px; left: 50px">  report snp 2 : build 8 uncompressed </h1>
+	<div id="report-snp">
+	</div>
+</body>
+</html>

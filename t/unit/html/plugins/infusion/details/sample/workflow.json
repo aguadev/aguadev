@@ -1,0 +1,10 @@
+[
+    {
+        workflow_id         :	"6",
+        workflow_name       :	"casava_bcl_to_gvcf_workflow",
+        workflow_version    :	"v1",
+        create_date         :	"2013-02-09 22:33:42",
+        driver_location     :	"/home/sajay/src/illumina/scripts/analysis_wrapper/wrapper.sh",
+        sge_min_parameters  :	"qsub -cwd -V -pe threaded 12 -q prod-s.q -notify -b y -terse"
+    }
+]

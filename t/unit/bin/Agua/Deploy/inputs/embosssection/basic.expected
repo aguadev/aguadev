@@ -1,0 +1,19 @@
+[
+    {
+        "argument":"-one",
+		"paramtype":"typeone",
+		"value":"",
+		"name":"one",
+		"discretion":"required",
+		"description":"No default description of abc and rest of ABC description"
+    }
+    ,
+    {
+        "argument":"-two",
+		"paramtype":"typetwo",
+		"value":"default cde",
+		"name":"two",
+		"discretion":"required",
+		"description":"Description of cde and rest of CDE description"
+    }
+]

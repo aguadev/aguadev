@@ -1,0 +1,23 @@
+.viewsize {
+    font-size: 14px;
+    color: #888;
+}
+
+.viewsize table {
+    position: absolute;
+    top: 0;
+    float: left;
+    background-color: #EEE;
+}
+
+.viewsize td {
+    background-color: #FFF;
+    min-width: 40px;
+    text-align: center;
+}
+
+.viewsize td.sublabel {
+    background-color: white;
+    font-weight: bold;
+}
+

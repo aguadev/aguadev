@@ -1,0 +1,352 @@
+
+
+/* GENERAL */
+.clusters {
+	height: auto !important;
+}
+
+tbody,
+tr,
+td {
+	/*margin: 0px !important;*/
+    /*padding: 0px !important;*/
+	/*height: 0px !important;*/
+}
+
+.clusters .dijitTabInnerDiv {
+	padding: 0px 0px 0px 0px !important;
+}
+
+/* HEADERS */
+.clusters .tabTitle {
+	background-color: #264eea;
+	text-align: center !important;
+	vertical-align: middle;
+	font-size: 20px;
+	font-stretch: expanded;
+	font-weight: bold;
+	color: #FFF;
+}
+
+.clusters .label {
+	text-align:	center !important;
+	font-weight: bolder;
+	font-size: 18px;
+	font-family: Verdana;
+	font-size: 14px;
+	font-style: oblique;
+	height: 20px;
+	vertical-align: bottom !important;
+	background: #EEE;
+}
+
+.clusters .dijitInputContainer input,
+.clusters .dijitTextBox {
+	background: url("") repeat scroll 0 0 transparent !important;
+	margin: 0 !important;
+    text-align: center !important;
+	font-size: 14px !important;
+}
+
+.clusters .clusterRow .cluster .dijitTextBox {
+    background: none repeat scroll 0 0 #FFFFFF !important;
+    color: #444444 !important;
+    font-size: 12px !important;
+    height: 25px !important;
+    width: 105px !important;
+}
+.clusters .dijitInputContainer {
+    float: none !important;
+    overflow: hidden;
+    padding-bottom: 0px !important;
+    padding-left: 3px;
+    padding-right: 3px;
+    position: relative;
+    top: 2px;
+}
+
+.clusters .headerRow {
+	color: darkblue !important;
+	text-align: center !important;
+	padding: 0px !important;
+}
+
+/* FORM INPUTS */
+.clusters .addClusterButton {
+	font-size: 18px;
+	color: #224;
+	height: 24px !important;
+}
+
+.clusters .addClusterButton {
+    -moz-user-select: none;
+    background-color: #FEFEFE;
+    border-color: #BBBBBB #BBBBBB #888888 #888888;
+    border-style: solid;
+    border-width: 4px;
+    color: #222244;
+    font-family: Verdana;
+    font-size: 14px;
+    font-weight: bolder;
+    height: 20px !important;
+    margin-right: 0;
+    text-align: center;
+    vertical-align: middle;
+    width: 115px !important;
+}
+
+.clusters .cluster,
+.clusters .minnodes,
+.clusters .maxnodes {
+	width: 180px !important;
+	font-weight: bolder !important;
+	font-family: Verdana;
+}
+.clusters .cluster {
+    background: url() !important;
+	height: 22px;
+	font-size: 14px;
+	color: #444;
+	vertical-align: middle !important;
+	font-style: oblique;
+	font-weight: bolder !important;
+	padding-top: 2px;
+}
+.clusters .minnodes,
+.clusters .maxnodes {
+	color: #444 !important;
+    background: url() !important;
+	background-color: #FFF;
+	width: 60px !important;
+	height: 21px !important;
+	padding-top: 3px !important;
+	/*height: 25px !important;*/
+}
+.clusters .aminame {
+	font-size: 12px !important;
+	font-weight: bold !important;
+}
+.clusters .amitype {
+	font-size: 12px !important;
+	font-weight: bold !important;
+	width: 80px !important;
+}
+.clusters .instancetype,
+.clusters .region,
+.clusters .availzone {
+    background: url() !important;
+	background-color: #FFF !important;
+	font-weight: bolder;
+	font-family: Verdana;
+	font-size: 16px !important;
+}
+
+.clusters .instancetype select,
+.clusters .instancetype option,
+.clusters .region select,
+.clusters .region option,
+.clusters .availzone select,
+.clusters .availzone option {
+	background-color: #FFF !important;
+}
+
+.clusters .aminame,
+.clusters .amitype,
+.clusters .instancetype,
+.clusters .region,
+.clusters .availzone,
+.clusters .amiid {
+	color: #444 !important;
+	width : 120px !important;
+	text-align: center !important;
+}
+
+.clusters .amiid {
+	font-weight: bolder;
+	font-family: Verdana;
+	font-size: 12px !important;
+	text-align: center !important;
+	background-color: #FFF !important;
+}
+
+.clusters .amiid .dijitReset .dijitInputInner {
+	font-size: 11px !important;
+}
+
+.clusters .amiid .dijitComboBox .dijitButtonNode {
+    padding: 0 0 !important;
+}
+
+.clusters .amiid .dijitTextBox .dijitComboBox {
+	width: 180px !important;
+}
+
+.clusters .description,
+.clusters .notes {
+	width: 97%;
+	font-weight: bolder;
+	font-family: Verdana;
+}
+
+/* INVALID INPUT */
+.clusters .invalid ,
+.clusters .cluster .dijitTextArea .invalid,
+.clusters .minnodes .dijitTextArea .invalid,
+.clusters .maxnodes .dijitTextArea .invalid,
+.clusters .amiid .dijitTextArea .invalid
+{
+	border: 2px solid #F00 !important;
+}
+
+/* CLUSTER DRAGSOURCE */
+.clusters .dragSource
+{
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+
+	/*margin-top: 5px;*/
+	width: 120px;	
+	height: 260px;
+	min-height: 100px;
+	
+	text-align: left !important;
+	/*color: #339;*/
+	/*color: darkred;*/
+	/*font-weight: bold;*/
+	
+	font-family: Verdana;
+	/*font-size: 12px;*/
+	border-color: #333;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	overflow:auto !important;
+}
+
+.clusters .dragSource .dojoDndItem {
+	/*width: 380px !important;*/
+	padding: 3px !important;
+}
+
+/* CLUSTER ROW TEXTAREA*/
+.clusters textarea {
+	overflow: auto !important;
+}
+.clusters table textarea {
+	font-family: Verdana !important;
+}
+.clusters .clusterRow textarea {
+	text-align: center !important;
+}
+.clusters .editClusterRow {
+	width: 100% !important;
+	height: 20px !important;
+}
+
+
+/* CLUSTER ROW */
+.clusters .clusterRow .cluster {
+	background-image: url(../../../../plugins/cloud/images/cluster-18.png) !important;
+	background-repeat: no-repeat !important;
+	background-position: center left !important;
+
+	text-indent: 22px;
+	text-align: left !important;
+	font-size: 14px;
+	color: darkred;
+	font-weight: bolder;
+
+	width: 160px !important;
+}
+
+.clusters .clusterRow .nodesLabel {
+    color: darkblue !important;
+    font-size: 10px !important;
+    width: 30px !important;
+}
+
+.clusters .clusterRow .headerRow {
+	font-size: 10px !important;
+	color: red !important;
+}
+
+
+.clusters .clusterRow .minnodes,
+.clusters .clusterRow .maxnodes {
+	color: #222;
+	font-size: 14px;
+	font-weight: bold;
+	text-align: left !important;
+	background: #FFF !important;
+	min-width: 50px !important;
+}
+
+.clusters .clusterRow .description,
+.clusters .clusterRow .notes {
+	color: #222;
+	width: 100% !important;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: left !important;
+	background: none repeat scroll 0 0 #FFFFFF !important;
+}
+
+.clusters .clusterRow .instancetype,
+.clusters .clusterRow .amiid,
+.clusters .clusterRow .region,
+.clusters .clusterRow .availzone {
+	width: 120px !important;
+}
+
+.clusters .clusterRow .amiid {
+	font-size: 15px !important;
+	color: #444 !important;
+	background: #FFF !important;
+}
+
+.clusters .clusterRow .aminame {
+	display: none;
+	width: 200px !important;
+}
+
+.clusters .clusterRow .amitype {
+	display: none;
+	width: 50px !important;
+}
+
+
+/* TRASH CAN */
+.clusters .trash {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+
+	margin-top: 5px;
+	width: 150px;	
+	height: 60px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.clusters .trashIcon {
+	height: 100%;
+	width: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	
+	background-image: url(../../../../plugins/cloud/images/trash-60.png);
+	background-repeat: no-repeat;
+	
+}
+

@@ -1,0 +1,106 @@
+
+---
+
+database: devtest 
+
+test:
+    TESTUSER:       testuser
+    TESTPASSWORD:   testpassword
+    TESTDATABASE:   testdatabase
+
+hostname: 'ussd-dev-lndb01.illumina.com'
+username: pcruz
+password: zorbas
+error_rate_read2: 2
+error_rate_read1: 1.5
+min_q30plus_yield: 80
+estimated_per_align: 80
+
+
+#login/cron node to cluster name
+uscp-prd-lndt-1-1.local: 'uscp-prd-lndt.illumina.com'
+uscp-prd-lndt-1-2.local: 'uscp-prd-lndt.illumina.com'
+uscp-prd-lndt-1-3.local: 'uscp-prd-lndt.illumina.com'
+ussd-prd-lndt-b-7-1.local: 'ussd-services.illumina.com'
+ussd-prd-lndt-b-8-1.local: 'ussd-services.illumina.com'
+ushw-prd-lndt-c-10-6.local: 'ushw-prd-lndt.illumina.com'
+
+#server to isilon 
+ussd-services.illumina.com:
+    illumina: ussd-prd-isi01
+    illumina2: ussd-prd-isi02 
+
+uscp-prd-lndt.illumina.com:
+    illumina: uscp-prd-isi01
+    home: uscp-prd-isi01
+
+ushw-prd-lndt.illumina.com:
+	illumina: ushw-prd-isi01 
+
+
+#isilon to server
+
+ussd-prd-isi01: 'ussd-services.illumina.com'
+ussd-prd-isi02: 'ussd-services.illumina.com'
+uscp-prd-isi01: 'uscp-prd-lndt.illumina.com'
+
+
+#cluster to isilon
+cluster2isilon:
+    ussd-services.illumina.com: 'ussd-prd-isi01'
+    uscp-prd-lndt.illumina.com: 'uscp-prd-isi01'
+    ushw-prd-lndt.illumina.com: 'ushw-prd-isi01'
+
+
+#quality of lanes to use 
+min_per_good_tiles: 1
+max_read1_phiX_error_rate: 2.0
+max_read2_phiX_error_rate: 3.0
+min_read1_per_q30: 65
+min_read2_per_q30: 65
+
+# estimate factor per lane align yield
+avg_align_yield_per_lane_Gb: 35
+avg_yield_trimmed_gb: 35
+
+#build limits
+build_launch_limit: 5
+
+#error emails
+error_emails:
+    - pcruz@illumina.com
+    - bsickler@illumina.com
+    - sajay@illumina.com
+    - knobuta@illumina.com
+    - amaroo@illumina.com
+
+
+debug_emails:
+    - pcruz@illumina.com
+
+cloud_emails:
+    -IlluminaServicesCloud@illumina.com
+
+run_root: 
+    - /home/pcruz/src/saffrondev/data/upload
+
+#project defaults
+build_version: NCBI37
+dbsnp_version: 131
+build_root: /home/pcruz/src/saffrondev/data/build/Projects
+build_type: local
+launch_limit: 5
+scratch_root: /home/pcruz/src/saffrondev/data/build/Projects
+include_NPF: n
+
+#archiving
+archive_pending: /illumina/scratch/services/archive/pending
+genotype_source_dir: /illumina/scratch/Genotyping_Data/InstituteReports/WGS_GenotypingReports
+gt_deliv_src: /illumina/scratch/Genotyping_Data/InstituteReports/WGS_GT_Deliverables   
+gt_vcf: /illumina/scratch/Genotyping_Data/InstituteReports/WGS_GenotypingVCFs
+# fasta locations defaults
+fasta_locations:
+    NCBI37_XY: /illumina/scratch/services/Genomes/FASTA_UCSC/HumanNCBI37_XY/HumanNCBI37_XY.fa
+    NCBI37_XX: /illumina/scratch/services/Genomes/FASTA_UCSC/HumanNCBI37_XX/HumanNCBI37_XX.fa
+    NCBI36_XY: /illumina/scratch/services/Genomes/FASTA_UCSC/HumanNCBI36_XY/HumanNCBI36_XY.fa
+    NCBI36_XX: /illumina/scratch/services/Genomes/FASTA_UCSC/HumanNCBI36_XY/HumanNCBI36_XX.fa

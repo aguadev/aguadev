@@ -1,0 +1,113 @@
+{
+   "headers" : [
+      "start",
+      "end",
+      "strand",
+      "id",
+      "name",
+      "type",
+      "alias"
+   ],
+   "subfeatureClasses" : null,
+   "histogramMeta" : [
+      {
+         "basesPerBin" : "5000",
+         "arrayParams" : {
+            "length" : 50848,
+            "chunkSize" : 10000,
+            "urlTemplate" : "hist-5000-{chunk}.json"
+         }
+      },
+      {
+         "basesPerBin" : "50000",
+         "arrayParams" : {
+            "length" : 5085,
+            "chunkSize" : 10000,
+            "urlTemplate" : "hist-50000-{chunk}.json"
+         }
+      }
+   ],
+   "histStats" : [
+      {
+         "bases" : 5000,
+         "max" : 67,
+         "mean" : 2.45929043423537
+      },
+      {
+         "bases" : 10000,
+         "max" : 74,
+         "mean" : 3.88872718691001
+      },
+      {
+         "bases" : 20000,
+         "max" : 86,
+         "mean" : 6.74921334172435
+      },
+      {
+         "bases" : 50000,
+         "max" : 89,
+         "mean" : 15.3203539823009
+      },
+      {
+         "bases" : 100000,
+         "max" : 141,
+         "mean" : 29.6075501376327
+      },
+      {
+         "bases" : 200000,
+         "max" : 197,
+         "mean" : 58.1650943396226
+      },
+      {
+         "bases" : 500000,
+         "max" : 387,
+         "mean" : 143.783889980354
+      },
+      {
+         "bases" : 1000000,
+         "max" : 701,
+         "mean" : 285.996078431373
+      },
+      {
+         "bases" : 2000000,
+         "max" : 1136,
+         "mean" : 568.75
+      },
+      {
+         "bases" : 5000000,
+         "max" : 2705,
+         "mean" : 1425.94117647059
+      },
+      {
+         "bases" : 10000000,
+         "max" : 5189,
+         "mean" : 2796
+      }
+   ],
+   "key" : "simpleRepeat",
+   "featureNCList" : [
+      [
+         -1,
+         254235635,
+         {
+            "chunk" : 0
+         }
+      ]
+   ],
+   "sublistIndex" : 7,
+   "lazyIndex" : 2,
+   "featureCount" : 72671,
+   "className" : "feature2",
+   "clientConfig" : null,
+   "arrowheadClass" : null,
+   "subfeatureHeaders" : [
+      "start",
+      "end",
+      "strand",
+      "type"
+   ],
+   "urlTemplate" : "http://url/index?id={alias}",
+   "type" : "FeatureTrack",
+   "label" : "simpleRepeat",
+   "lazyfeatureUrlTemplate" : "lazyfeatures-{chunk}.json"
+}

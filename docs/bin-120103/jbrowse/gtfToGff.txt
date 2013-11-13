@@ -1,0 +1,73 @@
+
+h3. APPLICATION
+
+gtfToGff
+
+h3. PURPOSE
+
+CONVERT A GTF FILE TO GFF FORMAT
+
+h3. INPUTS
+
+1. LOCATION OF INPUT DIRECTORY CONTAINING 'reference1', 'reference2'
+
+SUB-DIRECTORIES
+
+2. NAME OF THE INPUT FILE INSIDE THE SUBDIRECTORIES
+
+3. OUTPUT DIRECTORY FOR PRINTING GFF FILES
+
+4. NAME FOF FEATURE
+
+5.
+
+h3. OUTPUT
+
+1. PROCESSED FILES FOUND IN DIRECTORY agua/data/seq AND agua/data/tracks
+
+NOTES:
+
+h3. INPUT FILE GTF FORMAT:
+
+head hs-conrad-dels-chr1-gtf
+
+chr1    hg18_delConrad2 CDS     45258   76166   1000.000000     +       0       gene_id "chr1.1"; transcript_id "chr1.1";
+                       chr1    hg18_delConrad2 exon    76167   988364  1000.000000     +       .       gene_id "chr1.1"; transcript_id "chr1.1";
+                       chr1    hg18_delConrad2 exon    6624739 6717817 1000.000000     +       .       gene_id "chr1.2"; transcript_id "chr1.2";
+                       chr1    hg18_delConrad2 CDS     6717818 6720271 1000.000000     +       0       gene_id "chr1.2"; transcript_id "chr1.2";
+                       chr1    hg18_delConrad2 exon    6720272 6726334 1000.000000     +       .       gene_id "chr1.2"; transcript_id "chr1.2";
+
+h3. OUTPUT GFF FORMAT:
+
+head /nethome/syoung/base/pipeline/jbrowse1/ucsc/gff/hs-cytoBand-chr1.gff
+
+### /data/agua/0.4/bin/apps/gtfToGff.pl --refseqfile /nethome/syoung/base/pipeline/jbrowse1/ucsc/chr1/data/refSeqs.js --inputfile /nethome/syoung/base/pipeline/jbrowse1/ucsc/gtf/hs-cytoBand-chr1-gtf --outputfile /nethome/syoung/base/pipeline/jbrowse1/ucsc/gff/hs-cytoBand-chr1.gff
+                       ####3:23AM, 8 December 2009
+                       chr1    hg18_cytoBand   exon    0       247249719       .       .       .       Name=chr1
+                       chr1    hg18_cytoBand   exon    1       2300000 0       .       .       Name=p36.33
+                       chr1    hg18_cytoBand   exon    2300001 5300000 0       .       .       Name=p36.32
+                       chr1    hg18_cytoBand   exon    5300001 7100000 0       .       .       Name=p36.31
+                       chr1    hg18_cytoBand   exon    7100001 9200000 0       .       .       Name=p36.23
+                       chr1    hg18_cytoBand   exon    9200001 12600000        0       .       .       Name=p36.22
+                       chr1    hg18_cytoBand   exon    12600001        16100000        0       .       .       Name=p36.21
+
+h3. USAGE
+
+{code}
+./gtfToGff.pl  <--inputfile String> <--outputfile String> [-h]
+ --inputdir              :   Directory containing 'ref1', 'ref2' subdirectories
+ --inputfile             :   Name of input file in subdirectories
+ --feature               :   Name of feature
+ --outputdir             :   Print GFF files to this output directory
+ --help                  :   print help info
+{code}
+
+h3. EXAMPLES
+
+/nethome/bioinfo/apps/agua/0.5/bin/apps/gtfToGff.pl \ --refseqfile
+       /nethome/syoung/base/pipeline/jbrowse/ucsc/0.5/rat/rn4/refSeqs.js \
+ --inputdir /nethome/syoung/base/pipeline/jbrowse/ucsc/0.5/rat/rn4/gtf \
+ --outputdir /nethome/syoung/base/pipeline/jbrowse/ucsc/0.5/rat/rn4/gff
+       \ --feature CpG \ --inputfile CpG.gtf
+
+

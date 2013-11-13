@@ -1,0 +1,60 @@
+<div dojoattachpoint="containerNode">
+
+	<!-- access TAB -->
+	<div
+		data-dojo-attach-point="mainTab"
+		class="access"
+		data-dojo-type="dijit/layout/ContentPane"
+		title="Access"
+		style="height: 700px; max-height: auto !important; width: 390px !important; padding: 0 !important;"
+		>
+		
+		<table width="100%">
+			<tr valign="top" width="100%">
+				<td colspan="7" class="tabTitle" align="center"> Access </td>
+			</tr>
+		</table>
+		<table class="saveButtonTable">
+			<tr>
+				<td 
+					colspan="11"
+					align="center"
+					class="saveButton"
+					data-dojo-attach-point="saveButton"
+					data-dojo-attach-event="onclick:saveAccess"
+				>
+					Save
+				</td>
+			</tr>
+		</table>
+
+		<div
+			class="dragSource"
+			style="height: 600px; width: 96%;"
+		>
+			<table class="permissionsTable"
+				   data-dojo-attach-point='table'>
+				<tr class="header">
+					<td >Group</td>
+					<td colspan="3" class="headerBold">Group</td>
+					<td colspan="3" class="headerBold">World</td>
+				</tr>
+				<tr class="subheader">
+					<td class="narrowColumn" colspan="1"> </td>
+					<td class="narrowColumn">Write</td>
+					<td class="narrowColumn">Copy</td>
+					<td class="narrowColumn">View</td>
+					<td class="narrowColumn">Write</td>
+					<td class="narrowColumn">Copy</td>
+					<td class="narrowColumn">View</td>
+				</tr>
+				
+			</table>
+		</div>		
+
+	</div>
+	<!-- END access TAB -->
+	
+</div> 
+
+

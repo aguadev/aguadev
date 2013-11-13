@@ -1,0 +1,113 @@
+/* SPECIFIC MAX-HEIGHT FOR EACH TABLE */
+.details .project .information {
+    max-height: 65px !important;
+}
+.details .project .list .dijitTitlePane {
+    max-height: 500px !important;
+}
+.details .project .comments {
+    max-height: 300px !important;
+}
+
+/* GRID SCROLLER TOP MARGINS */
+.details .project .information .dgrid-scroller {
+    margin-top: 18px !important;
+}
+.details .project .list .dgrid-scroller {
+    margin-top: 35px !important;
+}
+
+/* INFORMATION */
+.details .project .information .dgrid-header .field-project_name,
+.details .project .information .field-project_name {
+    width: 100px !important;
+}
+
+.details .project .information .dgrid-header .dgrid-column-build_version,
+.details .project .information .dgrid-column-build_version,
+.details .project .information .dgrid-header .field-private_policy,
+.details .project .information .field-project_policy,
+.details .project .information .dgrid-header .field-include_NPF,
+.details .project .information .field-include_NPF,
+.details .project .information .dgrid-header .field-build_version,
+.details .project .information .field-build_version,
+.details .project .information .dgrid-header .field-project_id,
+.details .project .information .field-project_id {
+    width: 50px !important;
+}
+.details .project .information .dgrid-header .field-status,
+.details .project .information .field-status {
+    text-align: center !important;
+    width: 150px !important;
+}
+
+
+
+/* LIST */
+.details .project .list .dgrid-header .field-status,
+.details .project .list .field-status,
+.details .project .list .dgrid-header .field-sample_barcode,
+.details .project .list .field-sample_barcode {
+    width: 150px !important;
+}
+.details .project .list .dgrid-header .field-status,
+.details .project .list .field-status {
+    text-align: center !important;
+}
+
+.details .project .list .field-sample_id,
+.details .project .list .dgrid-header .field-sample_id,
+.details .project .list .field-cancer,
+.details .project .list .dgrid-header .field-cancer,
+.details .project .list .field-gt_call_rate,
+.details .project .list .dgrid-header .field-gt_call_rate,
+.details .project .list .field-gt_gender,
+.details .project .list .dgrid-header .field-gt_gender {
+    text-align: center !important;
+    width: 50px !important;
+}
+
+.details .project .list .dgrid-header .field-total_lanes,
+.details .project .list .field-total_lanes,
+.details .project .list .dgrid-header .field-target_fold_coverage,
+.details .project .list .field-target_fold_coverage,
+.details .project .list .dgrid-header .field-gt_gender,
+.details .project .list .field-gt_gender,
+.details .project .list .dgrid-header .field-gt_status_id,
+.details .project .list .field-gt_status_id,
+.details .project .list .dgrid-header .field-cancer,
+.details .project .list .field-cancer {
+    text-align: center !important;
+    width: 60px !important;
+}
+
+.details .project .list  .dgrid-header .field-requeued_lanes,
+.details .project .list .field-requeued_lanes,
+.details .project .list  .dgrid-header .field-sequencing_lanes,
+.details .project .list .field-sequencing_lanes,
+.details .project .list  .dgrid-header .field-bad_lanes,
+.details .project .list .field-bad_lanes,
+.details .project .list  .dgrid-header .field-good_lanes,
+.details .project .list .field-good_lanes,
+.details .project .list  .dgrid-header .field-total_lanes,
+.details .project .list .field-total_lanes,
+.details .project .list  .dgrid-header .field-aligned_yield,
+.details .project .list .field-aligned_yield,
+.details .project .list  .dgrid-header .field-estimated_yield,
+.details .project .list .field-estimated_yield,
+.details .project .list  .dgrid-header .field-coverage,
+.details .project .list .field-coverage,
+.details .project .list  .dgrid-header .field-trimmed_yield,
+.details .project .list .field-trimmed_yield {
+    text-align: center !important;
+    width: 70px !important;
+}
+
+.details .project .list .field-contam_hom_fraction,
+.details .project .list .dgrid-header .field-contam_hom_fraction,
+.details .project .list .field-gt_concordance,
+.details .project .list .dgrid-header .field-gt_concordance {
+    text-align: center !important;
+    width: 80px !important;
+}
+

@@ -1,0 +1,201 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-utf-8" />
+        <title> changeUrl and changeHref in embedded page </title>
+
+<script type="text/javascript">
+    
+    var node;
+    var changeUrl = function() {
+        var frm = window.frames['childFrame'].document.location.replace('embed/page2.html');
+    }
+
+    var replaceHref= function ()
+    {
+        //var childFrame = document.getElementById('childFrame');
+        
+        var frame = window.frames['childFrame'].document;
+        console.log("frame: " + frame);
+        console.log("frame.document: " + frame.document);
+        console.log("frame.childNodes: " + frame.childNodes);
+        
+        var childNodes = frame.childNodes;
+        console.log("childNodes.length: " + childNodes.length);
+        
+        for ( var i = 0; i < childNodes.length; i++ )
+        {
+            node = childNodes[i];
+            console.log("node: " + node);
+            //var attributes = node.attributes;
+            //console.log("node " + i + " attributes: " + attributes);
+            //console.log("node.value: " + node.value);
+            
+            // OK!
+            //console.log("node.innerHTML: " + node.innerHTML);
+            
+            // REPLACE GALAXY
+            // <a href="http://g2.bx.psu.edu" target="_BLANK">Galaxy</a>
+            var content = node.innerHTML;
+            console.log("content: " + content);
+            
+            //var innerContent = content.innerHTML;
+            //console.log("innerContent: " + innerContent);
+            
+            //var contentString = '';
+            //for ( var k = 0; k < content.length; k++ )
+            //{
+            //    contentString += content[k];
+            //}
+            //console.log("contentString: " + contentString);
+
+            // NB: CAN'T USE REPLACE ON content EVEN THOUGH IT PRINTS TO CONSOLE
+            // LIKE A STRING
+            //content = content.replace(/\n/,'');
+            //console.log("content: " + content);
+            //if ( content == null or ! content )
+            //{
+            //    return;
+            //}
+            //content = content.replace(/g2\.bx\.psu\.edu/, 'ngsdev.ccs.miami.edu/cgi-bin/download.cgi');
+            //content = content.replace(/GALAXY/i, 'Agua');
+            //node.innerHTML = content;
+            
+            //console.log("node.childNodes: " + node.childNodes);
+            //console.log("node.childNodes.length: " + node.childNodes.length);
+            
+            for ( var j = 0; j < node.childNodes.length; j++ )
+            {
+                var childNode = node.childNodes[j];
+                console.log("childNode: " + childNode);
+                
+                replaceGalaxy(childNode);
+                
+                
+            }
+            
+            
+        }
+        
+        
+        //console.log("childFrame.contentDocument: " + childFrame.contentDocument);
+        //console.log("childFrame.object: " + childFrame.object);
+    }
+
+    // recursive function to drill down to all nodes
+    var replaceGalaxy = function (node)
+    {
+        console.log("replaceGalaxy(node)");
+        console.log("replaceGalaxy     node: " + node);
+        console.log("replaceGalaxy     node.value: " + node.value);
+        console.log("replaceGalaxy     node.innerHTML: " + node.innerHTML);
+        console.log("replaceGalaxy     typeof node: " + typeof node);
+        console.log("replaceGalaxy     node.nodeName: " + node.nodeName);
+        
+        var content = node.innerHTML;
+        if ( content != null && content )
+        {
+            //console.log("typeof content: " + typeof content);
+            //content = content.toString();
+            //console.log("typeof content: " + typeof content);
+            console.log("content: " + content);
+
+            if ( content.match(/Galaxy/) )
+            {
+                console.log("replaceGalaxy     MATCH Galaxy!!");
+                content = content.replace(/Galaxy/i, 'Agua');
+                console.log("content AFTER replace: " + content);
+                node.innerHTML = content;
+            }
+        }
+
+        var nodeName = node.nodeName;
+        if ( nodeName == "A" )
+        {
+            console.log("Anchor tag: " + nodeName);
+            
+            var href = node.getAttribute('href');
+            console.log("href: " + href);
+            if ( href.match(/g2\.bx\.psu\.edu/) )
+            {
+                node.setAttribute('href', 'ngsdev.ccs.miami.edu/cgi-bin/download.cgi');
+            }
+            
+        }
+
+        // REPLACE STRING        
+        //if ( node.replace(/g2\.bx\.psu\.edu/, 'ngsdev.ccs.miami.edu/cgi-bin/download.cgi') )
+        //{   
+        //    console.log("replaceGalaxy     Matched URL!");
+        //    console.log("replaceGalaxy     BEFORE replace, node: " + node);
+        //    node = node.replace(/g2\.bx\.psu\.edu/, 'ngsdev.ccs.miami.edu/cgi-bin/download.cgi');
+        //    console.log("replaceGalaxy     AFTER replace, node: " + node);
+        //}
+        //if ( node.replace(/GALAXY/i, 'Agua')
+        //{
+        //    content = content.replace(/GALAXY/i, 'Agua');
+        //}
+        
+        
+        // DO ALL CHILD NODES RECURSIVELY
+        var childNodes = node.childNodes;
+        if ( childNodes.length >= 1 )
+        {
+            for ( var i = 0; i < childNodes.length; i++ )
+            {
+                replaceGalaxy(childNodes[i]);
+                
+                
+            }
+        }
+        
+        
+        
+    }
+
+
+</script>
+
+        
+<style type="text/css"> 
+
+.childFrame {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 600px;
+    height: 600px;
+}
+
+.changeUrlButton {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+}
+
+.replaceHrefButton {
+    position: absolute;
+    top: 100px;
+    left: 50px;
+}
+
+</style>
+
+</head>
+<body>
+    <object  class="childFrame" id="childFrame" name="childFrame" type="text/html" data="embed/page1.html" width=50% height=50%>
+        
+    </object>
+
+    <button class="changeUrlButton" id="changeUrl" onclick="changeUrl()">changeUrl</button>
+
+    <button class="replaceHrefButton" id="replaceHref" onclick="replaceHref()">replaceHref</button>
+
+
+<script type="text/javascript">
+
+    //document.body.onLoad = replaceHref();
+
+</script>
+
+</body>
+</html>

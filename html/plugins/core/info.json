@@ -1,0 +1,11 @@
+{
+	name : "plugins.core.Agua",
+	
+	version : "0.01",
+	
+	description : "Create a widget for positioning Plugin buttons and a tab container for displaying Plugin tabs",
+	
+	url : '',
+	
+	dependencies : []
+}

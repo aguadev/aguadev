@@ -1,0 +1,40 @@
+<div dojoAttachPoint="containerNode">
+
+<div
+    dojoAttachPoint="menu"
+    class="selectormenu"
+    dojoType="plugins.menu.Menu">
+
+    <div dojoType="dijit.MenuItem"
+        label=""
+        dojoAttachPoint="titleNode"
+        class="title"
+        disabled="false">
+    </div>
+
+    <div dojoType="dijit.MenuSeparator">
+    </div>
+
+    <div
+        dojoAttachPoint="selectNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:select"
+        class="newProject"
+        >
+        Select
+    </div>
+
+    <div dojoType="dijit.MenuSeparator">
+    </div>
+
+    <div
+        dojoAttachPoint="newWorkflowNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:add"
+        class="newWorkflow"
+        >
+        Add
+    </div>
+
+
+</div>

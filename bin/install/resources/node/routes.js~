@@ -1,0 +1,4 @@
+exports.routes = [{
+    from: /^http:\/\/127.0.0.1:9104\/agua\//,
+    to: '/agua/html/'
+}];

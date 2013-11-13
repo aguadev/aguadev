@@ -1,0 +1,624 @@
+/* HEADERS */
+h3, h4, h5, h6 {
+    margin-bottom:0 !important;
+    margin-top: 0 !important;
+}
+
+/* BODY */
+body {
+	padding: 0 !important;
+}
+
+/* VERSION */
+#aguaVersion {
+	position: fixed;
+	top: 0px;
+	margin-left: 46%;
+    margin-right: 50%;
+	min-width: 500px;
+	color: #888;
+}
+
+/* CONTROLS LEFT MARGIN */
+.controls {
+	left: 3px !important;
+}
+
+/* RIGHT FLOAT */
+.controls .tabs {
+	position: relative;
+	float: left !important;
+}
+	
+.tundra .dijitTabInnerDiv {
+    padding-left: 10px;
+    padding-right: 10px;
+	position: relative;
+	top: -5px;
+}
+
+.tundra .dijitToolbar {
+	background: none !important;
+    /*background: url("../../../dojo-1.6.1rc2/dijit/themes/tundra/images/titleBar.png") repeat-x scroll left top #EAEAEA !important;*/
+    border-bottom: 1px solid #DDF !important;
+}
+
+
+/* TAB PANE SUBTITLE */
+
+.tabs .subTitle {
+	text-align: center;
+	font-size: 16px;
+	font-weight: bolder;
+	font-family: Verdana;
+	/*font-style: oblique;*/
+	height: 20px;
+	vertical-align: bottom;
+	background: #EEE;
+	color: darkred;
+}
+
+/* TAB PANE SUBTITLE */
+.tabs .spacerTitle {
+	text-align: center !important;
+	font-size: 20px;
+	font-weight: bolder;
+	font-family: Verdana;
+	/*font-style: oblique;*/
+	height: 20px;
+	vertical-align: bottom;
+	background: #EEF;
+	color: darkblue;
+}
+
+
+
+/****** TABS *******/
+
+/* TOP BORDER */
+.dijitTabContainerTop-tabs {
+	/* grey */
+	/*background-color: #9a9c9d;*/
+	
+	/* blue */
+	/*background-color: #b2e6f1;*/
+
+	/* lightest blue */
+	background-color: #EEF8FF;
+}
+
+.workflow .dijitTabContainerTop-tabs,
+.folders .dijitTabContainerTop-tabs,
+.view .dijitTabContainerTop-tabs,
+.admin .dijitTabContainerTop-tabs,
+.report .dijitTabContainerTop-tabs,
+.home .dijitTabContainerTop-tabs {
+	/* grey */
+	/*background-color: #9a9c9d;*/
+	
+	/* blue */
+	/*background-color: #b2e6f1;*/
+
+	/* light blue */
+	background-color: #d2e9f1;
+}
+
+
+/* SELECTED TAB LABELS */
+.dijitTabChecked .tabLabel {
+    color: #FF4400 !important;
+    font-weight: bold !important;
+	font-size: 16px !important;
+	
+    /* height: 32px !important; */
+}
+
+
+/* NON-SELECTED TAB LABELS */
+.tabLabel {
+	font-size: 14px !important;
+	height: 24px !important;
+}
+
+
+/* FOCUSED TAB LABELS */
+.dijitFocused .tabLabel {
+	outline							: none !important;
+	/*padding							:	3px !important;*/
+	/*border							:	solid 2px #0F0 !important;*/
+	-moz-background-clip			:	border !important;
+	-moz-background-inline-policy	:	continuous !important;
+	-moz-background-origin			:	padding !important;
+	
+	
+	border-radius		:	3pt !important;
+	
+	
+	border-radius	:	3pt !important;
+	border-radius-bottomright	:	3pt !important;
+	border-radius		:	3pt !important;
+	border-radius-topright		:	3pt !important;
+	-moz-outline-style				:	none !important;
+	-moz-focus-inner { border: 0; }
+}
+
+.tabLabel:active {
+  outline: none !important;
+}
+
+/* TAB HEIGHT */
+.controls .dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient {
+	height: inherit !important;
+}
+
+.controls .dijitTabListWrapper.dijitTabContainerTopNone.dijitAlignCenter,
+.dijitTabListWrapper.dijitTabContainerTopStrip.dijitAlignCenter,
+.controls .dijitTabListWrapper.dijitTabContainerTopStrip.dijitAlignCenter {
+    height: 31px !important; 
+}
+/* GLOBAL */
+.dijitTabListWrapper .dijitTabContainerTopNone .dijitAlignClient,
+.dijitContentPane  {
+    position: relative;
+	top: 0px !important;
+}
+
+/* NEEDED TO BLOCK IMAGES IN TAB LABEL */
+.dijitTabHover .dijitTabInnerDiv .dijitTabContent,
+.soria .dijitTabCloseButtonHover .dijitTabInnerDiv .dijitTabContent
+{
+	background: transparent !important;
+	background-image: none !important;	
+}
+
+/* AVOID NEWLINE IN TAB STRIP */
+/* TAB LIST */
+/*.dijitTabContainer .tabs .dijitTabListContainer-top {*/
+.dijitTabListContainer-top {
+	/*margin-top: -30px !important;*/	
+}
+
+.soria .dijitTabContainerTop-tabs {
+	left: 30px !important;
+	/*top: -30px !important;*/
+}
+
+/* TAB STRIP BUTTON */
+.dijitTabListContainer-top .tabStrip-disabled .tabStripButton-top .dijitTab .tabStripButton {
+	left: 0px !important;	
+	top: 30px;
+}
+
+.controls .dijitTabContainer .dijitTab .tabStripButton {
+	position:relative !important;
+	top: 30px !important;
+	width: 21px !important;
+}
+
+/* SET HEIGHT, ETC. OF TABS */
+.dijitTab
+{	background: transparent !important;
+	background-image: none !important;
+
+	height: 21px;
+	padding: 2px;
+	border: solid 2px #AAA;
+
+	border-top-left-radius: 8pt !important;
+    border-top-right-radius: 8pt !important;
+
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	-moz-outline-style: none;
+}
+
+/* TAB BODY */
+.dijitTab,
+.dijitTab .dijitTabChecked .dijitChecked,
+.dijitTab .dijitTabHover .dijitHover,
+dijitTabChecked dijitChecked dijitTabHover dijitTabCheckedHover dijitCheckedHover dijitHover,
+.dijitTabHover .dijitTabCheckedHover .dijitCheckedHover .dijitTabFocusedHover .dijitTabCheckedFocusedHover .dijitCheckedFocusedHover .dijitFocusedHover .dijitHover
+{
+	background-image: none !important;
+	background-color: white !important;
+	color: #264EEA !important;
+}
+
+.dijitTab .dijitTabChecked .dijitChecked .dijitTabFocused .dijitTabCheckedFocused .dijitCheckedFocused .dijitFocused,
+.dijitTabHover .dijitTabCheckedHover .dijitCheckedHover .dijitTabFocusedHover .dijitTabCheckedFocusedHover .dijitCheckedFocusedHover .dijitFocusedHover .dijitHover,
+.dijitTab .dijitTabChecked .dijitChecked .dijitTabHover .dijitTabCheckedHover .dijitCheckedHover .dijitHover
+{
+	background-image: none !important;
+	background-color: #264EEA !important;
+	color: white !important;
+
+	padding: 2px;
+	border: solid 1px #333;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+
+	border-radius	:8pt;
+}
+
+/* TAB HOVER */
+.dijitTab .dijitTabHover .dijitHover {
+	/*background: #FFD !important;	*/
+	background-image: none !important;
+	background-color: #264EEA !important;
+	color: white;
+}
+
+/* ******* CURVE RIGHT SIDE OF TAB *******/
+/* CHECKED TAB CONTENT */
+/* THIS AFFECTS THE TAB TEXT LABEL */
+/* NB: MUST INCLUDE THE -moz SETTINGS OR TOP RIGHT CORNER WON'T CURVE */
+.soria .dijitTabListWrapper .dijitTabChecked,
+.soria .dijitTabListWrapper .dijitTabChecked .dijitTabInnerDiv,
+.soria .dijitTabListWrapper .dijitTabChecked .dijitTabInnerDiv .dijitTabContent,
+.dijitTab .dijitTabChecked .dijitChecked .dijitTabHover .dijitTabCheckedHover .dijitCheckedHover .dijitHover
+{
+	background-image: none !important;
+	background-color: #264EEA !important;
+	color: white !important;
+
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+
+	border-top-left-radius: 8pt;
+    border-top-right-radius: 8pt;
+}
+
+dijitTab,
+.dijitTab .dijitTabChecked .dijitChecked,
+.dijitTab .dijitTabHover .dijitHover,
+.dijitTab .dijitTabChecked .dijitChecked .dijitTabFocused .dijitTabCheckedFocused .dijitCheckedFocused .dijitFocused
+.dijitTabHover .dijitTabCheckedHover .dijitCheckedHover .dijitTabFocusedHover .dijitTabCheckedFocusedHover .dijitCheckedFocusedHover .dijitFocusedHover .dijitHover
+{
+	background-image: none !important;
+	background-color: #264EEA !important;
+	color: white !important;
+
+	padding: 2px;
+	border: solid 2px #222;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+
+	border-top-left-radius: 5pt !important;
+    border-top-right-radius: 5pt !important;
+
+	-moz-outline-style: none;
+}
+
+
+/* TAB HOVER */
+.dijitTab .dijitTabHover .dijitHover,
+.dijitTab .dijitTabChecked .dijitChecked .dijitTabFocused .dijitTabCheckedFocused .dijitCheckedFocused .dijitFocused,
+.dijitTab .dijitTabChecked .dijitChecked .dijitTabInnerDiv .dijitTabContent {
+	/*background: #FFD !important;	*/
+	background-image: none !important;
+	background-color: #264EEA !important;
+	color: white;
+}
+
+/* GAP BETWEEN TABS */
+.dijitTabContainerTop-tabs .dijitTab, .dijitTabContainerBottom-tabs .dijitTab {
+	margin:0 2px 0 0;
+}
+
+ /*CHECKED TAB CONTENT */
+.soria .dijitTabChecked .dijitTabInnerDiv .dijitTabContent {
+	background-image: none !important;
+	background-color: #264EEA !important;
+	color: white !important;
+}
+
+.dijitTab .dijitTabHover .dijitHover .dijitTabInnerDiv .dijitTabContent {
+	background: #FFD !important;	
+	background-image: none !important;
+	background-color: #FFD !important;
+	color: #F00;
+}
+
+
+/* TAB INNER DIV */
+.dijitTabInnerDiv {
+	background: transparent !important;	
+	background-image: none !important;
+}
+
+/* TAB LABEL SIZE */
+.tabs .dijitTabInnerDiv .dijitTabContent {
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	position: relative;
+	background: transparent;
+	background-image: none;
+
+	/*(../images/tabContainerSprite.gif) repeat-x scroll 0 -350px;*/
+	/* IF UNCOMMENTED PUTS A WHITE BLANK IN ADJACENT TAB WHEN NOT FOCUSED */
+	/*background: transparent url(../images/tabContainerSprite.gif) repeat-x scroll 0 -350px;*/
+
+	/* CHANGE THE HEIGHT OF THE TAB LABEL HERE */
+	/*padding: 5px 3px 4px 4px;*/
+	padding: 2px 0px 1px 1px !important;
+}
+
+/* REMOVE TAB PANE WRAPPER BORDER */
+.controls .dijitTabPaneWrapper {
+	border: none !important;
+	top: 30px !important;
+    
+	height: 100% !important;
+}
+
+/* GREY BACKGROUND FOR UNSELECTED TABS */
+.tundra .dijitTabContainerTop-tabs .dijitTab {
+	background-color: #DDD !important;
+}
+
+/* STOP THE TAB CHILDREN FROM SHIFTING DOWN */
+.soria .dijitTabContainerTop-container {
+	top: 1px !important;
+	height: auto !important;
+	width: auto !important;
+	min-height: 650px !important;
+	/*overflow: scroll !important;*/
+	/*overflow-y: scroll !important;*/
+}
+
+
+/* TABS */
+.dijitTabContainer .tabs .dijitContainer .dijitTabContainerTop .dijitLayoutContainer {
+	/*top: -30px !important;*/
+}
+
+.dijitTabListContainer-top.dijitTabController.dijitScrollingTabController.dijitAlignTop.dijitLayoutContainer {
+    height: 31px !important;
+}
+
+.controls .tabs .dijitTabCloseIcon {
+	position: relative !important;
+	top: -4px !important;
+	left: -5px !important;
+}
+
+.controls .tabs .dijitTabButtonIcon {
+	position: relative !important;
+	top: -4px !important;
+	left: 4px !important;
+}
+
+/* TAB LABEL SIZE */
+.controls .tabs  .dijitTabInnerDiv .dijitTabContent {
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	position: relative;
+
+	/* IF UNCOMMENTED PUTS A WHITE BLANK IN ADJACENT TAB WHEN NOT FOCUSED */
+	/*background: transparent url(../images/tabContainerSprite.gif) repeat-x scroll 0 -350px;*/
+
+	/* CHANGE THE HEIGHT OF THE TAB LABEL HERE */
+	padding: 5px 3px 4px 4px;
+	/*padding: 0px 0px 0px 0px;*/
+}
+
+/* TAB LABELS */
+.controls .tabs .tablabel {
+	padding: 3px;
+	border: solid 2px transparent;
+	/*color: #243C5F;*/
+	/*color: #111f82;*/
+	/*color: #F00;*/
+	font-size: 13px !important;
+	font-weight: bold;
+}
+
+.controls .tabs .tabLabel {
+	padding: 3px;
+	border: solid 2px transparent;
+	/*color: #243C5F;*/
+	/*color: #111f82;*/
+	/*color: #F00;*/
+	font-size: 14px !important;
+	font-weight: bold;
+	top: 3px !important;
+	position: relative;
+}
+
+.controls .tabs .admin .tabLabel,
+.controls .tabs .workflow .tabLabel,
+.controls .tabs .folders .tabLabel,
+.controls .tabs .view .tabLabel,
+.controls .tabs .report .tabLabel,
+.controls .tabs .home .tabLabel {
+	font-size: 13px !important;	
+}
+
+element.style {
+    -moz-user-select: none;
+}
+
+/* NO DOTTED LINE */
+.dijitTab * {
+    outline: 0 none !important;
+}
+
+.controls .tabs  .dijitTabChecked .tabLabel {
+	color: white;
+	font-size: 18px !important;
+	/*color: #055817;*/ /* dark green */
+	/*color: #088a24;*/
+	font-weight: bold;
+	height: 36px !important;
+}
+
+/* WHITE BACKGROUND FOR SELECTED TABS */
+.controls .tabs .dijitTabContainerTop-tabs .dijitTabChecked {
+	background-color: #FFF !important;
+	display: inline !important;
+}
+
+.tundra .dijitTabContainerTop-tabs .dijitTabChecked {
+    height: 28px !important;
+}
+
+.controls .tabs  .dijitFocused .tabLabel {
+	height: 15px;
+	padding: 3px;
+	/*border: solid 2px #0F0;*/
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	
+	border-radius: 5pt;
+
+	-moz-outline-style: none;
+
+}
+
+.controls .tabs  .tabTitle {
+   user-select: none !important;
+   -o-user-select:none !important;
+   -moz-user-select: none !important;
+   -khtml-user-select: none !important;
+   -webkit-user-select: none !important;
+	/*color: white;*/
+	font-family: Cursive;
+	/*color: darkred;*/
+	/* LIGHT PURPLE */
+	/*background-color: #BBD;*/
+	background-color: #9fdbe6;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 20px;
+	font-weight: bold;
+}
+
+/* DON'T USE THIS AS IT CREATES FAT SCROLL BARS AROUND ALL 3 MAIN PANES */
+/*/* SET BORDERS ON TAB CONTAINER AND OTHER LAYOUT CONTAINERS*/
+/*.controls .tabs .dijitLayoutContainer {*/
+/*	border:1px solid #EEE !important;*/
+/*}*/
+
+
+/* FROM core.css */
+
+/* SCROLLBARS */
+/*body {	
+	scrollbarFaceColor : #dee3e7!important;
+	scrollbarArrowColor : #006699!important;
+	scrollbarTrackColor : #efefef!important;
+	scrollbarShadowColor : #dee3e7!important;
+	scrollbarHighlightColor : #ffffff!important;
+	scrollbar3dlightColor : #d1d7dc!important;
+	scrollbarDarkshadowColor : #98aab1!important;
+}
+*/
+
+/* CONTROLS MENU */
+.controls {
+	height: 30px !important;
+	position: absolute;
+	left: 0px;
+}
+
+/* STOP THE TAB CHILDREN FROM SHIFTING DOWN */
+.dijitTabSpacer .dijitTabContainerTop-spacer .dijitAlignTop {
+	top: 0px !important;
+}
+
+.controls .controlButtons {
+	height: 30px;
+	background-image: url();
+	background: none;
+}
+
+.controlButtons .dijitReset .dijitInline .dijitButtonNode{
+	position: relative;
+	top: -28px;
+	left: 30px;
+}
+
+.tabs .dijitLayoutContainer {
+	/*height: 31px !important*/
+	/*position: relative;*/
+	/*top: -25px;*/
+	/*left: 30px;	*/
+}
+
+/* SUBHEADING LABELS IN ALL TAB PANES */
+.tabs .dijitTab {
+	color: #243C5F;
+	/*color: #111f82;*/
+	font-size: 16px;
+	font-weight: bolder;
+	height: 22px !important;
+}
+
+.tabs .dijitTabChecked .dijitTabInnerDiv .dijitTabContent {
+	color: darkblue;
+	/*color: #0e1a67;*/
+	font-weight: bold;
+}
+
+/* TOOLBAR */
+.controls .dijit .dijitToolbar {
+	height: 0px !important;
+	background-image: url();
+	background: none;	
+}
+.controls .dijit .dijitToolbar:hover,
+.controls .dijit .dijitToolbar:active {
+    height: 30px !important;
+}
+.controls .toolbar {
+	height: 0px !important;
+    background: none repeat scroll 0 0 transparent;
+	background-color: #CCEEFF !important;
+    border: medium none !important;
+    display: inline-block;
+    float: left !important;
+    width: 100% !important;
+}
+.controls .toolbar:hover {
+	height: 30px !important;
+
+/*.controls .toolbar:hover {
+    height: 25px !important;
+*/
+}
+
+.controls .toolbar .dijitToolbar {
+	background-color: white !important;
+}
+.controls .dijitButtonText {
+	font-weight: bold !important;
+	font-family: Calypso;
+}
+
+.controls .dijitInline .dijitReset .dijitButtonNode {
+	background-color: #FFF;
+	vertical-align: middle;
+	border: 2px solid #BBB;
+	border-bottom-color: #888;	
+	border-left-color: #888;
+	font-weight: bold;
+	height: 20px !important;
+	width: 80px;
+	text-indent: -2px;
+}
+
+.controls .dijitInline .dijitReset .dijitButtonNode:hover {
+	background-color: #FFA;
+}
+.controls .dijitInline .dijitReset .dijitButtonNode:active {
+	background-color: #8F8;
+}
+
+

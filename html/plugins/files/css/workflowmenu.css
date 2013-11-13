@@ -1,0 +1,77 @@
+.workflowmenu {
+    font-family: Verdana;
+	text-indent: 4px;
+	font-size: 16px;
+	color: darkred;
+	font-weight: bold;
+}
+
+
+/* NB: WANT TO LIMIT WIDTH OF MENU ITEM BECAUSE 
+  FILE INPUT ELEMENT OVERSHOOTS ON RIGHT SIDE */
+
+.workflowmenu .dijitMenuItem {
+	max-width: 80px !important;
+	border: 1px solid #888;
+}
+
+.workflowmenu .title {
+	background-color: #000 !important;
+    color: #FFF !important;
+    font-weight: bolder;
+    background-color: #EEE;
+    text-align: left;
+	text-indent: 5px;
+	font-size: 18px !important;
+}
+
+.workflowmenu .refresh .dijitMenuItemIconCell,
+.workflowmenu .select .dijitMenuItemIconCell,
+.workflowmenu .add .dijitMenuItemIconCell,
+.workflowmenu .newProject .dijitMenuItemIconCell,
+.workflowmenu .newWorkflow .dijitMenuItemIconCell,
+.workflowmenu .deleteWorkflow .dijitMenuItemIconCell,
+.workflowmenu .deleteProject .dijitMenuItemIconCell,
+.workflowmenu .copyWorkflow .dijitMenuItemIconCell,
+.workflowmenu .copyProject .dijitMenuItemIconCell,
+.workflowmenu .renameWorkflow .dijitMenuItemIconCell,
+.workflowmenu .openWorkflow  .dijitMenuItemIconCell {
+	background-repeat: no-repeat;
+    background-position: 5px 0px !important;
+}
+
+
+.workflowmenu .select .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/select-20.png);
+}
+.workflowmenu .add .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/add-20.png);
+}
+
+.workflowmenu .newProject .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/newproject-20.png);
+}
+.workflowmenu .newWorkflow .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/newworkflow-20.png);
+}
+.workflowmenu .deleteWorkflow .dijitMenuItemIconCell {	
+	background-image: url(../../../plugins/files/images/deleteworkflow-20.png);
+}
+.workflowmenu .deleteProject .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/deleteproject-20.png);
+}
+.workflowmenu .copyWorkflow .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/copyworkflow-20.png);
+}
+.projectmenu .copyProject .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/copyproject-20.png);
+}
+.workflowmenu .renameWorkflow .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/renameworkflow-20.png);
+}
+.workflowmenu .openWorkflow .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/workflow-20.png);
+}
+.workflowmenu .refresh .dijitMenuItemIconCell {
+	background-image: url(../../../plugins/files/images/refresh-20.png) !important;
+}

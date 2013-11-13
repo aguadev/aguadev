@@ -1,0 +1,197 @@
+README
+======
+
+This documentation is composed of the following main sections:
+
+1. Introduction
+2. Installation
+3. Resources
+4. For Developers
+5. License
+
+1. Introduction
+===============
+
+Agua is a data analysis workflow tool designed to run on the Amazon cloud. Although Agua was primarily intended as a bioinformatics analysis platform for Next Generation Sequencing, it can also be used as a workflow or pipeline development tool for all Linux-supported command-line applications.
+
+Users can flexibly create groups, add members to groups and share data analysis pipelines and results with group members. Multi-level access privileges can be allocated to group members and to users in the general public.
+
+Users can also add new applications easily to the existing suite of applications. These custom applications can be configured to 'recognize' their inputs from the outputs of preceding applications in a workflow.
+
+Agua workflows can be run locally on the head node (where Agua is installed) or on StarCluster cloud node clusters. Once a cluster workflow is started, the StarCluster begins to auto-scale itself, adding new nodes to the cluster when the number and average duration of jobs is high and removing nodes when demand slacks off. The user can preconfigure the minimum and maximum number of nodes for each StarCluster tailored to each workflow. The user can also change the minimum and maximum number of nodes while the workflow is in progress to best suit their budget and time constraints. 
+
+Using Agua's default pipelines, Next Generation Sequencing data can be processed and viewed in the built-in JBrowse genome viewer. JBrowse employs the same technology as Google-Maps to allow the user to scan through the genome, zooming in and out in real time.
+
+
+2. Installation
+===============
+
+
+2.1 INSTALL CPAN MINUS
+----------------------
+apt-get -y install cpanminus
+
+
+2.2 INSTALL PERL MODS
+---------------------
+cpanm install JSON
+cpanm install Term::ReadKey
+
+
+2.4 RUN INSTALL SCRIPTS
+-----------------------
+
+The install scripts are found in this directory:
+
+INSTALLDIR/bin/scripts
+
+where the default INSTALLDIR is "/agua".
+
+To install Agua with the default settings, run AS ROOT the following three scripts in succession:
+
+cd /agua/bin/scripts
+./install.pl
+./config.pl
+./deploy.pl
+
+
+For details on custom options for these scripts, see the following sections.
+
+2.4.1 install.pl   Installs dependencies and sets up the directory hierarchy
+
+USAGE
+
+sudo ./install.pl \
+ [--mode String] \
+ [--installdir String] \
+ [--apachedir String] \
+ [--userdir String] \
+ [--wwwdir String] \
+ [--wwwuser String] \
+ [--domainname String] \
+ [--logfile String] \
+ [--newlog] \
+ [--help]
+
+ --mode          :  Installation option (see ./install.pl -h for options)
+ --target        :  Target directory to install repository to (e.g., 1.2.0)
+ --urlprefix     :  Prefix to URL (e.g., http://myhost.com/URLPREFIX/agua.html)
+                    (default: agua)
+ --userdir       :  Path to users home directory (default: /nethome)
+ --wwwdir        :  Path to 'WWW' directory (default: /var/www)
+ --wwwuser       :  Name of apache user (default: "www-data")
+ --apachedir     :  Path to apache installation (default: /etc/apache2)
+ --domainname    :  Domain name to use for CA certificate
+ --logfile       :  Print log to this file
+ --newlog        :  Flag to create new log file and backup old
+ --help          :  Print help info
+ 
+EXAMPLE
+
+sudo install.pl --installdir /path/to/installdir
+
+
+2.4.2 config.pl    Configures items including the database and load balancer monitor
+                    and creates the 'admin' user.
+
+USAGE
+
+sudo ./config.pl \
+    [--mode String] 
+
+    --mode config   Default 'config' mode: do all the following config tasks
+    --mode mysql    Install Agua mysql database and DB user
+    --mode cron     Create cron job to monitor StarCluster load balancer
+    --mode user     Create 'admin' user
+
+EXAMPLE
+
+sudo ./config.pl --mode mysql
+
+
+2.4.3 deploy.pl    Deploys Agua dependencies (e.g., StarCluster, BioApps)
+
+USAGE:
+
+sudo ./deploy.pl \
+ [--mode String] \ 
+ [--configfile String] \ 
+ [--logfile String] \ 
+ [--help]
+
+ --mode      :    deploy | bioapps | biorepo | ... options (see below)
+ --configfile:    Location of configfile
+ --logfile   :    Location of logfile
+ --help      :    Print help info
+
+The 'mode' options are as follows:
+
+	--mode aguatest    Install the Agua tests package
+	--mode bioapps     Install the Bioapps package
+	--mode biorepo     Install the Biorepository package
+	--mode sge         Install the SGE (Sun Grid Engine) package
+	--mode starcluster Install the StarCluster package
+	--mode deploy      (DEFAULT) Do all of the above
+
+EXAMPLE
+-------
+sudo ./deploy.pl --mode aguatest
+
+
+
+3. Developers
+=============
+
+If you'd like to tweak, fix, customize or otherwise improve Agua, please visit the 'Developers' section of the Agua website: http://www.aguadev.org. A quick look through it will explain the key points of the software and the design decisions behind it.
+
+
+4. Resources
+============
+
+A comprehensive list of resource files is located at $INSTALLDIR/$VERSION/bin/scripts/resources. The resource files contain configuration information for Agua itself, to be used in the installation process, and/or information needed to configure third-party components (e.g., Apache, StarCluster). The format for the list is as follows:
+
+dirname:
+    resource.txt
+    subdir:
+        filename.suffix
+where
+
+dirname:        =   a directory called 'dirname' inside the $INSTALLDIR
+subdir:         =   a directory called 'subdir' inside 'dirname' directory
+resource.txt    =   a file called 'resource.txt' inside 'dirname' directory
+filename.suffix =   a file called 'resource.txt' inside 'dirname' directory
+
+
+Resource List Examples
+----------------------
+
+VERSION                 Contains version and build of current Agua package.
+
+agua:
+    links.txt           List of symbolic links to be created by config script.
+    perlmods.txt        List of required Perl modules to be installed by install.pl
+    permissions.txt     File permissions for Agua directory hierarchy
+                        of 'git describe --tags'.
+
+apache2:
+    apache2.conf        Configuration for the Apache HTTP server.
+                        Replaces original file: /etc/apache2/apache2.conf
+    envvars             Environment variables for the Apache HTTP server
+    sites-available:
+        default         Replaces configuration file for default HTTP site
+
+cpan:
+    MyConfig.pm         Replaces MyConfig.pm for running CPAN.
+                        (NB: deprecated - use cpanminus)
+
+starcluster:
+    config              For reference, basic StarCluster config file
+    plugins:
+        automount.py    Mounts /data and /nethome volumes on head node
+        sge.py          Configures SGE cluster on head, master and exec nodes.
+                        Allows head node to submit and monitor cluster jobs.
+
+5. License
+==========
+
+Agua is freely available under the MIT Licence (see LICENSE.txt file for details).

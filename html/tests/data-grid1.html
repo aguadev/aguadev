@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<head>
+    <title> data grid 1 : programmatic, dojox.grid.data.Table(null, data) </title>
+
+<script type="text/javascript" src="../release-1.2.2/dojo/dojo.js"
+	djConfig="isDebug: true, parseOnLoad: true, useCommentedJson: true"></script>
+
+<script type="text/javascript">
+        dojo.require("dojox.grid.Grid");
+        dojo.require("dojox.grid.DataGrid");
+        dojo.require("dojo.parser");
+        
+    // We need to place the initializations here because of CDN.  This way they
+    //    are run after dojo.require's are loaded (we need dojox.grid.data.Table
+    //    in particular, but before grid is drawn.         
+
+
+    dojo.addOnLoad(function() {
+
+        var data = [
+            [ "normal", false, "new", 'But are not followed by two hexadecimal',
+                    29.91, 10, false ],
+            [ "important", false, "new", 'Because a % sign always indicates', 9.33, -5, false ],
+            [ "important", false, "read", 'Signs can be selectively', 19.34, 0, true ],
+            [ "note", false, "read", 'However the reserved characters', 15.63, 0, true ],
+            [ "normal", false, "replied", 'It is therefore necessary', 24.22, 5.50, true ],
+            [ "important", false, "replied", 'To problems of corruption by', 9.12, -3, true ],
+            [ "note", false, "replied", 'Which would simply be awkward in', 12.15, -4, false ]
+        ];
+        // global var "model"
+        var model = new dojox.grid.data.Table(null, data);
+        var view1 = {
+                cells: [[
+                        {name: 'Column 0'}, {name: 'Column 1'}, {name: 'Column 2'},
+                        {name: 'Column 3', width: "150px"}, {name: 'Column 4'}
+                ],[
+                        {name: 'Column 5'}, {name: 'Column 6'}, {name: 'Column 7'},
+                        {name: 'Column 8', field: 3, colSpan: 2}
+                ]]
+        };
+        var layout = [ view1 ];
+
+        // Now set the model and structure
+        gridWidget.setModel(model);
+        gridWidget.setStructure(layout);
+
+        
+
+
+        //dojo.addClass(gridWidget, 'work-pane-split');
+        //gridWidget.render();
+        
+
+    }); // dojo.addOnLoad
+
+</script>
+</head>
+
+<body class="tundra">
+
+<div class="heading"> data grid 1 : programmatic, dojox.grid.data.Table(null, data) </div>
+
+<div id="grid" dojoType="dojox.Grid" jsId="gridWidget"></div>
+
+</body>
+</html>
+</script>
+
+

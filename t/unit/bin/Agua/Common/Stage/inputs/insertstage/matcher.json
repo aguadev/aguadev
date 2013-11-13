@@ -1,0 +1,26 @@
+{
+    "appname": "matcher",
+    "appnumber": "4",
+    "cluster": "",
+    "description": "1",
+    "executor": "",
+    "installdir": "/aguadev/apps/emboss",
+    "localonly": "0",
+    "location": "bin/matcher",
+    "mode": "insertStage",
+    "module": "Agua::Workflow",
+    "name": "matcher",
+    "notes": "",
+    "number": "4",
+    "owner": "admin",
+    "package": "emboss",
+    "project": "Project1",
+    "sessionid": "9999999999.9999.999",
+    "type": "alignment",
+    "url": "",
+    "username": "admin",
+    "version": "1",
+    "workflow": "Workflow1",
+    "workflownumber": "1"
+}
+    

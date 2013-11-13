@@ -1,0 +1,476 @@
+<div dojoattachpoint="containerNode">
+
+    <div
+        data-dojo-attach-point="mainTab"
+        class="infusion dialog flowcell"
+        modal="true"
+		title="Edit Flowcell"
+        draggable="true"
+        data-dojo-type="plugins/dojox/widget/Dialog"
+        style="overflow: visible; position: absolute; top: 240px; left: 248px; opacity: 1; width: 500px; min-width: 500px !important; min-height: 900px !important; height: auto !important; align: center;"
+        >
+
+			<table
+				align="center"
+				style="width: 420px; min-height: 860px;" >
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="flowcellId"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Flowcell ID',
+								disabled		:	'disabled'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="flowcellBarcode"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Flowcell Barcode',
+								disabled		:	'disabled'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="server"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Server',
+								pattern			: 	'^.{0,150}$',
+								disabled		:	'disabled'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="updateTimestamp"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Update Timestamp',
+								disabled		:	'disabled'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="fpgaVersion"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'FPGA Version',
+								pattern			: 	'^.{0,100}$',
+								disabled		:	'disabled'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="rtaVersion"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'RTA Version',
+								pattern			: 	'^.{0,100}$',
+								disabled		:	'disabled'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="runLength"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Run Length',
+								pattern			: 	'^.{0,100}$',
+								disabled		:	'disabled'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="indexed"
+							data-dojo-type="plugins.form.Select"
+							class="customInput"
+							data-dojo-props="
+								label			: 	'Indexed',
+								disabled		:	'true'
+							"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="status"
+							data-dojo-type="plugins.form.Select"
+							class="customInput"
+							data-dojo-props="
+								label			: 	'Status'
+							"
+						>
+						</div>									
+					</td>
+				</tr>
+
+<!--				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="operator"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Operator',
+								pattern			: 	'^.{0,100}$',
+								disabled		:	'false'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+-->
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="description"
+							data-dojo-type="plugins.form.TextArea"
+							data-dojo-props="
+								label			: 	'Description',
+								pattern			: 	'^.{0,250}$',
+								invalidMessage	:	'Max 250 characters',
+								promptMessage	:	'Input up to 250 characters',
+								cols			: 	32,
+								rows			: 	3,
+								required		:	false
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+<!--				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="recipe"
+							data-dojo-type="plugins.form.TextArea"
+							data-dojo-props="
+								label			: 	'Recipe',
+								pattern			: 	'^.{0,250}$',
+								invalidMessage	:	'Max 250 characters',
+								promptMessage	:	'Input up to 250 characters',
+								cols			: 	32,
+								rows			: 	5,
+								required		:	false
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+-->
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="machineName"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Machine Name',
+								pattern			: 	'^.{0,45}$',
+								disabled		:	'disabled'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="location"
+							data-dojo-type="plugins.form.TextArea"
+							data-dojo-props="
+								label			: 	'Location',
+								pattern			: 	'^.{0,250}$',
+								invalidMessage	:	'Max 250 characters',
+								promptMessage	:	'Input up to 250 characters',
+								cols			: 	32,
+								rows			: 	2,
+								required		:	false,
+								disabled		:	true
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="runStartDate"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Run Start Date',
+								disabled		:	'disabled'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="priorityFlowcell"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Priority Flowcell',
+								pattern			: 	'^\\d{1,2}$',
+								disabled		:	'disabled'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+<!--				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="locationMd5sum"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Location md5sum',
+								pattern			: 	'^.{0,45}$',
+								disabled		:	'false'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+-->
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="comments"
+							data-dojo-type="plugins.form.TextArea"
+							data-dojo-props="
+								label			: 	'Comments',
+								pattern			: 	'^.{0,250}$',
+								invalidMessage	:	'Max 250 characters',
+								promptMessage	:	'Input up to 250 characters',
+								cols			: 	32,
+								rows			: 	3,
+								required		:	false
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="failCodeId"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Fail Code ID',
+								pattern			: 	'^\\d{0,10}$',
+								disabled		:	'false'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+<!--				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="userCodeAndIp"
+							data-dojo-type="plugins.form.TextArea"
+							data-dojo-props="
+								label			: 	'User Code and IP',
+								pattern			: 	'^.{0,250}$',
+								invalidMessage	:	'Max 250 characters',
+								promptMessage	:	'Input up to 250 characters',
+								cols			: 	32,
+								rows			: 	5,
+								required		:	false
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+-->
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="attemptingRehyb"
+							data-dojo-type="plugins.form.Select"
+							class="customInput"
+							data-dojo-props="
+								label			: 	'Attempting Rehyb'
+							"
+						>
+						</div>									
+					</td>
+				</tr>
+
+<!--				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="attemptingRehyb"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Attempting Rehyb',
+								pattern			: 	'^.{0,1}$',
+								disabled		:	'false'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+-->
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="lcmBroadCause"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'LCM Broad Cause',
+								pattern			: 	'^\\d{0,10}$',
+								disabled		:	'false'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="lcmSpecificCause"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'LCM Specific Cause',
+								pattern			: 	'^\\d{0,10}$',
+								disabled		:	'false'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="lcmStatus"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'LCM Status',
+								pattern			: 	'^.{0,45}$',
+								disabled		:	'false'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="lcmEquipmentRelated"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'LCM Equipment Related',
+								pattern			: 	'^.{0,45}$',
+								disabled		:	'false'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="lcmComments"
+							data-dojo-type="plugins.form.TextArea"
+							data-dojo-props="
+								label			: 	'LCM Comments',
+								pattern			: 	'^.{0,250}$',
+								invalidMessage	:	'Max 250 characters',
+								promptMessage	:	'Input up to 250 characters',
+								cols			: 	32,
+								rows			: 	3,
+								required		:	false
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td
+						height="50"
+						colspan="3"
+						data-dojo-attach-point="saveButton"
+						class="saveButton"
+						dojoAttachEvent="onclick:save"
+					>
+						Save
+					</td>
+				</tr>
+				
+			</table>
+			
+	</div> 
+
+</div>

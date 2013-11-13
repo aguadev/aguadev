@@ -1,0 +1,185 @@
+.settings .tabTitle {
+	background-color: #264eea;
+	text-align: center !important;
+	vertical-align: middle;
+	font-size: 20px;
+	font-stretch: expanded;
+	font-weight: bold;
+	color: #FFF;
+}
+
+.settings .subPane {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding: 5px;
+	width: 120px;	
+	height: 260px;
+	min-height: 100px;
+	text-align: left !important;
+	font-family: Verdana;
+	font-size: 12px;
+	border-color: #333;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	overflow:auto !important;
+}
+
+.settings .label {
+	text-align:	center !important;
+	font-weight: bolder;
+	font-size: 18px;
+	font-family: Verdana;
+	font-size: 14px;
+	font-style: oblique;
+	height: 20px;
+	vertical-align: bottom !important;
+	background: #EEE;
+}
+.settings .sublabel {
+	text-align:	center !important;
+	font-size: 12px;
+	vertical-align: center !important;
+	width: 200px !important;
+}
+.settings .username,
+.settings .firstname,
+.settings .lastname,
+.settings .email,
+.settings .password {
+	width: 100% !important;
+	font-weight: 600;
+	height: 25px !important;
+	padding-top: 2px;
+	text-align: center !important;
+}
+
+.settings .newPassword,
+.settings .confirmPassword {
+	width: 98% !important;
+}
+
+.settings .username,
+.settings .firstname,
+.settings .lastname,
+.settings .email,
+.settings .password,
+.settings .newPassword,
+.settings .confirmPassword,
+.settings .volumeSize {
+	height: 20px;
+	font-size: 14px;
+	color: #222;
+	vertical-align: middle !important;
+	font-weight: bolder !important;
+	font-family: Verdana;	
+}
+
+.settings .invalid ,
+.settings .firstname .dijitTextArea .invalid,
+.settings .lastname .dijitTextArea .invalid,
+.settings .email .dijitTextArea .invalid {
+	border: 2px solid #F00 !important;
+}
+
+.settings .editUserRow {
+	width: 100%;
+	height: 20px !important;
+}
+
+.settings .username {
+	background-position: 5px 2px;
+	background-repeat: no-repeat;
+	font-size: 14px;
+	color: darkred;
+	font-weight: bolder;
+	height: 18px;
+	width: 110px !important;
+}
+
+.settings .email {
+	color: #000;
+	font-weight: normal;
+	font-size: 12px;
+}
+
+.settings .password {
+	color: #000;
+	font-weight: normal;
+	font-size: 12px;
+	font-style: italic;
+}
+
+.settings .password .dijitReset .dijitInputInner {
+	height: 20px !important;
+}
+
+.settings .login,
+.settings .amazonUserId,
+.settings .addUserButton,
+.settings .addAwsButton {
+	width: 110px !important;
+	text-align: center !important;
+	vertical-align: middle !important;
+	height: 20px !important;
+	padding-top: 4px;
+}
+.settings .token {
+	text-align: center !important;
+	vertical-align: middle !important;
+	height: 20px !important;
+	padding-top: 4px;
+}
+.settings .addUserButton,
+.settings .addAwsButton {
+	width: 160px !important;
+	font-size: 20px !important;
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	border-radius: 8pt;
+	border-radius-bottomright: 8pt;
+	border-radius: 8pt;
+	border-radius-topright: 8pt;
+	background: #DDD none repeat scroll 0 0;
+	height: 30px;
+	color: #888 !important;	
+	border: 1pt solid #CCC;
+	font-weight: 900 !important;
+	-moz-user-select: none !important;	
+}
+
+.settings .addUserButton:hover,
+.settings .addAwsButton:hover {
+	color: #FFFFFF !important;
+	background-color: #AAAAFF;
+}
+.settings .addUserButton:active,
+.settings .addAwsButton:active {
+	color: #AAFFAA !important;
+	background-color: #7777DD;
+}
+
+.settings .volumeSizeLabel {
+	width: 100px !important;
+}
+.settings .volumeSize {
+	width: 50px !important;
+	font-weight: bolder;
+	font-family: Verdana;
+	text-align: center !important;
+}
+
+.settings .accessKeyId,
+.settings .secretAccessKey {
+	font-weight: 600;
+	height: 20px !important;
+	padding-top: 5px;
+}
+
+

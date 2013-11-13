@@ -1,0 +1,61 @@
+{
+   "tracks" : [
+      {
+         "chunkSize" : 20000,
+         "urlTemplate" : "seq/{refseq_dirpath}/{refseq}-",
+         "type" : "SequenceTrack",
+         "label" : "DNA",
+         "key" : "Reference sequence"
+      },
+      {
+         "autocomplete" : "all",
+         "track" : "Genes",
+         "style" : {
+            "className" : "feature5",
+            "subfeatureClasses" : {
+               "CDS" : "transcript-CDS"
+            },
+            "arrowheadClass" : "transcript-arrowhead"
+         },
+         "key" : "Protein-coding genes",
+         "feature" : [
+            "gene"
+         ],
+         "urlTemplate" : "tracks/Genes/{refseq}/trackData.json",
+         "compress" : 0,
+         "category" : "Genes",
+         "label" : "Genes",
+         "type" : "FeatureTrack",
+         "subfeatures" : true
+      },
+      {
+         "autocomplete" : "all",
+         "track" : "transcript_with_no_features",
+         "style" : {
+            "className" : "transcript",
+            "subfeatureClasses" : {
+               "CDS" : "transcript-CDS",
+               "UTR" : "transcript-UTR"
+            },
+            "arrowheadClass" : "transcript-arrowhead"
+         },
+         "description" : 1,
+         "key" : "Exonerate predictions (misconfigured for test, and with a long description)",
+         "feature" : [
+            "mRNA"
+         ],
+         "urlTemplate" : "tracks/transcript_with_no_features/{refseq}/trackData.json",
+         "compress" : 0,
+         "type" : "FeatureTrack",
+         "label" : "transcript_with_no_features",
+         "category" : "Genes",
+         "subfeatures" : true
+      }
+   ],
+   "names" : {
+      "url" : "names/",
+      "type" : "Hash"
+   },
+   "dataset_id" : "yeast",
+   "formatVersion" : 1
+}

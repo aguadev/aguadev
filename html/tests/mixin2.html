@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+<title> mixin 2: dijit.Menu & dojo.dnd.Source </title>
+
+<script type="text/javascript" src="dojo.1.2.2/dojo/dojo.js"
+		djConfig="parseOnLoad: true, isDebug: true, useCommentedJson: true"></script>
+
+<script type="text/javascript" src="dojo.1.2.2/dojo/dojo.js"
+		djConfig="parseOnLoad: true, isDebug: true, useCommentedJson: true"></script>
+
+<script type="text/javascript" >
+    
+dojo.require("dijit.Menu");
+dojo.require("dojo.dnd.Source");
+
+    // LOAD CSS
+    var cssFiles = [ "dojo.1.2.2/dojo/resources/dojo.css", "dojo.1.2.2/dijit/tests/css/dijitTests.css" ];
+    for ( var i in cssFiles )
+    {
+        var cssFile = cssFiles[i];
+        var cssNode = document.createElement('link');
+        cssNode.type = 'text/css';
+        cssNode.rel = 'stylesheet';
+        cssNode.href = cssFile;
+        cssNode.media = 'screen';
+        cssNode.title = 'loginCSS';
+        document.getElementsByTagName("head")[0].appendChild(cssNode);
+    }
+
+    // THIS CSS FILE PROVIDES THE ICONS AND FORMATTING FOR INDIVIDUAL FILES/DIRECTORIES
+    var cssFile = "dojo.1.2.2/dijit/themes/soria/soria.css";
+    var cssNode = document.createElement('link');
+    cssNode.type = 'text/css';
+    cssNode.rel = 'stylesheet';
+    cssNode.href = cssFile;
+    cssNode.media = 'screen';
+    cssNode.title = 'loginCSS';
+    cssNode.id = "themeStyles";
+    document.getElementsByTagName("head")[0].appendChild(cssNode);
+
+    // THIS CSS FILE PROVIDES THE ICONS AND FORMATTING FOR INDIVIDUAL FILES/DIRECTORIES
+    var cssFile = "dojo.1.2.2/dojox/widget/FilePicker/FilePicker.css";
+    var cssNode = document.createElement('link');
+    cssNode.type = 'text/css';
+    cssNode.rel = 'stylesheet';
+    cssNode.href = cssFile;
+    cssNode.media = 'screen';
+    cssNode.title = 'loginCSS';
+    cssNode.id = "widgetStyle";
+    document.getElementsByTagName("head")[0].appendChild(cssNode);
+    
+
+
+dojo.declare("menuFileDragMixin", null, {
+
+    constructor: function(properties){
+
+        console.log("++++ menuFileDragMixin.constructor()");
+
+        // CREATE MENU ITEM
+        var iconClass = "dojoxDirectoryItemIcon";
+        var menu = new dijit.MenuItem({
+            iconClass: iconClass,
+            label: "Menu Item",
+            style: "display: inline;"
+        });
+        
+        //menu.addChild(
+        //    {
+        //        
+        //    }
+        //)
+
+        // SET LEFT PANE ID
+        var sourceId = "leftPane";
+
+        // ATTACH MAIN CONTAINER TO DOCUMENT
+        var containerNode = document.createElement('div');
+        var containerNodeId = sourceId + "-projectContainer";
+        containerNode.id = containerNodeId;
+        dojo.byId(sourceId).appendChild(containerNode);
+
+        // ATTACH MENU CONTAINER TO MAIN CONTAINER
+        var menuContainerNode = document.createElement('div');
+        var menuNodeId = containerNodeId + "menuContainer";
+        menuContainerNode.id = menuNodeId;
+        containerNode.appendChild(menuContainerNode);
+
+        // ATTACH MENU TO MENU CONTAINER            
+        menuContainerNode.appendChild(menu.domNode);
+
+        var fileDrag = new dojo.dnd.Source(
+            menuNodeId,
+            {
+                accept: ["none"],
+                copyOnly: false,
+                onClick: function () {	console.log("clicked!")	}
+            }
+        );            
+
+        var applications = [
+            { data: "Base callers",     type: ["notDraggable"]    },
+            { data: "Bustard",          type: ["isDraggable"]    },
+            { data: "Alta-Cyclic",      type: ["isDraggable"]    },
+            { data: "Assemblers",       type: ["notDraggable"]    },
+            { data: "AMOS",             type: ["isDraggable"]    },
+            { data: "Eland",            type: ["isDraggable"]    },
+            { data: "MAQ",              type: ["isDraggable"]    },
+            { data: "SOAP",             type: ["isDraggable"]    },
+            { data: "Velvet",           type: ["isDraggable"]    }
+        ];
+        //fileDrag.insertNodes(false, applications);
+
+
+        // property configuration:
+        var menuFileDrag = dojo.mixin(menu, fileDrag);
+        menuFileDrag.insertNodes(false, applications);
+
+
+
+        console.debug("menuFileDrag: " + menuFileDrag);
+        //  ...
+    }
+    
+    //,
+    //quip: "I wasn't born yesterday, you know - I've seen movies.",
+    //// ...
+});
+ 
+
+// ADD ON LOAD    
+dojo.addOnLoad(
+
+    function(){
+
+    // create an instance of the class and configure it
+    //var menuFileDrag = new menuFileDragMixin({quip: "That's what it does!" });
+    var menuFileDrag = new menuFileDragMixin( {} );
+    
+
+});
+
+    
+    
+</script>
+	
+</head>
+
+<body class="soria">
+
+<h1>
+    mixin 2: dijit.Menu & dojo.dnd.Source
+</h1>
+
+<div id="leftPane">leftPane </div>
+
+
+
+</body>
+</html>
+
+

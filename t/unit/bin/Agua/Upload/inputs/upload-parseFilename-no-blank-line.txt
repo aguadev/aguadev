@@ -1,0 +1,13 @@
+------WebKitFormBoundary7zL3OseKDAIXBdD7
+Content-Disposition: form-data; name="uploadedfiles[]"; filename="upload-parseFilename-no-blank-line.txt"
+Content-Type: application/javascript
+
+d3 = function() {
+  var d3 = {
+    version: "3.1.4"
+  };
+  if (!Date.now) Date.now = function() {
+    return +new Date();
+  };
+  
+  

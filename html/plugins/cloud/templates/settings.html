@@ -1,0 +1,120 @@
+<div dojoattachpoint="containerNode">
+
+	
+	<!-- settings TAB -->
+	<div
+		dojoAttachPoint="mainTab"
+		class="settings"
+		dojoType="dijit.layout.ContentPane"
+		title="Settings"
+		style="height: 700px; max-height: auto !important; width: 390px !important; padding: 0 !important;"
+		>
+
+		<table>
+			<tr valign="top" width="100%">
+				<td colspan="2" class="tabTitle" align="center"> Settings </td>
+			</tr>
+			
+			<tr valign="top" width="95%">
+				<td width="95%">
+					<div class="label"> Personal Info </div>
+					<div
+						class="subPane"
+						style="height: 195px; width: 95%;"
+					>
+
+					<table>
+						<tr>
+							<td class="sublabel">Username</td>
+							<td	dojoAttachPoint="username"
+									class="username"
+							></td>
+							<td
+								dojoAttachPoint="updateUserButton"
+								class="addUserButton"
+								>
+								Save
+							</td>
+						</tr>
+						<tr>
+							<td class="sublabel">Firstname</td>
+							<td colspan="2">
+								<input
+									dojoAttachPoint="firstname"
+									class="firstname"
+								>
+							</td>
+						</tr>
+						<tr>
+							<td class="sublabel">Lastname</td>
+							<td colspan="2">
+								<input
+									dojoAttachPoint="lastname"
+									class="lastname"
+								>
+							</td>
+						</tr>
+						<tr>
+							<td class="sublabel">Email</td>
+							<td colspan="2">
+								<input
+									dojoAttachPoint="email"
+									class="email"
+									value=""
+								>
+							</td>
+						</tr>
+						<tr>
+							<td class="sublabel">Old Password</td>
+							<td colspan="2">
+								<input
+									dojoAttachPoint="oldPassword"
+									class="password"
+									type="password"
+									value=""
+								>
+							</td>
+						</tr>
+
+
+						<tr>
+							<td class="sublabel">New Password</td>
+							<td colspan="2">
+								<input
+									dojoAttachPoint="newPassword"
+									dojoType="plugins.dijit.form.ValidationTextBox"
+									required="true"
+									invalidMessage="Passwords don't match"
+									class="newPassword"
+									type="password"
+									tooltipPosition="below"
+								>
+							</td>
+						</tr>
+						<tr>
+							<td class="sublabel">Confirm Password</td>
+							<td colspan="2">
+								<input
+									dojoAttachPoint="confirmPassword"
+									dojoType="plugins.dijit.form.ValidationTextBox"
+									required="true"
+									invalidMessage="Passwords don't match"
+									class="confirmPassword"
+									type="password"
+									tooltipPosition="below"
+								>
+							</td>
+						</tr>
+					</table>
+					
+				</td>
+			</tr>
+			
+		</table>
+
+	</div>
+	<!-- END settings TAB -->
+	
+</div> 
+
+

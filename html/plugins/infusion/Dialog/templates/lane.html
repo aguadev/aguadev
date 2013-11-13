@@ -1,0 +1,202 @@
+<div dojoattachpoint="containerNode">
+
+    <div
+        data-dojo-attach-point="mainTab"
+        class="infusion dialog lane"
+        modal="true"
+		title="Edit Lane"
+        draggable="true"
+        data-dojo-type="plugins/dojox/widget/Dialog"
+        style="overflow: visible; position: absolute; top: 240px; left: 248px; opacity: 1; width: 500px; min-width: 420px !important; min-height: 640px !important; height: auto !important; align: center;"
+        >
+
+			<table
+				align="center"
+				style="width: 420px; min-height: 590px;" >
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="flowcellSamplesheetId"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Flowcell Samplesheet ID',
+								disabled		:	'disabled'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="flowcellId"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Flowcell ID',
+								disabled		:	'disabled'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="sampleId"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Sample ID',
+								disabled		:	'disabled'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="laneId"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Lane ID',
+								disabled		:	'disabled'
+							"
+							class="laneId"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="refSequence"
+							data-dojo-type="plugins.form.TextArea"
+							data-dojo-props="
+								label			: 	'Reference Sequence',
+								pattern			: 	'^.{0,250}$',
+								invalidMessage	:	'Max 250 characters',
+								promptMessage	:	'Input up to 250 characters',
+								cols			: 	32,
+								rows			: 	5,
+								required		:	false
+							"
+							class="laneName"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="control"
+							data-dojo-type="plugins.form.Select"
+							class="laneName"
+							data-dojo-props="
+								label			: 	'Control'
+							"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="status"
+							data-dojo-type="plugins.form.Select"
+							class="laneName"
+							data-dojo-props="
+								label			: 	'Status'
+							"
+						>
+						</div>									
+					</td>
+				</tr>
+
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="indexval"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Index Value',
+								disabled		:	'disabled'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="md5sum"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'MD5SUM',
+								disabled		:	'disabled'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="location"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Location',
+								disabled		:	'disabled'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="dateUpdated"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Date Updated',
+								disabled		:	'disabled'
+							"
+							class="customInput"
+						>
+						</div>									
+					</td>
+				</tr>
+
+				<tr>
+					<td
+						height="50"
+						colspan="3"
+						data-dojo-attach-point="saveButton"
+						class="saveButton"
+						dojoAttachEvent="onclick:save"
+					>
+						Save
+					</td>
+				</tr>
+				
+			</table>
+			
+	</div> 
+
+</div>

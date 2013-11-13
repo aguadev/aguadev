@@ -1,0 +1,460 @@
+/* GLOBAL STYLES */
+
+/* LOGIN DIALOGUE */
+
+.tundra .dojoxDialog {
+    border: 1px solid #B7B7B7;
+    border-radius: 9pt 9pt 9pt 9pt;
+    box-shadow: -2px 5px 20px #888888 !important;
+    padding: 1.5em 3px 3px;
+}
+.infusion .dialog .dijitDialog {
+    height: 610px !important;
+    width: 610px !important;
+}
+
+.infusion .dialog .dojoxDialog .dojoxDialogPaneContent {
+    border: none;
+    padding: 0;
+    width: 600px !important;
+    height: 600px !important;
+}
+
+.infusion .dialog .dojoxDialogNoTitle .dojoxDialogTitleBar {
+    display: inline-block !important;
+    width: 100% !important;
+}
+
+.infusion .dialog .project .dojoxDialogTitle {
+   font-size: 30px !important;
+    font-weight: bolder !important;
+    text-align: center !important;
+    color: #888;
+}
+
+/* INPUT ERRORS */
+.dijitTextBoxError .dijitValidationTextBoxError .dijitError {
+	border: 2px solid #F00 !important;	
+}
+.dijitValidationTextBoxError .dijitError {
+	border: 2px solid #F00 !important;	
+}
+
+.dijitError {
+	border: 2px solid #F00 !important;	
+}
+
+.dijitTextBoxError .dijitValidationContainer {
+    cursor: default;
+    display: none;
+}
+
+.dijitReset .dijitInputField .dijitValidationIcon .dijitValidationInner {
+	visibility: hidden !important;
+	left: 40px !important;	
+}
+
+/* TOOLTIP */
+.dijitTooltipContents {
+	background-color: #FFFFAA !important;
+	color: #55B !important;
+	border-radius:4pt;
+}
+
+
+/* LOCAL STYLES */
+
+/* DIALOGUE */
+.tundra .dojoxDialog {
+    border: 1px solid #B7B7B7;
+    border-radius: 9pt 9pt 9pt 9pt;
+    box-shadow: -2px 5px 20px #888888 !important;
+    padding: 1.5em 3px 3px;
+}
+.infusion .dialog .project table {
+	/*position: absolute;*/
+	/*top: 25%;*/
+}
+
+.infusion .dialog .project {
+	text-align: center;
+	vertical-align: middle;
+	color: #224;
+	font-size: 14px;
+	font-family: Verdana;
+	font-weight: bold;
+	z-index: 1001;
+	width: 600px !important;
+	height: 600px !important;
+}
+.infusion .dialog .project .dojoxDialogWrapper {
+	z-index: 1001;
+}
+
+.infusion .dialog .project .dojoxDialogTitleBar {
+    height: 50px !important;
+    /*opacity : 4;*/
+	border-radius: 6pt;
+	
+}
+
+.infusion .dialog .project .dijitDialog {
+   box-shadow: -2px 5px 20px #888;
+}
+
+
+/* BUTTONS */
+.infusion .dialog .project .saveButton {
+	/* SIZE, BORDER */
+	background-color: #FFF;
+	border: 3px solid #EEE;
+	border-bottom-color: #DDD;	
+	border-left-color: #DDD;	
+	vertical-align: middle;
+	background-position: center;
+	background-repeat: no-repeat;
+	width: 150px;
+	height: 40px;
+
+	/* TEXT */
+	-moz-user-select: none;
+    color: #222;
+    font-weight: bolder;
+    font-size: 28px;
+	vertical-align: middle;
+	text-align: center;
+	margin-top: 5px;
+}
+
+.infusion .dialog .project .saveButton:hover,
+.infusion .dialog .project .saveButton:active {
+	background-color: #8F8 !important;
+	border: 3px solid #DDD;
+	border-bottom-color: #BBB;	
+	border-left-color: #BBB;	
+}
+.infusion .dialog .project .saveButton:active{
+	background-color: #0F0 !important;
+}
+
+/* LOGIN LOADING */
+.infusion .dialog .project .error {
+    color: #F44;
+}
+
+.infusion .dialog .project .accepted {
+    color: #4D4;
+}
+
+.infusion .dialog .project .loading {
+    color: #444;
+	font-weight: 600;
+}
+
+.infusion .dialog .project .progressBar {
+	width: 90%;
+}
+.infusion .dialog .project .inactive,
+.infusion .dialog .project .dijitProgressBar .dijitProgressBarEmpty .progressBar .inactive,
+.infusion .dialog .project .dijitProgressBarFull .inactive,
+.infusion .dialog .project .dijitProgressBarEmpty .inactive {
+	visibility: invisible !important;
+	display: none !important;
+}
+
+.log .dijitProgressBarFull,
+.log .dijitProgressBarEmpty {
+	visibility: visible !important;
+	display: inline !important;
+}
+
+/* PROGRESS MESSAGE */
+.infusion .dialog .project .progressMessage {
+	font-family: Arial !important;
+	font-size: 20px;
+	color: #888;
+}
+/* LOGIN ICON */
+.infusion .dialog .project .infusion .dialog .projectIcon {
+	width: 150px !important;
+    height: 150px !important;
+	/*background-image: url("../../../plugins/login/images/home-100.png");*/
+	background-image: url("../../../plugins/login/images/infusion-150.png");
+	background-repeat: no-repeat;
+    background-position: center !important;
+}
+
+.infusion .dialog .project .hidden {
+	visibility: hidden;
+	display: none;
+}
+
+
+/* MAIN TABLE */
+.infusion .dialog .project .mainTable {
+	background-color: transparent !important;
+	vertical-align: "top";
+	align: "center";
+	width: 600px !important;
+}
+
+/* INIT TABLE */
+.infusion .dialog .project .infusion .dialog .projectTable {
+	width: 850px !important;	
+
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius: 14pt;
+
+	background:#FFFFFF none repeat scroll 0 0;
+	border: 1px solid #DDD;
+	cursor:default;
+	height: 260px;
+	min-height: 100px;
+	
+	text-align: left !important;
+	color: #333;
+	font-weight: bold;	
+	font-family: Verdana;
+	font-size: 18px;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	overflow:auto !important;
+}
+
+/* PROGRESS BUTTON AND SAVE BUTTON */
+.infusion .dialog .project .progressButton,
+.infusion .dialog .project .saveButton {
+	height: 50px !important;
+	width: 100% !important;
+	font-size: 30px !important;
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	border-radius: 8pt;
+	background: #DDF none repeat scroll 0 0;
+	height: 30px;
+	color: #222;	
+	border: 1pt solid #CCC;
+	font-weight: 900 !important;
+	-moz-user-select: none !important;
+	text-align: center !important;
+}
+.infusion .dialog .project .progressButton {
+	height: 26px !important;
+	font-size: 20px !important;
+	background: #CEC none repeat scroll 0 0;
+}
+.infusion .dialog .project .progressButton:hover {
+	/*color: #FFFFFF;*/
+	background-color: #8C8;
+}
+.infusion .dialog .project .progressButton:active {
+	/*color: #F8F;*/
+	background-color: #7777DD;
+}
+.infusion .dialog .project .progressButton.disabled,
+.infusion .dialog .project .progressButton.disabled:hover,
+.infusion .dialog .project .progressButton.disabled:active {
+	height: 26px !important;
+	font-size: 20px !important;
+	background: #888 none repeat scroll 0 0;
+	color: #BBB;
+	opacity: 0.7;
+}
+.infusion .dialog .project .saveButton:hover {
+	color: #FFFFFF !important;
+	background-color: #AAAAFF;
+}
+.infusion .dialog .project .saveButton:active {
+	color: #F8F !important;
+	background-color: #7777DD;
+}
+
+/* LABELS */
+.infusion .dialog .project .label {
+	text-align:	center !important;
+	font-weight: bolder;
+	font-size: 18px;
+	font-family: Verdana;
+	font-size: 14px;
+	font-style: oblique;
+	height: 100% !important;
+	vertical-align: bottom !important;
+	background: #EEE;
+}
+
+.infusion .dialog .project .sublabel {
+	font-size: 12px;
+	text-align:	center !important;
+	vertical-align: center !important;
+	height: 15px !important;
+	color: darkblue !important;
+	padding: 0px !important;
+}
+
+/* USE FIXED-WIDTH FONT FOR PRE-LIKE SPACING IN TEXTAREA */
+.infusion .dialog .project textarea {
+	white-space: pre-wrap !important;
+	font-weight: bold !important;
+	color: #111 !important;
+	font-family: arial !important;
+	font-size: 10px !important;
+	font-family: Courier New !important;
+	background-color: #FFA !important;
+}
+
+/* INPUT TURNS YELLOW ON HOVER */
+.infusion .dialog .project .dijitHover,
+.infusion .dialog .project .awsAccessKeyId:hover,
+.infusion .dialog .project .secretAccessKey:hover {
+	background-color: #FFA !important;
+}
+
+.infusion .dialog .project .dijitReset .dijitValidationContainer {
+	visibility: hidden !important;
+	left: 40px;
+}
+
+/* PROGRESS */
+.infusion .dialog .project .progress {
+	visibility: hidden !important;
+}
+
+.infusion .dialog .project .progress .active {
+	visibility: visible !important;
+}
+
+/* SLIDERS */
+.infusion .dialog .project .dijitSliderBar {
+	background-color: #DDD !important;
+}
+.infusion .dialog .project .dijitSliderProgressBar {
+	background-color: #AAA !important;
+}
+.infusion .dialog .project .dijitSliderButtonInner {
+	visibility: hidden !important;
+}
+
+/* INPUTS */
+.infusion .dialog .project .dijitTextBox INPUT {
+	background-color: #FFA !important;
+	float: none !important;	
+}
+
+.infusion .dialog .project .adminUser,
+.infusion .dialog .project .password,
+.infusion .dialog .project .confirmPassword,
+.infusion .dialog .project .amazonUserId,
+.infusion .dialog .project .awsAccessKeyId,
+.infusion .dialog .project .secretAccessKey {
+	font-weight: bolder !important;
+	font-family: Verdana !important;
+	text-align: center !important;
+	width: 99.5% !important;
+}
+
+.infusion .dialog .project .adminUser .dijitInputContainer input,
+.infusion .dialog .project .password .dijitInputContainer input,
+.infusion .dialog .project .confirmPassword .dijitInputContainer input,
+.infusion .dialog .project .dataVolume .dijitTextBox,
+.infusion .dialog .project .dataVolume .dijitInputInner,
+.infusion .dialog .project .dataVolume .dijitReset,
+.infusion .dialog .project .dataVolume .dijitReset .dijitInputInner,
+.infusion .dialog .project .amazonUserId .dijitInputContainer input,
+.infusion .dialog .project .awsAccessKeyId .dijitInputContainer input,
+.infusion .dialog .project .secretAccessKey .dijitInputContainer input {
+	text-align: center !important;
+	float: none !important;
+	background-color: #FFA !important;
+}
+
+.infusion .dialog .project .userVolumeLabel,
+.infusion .dialog .project .dataVolumeLabel {
+	display: inline;
+	width: 150px !important;	
+}
+
+.infusion .dialog .project .dataVolumeSizeContainer,
+.infusion .dialog .project .userVolumeSizeContainer {
+	width: 5% !important;
+}
+.infusion .dialog .project .userVolumeSlider {
+	/*background-color: red !important;*/
+}
+.infusion .dialog .project .userVolume,
+.infusion .dialog .project .dataVolume,
+.infusion .dialog .project .userVolumeSize,
+.infusion .dialog .project .dataVolumeSize {
+	background-color: #FFA !important;
+	width: 98% !important;
+	height: 20px;
+	font-size: 16px !important;
+	color: #222;
+	text-align: left !important;
+	vertical-align: middle !important;
+	font-weight: bolder !important;
+	padding-top: 4px;
+}
+
+.infusion .dialog .project .userVolume,
+.infusion .dialog .project .dataVolume {	
+	width: 140px !important;
+	/*font-style: oblique;*/
+	/*color: #777 !important;*/
+	/*background-color: #DDD;*/
+}
+
+.infusion .dialog .project .invalid,
+.infusion .dialog .project .amazonUserId .dijitTextArea .invalid,
+.infusion .dialog .project .dataVolume .dijitTextArea .invalid,
+.infusion .dialog .project .userVolume .dijitTextArea .invalid {
+	border: 2px solid #F00 !important;
+}
+
+
+.infusion .dialog .project .amazonUserId {
+	vertical-align: middle !important;
+	font-size: 16px !important;
+	/*width: 140px !important;	*/
+}
+
+.infusion .dialog .project .dataVolumeSize,
+.infusion .dialog .project .userVolumeSize {
+	text-indent: 4px !important;
+	vertical-align: middle !important;
+	width: 60px !important;
+}
+
+.infusion .dialog .project .userVolumeSize {
+	height: 20px;
+	font-size: 14px;
+	color: #222;
+	vertical-align: middle !important;
+	font-weight: bolder !important;
+	font-family: Verdana;	
+}
+
+.infusion .dialog .project .volumeId {
+	width: 120px !important;
+}
+
+.infusion .dialog .project .editUserRow {
+	width: 100%;
+	height: 20px !important;
+}
+
+/* VOLUME ID AND SIZE */
+.infusion .dialog .project .dataVolumeContainer,
+.infusion .dialog .project .userVolumeContainer {
+	width: 45% !important;
+	/*background-color: green !important;*/
+}
+.infusion .dialog .project .dataVolumeSliderContainer,
+.infusion .dialog .project .userVolumeSliderContainer {
+	width: 45% !important;
+	/*background-color: green !important;*/
+}
+

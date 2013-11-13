@@ -1,0 +1,69 @@
+
+h3. APPLICATION
+
+bamToJbrowse
+
+h3. PURPOSE
+
+GENERATE JBROWSE JSON FEATURES FROM REMOTE BAM FILE
+
+h3. INPUT
+
+h3. OUTPUT
+
+NOTES
+
+Bio::DB::Bam::Alignment -- The SAM/BAM alignment object
+
+use Bio::DB::Sam;
+my $sam = Bio::DB::Sam->new(-fasta=>"data/ex1.fa", -bam  =>"data/ex1.bam");
+
+my @alignments = $sam->get_features_by_location(-seq_id => 'seq2',
+                                                                                                                       -start  => 500,
+                                                                                                                       -end    => 800);
+                       for my $a (@alignments)
+                       {
+                               my $seqid  = $a->seq_id;
+                               my $start  = $a->start;
+                               my $end    = $a->end;
+                               my $strand = $a->strand;
+                               my $ref_dna= $a->dna;
+                               my $query_start  = $a->query->start;
+                               my $query_end    = $a->query->end;
+                               my $query_strand = $a->query->strand;
+                               my $query_dna    = $a->query->dna;
+                               my $cigar     = $a->cigar_str;
+                               my @scores    = $a->qscore;     # per-base quality scores
+                               my $match_qual= $a->qual;       # quality of the match
+                               my $paired = $a->get_tag_values('PAIRED');
+                       }
+
+h3. USAGE
+
+{code}
+./bamToJbrowse.pl <--inputfiles String> <--outputdir String>
+               <--inputdir String> [--splitfile String] [--reads Integer] [--convert]
+               [--clean] [--queue String] [--maxjobs Integer] [--cpus Integer] [--help]
+{code}
+
+
+ --outputdir       :   Directory with one subdirectory per reference chromosome
+                                   containing an out.sam or out.bam alignment output file
+ --inputdir    :   Location of directory containing chr
+.fa reference files
+ --chromodir         :   Name of the reference chromodir (e.g., 'mouse')
+ --queue           :   Cluster queue name
+ --cluster         :   Cluster type (LSF|PBS)
+ --help            :   print help info
+
+h3. EXAMPLES
+
+{code}
+/nethome/bioinfo/apps/agua/0.5/bin/apps/bamToJbrowse.pl \
+ --refseqfile /nethome/syoung/base/pipeline/jbrowse/ucsc/reference/refSeqs.js \
+ --outputdir /scratch/syoung/base/pipeline/jbrowse/agua/0.5/maq1 \
+ --inputdir /scratch/syoung/base/pipeline/SRA/NA18507/maq/maq1 \
+ --filetype bam \ --filename "out.bam" \ --label maq1 \ --key maq1 \
+ --queue large \ --cluster LSF
+
+

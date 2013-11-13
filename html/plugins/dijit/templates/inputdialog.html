@@ -1,0 +1,98 @@
+<div dojoAttachPoint="containerNode">
+
+    <table
+        cellspacing="0px"
+        height="300px" width="100%" style="padding: 0; margin: 0;"
+        class="inputDialog">
+        <tr>
+            <td align="center">
+                
+                <div
+                    dojoAttachPoint="dialog"
+                    dojoType="dijit.Dialog"
+                    closeText="false"
+                    title="${title}"
+                    style="margin-right: auto; margin-left: auto; text-align: center;"
+                    >
+                    
+                    <table
+                        cellpadding="0"
+                        cellspacing="0"
+                        class="inputDialog"
+                        width="100%"
+                        >
+
+                        <tr class="message" align="center">
+                            <td
+                                align="center"
+                                dojoAttachPoint="messageNode"
+                                colspan="2">${message}</td>
+                        </tr>
+
+                        <tr class="input" align="center" dojoAttachPoint="inputContainer">
+                            <td align="center" colspan="2" >
+                                <input type="text" align="center"
+                                dojoAttachPoint="inputNode"
+                                value=""></input>
+                            </td>
+                        </tr>
+                        
+
+                        <tr
+                            dojoAttachPoint="checkboxContainer"
+                            class="hidden">
+
+                            <td colspan="2">
+                                <table>
+                                    <tr>
+                                        <td class="leftColumn"
+                                            dojoAttachPoint="checkboxMessageNode"
+                                            class="hidden"
+                                        >
+                                        </td>
+                                        <td class="rightColumn">
+                                            <input
+                                                dojoAttachPoint="checkbox"  
+                                                style="visibility: hidden"
+                                                type="checkbox"
+                                                class="hidden"
+                                        >
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+
+                        </tr>
+                        
+
+                        <tr>
+                            <td align="center" class="enterButton">
+                                <button
+                                    dojoType="dijit.form.Button"
+                                    type="button"
+                                    label="Enter"
+                                    dojoAttachEvent="onClick:doEnter"
+                                    >
+                                </button>
+                            </td>
+
+                            <td align="center" class="cancelButton">
+                                <div
+                                    dojoType="dijit.form.Button"
+                                    type="button"
+                                    label="Cancel"
+                                    dojoAttachEvent="onClick:doCancel"
+                                    >
+                                </div>
+                            </td>
+                        </tr>
+                        
+                        
+                    </table>
+
+                </div>
+            
+            </td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,137 @@
+/* DOES THIS HELP AUTOSIZING? */
+.sharing .access {
+	height: auto !important;
+}
+
+.sharing .dijitTabPaneWrapper.dijitTabContainerTop-container {
+    height: auto !important;    
+}
+
+.sharing .access .tabTitle {
+	background-color: #264eea;
+	text-align: center !important;
+	vertical-align: middle;
+	font-size: 20px;
+	font-stretch: expanded;
+	font-weight: bold;
+	color: #FFF;
+}
+
+.sharing .access .label {
+	text-align:	center !important;
+	font-weight: bolder;
+	font-size: 18px;
+	font-family: Verdana;
+	font-size: 14px;
+	font-style: oblique;
+	height: 20px;
+	vertical-align: bottom !important;
+	background: #EEE;
+}
+
+.sharing .access .dragSource .permissionsTable,
+.sharing .access .saveButtonTable{
+	top: 20px !important;
+	font-family: Verdana;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+
+	border-radius: 8pt;
+
+	background:#EEE none repeat scroll 0 0;
+	border: 2px solid #333;
+	cursor: default;
+	margin: 2px 2px !important;
+	width: 99% !important;		
+	text-align: left !important;
+	font-size: 11px;
+	border-color: #CCC;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	/*display: block !important;*/
+	overflow:auto !important;	
+}
+
+
+.sharing .access .saveButton {
+	width: 250px !important;
+	color: #333333 !important;
+	font-size: 20px !important;
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	
+	border-radius: 8pt;
+
+	background: #FFF none repeat scroll 0 0;
+	height: 30px !important;
+	color: #CCC;	
+	font-weight: 400;
+	-moz-user-select: none !important;	
+}
+.sharing .access .saveButton:hover {
+	color: #FFFFFF !important;
+	background-color: #AAAAFF;
+}
+.sharing .access .saveButton:active {
+	color: #AAFFAA !important;
+	background-color: #7777DD;
+}
+.sharing .access .allowed,
+.sharing .access .denied {
+	background-repeat: no-repeat !important;
+	width: 18px !important;
+	height: 18px !important;
+	vertical-align: middle !important;
+	background-position: center !important;
+}
+.sharing .access .allowed {
+	background-image: url("../../../plugins/sharing/images/access-yes-18.png");
+}
+	
+.sharing .access .denied {
+	background-image: url("../../../plugins/sharing/images/access-no-18.png");
+}
+
+.sharing .access .permissionsTable .header,
+.sharing .access .permissionsTable .subHeader {
+	-moz-user-select: none !important;
+    border-width: 0 0 0 1px;
+    border-style: solid;
+    color: #222;
+}
+
+.sharing .access .permissionsTable .headerBold {
+	font-weight: bolder;
+	font-size: 16px;
+}
+
+.sharing .access .permissionsTable .header td {
+	width: 80px !important;
+	background-color: #FFFFCC;
+}
+
+.sharing .access .permissionsTable .header {
+    font-size: 15px;
+	text-align: center;
+    /*background-color: #5928f8;*/
+}
+
+.sharing .access .permissionsTable .subHeader {
+	font-family: Arial;
+}
+
+.sharing .access .permissionsTable .narrowColumn {
+	-moz-user-select: none !important;
+	background-color: #FFF !important;
+	text-align: center;
+    font-size: 14px !important;
+	color: #333;
+	width: 40px !important;
+	font-family: Arial;
+	font-weight: bolder;
+	height: 30px !important;
+    max-width: 60px !important;
+	white-space: wrap !important;
+}

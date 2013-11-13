@@ -1,0 +1,34 @@
+{
+   "projects" : [
+      {
+         "notes" : "ERANGE analysis",
+         "name" : "Project1",
+         "description" : "Transcriptome",
+         "username" : "syoung"
+      },
+      {
+         "notes" : "ERANGE analysis",
+         "name" : "Project1b",
+         "description" : "Transcriptome",
+         "username" : "syoung"
+      },
+      {
+         "notes" : "Comparitive analysis",
+         "name" : "Project2",
+         "description" : "MAQ and ERANGE",
+         "username" : "syoung"
+      },
+      {
+         "notes" : "",
+         "name" : "rnaSeq",
+         "description" : "",
+         "username" : "syoung"
+      },
+      {
+         "notes" : "",
+         "name" : "snp454",
+         "description" : "",
+         "username" : "syoung"
+      }
+   ]
+}

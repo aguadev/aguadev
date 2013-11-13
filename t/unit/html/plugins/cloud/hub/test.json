@@ -1,0 +1,11 @@
+{
+   "adminheadings" : {
+      "leftPane" : [
+         "Apps"
+      ]
+   },
+   "hub" : {
+		"login" :	"aguatest",
+		"token" :	"999999999999999999"
+   }
+}

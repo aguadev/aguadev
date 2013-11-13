@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title> Agua 0.5 </title>
+
+<style type="text/css">
+
+	/* dojo.1.4.2 style */
+	@import "dojo.1.4.2/dojo.1.4.2/resources/dojo.1.4.2.css";
+
+	/* DOJO STYLES */
+	@import "dojo.1.4.2/dojo/resources/dojo.css";
+
+	/* THEMES */
+	@import "dojo.1.4.2/dijit/themes/dijit.css";
+	@import "dojo.1.4.2/dijit/themes/soria/soria.css";
+	@import "dojo.1.4.2/dijit/themes/tundra/tundra.css";
+
+	/* AGUA STYLES */
+	@import "../css/style.css";
+		
+</style> 
+
+<script type="text/javascript" src="dojo.1.4.2/dojo/dojo.js"
+	djConfig="isDebug: false, parseOnLoad: false, useCommentedJson: true"></script>
+
+<!--<script type="text/javascript" src="builds\agua04\dojo\agua.js"-->
+<!--	djConfig="isDebug: true, parseOnLoad: true, useCommentedJson: true"></script>-->
+
+
+<script type="text/javascript" src="dojo.1.4.2/dijit/nls/en-us.js"></script>
+<script type="text/javascript" src="dojo.1.4.2/dijit/nls/common.js"></script>
+<!--<script type="text/javascript" src="builds/plugins/dojo/plugins.js"></script>-->
+
+<!--<script type="text/javascript" src="builds/plugins/dojo/plugins.js.uncompressed.js"></script>-->	
+
+<script type="text/javascript" src="dojo.1.4.2/dojo/dojo.js"
+	djConfig="isDebug: false, parseOnLoad: false, useCommentedJson: true"></script>
+
+<script language="JavaScript" type="text/javascript"> 
+
+	//dojo.require("dojo.parser"); 
+	dojo.require("dijit.layout.ContentPane");
+	dojo.require("dijit.form.Button");
+	dojo.require("dojox.layout.ResizeHandle");
+	dojo.require("dojo.parser");
+
+	var hostname = window.location.hostname;
+	console.log("agua.html    hostname: " + hostname);
+
+	// SET CGI AND HTML URLS (RELATIVE TO dojo.js)
+	var cgiUrl = "../../../cgi-bin/agua/0.5/";
+	var htmlUrl = "../../../agua/0.5/"
+
+	// REGISTER module path FOR PLUGINS
+	dojo.registerModulePath("plugins","../../plugins");	
+
+	// LOAD CORE MODULES
+	//dojo.require("plugins.core.DataManager");
+
+	console.log("agua.html    BEFORE require plugins.core.Agua");
+	dojo.require("plugins.core.Agua");
+	console.log("agua.html    AFTER  require plugins.core.Agua");
+
+	var Agua;
+
+	dojo.addOnLoad( function() {
+
+		// CREATE GLOBAL AGUA OBJECT
+		var messageNode = dojo.byId("loadingProgress");
+		console.log("agua.html    AFTER  messageNode: " + messageNode);
+		var splashNode = dojo.byId("splashNode");
+		console.log("agua.html    AFTER  splashNode: " + splashNode);
+		
+		Agua = new plugins.core.Agua( {
+			messageNode : messageNode,
+			splashNode : splashNode,
+			cgiUrl : cgiUrl,
+			htmlUrl : htmlUrl
+		});
+		console.log("agua.html    AFTER new plugins.core.Agua, Agua: " + Agua);
+		
+		console.log("agua.html    BEFORE Agua.startup");
+		Agua.startup();
+		console.log("agua.html    AFTER Agua.startup");
+
+		// NB: THIS IS THE SECOND addOnLoad
+		// TO HIDE THE LOADING IMAGE ONCE THE MODULES ARE LOADED
+		dojo.addOnLoad(function(){
+			Agua.hideLoader();
+		});
+
+	}); // dojo.addOnLoad
+
+</script>
+</head>
+
+<body class="agua soria">
+	
+	<div id="controls" class="controls" style="position: relative; top: 0px; left: 20px"=>
+	</div>
+
+	<style type="text/css">
+
+		#splashNode {
+			width:100%; height:100%;
+			margin:0;
+			padding:0;
+			background: #FFF
+			/*background: #000*/
+			url('images/loading-big.gif') no-repeat center center;
+			/*url('images/startup-loading-black.gif') no-repeat center center;*/
+			position:absolute;
+			top: 0px;
+			left: 0px;
+			z-index:1001;
+		}
+
+		#backgroundNode {
+			width:100%; height:100%;
+			margin:0;
+			padding:0;
+			background: #FFF
+			/*background: #000*/
+			url('images/blue-biwave-310.png') no-repeat center center;
+			/*url('images/startup-loading-black.gif') no-repeat center center;*/
+			position:absolute;
+			vertical-align: bottom;
+			text-align: center;
+			top: 0px;
+			left: 0px;
+			z-index:1001;
+			opacity: 0.6;
+		}
+
+		.loadingImage {
+			/*background: #000*/
+			/*url('images/blue-biwave-310.png') no-repeat center center;*/
+			z-index:1001;
+		}
+		
+		.loadingProgress {
+			font-size: 16px;
+			font-weight: bolder;
+			font-family: Verdana;
+			color: #444;
+		}
+		
+		.loadingTitle {
+			font-size: 20px;
+			font-weight: bolder;
+			font-family: Verdana;
+			color: #444;
+ 			text-align: center;
+			vertical-align: bottom !important;
+			bottom: 0px !important;
+		}
+
+	</style>
+
+	<div id="splashNode">
+		<span id="loadingProgress" class="loadingProgress"><br></span>
+	</div>
+
+	<div id="backgroundNode">
+		<div class="loadingTitle"> Loading Agua
+		</div>
+	</div>
+	
+</body>
+</html>

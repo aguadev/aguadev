@@ -1,0 +1,25 @@
+{
+    "queuestatus":{
+        "queue":"admin-Project1-Workflow1",
+        "status":""
+    },
+    
+    "clusterstatus":{
+        "cluster"	: "aguatest-testcluster",
+        "status"    : "balancer running",
+        "list":"StarCluster - (http://web.mit.edu/starcluster)\nSoftware Tools for Academics and Researchers (STAR)\nPlease submit bug reports to starcluster\@mit.edu\n\n\n-----------------------------------------------\nsmallcluster (security group: \@sc-aguatest-testcluster)\n-----------------------------------------------\nLaunch time: 2012-10-15T05:49:36.000Z\nZone: us-east-1a\nKeypair: gsg-keypair\nCluster nodes:\n     master running i-7609f31b ec2-67-202-25-182.compute-1.amazonaws.com \n    node001 running i-7209f31f ec2-184-72-81-94.compute-1.amazonaws.com\n    ",
+        "log"       : "portmap start/running, process 285\n * Stopping NFS kernel daemon                                                [ OK ] \n * Unexporting directories for NFS kernel daemon...                          [ OK ] \n * Exporting directories for NFS kernel daemon...                            [ OK ] \n * Starting NFS kernel daemon                                                [ OK ] \n>>> Mounting NFS shares on node001\n>>> mount -t nfs 10.122.13.145:/agua /agua\n>>> Mounting NFS shares on node001\n>>> mount -t nfs 10.122.13.145:/data /data\n>>> Mounting NFS shares on node001\n>>> mount -t nfs 10.122.13.145:/nethome /nethome\n>>> Completed 'on_add_node' for plugin: automount.NfsShares\n>>> Running plugin sge\n>>> Doing 'on_add_node' for plugin: sge.CreateCell\n>>> Adding node001\n>>> Copying cell directory on node001\n>>> mkdir /opt/sge6/syoung-smallcluster &> /dev/null\n>>> rsync -a /opt/sge6/default/* /opt/sge6/syoung-smallcluster --exclude *tar.gz\n>>> chown -R sgeadmin:sgeadmin /opt/sge6/syoung-smallcluster\n>>> Restarting SGE qmaster and execd daemons\n>>> /bin/ps aux | grep sgeadmin | cut -c9-14 | xargs -n1 -iPID /bin/kill -9 PID &> /dev/null\n>>> Add node001 to @allhosts group\n>>> sge.addToAllhosts    command: /opt/sge6/bin/lx24-amd64/qconf -aattr hostgroup hostlist node001 @allhosts >> /tmp/allhosts.out; \n>>> Completed 'on_add_node' for plugin: sge.CreateCell",
+        "balancer"  : ">>> ** 3 ** Oldest job is from 2011-05-10 18:29:20. # queued jobs = 53. # hosts = 5.\n>>> Avg job duration = 50 sec Avg wait time = 517 sec.\n>>> Won't add another host, currently at max (5).\n>>> Sleeping, looping again in 10 seconds. XXXXX CORRECT ENTRY XXXXX\n"
+    },
+
+    "stagestatus": {
+        "status":"pending",
+        "project":"Project1",
+        "workflow":"Workflow1",
+        "stages":[
+            {"stagedescription":"","stagepid":"7860","number":"1","status":"completed","project":"Project1","submit":"0","workflowpid":"0","stagenotes":"","stagename":"","stagejobid":"0","completed":"2012-02-26 04:36:30","owner":"aguatest","workflownumber":"1","cluster":"","stderrfile":"/nethome/admin/agua/Project1/Workflow1/stdout/1-FTP.stderr","location":"bin/utils/FTP.pl","version":"0.6.0","installdir":"/agua/bioapps","executor":"/usr/bin/perl","name":"FTP","stdoutfile":"/nethome/admin/agua/Project1/Workflow1/stdout/1-FTP.stdout","package":"bioapps","username":"aguatest","workflow":"Workflow1","now":"2012-11-09 19:07:01","started":"2012-02-26 04:24:14","type":"utility","queued":"0000-00-00 00:00:00"},
+            {"stagedescription":"","stagepid":"8997","number":"2","status":"completed","project":"Project1","submit":"0","workflowpid":"0","stagenotes":"","stagename":"","stagejobid":"0","completed":"2012-02-27 03:39:27","owner":"aguatest","workflownumber":"1","cluster":"","stderrfile":"/nethome/admin/agua/Project1/Workflow1/stdout/2-unzipFiles.stderr","location":"bin/utils/unzipFiles.pl","version":"0.6.0","installdir":"/agua/bioapps","executor":"/usr/bin/perl","name":"unzipFiles","stdoutfile":"/nethome/admin/agua/Project1/Workflow1/stdout/2-unzipFiles.stdout","package":"bioapps","username":"aguatest","workflow":"Workflow1","now":"2012-11-09 19:07:01","started":"2012-02-27 03:39:00","type":"utility","queued":"0000-00-00 00:00:00"},
+            {"stagedescription":"","stagepid":"0","number":"3","status":"","project":"Project1","submit":"0","workflowpid":"0","stagenotes":"","stagename":"","stagejobid":"0","completed":"0000-00-00 00:00:00","owner":"aguatest","workflownumber":"1","cluster":"","stderrfile":"","location":"bin/converters/elandIndex.pl","version":"0.6.0","installdir":"/agua/bioapps","executor":"/usr/bin/perl","name":"elandIndex","stdoutfile":"","package":"bioapps","username":"aguatest","workflow":"Workflow1","now":"2012-11-09 19:07:01","started":"0000-00-00 00:00:00","type":"converter","queued":"0000-00-00 00:00:00"}
+        ],
+    }
+}

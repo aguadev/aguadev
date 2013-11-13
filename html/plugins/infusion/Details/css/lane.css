@@ -1,0 +1,139 @@
+/* SPECIFIC MAX-HEIGHT FOR EACH TABLE */
+.details .lane .information {
+    max-height: 90px !important;
+}
+.details .lane .clusters {
+    max-height: 90px !important;
+}
+
+
+/* GRID SCROLLER TOP MARGINS */
+.details .lane .information .dgrid-scroller {
+    margin-top: 40px !important;
+}
+.details .lane .clusters .dgrid-scroller {
+    margin-top: 35px !important;
+}
+
+
+/* INFORMATION */
+.details .lane .information .dgrid-header .field-project_name {
+    width: 30px !important;
+}
+.details .lane .information .dgrid-column-project_name {
+    width: 15px !important;
+}
+.details .lane .information .dgrid-column-status_id {
+    width: 60px !important;
+}
+.details .lane .information .dgrid-column-build_version {
+    width: auto !important;
+}
+.details .lane .information .dgrid-column-build_location {
+    width: auto !important;
+}
+.details .lane .information .dgrid-column-project_manager {
+    width: 60px !important;
+}
+.details .lane .information .dgrid-column-data_analyst {
+    width: auto !important;
+}
+
+.details .lane .information .field-project_name,
+.details .lane .information .dgrid-header .field-project_name {
+    width: 150px !important;
+}
+.details .lane .information .field-sample_barcode,
+.details .lane .information .dgrid-header .field-sample_barcode {
+    width: 150px !important;
+}
+.details .lane .information .field-status_id,
+.details .lane .information .dgrid-header .field-status_id {
+    width: 40px !important;
+}
+.details .lane .information .field-sample_name,
+.details .lane .information .dgrid-header .field-sample_name {
+    width: 150px !important;
+}
+.details .lane .information .field-target_fold_coverage,
+.details .lane .information .dgrid-header .field-target_fold_coverage {
+    width: 40px !important;
+}
+.details .lane .information .field-species,
+.details .lane .information .dgrid-header .field-species {
+    width: 70px !important;
+}
+.details .lane .information .field-cancer,
+.details .lane .information .dgrid-header .field-cancer,
+.details .lane .information .field-gt_call_rate,
+.details .lane .information .dgrid-header .field-gt_call_rate,
+.details .lane .information .field-gender,
+.details .lane .information .dgrid-header .field-gender,
+.details .lane .information .field-gt_gender,
+.details .lane .information .dgrid-header .field-gt_gender {
+    width: 50px !important;
+}
+.details .lane .information .field-gt_p99_cr,
+.details .lane .information .dgrid-header .field-gt_p99_cr {
+    width: 60px !important;
+}
+
+.details .lane .information .field-ethnicity,
+.details .lane .information .dgrid-header .field-ethnicity {
+    width: 70px !important;
+}
+.details .lane .information .field-delivered_date,
+.details .lane .information .dgrid-header .field-delivered_date,
+.details .lane .information .field-due_date,
+.details .lane .information .dgrid-header .field-due_date,
+.details .lane .information .field-loaded_date,
+.details .lane .information .dgrid-header .field-loaded_date {
+    width: 70px !important;
+}
+
+
+/* LIST */
+.details .lane .clusters .field-requeued_lanes,
+.details .lane .clusters .field-sequencing_lanes,
+.details .lane .clusters .field-bad_lanes,
+.details .lane .clusters .field-good_lanes,
+.details .lane .clusters .field-total_lanes,
+.details .lane .clusters .field-aligned_yield,
+.details .lane .clusters .field-trimmed_yield {
+    text-align: center !important;
+    width: 14% !important;
+}
+
+.details .lane .clusters .dgrid-scroller {
+    margin-top: 35px !important;
+}
+
+.details .lane .clusters .field-date_updated,
+.details .lane .clusters .dgrid-header .field-date_updated {
+    width: 120px !important;
+}
+.details .lane .clusters .field-align_status,
+.details .lane .clusters .dgrid-header .field-align_status,
+.details .lane .clusters .field-lane_status,
+.details .lane .clusters .dgrid-header .field-lane_status,
+.details .lane .clusters .field-lane_id,
+.details .lane .clusters .dgrid-header .field-lane_id,
+.details .lane .clusters .field-lane_status,
+.details .lane .clusters .dgrid-header .field-lane_status {
+    width: 50px !important;
+}
+.details .lane .clusters .field-lib_insert,
+.details .lane .clusters .dgrid-header .field-lib_insert,
+.details .lane .clusters .field-yield_trimmed,
+.details .lane .clusters .dgrid-header .field-yield_trimmed,
+.details .lane .clusters .field-yield_aligned,
+.details .lane .clusters .dgrid-header .field-yield_aligned {
+    width: 90px !important;
+}
+.details .lane .clusters .field-lane_barcode,
+.details .lane .clusters .dgrid-header .field-lane_barcode,
+.details .lane .clusters .field-lib_insert,
+.details .lane .clusters .dgrid-header .field-lib_insert {
+    width: 110px !important;
+}
+

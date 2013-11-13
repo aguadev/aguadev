@@ -1,0 +1,1 @@
+INSERT INTO `project` VALUES (128,'JHU_Barnes_3',63,NULL,'NCBI37','131','n',NULL,'---\nbuild_root: \'/illumina/build/services/Projects\'\nbuild_type: local\nbuild_version: NCBI37\ndbsnp_version: 131\nproject_name: JHU_Barnes_3\n',NULL,NULL);

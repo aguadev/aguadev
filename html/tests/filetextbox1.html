@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html class="dj_gecko dj_ff3 dj_contentbox"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+
+
+	<title>File Picker Demo</title>
+
+	<style type="text/css">
+		@import "../../../dojo/resources/dojo.css";
+		@import "../../../dijit/tests/css/dijitTests.css";
+	</style>
+
+	<!-- required: a default dijit theme: -->
+	<link id="themeStyles" rel="stylesheet" href="filetextbox1_files/soria.css">
+	
+	<!-- the additional styles for the widget -->
+	<link id="widgetStyle" rel="stylesheet" href="filetextbox1_files/FilePickerTextBox.css">
+	
+	<!-- required: dojo.js -->
+	<script type="text/javascript" src="filetextbox1_files/dojo.js" djconfig="parseOnLoad: true, isDebug: true, useCommentedJson: true"></script><script type="text/javascript" src="filetextbox1_files/bootstrap.js"></script><script type="text/javascript" src="filetextbox1_files/loader.js"></script><script type="text/javascript" src="filetextbox1_files/hostenv_browser.js"></script><script type="text/javascript" src="filetextbox1_files/_base.js"></script>
+	
+	<!-- not needed, for testing alternate themes -->
+	<script type="text/javascript" src="filetextbox1_files/_testCommon.js"></script>
+
+	<script type="text/javascript">
+		dojo.require("dojox.form.FilePickerTextBox");
+		dojo.require("dojox.data.FileStore");
+		dojo.require("dijit.form.Form");
+		dojo.require("dijit.form.Button");
+	</script>
+</head><div methodName="dir" FirebugVersion="1.3.3" style="display: none;" id="_firebugConsole"></div><body class="soria">
+	<h1>
+		Demo: File Picker text box widget using dojox.data.FileStore
+	</h1>
+	<p>The
+picker below uses the dojox.data.FileStore and a PHP implementation for
+the serverside to browse the dojo tree hierarchy in a lazy-load fashion.</p>
+	<p><i><b>This demo must be run from a web-server with PHP support enabled.  Without PHP support, this demo cannot function.</b></i></p>
+	<hr>
+	<div dojotype="dojox.data.FileStore" url="../../data/demos/stores/filestore_dojotree.php" jsid="fileStore" pathasqueryparam="true"></div>
+	<form widgetid="dijit_form_Form_0" id="dijit_form_Form_0" dojoattachpoint="containerNode" dojoattachevent="onreset:_onReset,onsubmit:_onSubmit" name="">
+		<label>Choose a file:<div widgetid="dojox_form_FilePickerTextBox_0" role="combobox" class="dijit dijitReset dijitInlineTable dijitLeft dojoxRollingListItem dojoxFilePickerItem dojoxFilePickerTextBox" id="widget_dojox_form_FilePickerTextBox_0" dojoattachevent="onmouseenter:_onMouse,onmouseleave:_onMouse,onmousedown:_onMouse" wairole="combobox" tabindex="-1"><div style="overflow: hidden;"><div popupactive="true" role="presentation" class="dijitReset dijitRight dijitButtonNode dijitArrowButton dijitDownArrowButton" dojoattachpoint="downArrowNode,dropDownNode,popupStateNode" wairole="presentation"><div class="dijitArrowButtonInner"> </div><div class="dijitArrowButtonChar">▼</div></div><div class="dijitReset dijitValidationIcon"><br></div><div class="dijitReset dijitValidationIconText">Χ</div><div class="dijitReset dijitInputField"><input value="" aria-invalid="false" aria-required="true" tabindex="0" id="dojox_form_FilePickerTextBox_0" aria-autocomplete="list" aria-haspopup="true" role="textbox" autocomplete="off" name="fileName" class="dijitReset" dojoattachevent="onfocus:_update,onkeyup:_update,onblur:_onMouse,onkeypress:_onKey" dojoattachpoint="textbox,focusNode" wairole="textbox" waistate="haspopup-true,autocomplete-list" type="text"></div></div></div></label><br>
+		<span widgetid="dijit_form_Button_0" class="dijit dijitReset dijitLeft dijitInline dijitButton dijitButtonFocused dijitFocused" dojoattachevent="ondijitclick:_onButtonClick,onmouseenter:_onMouse,onmouseleave:_onMouse,onmousedown:_onMouse"><span class="dijitReset dijitRight dijitInline"><span class="dijitReset dijitInline dijitButtonNode"><button style="-moz-user-select: none;" tabindex="0" id="dijit_form_Button_0" aria-labelledby="dijit_form_Button_0_label" role="button" class="dijitReset dijitStretch dijitButtonContents" dojoattachpoint="titleNode,focusNode" name="" type="submit" wairole="button" waistate="labelledby-dijit_form_Button_0_label"><span class="dijitReset dijitInline" dojoattachpoint="iconNode"><span class="dijitReset dijitToggleButtonIconChar">✓</span></span><span class="dijitReset dijitInline dijitButtonText" id="dijit_form_Button_0_label" dojoattachpoint="containerNode">Submit</span></button></span></span></span>
+	</form>
+<div style="display: none;"></div><div style="top: -9999px; width: 0px; visibility: hidden; position: absolute;" widgetid="dojox_widget_FilePicker_0" id="dojox_widget_FilePicker_0" class="dojoxRollingList dojoxFilePicker" dojoattachpoint="containerNode" dojoattachevent="onkeypress:_onKey"><div style="height: 224px;" class="dijitContentPane dojoxRollingListPane dojoxFilePickerPane dojoxRollingListGroupPane dojoxFilePickerGroupPane" role="group" title="" widgetid="dojox_widget__RollingListGroupPane_0" id="dojox_widget__RollingListGroupPane_0"><div dojoattachpoint="containerNode"><span class="dijitContentPaneLoading">Loading...</span></div><div dojoattachpoint="menuContainer"><table tabindex="-1" widgetid="dijit_Menu_0" id="dijit_Menu_0" role="menu" class="dijit dijitMenu dijitReset dijitMenuTable" wairole="menu" dojoattachevent="onkeypress:_onKeyPress"><tbody class="dijitReset" dojoattachpoint="containerNode"><tr aria-labelledby="dijit_MenuItem_0_text" style="-moz-user-select: none;" widgetid="dijit_MenuItem_0" id="dijit_MenuItem_0" role="menuitem" class="dijitReset dijitMenuItem dojoxRollingListItem dojoxRollingListItemExpanding dojoxFilePickerItem dojoxFilePickerItemExpanding dojoxRollingListItemSelected dojoxFilePickerItemSelected" dojoattachpoint="focusNode" wairole="menuitem" tabindex="-1" dojoattachevent="onmouseenter:_onHover,onmouseleave:_onUnhover,ondijitclick:_onClick"><td role="presentation" class="dijitReset" wairole="presentation"><div class="dijitMenuItemIcon dojoxDirectoryItemIcon" dojoattachpoint="iconNode"></div></td><td id="dijit_MenuItem_0_text" class="dijitReset dijitMenuItemLabel" dojoattachpoint="containerNode">demos</td><td role="presentation" class="dijitReset dijitMenuArrowCell" wairole="presentation"><div dojoattachpoint="arrowWrapper" style=""><div class="dijitMenuExpand"></div><span class="dijitMenuExpandA11y">+</span></div></td></tr></tbody></table></div></div><div style="height: 224px;" class="dijitContentPane dojoxRollingListPane dojoxFilePickerPane" role="group" title="" widgetid="dojox_widget__RollingListGroupPane_1" id="dojox_widget__RollingListGroupPane_1"><div dojoattachpoint="containerNode"><span class="dijitContentPaneLoading">Loading...</span></div><div dojoattachpoint="menuContainer"><table tabindex="-1" widgetid="dijit_Menu_1" id="dijit_Menu_1" role="menu" class="dijit dijitMenu dijitReset dijitMenuTable" wairole="menu" dojoattachevent="onkeypress:_onKeyPress"><tbody class="dijitReset" dojoattachpoint="containerNode"><tr aria-labelledby="dijit_MenuItem_1_text" style="-moz-user-select: none;" widgetid="dijit_MenuItem_1" id="dijit_MenuItem_1" role="menuitem" class="dijitReset dijitMenuItem dojoxRollingListItem dojoxRollingListItemExpanding dojoxFilePickerItem dojoxFilePickerItemExpanding dojoxRollingListItemHover dojoxFilePickerItemHover dojoxRollingListItemSelected dojoxRollingListItemHoverSelected dojoxFilePickerItemSelected dojoxFilePickerItemHoverSelected" dojoattachpoint="focusNode" wairole="menuitem" tabindex="-1" dojoattachevent="onmouseenter:_onHover,onmouseleave:_onUnhover,ondijitclick:_onClick"><td role="presentation" class="dijitReset" wairole="presentation"><div class="dijitMenuItemIcon dojoxDirectoryItemIcon" dojoattachpoint="iconNode"></div></td><td id="dijit_MenuItem_1_text" class="dijitReset dijitMenuItemLabel" dojoattachpoint="containerNode">castle</td><td role="presentation" class="dijitReset dijitMenuArrowCell" wairole="presentation"><div dojoattachpoint="arrowWrapper" style=""><div class="dijitMenuExpand"></div><span class="dijitMenuExpandA11y">+</span></div></td></tr></tbody></table></div></div><div style="height: 224px;" class="dijitContentPane dojoxRollingListPane dojoxFilePickerPane" role="group" title="" widgetid="dojox_widget__RollingListGroupPane_2" id="dojox_widget__RollingListGroupPane_2"><div dojoattachpoint="containerNode"><span class="dijitContentPaneLoading">Loading...</span></div><div dojoattachpoint="menuContainer"><table tabindex="-1" widgetid="dijit_Menu_2" id="dijit_Menu_2" role="menu" class="dijit dijitMenu dijitReset dijitMenuTable" wairole="menu" dojoattachevent="onkeypress:_onKeyPress"><tbody class="dijitReset" dojoattachpoint="containerNode"><tr aria-labelledby="dijit_MenuItem_2_text" style="-moz-user-select: none;" widgetid="dijit_MenuItem_2" id="dijit_MenuItem_2" role="menuitem" class="dijitReset dijitMenuItem dojoxRollingListItem dojoxRollingListItemSingle dojoxFilePickerItem dojoxFilePickerItemSingle dojoxRollingListItemSelected dojoxFilePickerItemSelected" dojoattachpoint="focusNode" wairole="menuitem" tabindex="-1" dojoattachevent="onmouseenter:_onHover,onmouseleave:_onUnhover,ondijitclick:_onClick"><td role="presentation" class="dijitReset" wairole="presentation"><div class="dijitMenuItemIcon dojoxFileItemIcon dojoxFileItemIcon_css" dojoattachpoint="iconNode"></div></td><td id="dijit_MenuItem_2_text" class="dijitReset dijitMenuItemLabel" dojoattachpoint="containerNode">demo.css</td><td role="presentation" class="dijitReset dijitMenuArrowCell" wairole="presentation"><div dojoattachpoint="arrowWrapper" style="display: none;"><div class="dijitMenuExpand"></div><span class="dijitMenuExpandA11y">+</span></div></td></tr></tbody></table></div></div><div style="height: 224px;" role="group" title="" widgetid="dojox_widget__FileInfoPane_0" id="dojox_widget__FileInfoPane_0" class="dojoxFileInfoPane dijitContentPane dojoxRollingListPane dojoxFilePickerPane">
+	<table>
+		<tbody>
+			<tr>
+				<td class="dojoxFileInfoLabel dojoxFileInfoNameLabel">Name</td>
+				<td class="dojoxFileInfoName" dojoattachpoint="nameNode">demo.css</td>
+			</tr>
+			<tr>
+				<td class="dojoxFileInfoLabel dojoxFileInfoPathLabel">Path</td>
+				<td class="dojoxFileInfoPath" dojoattachpoint="pathNode">./demos/castle/demo.css</td>
+			</tr>
+			<tr>
+				<td class="dojoxFileInfoLabel dojoxFileInfoSizeLabel">Size (in bytes)</td>
+				<td class="dojoxFileInfoSize" dojoattachpoint="sizeNode">3282</td>
+			</tr>
+		</tbody>
+	</table>
+</div></div></body></html>

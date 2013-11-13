@@ -1,0 +1,68 @@
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>DevTools autosave</title>
+    <link rel="stylesheet" href="options.css"/>
+    <script src="options.js"></script>
+</head>
+<body>
+    <table class="layout">
+        <thead>
+            <tr>
+                <td class="routes-col">Routes</td>
+                <td class="pipes-col"></td>
+                <td class="servers-col">Servers</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="routes-col">
+                    <form id=routes autocomplete=off>
+                        <fieldset class=rule id=routes_dummy>
+                            <label class=row>
+                                <h3>Match</h3>
+                                <p>
+                                    <input name=match class="input-text input-regexp" placeholder="e.g. ^http://elv1s.local/">
+                                    <span class=error></span>
+                                </p>
+                            </label>
+                            <label class=row>
+                                <h3>Save to</h3>
+                                <p>
+                                    <input name=savePath type=url class="input-text" placeholder="e.g. /Users/nv/Sites/elv1s.ru">
+                                </p>
+                            </label>
+                            <input type=hidden name=id>
+                        </fieldset>
+                    </form>
+                </td>
+                <td class="pipes-col">
+                    <svg id="pipes" xmlns="http://www.w3.org/2000/svg" version="1.1">
+                        <g id="pipes_dummy" class="pipe">
+                            <line class="pipe-line-shadow" x1="1" x2="20" y1="43.5" y2="43.5"/>
+                            <line class="pipe-line" x1="1" x2="20" y1="43.5" y2="43.5"/>
+                            <line class="pipe-fat-line draggable" x1="1" x2="20" y1="43.5" y2="43.5"/>
+                            <g class="pipe-end-group" transform="translate(20,43.5)">
+                                <circle class="pipe-end-middle" r="4" cy="0" cx="0" fill="#9dacc4"></circle>
+                                <circle class="pipe-end draggable" r="24" cy="0" cx="0" fill="transparent"></circle>
+                            </g>
+                        </g>
+                    </svg>
+                </td>
+                <td class="servers-col">
+                    <form id=servers autocomplete=off>
+                        <fieldset class="rule" id=servers_dummy>
+                            <label class=row>
+                                <input name=url type=url class="input-text" placeholder="e.g. http://127.0.0.1:9104/">
+                            </label>
+                            <input type=hidden name=id value=0>
+                        </fieldset>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

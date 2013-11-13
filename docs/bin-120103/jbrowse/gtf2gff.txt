@@ -1,0 +1,109 @@
+
+h3. APPLICATION
+
+gtf2gff
+
+h3. PURPOSE
+
+CONVERT A GTF FILE TO GFF FORMAT
+
+h3. INPUT
+
+1. inputfile
+
+2. outputfile
+
+h3. OUTPUT
+
+1. PROCESSED FILES FOUND IN DIRECTORY agua/data/seq AND agua/data/tracks
+
+h3. USAGE
+
+{code}
+./gtf2gff.pl  <--inputfile String> <--outputfile String> [-h]
+ --inputfile                :   Name or full path to inputfile directory
+ --outputfile           :   Name or full path to outputfile directory
+ --help                 :   print help info
+{code}
+
+h3. EXAMPLES
+
+BATCH JOB:
+
+RUN gtf2gff.pl
+
+cd /nethome/syoung/base/pipeline/jbrowse1/ucsc/gff
+
+/data/agua/0.4/bin/apps/gtf2gff.pl \ --configfile
+       /nethome/syoung/base/pipeline/jbrowse1/ucsc/chr1/data/refSeqs.js \
+ --inputdir /nethome/syoung/base/pipeline/jbrowse1/ucsc/gtf \
+ --outputdir /nethome/syoung/base/pipeline/jbrowse1/ucsc/gff \
+ --jsonfile
+       /nethome/syoung/base/pipeline/jbrowse1/ucsc/conf/ucsc-gff.json
+
+/data/agua/0.4/bin/apps/gtf2gff.pl \ --configfile
+       /nethome/syoung/base/pipeline/jbrowse1/ucsc/chr1/data/refSeqs.js \
+ --inputdir
+       /nethome/syoung/base/pipeline/jbrowse1/ucsc/chromosome-gtf/chr1 \
+ --outputdir
+       /nethome/syoung/base/pipeline/jbrowse1/ucsc/chromosome-gff/chr1 \
+ --jsonfile
+       /nethome/syoung/base/pipeline/jbrowse1/ucsc/conf/ucsc-gff.json
+
+THEN RUN biodb-to-json.pl
+
+cd /nethome/syoung/base/pipeline/jbrowse1/ucsc/chr1
+       /var/www/html/jbrowse/bin/biodb-to-json.pl \ --conf
+       /nethome/syoung/base/pipeline/jbrowse1/ucsc/chr1/data/human-chr1.json
+
+SINGLE FILE:
+
+cd /nethome/syoung/base/pipeline/jbrowse1/ucsc/gff
+
+/data/agua/0.4/bin/apps/gtf2gff.pl \ --configfile
+       /nethome/syoung/base/pipeline/jbrowse1/ucsc/chr1/data/refSeqs.js \
+ --inputfile
+       /nethome/syoung/base/pipeline/jbrowse1/ucsc/gtf/hs-cytoBand-chr1-gtf \
+ --outputfile
+       /nethome/syoung/base/pipeline/jbrowse1/ucsc/gff/hs-cytoBand-chr1.gff \
+ --feature cytoband
+
+WHICH PRODUCES THIS OUTPUT FILE:
+
+head
+       /nethome/syoung/base/pipeline/jbrowse1/ucsc/gff/hs-cytoBand-chr1.gff
+
+### /data/agua/0.4/bin/apps/gtf2gff.pl --configfile /nethome/syoung/base/pipeline/jbrowse1/ucsc/chr1/data/refSeqs.js --inputfile /nethome/syoung/base/pipeline/jbrowse1/ucsc/gtf/hs-cytoBand-chr1-gtf --outputfile /nethome/syoung/base/pipeline/jbrowse1/ucsc/gff/hs-cytoBand-chr1.gff
+               ####3:23AM, 8 December 2009
+
+chr1    hg18_cytoBand   exon    0       247249719       .       .       .       Name=chr1
+               chr1    hg18_cytoBand   exon    1       2300000 0       .       .       Name=p36.33
+               chr1    hg18_cytoBand   exon    2300001 5300000 0       .       .       Name=p36.32
+               chr1    hg18_cytoBand   exon    5300001 7100000 0       .       .       Name=p36.31
+               chr1    hg18_cytoBand   exon    7100001 9200000 0       .       .       Name=p36.23
+               chr1    hg18_cytoBand   exon    9200001 12600000        0       .       .       Name=p36.22
+               chr1    hg18_cytoBand   exon    12600001        16100000        0       .       .       Name=p36.21
+
+WHICH WORKS AS INPUT FOR biodb-to-json.pl:
+
+cd /jbrowse1/ucsc/conf/ucsc.json
+       /var/www/html/jbrowse/bin/biodb-to-json.pl --conf
+       /nethome/syoung/base/pipeline/jbrowse1/ucsc/conf/ucsc.json
+
+working on refseq chr1
+               working on track exon
+               got 64 features for exon
+
+NOTES:
+
+h3. INPUT FILES ARE DOWNLOADED UCSC GTF FILES WITH THE FOLLOWING FORMAT:
+
+head hs-conrad-dels-chr1-gtf
+
+chr1    hg18_delConrad2 CDS     45258   76166   1000.000000     +       0       gene_id "chr1.1"; transcript_id "chr1.1";
+               chr1    hg18_delConrad2 exon    76167   988364  1000.000000     +       .       gene_id "chr1.1"; transcript_id "chr1.1";
+               chr1    hg18_delConrad2 exon    6624739 6717817 1000.000000     +       .       gene_id "chr1.2"; transcript_id "chr1.2";
+               chr1    hg18_delConrad2 CDS     6717818 6720271 1000.000000     +       0       gene_id "chr1.2"; transcript_id "chr1.2";
+               chr1    hg18_delConrad2 exon    6720272 6726334 1000.000000     +       .       gene_id "chr1.2"; transcript_id "chr1.2";
+
+

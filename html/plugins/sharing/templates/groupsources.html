@@ -1,0 +1,92 @@
+<div dojoattachpoint="containerNode">
+
+	<!-- SOURCES TAB -->
+	<div
+		dojoAttachPoint="sourcesTab"
+		class="groupsources"
+		dojoType="dijit.layout.ContentPane"
+		title="Group Sources"
+		style="height: 100% !important; max-height: auto !important; width: 370px !important; padding: 0 !important;"
+		>
+
+		<table width="100%">
+			<tr valign="top" width="370">
+				<td colspan="2" class="tabTitle" align="center"> Group Sources </td>
+			</tr>
+			<tr valign="top" width="95%">
+				<td width="50%">
+					<table width="100%">
+						<tr>
+							<td align="center">
+
+								<!-- GROUP COMBO -->
+								<div class="comboLabel"> Groups </div>
+								<div dojoAttachPoint="groupCombo"
+										dojoType="dijit.form.ComboBox"
+										class="groupCombo"
+										popupClass="sources groupCombo dijitReset dijitMenu"
+										autocomplete="true"
+										hasDownArrow="true"
+										disabled="false"
+										style="width: 150px;"
+								>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td align="center">
+
+								<!-- DROP TARGET CONTAINER -->
+								<div class="comboLabel"> Group Sources </div>
+								<div
+									dojoAttachPoint="dropTargetContainer"
+									class="dropTarget"
+									style="height: 622px; width: 160px;"
+									>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</td>
+				<td width="50%">
+					<table width="100%">
+						<tr>
+							<td align="center">
+
+								<!-- DRAG SOURCE CONTAINER -->
+								<div class="comboLabel"> Sources </div>
+								<div
+									dojoAttachPoint="dragSourceContainer"
+									class="dragSource"
+									style="height: 580px; width: 160px;"
+									>
+								</div>
+							</td>
+						</tr>
+						<tr align="center">
+							<td align="center">
+
+								<!-- TRASH CONTAINER -->
+								<div
+									dojoAttachPoint="trashContainer"
+									class="trash"
+									style="height: 60px; width: 150px; align: center;" 
+									>
+									<div
+										dojoAttachPoint="trashIcon"
+										class="trashIcon"
+										style="height: 60px; width: 60px;"
+										>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+
+	</div>
+	<!-- END SOURCES TAB -->
+	
+</div> 

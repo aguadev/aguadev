@@ -1,0 +1,42 @@
+
+h3. APPLICATION
+
+config
+
+h3. PURPOSE
+
+1. CONFIGURE THE Agua DATABASE AND LOAD TABLES AND SKELETON DATA
+
+2. CONFIGURE CRON JOB TO CHECK LOAD BALANCER
+
+3. ADD 'admin' USER TO AGUA DATABASE
+
+4. FIX /etc/fstab TO ALLOW EC2 MICRO INSTANCES TO REBOOT PROPERLY
+
+h3. INPUT
+
+1. MODE OF ACTION, E.G., 'config', 'mysql', 'cron', 'admin', 'fixFstab'
+
+h3. OUTPUT
+
+MYSQL DATABASE CONFIGURATION AND EDITED CONFIG FILE
+
+h3. USAGE
+
+{code}
+sudo ./config.pl <--mode String> \
+        [--key String] \
+        [--value String] \
+        [--help]
+ --mode      :  config | mysql | cron | admin | fixFstab
+ --database  :  Name of database
+ --configfile:  Location of configfile
+ --logfile   :  Location of logfile
+ --help      :   Print help info
+{code}
+
+h3. EXAMPLES
+
+sudo config.pl --mode mysql --database
+
+

@@ -1,0 +1,65 @@
+body {
+	font-size: 15px;
+	font-family: Verdana;
+}
+.header {
+	background-color: black;
+    height: 50px !important;
+	width: 100%;
+	color: white;
+}
+.logo {
+	width: 33%;
+	background-image: url("../../../plugins/init/images/logo-final-agua-50x105.png");
+	background-repeat: no-repeat;
+    background-position: left !important;
+}
+.title {
+	width: 33%;
+	font-size: 30px !important;
+	text-align: center;
+	font-weight: bold;
+	color: #FFF;
+}
+.clock {
+	width: 100%;
+	text-align: right;
+}
+.date {
+	width: 100%;
+	float: right;
+	color: white;
+	font-size: 16px;
+}
+.countdown {
+	font-size: 20px;
+	color: lightblue;
+}
+
+.message {
+	width: 100%;
+	font-size: 30px;
+	text-align: center;
+	font-weight: bold;
+}
+.address, .url {
+	font-size: 26px;
+	margin: 4px;
+	border: 1px solid black;
+	text-align: center;
+}
+.url {
+	color: #88F;
+}
+.url:hover {
+	color: #F8F;
+}
+.url:active {
+	color: #8F8;
+}
+.url:visited {
+	color: #F8F;
+}
+.progress {
+	white-space: pre-wrap;
+}

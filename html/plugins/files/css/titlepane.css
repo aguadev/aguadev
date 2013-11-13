@@ -1,0 +1,388 @@
+/* ROLLING LIST PANE BACKGROUND COLOUR */
+.folders .dojoxRollingListPane {
+	background-color: #FFF !important;
+}
+
+/* TITLE PANE */
+.folders .dijitClosed .dijitTitlePaneTextNode {
+	height: auto !important;
+}
+
+.folders .dijitClosed .dijitTitlePaneTextNode {
+	color: #448 !important;	
+	font-size: 12px !important;
+	font-family: Verdana;
+	font-weight: bold !important;
+}
+
+.folders .dijitOpen .dijitTitlePaneTextNode,
+.folders .dijitClosed .dijitTitlePaneTextNode {
+	/*color: #008 !important;	*/
+	/*font-size: 16px !important;*/
+	/*font-family: Verdana;*/
+	/*font-weight: bolder !important;*/
+}
+
+.folders .dijitTitlePaneContentInner {
+	padding:0.05em;
+	margin : 0px;
+}
+
+.folders .dijitTitlePaneTitle .dijitOpen .dijitTitlePaneTextNode {
+	/*color: #F00 !important;*/
+	color: #0F0 !important;
+}
+.folders .dijitTitlePaneFocused .dijitTitlePaneTextNode {
+	text-decoration:none;
+	
+}
+.folders .filesTitlePane .dijitTitlePaneTextNode {
+	vertical-align: top !important;
+	color: #008 !important;	
+	font-size: 16px !important;
+	font-family: Verdana;
+	font-weight: bolder !important;
+	position: relative !important;
+	/*top: 5px !important;*/
+}
+
+
+	
+.folders .filesTitlePane .dijitTitlePaneTitle {
+	background-color: #FFFFDD !important;
+	border:1px solid #bfbfbf;
+	padding:3px 4px;
+	cursor: pointer;
+	font-size: 0.9em;
+	font-weight: bold;
+	color: #6d6d6d;
+}
+
+
+/* TITLE PANE ARROWS */
+.folders .filesTitlePane .dijitClosed .dijitArrowNode {
+	background: url(images/spriteRoundedIconsSmall.png) no-repeat -30px top;
+}
+.dj_ie6 .folders .filesTitlePane .dijitClosed .dijitArrowNode {
+	background:url(images/spriteRoundedIconsSmall.gif) no-repeat -30px top;
+}
+.folders .filesTitlePane .dijitOpen .dijitArrowNode {
+	background:url(images/spriteRoundedIconsSmall.png) no-repeat -15px top;
+}
+.dj_ie6 .folders .filesTitlePane .dijitOpen .dijitArrowNode {
+	background:url(images/spriteRoundedIconsSmall.gif) no-repeat -15px top;
+}
+.folders .filesTitlePane .dijitArrowNodeInner {
+	display:none;
+}
+.dijit_a11y .filesTitlePane .dijitArrowNodeInner {
+	display:inline !important;
+	font-family:monospace;
+	cursor: pointer;
+	padding-bottom:.2em;
+}
+
+.dijit_a11y .filesTitlePane .dijitArrowNode {
+	display:none;
+}
+
+.soria .dijitTitlePaneContentOuter {
+	background: #ffffff;
+	border:1px solid #bfbfbf;
+	border-top: 0px solid #3d3d3d;	/* w/out this, an <h1> on the top line causes a gap between the .content and .label */
+}
+.soria .dijitTitlePaneContentInner {
+	padding:10px;
+}
+/* force hasLayout to ensure borders etc, show up */
+.dj_ie6 .soria .dijitTitlePaneContentOuter,
+.dj_ie6 .soria .filesTitlePane .dijitTitlePaneTitle {
+	/*zoom: 1;*/
+}
+
+.soria .dijitTitlePaneTextNode {
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+
+/* REMOVE PADDING INSIDE TITLE PANE */
+.folders .dijitTitlePaneContentInner {
+	/*padding: 0px !important; */
+    padding-right: 30px !important;
+}
+
+/* STYLE FOR OUTER TITLE PANE */
+.folders .filesTitlePane .dijitTitlePaneTitle {
+	-moz-user-select: none;
+	/*height: 20px !important;*/
+	background-color: #88F !important;
+	border:1px solid #bfbfbf;
+	padding:3px 4px;
+	cursor: pointer;
+	font-size: 0.9em;
+	font-weight: bold;
+	color: #FFF !important;
+	outline: none !important;
+	min-width: 180px;
+}
+
+/* DIFFERENT STYLE FOR INNER TITLE PANE */
+.folders .directories .filesTitlePane .dijitTitlePaneTitle {
+	/*background-color: #88f !important;*/
+	background-color: #DDF !important;
+    width: 110% !important;
+}
+
+.folders .filesTitlePane .dijitTitlePaneTitle table,
+.folders .filesTitlePane .dijitTitlePaneTitle tr,
+.folders .filesTitlePane .dijitTitlePaneTitle td {
+	height: 20px !important;
+	padding-right: 10px !important;
+	display: inline-block !important;
+}
+
+.folders .filestitlepane .dijittitlepanetitle table {
+	width: auto !important;
+	position: relative !important;
+	min-width: 300px !important;
+	left: 0px;
+	top: 0px;    
+}
+
+.folders .filesTitlePane .dijitTitlePaneTitle .location {
+   -moz-user-select: normal !important;
+}
+
+/* EXPAND-FOLD ARROW */
+.folders .dijitArrowNode {
+	/*width: 26px !important;*/
+	/*height: 26px !important;*/
+}
+
+.folders .filesArrowNode,
+.folders .largeFilesArrowNode,
+.folders .largerFilesArrowNode {
+	width: 24px !important;
+	height: 24px !important;
+	background-image: url(../../../../plugins/files/images/expand-14.png);
+	background-repeat: no-repeat !important;	
+	background-position: center !important;
+
+	border-radius: 4pt;
+	border-radius-bottomright: 4pt;
+	border-radius: 4pt;
+	border-radius-topright: 4pt;
+
+	border: 2px solid;
+	border-color: transparent !important;
+	vertical-align: middle !important;
+	position: relative !important;
+	top: -4px !important;
+}
+
+.folders .largeFilesArrowNode {
+	background-image: url(../../../../plugins/files/images/expand-18.png);
+}
+
+.folders .largerFilesArrowNode {
+	background-image: url(../../../../plugins/files/images/expand-22.png);
+}
+
+.folders .filesArrowNode:hover {
+	background-color: #FFF;
+	border: 2px solid #EEE;
+	border-bottom-color: #DDD;	
+	border-left-color: #DDD;	
+	vertical-align: middle;
+}
+
+.folders .dijitOpen .filesArrowNode {
+	background-image: url(../../../../plugins/files/images/fold-14.png);
+}
+
+.folders .dijitOpen .largeFilesArrowNode {
+	background-image: url(../../../../plugins/files/images/fold-18.png);
+}
+
+.folders .dijitOpen .largerFilesArrowNode {
+	background-image: url(../../../../plugins/files/images/fold-22.png);
+}
+
+.folders .dijitClosed .filesArrowNode {
+	background-image: url(../../../../plugins/files/images/expand-14.png);
+}
+
+.folders .dijitClosed .largeFilesArrowNode {
+	background-image: url(../../../../plugins/files/images/expand-18.png);
+}
+
+.folders .dijitClosed .largerFilesArrowNode {
+	background-image: url(../../../../plugins/files/images/expand-22.png);
+}
+
+/* TITLE PANE TITLE */
+.folders .dijitTitlePaneTitle * {
+	/*vertical-align: bottom !important;*/
+}
+
+.folders .header,
+.folders .largeHeader,
+.folders .largerHeader {
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	border-radius: 4pt;
+	border-radius-bottomright: 4pt;
+	border-radius: 4pt;
+	border-radius-topright: 4pt;
+
+	/* AVOID WEIRD MARGINS IN TABLE */
+	display: inline-block !important;
+	/*min-width: 600px !important;*/
+	height: 20px !important;
+
+	vertical-align: top !important;
+	background:#FFFFFF none repeat scroll 0 0;
+	border: 1px solid #CCCCCC;
+	border-color: #333;
+
+	font-family: Verdana;
+	text-align: left !important;
+	font-size: 14px;
+	/*margin-top: 2px;*/
+	text-indent: 5px;
+	
+	overflow: hidden !important;
+	/*padding: 5px !important;*/
+	
+;
+	margin-left:  10px !important;
+}
+
+.folders .largeHeader {
+	font-size: 18px;	
+}
+.folders .largerHeader {
+	font-size: 18px;	
+}
+
+.folders .header .owner,
+.folders .largeHeader .owner,
+.folders .largerHeader .owner {
+	text-align: left;
+	color: darkred;
+	padding-left: 10px;
+	width: 80px !important;
+	font-family: Verdana;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:4pt;
+	border-radius:4pt;
+}
+.folders .header .name,
+.folders .largeHeader .name,
+.folders .largerHeader .name {
+	width: auto !important;
+	color: darkblue;
+	padding-right: 5px !important;
+	padding-left: 5px !important;
+}
+
+.folders .header .type,
+.folders .largeHeader .type,
+.folders .largerHeader .type {
+	color: darkgreen;
+}
+
+.folders .header .description,
+.folders .largeHeader .description,
+.folders .largerHeader .description {
+	color: darkgreen;
+}
+
+/* FILE PANE */
+
+/* REFRESH */
+.folders .refreshTitlePane {
+	border-radius: 4pt;
+	border-radius-bottomright: 4pt;
+	border-radius: 4pt;
+	border-radius-topright: 4pt;
+	display: inline !important;
+	border: 1px solid;
+	border-color: transparent !important;
+	vertical-align: middle;
+	background-position: center;
+	background-repeat: no-repeat;
+	width: 24px !important;
+	height: 24px !important;
+	background-image: url(../../../../plugins/files/images/refresh-14.png);
+	z-index: 9999;
+	position: relative !important;
+	top: -4px !important;
+}
+.folders .largeRefreshTitlePane {
+	background-image: url(../../../../plugins/files/images/refresh-18.png);
+}
+.folders .largerRefreshTitlePane {
+	background-image: url(../../../../plugins/files/images/refresh-22.png);
+}
+
+
+/* REFRESH */
+.folders .refreshTitlePane:hover {
+	background-color: #FFF;
+	/*background-color: transparent !important;*/
+	border: 1px solid #EEE;
+	border-bottom-color: #DDD;	
+	border-left-color: #DDD;	
+	vertical-align: middle;
+}
+
+
+/* DIRECTORY TITLE PANES - DIFFERENT COLOR FROM MAIN TITLE PANES */
+.folders .dijitTitlePaneTitle,
+.folders .dijitTitlePaneTitleHover,
+.folders .dijitTitlePaneTitleActive {
+	background-image: url() !important;
+}
+.folders .directories .dijitTitlePaneFocused .dijitTitlePaneTextNode {
+	color: #000 !important;
+}
+.folders .directories .dijitTitlePane .dijitTitlePaneTitle {
+	color: #FFF !important;
+	background-color: #88F !important;
+	font-weight: bolder !important;
+}
+.folders .directories .dijitTitlePaneTextNode,
+.folders .directories .dijitTitlePaneFocused .dijitTitlePaneTextNode {
+	color: inherit !important;
+	background-color: inherit !important;
+	font-weight: bolder !important;
+}
+
+/* BLUE ON ANCHOR */
+.folders .dojoDndItemAnchor {
+	background-color: #3AD !important;
+	color: #FFF !important;
+	font-weight: bold;
+}
+
+/* GREEN ON HOVER */
+.folders .directories .dijitTitlePane .dijitTitlePaneTitle:hover {
+	background-color: #8F8 !important;
+	color: #000 !important;
+}
+
+/* WHITE-ON-BLACK ON SELECTED */
+.folders .dojoDndItemSelected {
+	font-weight: bold;
+	background-color: #BDF !important;
+}
+
+.folders .directories .dijitTitlePane .dijitTitlePaneTitle .dijitTitlePaneTextNode:hover {
+	background-color: inherit !important;
+}
+
+

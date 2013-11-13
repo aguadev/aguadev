@@ -1,0 +1,24 @@
+<div dojoAttachPoint="containerNode">
+
+<div
+    dojoAttachPoint="menu"
+    class="workflowselectormenu"
+    dojoType="plugins.menu.Menu">
+
+    <div dojoType="dijit.MenuItem"
+        label="File Options"
+        dojoAttachPoint="titleNode"
+        class="title"
+        disabled="false">
+    </div>
+
+    <div
+        dojoAttachPoint="newFolderNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:newFolder"
+        class="newFolder"
+        >
+        <U>N</U>ew Folder
+    </div>
+
+</div>

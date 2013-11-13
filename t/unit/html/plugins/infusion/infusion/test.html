@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+		"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+	<style type="text/css">
+		/* DOJO STYLES */
+		@import "../../../../dojo/dojo/resources/dojo.css";
+		@import "../../../../dojo/dijit/themes/dijit.css";
+		@import "../../../../dojo/dijit/themes/claro/claro.css";
+		@import "../../../../dojo/dijit/tests/layout/css/dijitTests.css";
+	</style>
+
+	<!-- LESS -->
+	<link rel="stylesheet/less" type="text/css" href="../../../../plugins/infusion/css/infusion.less">
+	<script src="../../../../plugins/infusion/css/less.js" type="text/javascript"></script>
+
+	<link rel="stylesheet/less" type="text/css" href="../../../../plugins/infusion/css/infusion.css">
+
+	<script type="text/javascript" src="../../../../plugins/infusion/Infusion.js"></script>
+	
+	<title>Infusion</title>
+
+
+	<style>
+
+<style type="text/css">
+	.agua .controls {
+		margin-top : 20px;
+	}
+</style>
+
+<title> t.plugins.infusion.infusion.test</title>
+
+<script type="text/javascript">
+
+// GLOBAL VARIABLES
+var Agua = {};
+var Data = {};
+var dojoConfig = {
+	isDebug: true,
+	locale: "en-us",
+	packages: [
+		{
+		  name: "plugins",
+		  location: "../../plugins"
+		},
+		{
+		  name: "t",
+		  location: "../../t"
+		},
+		{
+		  name: "doh",
+		  location: "../../dojo/util/doh"
+		}
+	],
+	debugAtAllCosts: true,
+	useCommentedJson: true
+};
+
+</script>
+<script type="text/javascript"
+	src="../../../../dojo/dojo/dojo.js">
+</script>
+
+<script type="text/javascript">
+	dojo.require("dijit.layout.TabContainer");
+</script>
+
+<script type="text/javascript" src="./runTests.js"></script>
+
+</head>
+<body class="claro">
+	
+<center>
+	<h3>t.unit.plugins.infusion.infusion.test</h3>
+</center>
+
+<!--	<div class="infusion"
+		data-dojo-type="dijit.layout.TabContainer"
+		class="tabs"
+		id="attachPoint"
+	>
+	</div>
+-->
+		<div
+			id="attachPoint"
+			dojoAttachPoint="tabs"
+			dojoType="dijit.layout.TabContainer"
+			class="tabs"
+			useSlider="false"
+			tabPosition="top"
+			tabStrip="false"
+			style="position: relative; top: 0px; left: 0px; height: 100% !important; min-height: 850px !important; width: 800px !important; min-width: 100% !important; right: auto; bottom: auto;"
+		>
+		</div>
+
+</body>
+</html>

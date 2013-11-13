@@ -1,0 +1,329 @@
+/* SET BACKGROUND COLOR AND FONT */
+.clusterstatus .clusterstatus {
+	font-family: Verdana;
+	background-color: #FFF;
+}
+
+/* CONTROL PADDING INSIDE THE TITLE PANES */
+.clusterstatus .dijitTitlePaneContentInner {
+	padding: 0px;
+}
+
+.clusterstatus .dijitContentPane {
+	width: auto !important;
+	padding : 0 !important;
+	margin: 0 0 0 !important;
+}
+
+.clusterstatus .dijitTitlePaneContentOuter {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	background:#FFFFFF none repeat scroll 0 0;
+	border-color:#FFF;
+	/*border-style:solid;*/
+	border-width:2px;
+	padding : 0 !important;
+	margin: 0 0 0 !important;
+}
+
+/* SET TAB PANE WRAPPER MIN HEIGHT SO ALL TITLE PANES ARE VISIBLE */
+.dijitTabPaneWrapper .dijitTabContainerTop-container .clusterstatus {
+	height: auto !important;
+	min-height: 120px !important;
+	width: auto !important;
+}
+
+/* TITLE PANE TITLE */
+.clusterstatus .status {
+	/*min-height: 20px !important;*/
+}
+
+/* TITLE PANE TITLE */
+.clusterstatus .dijitTitlePaneTextNode {
+	color: #484 !important;
+	font-weight: bolder;
+	font-size: 16px;
+}
+
+.clusterstatus .dijitTitlePaneTitle, .clusterstatus .dijitTitlePaneTitle .dijitClosed {
+	min-height: 20px !important;	
+}
+
+/* STATUS ROWS CONTAINER */
+.clusterstatus {
+	/*min-height: 40px !important;	*/
+	height: auto !important;
+	font-family: Verdana;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border: 2px solid #CCCCCC;
+	cursor: default;
+	width: auto !important;	
+	text-align: left !important;
+	font-size: 12px;
+	border-color: #333;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	/*display: block !important;*/
+	overflow:auto !important;
+}
+
+/* CLUSTER NAME */
+.clusterHeading,
+.clusterText {
+	position: relative !important;
+	height: 32px;
+	font-size: 20px;
+	top: 7px;
+}
+.clusterHeading {
+	color:	#888;
+	font-weight: 100;
+	width: 75px !important;
+	float: left;
+	text-align: right;
+}
+
+.clusterText {
+	color: #000;
+	font-weight: 400;
+	min-width: 150px !important;
+	text-indent: 5px;
+	float: left;
+	text-align: left;
+}
+
+/* ALL BUTTONS */
+.clusterstatus .play,
+.clusterstatus .pause,
+.clusterstatus .stop,
+.clusterstatus .pollingStopped,
+.clusterstatus .pollingStarted {
+	position: relative !important;
+	top: 0px !important;
+	left: 0px !important;
+	text-align: left !important;
+
+	background-color: #FFF;
+	border: 2px solid #EEE;
+	border-bottom-color: #DDD;	
+	border-left-color: #DDD;	
+	vertical-align: middle;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-image: url();
+	width: 32px !important;
+	height: 20px;
+	padding-top: 15px !important;
+	color: #888 !important;
+	font-size: 10px !important;
+	float: left;
+}
+
+.clusterstatus .play:hover,
+.clusterstatus .pause:hover,
+.clusterstatus .stop:hover,
+.clusterstatus .pollingStopped:hover {
+	background-color: #FF0 !important;
+}
+
+.clusterstatus .play:active,
+.clusterstatus .pause:active,
+.clusterstatus .stop:active,
+.clusterstatus .pollingStopped:active {
+	background-color: #0F0;
+}
+
+/* TOGGLE TIMER */
+.clusterstatus .pollingStopped {
+	background-image: url(../../../../../plugins/workflow/images/ready-36.png);
+}
+.clusterstatus .pollingStarted {
+	background-image: url(../../../../../plugins/workflow/images/spinner-36.gif);
+}
+
+/* PLAY, PAUSE AND STOP */
+.clusterstatus .play {
+	background-image: url(../../../../../plugins/workflow/images/play-28.png);	
+}
+.clusterstatus .pause {
+	background-image: url(../../../../../plugins/workflow/images/pause-28.png);	
+}
+.clusterstatus .stop {
+	background-image: url(../../../../../plugins/workflow/images/stop-28.png);	
+}
+.clusterstatus .play:hover {
+	background-image: url(../../../../../plugins/workflow/images/play-wide-green-28.png);	
+}
+.clusterstatus .pause:hover {
+	background-image: url(../../../../../plugins/workflow/images/pause-orange-28.png);	
+}
+.clusterstatus .stop:hover {
+	background-image: url(../../../../../plugins/workflow/images/stop-red-28.png);	
+}
+
+
+/* STAGE STATUS */
+.clusterstatus .stageTable,
+.clusterstatus .stageTable tr {
+	position: relative;
+	min-width: 458px !important;
+	width: 20% !important;
+	background-color: #CCC;
+}
+
+.clusterstatus .stageTable .completed,
+.clusterstatus .stageTable .completed .stageRow .key,
+.clusterstatus .stageTable .completed .stageRow .completedIcon {
+	background-color :  #CFC !important;
+	color: #222 !important;
+    /*font-family: Arial !important;*/
+    /*font-size: 14px !important;*/
+    font-weight: bold !important;
+}
+
+.clusterstatus .stageTable .running,
+.clusterstatus .stageTable .running .stageRow .key,
+.clusterstatus .stageTable .running .stageRow .runningIcon {
+	background-color : #FFC !important;
+	color: darkred !important;
+	font-weight: bolder !important;
+}
+
+.clusterstatus .stageRow {
+	text-align: center !important;
+	vertical-align: middle !important;
+	text-align: center !important;
+	font-size: 16px !important;
+	background-color: #FFF !important;
+	border-collapse: collapse !important;
+}
+
+.clusterstatus .stageRow .Icon,
+.clusterstatus .stageRow .completedIcon,
+.clusterstatus .stageRow .runningIcon,
+.clusterstatus .stageRow .errorIcon,
+.clusterstatus .stageRow .stoppedIcon {
+	background-color: #EEE !important;
+	font-size: 20px !important;
+	color: #000 !important;
+	text-align: center !important;
+	text-indent: 10px !important;
+    width: 40px !important;
+	background-repeat: no-repeat;
+	background-position: 0.3em 0.09em !important;
+}
+
+.clusterstatus .stageRow .Icon {
+	background-image: url(../../../../../plugins/workflow/images/workflow-20.png) !important;
+}
+
+.clusterstatus .stageRow .completedIcon {
+	background-image: url(../../../../../plugins/workflow/images/workflow-completed-20.png) !important;
+}
+
+.clusterstatus .stageRow .runningIcon {
+	background-image: url(../../../../../plugins/workflow/images/workflow-running-20.gif) !important;
+}
+
+.clusterstatus .stageRow .errorIcon {
+	background-image: url(../../../../../plugins/workflow/images/warning.png) !important;
+}
+
+.clusterstatus .stageRow .stoppedIcon {
+	background-image: url(../../../../../plugins/workflow/images/stopped-20.png) !important;
+}
+
+.clusterstatus .stageRow .key {
+	width: 60px !important;
+	font-weight: bolder !important;	
+	color: #000 !important;
+	background-color: #EEE;
+}
+
+.clusterstatus .stageRow .name {
+	min-width: 220px !important;
+	font-size: 20px !important;
+	color: #000 !important;
+	-moz-user-select: text !important;
+}
+
+.clusterstatus .stageRow .value {
+	background-color: #FFF !important;
+	color: #222;
+	min-width: 220px !important;
+	font-weight: bold;	
+}
+
+.clusterstatus .stageRow .stdout,
+.clusterstatus .stageRow .stderr {
+	text-align: left !important;
+	text-indent: 10px !important;
+	width: 385px !important;
+	font-size: 10px !important;
+	color: blue !important;
+}
+.clusterstatus .stageRow .stdout:hover,
+.clusterstatus .stageRow .stderr:hover {
+	color: #FF0 !important;
+}
+.clusterstatus .stageRow .stdout:active,
+.clusterstatus .stageRow .stderr:active {
+	color: #FF0 !important;
+}
+
+.clusterstatus .stageRow .subkey {
+	width: 60px !important;
+	font-weight: bolder !important;	
+	color: #000 !important;
+	background-color: #EEE !important;	
+}
+
+.clusterstatus .stageRow .spacer {
+	background-color: #EEE !important;
+	width: 2px !important;
+}
+
+/* CLUSTER STATUS AND QUEUE STATUS */
+.clusterstatus .clusterStatus pre,
+.clusterstatus .balancerStatus pre,
+.clusterstatus .queueStatus pre {
+	font-size: 14px !important;
+	height: auto !important;
+	max-height: auto !important;
+	font-weight: bolder !important;
+	font-family: monospace !important;
+	white-space: pre !important;
+	background-color: black !important;
+	border-top: 1px solid black !important;
+	color: white !important;
+	margin: 0px !important;
+	padding: 4px !important;
+	display: block !important;
+}
+.clusterstatus .clusterStatusContainer {
+	height: auto !important;
+}
+
+.clusterstatus .clusterStatus pre:hover,
+.clusterstatus .balancerStatus pre:hover,
+.clusterstatus .queueStatus pre:hover {
+	background-color: #080 !important;
+	font-weight: bold !important;
+	color: white !important;
+	cursor: pointer !important;
+}
+.clusterstatus .clusterStatus pre:active,
+.clusterstatus .balancerStatus pre:active,
+.clusterstatus .queueStatus pre:active {
+	background-color: #888 !important;
+	font-weight: bold !important;
+	color: white !important;
+	cursor: pointer !important;
+}
+
+

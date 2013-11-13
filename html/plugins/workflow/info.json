@@ -1,0 +1,14 @@
+{
+	name: "plugins.workflow.Controller",
+
+	version : "0.01",
+	
+	url : '',
+	
+	description : "workflow plugin",
+		
+	dependencies :
+	[
+		{	name: "plugins.core.Agua", version: 0.01	}
+	]
+}

@@ -1,0 +1,46 @@
+
+h3. APPLICATION
+
+flow
+
+h3. PURPOSE
+
+Manage workflow files and run workflows
+
+h3. USAGE
+
+{code}
+./flow.pl mode [switch] [args] [--help]
+
+mode     :    Type of workflow object (work|app|param) switch   :
+       Nested object (e.g., work app, app param) args     :    Arguments for
+       the selected mode --help   :    print help info
+{code}
+
+h3. EXAMPLES
+
+# create workflow
+
+perl flow.pl work create --wkfile /workflows/workflowOne.wk --name
+       workflowOne
+
+# create application from command file
+
+perl flow.pl app loadCmd --cmdfile /workflows/applicationOne.cmd
+ --appfile /workflows/applicationOne.app --name applicationOne
+
+# add application to workflow
+
+perl flow.pl work addApp --wkfile /workflows/workflowOne.wk --appfile
+       /workflows/applicationOne.app --name applicationOne
+
+# run single application
+
+perl flow.pl work app run --wkfile /workflows/workflowOne.wk --name
+       applicationOne
+
+# run all applications in workflow
+
+perl flow.pl work run --wkfile /workflows/workflowOne.wk
+
+

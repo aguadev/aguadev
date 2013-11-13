@@ -1,0 +1,9 @@
+FCID,Lane,SampleID,SampleRef,Index,Description,Control,Recipe,Operator,SampleProject
+C1NGRACXX,1,mickey_mouse,NCBI37,,,N,NA,NA,project_demo2
+C1NGRACXX,2,mickey_mouse,NCBI37,,,N,NA,NA,project_demo2
+C1NGRACXX,3,mickey_mouse,NCBI37,,,N,NA,NA,project_demo2
+C1NGRACXX,4,peppa_pig,NCBI37,,,N,NA,NA,project_demo1
+C1NGRACXX,5,peppa_pig,NCBI37,,,N,NA,NA,project_demo1
+C1NGRACXX,6,peppa_pig,NCBI37,,,N,NA,NA,project_demo1
+C1NGRACXX,7,cinderella,NCBI37,,,N,NA,NA,project_demo1
+C1NGRACXX,8,cinderella,NCBI37,,,N,NA,NA,project_demo1

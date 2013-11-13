@@ -1,0 +1,52 @@
+/* ***NECESSARY*** */
+/* TO ENSURE THAT GRID HEIGHT AUTO-SIZES, I.E., ONLY TO ITS MINIMUM NECESSARY HEIGHT */
+.infusion .detailed .dgrid-content {
+    height: auto !important;
+    width: 100% !important;
+}
+.infusion .detailed .dgrid {
+    height: auto !important;
+}
+.infusion .detailed .dgrid .dgrid-scroller {
+    position: relative;
+    overflow: visible;
+}
+/* ***NECESSARY*** */
+
+
+/* HIDDEN detailed */
+.infusion .detailed .hidden {
+    display: none;
+    visibility: invisible;
+}
+
+/* TITLEPANE TITLE COLOURS */
+.infusion .detailed .dijitTitlePaneTextNode {
+    color: darkred;
+    font-weight: bold;    
+}
+
+/* CENTERED TEXT */
+.infusion .detailed .dgrid-cell {
+    text-align: center !important;
+}
+/* TEXT STYLE */
+.infusion .detailed .dgrid-header .dgrid-cell {
+    background-color: #DEF;
+    font-weight: bold;
+}
+
+/* ALL PANES FLUSH WITH LEFT */
+.infusion .lane,
+.infusion .flowcell,
+.infusion .project,
+.infusion .sample {
+    position: relative;
+    left: -8px !important;
+    height: auto !important;
+}
+
+/* HOVER */
+.infusion .dgrid .dgrid-row:hover {
+    background-color: #9DF;   
+}

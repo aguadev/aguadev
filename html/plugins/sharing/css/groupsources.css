@@ -1,0 +1,169 @@
+
+/* GENERAL sources STYLES */
+.sharing .groupsources .tabTitle {
+	background-color: #264eea;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 20px;
+	font-stretch: expanded;
+	font-weight: bold;
+	color: #FFF;
+}
+.sharing .groupsources .comboLabel {
+	/*text-align:	center;*/
+	font-weight: bolder;
+	font-size: 18px;
+	font-family: Verdana;
+	font-size: 14px;
+	font-style: oblique;
+	height: 20px;
+	vertical-align: bottom !important;
+	background: #EEE;
+}
+
+/* GROUP COMBO */
+.sharing .groupsources .groupCombo,
+.sharing .groupsources .dijitMenu li,
+.sharing .groupsources .dijitMenuItem li
+{
+	text-indent: 10px;
+}
+
+.sharing .groupsources .groupCombo {
+	text-indent: 10px;
+	height: auto;
+	width: 150px;
+	color: #000;
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* NOTE: THIS IS NECESSARY FOR THE NEXT RULE TO WORK!!! */
+.sharing .groupsources .groupCombo .dijitReset .dijitMenu li,
+.sharing .groupsources .groupCombo .dijitReset .dijitMenuItem li
+{
+	/*color: #0FF !important;*/
+}
+.sharing .groupsources .dijitMenu li,
+.sharing .groupsources .dijitMenuItem li
+{
+	color: #224 !important;
+	height: 25px;
+}
+
+.sharing .groupsources .dragSource
+{
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	
+	border-radius:8pt;
+
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+
+	/*margin-top: 5px;*/
+	width: 120px;	
+	height: 260px;
+	min-height: 100px;
+	
+	text-align: left;
+	/*color: #339;*/
+	/*color: darkred;*/
+	/*font-weight: bold;*/
+	font-family: Verdana;
+	font-size: 12px;
+	border-color: #333;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	overflow:auto !important;
+}
+
+.sharing .groupsources .dragSource .name,
+.sharing .groupsources .dropTarget .name {
+	font-size: 14px;
+	font-weight: 900;
+	background-image: url(../../../plugins/sharing/images/source-18.png);
+	text-indent: 22px;
+	background-repeat: no-repeat;
+	height: 18px;
+}
+
+.sharing .groupsources .dragSource .name {
+	color: darkred;
+}
+
+.sharing .groupsources .dropTarget .name {
+	color: darkgreen;
+}
+
+.sharing .groupsources .dragSource .description {
+	font-size: 12px;
+}
+
+.sharing .groupsources .dropTarget {
+
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	
+	border-radius:8pt;
+	
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+
+	text-align: left;
+	font-size: 14px;
+	font-family: Verdana;
+
+	width: 160px;
+	height: 350px;
+	min-height: 100px;
+
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	overflow:auto !important;
+}
+
+.sharing .groupsources .dropTarget .description {
+	font-size: 12px;
+}
+
+
+.sharing .groupsources .trash{
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	
+	border-radius:8pt;
+
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+
+	margin-top: 5px;
+	width: 150px;	
+	height: 60px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+
+.sharing .groupsources .trashIcon {
+	height: 100%;
+	width: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	
+	background-image: url(../../../plugins/sharing/images/trash-60.png);
+	background-repeat: no-repeat;	
+}

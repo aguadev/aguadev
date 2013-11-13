@@ -1,0 +1,256 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<head>
+    <title> dialog prog 2: submit ok </title>
+
+
+	<!-- required: a default theme file -->
+	<link rel="stylesheet" id="themeStyles" href="dojo.1.2.2/dijit/themes/tundra/tundra.css">
+	
+	<!--<link rel="stylesheet" href="../css/Dialog.css">-->
+	<link rel="stylesheet" href="dojo.1.2.2/dojox/widget/Dialog/Dialog.css">
+
+	
+	<style type="text/css">
+		@import "dojo.1.2.2/dojo/resources/dojo.css";
+		@import "dojo.1.2.2/dijit/tests/css/dijitTests.css";
+		
+		.loginTable {
+			margin-left: 20px;
+			position: relative;
+			top: 30%;
+			text-align: center;
+			vertical-align: center;			
+		}
+		
+		.centered {
+			/*margin-top: 35%;*/
+			/*margin-bottom: 35%;*/
+			/*vertical-align: center;*/
+			/*margin: 0 auto;*/
+			text-align: center;
+			/*color: #FF0000;*/
+		}
+		
+		.loginButton, .loginButtonError {
+			/*width:	30%;*/
+			/*margin-left: 35%;*/
+			/*margin-right: 35%;*/
+			/*text-align: center;*/
+			color: #88CC88;
+			font-weight: bolder;
+			font-size: 20px;
+		}
+
+		.loginButtonError {
+			color: #FF0000;
+		}
+
+		/* this is how you style underlays */	
+		#thirdTest_underlay { background-color: #000 }
+		#fourthTest_underlay,
+		#secondTest_underlay { background-color: #369 }
+
+	</style>		
+
+	<!-- required: dojo.js -->
+
+<script type="text/javascript" src="dojo.1.2.2/dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
+
+	<!-- do not use! only for testing dynamic themes -->
+	<script type="text/javascript" src="dojo.1.2.2/dijit/tests/_testCommon.js"></script>
+
+<script type="text/javascript">
+
+
+    dojo.require("dojox.widget.Dialog");
+    dojo.require("dojo.fx.easing");
+    dojo.require("dijit.form.Button");
+    dojo.require("dijit.form.TextBox");
+	dojo.require("dojo.cookie");
+
+
+function login (e, username, password)
+{
+    //console.log("++++ login(e, username, password)");
+	//console.log("e.target: " + e.target);
+
+	var username = dijit.byId("username").value;
+	var password = dijit.byId("password").value;
+	console.log("username: " + username);
+	console.log("password: " + password);
+    
+	console.log("url:" +  '../../cgi-bin/Bioptic2/admin.cgi?mode=login&username=' + username + '&password=' + password);
+
+    dojo.cookie("sessionId", null); 
+	
+    dojo.xhrGet({
+        //url: 'http://zion.ccs.miami.edu/cgi-bin/Bioptic/admin.cgi?mode=login&username=' + username + '&password=' + password,
+        url: '../../cgi-bin/Bioptic2/admin.cgi?mode=login&username=' + username + '&password=' + password,
+        handleAs: 'text',
+        sync: true,
+        load: function(sessionId){
+            console.log("sessionId: " + sessionId);
+			if ( sessionId != null && sessionId != '' ){
+				//by default, the cookie will expire at the  end of the session
+				dojo.cookie("sessionId", sessionId); 
+			}
+        }
+    });
+
+    //console.log("sessionId: " + sessionId);
+    console.log("dojo.cookie('sessionId'): " + dojo.cookie('sessionId'));
+    
+
+	if ( dojo.cookie("sessionId") === "null" ) //&& dojo.cookie("sessionId") != '' ) //!= null || dojo.cookie("sessionId") == '' )
+	{
+        console.log("dojo.cookie('sessionId') === null");
+		var loginButton = dijit.byId("loginButton");
+		loginButton.domNode.setAttribute("class", "loginButtonError");
+	}
+	else
+	{
+        console.log("NOT dojo.cookie('sessionId') === null");
+		//console.log("sessionId generated");
+	    //console.log("dojo.cookie('sessionId'): " + dojo.cookie('sessionId'));    	
+		var loginButton = dijit.byId("loginButton");
+        console.log("Changing label to 'Accepted'");
+		loginButton.setLabel("Accepted");
+		var dialogue = dijit.byId("loginDialogue");
+		loginButton.domNode.setAttribute("class", "loginButton");
+        console.log("doing fadeOut");
+        dojo.fadeOut({ node: "loginDialogue", duration: 700 }).play();
+        console.log("completed fadeOut");
+		/*dialogue.destroy();*/
+	}
+
+
+
+}
+
+
+dojo.addOnLoad(function(){
+
+    var table = document.createElement("table");
+
+        var tr1 = document.createElement("tr");
+
+            // USER NAME LABEL
+            //td1.width="30%";
+            var td1 = document.createElement("td");
+            var text1 = document.createTextNode("User name");
+            console.log("text1: " + text1);
+            td1.appendChild(text1);
+            tr1.appendChild(td1);
+
+            
+            // USER NAME INPUT
+            var td2 = document.createElement("td");
+            var input1 = new dijit.form.TextBox( { id: "username", value: "admin" } );
+			//input1.id = "username";
+			console.log("input1.id: " + input1.id);
+            td2.appendChild(input1.domNode);
+
+		tr1.appendChild(td2);
+        var tr2 = document.createElement("tr");
+            
+            // PASSWORD LABEL
+            //td1.width="30%";
+            var td3 = document.createElement("td");
+            var text2 = document.createTextNode("Password");
+            td3.appendChild(text2);
+            tr2.appendChild(td3);
+            
+            // PASSWORD INPUT
+            var td4 = document.createElement("td");
+            var input2 = new dijit.form.TextBox( { id: "password" } );
+			//input2.id = "password";
+            td4.appendChild(input2.domNode);
+
+		tr2.appendChild(td4);
+        var tr3 = document.createElement("tr");
+
+            // LOGIN BUTTON
+            var loginButton = new dijit.form.Button( {id: "loginButton"} ); //forget to delete
+            loginButton.setLabel("Login");
+			loginButton.domNode.setAttribute("class", "loginButton");
+
+            loginButton.onClick = function(e)    {   login(e); }
+
+            var td5 = document.createElement("td");
+            td5.setAttribute("align", "center");
+            td5.setAttribute("colspan", 2);
+            td5.appendChild(loginButton.domNode);
+
+    
+		tr3.setAttribute("class", "centeredRow");
+	    tr3.appendChild(td5);
+
+    table.appendChild(tr1);
+    table.appendChild(tr2);
+    table.appendChild(tr3);
+
+    document.body.appendChild(table);
+
+	//dojo.parser.parse(table);
+
+    console.log("table: " + table);	
+	table.className = "loginTable";
+	console.log("table.className: " + table.className);
+	
+	//table.setAttribute('style', "margin-top: 100");
+	//console.log("table.getAttribute('style'): " + table.getAttribute('style'));
+	
+	//console.log("table.domNode: " + table.domNode);
+    //table.startup();
+    
+    
+
+    
+    // a programatic test:
+    var progDialog = new dojox.widget.Dialog ({
+		id: "loginDialogue",
+        dimensions: [300,300],
+        draggable: true,
+//        easing: dojo.fx.easing.elasticOut,
+        sizeDuration: 200,
+        sizeMethod:       "combine",
+		viewportPadding : "125",
+		showTitle: "true",
+		title: "Login window"
+		
+		
+    }, "progDialog" );
+
+	progDialog.attr("class", "centered");
+	console.log("progDialog.domNode.getAttribute('class'): " + progDialog.domNode.getAttribute("class"));
+    
+    // LATER: FIX THIS ERROR 'Error undefined running custom onLoad code'
+    progDialog.setContent(table);
+    progDialog.startup();
+    progDialog.show();
+
+
+    console.log("After startup dojo.cookie('sessionId'): " + dojo.cookie('sessionId'));    	
+	
+
+});
+
+
+</script>
+
+
+</head>
+<body class="tundra">
+
+<h3>  dialog prog 2: submit ok </h3>
+
+<h5>
+    Source:
+    <br>
+    http://localhost:8080/bioptic1/dojo.1.2.2/dojox/widget/tests/test_Dialog.html
+</h5>
+
+    <!-- Insert your content here -->
+</body>
+</html>

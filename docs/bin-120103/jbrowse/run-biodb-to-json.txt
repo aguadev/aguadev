@@ -1,0 +1,54 @@
+
+h3. APPLICATION
+
+run-biodb-to-json
+
+h3. PURPOSE
+
+WRAPPER TO RUN biodb-to-json.pl ON ONE GFF FILE
+
+AT A TIME TO SAVE ON MEMORY USAGE
+
+{code}
+(I.E., USEFUL WHEN USING THE db_adaptor='memory'
+
+OPTION IN THE .json CONFIG FILE.)
+
+h3. INPUT
+
+1. INPUT DIRECTORY CONTAINING GFF FILES
+
+2. PARENT DIRECTORY OF 'data' DIRECTORY (DESTINATION FOR OUTPUT FILES)
+
+3. JBROWSE .json CONFIGURATION FILE
+
+4. 'biodb-to-json.pl' EXECUTABLE
+
+h3. OUTPUT
+
+1. PROCESSED FILES FOUND IN DIRECTORY agua/data/seq AND agua/data/tracks
+
+h3. USAGE
+
+./run-biodb-to-json.pl
+                       <--executable String>
+                       <--inputdir String>
+                       <--outputdir String>
+                       <--jsonfile String>
+                       [--help]
+ --executable            :   Location of 'biodb-to-json.pl' executable
+ --inputdir                      :   Full path to input directory
+ --outputdir                     :   The 'data' directory will be created in this directory
+ --jsonfile                      :   Full path to .json configuration file
+ --help                  :   Print this help info
+{code}
+
+h3. EXAMPLES
+
+/data/agua/0.4/bin/apps/run-biodb-to-json.pl \ --executable
+       /var/www/html/jbrowse/bin/biodb-to-json.pl \ --inputdir
+       /nethome/syoung/base/pipeline/jbrowse1/ucsc/gff \ --outputdir
+       /nethome/syoung/base/pipeline/jbrowse1/ucsc/chr1 \ --jsonfile
+       /nethome/syoung/base/pipeline/jbrowse1/ucsc/ucsc-gff.json
+
+

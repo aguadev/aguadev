@@ -1,0 +1,40 @@
+{
+    name:           "fastqc",
+    version:        "0.9.3",
+    build:          "",
+    type:           "application",
+    source:         "url",
+    type:           "http",
+    keywords:       ["qc", "quality control", "sequence data", "fastq"],
+    description:    "A quality control tool for high throughput sequence data",
+    website :       "http://www.bioinformatics.bbsrc.ac.uk/projects/fastqc",
+    installtype:    "ops",
+    opsfile:        "https://api.github.com/repos/syoung/biorepository/fastqc/fastqc.ops",
+    parameterfile:  "https://api.github.com/repos/syoung/biorepository/fastqc/fastqc.params",
+    installfile:    "https://api.github.com/repos/syoung/biorepository/fastqc/fastqc.pm",
+    licensefile:    "https://api.github.com/repos/syoung/biorepository/fastqc/LICENSE",
+    readmefile:     "https://api.github.com/repos/syoung/biorepository/fastqc/README",
+    installparams: [
+        {
+            name:         "version",
+            argument:     "",
+            ordinal:      "",
+            description;  "software version (can be letters and numbers)",
+            default:      "0.9.3"
+        },
+        {
+            name:           "installdir",
+            argument:       "",
+            ordinal:        "",
+            description:    "Full path to install directory (final path: 'installdir/version'",
+            default:        "/usr/local/src/fastqc"
+        }
+    ],
+    installtype:    "ops",
+    author:         [],
+    publication:    [],
+    organisation:   [],
+    ISA:            {},
+    acknowledgements: [],
+    citations:      []
+}

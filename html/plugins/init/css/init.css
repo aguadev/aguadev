@@ -1,0 +1,320 @@
+/* MAIN TABLE */
+.init .mainTable {
+	background-color: black !important;
+	vertical-align: "top";
+	align: "center";
+	width: 100% !important;
+}
+/* LOGIN ICON */
+.init .aguaIcon {
+	width: 150px !important;
+    height: 50px !important;
+	/*background-image: url("../../../plugins/login/images/home-100.png");*/
+	background-image: url("../../../plugins/init/images/logo-final-agua-50x105.png");
+	/*background-image: url("../../../plugins/init/images/a-150.png");*/
+	background-repeat: no-repeat;
+    background-position: center !important;
+}
+
+.init .aguaIconBackground {	
+	background-color: black !important;
+}
+.init .title {
+	color: white !important;
+	font-size: 16px !important;
+    font-weight: bolder !important;
+    text-align: center !important;
+}
+
+/* INIT TABLE */
+.init .initTable {
+	width: 850px !important;	
+
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius: 14pt;
+
+	background:#FFFFFF none repeat scroll 0 0;
+	border: 1px solid #DDD;
+	cursor:default;
+	height: 260px;
+	min-height: 100px;
+	
+	text-align: left !important;
+	color: #333;
+	font-weight: bold;	
+	font-family: Verdana;
+	font-size: 18px;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	overflow:auto !important;
+}
+
+/* PROGRESS BUTTON AND SAVE BUTTON */
+.init .progressButton,
+.init .saveButton {
+	height: 50px !important;
+	width: 100% !important;
+	font-size: 30px !important;
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	border-radius: 8pt;
+	background: #DDF none repeat scroll 0 0;
+	height: 30px;
+	color: #222;	
+	border: 1pt solid #CCC;
+	font-weight: 900 !important;
+	-moz-user-select: none !important;
+	text-align: center !important;
+}
+.init .progressButton {
+	height: 26px !important;
+	font-size: 20px !important;
+	background: #CEC none repeat scroll 0 0;
+}
+.init .progressButton:hover {
+	color: #FFFFFF;
+	background-color: #8C8;
+}
+.init .progressButton:active {
+	color: #F8F;
+	background-color: #7777DD;
+}
+.init .progressButton.disabled,
+.init .progressButton.disabled:hover,
+.init .progressButton.disabled:active {
+	height: 26px !important;
+	font-size: 20px !important;
+	background: #888 none repeat scroll 0 0;
+	color: #BBB;
+	opacity: 0.7;
+}
+.init .saveButton:hover {
+	color: #FFFFFF !important;
+	background-color: #AAAAFF;
+}
+.init .saveButton:active {
+	color: #F8F !important;
+	background-color: #7777DD;
+}
+
+/* LABELS */
+.init .label {
+	text-align:	center !important;
+	font-weight: bolder;
+	font-size: 18px;
+	font-family: Verdana;
+	font-size: 14px;
+	font-style: oblique;
+	height: 20px;
+	vertical-align: bottom !important;
+	background: #EEE;
+}
+
+.init .sublabel {
+	font-size: 12px;
+	text-align:	center !important;
+	vertical-align: center !important;
+	height: 15px !important;
+	color: darkblue !important;
+	padding: 0px !important;
+}
+
+/* USE FIXED-WIDTH FONT FOR PRE-LIKE SPACING IN TEXTAREA */
+.init textarea {
+	white-space: pre-wrap !important;
+	font-weight: bold !important;
+	color: #111 !important;
+	font-family: arial !important;
+	font-size: 10px !important;
+	font-family: Courier New !important;
+	background-color: #FFA !important;
+}
+
+/* INPUT ERRORS */
+.dijitTextBoxError .dijitValidationTextBoxError .dijitError {
+	border: 2px solid #F00 !important;	
+}
+.dijitValidationTextBoxError .dijitError {
+	border: 2px solid #F00 !important;	
+}
+
+.dijitError {
+	border: 2px solid #F00 !important;	
+}
+
+.dijitTextBoxError .dijitValidationContainer {
+    cursor: default;
+    display: none;
+}
+
+.dijitReset .dijitInputField .dijitValidationIcon .dijitValidationInner {
+	visibility: hidden !important;
+	left: 40px !important;	
+}
+
+/* TOOLTIP */
+.dijitTooltipContents {
+	background-color: #FFFFAA !important;
+	color: #55B !important;
+	border-radius:4pt;
+}
+
+/* INPUT TURNS YELLOW ON HOVER */
+.init .dijitHover,
+.init .awsAccessKeyId:hover,
+.init .secretAccessKey:hover {
+	background-color: #FFA !important;
+}
+
+.init .dijitReset .dijitValidationContainer {
+	visibility: hidden !important;
+	left: 40px;
+}
+
+/* PROGRESS */
+.init .progress {
+	visibility: hidden !important;
+}
+
+.init .progress .active {
+	visibility: visible !important;
+}
+
+/* SLIDERS */
+.init .dijitSliderBar {
+	background-color: #DDD !important;
+}
+.init .dijitSliderProgressBar {
+	background-color: #AAA !important;
+}
+.init .dijitSliderButtonInner {
+	visibility: hidden !important;
+}
+
+/* INPUTS */
+.init .dijitTextBox INPUT {
+	background-color: #FFA !important;
+	float: none !important;	
+}
+
+.init .adminUser,
+.init .password,
+.init .confirmPassword,
+.init .amazonUserId,
+.init .awsAccessKeyId,
+.init .secretAccessKey {
+	font-weight: bolder !important;
+	font-family: Verdana !important;
+	text-align: center !important;
+	width: 99.5% !important;
+}
+
+.init .adminUser .dijitInputContainer input,
+.init .password .dijitInputContainer input,
+.init .confirmPassword .dijitInputContainer input,
+.init .dataVolume .dijitTextBox,
+.init .dataVolume .dijitInputInner,
+.init .dataVolume .dijitReset,
+.init .dataVolume .dijitReset .dijitInputInner,
+.init .amazonUserId .dijitInputContainer input,
+.init .awsAccessKeyId .dijitInputContainer input,
+.init .secretAccessKey .dijitInputContainer input {
+	text-align: center !important;
+	float: none !important;
+	background-color: #FFA !important;
+}
+
+.init .userVolumeLabel,
+.init .dataVolumeLabel {
+	display: inline;
+	width: 150px !important;	
+}
+
+.init .dataVolumeSizeContainer,
+.init .userVolumeSizeContainer {
+	width: 5% !important;
+}
+.init .userVolumeSlider {
+	/*background-color: red !important;*/
+}
+.init .userVolume,
+.init .dataVolume,
+.init .userVolumeSize,
+.init .dataVolumeSize {
+	background-color: #FFA !important;
+	width: 98% !important;
+	height: 20px;
+	font-size: 16px !important;
+	color: #222;
+	text-align: left !important;
+	vertical-align: middle !important;
+	font-weight: bolder !important;
+	padding-top: 4px;
+}
+
+.init .userVolume,
+.init .dataVolume {	
+	width: 140px !important;
+	/*font-style: oblique;*/
+	/*color: #777 !important;*/
+	/*background-color: #DDD;*/
+}
+
+.init .invalid,
+.init .amazonUserId .dijitTextArea .invalid,
+.init .dataVolume .dijitTextArea .invalid,
+.init .userVolume .dijitTextArea .invalid {
+	border: 2px solid #F00 !important;
+}
+
+
+.init .amazonUserId {
+	vertical-align: middle !important;
+	font-size: 16px !important;
+	/*width: 140px !important;	*/
+}
+
+.init .dataVolumeSize,
+.init .userVolumeSize {
+	text-indent: 4px !important;
+	vertical-align: middle !important;
+	width: 60px !important;
+}
+
+.init .userVolumeSize {
+	height: 20px;
+	font-size: 14px;
+	color: #222;
+	vertical-align: middle !important;
+	font-weight: bolder !important;
+	font-family: Verdana;	
+}
+
+.init .volumeId {
+	width: 120px !important;
+}
+
+.init .editUserRow {
+	width: 100%;
+	height: 20px !important;
+}
+
+
+
+
+/* VOLUME ID AND SIZE */
+.init .dataVolumeContainer,
+.init .userVolumeContainer {
+	width: 45% !important;
+	/*background-color: green !important;*/
+}
+.init .dataVolumeSliderContainer,
+.init .userVolumeSliderContainer {
+	width: 45% !important;
+	/*background-color: green !important;*/
+}
+

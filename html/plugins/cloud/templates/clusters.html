@@ -1,0 +1,235 @@
+<div dojoattachpoint="containerNode">
+
+	<!--http://aws.amazon.com/ec2/instance-types/-->
+
+	<!-- clusters TAB -->
+	<div
+		dojoAttachPoint="clustersTab"
+		class="clusters"
+		dojoType="dijit.layout.ContentPane"
+		title="Clusters"
+		style="height: 100% !important; max-height: auto !important; width: 390px !important; padding: 0 !important;"
+	>
+
+	<table align="center" width="100%">
+
+		<tr valign="top" width="100%">
+			<td colspan="3" class="tabTitle" align="center">Clusters</td>
+		</tr>
+
+		<tr height="20px">
+			<td align="center" colspan="3">
+				<div
+					dojoAttachPoint="addClusterButton"
+					class="addClusterButton"
+					>Add Cluster</div>
+			</td>
+		</tr>
+
+		<tr class="headerRow">
+			<td>Name</td>
+			<td>Min nodes</td>
+			<td>Max nodes</td>
+		</tr>
+
+		<tr align="center">
+
+			<td>
+				<input
+					dojoAttachPoint="cluster"
+					class="cluster"
+					type="text"
+					value="myCluster"
+					dojoType="dijit.form.ValidationTextBox"
+					regExp="^\S{1,20}$"
+					maxlength="20" 
+					promptMessage="Cluster name: up to 20 characters (no spaces)" 
+					invalidMessage="Cluster name: up to 20 characters (no spaces)"
+					tooltipPosition="below"
+					wrap="off"
+					>
+			</td>
+			<td>
+				<input
+					dojoAttachPoint="minnodes"
+					dojoAttachEvent="onChange:checkNodeNumbers"
+					class="minnodes"
+					dojoType="dijit.form.NumberTextBox"
+					value="0"
+					constraints="{min:0,max:99999,places:0}"
+					maxlength="5" 
+					promptMessage="Minimum nodes: from 0 to 99999" 
+					invalidMessage="Minimum nodes: from 0 to 99999"
+					tooltipPosition="below"
+				>
+			</td>
+			<td>
+				<div
+					dojoAttachPoint="maxnodes"
+					dojoAttachEvent="onChange:checkNodeNumbers"
+					class="maxnodes"
+					dojoType="dijit.form.NumberTextBox"
+					value="5"
+					constraints="{min:1,max:99999,places:0}"
+					maxlength="5" 
+					promptMessage="Maximum nodes: from 1 to 99999" 
+					invalidMessage="Maximum nodes: from 1 to 99999"
+					tooltipPosition="below"
+				</div>
+			</td>
+		</tr>
+
+		<tr>
+			<td align="center" colspan="3">
+				<table width="100%">
+					<tr class="headerRow">
+						<td
+						title="AMI ID of the Starcluster image used for all cluster nodes (The base x86_64 StarCluster AMI is ami-d1c42db8)">AMI ID</td>
+						<td>AMI Name</td>
+						<td>AMI Type</td>
+					</tr>
+					<tr>
+						<td align="center" dojoAttachPoint="amiidContainer">
+							<input
+								dojoAttachPoint="amiid"
+								dojoAttachEvent="onChange:setAmiInfo"
+								dojoType="dijit.form.ComboBox"
+								class="amiid"
+								type="text"
+								dojoType="dijit.form.ValidationTextBox"
+								regExp="^ami-[A-F0-9a-f]{8}$"
+								maxlength="12" 
+								promptMessage="Amazon Machine Image (AMI) identifier. Must be 'ami-XXXXXXXX' in hexadecimal (a-f0-09), e.g. ami-d1c42db8" 
+								invalidMessage="Amazon Machine Image (AMI) identifier. Must be 'ami-XXXXXXXX' in hexadecimal (a-f0-09), e.g., ami-d1c42db8" 
+								tooltipPosition="below"
+								wrap="off"
+							>
+						</td>
+						<td
+							dojoAttachPoint="aminame"
+							class="aminame"
+						>
+						</td>
+						<td
+							dojoAttachPoint="amitype"
+							class="amitype"
+						>
+						</td>
+					</tr>
+
+					<tr class="headerRow">
+						<td class="info">Instance Type
+							<img src="plugins/core/images/info-16.png" onClick="window.open('http://aws.amazon.com/ec2/instance-types', '_blank')"></img>
+						</td>
+						<td class="info">Region
+							<img src="plugins/core/images/info-16.png" onClick="window.open('http://docs.amazonwebservices.com/AWSEC2/latest/UserGuide/index.html?using-regions-availability-zones.html', '_blank')"></img>
+						</td>
+						<td>Availability Zone</td>
+					</tr>
+					<tr>
+						<td align="center" >
+							<select
+								dojoAttachPoint="instancetype"
+								dojoType="dijit.form.ComboBox"
+								class="instancetype">
+								<option value="t1.micro">t1.micro</option> 
+								<option value="m1.small">m1.small</option>
+								<option value="m1.large">m1.large</option>
+								<option value="m1.xlarge">m1.xlarge</option>
+								<option value="m1.xlarge">m2.xlarge</option>
+								<option value="m2.4xlarge">m2.2xlarge</option>
+								<option value="m2.4xlarge">m2.4xlarge</option>
+								<option value="c1.medium">c1.medium</option>
+								<option value="c1.xlarge">c1.xlarge</option>
+								<option value="c1.xlarge">cc1.4xlarge</option>
+								<option value="c1.xlarge">cg1.4xlarge</option>
+							</select>
+						</td>
+						<td align="center" >
+							<select
+								dojoAttachPoint="region"
+								dojoType="dijit.form.ComboBox"
+			                    dojoAttachEvent="onChange:setAvailzoneCombo"
+								class="region">
+								<option value="us-east-1">us-east-1</option> 
+								<option value="us-west-1">us-west-1</option> 
+								<option value="eu-west-1">eu-west-1</option> 
+								<option value="ap-northeast-1">ap-northeast-1</option> 
+								<option value="ap-southeast-1">ap-southeast-1</option> 
+							</select>
+						</td>
+						<td align="center">
+							<div
+								dojoAttachPoint="availzone"
+								dojoType="dijit.form.ComboBox"
+								class="availzone"
+								type="text"
+								popupClass="clusters availzone dijitReset dijitMenu"
+								autocomplete="true"
+								hasDownArrow="true"
+								disabled="false"
+								style="width: 150px;">
+							</div>
+						</td>
+					</tr>
+					
+				</table>
+			</td>
+		</tr>
+
+		<tr class="headerRow" width="95%" height="8px">
+			<td colspan="3">Description</td>
+		</tr>
+
+		<tr width="95%" >
+			<td align="center" colspan="3">
+				<textarea
+					spellcheck="false"
+					dojoAttachPoint="description"
+					class="description"
+					cols="40"
+					rows="1"
+					title="A brief description of the cluster group"
+				>Description</textarea>
+			</td>
+		</tr>
+
+		<tr valign="top" width="95%">
+			<td colspan="3" width="95%">
+				<div class="label"> Clusters </div>
+				<div
+					dojoAttachPoint="dragSourceNode"
+					class="dragSource"
+					style="height: 350px; width: 95%;"
+				>
+				</div>
+			</td>
+		</tr>
+
+		<tr align="center">
+			<td colspan="3" align="center">
+
+				<!-- TRASH CONTAINER -->
+				<div
+					dojoAttachPoint="trashContainer"
+					class="trash"
+					style="height: 60px; width: 150px; align: center;" 
+					>
+					<div
+						dojoAttachPoint="trashIcon"
+						class="trashIcon"
+						style="height: 60px; width: 60px;"
+						>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+
+
+	</div>
+	<!-- END clusters TAB -->
+	
+</div> 
+
+

@@ -1,0 +1,165 @@
+<div data-dojo-attach-point="containerNode">
+
+	<div
+		data-dojo-attach-point="mainTab"
+		class="view"
+		title="View"
+		dojoType="dijit.layout.BorderContainer"
+		iconClass="viewIcon"
+		style="width: 1100px !important; min-width: 100% !important;  height: 100% !important; min-height: 1200px !important; padding: 0px !important; bottom: 0px !important;"
+		closable="true"
+	>
+		
+		<!-- LEFT PANE -->
+		<div
+			data-dojo-attach-point="leftPane" 
+			class="leftPane"
+			title="Views"
+			dojoType="plugins.dojox.layout.ExpandoPane" 
+			maxWidth="200px"
+			splitter="true"
+			duration="125"
+			region="left"
+			startExpanded="true"
+			style="top: 5px !important; width: 210px; min-width: 20px !important; background: #FFF; padding: 0; overflow: visible;"
+			easeIn="dojo.fx.easing.expoOut" 
+			easeOut="dojo.fx.easing.expoInOut"
+			duration="100"
+		>
+			
+			<table width="210px">
+	
+				<tr>
+					<td class="viewTitle" colspan="3">Project</td>
+				</tr>
+
+				<tr>
+					<td class="projectIcon">
+					</td>
+					
+					<td>
+						<div dojoType="dijit.form.ComboBox"
+							class="projectCombo"
+							data-dojo-attach-point="projectCombo"
+							autocomplete="false"
+							title="Select a project containing your views"
+						>
+						</div>
+					</td>
+					
+				</tr>		
+
+				<tr>
+					<td class="viewTitle" colspan="4">View</td>
+				</tr>
+				<tr>
+		
+					<td class="viewIcon"
+						data-dojo-attach-event="onclick:refreshView"
+						title="Click to reload View"
+					>
+					</td>
+		
+					<td>
+		
+						<div dojoType="dijit.form.ComboBox"
+							class="viewCombo"
+							data-dojo-attach-point="viewCombo"
+							autocomplete="false"'
+							title="Select a view or type a name to create one"
+						>
+						</div>
+					</td>
+					<td data-dojo-attach-point="deleteViewButton"
+						class="deleteViewButton"
+						data-dojo-attach-event="onclick:confirmRemoveView"
+						width="20%"
+						align="center"
+						class="fileUpload"
+						title="Click to delete the selected View"
+					></td>
+				</tr>
+
+				<tr>
+					<td class="viewTitle" colspan="3">Species</td>
+				</tr>
+
+					<td class="speciesIcon">
+					</td>
+
+					<td>
+						<table>
+							<tr>
+								<td
+									class="speciesLabel"
+									data-dojo-attach-point="speciesLabel"
+								>&nbsp;</td>
+								<td
+									class="buildLabel"
+									data-dojo-attach-point="buildLabel"
+								>&nbsp;</td>
+							</tr>
+						</table>
+					</td>		
+				</tr>
+
+				<tr>
+					<td class="viewTitle" colspan="3">Feature List</td>
+				</tr>
+
+				<tr>
+					<td class="featureIcon">
+					</td>
+
+					<td>
+						<div dojoType="dijit.form.ComboBox"
+							class="featureList"
+							data-dojo-attach-point="featureList"
+							autocomplete="false"
+							title="Select a feature to add to the selected View"
+						>
+						</div>
+					</td>
+
+					<td>
+						<div data-dojo-attach-point="deleteFeatureButton"
+						class="deleteFeatureButton"
+						data-dojo-attach-event="onclick:removeViewFeature"
+						width="20%"
+						align="center"
+						class="fileUpload" ></div>
+					</td>
+				</tr>
+
+
+				<tr>
+					<td colspan="4">
+
+						<div data-dojo-attach-point="featuresAttachPoint">
+						</div>
+					</td>
+				</tr>
+				
+			</table>
+
+
+		</div>
+		<!-- END OF LEFT PANE -->
+
+
+		<!-- RIGHT PANE -->
+		<div
+			dojoType="dijit.layout.TabContainer" 
+			data-dojo-attach-point="rightPane"
+			class="rightPane" 
+			region="center"
+		>
+
+
+		</div>
+		<!-- END OF RIGHT PANE -->
+
+	</div>
+	<!-- END OF VIEW TAB dijit.layout.BorderContainer -->
+
+</div> 

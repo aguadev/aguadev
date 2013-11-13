@@ -1,0 +1,43 @@
+{
+'total': '2',
+'items': [
+	{
+		'name': 'Project1',
+		'parentDir': '.',
+		'path': './Project1',
+		'directory': 'true',
+		'size': '0',
+		'modified': '1228327511',
+		'children': [
+
+			{
+				'name': 'inputdir',
+				'parentDir': '.',
+				'path': './Project1/inputdir',
+				'directory': 'true',
+				'size': '0',
+				'modified': '1228327510'
+			},
+			{
+				'name': 'inputfile.txt',
+				'parentDir': '.',
+				'path': './Project1/inputfile.txt',
+				'directory': 'false',
+				'size': '5',
+				'modified': '1228327440'
+			}
+		]
+	},
+	{
+		'name': 'dummy.txt',
+		'parentDir': '.',
+		'path': './dummy.txt',
+		'directory': 'false',
+		'size': '5',
+		'modified': '1228327440'
+	}
+
+
+]
+
+}

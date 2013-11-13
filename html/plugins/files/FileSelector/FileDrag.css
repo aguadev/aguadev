@@ -1,0 +1,166 @@
+@import url("RollingList.css");
+
+/* ALIGN FILES TO TOP */
+.dojoxFileDrag, dojoxRollingListPane {
+	vertical-align: top;
+	height: auto;
+}
+
+.directoryClosed {
+	text-indent: 18px;
+	/*color: #F00;*/
+	background-repeat: no-repeat;
+	background-image: url("../../../plugins/project/FileDrag/images/directory-closed.png");
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+}
+
+.directoryOpen {
+	text-indent: 18px;
+	/*color: #F00;*/
+	background-repeat: no-repeat;
+	background-image: url("../../../plugins/project/FileDrag/images/directory-open.png");
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+}
+
+.fileClosed {
+	text-indent: 18px;
+	/*color: #F00;*/
+	background-repeat: no-repeat;
+	background-image: url("../../../plugins/project/FileDrag/images/file-closed.png");
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+}
+
+.fileOpen {
+	text-indent: 18px;
+	/*color: #F00;*/
+	background-repeat: no-repeat;
+	background-image: url("../../../plugins/project/FileDrag/images/file-open.png");
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+}
+
+
+.directoryIcon {
+	background-image: url("../../../plugins/project/FileDrag/images/soriaFileIcons.gif");
+	/*background-image: url("../images/soriaFileIcons.gif");*/
+	background-repeat: no-repeat;
+	/*background-color: #F00;*/
+	color: #F00;
+	background-position: 0px;
+	width: 16px;
+	height: 18px;
+	/*text-align: center;*/
+	position: relative;
+	top: 1px;
+
+}
+
+/*.directoryIcon* { background-position: 0px; }*/
+
+.copyDialog{
+	/*width: 200px;*/
+	/*height: 200px;*/
+	background-color: #000;
+	color: #FFF;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 20px;
+	/*overflow: hidden;*/
+}
+
+.titleDiv{
+	color: #FFF;
+	text-align: center;
+	vertical-align: middle;
+	position: relative;
+	top: 43%;
+}
+
+
+.dojoxFileInfoPane *{
+	white-space: normal;
+}
+
+.dojoxFileInfoLabel {
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+.dojoxFileInfoPane {
+	width: 20em;
+}
+
+.tundra .dojoxFilePickerItem .dijitMenuItemIcon {
+	background-image: url("images/tundraFileIcons.gif");
+	background-repeat: no-repeat;
+}
+.tundra .dojoxFilePickerItem .dojoxEmpty {
+	background-image: none;
+}
+.tundra .dojoxFilePickerItem .dojoxDirectoryItemIcon {
+	background-position: 0px;
+}
+.tundra .dojoxFilePickerItemSelected .dojoxDirectoryItemIcon {
+	background-position: -16px;
+}
+.tundra .dojoxFilePickerItem .dojoxFileItemIcon {
+	background-position: -32px;
+}
+.tundra .dojoxFilePickerItemSelected .dojoxFileItemIcon {
+	background-position: -48px;
+}
+
+.soria .dojoxFilePickerItem .dijitMenuItemIcon {
+	background-image: url("images/soriaFileIcons.gif");
+	background-repeat: no-repeat;
+}
+.soria .dojoxFilePickerItem .dojoxEmpty {
+	background-image: none;
+}
+.soria .dojoxFilePickerItem .dojoxDirectoryItemIcon {
+
+	background-image: url("../../../dojo-1.5.0/dojox/widget/FileDrag/images/soriaFileIcons.gif");
+	/*background-image: url("../images/soriaFileIcons.gif");*/
+	background-repeat: no-repeat;
+	background-color: #F00;
+
+	background-position: 0px;
+}
+.soria .dojoxFilePickerItemSelected .dojoxDirectoryItemIcon {
+	background-position: -16px;
+}
+.soria .dojoxFilePickerItem .dojoxFileItemIcon {
+	background-position: -32px;
+}
+.soria .dojoxFilePickerItemSelected .dojoxFileItemIcon {
+	background-position: -48px;
+}
+
+
+.nihilo .dojoxFilePickerItem .dijitMenuItemIcon {
+	background-image: url("images/nihiloFileIcons.gif");
+	background-repeat: no-repeat;
+}
+.nihilo .dojoxFilePickerItem .dojoxEmpty {
+	background-image: none;
+}
+.nihilo .dojoxFilePickerItem .dojoxDirectoryItemIcon {
+	background-position: 0px;
+}
+.nihilo .dojoxFilePickerItemSelected .dojoxDirectoryItemIcon {
+	background-position: -16px;
+}
+.nihilo .dojoxFilePickerItem .dojoxFileItemIcon {
+	background-position: -32px;
+}
+.nihilo .dojoxFilePickerItemSelected .dojoxFileItemIcon {
+	background-position: -48px;
+}
+

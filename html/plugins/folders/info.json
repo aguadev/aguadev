@@ -1,0 +1,14 @@
+{
+	name: "plugins.folders.Controller",
+
+	version : "0.01",
+	
+	url : '',
+	
+	description : "Display the users' project directories, the workflow directories inside them and files. Allow the user to move files into workflow directories and remove/rename files.",
+		
+	dependencies :
+	[
+		{	name: "plugins.core.Agua", version: 0.01	}
+	]
+}

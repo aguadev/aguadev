@@ -1,0 +1,39 @@
+<div
+	dojoattachpoint="containerNode"
+>
+
+	<!-- TAB -->
+	<div
+		data-dojo-attach-point="mainTab"
+		class="simpleSearch"
+		data-dojo-type="dijit.layout.ContentPane"
+		title="Saved"
+	>
+
+		<div
+			class="toggleTitle closed"
+			data-dojo-attach-point="toggler"
+			data-dojo-attach-event="onclick:toggleSaved"
+		>Simple Search
+		</div>
+		
+		<div
+			style="display: inline-block"
+			data-dojo-attach-point="togglePoint"
+			class="searchInputContainer"
+		>
+			<td align="center" width="430px">
+				<input
+					class="searchInput"
+					data-dojo-attach-point="searchInput"
+				/>
+			</td>
+		</div>
+				
+
+	</div>
+	<!-- END TAB -->
+	
+</div> 
+
+

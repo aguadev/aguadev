@@ -1,0 +1,20 @@
+.workflowselectormenu {
+    font-family: Verdana;
+	text-indent: 4px;
+	font-size: 16px;
+	color: darkred;
+	font-weight: bold;
+}
+
+.workflowselectormenu .title {
+    color: #822;
+    font-weight: bolder;
+    background-color: #EEE;
+    text-align: left;
+	text-indent: 5px;
+}
+
+.workflowselectormenu .newFolder {
+	background-image: url(../../../../plugins/files/images/newfolder-20.png);
+	background-repeat: no-repeat;
+}

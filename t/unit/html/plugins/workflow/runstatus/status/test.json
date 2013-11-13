@@ -1,0 +1,246 @@
+{
+    test1: {
+        "response": {
+            "cluster":">>> ** 3 ** Oldest job is from 2011-05-10 18:29:20. # queued jobs = 53. # hosts = 5.\n>>> Avg job duration = 50 sec Avg wait time = 517 sec.\n>>> Won't add another host, currently at max (5).\n>>> Sleeping, looping again in 10 seconds. XXXXX CORRECT ENTRY XXXXX\n",
+            "queue":"=================================================================================\nqueuename                      qtype resv/used/tot. load_avg arch          states\n---------------------------------------------------------------------------------\nProject1-Workflow1@master      BIP   0/1/1          1.13     lx24-amd64    \n     37 0.55500 test       root         t     05/17/2011 03:43:54     1        \n---------------------------------------------------------------------------------\nProject1-Workflow1@node001     BIP   0/1/1          1.29     lx24-amd64    \n     38 0.55500 test       root         t     05/17/2011 03:43:54     1        \n---------------------------------------------------------------------------------\nall.q@master                   BIP   0/1/1          1.13     lx24-amd64    \n     35 0.55500 test       root         r     05/17/2011 03:43:54     1        \n---------------------------------------------------------------------------------\nall.q@node001                  BIP   0/1/1          1.29     lx24-amd64    \n     36 0.55500 test       root         r     05/17/2011 03:43:54     1        \n\nPENDING JOBS:\ntest\t56 jobs\n",
+            "stages":[
+            {
+                "stagedescription":null,
+                "stagepid":"0",
+                "number":"1",
+                "status":"completed",
+                "project":"Project1",
+                "submit":null,
+                "workflowpid":"3232",
+                "stagenotes":null,
+                "stagename":null,
+                "stagejobid":"0",
+                "owner":"admin",
+                "workflownumber":"1",
+                "cluster":"",
+                "stderrfile":null,
+                "location":"apps/expression/TOPHAT.pl",
+                "executor":"/usr/bin/perl",
+                "name":"TOPHAT",
+                "username":"syoung",
+                "stdoutfile":null,
+                "workflow":"Workflow1",
+                "type":"aligner",
+                "queued":"0000-00-00 00:00:00",
+                "started":"2011-05-12 11:03:08",
+                "completed":"2011-05-12 12:14:19",
+                "now":"2011-05-13 01:45:58"
+            }
+            ,
+            {
+                "stagedescription":null,
+                "stagepid":"206",
+                "number":"2",
+                "status":"running",
+                "project":"Project1",
+                "submit":null,
+                "workflowpid":"3232",
+                "stagenotes":null,
+                "stagename":null,
+                "stagejobid":"0",
+                "owner":"admin",
+                "workflownumber":"1",
+                "cluster":"",
+                "stderrfile":null,
+                "location":"apps/index/indexReads.pl",
+                "executor":"/usr/bin/perl",
+                "name":"indexReads",
+                "username":"syoung",
+                "stdoutfile":null,
+                "type":"index",
+                "workflow":"Workflow1",
+                "queued":"2011-05-12 12:14:25",
+                "started":"2011-05-12 12:14:59",
+                "completed":"0000-00-00 00:00:00",
+                "now":"2011-05-13 01:45:58"
+            }]
+        }
+    }
+    ,
+    test2: {
+        "response": {
+    
+            "clusterStatus":null,
+			
+			"queue":"=================================================================================\n\nPENDING JOBS:\n",
+    
+            "stageStatus": {
+				project : "project1",
+				workflow : "Workflow1",
+				status : "completed",
+				stages : [
+				{
+					"stagedescription":null,
+					"stagepid":"22243",
+					"number":"1",
+					"status":"completed",
+					"project":"Project1",
+					"submit":"1",
+					"workflowpid":"22234",
+					"stagenotes":null,
+					"stagename":null,
+					"stagejobid":"0",
+					"owner":"admin",
+					"workflownumber":"1",
+					"cluster":"",
+					"stderrfile":null,
+					"location":"apps/expression/TOPHAT.pl",
+					"executor":"/usr/bin/perl",
+					"name":"TOPHAT",
+					"username":"syoung",
+					"stdoutfile":null,
+					"workflow":"Workflow1",
+					"type":"aligner",
+					"queued":"0000-00-00 00:00:00",
+					"started":"2011-05-12 11:03:08",
+					"completed":"2011-05-12 12:14:19",
+					"now":"2011-05-13 01:45:58"
+				},
+				{
+					"stagedescription":null,
+					"stagepid":"20636",
+					"number":"2",
+					"status":"completed",
+					"project":"Project1",
+					"submit":null,
+					"workflowpid":"20374",
+					"stagenotes":null,
+					"stagename":null,
+					"stagejobid":"0",
+					"owner":"admin",
+					"workflownumber":"1",
+					"cluster":"",
+					"stderrfile":null,
+					"location":"apps/index/indexReads.pl",
+					"executor":"/usr/bin/perl",
+					"name":"indexReads",
+					"username":"syoung",
+					"stdoutfile":null,
+					"type":"index",
+					"workflow":"Workflow1",
+					"queued":"2011-05-12 12:14:25",
+					"started":"2011-05-12 12:14:59",
+					"completed":"2011-05-13 01:46:04",
+					"now":"2011-05-13 01:46:04"
+				}]
+			}
+        }
+    }
+    ,
+    displayStagesStatus1: {
+        "response": {
+            "stages": [
+                {
+                    "childpid": "235904",
+                    "number": "1",
+                    "status": "running",
+                    "project": "Project1",
+                    "workflowpid": "2839",
+                    "owner": "admin",
+                    "cluster": "PBS",
+                    "location": "apps/expression/TOPHAT.pl",
+                    "executor": "/usr/bin/perl",
+                    "name": "TOPHAT",
+                    "username": "syoung",
+                    "workflow": "Workflow1",
+                    "parentpid": "2839",
+                    "valuetype": "pipeline",
+                    "queued": "2010-02-22 09:05:00",
+                    "started": "2010-02-22 09:05:05",
+                    "completed": "0000-00-00 00:00:00",
+                    "now": "2010-02-23 19:35:07"
+                }
+            ]
+        },
+        duration: "34 hours 30 min 2 sec"
+    }
+    ,
+    displayStagesStatus2: {
+        "response": {
+            "stages": [
+                {
+                    "childpid": "235904",
+                    "number": "1",
+                    "status": "running",
+                    "project": "Project1",
+                    "workflowpid": "2839",
+                    "owner": "admin",
+                    "cluster": "PBS",
+                    "location": "apps/expression/TOPHAT.pl",
+                    "executor": "/usr/bin/perl",
+                    "name": "TOPHAT",
+                    "username": "syoung",
+                    "workflow": "Workflow1",
+                    "parentpid": "2839",
+                    "valuetype": "pipeline",
+                    "queued": "2010-02-22 09:05:00",
+                    "started": "2010-02-22 09:05:05",
+                    "completed": "2010-02-22 09:25:06",
+                    "now": "2010-02-22 09:35:07"
+                }
+            ]
+        },
+        duration: "0 hours 20 min 1 sec"
+    },
+    
+    displayStagesStatus3: {
+        "response": {
+            "stages": [
+                {
+                    "childpid": "235904",
+					 "number": "1",
+					 "status": "running",
+					 "project": "Project1",
+					 "workflowpid": "2839",
+					 "owner": "admin",
+					 "cluster": "PBS",
+					 "location": "apps/expression/TOPHAT.pl",
+					 "executor": "/usr/bin/perl",
+					 "name": "TOPHAT",
+					 "username": "syoung",
+					 "workflow": "Workflow1",
+					 "parentpid": "2839",
+					 "valuetype": "pipeline",
+					 "queued": "2010-02-22 09:05:00",
+					 "started": "2010-02-22 09:05:05",
+					 "completed": "0000-00-00 00:00:00",
+					 "now": "2010-02-27 19:35:07"
+                }
+            ]
+        },
+        duration: "130 hours 30 min 2 sec"
+    },
+
+    displayStagesStatus4: {
+        "response": {
+            "stages": [
+                {
+                    "childpid": "235904",
+					 "number": "1",
+					 "status": "running",
+					 "project": "Project1",
+					 "workflowpid": "2839",
+					 "owner": "admin",
+					 "cluster": "PBS",
+					 "location": "apps/expression/TOPHAT.pl",
+					 "executor": "/usr/bin/perl",
+					 "name": "TOPHAT",
+					 "username": "syoung",
+					 "workflow": "Workflow1",
+					 "parentpid": "2839",
+					 "valuetype": "pipeline",
+					 "queued": "2010-02-22 09:05:00",
+					 "started": "2010-02-22 09:05:05",
+					 "completed": "2010-02-27 12:35:06",
+					 "now": "2010-02-27 19:35:07"
+                }
+            ]
+        },
+        duration: "123 hours 30 min 1 sec"
+    }
+}

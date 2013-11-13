@@ -1,0 +1,236 @@
+/* ALL-ADMIN STYLES */
+.applications .subPane {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius: 10pt;
+}
+
+.applications .dragSource table {
+	border-collapse: collapse !important;	
+}
+
+.applications .dragSource table td:hover {
+	background-color: #FF8 !important;
+}
+
+.applications textarea {
+	font-size: 10px !important;
+	white-space: pre-wrap !important;
+}
+
+.applications textarea,
+.applications td {
+	word-wrap: break-word !important;
+	z-index: 900 !important;
+	min-height: 25px !important;
+}
+
+.applications .dragSource textarea, .applications .dragSource td {
+	min-height: 20px !important;
+}
+
+/* MAIN PANES */
+.applications .rightPane {
+	left: 780px !important;	
+}
+
+/* DRAG SOURCE */
+.applications .dragSource {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+
+	background:#FFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+
+	/*margin-top: 5px;*/
+	width: 120px;	
+	height: 260px;
+	min-height: 100px;
+	
+	text-align: left;
+	/*color: #339;*/
+	/*color: darkgreen;*/
+	/*font-weight: bold;*/
+	font-family: Verdana;
+	font-size: 12px;
+	border-color: #333;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	overflow:auto !important;
+}
+
+.dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient,
+.applications .dijitTabPaneWrapper,
+.applications .tundra .dijitTabPaneWrapper,
+.tundra .applications .dijitTabPaneWrapper {
+	height: 100% !important;
+}
+
+.applications .dragSource table td:hover {
+	background-color: #FF8 !important;
+}
+
+.applications .dojoDndItem .dojoDndItemOver {
+	background-color: #FF8 !important;
+}
+
+.applications .dojoDndItem {
+    min-height: 24px !important;
+	padding-bottom: 2px !important;
+}
+
+/* SHOW LOCKED/UNLOCKED */
+.applications .dragSource td {
+	/*background: none repeat scroll 0 0 #FFF !important; */
+	background-color: #FFF !important;
+}
+
+.applications .dragSource .dojoDndItem,
+.applications .dragSource .dojoDndItemOver,
+.applications .dragSource .dojoDndItemAnchor {
+	/*background-color: #CCFFCC !important;*/
+	background-color: #DAF0F2 !important;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	border-radius:8pt;
+}
+
+
+.applications .dragSource .dojoDndContainerOver {
+	border : inherit !important;
+}
+
+
+.applications .dragSource .dojoDndItemOver,
+.applications .dragSource .dojoDndItemAnchor {
+	background-color: #88FF88 !important;
+	/*background-color: #DAF0F2 !important;*/
+}
+
+/* EDITING ROW */
+.applications .editRow {
+	width: 100% !important;
+	height: auto !important;
+	white-space: pre !important;
+}
+
+/* TAB BACKGROUND COLOUR */
+.applications .dijitTabContent {
+	/*background-color: #EEE;*/
+}
+
+/* TAB LABEL SIZE */
+.applications .dijitTabInnerDiv .dijitTabContent {
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	position: relative;
+
+	/* IF UNCOMMENTED PUTS A WHITE BLANK IN ADJACENT TAB WHEN NOT FOCUSED */
+	/*background: transparent url(../images/tabContainerSprite.gif) repeat-x scroll 0 -350px;*/
+
+	/* CHANGE THE HEIGHT OF THE TAB LABEL HERE */
+	/*padding: 5px 3px 4px 4px;*/
+	
+	/*padding: 0px 0px 0px 0px !important;*/
+}
+
+/* DECREASE TABLE LABEL SIZE */
+.applications .dijitTabInnerDiv {
+	/*padding: 0px 0px 0px 0px !important;*/
+}
+
+/* TAB LABELS */
+.applications .tabLabel {
+	color: #243C5F !important;
+	padding: 3px;
+	border: solid 2px transparent;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.applications .dijitTabChecked .tabLabel {
+	color: darkred !important;
+	/*color: #055817;*/ /* dark green */
+	font-weight: bold;
+}
+
+.applications .dijitFocused .tabLabel {
+	padding: 3px;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:3pt;
+	-moz-outline-style: none;
+}
+
+.applications .tabTitle {
+	color: white;
+	background-color: #264eea;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 20px;
+	font-weight: bold;
+	-moz-user-select: none !important;
+}
+
+
+/* PANES & CONTAINERS */
+
+.applications .middlePane {
+	left: 390px !important;
+}
+
+.applications .dijitTabContainer .tabStripButton {
+    display: none;
+    visibility: hidden;
+    z-index: 12;
+}
+
+
+
+/* NO SCROLLBARS IN LEFT, MIDDLE AND RIGHT PANES */
+.applications .dijitContentPane {
+	overflow: hidden !important;
+}
+
+/* CONTAINERS HAVE WHITE BACKGROUND AND NO PADDING */
+.applications .dijitBorderContainer {
+	background-color: #FFF;
+	padding: 0;
+}
+
+.applications .inputsTitlePane {
+	background-color: #000;
+}
+
+/* CONTAINER HEIGHT */
+.browserContainer {	
+	height:	900px;
+}
+
+.applications .dijitLayoutContainer {
+	top: 0px;
+	left: 0px;
+}
+
+.applications .dijitTabPaneWrapper {
+	width: auto !important;
+	/*top: 20px !important;*/
+	/*border: none;*/
+}
+
+.applications .dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient{
+	height: auto;
+}
+
+.applications .groups .dijitContentPane .dijitTabPane .dijitTabContainerTop-dijitContentPane {
+	width: auto !important;
+}
+

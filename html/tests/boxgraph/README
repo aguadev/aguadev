@@ -1,0 +1,91 @@
+V0.1:
+
+Changes:
+
+1. Now you can add a 'dataurl' parameters when creating the boxgraph.editor object. If iyt is present and defines a JSON file at a valid URI, the editor will try to load the file and parse it.
+The format is as follows;
+
+{
+    "colors": ["06799F", "216278", "024E68", "3AAACF", "62B4CF"],
+    "boxes":
+    [
+        {
+            "id": 1,
+            "name":"foo",
+            "x":50,
+            "y": 210,
+            "height":100,
+            "width": 150,
+            "ports":
+            [
+                { "id": 100, "dir": "right", "position": 1},
+                { "id": 101, "dir": "up", "position": 3},
+				{ "id": 105, "dir": "left", "position": 2}
+            ]
+        },
+        {
+            "id": 2,
+            "name":"bar",
+            "x":250,
+            "y": 50,
+            "height":50,
+            "width": 100,
+            "ports":
+            [
+                { "id": 102, "dir": "left", "position": 2},
+                { "id": 103, "dir": "right", "position": 1},
+				{ "id": 104, "dir": "down", "position": 1}
+            ]
+        }
+    ],
+    "connections":
+    [
+        {"first": 101, "second": 102},
+        {"first": 103, "second": 100}
+    ]
+}
+
+The old test file is now called 'test_editgraph.html- The new test file which tests loading from JSON is called 'test_loadgraph.html'
+
+TODO:
+
+1. The colors property is not yet used, but will make it easy to have your own color schemes.
+2. It will also be possible to make the editor 'locked' so that boxes can't move around, also to disable adding or removing connections.
+
+BOXGRAPH:
+
+BoxGraph is a small library to let you create an interface where your users can create conenctions between ports on boxes.
+The typical use-case could be workflow descriptions or creation and modification of connectedness in a graph model.
+
+It is open source available under the BSD license. I'm a bit tired right now, so if anyone can please tell me if there's anything else I need to do thatn just state that here, pelase let me know.
+
+There are three types of entities;
+
+1) Boxes. These have position, height, width and name. In the future there will be logic to create anything (images or realtime graphics, or whetever) inside a box's interior.
+2) Ports. A specific Port always belong to one specific Box
+3) Connections. A connection is created between two different Ports.
+
+At the moment BoxGraph only supports Manhattan routing of connections, but will support Beziers in the future.
+
+BoxGraph is focused on user interaction, which generate events. The events are then consumed by the using application. However, BoxGraph could also be used to display a static graph without user interaction.
+
+USAGE:
+
+BoxGraph is built using Dojo's excellent OO system. This means you need to load Dojo before loading BoxGraph. Also, loading in Dojo is called 'dojo.require(..)'. This is not a killer for those of you who only
+use jQuery, since Dojo plays _very_ nice with other toolkits and is completely namespaced. E.g. it will not step on your toes as long as your own classes does not beign with 'dojo.'.
+
+Check out the test.html file for an example on how to include and use BoxGraph.
+
+Note: At the moment BoxGraph is very alpha and have some rough edges. In the class boxgraph/editor.js the function 'test' shows how to create four boxes with various ports. Soon there will be an event based interface
+which will make it much simpler to create different entities. If you have any suggestions, use the 'Issues' feature ogf github or mail me directly at psvensson@gmail.com
+
+TODO:
+
+1. Reading and rendering of a JSON graph object.
+2. Exporting the currently edited graph in the same data format as (1).
+3. Implement events for box creation/deletion, Port creation/deletion.
+4. Implement custom box presentation
+5. Your idea here :)
+
+Cheers,
+PS

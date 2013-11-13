@@ -1,0 +1,81 @@
+{
+   "features" : [
+      {
+         "feature" : "chr22",
+         "workflow" : "Workflow1",
+         "project" : "Project1",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "out",
+         "workflow" : "Workflow1",
+         "project" : "Project1",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "test-undefined",
+         "workflow" : "Workflow1",
+         "project" : "Project1",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "control1-parkinsons",
+         "workflow" : "Workflow9",
+         "project" : "Project1",
+         "species" : "hg19",
+         "build" : "/nethome/jgilbert/ag"
+      },
+      {
+         "feature" : "control2-parkinsons",
+         "workflow" : "Workflow9",
+         "project" : "Project1",
+         "species" : "hg19",
+         "build" : "/nethome/jgilbert/ag"
+      },
+      {
+         "feature" : "test1-parkinsons",
+         "workflow" : "Workflow9",
+         "project" : "Project1",
+         "species" : "hg19",
+         "build" : "/nethome/jgilbert/ag"
+      },
+      {
+         "feature" : "test2-parkinsons",
+         "workflow" : "Workflow9",
+         "project" : "Project1",
+         "species" : "hg19",
+         "build" : "/nethome/jgilbert/ag"
+      },
+      {
+         "feature" : "control1-parkinsons-",
+         "workflow" : "Workflow1",
+         "project" : "Project2",
+         "species" : "hg19",
+         "build" : "/nethome/jgilbert/ag"
+      },
+      {
+         "feature" : "control2-parkinsons-2",
+         "workflow" : "Workflow1",
+         "project" : "Project2",
+         "species" : "hg19",
+         "build" : "/nethome/jgilbert/ag"
+      },
+      {
+         "feature" : "test1-parkinsons-2",
+         "workflow" : "Workflow1",
+         "project" : "Project2",
+         "species" : "hg19",
+         "build" : "/nethome/jgilbert/ag"
+      },
+      {
+         "feature" : "test2-parkinsons-2",
+         "workflow" : "Workflow1",
+         "project" : "Project2",
+         "species" : "hg19",
+         "build" : "/nethome/jgilbert/ag"
+      }
+   ]
+}

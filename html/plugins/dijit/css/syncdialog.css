@@ -1,0 +1,78 @@
+/* GENERAL DIALOG STYLE */
+.syncDialog {
+	font-size: 26px !important;
+	font-family: Verdana !important;
+	color: #444 !important;
+	font-weight: bolder;
+	z-index: 2000 !important;
+	width: 650px !important;
+	border-radius : 8pt;
+	padding: 10px !important;
+}
+
+.syncDialog .dijitDialogCloseIcon {
+	padding: 10px !important;
+    top: 4px;
+    vertical-align: middle;
+    width: 15px;
+}
+.dijitDialog .dijitContentPane .syncDialog {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius : 8pt;
+	padding: 4px !important;
+}
+
+/* TITLE */
+.dialog .dijitDialogTitleBar .dijitDialogTitle .syncDialog {
+	font-size: 14px !important;
+	font-family: Verdana !important;
+	color: #888 !important;
+	margin-right: auto;
+	margin-left: auto;
+}
+/* HEADER */
+.syncDialog .header {
+	font-size: 26px !important;
+	color: #800;
+}
+
+/* MESSAGE */
+.syncDialog .message {
+	color: #222 !important;
+	font-size: 16px !important;
+	width: 99% !important;
+	height: 20px;
+	z-index: 2000 !important;
+}
+
+/* DETAILS */
+.syncDialog .details {
+	color: #222 !important;
+	font-size: 14px;
+	color: #A00;
+}
+
+/* ENTER BUTTON */
+.syncDialog .enterButton {
+	font-size: 18px;
+	color: #0A0 !important;
+}
+.syncDialog .enterButton .dijitButtonText {
+	width: 200px !important;
+}
+
+.syncDialog .cancelButton {
+	color: #A00 !important;
+}
+
+.syncDialog .invalid {
+	border: 2px solid #F00 !important;
+}
+
+.syncDialog .sublabel {
+	color: #226 !important;
+	text-align: left !important;
+	font-size: 16px !important;
+}

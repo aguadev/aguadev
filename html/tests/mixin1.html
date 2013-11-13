@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+<title> mixin 1: dojo.mixin acme.Base </title>
+
+<script type="text/javascript" src="dojo.1.2.2/dojo/dojo.js"
+		djConfig="parseOnLoad: true, isDebug: true, useCommentedJson: true"></script>
+
+<script type="text/javascript">
+
+
+dojo.declare("acme.Base", null, {
+
+    constructor: function(properties){
+        // property configuration:
+        dojo.mixin(this, properties);
+ 
+        console.debug(this.quip);
+        //  ...
+    },
+
+    quip: "I wasn't born yesterday, you know - I've seen movies.",
+    // ...
+});
+ 
+// create an instance of the class and configure it
+var b = new acme.Base({quip: "That's what it does!" });
+    
+</script>
+	
+</head>
+
+<body class="soria">
+
+<h1>
+    mixin 1: dojo.mixin acme.Base
+</h1>
+
+
+</body>
+</html>
+
+

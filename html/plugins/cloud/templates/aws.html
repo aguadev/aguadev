@@ -1,0 +1,140 @@
+<div dojoattachpoint="containerNode">
+
+	
+	<!-- settings TAB -->
+	<div
+		dojoAttachPoint="mainTab"
+		class="aws"
+		dojoType="dijit.layout.ContentPane"
+		title="AWS"
+		style="height: 700px; max-height: auto !important; width: 390px !important; padding: 0 !important;"
+		>
+
+		<table width="100%">
+			<tr valign="top" width="100%">
+				<td colspan="2" class="tabTitle" align="center"> AWS </td>
+			</tr>
+			
+			<tr valign="top" width="95%">
+				<td width="95%">
+					<div class="label"> Amazon Web Services </div>
+					<div
+						class="subPane"
+						style="height: 680px; width: 95%;"
+					>
+
+					<table width="100%">
+						<tr>
+							<td
+								colspan="2"
+								dojoAttachPoint="addAwsButton"
+								class="addAwsButton"
+								dojoAttachEvent="onclick:addAws"
+							>
+								Save
+							</td>
+						</tr>
+
+						<tr>
+							<td class="sublabel">Amazon User ID</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<input
+									dojoAttachPoint="amazonuserid"
+									class="amazonUserId"
+									dojoType="dijit.form.ValidationTextBox"
+									wrap="off"
+									regExp="^\d{12}$"
+									maxlength="12"
+									promptMessage="Enter your 12-digit Amazon User ID (numbers only)" 
+									invalidMessage="Invalid User ID (Must be 12 digits, numbers only)."
+									value=""
+								>
+							</td>
+						</tr>
+						<tr>
+							<td class="sublabel">AWS Key ID</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<input
+									dojoAttachPoint="awsaccesskeyid"
+									class="accessKeyId"
+									dojoType="dijit.form.ValidationTextBox"
+									type="text"
+									maxlength="24"
+									uppercase="true"
+									regExp="[A-Z0-9]{16,24}"
+									invalidMessage="16-24 characters: capital letters or numbers"
+									promptMessage="16-24 characters: capital letters or numbers"
+									value=""
+								>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="sublabel">AWS Secret Key</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<input
+									dojoAttachPoint="awssecretaccesskey"
+									class="secretAccessKey"
+									dojoType="dijit.form.ValidationTextBox"
+									type="text"
+									maxlength="45"
+									regExpGen="return '.{35,45}'"
+									invalidMessage="35-45 characters"
+									promptMessage="35-45 characters"
+									value=""
+								>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="sublabel">Private Key</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<textarea
+									spellcheck="false"
+									dojoAttachPoint="ec2privatekey"
+									class="ec2privatekey"
+									style="width:100%;";
+									cols="40"
+									rows="20"></textarea>
+							</td>
+						</tr>
+
+						<tr>
+							<td class="sublabel">Public Certificate</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<textarea
+									spellcheck="false"
+									dojoAttachPoint="ec2publiccert"
+									class="ec2publiccert"
+									style="width:100%;";
+									cols="40"
+									rows="20"
+								></textarea>
+							</td>
+						</tr>
+
+					</table>
+
+	
+					</div>
+				</td>
+			</tr>
+		
+		</table>
+
+	</div>
+	<!-- END settings TAB -->
+	
+</div> 
+
+

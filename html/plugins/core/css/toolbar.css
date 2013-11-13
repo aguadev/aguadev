@@ -1,0 +1,22 @@
+.dijitReset .dijitInline .dijitIcon .dijitEditorIcon .dijitEditorIconCopy {
+	background-image: url(http://localhost/agua/0.5/plugins/view/images/view-18.png) !important; 
+	background-repeat: no-repeat;
+	width: 18px;
+	height: 18px;
+	text-align: center;
+	background-position: 0px !important;
+	
+}
+
+.tundra .dijitEditorIcon  {
+	width: 20px;
+}
+.tundra .dijitEditorIcon .dijitEditorIconView {
+	background-image: url(http://localhost/agua/0.5/plugins/view/images/view-18.png) !important; 
+	background-repeat: no-repeat;
+	width: 18px;
+	height: 18px;
+	text-align: center;
+	background-position: 0px !important;
+}
+

@@ -1,0 +1,46 @@
+[
+    {
+		"argument":"-entry",
+		"paramtype":"string",
+		"value":"",
+		"name":"entry",
+		"discretion":"required",
+		"description":"ID or Accession number (Any string)"
+	}
+	,
+	{
+		"argument":"-outfile",
+		"paramtype":"outfile",
+		"value":"*.whichdb",
+		"name":"outfile",
+		"discretion":"required",
+		"description":"Output file name"
+	}
+	,
+    {
+		"argument":"-get",
+		"paramtype":"toggle",
+		"value":"N",
+		"name":"get",
+		"discretion":"optional",
+		"description":"Retrieve sequences"
+	}
+	,
+	{
+		"argument":"-showall",
+		"paramtype":"boolean",
+		"value":"N",
+		"name":"showall",
+		"discretion":"optional",
+		"description":"Show failed attempts"
+	}
+	,
+	{
+		"argument":"-help",
+		"paramtype":"boolean",
+		"value":"",
+		"name":"help",
+		"discretion":"optional",
+		"description":"Report command line options and exit. More information on associated and general qualifiers can be found with -help -verbose"
+    }
+]

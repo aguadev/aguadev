@@ -1,0 +1,3 @@
+    --installdir        :   Path to install directory (default: /agua)
+    --wwwdir			:	Path to www dir (default: /var/www/html)
+    --help              :   Print help info

@@ -1,0 +1,148 @@
+/* DIALOG */
+.dijitDialog {
+	overflow: visible !important;	
+	border-radius: 10pt !important;
+}
+
+.dijitDialogCloseIcon {
+	padding: 10px !important;
+}
+
+/* GENERAL TEXT */
+.uploader {
+	width: 600px !important;
+	font-size: 16px !important;
+	font-family: Verdana !important;
+	color: #226 !important;
+	font-weight: bolder !important;
+	text-align: center;
+	border-radius: 10pt !important;
+	box-shadow: -2px 5px 20px #888;
+	outline: none;
+	-moz-outline: none;
+}
+
+.uploader .dijitDialog {
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+
+.dojoxInputNode {
+	left: 0px !important;
+    font-size: 18px !important;
+	opacity: 1.0 !important;
+}
+
+/* IMPORTANT: STOP WIDE WINDOW */
+.dojoxInputNode {
+	font-size: 18px !important;
+}
+
+.browseButton .dijit .dijitReset .dijitInline .dijitButton {
+	margin-left: 100px;
+}
+
+.uploader .dojoxInputButton,
+.uploader .browseButton {
+    font-weight: bold;
+    height: 35px !important;
+    left: 0;
+    margin-top: 13px;
+    overflow: visible !important;
+    position: relative;
+	width: 380px !important;
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+.browseButton .dijit .dijitReset .dijitInline .dijitButton {
+	width: 500px !important;
+}
+
+.uploader .destination {
+	text-align: center;
+	font-size: 18px !important;
+}
+	
+.uploader .dijitDialogPaneContent {
+	border-radius: 0 0 12px 12px !important;
+    width: 580px !important;
+}
+
+.uploader .dijitDialogTitleBar {
+	border-radius: 12px 12px 0 0 !important;	
+}
+
+.claro .dijitDialogCloseIconHover {
+	background-position: 0px !important;
+	position: absolute;
+	top: 0px !important;
+}
+
+/* NO SHADOW */
+.uploader .dijitDialogTitleBar,
+.uploader .dijitDialogPaneContent,
+.uploader .dijitDialogTitle,
+.uploader .dijitDialogCloseIcon,
+ .uploader .tundra .dijitDialogTitleBar,
+.uploader .tundra .dijitDialogPaneContent,
+.uploader .tundra .dijitDialogTitle,
+.uploader .tundra .dijitDialogCloseIcon {
+   box-shadow: none  !important;
+   background-repeat: no-repeat !important;
+}
+
+/* TITLE */
+.dialog .dijitDialogTitleBar .dijitDialogTitle .uploader {
+	font-family: Verdana !important;
+	color: #822 !important;
+}
+
+/* MESSAGE */
+.uploader .message {
+	font-size: 18px !important;
+	text-align: center;
+	color: #A00;
+}
+
+/* ENTER AND CANCEL BUTTONS */
+.uploader .yesButton,
+.uploader .noButton {
+	font-size: 18px;
+}
+.uploader .yesButton {
+	color: #0A0;
+}
+.uploader .noButton {
+	color: #A00;
+}
+
+/* FILENAME */
+.uploader .dojoxUploaderFileSize,
+.uploader .dojoxUploaderIcon,
+.uploader .dojoxUploaderFileName {
+    text-align: center;
+}
+
+.uploader .selectButton {
+    width: 350px !important;
+    top:  -5px !important;
+}
+
+.uploader .submitButton .dijitReset .dijitInline .dijitButtonText{
+    width: 80px;
+    top: 10px !important;    
+    height: 20px !important;
+}
+
+.uploader .dojoxUploaderIndex {
+    display: none;
+}
+
+.uploader span.submitButton {
+    display: none;
+}
+
+/* ALERT */
+.uploader .alert {
+	color: #844;
+}

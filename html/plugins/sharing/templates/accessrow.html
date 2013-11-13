@@ -1,0 +1,64 @@
+<div dojoAttachPoint="containerNode">
+
+<table>
+    
+    <tr dojoAttachPoint="row">
+        <td 
+            colspan="1"
+            dojoAttachPoint="groupname"
+            class="narrowColumn"
+            title="Special file groupnames, e.g., FASTA, FASTQ"
+        >${groupname}</td>
+        <td 
+            colspan="1"
+            dojoAttachPoint="groupwrite"
+            dojoAttachEvent="onclick:toggle"
+            class="narrowColumn"
+            title="Special file groupwrites, e.g., FASTA, FASTQ"
+            value="groupwrite"
+        ></td>
+        <td
+            colspan="1"
+            dojoAttachPoint="groupcopy"
+            dojoAttachEvent="onclick:toggle"
+            class="narrowColumn"
+            title="User can groupcopy data and workflows in this group"
+            value="groupcopy"
+        ></td>
+        <td
+            colspan="1"
+            dojoAttachPoint="groupview"
+            dojoAttachEvent="onclick:toggle"
+            class="narrowColumn"
+            title="User can groupview data and workflows in this group"
+            value="groupview"
+        ></td>
+        <td 
+            colspan="1"
+            dojoAttachPoint="worldwrite"
+            dojoAttachEvent="onclick:toggle"
+            class="narrowColumn"
+            title="Special file worldwrites, e.g., FASTA, FASTQ"
+            value="worldwrite"
+        ></td>
+        <td
+            colspan="1"
+            dojoAttachPoint="worldcopy"
+            dojoAttachEvent="onclick:toggle"
+            class="narrowColumn"
+            title="User can worldcopy data and workflows in this group"
+            value="worldcopy"
+        ></td>
+        <td
+            colspan="1"
+            dojoAttachPoint="worldview"
+            dojoAttachEvent="onclick:toggle"
+            class="narrowColumn"
+            title="User can worldview data and workflows in this group"
+            value="worldview"
+        ></td>
+    </tr>
+
+</table>
+
+</div>

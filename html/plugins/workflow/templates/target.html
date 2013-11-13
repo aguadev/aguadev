@@ -1,0 +1,109 @@
+<div dojoAttachPoint="containerNode">
+
+    <div
+        dojoAttachPoint="workflow"
+        dojoType="dijit.layout.BorderContainer"
+        title="Stages"
+        parseOnLoad="false"
+        style="height:100%;width: 262 !important;"
+        >
+            
+        <table width="200px">
+            <tr>
+                <td colspan="4" class="tabTitle" align="center">Stages</td>
+            </tr>
+            <!--<tr>-->
+            <!--	-->
+            <!--	<td dojoAttachPoint="loading" class="loaded">-->
+            <!--	</td>-->
+            <!---->
+            <!--	<td dojoAttachPoint="message" class="message" colspan="2">Loaded</td>-->
+            <!---->
+            <!--</tr>-->
+            <tr>
+                <td class="projectTitle" colspan="3">Project</td>
+            </tr>
+            <tr>
+
+                <td class="projectIcon">
+                </td>
+                
+                <td>
+                    <div dojoType="dijit.form.ComboBox"
+                        dojoAttachPoint="projectCombo"
+                        class="projectCombo"
+                        autocomplete="false"
+                    >
+                    </div>
+                </td>
+                
+                <td
+                    dojoAttachPoint="deleteProjectButton"
+                    class="deleteProjectButton" 															width="20%"
+                    align="center"
+                    class="fileUpload" >
+                </td>
+
+            </tr>
+            <tr>
+                <td class="workflowTitle" colspan="3">Workflow</td>
+            </tr>
+            <tr>
+
+                <td class="workflowIcon">
+                </td>
+                
+                <td>
+                    <div dojoType="dijit.form.ComboBox"
+                        dojoAttachPoint="workflowCombo"
+                        class="workflowCombo"
+                        autocomplete="false"
+                    >
+                    </div>
+                </td>
+
+                <td 
+                    dojoAttachPoint="deleteWorkflowButton"
+                    class="deleteWorkflowButton" 															width="20%"
+                    align="center"
+                    class="fileUpload" >
+                </td>
+            </tr>
+    
+
+            <tr>
+                <td 
+                    dojoAttachPoint="runWorkflowButton"
+                    class="runWorkflowButton" 																width="20%"
+                    align="center"
+                    class="fileUpload" >
+                </td>
+                <td colspan="2" class="workflowButtonRunIconLabel" style="-moz-user-select: none !important">Run Workflow</td>
+            </tr>
+
+            <tr>
+                <td 
+                    dojoAttachPoint="displayStatus"
+                    class="displayStatus"
+                    colspan="3"
+                    >
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="3">
+                    <div
+                        dojoAttachPoint="dropTargetContainer"
+                        class="dropTarget" >
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+
+    
+    </div>
+    <!-- END OF WORKFLOWS TAB -->
+    
+
+</div>

@@ -1,0 +1,41 @@
+
+h3. APPLICATION
+
+archive
+
+h3. PURPOSE
+
+1. ARCHIVE AND PACKAGE A GIT REPOSITORY FOR DISTRIBUTION
+
+h3. INPUT
+
+1. BASE DIR OF git REPOSITORY
+
+2. OUTPUTDIR FOR PACKAGE
+
+h3. OUTPUT
+
+MYSQL DATABASE CONFIGURATION AND EDITED CONFIG FILE
+
+h3. USAGE
+
+{code}
+sudo ./archive.pl \
+           <--name String> <--basedir String> <--version String> \
+           <--versionfile String> <--outputdir String> [--help]
+ --name      :   Name of application --version   :  Version number
+       (e.g., 0.6, 0.8) --basedir   :  Name of basedir where the .git
+       directory is located --outputdir :  Create packages inside RELEASE dir
+       in the outputdir --help      :   Print help info
+{code}
+
+h3. EXAMPLES
+
+./archive.pl \
+ --name agua \
+ --basedir /home/syoung/0.6 \
+ --version 0.6 \
+ --versionfile bin/scripts/resources/VERSION \
+ --outputdir /home/syoung
+
+

@@ -1,0 +1,114 @@
+/* SPECIFIC MAX-HEIGHT FOR EACH TABLE */
+.details .flowcell .information {
+    max-height: 85px !important;
+}
+.details .flowcell .list {
+    max-height: 900px !important;
+}
+.details .flowcell .lifeCycle {
+    max-height: 900px !important;
+}
+
+
+/* GRID SCROLLER TOP MARGINS */
+.details .flowcell .information .dgrid-scroller {
+    margin-top: 18px !important;
+}
+.details .flowcell .list .dgrid-scroller {
+    margin-top: 35px !important;
+}
+.details .flowcell .lifeCycle .dgrid-scroller {
+    margin-top: 35px !important;
+
+}
+
+/* INFORMATION */
+.details .flowcell .information .dgrid-scroller {
+    margin-top: 35px !important;
+    height: auto !important;
+}
+.details .flowcell .information .field-rta_version,
+.details .flowcell .information .dgrid-header .field-rta_version,
+.details .flowcell .information .field-fpga_version,
+.details .flowcell .information .dgrid-header .field-fpga_version,
+.details .flowcell .information .field-flowcell_id,
+.details .flowcell .information .dgrid-header .field-flowcell_id {
+    width: 60px !important;
+}
+.details .flowcell .information .field-flowcell_barcode,
+.details .flowcell .information .dgrid-header .field-flowcell_barcode {
+    width: 110px !important;
+}
+
+.details .flowcell .information .field-update_timestamp,
+.details .flowcell .information .dgrid-header .field-update_timestamp {
+    width: 150px !important;
+}
+
+/* HEADERS */
+.details .dgrid-header {
+    background-color: #ADF !important;
+    height: auto !important;
+}
+.details .dgrid-header .dgrid-cell {
+    text-align: center !important;
+}
+
+/* TITLE PANE */
+.details .dijitTitlePaneContentInner {
+    height: auto !important;
+}
+.details .information .dijitTitlePane {
+    height: auto !important;
+}
+
+/* ROWS */
+.details .html.has-quirks .dgrid-row-table {
+    min-height: 30px !important;
+    vertical-align: middle !important;
+} 
+
+/* LIST */
+.details .flowcell .list .dgrid-scroller {
+    margin-top: 35px !important;
+}
+.details .flowcell .list .field-flowcell_name,
+.details .flowcell .list .dgrid-header .field-flowcell_name {
+    width: 100px !important;
+}
+.details .flowcell .list .field-sample_barcode,
+.details .flowcell .list .dgrid-header .field-sample_barcode {
+    width: 100px !important;
+}
+.details .flowcell .list .field-phix_error_rate,
+.details .flowcell .list .dgrid-header .field-phix_error_rate,
+.details .flowcell .list .field-clusters_per_pf,
+.details .flowcell .list .dgrid-header .field-clusters_per_pf,
+.details .flowcell .list .field-clusters_raw,
+.details .flowcell .list .dgrid-header .field-clusters_raw,
+.details .flowcell .list .field-cluster_density_pf,
+.details .flowcell .list .dgrid-header .field-cluster_density_pf,
+.details .flowcell .list .field-cluster_density_raw,
+.details .flowcell .list .dgrid-header .field-cluster_density_raw,
+.details .flowcell .list .field-qscore_cycle,
+.details .flowcell .list .dgrid-header .field-qscore_cycle,
+.details .flowcell .list .field-extract_cycle,
+.details .flowcell .list .dgrid-header .field-extract_cycle {
+    width: 80px !important;
+}
+
+.details .flowcell .list .field-insert_median,
+.details .flowcell .list .dgrid-header .field-insert_median,
+.details .flowcell .list .field-phasing_r2,
+.details .flowcell .list .dgrid-header .field-phasing_r2,
+.details .flowcell .list .field-phasing_r1,
+.details .flowcell .list .dgrid-header .field-phasing_r1 {
+    width: 100px !important;    
+}
+
+
+.details .flowcell .list .field-lane_id,
+.details .flowcell .list .dgrid-header .field-lane_id {
+    width: 50px !important;
+}
+

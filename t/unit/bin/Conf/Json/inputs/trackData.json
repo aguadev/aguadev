@@ -1,0 +1,135 @@
+{
+    "urlTemplate" : "http://genome.ucsc.edu/cgi-bin/hgGene?hgg_gene={proteinID}",
+   "headers" : [
+      "start",
+      "end",
+      "strand",
+      "name",
+      "alignID",
+      "proteinID",
+      "subfeatures"
+   ],
+   "subfeatureClasses" : {
+      "CDS" : "transcript-CDS",
+      "UTR" : "transcript-UTR"
+   },
+   "histogramMeta" : [
+      {
+         "basesPerBin" : "100000",
+         "arrayParams" : {
+            "length" : 514,
+            "chunkSize" : 10000,
+            "urlTemplate" : "data/tracks/chr22/knownGene/hist-100000-{chunk}.json"
+         }
+      }
+   ],
+   "lazyIndex" : 2,
+   "featureCount" : 1857,
+   "histStats" : [
+      {
+         "bases" : "100000",
+         "max" : 43,
+         "mean" : 5.09922178988327
+      },
+      {
+         "bases" : 200000,
+         "max" : 58,
+         "mean" : 10.1984435797665
+      },
+      {
+         "bases" : 500000,
+         "max" : 119,
+         "mean" : 25.4466019417476
+      },
+      {
+         "bases" : 1000000,
+         "max" : 151,
+         "mean" : 50.4038461538462
+      },
+      {
+         "bases" : 2000000,
+         "max" : 251,
+         "mean" : 100.807692307692
+      },
+      {
+         "bases" : 5000000,
+         "max" : 429,
+         "mean" : 238.272727272727
+      },
+      {
+         "bases" : 10000000,
+         "max" : 841,
+         "mean" : 436.833333333333
+      },
+      {
+         "bases" : 20000000,
+         "max" : 1538,
+         "mean" : 873.666666666667
+      },
+      {
+         "bases" : 50000000,
+         "max" : 2423,
+         "mean" : 1310.5
+      }
+   ],
+   "key" : "UCSC Genes",
+   "featureNCList" : [
+      [
+         16124263,
+         21353326,
+         {
+            "chunk" : "1"
+         }
+      ],
+      [
+         21336557,
+         26908438,
+         {
+            "chunk" : "2"
+         }
+      ],
+      [
+         26887893,
+         32509010,
+         {
+            "chunk" : "3"
+         }
+      ],
+      [
+         32545520,
+         39069854,
+         {
+            "chunk" : "4"
+         }
+      ],
+      [
+         39066474,
+         44603035,
+         {
+            "chunk" : "5"
+         }
+      ],
+      [
+         44568835,
+         51238065,
+         {
+            "chunk" : "6"
+         }
+      ]
+   ],
+   "className" : "generic_parent",
+   "clientConfig" : {
+      "featureCallback" : "(function(feat, fields, div) {\n    if (fields.type) {\n        div.className = \"basic\";\n        switch (feat[fields.type]) {\n        case \"CDS\":\n        case \"thick\":\n            div.style.height = \"10px\";\n            div.style.marginTop = \"-3px\";\n            break;\n        case \"UTR\":\n        case \"thin\":\n            div.style.height = \"6px\";\n            div.style.marginTop = \"-1px\";\n            break;\n        }\n        div.style.backgroundColor = \"#0c0c78\";\n    }\n}\n)"
+   },
+   "arrowheadClass" : "transcript-arrowhead",
+   "subfeatureHeaders" : [
+      "start",
+      "end",
+      "strand",
+      "type"
+   ],
+   "type" : "FeatureTrack",
+   "label" : "knownGene",
+   "sublistIndex" : 7,
+   "lazyfeatureUrlTemplate" : "data/tracks/chr22/knownGene/lazyfeatures-{chunk}.json"
+}

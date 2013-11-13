@@ -1,0 +1,43 @@
+@import "../../../dojo/dgrid/css/dgrid.css";
+@import "../../../dojo/dojo/resources/dojo.css";
+/* @import "../../../dojo/dijit/tests/css/dijitTests.css"; */
+
+
+.details .dijitTabInnerDiv.dijitTabContent.dijitButtonContents.dijitTab.tabStripButton.tabStripButton-top {
+     display: none !important;
+     visibility: invisible !important;   
+}
+
+/* REMOVE ALL TAB PADDING */
+.details .dijitTabContainerTop-tabs .dijitTabChecked {
+    padding: 0px !important;   
+}
+
+.details .dijitTabHover .dijitTabCheckedHover {
+    outline: 0 !important;
+}
+
+/* ALLOW USER TO SELECT & COPY FROM PAGE */
+.details,
+.details .flowcell {
+    -webkit-user-select: all !important;
+    user-select: all !important;
+    -moz-user-select: text !important;
+}
+
+.details .dijitTabPaneWrapper.dijitTabContainerTop-container.dijitAlignClient {
+	min-height: 900px !important;
+}	
+
+.details .dijitContentPane.dijitTabPane.dijitTabContainerTop-child.dijitTabContainerTop-dijitContentPane {
+	min-height: 900px !important;
+	padding: 0px !important;
+}
+
+.details .dijitTitlePaneTitleFocus {
+    outline: none !important;
+}
+
+.details .dijitTitlePaneTextNode {
+    font-size: 16px !important;
+}

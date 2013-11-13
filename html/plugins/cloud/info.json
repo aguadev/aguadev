@@ -1,0 +1,14 @@
+{
+	name: "plugins.cloud.Controller",
+
+	version : "0.01",
+	
+	url : '',
+	
+	description : "Display a login dialogue window and authenticate with the server to retrieve a session ID which is stored as Agua.cookie('sessionid')",
+		
+	dependencies :
+	[
+		{	name: "plugins.core.Agua", version: 0.01	}
+	]
+}

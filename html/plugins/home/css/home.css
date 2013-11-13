@@ -1,0 +1,333 @@
+/* MAIN HOME TAB CONTENT */
+.home {
+	position: relative;
+	top: -20px;
+	background-color: white !important;
+}
+
+/* PROGRESS PANE LOAD ERROR */
+.progressPane .dijitContentPaneError {
+	background-color: #FF0000 ! important;
+	background-image: url(../../../images/loading.gif);
+	left: 40% ! important;
+	position: absolute ! important;
+	top: 40% ! important;
+}
+
+/* PROGRESS PANE POSITION */
+.home .progressPane {
+	overflow: scroll !important;	
+	height: 500px !important;
+    /*left: 50px !important;*/
+    margin-bottom: 2px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    margin-top: 2px;
+    overflow: scroll !important;
+    position: absolute;
+    /*top: 100px !important;*/
+    visibility: hidden;
+    width: 70% !important;
+	box-shadow: -2px 5px 20px #888;
+	
+/*	position: absolute;
+	top: 150px;
+	left: 150px;
+	float: center;
+	padding:8x;
+	margin:2px;
+	visibility: hidden;
+	height: 300px !important;
+	width: 900px !important;
+*/   box-shadow: -2px 5px 20px #888;
+}
+
+.home .progressPane .dojoxFloatingPaneContent {
+	background-color: #BCF;
+}
+
+.home .progressPane .dojoxDialog .dijitDialog .dijitAlignTop .dojoxFloatingPaneFg {
+	width: 900px !important;
+	height:	300px !important;
+}
+
+.home .progressPane body {
+	font-size: 15px;
+	font-family: Verdana;
+}
+
+.home .progressPane .message {
+	font-size: 30px;
+	text-align: center;
+	font-weight: bold;
+}
+
+.home .progressPane .address, .url {
+	font-size: 28px;
+	margin: 4px;
+	/*border: 1px solid black;*/
+	text-align: center;
+}
+
+.home .progressPane .url {
+	color: #88F;
+}
+
+.home .progressPane .url:visited {
+	color: #F8F;
+}
+
+.home .progressPane .dojoxFloatingPaneTitle {
+	font-family: Verdana !important;
+	font-weight: bold !important;
+	text-align: center !important;
+}
+
+.home .progressPane pre {
+	background-color: white !important;
+}
+
+.progressPane .dojoxDialog .dijitDialog {
+	background-color: #FF8888;
+	width: 600px;
+}
+
+
+/* BOTTOM PANE */
+.home .bottomPane {	
+	vertical-align: top; 
+	min-width: 	950px;
+	height:	750px;
+	width: auto !important;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius	:	8pt;
+	border: 1px solid #CCC !important;
+}
+
+.home .bottomPane iframe {    
+    border-radius: 8pt !important;
+}
+
+.home .homeContainer {
+	-moz-user-select: none !important;	
+}
+
+.home .bottomPane:hover {	
+	border: 1px solid #FF0 !important;
+}
+
+/* NAVIGATION INFO */
+.home .navigationTable {
+	border-collapse: collapse !important;
+	width:	300px !important;	
+}
+
+.home .navigationTable .leftArrow,
+.home .navigationTable .rightArrow {
+    background-position: 49px 50% !important;
+    background-repeat: no-repeat;
+    font-size: 15px !important;
+    text-indent: 4px !important;
+    width: 75px !important;
+}
+.home .leftArrow {
+	background-image: url(../../../plugins/home/images/leftarrow-20.png);
+}
+.home .rightArrow {
+	background-image: url(../../../plugins/home/images/rightarrow-20.png);
+}
+
+.home .navigationInfo {
+	width: 100px !important;
+}
+
+/* PACKAGE COMBO */
+.home .packageTable {
+	border-collapse: collapse !important;
+}
+.home .packageTitle {
+	text-align: center;
+	font-size: 8px !important;
+	font-weight: bold !important;
+}
+.home .packageCombo {
+	font-size: 16px !important;
+	height: 22px !important;
+	width: 150px !important;
+}
+
+/* CURRENT VERSION */
+.home .currentVersion {
+	font-size: 16px !important;
+	height: 22px !important;
+	min-width: 200px !important;
+	text-align: center !important;
+}
+
+.home .resizeHandle {
+	height: 13px;
+	width: 13px;
+	float: right;
+	position: absolute;
+	right: 2px;
+	bottom: 2px;
+	z-index: 10;
+	background-image: url(../../../dojo/dojox/layout/resources/icons/resize.png);
+}
+
+.home .checkVersion {
+    -moz-background-clip: border;
+    -moz-background-inline-policy: continuous;
+    -moz-background-origin: padding;
+    border-radius: 8pt 8pt 8pt 8pt;
+    -moz-user-select: none;
+
+    background-color: #FFFFFF !important;
+    border-color: #BBBBBB #BBBBBB #888888 #888888;
+    border-style: solid;
+    border-width: 3px;
+    color: #444 !important;
+    font-family: Arial;
+    font-size: 22px;
+    font-weight: bolder !important;
+    height: 32px !important;
+    margin-left: 10px;
+    outline: 0 !important;
+    position: relative;
+    width: 310px !important;
+
+	/* LATER: ADD UPGRADE IMAGE */
+/*	background-image: url(../../../plugins/home/images/upgrade-24.png);
+	background-position: 10px;
+	background-repeat: no-repeat;
+*/
+}
+
+.home .checkVersion:hover,
+.home .checkVersion:active {
+	background-color: #FF0 !important;
+	border: 3px solid #DDD;
+	border-bottom-color: #BBB;
+	border-left-color: #BBB;
+	background-color : #FF8;
+    outline: 0 !important;
+}
+
+.home .checkVersion:active {
+	background-color: #0F0 !important;
+	background-color : #8F8;
+}
+
+.home .hidden {
+	visibility: hidden !important;
+	display: none !important;
+}
+
+.home {
+	/* NO DOTTED BORDER AROUND DIALOG */
+	border: 0 none !important;
+	outline: 0 none !important;
+}
+
+/* PROGRESS PANE DOCK NODE */
+.homeDockNode {
+	position: relative !important;
+	list-style-type: none !important;
+    cursor: pointer;
+    float: left;
+    list-style: outside outside none;
+    margin: 0;
+    padding: 2px;
+    width: auto;
+	/*display: none;*/
+	/*visibility: invisible;*/
+}
+
+.dojoxDockList {
+	height: 30px !important;
+}
+
+.dojoxDockList li {
+	float: left;
+    list-style-type: none !important;
+}
+
+.homeDockNode .dojoxDockRestoreButton {
+	background: url("../../../plugins/home/images/refresh-24.png") no-repeat scroll 0pt center transparent ! important;
+	height: 24px !important;
+    width: 24px !important;
+	margin-top: 0 !important;
+}
+
+.dojoxDockTitleNode {
+    font-weight: bold;
+	top: 5px !important;
+	left: 2px !important;
+    padding-right: 5px !important;
+	position: relative;
+	opacity: 0.8;
+	font-size: 14px;
+    overflow: hidden;
+}
+
+.dojoxDockNode {
+	background: none !important;
+	border: none !important;
+	height: auto ! important;
+	margin: 0 !important;
+}
+.dojoxDock {
+	background: none !important;
+	border: none !important;
+	opacity: 0.8 !important;
+}
+
+/* NO UPGRADE DIALOG */
+.simpleDialog,
+.simpleDialog .dijitDialog {
+	font-size: 20px !important;
+	margin-right: auto;
+	margin-left: auto;
+	text-align: center;
+
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius	:8pt;
+	
+	float: center;
+	padding: 8x;
+	margin: 2px;
+   box-shadow: -2px 5px 20px #888;
+}
+
+.simpleDialog .dijitDialogPaneContent {
+	/*height: 0px !important;*/
+	padding: 0px !important;
+	border: 0 !important;
+}
+
+.dijitDialogCloseIcon {
+	outline: 0 none !important;
+}
+
+.title .home {
+     font-size: 40px ! important;
+}
+
+.home .dijitDialogTitleBar {
+     background-color: #FF8888 ! important;
+     top: 0px ! important;
+     width: 700px ! important;
+}
+
+.home .dijitReset .dijitInline .dijitButtonText{
+     width: 100px ! important;
+}
+
+.soria .dijitDialog, .tundra .dijitDialog {
+     border: 0pt none ! important;
+     /*padding: 10px ! important;*/
+}

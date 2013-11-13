@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+		"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<style type="text/css">
+	@import "../../../../../../dojo/dojo/resources/dojo.css";
+	@import "../../../../../../dojo/dijit/themes/dijit.css";
+	@import "../../../../../../dojo/dijit/themes/soria/soria.css";
+	@import "../../../../../../dojo/dijit/themes/tundra/tundra.css";
+</style>
+
+<style type="text/css">
+
+/* FIX TESTS */
+.details .dijitTabPaneWrapper.dijitTabContainerTop-container.dijitAlignClient {
+	height: 900px !important;
+}	
+
+.details .dijitContentPane.dijitTabPane.dijitTabContainerTop-child.dijitTabContainerTop-dijitContentPane {
+	height: 900px !important;
+	padding: 0px !important;
+}
+
+</style>
+	
+<title> t.plugins.infusion.detailed.flowcell.test</title>
+
+<script type="text/javascript">
+
+// GLOBAL VARIABLES
+var Agua = {};
+var Data = {};
+var dojoConfig = {
+	isDebug: true,
+	locale: "en-us",
+	packages: [
+		{
+		  name: "plugins",
+		  location: "../../plugins"
+		},
+		{
+		  name: "t",
+		  location: "../../t"
+		},
+		{
+		  name: "doh",
+		  location: "../../dojo/util/doh"
+		}
+	],
+	debugAtAllCosts: true,
+	useCommentedJson: true
+};
+</script>
+<script type="text/javascript"
+	src="../../../../../../dojo/dojo/dojo.js">
+</script>
+
+<script type="application/x-javascript">
+	dojo.require("dijit.layout.TabContainer");
+	dojo.require("dijit.layout.ContentPane");
+</script>
+
+<script type="text/javascript" src="./runTests.js"></script>
+
+<style type="text/css">
+
+
+</style>
+
+<link rel="stylesheet" href="claro.css">
+
+</head>
+<body class="agua tundra claro">
+	
+<center>
+	<h3>t.unit.plugins.infusion.detailed.flowcell.test</h3>
+</center>
+
+<!--<div data-dojo-type="dijit/layout/TabContainer" style="width: 400px; height: 100px;" tabPosition="right-h">-->
+<!--  <div data-dojo-type="dijit/layout/ContentPane" title="My first tab" selected="true">-->
+<!--    Lorem ipsum and all around...-->
+<!--  </div>-->
+<!--  <div data-dojo-type="dijit/layout/ContentPane" title="My second tab">-->
+<!--    Lorem ipsum and all around - second...-->
+<!--  </div>-->
+<!--  <div data-dojo-type="dijit/layout/ContentPane" title="My last tab">-->
+<!--    Lorem ipsum and all around - last...-->
+<!--  </div>-->
+<!--</div>-->
+
+	<div class="details">
+
+		<div
+			data-dojo-type="dijit.layout.TabContainer"
+			data-dojo-attach-point="tabContainer" 
+			tabStrip="false"
+			id="attachPoint"
+			class="details"
+		>
+		</div>
+
+	</div>
+
+
+</body>
+</html>

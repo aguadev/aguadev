@@ -1,0 +1,78 @@
+#!/usr/bin/perl -w
+
+=head2
+
+    APPLICATION     01.Monitor-LSF.t
+	    
+    PURPOSE
+  
+        TEST MODULE Monitor::LSF
+
+    USAGE
+
+perl ./01.Monitor-LSF.t
+
+
+
+=cut
+
+#use strict;
+
+#### TEST FILE NUMBER
+my ($test_number) = $0 =~ /[\.\/]*(\d+)[^\/]+$/;
+print "01.Monitor-LSF.t    Test set $test_number (script: $0)\n";
+
+#### EXTERNAL MODULES
+use FindBin qw($Bin);
+use Data::Dumper;
+
+#### USE LIBRARY
+use lib "$Bin/../../../lib";	
+use lib "$Bin/../../../lib/external";	
+
+#### INTERNAL MODULES
+use Monitor::LSF;
+use Timer;
+use Util;
+
+#### SUBMIT A JOB
+my $lsf = Monitor::LSF->new();
+my $scriptfile = "$Bin/test/test.sh";
+my $stdoutfile= "$Bin/test/test.out";
+my $stderrfile= "$Bin/test/test.out";
+my $queue = "priority";
+
+
+
+#my $job = LSF::Job->submit(
+#    -q => $queue,
+#    -o => $stdoutfile,
+#    $scriptfile
+#);
+#
+#my $jobid = $job->id();
+#print "01.Monitor-LSF.t    jobid: $jobid\n";
+
+
+print "01.Monitor-LSF.t    Submitting job in scriptfile: $scriptfile\n";
+$lsf->submitJob(
+    {
+        scriptfile  => $scriptfile,
+        queue       => $queue,
+        stdoutfile  => $stdoutfile,
+        stderrfile  => $stderrfile
+    }
+);
+my $jobid = $lsf->get_jobid();
+print "01.Monitor-LSF.t    jobid: $jobid\n";
+
+print "01.Monitor-LSF.t    BEFORE GET STATUS\n";
+my $status = $lsf->jobStatus($jobid);
+print "01.Monitor-LSF.t    status: $status\n";
+
+my $remaining_jobs = $lsf->remainingJobs([$jobid]);
+print "01.Monitor-LSF.t    remaining_jobs: \n";
+print join "\n", @$remaining_jobs;
+print "\n";
+
+exit;

@@ -1,0 +1,117 @@
+<!--<!DOCTYPdojo/E HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"-->
+<!--"http://www.w3.org/TR/html4/strict.dtd">-->
+<html>
+<head>
+
+<!-- prevent cache -->
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="pragma" content="no-cache">
+
+<!-- declare character set -->
+<meta charset="utf-8" />
+
+<title>Agua</title>
+
+<style type="text/css">
+	/* DOJO STYLES */
+	@import "dojo/dojo/resources/dojo.css";
+	@import "dojo/dijit/themes/dijit.css";
+	@import "dojo/dijit/themes/soria/soria.css";
+	@import "dojo/dijit/themes/tundra/tundra.css";
+	@import "dojo/dojox/widget/Loader/Loader.css";
+	@import "dojo/dijit/themes/claro/document.css";
+</style>
+
+<link rel="stylesheet" href="plugins/core/css/toolbar.css">
+<script type="text/javascript">
+
+// GLOBAL VARIABLES
+var Agua = {};
+var Data = {};
+var dojoConfig = {
+	isDebug: true,
+	locale: "en-us",
+	//extraLocale: ['ja-jp'],
+	packages: [
+		{
+			name: "plugins",
+			location: "../../plugins"
+		}
+		,
+		{
+			name: "t",
+			location: "../../t"
+		}
+		,
+		{
+			name: "dgrid",
+			location: "../../dojo/dgrid"
+		}
+		,
+		{
+			name: "xstyle",
+			location: "../../dojo/xstyle"
+		}
+		,
+		{
+			name: "put-selector",
+			location: "../../dojo/put-selector"
+		}
+		,
+		{
+			name: "JBrowse",
+			location: "../../plugins/view/jbrowse/src/JBrowse"
+		}
+		,
+		{
+			name: 'lazyload',
+			main: 'lazyload',
+			location: "../../dojo/lazyload"
+		}
+		,
+		{
+			name: 'jDataView',
+			location: 'jDataView/src',
+			main: 'jdataview'
+		}
+	],
+	debugAtAllCosts: true,
+	useCommentedJson: true
+};
+</script>
+
+<script type="text/javascript"
+	src="dojo/dojo/dojo.js">
+</script>
+
+<link rel="stylesheet" type="text/css" href="dojo/dgrid/css/dgrid.css">
+
+<script type="text/javascript">
+
+window.history.forward(1);
+
+// DEBUG LOADER
+//dojo.require("dojoc.util.loader");
+
+dojo.addOnLoad(function(){
+	dojo.require("plugins.core.Agua");
+	dojo.require("plugins.login.Controller");
+	Agua = new plugins.core.Agua( {
+		cgiUrl : "../cgi-bin/aguadev/"
+		, htmlUrl : "../aguadev/"
+	});
+	Agua.login = new plugins.login.Login();
+	console.log("agua.html    Completed new plugins.login.Login()");
+});
+
+</script>
+
+</head>
+
+<body class="claro" style="overflow: scroll !important;">
+<!--<body class="agua tundra">-->
+	<div id="aguaVersion"></div>
+	<div id="loginHolder"></div>
+	<div id="attachPoint"></div>
+</body>
+</html>

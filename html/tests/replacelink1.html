@@ -1,0 +1,329 @@
+<html>
+
+<head>
+
+<title> replace links </title>
+</head>
+<body>
+
+<script type="text/javascript">
+  
+var brokenLink = /\/watch/ig; 
+var xPath = "//a"; 
+var links = document.evaluate(xPath, document, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+
+for (var i = 0; i < links.snapshotLength; i++) { 
+    a = links.snapshotItem(i); 
+    href = a.href; 
+    if (brokenLink.test(a.href)) { 
+        a.href = href.replace(/.*/, 'was a watch link'); 
+    } else { 
+        a.href = href.replace(/.*/, 'was not a watch link'); 
+    } 
+}
+
+
+
+
+
+</script>
+
+</body>
+</html>
+
+
+<!--// ==UserScript==-->
+<!--// @name             subs.nu-directDownloadLink-->
+<!--// @namespace        http://sam.intelunix.fr-->
+<!--// @description      Add a link to download subtitles directly from a search result (without the hassle of having to go on the subtitle page first)-->
+<!--// @include          http://subs.nu/*/search/*-->
+<!--// @include          http://www.subs.nu/*/search/*-->
+<!--// @version          0.2-->
+<!--// ==/UserScript==-->
+<!---->
+<!---->
+<!--// this RE will be used to find the href for direct download on a subtitle page-->
+<!--var RE_subHref = new RegExp('<a[^>]+href="([^"]+/download/[0-9]+-[0-9a-f]+/)"[^>]+>[^<]*<img[^>]+src="[^"]+/download_icon.png"[^>]*>');-->
+<!---->
+<!--// try to find link to the subtitles-->
+<!--var links = document.evaluate('//body/div[@class="content"]/div[@class="left"]/div[@class="left_box"]//td[@onmouseover]/a', -->
+<!--         document, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);-->
+<!---->
+<!--for (var i=0, link ; link = links.snapshotItem(i) ; i++) {-->
+<!--   var span = document.createElement('span');-->
+<!---->
+<!--   // This may look dirty but so are the original html sources-->
+<!--   span.style.font.weight = 'bold';-->
+<!--   span.style.textDecoration = 'underline';-->
+<!---->
+<!--   span.textContent = ' <Download> ';-->
+<!--   link.appendChild(span);-->
+<!--   span.addEventListener('click', function (e) {-->
+<!--         var thisNode = this;-->
+<!--         // Don't actually click on the parent link-->
+<!--         e.preventDefault();-->
+<!--         e.stopPropagation();-->
+<!--         GM_xmlhttpRequest({-->
+<!--            method: 'GET',-->
+<!--            url: this.parentNode.href,-->
+<!--            onload: function (resp) {-->
+<!--                  // find the subtitle URL-->
+<!--                  var match = resp.responseText.match(RE_subHref);-->
+<!--                  if (match)-->
+<!--                     location.href = match[1];-->
+<!--                  else-->
+<!--                     thisNode.textContent = 'Direct Link Not Found';-->
+<!--            }-->
+<!--         });-->
+<!--      }, true);-->
+<!--}-->
+
+
+<!---->
+<!--WebDeveloper.com > Client-Side Development > JavaScript > gm_xmlhttprequest-Extracting a link from responseDetails.responseText.-->
+<!--PDA-->
+<!--Click to See Complete Forum and Search --> : gm_xmlhttprequest-Extracting a link from responseDetails.responseText.-->
+<!---->
+<!--junkyard-->
+<!--04-25-2007, 03:17 PM-->
+<!--I am trying to extract some movie links from lynda.com with a javascript /greasemonkey script I am writing.-->
+<!---->
+<!--I can get the string contents of all the pages I want to get the links from just fine.....however, extracting the links from those strings is stumping me.-->
+<!---->
+<!--Here is what I have so far. -->
+<!---->
+<!---->
+<!--I THINK the path should be //embed[@src]. At least I'm pretty sure. //Embed gets me definitely to the right node....and that node has a src attribute or sub node which I need the string link from.-->
+<!---->
+<!--responseDetails.responseText is a string of the entire sub webpage that is being looked at. I have successfully alerted myself all the sub web page HTML, I just am having trouble getting at the //embed link and then printing it.-->
+<!---->
+<!---->
+<!--PS. What is the best way to output all these links so I can copy/paste them into a download manager.-->
+<!---->
+<!--Much appreciated.-->
+<!---->
+<!---->
+<!---->
+<!--//allLinks.snapshotLength-->
+<!---->
+<!--var a = new Array();-->
+<!--var b = new Array();-->
+<!--var firstIndex;-->
+<!--var lastIndex;-->
+<!--var subString;-->
+<!--var finalString;-->
+<!--var finalLink;-->
+<!--var div;-->
+<!--var c = new Array();-->
+<!--var xpath;-->
+<!--var append;-->
+<!---->
+<!--var allLinks, thisLink;-->
+<!--allLinks = document.evaluate(-->
+<!--'//div[@id="divTableOfContents"]//a[@href] ',-->
+<!--document,-->
+<!--null,-->
+<!--XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,-->
+<!--null);-->
+<!--for ( var i = 0; i < allLinks.snapshotLength; i++) {-->
+<!--thisLink = allLinks.snapshotItem(i).toString();-->
+<!---->
+<!---->
+<!---->
+<!---->
+<!--firstIndex = thisLink.indexOf('{');-->
+<!--lastIndex = thisLink.lastIndexOf('}');-->
+<!--subString = thisLink.substring(firstIndex+1 ,lastIndex);-->
+<!---->
+<!--finalString = "http://movielibrary.lynda.com/html/player/?id={" + subString + "}";-->
+<!--a[i] = finalString;-->
+<!---->
+<!---->
+<!--GM_xmlhttpRequest({-->
+<!--method: 'GET',-->
+<!--url: finalString,-->
+<!--headers: null,-->
+<!--onload: function(responseDetails) {-->
+<!---->
+<!---->
+<!---->
+<!--var xpath = "//embed[@src]";-->
+<!--c = responseDetails.responseText.match(xpath);-->
+<!---->
+<!--alert(c.toString());-->
+<!---->
+<!---->
+<!---->
+<!--}-->
+<!--});-->
+<!---->
+<!---->
+<!---->
+<!---->
+<!--} //end of great if.-->
+<!--ricp-->
+<!--04-25-2007, 04:04 PM-->
+<!--xpath, I have found, can be a little deceiving. I've had cases where //nodeName[@attribute] should pick up all those nodes with that attribute, but I've had to change it to //nodeName[@attribute!='']-->
+<!---->
+<!--Give that a shot, and see if it sorts it.-->
+<!--ricp-->
+<!--04-25-2007, 04:07 PM-->
+<!--Oh, and if you want to allow non-IE browsers to accept the selectNodes/selectSingleNodes method from the XMLDOM, have a look at this...-->
+<!---->
+<!--http://km0.la/js/mozxpath/-->
+<!--junkyard-->
+<!--04-25-2007, 06:07 PM-->
+<!--It didn't work. -->
+<!---->
+<!--See I got the idea that //embed[@src] would work from this script, which does an excellent job of unembedding videos.-->
+<!---->
+<!--Now how to I merge that script with mine, to GET the links.-->
+<!---->
+<!---->
+<!--Anybody else? Should I just deal with the string RAW, or should I try turn it into a node and append it, and then search that.-->
+<!---->
+<!--Either way.....I need help.-->
+<!---->
+<!---->
+<!--// ==UserScript==-->
+<!--// @name	Unembed-->
+<!--// @namespace	http://neugierig.org/software/greasemonkey-->
+<!--// @description	Adds a download link to embedded movies-->
+<!--// @include	*-->
+<!--// ==/UserScript-->
+<!--//-->
+<!--// *** NOTE: there is an easier way to accomplish this than using this script.-->
+<!--// *** please see http://neugierig.org/software/greasemonkey/ for info.-->
+<!---->
+<!--(function() {-->
+<!--var xpath = "//embed";-->
+<!--var res = document.evaluate(xpath, document, null,-->
+<!--XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null); -->
+<!--var i, embed;-->
+<!--for (i = 0; embed = res.snapshotItem(i); ++i) {-->
+<!--var dl = document.createElement('a');-->
+<!--dl.href = embed.src;-->
+<!---->
+<!--}-->
+<!--})();-->
+<!---->
+<!--// vim: set ts=2 sw=2 :-->
+<!--junkyard-->
+<!--04-26-2007, 12:00 AM-->
+<!--This is working perfectly....except my output is wrong. My links are perfect if I view them within the xmlhttprequest onload function, but they become undefined between there and the write to the new window. That is for the VERY last link, which stays intact and is printed just fine.-->
+<!---->
+<!--See anything?-->
+<!--Thanks.-->
+<!---->
+<!--var a = new Array();-->
+<!--var b = new Array();-->
+<!--var c = new Array();-->
+<!--var d = new Array();-->
+<!--var firstIndex;-->
+<!--var lastIndex;-->
+<!--var subString;-->
+<!--var finalString;-->
+<!--var finalLink;-->
+<!---->
+<!---->
+<!---->
+<!--window.addEventListener(-->
+<!--'load', -->
+<!--function() { -->
+<!---->
+<!---->
+<!--var w = window.open(); // Create a new window with no content-->
+<!--var t = w.document; -->
+<!--t.open(); // Start a new document (optional)-->
+<!---->
+<!--t.write("<p>" + d.length);-->
+<!---->
+<!--for ( var r = 0; r < d.length; r++){-->
+<!---->
+<!--t.write("<p>" + d[r]); // Output document content-->
+<!---->
+<!--}-->
+<!--//t.write("<p>" + a.toString());-->
+<!--t.close();-->
+<!---->
+<!---->
+<!--},-->
+<!--true);-->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!--var allLinks, thisLink;-->
+<!--allLinks = document.evaluate(-->
+<!--'//div[@id="divTableOfContents"]//a[@href] ',-->
+<!--document,-->
+<!--null,-->
+<!--XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,-->
+<!--null);-->
+<!---->
+<!---->
+<!--for ( var i = 0; i < allLinks.snapshotLength; i++) {-->
+<!--thisLink = allLinks.snapshotItem(i).toString();-->
+<!---->
+<!---->
+<!---->
+<!---->
+<!--firstIndex = thisLink.indexOf('{');-->
+<!--lastIndex = thisLink.lastIndexOf('}');-->
+<!--subString = thisLink.substring(firstIndex+1 ,lastIndex);-->
+<!---->
+<!--finalString = "http://movielibrary.lynda.com/html/player/?id={" + subString + "}";-->
+<!--a[i] = finalString;-->
+<!---->
+<!---->
+<!--GM_xmlhttpRequest({-->
+<!--method: 'GET',-->
+<!--url: finalString,-->
+<!--headers: null,-->
+<!--onload: function(responseDetails) {-->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!---->
+<!--var xpath = new RegExp("'http(.*)'");-->
+<!--c = responseDetails.responseText.match(xpath);-->
+<!--d[i] = c[0];-->
+<!---->
+<!---->
+<!---->
+<!---->
+<!--}-->
+<!--});-->
+<!---->
+<!---->
+<!--} -->
+<!---->
+<!---->
+<!--This is what is print in the new window.-->
+<!--undefined-->
+<!---->
+<!--undefined-->
+<!---->
+<!--undefined-->
+<!---->
+<!--undefined-->
+<!---->
+<!--undefined-->
+<!---->
+<!--undefined-->
+<!---->
+<!--undefined-->
+<!---->
+<!--undefined-->
+<!---->
+<!--'http://files.lynda.com/secure/courses/252/chap24/23_01_Conclusion.mov?e=1177563634&h=ef40da1d1ea41f79b1395b3ac9945c53'-->
+<!--webdeveloper.com-->
+<!--Copyright 2009 WebMediaBrands Inc., All Rights Reserved.-->

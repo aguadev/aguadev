@@ -1,0 +1,207 @@
+<div dojoattachpoint="containerNode">
+
+    <div
+        data-dojo-attach-point="mainTab"
+        class="infusion dialog project"
+        label="Create Project"
+        class="login"
+        modal="true"
+		title="Create Project"
+        draggable="true"
+        data-dojo-type="dojox/widget/Dialog"
+        style="overflow: visible; position: absolute; top: 240px; left: 248px; opacity: 1; width: 600px; height: 600px; align: center;"
+        title="Agua Login"
+        >
+
+			<table class="mainTable">
+				<tr class="aguaIconBackground">
+					<td align="center" class="aguaIcon"></td>
+				</tr>
+				<tr align="center" width="100%">
+					<td width="100%">
+						<div
+							data-dojo-attach-point="initTable"
+							class="initTable"
+							style="min-height: 500px; "
+						>
+							<table
+								align="center"
+								style="width: 420px;" >
+								<tr>
+									<td colspan="3" align="center">
+										<div
+											data-dojo-attach-point="projectName"
+											data-dojo-type="plugins.form.ValidationTextBox"
+											data-dojo-props="
+												label			: 	'Project Name',
+												required		: 	'true',
+												pattern			: 	'^[A-Za-z]\\w+',
+												minlength		:	8,
+												invalidMessage	:	'The project name should be a single word starting with a letter. The word must be longer than 8 characters and can only contain letters, numbers or the \'-\' character',
+												promptMessage	:	'The project name should be a single word starting with a letter. The word must be longer than 8 characters and can only contain letters, numbers or the \'-\' character',
+												required		:	true
+											"
+											class="projectName"
+										>
+										</div>									
+									</td>
+								</tr>
+								<tr>
+									<td colspan="3" align="center">
+										<div
+											data-dojo-attach-point="description"
+											data-dojo-type="plugins.form.TextArea"
+											data-dojo-props="
+												label			: 	'Description',
+												pattern			: 	'^.{0,250}$',
+												invalidMessage	:	'Max 250 characters',
+												promptMessage	:	'Input up to 250 characters',
+												cols			: 	32,
+												rows			: 	5,
+												required		:	false
+											"
+											class="projectName"
+										>
+										</div>									
+									</td>
+								</tr>
+								<tr>
+									<td colspan="3" align="center">
+										<div
+											data-dojo-attach-point="buildVersion"
+											data-dojo-type="plugins.form.Select"
+											class="projectName"
+											data-dojo-props="
+												label			: 	'Build Version'
+											"
+										>
+										</div>									
+									</td>
+								</tr>
+								<tr>
+									<td colspan="3" align="center">
+										<div
+											data-dojo-attach-point="dbsnpVersion"
+											data-dojo-type="plugins.form.Select"
+											class="dbsnpVersion"
+											data-dojo-props="
+												label			: 	'dbSNP Version'
+											"
+										>
+										</div>									
+									</td>
+								</tr>
+								<tr>
+									<td colspan="3" align="center">
+										<div
+											data-dojo-attach-point="includeNpf"
+											data-dojo-type="plugins.form.Select"
+											class="includeNpf"
+											data-dojo-props="
+												label			: 	'Include NPF'
+											"
+										>
+										</div>									
+									</td>
+								</tr>
+								<tr>
+									<td colspan="3" align="center">
+										<div
+											data-dojo-attach-point="projectManager"
+											data-dojo-type="plugins.form.ValidationTextBox"
+											data-dojo-props="
+												label			: 	'Project Manager',
+												required		: 	'true',
+												pattern			: 	'.+',
+												minlength		:	1,
+												maxlength		:	45,
+												invalidMessage	:	'Max 45 characters',
+												promptMessage	:	'Max 45 characters',
+												required		:	true
+											"
+											class="projectName"
+										>
+										</div>									
+									</td>
+								</tr>
+								<tr>
+									<td colspan="3" align="center">
+										<div
+											data-dojo-attach-point="dataAnalyst"
+											data-dojo-type="plugins.form.ValidationTextBox"
+											data-dojo-props="
+												label			: 	'Data Analyst',
+												required		: 	'true',
+												pattern			: 	'.+',
+												minlength		:	1,
+												maxlength		:	45,
+												invalidMessage	:	'Max 45 characters',
+												promptMessage	:	'Max 45 characters',
+												required		:	true
+											"
+											class="projectName"
+										>
+										</div>									
+									</td>
+								</tr>
+								<tr>
+									<td colspan="3" align="center">
+										<div
+											data-dojo-attach-point="buildLocation"
+											data-dojo-type="plugins.form.TextArea"
+											data-dojo-props="
+												label			: 	'Build Location',
+												pattern			: 	'^.{0,250}$',
+												invalidMessage	:	'Max 250 characters',
+												promptMessage	:	'Input up to 250 characters',
+												cols			: 	32,
+												rows			: 	5,
+												required		:	false
+											"
+											class="projectName"
+										>
+										</div>									
+									</td>
+								</tr>
+								<tr>
+									<td colspan="3" align="center">
+										<div
+											data-dojo-attach-point="projectPolicy"
+											data-dojo-type="plugins.form.TextArea"
+											data-dojo-props="
+												label			: 	'Project Policy',
+												pattern			: 	'^.{0,250}$',
+												invalidMessage	:	'Max 250 characters',
+												promptMessage	:	'Input up to 250 characters',
+												cols			: 	32,
+												rows			: 	5,
+												required		:	false
+											"
+											class="projectName"
+										>
+										</div>									
+									</td>
+								</tr>
+								<tr>
+									<td
+										colspan="3"
+										data-dojo-attach-point="saveButton"
+										class="saveButton"
+										dojoAttachEvent="onclick:save"
+									>
+										Save
+									</td>
+								</tr>
+								
+							</table>
+			
+						</div>
+					</td>
+				</tr>
+			
+			</table>
+	
+		
+	</div> 
+
+</div>

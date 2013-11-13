@@ -1,0 +1,437 @@
+
+
+/* DOES THIS HELP AUTOSIZING? */
+.inputs {
+	height: auto !important;
+	font-family: Verdana;
+}
+
+/*.inputs .tabTitle {*/
+/*	background-color: #FF4;*/
+/*	vertical-align: middle;*/
+/*	font-size: 20px;*/
+/*	font-weight: bold;*/
+/*	color: darkred;*/
+/*}*/
+
+
+/*.inputs .tabTitle .tabTitleIcon {*/
+/*	background-image: url(../../../plugins/apps/images/input-24.png);*/
+/*	text-indent: 28px;*/
+/*	background-repeat: no-repeat;*/
+/*	width: 150px;*/
+/*	text-align: center !important;*/
+/*	vertical-align: middle;*/
+/*}*/
+
+.inputs .label {
+	text-align:	center !important;
+	font-weight: bolder;
+	font-size: 18px;
+	color: darkblue;
+	font-style: oblique;
+	height: 20px;
+	vertical-align: bottom !important;
+	/*background-color: #FF4;*/
+	background-color: #EEE;
+}
+
+.inputs .label .paramTypes {
+	line-height: 20px !important;
+	height: 40px !important;	
+}
+
+/* NB: THIS IS NEEDED FOR THE BUTTON CSS BELOW TO WORK! */
+.inputs table textarea {
+	font-family: Verdana;
+}
+.inputs .addInputButton {
+	height: 20px !important;
+	width: 115px !important;
+	/*margin-left: auto;*/
+	margin-right: 0px;
+
+	text-align: center;
+	vertical-align: middle;
+	-moz-user-select: none;
+	font-size: 14px;
+	font-family: Verdana;
+	font-weight: bolder;
+	color: #224;
+	background-color: #EEF;
+	
+	border: 4px solid #BBB;
+	border-bottom-color: #888;	
+	border-left-color: #888;
+}
+
+.inputs .addInputButton:hover {
+	border-color: #999;
+	border-bottom-color: #555;	
+	border-left-color: #555;
+	background-color : #FF8;
+}
+
+.inputs .addInputButton:active {
+	border-color: #999;
+	border-bottom-color: #555;	
+	border-left-color: #555;
+	background-color : #8F8;
+}
+
+
+.inputs .inputs .name,
+.inputs .inputs .type,
+.inputs .inputs .value,
+.inputs .inputs .argument,
+.inputs .inputs .category,
+.inputs .inputs .type,
+.inputs .inputs .description,
+.inputs .inputs .discretion,
+.inputs .inputs .paramtype,
+.inputs .inputs .format,
+.inputs .inputs .args,
+.inputs .inputs .params,
+.inputs .inputs .paramFunction
+{
+	height: 20px !important;
+	font-size: 14px;
+	color: #222;
+	text-align: left !important;
+	vertical-align: middle !important;
+	font-style: oblique;
+	font-weight: bolder !important;
+	padding-top: 0px;
+	/*background-color: #FFF;*/
+	/*background-color: #F2F2F2;*/
+}
+
+.inputs .inputs name {
+	height: 24px !important;	
+}
+
+.inputs .inputs .type,
+.inputs .inputs .discretion,
+.inputs .inputs .paramtype {
+	font-size: 13px;
+	height: 24px !important;
+	width: 103px !important;
+	padding-top: 0px;
+	position: relative;
+	left: 4px;
+}
+
+.inputs .inputs .format,
+.inputs .inputs .args,
+.inputs .inputs .params,
+.inputs .inputs .paramFunction {
+	/*background-color: #EEE;*/
+	color: #555;
+}
+
+
+.inputs .invalid ,
+.inputs .inputs .description .dijitTextArea .invalid,
+.inputs .inputs .discretion .dijitTextArea .invalid
+{
+	border: 2px solid #F00 !important;
+}
+
+.inputs .inputs .default {
+	font-style: normal !important;
+	font-weight: normal;
+	font-size: 12px !important;
+	background-color: #DDD !important;
+}
+.inputs .inputs .default:hover {
+	background-color: #DDD !important;
+}
+
+
+/* APPS COMBO */
+
+.inputs .applicationsCombo,
+.inputs .appNamesCombo,
+.inputs .paramTypesCombo,
+.inputs .dijitMenu li,
+.inputs .dijitMenuItem li
+{
+	text-indent: 10px;
+	background-color: #FFD;
+}
+
+/* COMBO BOX SELECTED FIELD */
+/*.inputs .applicationsCombo .dijitReset .dijitInputField,*/
+/*.inputs .appNamesCombo .dijitReset .dijitInputField {*/
+/*	background-color: #FFD;*/
+/*}*/
+
+.inputs .applicationsCombo,
+.inputs .appNamesCombo,
+.inputs .paramTypesCombo {
+	height: auto;
+	width: 165px !important;
+	color: #000;
+	font-size: 14px;
+	font-weight: bold;
+	text-align: center !important;
+	margin-left: auto;
+	margin-right: auto;
+	background-color: #FFC;
+}
+
+.inputs .appNamesCombo {
+	color: darkred;
+}
+
+/* HIDE VALIDATION ICON AT RIGHT OF COMBO SCROLLBOX */
+.inputs .applicationsCombo .dijitValidationIcon,
+.inputs .appNamesCombo .dijitValidationIcon,
+.inputs .paramTypesCombo .dijitValidationIcon {
+	display: none !important;
+}
+
+.inputs .paramTypesCombo {
+	font-size: 14px;
+	background-color: #FFF !important;
+	text-indent: 0px;
+	width: 165px !important;
+	display: table-cell;
+	text-align: center;
+	width: 100%;
+	font-weight: bold;
+	font-family: Verdana;
+}
+
+.inputs .paramTypesCombo .option {
+	background-color: #FFC !important;
+}
+
+
+
+/* NOTE: THIS IS NECESSARY FOR THE NEXT RULE TO WORK!!! */
+.inputs .applicationsCombo .dijitReset .dijitMenu li,
+.inputs .applicationsCombo .dijitReset .dijitMenuItem li,
+.inputs .appNamesCombo .dijitReset .dijitMenu li,
+.inputs .appNamesCombo .dijitReset .dijitMenuItem li,
+.inputs .paramTypesCombo .dijitReset .dijitMenu li,
+.inputs .paramTypesCombo .dijitReset .dijitMenuItem li
+{
+	/*color: #0FF !important;*/
+}
+
+.inputs .appNamesCombo .dijitReset .dijitMenu li,
+.inputs .appNamesCombo .dijitReset .dijitMenuItem li {
+	color: darkred;	
+}
+
+.inputs .dijitMenu li,
+.inputs .dijitMenuItem li
+{
+	color: #224 !important;
+	height: 25px;
+	background-color: #FFD;
+}
+
+.inputs .appNamesCombo .dijitMenu li,
+.inputs .appNamesCombo .dijitMenuItem li
+{
+	color: darkred !important;	
+}
+
+
+.inputs .dijitMenu li:hover,
+.inputs .dijitMenuItem li:hover
+{
+	background-color: #DDD;
+}
+
+
+/*/* PARAMETERS COMBO */*/
+/**/
+/*.inputs .inputsCombo,*/
+/*.inputs .dijitMenu li,*/
+/*.inputs .dijitMenuItem li*/
+/*{*/
+/*	text-indent: 10px;*/
+/*}*/
+/**/
+/*.inputs .inputsCombo {*/
+/*	text-indent: 10px;*/
+/*	height: auto;*/
+/*	width: 150px;*/
+/*	color: #000;*/
+/*	font-size: 15px;*/
+/*	font-weight: bold;*/
+/*	text-align: center !important;*/
+/*	margin-left: auto;*/
+/*	margin-right: auto;*/
+/*}*/
+/**/
+/*/* HIDE VALIDATION ICON AT RIGHT OF COMBO SCROLLBOX */*/
+/*.inputs .inputsCombo .dijitValidationIcon {*/
+/*	/*visibility: hidden !important;*/*/
+/*	display: none !important;*/
+/*	/*width: 0px !important;*/*/
+/*}*/
+/**/
+/*/* NOTE: THIS IS NECESSARY FOR THE NEXT RULE TO WORK!!! */*/
+/*.inputs .inputsCombo .dijitReset .dijitMenu li,*/
+/*.inputs .inputsCombo .dijitReset .dijitMenuItem li*/
+/*{*/
+/*	/*color: #0FF !important;*/*/
+/*}*/
+/**/
+/*.inputs .dijitMenu li,*/
+/*.inputs .dijitMenuItem li*/
+/*{*/
+/*	color: #224 !important;*/
+/*	height: 25px;*/
+/*}*/
+/**/
+/*/* NOTE: THIS DOESN'T WORK!!! */*/
+/*.inputs .inputsCombo .dijitReset .dijitInputField*/
+/*{*/
+/*	/*color: #0FF !important;*/*/
+/*	text-align: center !important;*/
+/*}*/
+
+
+
+/* DRAG SOURCE */
+
+.inputs .dragSource .paramtype .default,
+.inputs .dragSource .discretion .default
+{
+	color: #555;
+	font-style: italic;	
+}
+
+.inputs .editInputRow {
+	width: 100%;
+	height: 20px;
+}
+
+
+.inputs .dragSource
+{
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+
+	/*margin-top: 5px;*/
+	width: 120px;	
+	height: 260px;
+	min-height: 100px;
+	
+	text-align: left !important;
+	/*color: #339;*/
+	/*color: darkred;*/
+	/*font-weight: bold;*/
+	
+	font-size: 12px;
+	border-color: #333;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	overflow:auto !important;
+}
+
+.inputs .dragSource .name {
+	font-size: 14px;
+	color: darkred;
+	font-weight: bolder;
+	text-align: left !important;
+
+	background-image: url(../../../plugins/apps/images/input-18.png);
+	text-indent: 22px;
+	background-repeat: no-repeat;
+	height: 18px;
+}
+
+.inputs .dragSource .type,
+.inputs .dragSource .paramtype {
+	width: 40px;
+	font-size: 11px;
+	text-align: center !important;
+	background-color: #FFF;
+}
+
+.inputs .dragSource .type {
+	color: darkblue;
+}
+
+.inputs .dragSource .paramtype {
+	color: darkred;
+}
+
+
+.inputs .dragSource .category,
+.inputs .dragSource .value,
+.inputs .dragSource .argument {
+	color: #222;
+	font-size: 11px;
+	font-weight: bold;
+	text-align: left !important;
+	background: #FFF;
+}	
+
+.inputs .dragSource .description {
+	color: #222;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: left !important;
+	background: #FFF;
+}
+
+.inputs .dragSource .discretion {	
+	color: blue;
+	font-weight: bold;
+	font-size: 12px;
+	background: none;
+}
+
+.inputs .dragSource .format,
+.inputs .dragSource .args,
+.inputs .dragSource .params,
+.inputs .dragSource .paramFunction {
+	color: #222;
+	font-weight: normal;
+	font-size: 10px;
+	background-color: #EFEFEF;
+}
+
+
+
+.inputs .trash {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+
+	margin-top: 5px;
+	width: 150px;	
+	height: 60px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.inputs .trashIcon {
+	height: 100%;
+	width: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	
+	background-image: url(../../../plugins/apps/images/trash-60.png);
+	background-repeat: no-repeat;
+}
+

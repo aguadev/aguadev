@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<title></title>
+
+	<style type="text/css">
+		@import "../dojo.1.2.2/dojo/resources/dojo.css";
+	</style>
+
+	<!-- required: a default dijit theme: -->
+	<link id="themeStyles" rel="stylesheet" href="../dojo.1.2.2/dijit/themes/tundra/tundra.css">
+	
+	<!-- required: dojo.js -->
+	<script type="text/javascript" src="../dojo.1.2.2/dojo/dojo.js"
+		djConfig="parseOnLoad: true, isDebug: false"></script>
+	
+
+<style type="text/css">
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: #E4ECED;
+    color: #000;
+    font-size: 12px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+        
+textarea.autosize {
+    
+    /*font-size: 12px;*/
+    /*font-family: Verdana, Arial, Helvetica, sans-serif;*/
+    /*width: 300px;*/
+    /*height:auto;*/
+    overflow: visible;
+    background:#FFF;
+
+    /*color: #000;*/
+    /*border:0;*/
+
+}
+
+</style>
+
+<script type="text/javascript">
+
+var styles = document.createElement('style');
+var stylesprop = document.createTextNode('#text1, #text2 { display:block; }');
+styles.appendChild(stylesprop);
+document.getElementsByTagName('head')[0].appendChild(styles);
+
+autoHeight = function(input)
+{
+    console.log("Workflow.autoHeight    plugins.workflow.Workflow.autoHeight(event)");
+
+    var rows = parseInt(input.rows);
+
+    while ( input.rows * input.cols < input.value.length )
+    {
+        console.log("Workflow.editOptionValue    BEFORE input.value.length: " + input.value.length);
+        console.log("Workflow.editOptionValue    BEFORE input.rows: " + input.rows);
+        console.log("Workflow.editOptionValue    BEFORE input.cols: " + input.cols);
+        console.log("Workflow.editOptionValue    AFTER input.rows * input.cols: " + input.rows * input.cols);
+        
+        
+        console.log("Workflow.editOptionValue    BEFORE rows: " + rows);
+        input.rows = ++rows;
+        console.log("Workflow.editOptionValue    AFTER rows: " + rows);
+
+
+        console.log("Workflow.editOptionValue    AFTER input.rows: " + input.rows);
+        console.log("Workflow.editOptionValue    BEFORE input.cols: " + input.cols);
+        console.log("Workflow.editOptionValue    BEFORE input.rows * input.cols: " + input.rows * input.cols);
+        console.log("Workflow.editOptionValue    AFTER input.value.length: " + input.value.length);
+    }
+    
+    // REMOVE ONE LINE TO FIT SNUGLY
+    input.rows--; 
+    
+}
+
+    //console.log("Workflow.autoHeight    event.target: " + event.target );
+    //console.dir(event.target );
+
+////    // THIS WORKS OKAY
+////    console.log("Workflow.autoHeight    event.target.scrollHeight: " + event.target.scrollHeight );
+////    
+////    var height = event.target.scrollHeight;
+////    var rows = parseInt((height / 15) - 2);
+////
+////    console.log("Workflow.autoHeight    height: " + height);
+////    console.log("Workflow.autoHeight    rows: " + rows);
+////
+//////<textarea id="value" class="autosize" rows="3" cols="10">    
+////    
+////    console.log("Workflow.autoHeight    BEFORE event.target.setAttribute('rows', " + rows + "): " +  event.target.getAttribute('rows'));
+////    
+////    event.target.setAttribute('rows', rows);
+////    
+////
+////    console.log("Workflow.autoHeight    AFTER event.target.setAttribute('rows', " + rows + "): " + event.target.getAttribute('rows'));}
+
+
+
+
+window.onload = function()
+{
+    // DISCONNECT 'onClick' LISTENER
+    //dojo.disconnect(event.target.listener);
+    
+    // REPLACE THE innerHTML WITH A TEXT INPUT BOX
+    var node = document.getElementById("value");
+    var text = node.innerHTML;
+    node.innerHTML = '';
+    if ( text == null || ! text )
+    {
+        text = '';
+    }
+    console.log("Workflow.editOptionValue    text: " + text);
+
+    // RETURN IF THIS IS A DOUBLE-CLICK
+    if ( text.match(/^<input/) )	return;
+    if ( text.match(/^<br/) )	return;
+    if ( text.match(/^<fieldset/) )	return;
+
+    // CREATE INPUT TEXT AREA
+    var input = document.createElement('textarea');
+    node.appendChild(input);
+    input.value = text;
+    console.log("Workflow.editOptionValue    input: " + input);
+
+    // SET CSS STYLE
+    input.setAttribute('wrap', 'soft');
+    input.setAttribute('rows', 1);
+    input.setAttribute('cols', 25);
+    input.setAttribute('style', 'overflow: visible; background:#FFF;');
+
+    // ADJUST HEIGHT TO FIT TEXT
+    autoHeight(input);
+
+    // STOP ONCLICK
+    dojo.connect(input, "onclick", function(event)
+        {
+            console.log("Workflow.editOptionValue    input.onClick fired. Cancelling event.");
+            
+            // STOP EVENT BUBBLING
+            //event.stopPropagation();   
+        }
+    );
+    
+
+    // LOWER CASE onkeypress BECAUSE input IS A DOM OBJECT
+    dojo.connect(input, "onkeypress", function(event){
+
+        console.log("Workflow.editOptionValue    input.onkeypress(event)");
+
+        autoHeight(event.target);
+        
+        var key = event.charOrCode;
+        console.log("Workflow.editOptionValue input.onkeypress    key: " + key);
+        console.log("Workflow.editOptionValue input.onkeypress    this: " + this);
+        
+        // SAVE IF 'RETURN' KEY PRESSED
+        if ( key == 13 )
+        {
+            console.log("Workflow.editOptionValue._onKeyPress	RETURN key pressed: " + key + ". Exiting");
+            console.log("Workflow.editOptionValue._onKeyPress	key: " + key);
+            //workflowObject.saveOptionValue(this);
+            //workflowObject.revertOptionValue(this);
+            //return;
+        }
+
+        // RETURN IF 'ESCAPE' KEY IS PRESSED
+        if (key == dojo.keys.ESCAPE)
+        {
+            //console.log("Workflow.editOptionValue._onKeyPress	ESCAPE key pressed: " + key + ". Exiting");
+            workflowObject.revertOptionValue(this);
+            return;
+        }
+
+        // DO NOTHING IF 'BACKSPACE' KEY IS PRESSED
+        if (key == dojo.keys.BACKSPACE)
+        {
+            //console.log("Workflow.editOptionValue._onKeyPress	ESCAPE key pressed: " + key + ". Exiting");
+            return;
+        }
+
+    });
+}
+
+
+
+</script>
+</head>
+<body>
+
+<table>
+    <tr>
+        <td>
+            referencefile    
+        </td>
+        <td id="value">/q/solexa1/080801_HWI-EAS185_0001_20GVYAAXX_Jia_cDNA2_mtDNA_Total_Small_Medium_JH</td>
+    </tr>
+</table>
+
+
+</body>
+</html>

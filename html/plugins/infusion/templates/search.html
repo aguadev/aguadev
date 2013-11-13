@@ -1,0 +1,34 @@
+<div data-dojo-attach-point="containerNode">
+
+	<!-- SEARCH -->
+
+	<div
+		data-dojo-attach-point="mainTab"
+		data-dojo-type="dijit.layout.ContentPane"
+		class="search"
+		iconClass="searchIcon"
+		minWidth="1000"
+		style="position: relative; min-width: 640px !important; width: 100% !important; min-height: 600px !important; height: 100% !important; padding: 0px; background: #FFF;"
+		closable="true"
+		scrollbar="true"
+		title="Search"
+	>
+		<div data-dojo-type="dijit.layout.AccordionContainer"
+			title="Settings" style="width:275px;" attachParent="true">
+			<div data-dojo-type="dijit.layout.ContentPane" title="Project">
+				<ul id="projectSearch"></ul>
+			</div>
+			<div data-dojo-type="dijit.layout.ContentPane" title="Sample">
+				<ul id="dijitList"></ul>
+			</div>
+			<div data-dojo-type="dijit.layout.ContentPane" title="Flowcell">
+				<ul id="dojoxList"></ul>
+			</div>
+			<div data-dojo-type="dijit.layout.ContentPane" title="Lane">
+				<ul id="dojoxList"></ul>
+			</div>
+		</div>
+	
+	</div>
+
+</div>

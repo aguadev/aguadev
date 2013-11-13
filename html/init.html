@@ -1,0 +1,83 @@
+<html>
+<head>
+<title>Agua Init Page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<style type="text/css">
+	@import "dojo-1.6.1rc2/dojo/resources/dojo.css";
+	@import "dojo-1.6.1rc2/dijit/themes/dijit.css";
+	@import "dojo-1.6.1rc2/dijit/themes/soria/soria.css";
+	@import "dojo-1.6.1rc2/dijit/themes/tundra/tundra.css";
+</style>
+
+<script type="text/javascript"
+		src="dojo-1.6.1rc2/dojo/dojo.js"
+	djConfig="parseOnLoad: false, isDebug: true">
+</script>	
+
+<script type="text/javascript"
+	src="build/agua_dojo_dijit.js.uncompressed.js">
+</script>
+
+<script type="text/javascript"
+	src="build/agua_all.js.uncompressed.js">
+</script>
+
+
+<script type="text/javascript" src="plugins/apps/Packages.js"></script>
+<script type="text/javascript" src="plugins/apps/App.js"></script>
+
+
+<script type="text/javascript">
+
+// SET CGI AND HTML URLS (RELATIVE TO dojo.js)
+var cgiUrl = "../../cgi-bin/agua/";
+var htmlUrl = "../../agua/";
+
+// ***** COMMENT THIS OUT WHEN USING A BUILD !! ******
+// REGISTER module path FOR PLUGINS
+dojo.registerModulePath("plugins","../../plugins");	
+
+// DEBUG LOADER
+dojo.require("dojoc.util.loader");
+
+// GLOBAL InitObject VARIABLE
+var Agua = new Object; 		// EMPTY DUMMY TO SATISFY plugins.core.Common
+var Init;
+dojo.addOnLoad(function(){
+
+	console.log("agua.html    BEFORE require plugins.init.Init");
+	dojo.require("plugins.init.Init");
+	console.log("agua.html    AFTER  require plugins.init.Init");
+
+	console.log("agua.html    BEFORE Init = new plugins.init.Init()");
+	Init = new plugins.init.Init({
+	  // SET CGI AND HTML URLS (RELATIVE TO dojo.js)
+		cgiUrl : cgiUrl,
+		htmlUrl : htmlUrl,
+		dataVolume : 'snap-6341b301'
+	});
+	console.log("agua.html    AFTER new plugins.init.Init");
+});
+	
+</script>
+
+<body bgcolor="#FFFFFF" text="#000000" >
+
+<div align="center">
+  
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" >
+    <tr>
+      <td >
+			<div id="attachPoint" valign="top" align="center" >
+          
+        </div>
+      </td>
+    </tr>
+  </table>
+
+</div>
+
+</body>
+</html>

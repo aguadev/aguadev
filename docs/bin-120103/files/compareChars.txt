@@ -1,0 +1,36 @@
+
+h3. APPLICATION
+
+compareChars.pl
+
+h3. PURPOSE
+
+USES FileTools::compareChars TO CHECK READ LENGTHS
+
+1. PRINT LIST OF DIFFERENT READ LENGTHS
+
+WITH NUMBER OF READS OF EACH LENGTH
+
+h3. INPUT
+
+1. INPUT FASTA OR FASTQ FILE
+
+h3. OUTPUT
+
+1. LIST OF DIFFERENT READ LENGTH AND NUMBER OF READS
+
+h3. USAGE
+
+{code}
+./compareChars.pl <--inputfile1 String> <--inputfile2 String> [--help]
+ --inputfile1        :   /Full/path/to/first_inputfile
+ --inputfile2        :   /Full/path/to/second_inputfile
+ --help              :   Print help info
+{code}
+
+h3. EXAMPLES
+
+perl compareChars.pl --inputfile1 6/run12+15-s_2_1.6.fastq --inputfile2
+       7/run12+15-s_2_1.7.fastq
+
+

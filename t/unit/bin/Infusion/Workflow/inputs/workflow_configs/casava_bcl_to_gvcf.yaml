@@ -1,0 +1,95 @@
+---
+workflow_name: casava_bcl_to_gvcf
+workflow_version: v1
+config_format: yaml
+driver_location: /home/pcruz/src/saffrondev/data/test_submission.sh 
+sge_min_parameters: "qsub -cwd -V  -q '*' -terse "
+report_file_name: build_stats.txt
+report_thresholds:
+	normal_samples:
+		gt_gen_concordance:
+			- ge
+			- 0.9924
+		casava_duplicates_percent:
+			- le
+			- 0.05
+		casava_snp_het_hom_ratio:
+			- le
+			- 2.1
+		casava_coverage_autosomal_coverage:
+			- ge
+			- 0.98
+		depth_per_1X:
+			- ge
+			- 0.9785
+		depth_per_10X: 
+			- ge
+			- 0.9485
+		gb_q30: 
+			- ge
+			- 80.0
+		per_q30:
+			- ge
+			- 0.80
+		contam_hom_fraction_bad: 
+			- le
+			- 0.05
+		gt_gen_usage:
+			- ge
+			- 0.97
+		consensus_exon_coverage:
+			- ge
+			- 0.97
+		insert_median:
+			- ge
+			- 240
+		exon_depth_per_1X:
+			- ge
+			- 0.97
+		exon_depth_per_10X:
+			- ge
+			- 0.95
+	cancer_samples:
+		gt_gen_concordance:
+			- ge
+			- 0.991
+		casava_duplicates_percent:
+			- le
+			- 0.05
+		casava_snp_het_hom_ratio:
+			- le
+			- 2.1
+		casava_coverage_autosomal_coverage:
+			- ge
+			- 0.98
+		depth_per_1X:
+			- ge
+			- 0.9785
+		depth_per_10X:
+			- ge
+			- 0.9485
+		gb_q30:
+			- ge
+			- 80.0
+		per_q30:
+			- ge
+			- 0.80
+		contam_hom_fraction_bad:
+			- le
+			- 0.05
+		gt_gen_usage:
+			- ge
+			- 0.97
+		consensus_exon_coverage:
+			- ge
+			- 0.97
+		insert_median:
+			- ge
+			- 240
+		exon_depth_per_1X:
+			- ge
+			- 0.97
+		exon_depth_per_10X:
+			- ge
+			- 0.95
+

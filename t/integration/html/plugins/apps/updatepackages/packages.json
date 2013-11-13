@@ -1,0 +1,50 @@
+[
+{
+    "owner"	        :	"syoung",
+	"username"	    :	"admin",
+	"package"	    :	"bioapps",
+	"repository"    :	"biorepodev",
+	"privacy"	    :	"public",
+    "status"	    :	"installing",
+	"version"	    :	"0.8.0-alpha.1+build.4",
+	"opsdir"	    :	"/aguadev/repos/public/admin/biorepodev/admin/bioapps",
+	"installdir"    :	"/aguadev/apps/bioapps",
+    "description"	:	"",
+    "notes"	        :	"",
+    "url"	        :	"",
+    "datetime"	    :	"2013-10-07 05:34:42"
+}
+,
+{
+    "owner"	        :	"syoung",
+	"username"	    :	"admin",
+	"package"	    :	"biorepository",
+	"repository"    :	"biorepodev",
+	"privacy"	    :	"public",
+    "status"	    :	"installing",
+	"version"	    :	"0.8.0-alpha.1+build.4",
+	"opsdir"	    :	"/aguadev/repos/public/admin/biorepodev/admin/biorepository",
+	"installdir"    :	"/aguadev/repos",
+    "description"	:	"",
+    "notes"	        :	"",
+    "url"	        :	"",
+    "datetime"	    :	"2013-10-07 05:34:42"
+}
+,
+{
+    "owner"	        :	"syoung",
+	"username"	    :	"admin",
+	"package"	    :	"hannah",
+	"repository"    :	"hannah",
+	"privacy"	    :	"public",
+    "status"	    :	"ready",
+	"version"	    :	"0.0.1",
+	"opsdir"	    :	"/aguadev/repos/public/admin/biorepodev/admin/hannah",
+	"installdir"    :	"/aguadev/apps/hannah",
+    "description"	:	"",
+    "notes"	        :	"",
+    "url"	        :	"",
+	"datetime"	    :	"2013-10-10 16:15:29"
+}
+
+]

@@ -1,0 +1,122 @@
+
+h3. APPLICATION
+
+buildConfig
+
+h3. PURPOSE
+
+WRITE THE buildX.config.js FILE USED TO BUILD BY GETTING THE
+
+TOTAL LIST OF REQUIRED FILES INSIDE ALL FILES IN ALL SUBDIRECTORIES
+
+INSIDE THE USER-SPECIFIED DIRECTORY, E.G., agua/html/plugins
+
+h3. INPUT
+
+1. INPUT DIRECTORY
+
+2. OUTPUT DIRECTORY
+
+h3. OUTPUT
+
+1. CONFIG FILE INSIDE OUTPUT DIRECTORY
+
+2. PRINT TO STDOUT COMMAND TO RUN BUILD
+
+NOTES
+
+1. CREATES buildname.profile.js FILE
+
+E.G.: C:\DATA\base\html\Bioptic0.2.5\html\dojo.1.2.2\util\buildscripts\profiles\build8.profile.js
+
+dependencies ={
+                       layers:  [
+                           {
+                           name: "../report.js",
+                               dependencies: [
+
+"plugins.report.Controller",
+                                   "plugins.report.Report",
+                                   "plugins.report.Report.SNP",
+
+"dijit.form.CheckBox",
+
+"dijit.dijit",
+                                   "dijit.form.Slider",
+                                   "dijit.form.regexingSelect",
+                                   "dijit.form.Button",
+                                   ,
+                                   "dijit.form.NumberSpinner",
+                                   "dijit.Editor",
+                                   "dijit.form.DateTextBox",
+                                   "dijit.form.Textarea",
+                                   ,
+                                   "dijit.form.TextBox",
+                                   "dijit.form.ValidationTextBox",
+                                   "dijit.form.NumberTextBox",
+                                   "dijit.form.CurrencyTextBox",
+                                   "dojo.currency",
+                                   "dojo.parser"
+                               ]
+                           }
+                       ]
+
+//prefixes: [
+                       //    [ "dijit", "../dijit" ],
+                       //    [ "dojox", "../dojox" ],
+                       //    [ "plugins", "../../plugins" ]
+                       //]
+                   };
+
+2. AFTER RUNNING buildConfig.pl, YOU BUILD THE LAYER FILE AS FOLLOWS:
+
+CREATE THE OUTPUT DIRECTORY FOR YOUR BUILD
+
+mkdir C:\DATA\base\html\Bioptic0.2.5\html\build8
+
+RUN THE BUILD (TAKES A FEW MINS)
+
+cd C:\DATA\base\html\Bioptic0.2.5\html\dojo.1.2.2\util\buildscripts
+
+java -jar ..\shrinksafe\custom_rhino.jar build.js profile="build8" action="release" version="0.2.5" cssOptimize=comments.keepLines releaseDir=../../../build8/ > ..\..\..\build8\build8-output.txt
+
+h3. USAGE
+
+{code}
+./buildConfig.pl <--inputdir String> <--outputdir String> [--regex String] [--regex String] [--help]
+ --inputdir          :   /Full/path/to/input/directory
+ --outputdir         :   /Full/path/to/output/directory
+ --exclude           :   Comma-separated /full/path/to/excluded/directories
+ --help              :   Print help info
+{code}
+
+h3. EXAMPLES
+
+perl buildConfig.pl --inputdir C:\DATA\base\html\agua\html\plugins
+ --outputfile
+       C:\DATA\base\html\agua\html\dojo.1.2.2\util\buildscripts\agua.profile.js
+ --name "../agua.js"
+
+perl buildConfig.pl --inputdir
+       C:\DATA\base\html\agua\html\plugins\admin --outputfile
+       C:\DATA\base\html\agua\html\dojo.1.2.2\util\buildscripts\admin.profile.js
+ --name "../admin.js"
+
+perl buildConfig.pl --inputdir E:\0.4\html\plugins --outputfile
+       E:\0.4\html\dojo.1.2.2\util\buildscripts\profiles\agua04.profile.js
+ --name "../agua.js"
+
+perl buildConfig.pl --inputdir /home/syoung/0.6/html/plugins/workflow
+ --outputfile
+       /home/syoung/0.6/html/dojo-1.5.0/util/buildscripts/profiles/workflow.profile.js
+ --name "../agua.js"
+
+SUBROUTINE      recursive_getfiles
+
+h3. PURPOSE
+
+GET ALL FILES WITH A CERTAIN regex IN THEIR NAME WITHIN
+
+ALL SUBDIRECTORIES OF A DIRECTORY
+
+

@@ -1,0 +1,270 @@
+/* GENERAL */
+.ami {
+	height: auto !important;
+}
+
+.ami .dijitTabInnerDiv {
+	padding: 0px 0px 0px 0px !important;
+}
+
+/* HEADERS */
+.ami .tabTitle {
+	background-color: #264eea;
+	text-align: center !important;
+	vertical-align: middle;
+	font-size: 20px;
+	font-stretch: expanded;
+	font-weight: bold;
+	color: #FFF;
+}
+
+.ami .label {
+	text-align:	center !important;
+	font-weight: bolder;
+	font-size: 18px;
+	font-family: Verdana;
+	font-size: 14px;
+	font-style: oblique;
+	height: 20px;
+	vertical-align: bottom !important;
+	background: #EEE;
+}
+
+.ami .tundra .dijitInputContainer input {
+    margin: 0 !important;
+    text-align: center !important;
+	font-size: 14px !important;
+}
+
+.ami .dijitInputContainer {
+    float: none !important;
+    overflow: hidden;
+    padding-bottom: 0px !important;
+    padding-left: 3px;
+    padding-right: 3px;
+    position: relative;
+    top: 2px;
+}
+
+.ami .headerRow {
+	color: darkblue !important;
+	text-align: center !important;
+	padding: 0px !important;
+}
+
+/* FORM INPUTS */
+.ami .addAmiButton {
+	font-size: 18px;
+	color: #224;
+	height: 24px !important;
+}
+
+.ami .addAmiButton {
+    -moz-user-select: none;
+    background-color: #FEFEFE;
+    border-color: #BBBBBB #BBBBBB #888888 #888888;
+    border-style: solid;
+    border-width: 4px;
+    color: #222244;
+    font-family: Verdana;
+    font-size: 14px;
+    font-weight: bolder;
+    height: 20px !important;
+    margin-right: 0;
+    text-align: center;
+    vertical-align: middle;
+    width: 115px !important;
+}
+
+.ami .aminame {
+	width: 200px !important;
+	font-weight: bolder !important;
+	font-family: Verdana;
+    background: url() !important;
+	height: 22px;
+	font-size: 14px;
+	color: #444;
+	vertical-align: middle !important;
+	font-style: oblique;
+	font-weight: bolder !important;
+	padding-top: 2px;
+	text-align: center !important;
+}
+
+.ami .amiid {
+    color: #444444 !important;
+    text-align: center !important;
+    width: 120px !important;
+}
+
+.ami .amitype {
+    background: url() !important;
+	background-color: #FFF !important;
+	font-weight: bolder;
+	font-family: Verdana;
+	font-size: 16px !important;
+    width: 60px !important;
+    color: #444444 !important;
+    text-align: center !important;
+}
+
+.ami .amitype select,
+.ami .amitype option {
+	background-color: #FFF !important;
+}
+
+.ami .amiid {
+	font-weight: bolder;
+	font-family: Verdana;
+	height: 24px !important;
+	text-align: center !important;
+	background-color: #FFF !important;
+	background: url("") repeat scroll 0 0 transparent !important;
+}
+.ami .description {
+	width: 100%;
+	font-weight: bolder;
+	font-family: Verdana;
+}
+
+.ami .amiRow .description {
+	color: #222;
+	width: 100% !important;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: left !important;
+	background: none repeat scroll 0 0 #FFFFFF !important;
+}
+
+.ami .amiRow .amitype,
+.ami .amiRow .amiid {
+	width: 120px !important;
+}
+
+.ami .amiRow .aminame {
+	width: 170px !important;
+}
+
+/* INVALID INPUT */
+.ami .invalid ,
+.ami .aminame .dijitTextArea .invalid,
+.ami .amiid .dijitTextArea .invalid {
+	border: 2px solid #F00 !important;
+}
+
+/* CLUSTER TABLE */
+.ami .dragSource
+{
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+
+	width: 120px;	
+	height: 260px;
+	min-height: 100px;
+	text-align: left !important;
+	font-family: Verdana;
+	border-color: #333;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	overflow:auto !important;
+}
+
+/* EDIT ROW TEXTAREA*/
+.ami textarea {
+	overflow: auto !important;
+}
+.ami table textarea {
+	font-family: Verdana !important;
+}
+.ami .amiRow textarea {
+	height: auto !important;
+}
+
+/* TABLE ROWS */
+
+/*.ami .dijitInputContainer {
+    float: none !important;
+    overflow: hidden;
+    padding-bottom: 0px !important;
+    padding-left: 3px;
+    padding-right: 3px;
+    position: relative;
+    top: 2px;
+}
+*/
+.ami .amiRow .headerRow {
+	font-size: 10px !important;
+	color: red !important;
+}
+
+.ami .editRow {
+	width: 100% !important;
+	height: 20px !important;
+}
+
+.ami .amiRow .amiid {
+	font-size: 14px;
+	color: darkred !important;
+	font-weight: bolder;
+	text-align: left !important;
+	background-image: url(../../../../plugins/cloud/images/ami-18.png) !important;
+	text-indent: 22px;
+	background-repeat: no-repeat !important;
+	background-position: center left !important;
+	width: 105px !important;
+}
+
+.ami .amiRow .amiid .dijitTextBox {
+    background: none repeat scroll 0 0 #FFFFFF !important;
+    color: #444444 !important;
+    font-size: 12px !important;
+    height: 25px !important;
+    width: 105px !important;
+}
+
+.aminame .dijitReset .dijitInputInner {
+    text-align: center !important;
+}
+
+.ami .amiRow .amitype {
+	width: 60px !important;
+}    
+
+.ami .amiRow .description {
+	display: none;
+}    
+
+/* TRASH CAN */
+.ami .trash {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+
+	margin-top: 5px;
+	width: 150px;	
+	height: 60px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.ami .trashIcon {
+	height: 100%;
+	width: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	background-image: url(../../../../plugins/cloud/images/trash-60.png);
+	background-repeat: no-repeat;
+}
+

@@ -1,0 +1,52 @@
+* 6d9fc3f (HEAD, origin/master, origin/HEAD, master) Code highlighting.
+* 1a2df18 (tag: release-2.0.3, origin/next) Release 2.0.3.
+* fb63205 Fix a Gecko CSS loading bug in the minified JS caused by an unwanted Closure Compiler optimization. [Allex Wang]
+* a2e9573 Fix a race condition when adding multiple URLs to the "pending" queue.
+* 322ba2c Save a function call to getEnv() by checking for env in load().
+* 09e9621 Replace the old PHP-based test scripts with a Node.js Express app.
+* 4925510 (tag: release-2.0.2) Release 2.0.2.
+* f644957 Fix a silly bug that affected WebKit CSS load detection.
+* b1b5f1d Clarify credit for the @import trick.
+* 6caf585 Reliable CSS load detection for Gecko.
+* 827fa14 Shave more bytes.
+* cd1264c Use onload for CSS in IE.
+* 69781b7 (tag: release-2.0.1) Release 2.0.1.
+* d4a60bd MIT license.
+* 2e836f9 Reformat doc comments.
+* 2e40b9c Clarify async=false support.
+* e6de96e Refactor getEnv() for a savings of 94 min+gzip bytes.
+* 8f82e20 Update copyright year.
+* 0fa1362 Shave some bytes, then add them back by using a more reliable (but longer) isArray check.
+* f930111 Update min file.
+* b4b1490 Don't cause an error when polling on a page without any CSS. Fixes #2
+* 3d96b90 Set the "async" property of dynamic script nodes to false to preserve execution order in browsers that support it.
+* d844409 Scripts are no longer loaded in parallel by default for Firefox 4+ (Gecko 2+).
+* 936ad33 Convert README to Markdown.
+* f96c7ff Update -min file.
+* 110d065 Use document.head when available.
+* ab8fe06 Remove unnecessary var declaration.
+* 155173b Update comments.
+* 2c467d4 Set charset to "utf-8" for dynamically created script and link nodes.
+* d6bb8d2 Bump copyright year.
+* 0fbdfb6 s/scope/context/
+* 49258e4 Minor minification/performance/JSLint tweaks.
+* 5209698 Fix undeclared var in poll()
+* 141aa9d Silly comma. What are you doing there?
+* dfd301b Stylesheet load completion is now detected reliably in WebKit by polling document.styleSheets for changes. Thanks to Jonathan Cook for suggesting this solution.
+* 5e52088 Add a 'lazyload' class to dynamically created script and link nodes so they can be identified later.
+* a2735ee Add a README for GitHub's benefit
+* 6d748a2 Oops, looks like a few tabs snuck in
+* 2617405 (tag: release-2.0.0) Release 2.0.0
+* 7517e5f Lovely documentation
+* 82885bd Add license
+* d5466c0 Use separate queues for CSS and JS so they don't block each other
+* ca4f2e1 CSS loading is now reliable on all browsers
+* 5d3246d Remove NaturalDocs script and minified lib
+* 249530c Only load resources in parallel in browsers that ensure execution order (currently Firefox and Opera).
+* 9bd0e3d Update history with recent changes
+* 56c68c0 Add CSS support and load resources in parallel (both currently experimental)
+* 34045f7 (tag: release-1.0.4) Add NaturalDocs script.
+* c7fdb45 - Fix bug that caused the load completion callback to fail to fire in IE if the script was loaded from the cache - General reliability improvements - Prepare for 1.0.4 release
+* 6f187c2 Further improvements to Safari 3.x reliability.
+* 791c05a Fix a bug that caused the load completion callback to fire immediately in Safari 3.x.
+* 2e6a502 Initial commit of LazyLoad 1.0.3

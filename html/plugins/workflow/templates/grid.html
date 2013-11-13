@@ -1,0 +1,91 @@
+<div dojoattachpoint="containerNode">
+
+    <div
+        dojoAttachPoint="mainTab"
+        dojoType="dijit.layout.ContentPane"
+        parseOnLoad="false"
+		title="Projects"
+		class="grid"
+		style="position: relative; min-height: 100px; height: 100%; max-height: auto !important; width: 320px !important; padding: 0 !important;"
+    >
+
+        <table width="100%">
+			<tr valign="top" width="100%">
+				<td class="tabTitle" align="center">
+                    My Projects
+				</td>
+			</tr>
+		</table>
+
+		<table width="100%">
+			<tr width="100%" align="center">
+				<td>
+	
+					<table width="100%">
+						<tr align="center">
+							<td class="projectIcon">
+							</td>
+							<td>
+								<div dojoType="dijit.form.ComboBox"
+									dojoAttachPoint="projectCombo"
+									class="projectCombo"
+									autocomplete="false"
+								>
+								</div>
+							</td>
+						</tr>
+					</table>
+	
+				</td>
+			</tr>
+	
+			<tr width="100%" align="center">
+				<td>
+					<table width="100%">
+						<tr>
+							<td
+								dojoAttachPoint="stop"
+								dojoAttachEvent="onclick:confirmStopProject"
+								class="stop">
+							</td>
+							<td
+								dojoAttachPoint="pause"
+								dojoAttachEvent="onclick:confirmPauseProject"
+								class="pause">
+							</td>
+							<td
+								dojoAttachPoint="play"
+								dojoAttachEvent="onclick:startProject"
+								class="play">
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+	
+			<tr width="100%">
+				<td width="100%">
+					
+					<div>
+						<div 
+							dojoAttachPoint="mainPanel"
+							dojoType="dojox.layout.GridContainer" 
+							class="workflowContainer"
+							nbZones="1"
+							opacity="0.7" 
+							allowAutoScroll="true" 
+							hasResizableColumns="false"
+							withHandles="true"
+							acceptTypes="TitlePane"
+						>
+			
+						</div>
+					</div>
+	
+				</td>
+			</tr>
+		</table>
+
+	</div>
+
+</div>

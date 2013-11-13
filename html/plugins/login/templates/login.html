@@ -1,0 +1,92 @@
+<div dojoAttachPoint="containerNode" class="login">
+
+    <div
+        dojoAttachPoint="loginDialogue"
+        class="loginDialogue"
+        label="Login"
+        class="login"
+        modal="true"
+        dojoType="dojox.widget.Dialog"
+        style="overflow: visible; position: absolute; top: 240px; left: 248px; opacity: 1; width: 300px; height: 300px; align: center;"
+        title="Agua Login"
+        >
+        
+        <table align="center" width="100%">
+
+            <tr align="center" width="100%">
+                <td colspan="2" class="loginIcon"></td>
+            </tr>
+
+            <tr
+                dojoAttachPoint="nameRow"
+                align="center">
+                <td align="right">Username</td>
+                <td align="left">
+                    <div
+                        dojoAttachPoint="username"
+                        class="username"
+                        dojoType="dijit.form.TextBox"
+                        style="width: 100px"
+                        value="guest"
+                        >guest
+                    </div>
+                </td>
+            </tr>
+            <tr
+                dojoAttachPoint="passwordRow"
+                align="center">
+                <td align="right">Password</td>
+                <td align="left">
+                    <div
+                        dojoAttachPoint="password"
+                        class="password"
+                        value="guest"
+                        type="password"
+                        dojoType="dijit.form.TextBox"
+                        style="width: 100px"
+                        >guest
+                    </div>
+                </td>
+            </tr>
+            <tr
+                dojoAttachPoint="buttonRow"
+                class="loginCenteredRow">
+                <td align="center" colspan="2">
+                    <div
+                        dojoAttachPoint="loginButton"
+                        dojoAttachEvent="onclick:login"
+                        class="loginButton"
+                        >Login</div>
+                </td>
+            </tr>
+            <tr class="loginCenteredRow">
+                <td align="center" colspan="2">
+                    <div
+                        dojoAttachPoint="message"
+                        colspan="2">
+                    </div>
+                </td>
+            </tr>
+            <tr class="loginCenteredRow">
+                <td align="center" colspan="2">
+                    <div
+                        dojoAttachPoint="progressBar"
+                        class="progressBar"
+                        dojoType="dijit.ProgressBar"
+                        colspan="2">
+                    </div>
+                </td>
+            </tr>
+            <tr class="loginCenteredRow">
+                <td align="center" colspan="2">
+                    <div
+                        dojoAttachPoint="progressMessage"
+                        class="progressMessage"
+                        colspan="2">
+                    </div>
+                </td>
+            </tr>
+        </table>
+    
+    </div>
+</div>

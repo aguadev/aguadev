@@ -1,0 +1,14 @@
+.display {
+	background: transparent;
+	width: 36px !important;
+	height: 36px !important;
+}
+
+.display.ready {
+	background-image: url("../../../plugins/form/images/ready-36.png");	
+}
+
+.display.loading {
+	background-image: url("../../../plugins/form/images/spinner-36.gif");	
+}
+

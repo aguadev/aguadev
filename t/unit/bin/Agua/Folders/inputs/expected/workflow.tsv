@@ -1,0 +1,3 @@
+aguatest	Project1	downloadFiles	1				[{"original":{"number":"1","status":"","project":"Project1","name":"Workflow1","description":"","username":"aguatest","notes":""},"copiedby":"","date":null}]
+aguatest	Project1	elandRef	2				
+aguatest	Project1	novoRef	3				[{"copiedby":"aguatest","original":{"number":"3","project":"Project1","notes":"","name":"WorkflowA","description":"","username":"aguatest"},"date":"2012-03-18 21:40:36"},{"original":{"number":"5","notes":"","project":"Project1","name":"WorkflowA","description":"","username":"aguatest"},"copiedby":"aguatest","date":"2012-03-18 21:40:36"}]

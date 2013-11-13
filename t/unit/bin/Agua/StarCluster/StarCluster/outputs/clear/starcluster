@@ -1,0 +1,69 @@
+#!/usr/bin/perl -w
+
+#### EXTRACT MODE AND CLUSTER NAME
+my $mode;
+my $cluster;
+for ( my $i = 0; $i < $#ARGV + 1; $i++ ) {
+    if ( $ARGV[$i] =~ /^(listclusters|start|bal)$/ ) {
+        $mode = $ARGV[$i];
+        $cluster = $ARGV[$i + 1];
+        splice @ARGV, $i, 2;
+        last;
+    }
+}
+
+#### EXTERNAL MODULES
+use Getopt::Long;
+
+my $configfile;
+my $logfile;
+my $maxnodes;
+my $minnodes;
+my $waittime;
+my $killtime;
+my $interval;
+my $killmaster;
+my $sleep;
+GetOptions (
+    'configfile=s'  =>  \$configfile,
+    'logfile=s'     =>  \$logfile,
+    'maxnodes|m=i'  =>  \$maxnodes,
+    'minnodes|n=i'  =>  \$minnodes,
+    'waittime|w=i'  =>  \$waittime,
+    'killtime|k=i'  =>  \$killtime,
+    'interval|i=i'  =>  \$interval,
+    'kill-master' =>  \$killmaster,
+    'sleep|s=i'     =>  \$sleep
+) or die "No options specified";
+
+print "!!! ERROR - cluster $cluster does not exist\n" and exit if $mode eq "listclusters";
+
+if ( $mode eq "start" ) {
+    #### CREATE LOGDIR
+    my ($logdir) = $logfile =~ /^(.+?)\/[^\/]+$/;
+    `mkdir -p $logdir` if not -d $logdir;
+    print "Can't created logdir: $logdir\n" if not -d $logdir;
+    
+    #### OPEN LOGFILE
+    open(LOG, ">$logfile") or die "Can't open logfile: $logfile\n";
+    
+    #### PRINT LOG
+    print LOG "$)\n";
+    print LOG "Starting cluster\n";
+    sleep($sleep);
+    print LOG "The cluster has been started and configured\n";
+    
+    #### CLOSE LOGFILE
+    close(LOG) or die "Can't close logfile: $logfile\n";    
+}
+
+if ( $mode eq "bal" ) {
+    print "$0\n";
+    print "BALANCER IS RUNNING FOR CLUSTER: $cluster\n";
+    print "SLEEPING FOR $sleep seconds\n";
+    sleep($sleep);
+    print "COMPLETED BALANCER RUN\n";
+}
+
+
+exit(0);

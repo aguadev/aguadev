@@ -1,0 +1,910 @@
+admin	syoung	Project1	Workflow1	0	FTP	2	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	Project1	Workflow1	0	FTP	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	Project1	Workflow1	0	FTP	2	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	Project1	Workflow1	0	FTP	2	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	Project1	Workflow1	0	FTP	2	url	0	0	input	url	string	--url	http://some.url	required		Download files linked on this page				0
+admin	syoung	Project1	Workflow1	0	unzipFiles	3	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	Project1	Workflow1	0	unzipFiles	3	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	Project1	Workflow1	0	unzipFiles	3	inputdir	0	0	input	inputdir	directory	--inputdir	%project%/%workflow%/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		1
+admin	syoung	Project1	Workflow1	0	unzipFiles	3	outputdir	0	0	input	outputdir	directory	--outputdir	%project%/%workflow%/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		1
+admin	syoung	Project1	Workflow1	0	unzipFiles	3	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	Project1	Workflow1	0	unzipFiles	3	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	Project1	Workflow1	0	bowtieIndex	4	inputdir	1	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Location of directory containing *.fa files	input.referencedir.value, input.outputdir.value, input.inputdir.value	refdir,outputdir,inputdir		0
+admin	syoung	Project1	Workflow1	0	bowtieIndex	4	outputdir	1	0	input	inputdir	directory	--outputdir	Project1/Workflow1/inputs	required		Print indexed files to this directory	input.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	Project1	Workflow1	0	bowtieIndex	4	subdirs	1	1	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	Project1	Workflow1	0	TOPHAT	5	coverage	0	0	output	coverage	file		Project1/Workflow1/coverage.wig	Discretion		A UCSC BedGraph wigglegram track, showing the depth of coverage at each position, including the spliced read alignments.				0
+admin	syoung	Project1	Workflow1	0	TOPHAT	5	cpus	0	0	input	cpus	integer	--cpus		optional		Max. number of cpus per job (1 to 4) (DEFAULT = 4)				0
+admin	syoung	Project1	Workflow1	0	TOPHAT	5	distance	0	0	input	distance	integer	--distance	200	required		The  mean inner distance between first read and its mate pair (corresponds to -r/--mate-inner-dist argument to Tophat)				0
+admin	syoung	Project1	Workflow1	0	TOPHAT	5	hits	0	0	output	hits	file		Project1/Workflow1/accepted_hits.sam	Discretion		A list of read alignments in SAM format. SAM is a compact short read alignment format that is increasingly being adopted.				0
+admin	syoung	Project1	Workflow1	0	TOPHAT	5	inputfiles	0	0	input	inputfiles	file	--inputfiles	Project1/Workflow1/yoruba1-1.reads_1.1M.sequence.txt	required		Comma-separated *sequence.txt file names (e.g., s_1_1_sequence.txt,s_2_1_sequence.txt)				0
+admin	syoung	Project1	Workflow1	0	TOPHAT	5	jobs	0	0	input	jobs	integer	--jobs		optional		Max. number of concurrent cluster jobs (DEFAULT = 30)				0
+admin	syoung	Project1	Workflow1	0	TOPHAT	5	junctions	0	0	output	junctions	file		Project1/Workflow1/junctions.bed	Discretion		A UCSC BED track of junctions reported by TopHat. Each junction consists of two connected BED blocks, where each block is as long as the maximal overhang of any read spanning the junction. The score is the number of alignments spanning the junction.				0
+admin	syoung	Project1	Workflow1	0	TOPHAT	5	keep	0	0	input	keep	flag	--keep		optional		Keep intermediate files				0
+admin	syoung	Project1	Workflow1	0	TOPHAT	5	matefiles	0	0	input	matefiles	file	--matefiles		optional		Comma-separated *sequence.txt mate file names (e.g., s_1_2_sequence.txt,s_2_2_sequence.txt) with locations as paths relative to the output directory				0
+admin	syoung	Project1	Workflow1	0	TOPHAT	5	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1	required		Create this directory and write output files to it				0
+admin	syoung	Project1	Workflow1	0	TOPHAT	5	outputfile	0	0	output	outputfile	file		Project1/Workflow1/out.sam	Discretion	sam	SAM file containing				0
+admin	syoung	Project1	Workflow1	0	TOPHAT	5	params	0	0	input	params	string	--params		optional		Additional parameters to be passed to tophat (e.g., --solexa1.3-quals				0
+admin	syoung	Project1	Workflow1	0	TOPHAT	5	queue	0	0	input	queue	string	--queue		optional		Cluster queue options				0
+admin	syoung	Project1	Workflow1	0	TOPHAT	5	reference	0	0	input	reference	file	--reference	Project1/Workflow1/chr22/chr22.1.ebwt	required		Location of indexed reference file  (NB: Use file stub, e.g., /some/path/hg19)				0
+admin	syoung	Project1	Workflow1	0	TOPHAT	5	label	0	0	input	label	string	--label	bowtie-0	required		Name to used to submit jobs to cluster (e.g., tophat-sample1)				0
+admin	syoung	Project1	Workflow2	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	Project1	Workflow2	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	syoung	Project1	Workflow2	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	Project1	Workflow2	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	Project1	Workflow2	0	FTP	1	url	0	0	input	url	string	--url	ftp://some/ftp/url	required		Download files linked on this page				0
+admin	syoung	Project1	Workflow2	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	Project1	Workflow2	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	Project1	Workflow2	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	%project%/%workflow%/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		1
+admin	syoung	Project1	Workflow2	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	%project%/%workflow%/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		1
+admin	syoung	Project1	Workflow2	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	Project1	Workflow2	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	Project1	Workflow2	0	elandIndex	4	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow2/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != "") return referencedir; if ( outputdir != null && outputdir != "") return outputdir; if ( inputdir != null && inputdir != "") return inputdir; 	0
+admin	syoung	Project1	Workflow2	0	elandIndex	4	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow2/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != "") return referencedir; if ( outputdir != null && outputdir != "") return outputdir; if ( inputdir != null && inputdir != "") return inputdir; 	0
+admin	syoung	Project1	Workflow2	0	elandIndex	4	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	syoung	Project1	Workflow2	0	elandHeader	3	inputfile	0	0	input	readfile 	file	--inputfile	Project1/Workflow2/sequence.txt	essential		FASTQ file not in ELAND format (for use with ELAND_standalone.pl)	output.outputfile.value			0
+admin	syoung	Project1	Workflow2	0	elandHeader	3	label	1	1	input	label	string	--label	myLabel	required		Add this to the filenames of the converted files to identify the experiment/data test this				0
+admin	syoung	Project1	Workflow2	0	elandHeader	3	matefile	1	1	input	matefile	file	--matefile				Complementary FASTQ reads file for input files 				0
+admin	syoung	Project1	Workflow2	0	elandHeader	3	matefile	1	1	output	matefile	file	--matefile		\
+         		Converted (ELAND_standalone.pl-compliant) complementary FASTQ reads file for input files 	input.matefile.value,input.label.value	file,label	console.log("file: " + file); console.log("label: " + label); if ( file == null || file == "") return; var suffix; if ( file.match(/(.[^.]{1,5})$/) ) suffix = file.match(/(.[^.]{1,5})$/)[1]; console.log("suffix: " + suffix); file = file.replace(/.[^.]{1,5}$/, ""); if ( label != null) file += "." + label; if ( suffix != null ) file += suffix; console.log("Returning file: " + file);   return file;	0
+admin	syoung	Project1	Workflow2	0	elandHeader	3	readfile	1	0	output	readfile	file		%project%/%workflow%/sequence.myLabel.txt	\
+         			input.inputfile.value,input.label.value	file,label	console.log("file: " + file); console.log("label: " + label); if ( file == null || file == "") return; var suffix; if ( file.match(/(.[^.]{1,5})$/) ) suffix = file.match(/(.[^.]{1,5})$/)[1]; console.log("suffix: " + suffix); file = file.replace(/.[^.]{1,5}$/, ""); if ( label != null) file += "." + label; if ( suffix != null ) file += suffix; console.log("Returning file: " + file); return file;	1
+admin	syoung	Project1	Workflow2	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	%project%/%workflow%/downloads	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != "") return referencedir; if ( outputdir != null && outputdir != "") return outputdir; if ( inputdir != null && inputdir != "") return inputdir; 	1
+admin	syoung	Project1	Workflow2	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	%project%/%workflow%/downloads	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != "") return referencedir; if ( outputdir != null && outputdir != "") return outputdir; if ( inputdir != null && inputdir != "") return inputdir; 	1
+admin	syoung	Project2	Workflow1	0	TOPHAT	1	coverage	0	0	output	coverage	file		Project2/Workflow1/coverage.wig	Discretion		A UCSC BedGraph wigglegram track, showing the depth of coverage at each position, including the spliced read alignments.				0
+admin	syoung	Project2	Workflow1	0	TOPHAT	1	cpus	0	0	input	cpus	integer	--cpus		optional		Max. number of cpus per job (1 to 4) (DEFAULT = 4)				0
+admin	syoung	Project2	Workflow1	0	TOPHAT	1	distance	0	0	input	distance	integer	--distance	200	required		The  mean inner distance between first read and its mate pair (corresponds to -r/--mate-inner-dist argument to Tophat)				0
+admin	syoung	Project2	Workflow1	0	TOPHAT	1	hits	0	0	output	hits	file		Project2/Workflow1/accepted_hits.sam	Discretion		A list of read alignments in SAM format. SAM is a compact short read alignment format that is increasingly being adopted.				0
+admin	syoung	Project2	Workflow1	0	TOPHAT	1	inputfiles	0	0	input	inputfiles	file	--inputfiles	Project1/Workflow1/yoruba1-1.reads_1.1M.sequence.txt	required		Comma-separated *sequence.txt file names (e.g., s_1_1_sequence.txt,s_2_1_sequence.txt)				0
+admin	syoung	Project2	Workflow1	0	TOPHAT	1	jobs	0	0	input	jobs	integer	--jobs		optional		Max. number of concurrent cluster jobs (DEFAULT = 30)				0
+admin	syoung	Project2	Workflow1	0	TOPHAT	1	junctions	0	0	output	junctions	file		Project2/Workflow1/junctions.bed	Discretion		A UCSC BED track of junctions reported by TopHat. Each junction consists of two connected BED blocks, where each block is as long as the maximal overhang of any read spanning the junction. The score is the number of alignments spanning the junction.				0
+admin	syoung	Project2	Workflow1	0	TOPHAT	1	label	0	0	input	label	string	--label	tophat	required		Name to used to submit jobs to cluster (e.g., tophat-sample1)				0
+admin	syoung	Project2	Workflow1	0	TOPHAT	1	matefiles	0	0	input	matefiles	file	--matefiles		optional		Comma-separated *sequence.txt mate file names (e.g., s_1_2_sequence.txt,s_2_2_sequence.txt) with locations as paths relative to the output directory				0
+admin	syoung	Project2	Workflow1	0	TOPHAT	1	outputfile	0	0	output	outputfile	file		Project2/Workflow1/out.sam	Discretion	sam	SAM file containing				0
+admin	syoung	Project2	Workflow1	0	TOPHAT	1	params	0	0	input	params	string	--params		optional		Additional parameters to be passed to tophat (e.g., --solexa1.3-quals				0
+admin	syoung	Project2	Workflow1	0	TOPHAT	1	queue	0	0	input	queue	string	--queue		optional		Cluster queue options				0
+admin	syoung	Project2	Workflow1	0	TOPHAT	1	reference	0	0	input	reference	file	--reference		required		Location of indexed reference file  (NB: Use file stub, e.g., /some/path/hg19)				0
+admin	syoung	Project2	Workflow1	0	TOPHAT	1	keep	0	0	input	keep	flag	--keep	0	optional		Keep intermediate files				0
+admin	syoung	Project2	Workflow1	0	TOPHAT	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/alignment	required		Create this directory and write output files to it				0
+admin	admin	Project1	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	admin	Project1	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	admin	Project1	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	admin	Project1	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	admin	Project1	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	admin	Project1	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	admin	ProjectY	Workflow2	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	admin	ProjectY	Workflow2	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	admin	ProjectY	Workflow2	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	admin	ProjectY	Workflow2	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	admin	ProjectY	Workflow2	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	admin	ProjectY	Workflow2	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	admin	ProjectY	Workflow2	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	admin	ProjectY	Workflow2	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	admin	ProjectY	Workflow2	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	admin	ProjectY	Workflow2	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	admin	ProjectY	Workflow2	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	admin	ProjectY	Workflow2	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	admin	ProjectY	Workflow2	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	admin	ProjectY	Workflow2	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	admin	Project1	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+admin	admin	Project1	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+admin	admin	Project1	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+admin	admin	Project1	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+admin	admin	Project1	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+admin	admin	Project1	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+admin	admin	Project1	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+admin	admin	Project1	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+admin	admin	Project1	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+admin	admin	Project1	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+admin	admin	Project1	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+admin	admin	Project1	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+admin	admin	Project1	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+admin	admin	Project1	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+admin	admin	Project1	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	admin	Project1	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	admin	Project1	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	admin	Project1	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	admin	Project1	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	admin	Project1	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	admin	Project1	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	admin	Project1	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	admin	Project1	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	admin	Project1	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	admin	Project1	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	admin	Project1	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	admin	Project1	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	admin	Project1	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	admin	Project1	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	admin	Project1	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	admin	Project1	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	admin	Project1	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	admin	Project1	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	admin	Project1	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	admin	Project1	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	admin	Project1	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+agua	agua	ProjectY	Workflow2	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+agua	agua	ProjectY	Workflow2	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+agua	agua	ProjectY	Workflow2	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+agua	agua	ProjectY	Workflow2	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+agua	agua	ProjectY	Workflow2	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+agua	agua	ProjectY	Workflow2	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+agua	agua	ProjectY	Workflow2	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+agua	agua	ProjectY	Workflow2	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+agua	agua	ProjectY	Workflow2	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+agua	agua	ProjectY	Workflow2	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+agua	agua	ProjectY	Workflow2	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+agua	agua	ProjectY	Workflow2	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+agua	agua	ProjectY	Workflow2	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+agua	agua	Project1	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+agua	agua	Project1	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+agua	agua	Project1	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+agua	agua	Project1	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+agua	agua	Project1	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+agua	agua	Project1	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+agua	agua	Project1	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+agua	agua	Project1	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+agua	agua	Project1	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+agua	agua	Project1	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+agua	agua	Project1	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+agua	agua	Project1	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+agua	agua	Project1	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+agua	agua	Project1	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+agua	agua	Project1	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+agua	agua	Project1	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+agua	agua	Project1	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+agua	agua	Project1	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+agua	agua	Project1	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+agua	agua	Project1	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+agua	agua	Project1	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+agua	agua	Project1	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+agua	agua	Project1	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+agua	agua	Project1	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+agua	agua	Project1	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+agua	agua	Project1	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+agua	agua	Project1	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+agua	agua	Project1	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+agua	agua	Project1	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+agua	agua	Project1	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+agua	agua	Project1	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+agua	agua	Project1	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+agua	agua	Project1	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+agua	agua	Project1	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+agua	agua	Project1	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+agua	agua	Project1	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+agua	agua	Project1	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+agua	agua	Project1	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+agua	agua	ProjectY	Workflow2	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+agua	agua	Project1	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+agua	agua	Project1	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+agua	agua	Project1	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+agua	agua	Project1	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	ProjectF	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectF	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectF	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectF	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectF	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	syoung	ProjectF	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectF	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectF	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectF	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectF	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	ProjectF	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectF	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectF	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectF	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	syoung	ProjectF	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+admin	syoung	ProjectF	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+admin	syoung	ProjectF	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+admin	syoung	ProjectF	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+admin	syoung	ProjectF	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+admin	syoung	ProjectF	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+admin	syoung	ProjectF	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+admin	syoung	ProjectF	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+admin	syoung	ProjectF	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+admin	syoung	ProjectF	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+admin	syoung	ProjectF	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+admin	syoung	ProjectF	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+admin	syoung	ProjectF	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+admin	syoung	ProjectF	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+admin	syoung	ProjectF	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectF	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectF	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectF	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectF	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	syoung	ProjectF	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectF	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectF	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectF	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectF	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	syoung	ProjectF	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectF	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectF	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectF	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	ProjectG	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectG	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectG	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectG	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectG	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	syoung	ProjectG	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectG	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectG	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectG	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectG	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	ProjectG	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectG	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectG	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectG	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	syoung	ProjectG	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+admin	syoung	ProjectG	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+admin	syoung	ProjectG	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+admin	syoung	ProjectG	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+admin	syoung	ProjectG	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+admin	syoung	ProjectG	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+admin	syoung	ProjectG	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+admin	syoung	ProjectG	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+admin	syoung	ProjectG	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+admin	syoung	ProjectG	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+admin	syoung	ProjectG	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+admin	syoung	ProjectG	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+admin	syoung	ProjectG	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+admin	syoung	ProjectG	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+admin	syoung	ProjectG	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectG	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectG	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectG	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectG	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	syoung	ProjectG	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectG	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectG	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectG	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectG	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	syoung	ProjectG	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectG	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectG	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectG	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	ProjectH	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectH	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectH	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectH	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectH	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	syoung	ProjectH	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectH	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectH	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectH	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectH	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	ProjectH	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectH	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectH	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectH	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	syoung	ProjectH	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+admin	syoung	ProjectH	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+admin	syoung	ProjectH	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+admin	syoung	ProjectH	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+admin	syoung	ProjectH	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+admin	syoung	ProjectH	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+admin	syoung	ProjectH	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+admin	syoung	ProjectH	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+admin	syoung	ProjectH	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+admin	syoung	ProjectH	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+admin	syoung	ProjectH	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+admin	syoung	ProjectH	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+admin	syoung	ProjectH	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+admin	syoung	ProjectH	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+admin	syoung	ProjectH	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectH	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectH	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectH	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectH	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	syoung	ProjectH	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectH	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectH	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectH	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectH	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	syoung	ProjectH	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectH	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectH	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectH	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	Project1X	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	Project1X	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	Project1X	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	Project1X	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	Project1X	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	syoung	Project1X	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	Project1X	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	Project1X	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	Project1X	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	Project1X	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	Project1X	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	Project1X	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	Project1X	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	Project1X	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	syoung	Project1X	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+admin	syoung	Project1X	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+admin	syoung	Project1X	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+admin	syoung	Project1X	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+admin	syoung	Project1X	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+admin	syoung	Project1X	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+admin	syoung	Project1X	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+admin	syoung	Project1X	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+admin	syoung	Project1X	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+admin	syoung	Project1X	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+admin	syoung	Project1X	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+admin	syoung	Project1X	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+admin	syoung	Project1X	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+admin	syoung	Project1X	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+admin	syoung	Project1X	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	Project1X	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	syoung	Project1X	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	Project1X	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	Project1X	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	syoung	Project1X	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	Project1X	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	Project1X	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	Project1X	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	Project1X	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	syoung	Project1X	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	Project1X	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	Project1X	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	Project1X	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	Project1	Workflow1	0	bowtieIndex	1	inputdir	1	0	input	inputdir	directory	--inputdir		essential		Location of directory containing *.fa files	input.referencedir.value, input.outputdir.value, input.inputdir.value	refdir,outputdir,inputdir		0
+admin	syoung	Project1	Workflow1	0	bowtieIndex	1	outputdir	1	0	input	inputdir	directory	--outputdir		required		Print indexed files to this directory	input.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	Project1	Workflow1	0	bowtieIndex	1	subdirs	1	1	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	ProjextZZ	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjextZZ	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjextZZ	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjextZZ	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjextZZ	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	syoung	ProjextZZ	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjextZZ	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjextZZ	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjextZZ	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjextZZ	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	ProjextZZ	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjextZZ	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjextZZ	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjextZZ	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	syoung	ProjextZZ	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+admin	syoung	ProjextZZ	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+admin	syoung	ProjextZZ	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+admin	syoung	ProjextZZ	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+admin	syoung	ProjextZZ	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+admin	syoung	ProjextZZ	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+admin	syoung	ProjextZZ	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+admin	syoung	ProjextZZ	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+admin	syoung	ProjextZZ	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+admin	syoung	ProjextZZ	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+admin	syoung	ProjextZZ	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+admin	syoung	ProjextZZ	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+admin	syoung	ProjextZZ	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+admin	syoung	ProjextZZ	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+admin	syoung	ProjextZZ	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjextZZ	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjextZZ	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjextZZ	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjextZZ	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	syoung	ProjextZZ	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjextZZ	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjextZZ	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjextZZ	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjextZZ	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	syoung	ProjextZZ	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjextZZ	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjextZZ	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjextZZ	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	ProjectXX	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectXX	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectXX	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectXX	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectXX	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	syoung	ProjectXX	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectXX	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectXX	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectXX	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectXX	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	ProjectXX	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectXX	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectXX	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectXX	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	syoung	ProjectXX	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+admin	syoung	ProjectXX	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+admin	syoung	ProjectXX	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+admin	syoung	ProjectXX	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+admin	syoung	ProjectXX	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+admin	syoung	ProjectXX	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+admin	syoung	ProjectXX	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+admin	syoung	ProjectXX	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+admin	syoung	ProjectXX	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+admin	syoung	ProjectXX	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+admin	syoung	ProjectXX	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+admin	syoung	ProjectXX	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+admin	syoung	ProjectXX	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+admin	syoung	ProjectXX	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+admin	syoung	ProjectXX	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectXX	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectXX	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectXX	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectXX	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	syoung	ProjectXX	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectXX	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectXX	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectXX	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectXX	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	syoung	ProjectXX	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectXX	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectXX	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectXX	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	ProjectMM	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectMM	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectMM	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectMM	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectMM	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	syoung	ProjectMM	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectMM	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectMM	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectMM	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectMM	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	ProjectMM	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectMM	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectMM	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectMM	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	syoung	ProjectMM	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+admin	syoung	ProjectMM	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+admin	syoung	ProjectMM	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+admin	syoung	ProjectMM	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+admin	syoung	ProjectMM	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+admin	syoung	ProjectMM	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+admin	syoung	ProjectMM	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+admin	syoung	ProjectMM	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+admin	syoung	ProjectMM	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+admin	syoung	ProjectMM	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+admin	syoung	ProjectMM	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+admin	syoung	ProjectMM	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+admin	syoung	ProjectMM	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+admin	syoung	ProjectMM	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+admin	syoung	ProjectMM	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectMM	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectMM	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectMM	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectMM	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	syoung	ProjectMM	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectMM	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectMM	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectMM	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectMM	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	syoung	ProjectMM	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectMM	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectMM	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectMM	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	ProjectNN	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectNN	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectNN	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectNN	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectNN	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	syoung	ProjectNN	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectNN	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectNN	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectNN	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectNN	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	ProjectNN	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectNN	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectNN	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectNN	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	syoung	ProjectNN	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+admin	syoung	ProjectNN	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+admin	syoung	ProjectNN	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+admin	syoung	ProjectNN	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+admin	syoung	ProjectNN	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+admin	syoung	ProjectNN	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+admin	syoung	ProjectNN	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+admin	syoung	ProjectNN	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+admin	syoung	ProjectNN	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+admin	syoung	ProjectNN	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+admin	syoung	ProjectNN	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+admin	syoung	ProjectNN	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+admin	syoung	ProjectNN	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+admin	syoung	ProjectNN	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+admin	syoung	ProjectNN	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectNN	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectNN	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectNN	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectNN	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	syoung	ProjectNN	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectNN	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectNN	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectNN	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectNN	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	syoung	ProjectNN	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectNN	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectNN	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectNN	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	ProjectOO	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectOO	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectOO	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectOO	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectOO	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	syoung	ProjectOO	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectOO	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectOO	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectOO	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectOO	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	ProjectOO	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectOO	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectOO	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectOO	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	syoung	ProjectOO	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+admin	syoung	ProjectOO	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+admin	syoung	ProjectOO	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+admin	syoung	ProjectOO	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+admin	syoung	ProjectOO	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+admin	syoung	ProjectOO	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+admin	syoung	ProjectOO	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+admin	syoung	ProjectOO	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+admin	syoung	ProjectOO	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+admin	syoung	ProjectOO	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+admin	syoung	ProjectOO	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+admin	syoung	ProjectOO	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+admin	syoung	ProjectOO	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+admin	syoung	ProjectOO	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+admin	syoung	ProjectOO	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectOO	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectOO	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectOO	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectOO	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	syoung	ProjectOO	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectOO	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectOO	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectOO	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectOO	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	syoung	ProjectOO	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectOO	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectOO	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectOO	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	ProjectLL	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectLL	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectLL	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectLL	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectLL	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	syoung	ProjectLL	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectLL	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectLL	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectLL	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectLL	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	ProjectLL	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectLL	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectLL	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectLL	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	syoung	ProjectLL	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+admin	syoung	ProjectLL	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+admin	syoung	ProjectLL	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+admin	syoung	ProjectLL	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+admin	syoung	ProjectLL	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+admin	syoung	ProjectLL	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+admin	syoung	ProjectLL	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+admin	syoung	ProjectLL	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+admin	syoung	ProjectLL	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+admin	syoung	ProjectLL	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+admin	syoung	ProjectLL	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+admin	syoung	ProjectLL	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+admin	syoung	ProjectLL	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+admin	syoung	ProjectLL	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+admin	syoung	ProjectLL	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectLL	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectLL	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectLL	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectLL	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	syoung	ProjectLL	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectLL	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectLL	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectLL	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectLL	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	syoung	ProjectLL	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectLL	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectLL	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectLL	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	ProjectVV	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectVV	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectVV	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectVV	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectVV	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	syoung	ProjectVV	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectVV	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectVV	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectVV	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectVV	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	ProjectVV	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectVV	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectVV	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectVV	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	syoung	ProjectVV	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+admin	syoung	ProjectVV	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+admin	syoung	ProjectVV	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+admin	syoung	ProjectVV	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+admin	syoung	ProjectVV	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+admin	syoung	ProjectVV	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+admin	syoung	ProjectVV	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+admin	syoung	ProjectVV	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+admin	syoung	ProjectVV	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+admin	syoung	ProjectVV	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+admin	syoung	ProjectVV	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+admin	syoung	ProjectVV	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+admin	syoung	ProjectVV	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+admin	syoung	ProjectVV	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+admin	syoung	ProjectVV	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectVV	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectVV	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectVV	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectVV	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	syoung	ProjectVV	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectVV	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectVV	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectVV	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectVV	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	syoung	ProjectVV	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectVV	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectVV	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectVV	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	ProjectZZ	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectZZ	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectZZ	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectZZ	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectZZ	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	syoung	ProjectZZ	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectZZ	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectZZ	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectZZ	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectZZ	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	ProjectZZ	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectZZ	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectZZ	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	ProjectZZ	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	syoung	ProjectZZ	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+admin	syoung	ProjectZZ	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+admin	syoung	ProjectZZ	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+admin	syoung	ProjectZZ	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+admin	syoung	ProjectZZ	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+admin	syoung	ProjectZZ	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+admin	syoung	ProjectZZ	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+admin	syoung	ProjectZZ	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+admin	syoung	ProjectZZ	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+admin	syoung	ProjectZZ	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+admin	syoung	ProjectZZ	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+admin	syoung	ProjectZZ	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+admin	syoung	ProjectZZ	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+admin	syoung	ProjectZZ	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+admin	syoung	ProjectZZ	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	ProjectZZ	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	syoung	ProjectZZ	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	ProjectZZ	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	ProjectZZ	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	syoung	ProjectZZ	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	ProjectZZ	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	ProjectZZ	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	ProjectZZ	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	ProjectZZ	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	syoung	ProjectZZ	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	ProjectZZ	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectZZ	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	ProjectZZ	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	p1	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	p1	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	p1	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	p1	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	p1	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	syoung	p1	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	p1	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	p1	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	p1	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	p1	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	p1	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	p1	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	p1	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	p1	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	syoung	p1	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+admin	syoung	p1	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+admin	syoung	p1	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+admin	syoung	p1	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+admin	syoung	p1	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+admin	syoung	p1	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+admin	syoung	p1	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+admin	syoung	p1	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+admin	syoung	p1	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+admin	syoung	p1	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+admin	syoung	p1	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+admin	syoung	p1	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+admin	syoung	p1	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+admin	syoung	p1	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+admin	syoung	p1	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	p1	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	syoung	p1	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	p1	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	p1	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	syoung	p1	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	p1	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	p1	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	p1	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	p1	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	syoung	p1	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	p1	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	p1	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	p1	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	proj2	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	proj2	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	proj2	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	proj2	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	proj2	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	syoung	proj2	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	proj2	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	proj2	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	proj2	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	proj2	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	proj2	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	proj2	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	proj2	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	proj2	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	syoung	proj2	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+admin	syoung	proj2	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+admin	syoung	proj2	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+admin	syoung	proj2	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+admin	syoung	proj2	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+admin	syoung	proj2	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+admin	syoung	proj2	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+admin	syoung	proj2	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+admin	syoung	proj2	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+admin	syoung	proj2	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+admin	syoung	proj2	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+admin	syoung	proj2	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+admin	syoung	proj2	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+admin	syoung	proj2	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+admin	syoung	proj2	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	proj2	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	syoung	proj2	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	proj2	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	proj2	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	syoung	proj2	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	proj2	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	proj2	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	proj2	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	proj2	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	syoung	proj2	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	proj2	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	proj2	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	proj2	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	proj3	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	proj3	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	proj3	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	proj3	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	proj3	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	syoung	proj3	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	proj3	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	proj3	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	proj3	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	proj3	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	proj3	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	proj3	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	proj3	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	proj3	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	syoung	proj3	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+admin	syoung	proj3	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+admin	syoung	proj3	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+admin	syoung	proj3	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+admin	syoung	proj3	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+admin	syoung	proj3	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+admin	syoung	proj3	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+admin	syoung	proj3	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+admin	syoung	proj3	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+admin	syoung	proj3	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+admin	syoung	proj3	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+admin	syoung	proj3	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+admin	syoung	proj3	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+admin	syoung	proj3	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+admin	syoung	proj3	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	proj3	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	syoung	proj3	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	proj3	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	proj3	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	syoung	proj3	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	proj3	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	proj3	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	proj3	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	proj3	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	syoung	proj3	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	proj3	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	proj3	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	proj3	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	proj4	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	proj4	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	proj4	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	proj4	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	proj4	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	syoung	proj4	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	proj4	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	proj4	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	proj4	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	proj4	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	proj4	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	proj4	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	proj4	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	proj4	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	syoung	proj4	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+admin	syoung	proj4	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+admin	syoung	proj4	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+admin	syoung	proj4	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+admin	syoung	proj4	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+admin	syoung	proj4	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+admin	syoung	proj4	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+admin	syoung	proj4	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+admin	syoung	proj4	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+admin	syoung	proj4	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+admin	syoung	proj4	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+admin	syoung	proj4	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+admin	syoung	proj4	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+admin	syoung	proj4	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+admin	syoung	proj4	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	proj4	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	syoung	proj4	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	proj4	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	proj4	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	syoung	proj4	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	proj4	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	proj4	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	proj4	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	proj4	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	syoung	proj4	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	proj4	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	proj4	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	proj4	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	proj5	Workflow1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	proj5	Workflow1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	proj5	Workflow1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	proj5	Workflow1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	proj5	Workflow1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	syoung	proj5	Workflow1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	proj5	Workflow1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	proj5	Workflow1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	proj5	Workflow1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	proj5	Workflow1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	proj5	Workflow1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	proj5	Workflow1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	proj5	Workflow1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	proj5	Workflow1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0
+admin	syoung	proj5	Workflow2	0	ELAND	1	clean	0	0	input	clean	flag	--clean	1	optional		Clean run (remove old splitfile)				0
+admin	syoung	proj5	Workflow2	0	ELAND	1	hits	1	0	output	hits	files			optional		Chromosome-specific *bam files containing aligned reads	input.outputdir.value	outputdir	return outputdir + /chr*/hit.bam;	0
+admin	syoung	proj5	Workflow2	0	ELAND	1	inputfile	0	0	input	inputfile	file	--inputfile		essential		Solexa FASTQ format sequence file	output.readfile.value,input.readfile.value	input1,input2		0
+admin	syoung	proj5	Workflow2	0	ELAND	1	inputtype	0	0	input	inputtype	string	--inputtype	fastq	required		Type of input sequence. Valid inputs: fastq, fasta, export or qseq				0
+admin	syoung	proj5	Workflow2	0	ELAND	1	label	0	0	input	label	string	--label	myLabel	required		Label describing the data or experiment	input.label.value	InputParams		0
+admin	syoung	proj5	Workflow2	0	ELAND	1	matefile	0	0	input	matefile	file	--matefile		optional	fastq	Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)	output.matefile.value,input.matefile.value	input1,input2		0
+admin	syoung	proj5	Workflow2	0	ELAND	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow2	required		Print ELAND alignment files to this directory (will create the directory if it does not exist)				0
+admin	syoung	proj5	Workflow2	0	ELAND	1	pairparams	0	0	input	pairparams	string	--pairparams		optional		Paired read analysis parameters to pass to pickBestPair. Default: '--circular' (treats all chromosomes as circular).				0
+admin	syoung	proj5	Workflow2	0	ELAND	1	quality	0	0	input	quality	integer	--quality		optional		Quality value of all bases in fasta mode (Default: 30)				0
+admin	syoung	proj5	Workflow2	0	ELAND	1	reads	0	0	input	reads	integer	--reads	1000000	optional		Number of reads per sub-file				0
+admin	syoung	proj5	Workflow2	0	ELAND	1	referencedir	0	0	input	referencedir	directory	--referencedir	Project1/Workflow2	essential		Directory containing squashed reference genome files				0
+admin	syoung	proj5	Workflow2	0	ELAND	1	seedlength	0	0	input	seedlength	integer	--seedlength		optional		Length of read used for ELAND alignment (Default: min. of seedlength and 32)				0
+admin	syoung	proj5	Workflow2	0	ELAND	1	species	0	1	input	species	string	--species	human	required		Name of species, e.g., human, mouse, rat.				0
+admin	syoung	proj5	Workflow2	0	ELAND	1	splitfile	0	0	input	splitfile	file	--splitfile		optional						0
+admin	syoung	proj5	WorkflowA	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	proj5	WorkflowA	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2/downloads	required		Create this directory and download files to it				0
+admin	syoung	proj5	WorkflowA	0	FTP	1	regex	0	0	input	regex	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	proj5	WorkflowA	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	proj5	WorkflowA	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx	required		Download files linked on this page				0
+admin	syoung	proj5	WorkflowA	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	proj5	WorkflowA	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	proj5	WorkflowA	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	ProjectY/Workflow2	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	proj5	WorkflowA	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	ProjectY/Workflow2	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	proj5	WorkflowA	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			0
+admin	syoung	proj5	WorkflowA	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	proj5	WorkflowA	0	novoIndex	3	inputdir	1	0	input	inputdir	directory	--inputdir	ProjectX/Workflow1	essential		Location of directory containing *.fa files	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	proj5	WorkflowA	0	novoIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir		         		Print indexed files to this directory	output.referencedir.value, input.outputdir.value, input.inputdir.value			0
+admin	syoung	proj5	WorkflowA	0	novoIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs	1	optional			input.subdirs.value			0
+admin	syoung	p1	WorkflowXX1	0	FTP	1	filter	0	0	input	filter	string	--filter		optional		Download only files containing this text fragment				0
+admin	syoung	p1	WorkflowXX1	0	FTP	1	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Create this directory and download files to it				0
+admin	syoung	p1	WorkflowXX1	0	FTP	1	regex	0	0	input	regex	string	--regex	chr[XYM0-9]+.fa.gz	optional		Download files matching this regular expression				0
+admin	syoung	p1	WorkflowXX1	0	FTP	1	type	0	0	input	type	string	--type	html	essential		Type of page: html or text				0
+admin	syoung	p1	WorkflowXX1	0	FTP	1	url	0	0	input	url	string	--url	http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes	required		Download files linked on this page				0
+admin	syoung	p1	WorkflowXX1	0	unzipFiles	2	delete	1	0	input	delete	flag	--delete	1	optional		Remove zipped files after unzipping				0
+admin	syoung	p1	WorkflowXX1	0	unzipFiles	2	filter	0	0	input	filter	string	--filter		optional		Unzip only files containing this text fragment				0
+admin	syoung	p1	WorkflowXX1	0	unzipFiles	2	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/downloads	essential		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)	input.outputdir.value	InputParams		0
+admin	syoung	p1	WorkflowXX1	0	unzipFiles	2	outputdir	0	0	input	outputdir	directory	--outputdir	Project1/Workflow1/downloads	required		Unzip files to this directory	input.outputdir.value	InputParams		0
+admin	syoung	p1	WorkflowXX1	0	unzipFiles	2	regex	0	0	input	filter	string	--regex	\	chr[XYM0-9]+.fa.gz	optional		Unzip only files matching this regular expression	input.regex.value			1
+admin	syoung	p1	WorkflowXX1	0	unzipFiles	2	type	0	0	input	type	string	--type	gunzip	required		Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)				0
+admin	syoung	p1	WorkflowXX1	0	elandIndex	3	inputdir	0	0	input	inputdir	directory	--inputdir	Project1/Workflow1/reference/fasta	essential		Location of directory containing *.fa files	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	p1	WorkflowXX1	0	elandIndex	3	outputdir	1	0	input	outputdir	directory	--outputdir	Project1/Workflow1/reference/eland	required		Print indexed files to this directory	input.referencedir.value,input.outputdir.value,input.inputdir.value	referencedir,outputdir,inputdir	if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; 	0
+admin	syoung	p1	WorkflowXX1	0	elandIndex	3	subdirs	1	0	input	subdirs	flag	--subdirs		optional			input.subdirs.value			0

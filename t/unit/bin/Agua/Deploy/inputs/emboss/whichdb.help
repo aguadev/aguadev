@@ -1,0 +1,18 @@
+whichdb --help
+Search all sequence databases for an entry and retrieve it
+Version: EMBOSS:6.5.7.0
+
+   Standard (Mandatory) qualifiers (* if not always prompted):
+  [-entry]             string     ID or Accession number (Any string)
+*  -outfile            outfile    [*.whichdb] Output file name
+
+   Additional (Optional) qualifiers: (none)
+   Advanced (Unprompted) qualifiers:
+   -get                toggle     [N] Retrieve sequences
+   -showall            boolean    [N] Show failed attempts
+
+   General qualifiers:
+   -help               boolean    Report command line options and exit. More
+                                  information on associated and general
+                                  qualifiers can be found with -help -verbose
+

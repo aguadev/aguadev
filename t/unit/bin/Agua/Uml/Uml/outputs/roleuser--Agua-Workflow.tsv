@@ -1,0 +1,24 @@
+Agua::Workflow
+	external_calls
+		*Agua::Workflow	*Agua::Common::Cluster
+		addCluster	_addCluster	
+		_createConfigFile	_createPluginsDir	
+		addCluster	_removeCluster	
+		setStarClusterObject	clusterInputs	
+		runOnCluster	clusterIsBusy	
+		setClusterCompleted	clusterIsBusy	
+		_createConfigFile	getAdminKey	
+		createQueue	getAdminKey	
+		deleteQueue	getAdminKey	
+		_createConfigFile	getCluster	
+		createQueue	getCluster	
+		setStarClusterObject	getCluster	
+		getStatus	getClusterByWorkflow	
+		runOnCluster	getClusterStatus	
+		setStarClusterObject	getClusterStatus	
+		_createConfigFile	getConfigFile	2	
+		clusterOutput	getConfigFile	
+		createQueue	getConfigFile	2	
+		deleteQueue	getConfigFile	2	
+		getStatus	getConfigFile	
+		startStarCluster	getConfigFile	

@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+<title> simple widget 1: check arguments in postCreate </title>
+
+<script type="text/javascript" src="dojo.1.2.2/dojo/dojo.js"
+		djConfig="parseOnLoad: true, isDebug: true, debugHeight: 600, useCommentedJson: true"></script>
+	
+<script type="text/javascript">
+
+    //dojo.require("dijit.layout.TabContainer");
+    //dojo.require("dijit.form.Button");
+
+    // REGISTER module path FOR PLUGINS
+    dojo.registerModulePath("plugins","../../plugins");	
+    
+    // LOAD PLUGINS
+    //dojo.require("plugins.projects.Projects");
+
+    // LOAD DEPENDENCIES
+    //dojo.require("plugins.project.FileDrag");
+    //dojo.require("dojox.widget.FilePicker");
+    //dojo.require("dojox.data.FileStore");
+dojo.require("dijit._Widget");
+
+
+dojo.declare(
+	"Simple",
+	[dijit._Widget], {
+		preamble: function(){
+			console.log("++++ preamble - args:", arguments);
+			arguments[0].name = arguments[0].prefix + arguments[0].suffix;
+			console.log("arguments[0].name: " + arguments[0].name);
+			console.log("arguments[0].prefix: " + arguments[0].prefix);
+            console.log("Setting arguments[0].name = arguments[0].prefix + arguments[0].suffix = " + arguments[0].name);
+			console.log("arguments[0].name: " + arguments[0].name);
+		},
+		
+		constructor: function(){
+			console.log("++++ constructor (", arguments[0].name, ") - args:", arguments);
+            console.log(dojo.toJson(arguments[0]));
+            console.log("arguments[0].name: " + arguments[0].name);
+		},
+        
+		postMixInProperties: function(){
+			console.log("++++ postMixInProperties (", this.name, ")");
+            console.log("this.prefix: " + this.prefix);
+            console.log("this.name: " + this.name);
+		},
+        
+		postCreate: function(){
+			console.log("++++ postCreate");
+            //console.log("arguments[0].name: " + arguments[0].name);
+            console.log("this.prefix: " + this.prefix);
+            console.log("this.name: " + this.name);
+			this.domNode.innerHTML = this.name + " Simple Widget"
+		},
+		startup: function(){
+			console.log("startup");
+            
+		},
+	}
+);
+dojo.addOnLoad(function(){
+	w = new Simple(
+        {
+            prefix:"Foo", 
+            suffix:"Bar"
+        },
+        dojo.byId("main")
+    );
+
+//console.log("w.arguments: " + w.preamble( { store: 'store' } ));
+})
+
+</script>
+
+</head>
+
+<body class="soria">
+
+<h1>
+    simple widget 1: check arguments in postCreate
+</h1>
+
+<div id="main"> widget goes here </div>
+
+
+</body>
+</html>
+
+

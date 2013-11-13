@@ -1,0 +1,28 @@
+
+  Application:
+  owner          anonymous
+  locked         0
+  localonly      0
+  stagepid       0
+  stagejobid     0
+  workflowpid    0
+
+    Parameters:
+    build          
+    cleanup        
+    cluster        
+    cpus           
+    filename       
+    filetype       
+    inputdir       
+    jbrowse        
+    key            
+    label          
+    maxjobs        
+    project        
+    queue          
+    sleep          
+    species        
+    tempdir        
+    username       
+    workflow       

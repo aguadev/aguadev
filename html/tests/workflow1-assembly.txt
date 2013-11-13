@@ -1,0 +1,263 @@
+dojo.preventCache	1231653770616
+mode				fileSystem
+parentDir			Project1
+query				{}
+sessionId			1228319084.3060.776
+username			admin
+
+/* {
+'total': '3',
+'items': [
+	{
+		'name': 'Workflow1-assembly',
+		'parentDir': 'Project1',
+		'path': 'Workflow1-assembly',
+		'directory': true,
+		'size': '0',
+		'modified': 1231009744,
+		'children': [
+			'code.js',
+			'inputdir',
+			'inputfile.txt',
+			'sequence.fasta'
+		]
+	},
+	{
+		'name': 'Workflow2-SNPs',
+		'parentDir': 'Project1',
+		'path': 'Workflow2-SNPs',
+		'directory': true,
+		'size': '0',
+		'modified': 1231009744,
+		'children': [
+		]
+	},
+	{
+		'name': 'Workflow3-transcriptome',
+		'parentDir': 'Project1',
+		'path': 'Workflow3-transcriptome',
+		'directory': true,
+		'size': '0',
+		'modified': 1231009744,
+		'children': [
+		]
+	}
+]
+} */
+
+
+++++ plugins.project.FileDrag.getPaneForItem(item: [object Object],
+ parentPane: [object HTMLDivElement],
+ children: [object Object],
+[object Object],
+[object Object],
+[object Object])
+this.store: [object Object]
+item.name: Workflow1-assembly
+item.directory: true
+item:
+{
+    "name":"Workflow1-assembly",
+    "parentDir":"Project1",
+    "path":"Workflow1-assembly",
+    "directory":true,
+    "size":"0",
+    "modified":1231009744,
+    "children":
+    [
+        {
+            "name":"code.js",
+            "_loaded":false,
+            "parentPath":"Workflow1-assembly",
+            "_S":
+            {
+                "url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1",
+                "pathAsQueryParam":true,
+                "preamble":null,
+                "declaredClass":"dojox.data.FileStore",
+                "_storeRef":"_S",
+                "label":"name",
+                "_identifier":"path",
+                "_attributes":
+                [
+                    "children",
+                    "directory",
+                    "name",
+                    "path",
+                    "modified",
+                    "size",
+                    "parentDir"
+                ],
+                "pathSeparator":"/",
+                "options":[]
+            }
+        },
+        {
+            "name":"inputdir",
+            "_loaded":false,
+            "parentPath":"Workflow1-assembly",
+            "_S":
+            {
+                "url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1",
+                "pathAsQueryParam":true,
+                "preamble":null,
+                "declaredClass":"dojox.data.FileStore",
+                "_storeRef":"_S",
+                "label":"name",
+                "_identifier":"path",
+                "_attributes":
+                [
+                    "children",
+                    "directory",
+                    "name",
+                    "path",
+                    "modified",
+                    "size",
+                    "parentDir"
+                ],
+                "pathSeparator":"/",
+                "options": []
+            }
+        },
+        {
+            "name":"inputfile.txt",
+            "_loaded":false,
+            "parentPath":"Workflow1-assembly",
+            "_S":
+            {
+                "url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1",
+                "pathAsQueryParam":true,
+                "preamble":null,
+                "declaredClass":"dojox.data.FileStore",
+                "_storeRef":"_S",
+                "label":"name",
+                "_identifier":"path",
+                "_attributes":
+                [
+                    "children",
+                    "directory",
+                    "name",
+                    "path",
+                    "modified",
+                    "size",
+                    "parentDir"
+                ],
+                "pathSeparator":"/",
+                "options":[]
+            }
+        },
+        {
+            "name":"sequence.fasta",
+            "_loaded":false,
+            "parentPath":"Workflow1-assembly",
+            "_S":
+            {
+                "url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1",
+                "pathAsQueryParam":true,
+                "preamble":null,
+                "declaredClass":"dojox.data.FileStore",
+                "_storeRef":"_S",
+                "label":"name",
+                "_identifier":"path",
+                "_attributes":
+                [
+                    "children",
+                    "directory",
+                    "name",
+                    "path",
+                    "modified",
+                    "size",
+                    "parentDir"
+                ],
+                "pathSeparator":"/",
+                "options":[]
+            }
+        }
+        
+    ],
+
+    "_S":
+    {
+        "url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1",
+        "pathAsQueryParam":true,
+        "preamble":null,
+        "declaredClass":"dojox.data.FileStore",
+        "_storeRef":"_S",
+        "label":"name",
+        "_identifier":"path",
+        "_attributes":
+        [
+            "children",
+            "directory",
+            "name",
+            "path",
+            "modified",
+            "size",
+            "parentDir"
+        ],
+        "pathSeparator":"/",
+        "options":[]
+    }
+}
+
+
+
+++++ plugins.project.FileDrag.getMenuItemForItem(item: [object Object], parentPane: [Widget plugins.project._GroupDragPane, plugins_project__GroupDragPane_0], children: [object Object],[object Object],[object Object],[object Object])
+parentWidget: [Widget plugins.project.FileDrag, Project1-ProjectDrag]
+parentWidgetNode: [object HTMLDivElement]
+childNodes: [object NodeList]
+childNodes.length: 1
+dragType: workflow
+plugins.project.FileDrag.getMenuItemForItem. Returning menuItem: [object Object], {"data":"Workflow1-assembly","type":["workflow"]}
+lastNode: [object HTMLDivElement]
+Setting lastNode.item = item
+
+item: 
+{
+	"name":"Workflow1-assembly",
+	"parentDir":"Project1",
+	"path":"Workflow1-assembly",
+	"directory":true,
+	"size":"0",
+	"modified":1231014500,
+	"children":
+	[
+		{
+			"name":"code.js","_loaded":false,"parentPath":"Workflow1-assembly",
+			"_S":
+			{
+				"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]
+			}
+		},
+		{
+			"name":"inputdir","_loaded":false,"parentPath":"Workflow1-assembly",
+			"_S":
+			{
+				"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]
+			}
+		},
+		{
+			"name":"inputfile.txt","_loaded":false,"parentPath":"Workflow1-assembly",
+			"_S":
+			{		
+				"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]
+			}
+		},
+		{
+			"name":"sequence.fasta","_loaded":false,"parentPath":"Workflow1-assembly",
+			"_S":
+			{		
+				"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]
+			}
+		}
+	],
+	"_S":
+	{
+		"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]
+	}
+}
+
+lastNode.className: dojoDndItem
+lastNode.item.directory: true
+
+

@@ -1,0 +1,636 @@
+
+/* DOES THIS HELP AUTOSIZING? */
+.applications .parameters {
+	height: auto !important;
+	font-family: Verdana;
+}
+
+/* DND AVATAR ICON */
+.parameters .dojoDndAvatarHeader,
+.parameters .tundra.dojoDndCopy .dojoDndAvatarHeader {
+	background-image: url(../../../plugins/apps/images/parameter-18.png) !important;
+	background-repeat: no-repeat;
+	background-position: 0.3em 0.2em !important;
+	text-indent: 30px;
+	height: 20px;
+}
+
+
+.applications .parameters textarea {
+	overflow: auto !important;
+}
+
+.applications .parameters .headerRow {
+	font-size: 12px !important;
+	color: darkblue !important;
+	text-align: center !important;
+	padding: 0px !important;
+}
+.applications .parameters .unlocked,
+.applications .parameters .locked {
+	background-image: url(../../../plugins/apps/images/locked-24.png);
+	background-repeat: no-repeat;
+	width: 24px;
+	text-align: center !important;
+	vertical-align: middle;
+}
+.applications .parameters .unlocked {
+	background-image: url(../../../plugins/apps/images/unlocked-24.png);
+}
+.applications .parameters .parameterrow .unlocked,
+.applications .parameters .parameterrow .locked {
+	background-image: url(../../../plugins/apps/images/locked-20.png);
+	background-repeat: no-repeat;
+	min-width: 24px !important;
+	text-align: center !important;
+	vertical-align: middle;
+	background-position: 0px 0px !important;
+}
+.applications .parameters .parameterrow .unlocked {
+	background-image: url(../../../plugins/apps/images/unlocked-20.png);
+}
+.applications .parameters .label {
+	text-align:	center !important;
+	font-weight: bolder;
+	font-size: 18px;
+	color: darkblue;
+	font-style: oblique;
+	height: 20px;
+	vertical-align: bottom !important;
+	/*background-color: #FF4;*/
+	background-color: #EEE;
+}
+.applications .parameters .label .paramOrder,
+.applications .parameters .label .paramFilter {
+	line-height: 20px !important;
+	height: 40px !important;	
+}
+
+/* NB: THIS IS NEEDED FOR THE BUTTON CSS BELOW TO WORK! */
+.applications .parameters table textarea {
+	font-family: Verdana;
+}
+.applications .parameters .addParameterButton {
+	height: 20px !important;
+	width: 115px !important;
+	/*margin-left: auto;*/
+	margin-right: 0px;
+
+	text-align: center;
+	vertical-align: middle;
+	-moz-user-select: none;
+	font-size: 14px;
+	font-family: Verdana;
+	font-weight: bolder;
+	color: #224;
+	background-color: #FEFEFE;
+	
+	border: 4px solid #BBB;
+	border-bottom-color: #888;	
+	border-left-color: #888;
+}
+
+.applications .parameters .addParameterButton:hover {
+	border-color: #999;
+	border-bottom-color: #555;	
+	border-left-color: #555;
+	background-color : #FFF;
+	/*background-color : #FF8;*/
+}
+
+.applications .parameters .addParameterButton:active {
+	border-color: #999;
+	border-bottom-color: #555;	
+	border-left-color: #555;
+	background-color : #8F8;
+}
+
+.applications .parameters .inputs .name,
+.applications .parameters .inputs .valuetype,
+.applications .parameters .inputs .ordinal,
+.applications .parameters .inputs .value,
+.applications .parameters .inputs .argument,
+.applications .parameters .inputs .category,
+.applications .parameters .inputs .description,
+.applications .parameters .inputs .discretion,
+.applications .parameters .inputs .paramtype,
+.applications .parameters .inputs .format,
+.applications .parameters .inputs .args,
+.applications .parameters .inputs .inputParams,
+.applications .parameters .inputs .paramFunction
+{
+	height: 20px !important;
+	font-size: 16px !important;
+	color: #222;
+	text-align: left !important;
+	vertical-align: middle !important;
+	font-weight: bolder !important;
+	padding-top: 0px;
+}
+
+/* ARGUMENT */
+.applications .parameters .inputs .argumentHeader,
+.applications .parameters .inputs .argument,
+.applications .parameters .inputs .valueHeader,
+.applications .parameters .inputs .value {
+    width: 160px !important;
+}
+
+/* PARAMTYPE */
+.applications .parameters .inputs .paramtype {
+    width: 100px !important;
+}
+
+.applications .parameters .headerRow .paramtypeHeader {
+    width: 100px !important;
+}
+
+/* DISCRETION */
+.applications .parameters .inputs .discretion {
+	width: 100px !important;
+	font-weight: bolder;
+	font-family: Verdana;
+}
+
+/* VALUETYPE */
+.applications .parameters .inputs .valuetype {
+	width: 100px !important;
+}
+
+/* DESCRIPTION */
+.applications .parameters .inputs .description {
+    width: 270px !important;
+}
+
+/* ORDINAL */
+.applications .parameters .inputs .ordinal {
+    width: 100px !important;
+}
+
+/* APP TYPE COMBO */
+.applications .parameters .appsCombo {
+    width: 170px !important;
+}
+
+
+.applications .parameters .invalid ,
+.applications .parameters .inputs .description .dijitTextArea .invalid,
+.applications .parameters .inputs .discretion .dijitTextArea .invalid {
+	border: 2px solid #F00 !important;
+}
+
+.applications .parameters .inputs .default {
+	font-style: normal !important;
+	font-weight: normal;
+	font-size: 12px !important;
+	background-color: #DDD;
+}
+.applications .parameters .inputs .default:hover {
+	background-color: #DDD !important;
+}
+
+/* TOGGLE */
+.applications .parameters .toggleTitle {
+	text-align: left !important;
+	padding-top: 6px !important;
+	font-size: 14px !important;
+	font-weight: 800 !important;
+	color: #444 !important;
+}
+
+.applications .parameters .toggleTitle:hover {
+	background-color: #FFA;
+}
+
+.applications .parameters .toggleTitle:active {
+	background-color: #AFA;
+}
+
+/* APPS COMBO */
+.applications .parameters .appsCombo .dijitReset.dijitInputInner {
+    font-weight: bolder;
+    font-size: 16px;
+}
+
+.applications .parameters .appsCombo .dijitReset.dijitInputInner {
+    font-weight: bolder;
+}
+
+
+.applications .parameters .applicationsCombo,
+.applications .parameters .appNamesCombo,
+.applications .parameters .paramOrderCombo,
+.applications .parameters .paramFilterCombo,
+.applications .parameters .dijitMenu li,
+.applications .parameters .dijitMenuItem li {
+	text-indent: 10px;
+	background-color: #FFF;
+}
+
+/* COMBO BOX SELECTED FIELD */
+/*.applications .parameters .applicationsCombo .dijitReset .dijitInputField,*/
+/*.applications .parameters .appNamesCombo .dijitReset .dijitInputField {*/
+/*	background-color: #FFD;*/
+/*}*/
+
+.applications .parameters .applicationsCombo,
+.applications .parameters .appNamesCombo,
+.applications .parameters .paramOrderCombo,
+.applications .parameters .paramFilterCombo {
+	height: auto;
+	width: 165px !important;
+	color: #000;
+	font-size: 14px;
+	font-weight: bold;
+	text-align: center !important;
+	margin-left: auto;
+	margin-right: auto;
+	/*background-color: #FFC;*/
+}
+
+/* HIDE VALIDATION ICON AT RIGHT OF COMBO SCROLLBOX */
+.applications .parameters .applicationsCombo .dijitValidationIcon,
+.applications .parameters .appNamesCombo .dijitValidationIcon,
+.applications .parameters .paramOrderCombo .dijitValidationIcon,
+.applications .parameters .paramFilterCombo .dijitValidationIcon {
+	display: none !important;
+}
+
+.applications .parameters .applicationsCombo,
+.applications .parameters .appNamesCombo,
+.applications .parameters .paramOrderCombo,
+.applications .parameters .paramFilterCombo {
+	font-size: 14px;
+	background-color: #FFF !important;
+	text-indent: 0px;
+	width: 165px !important;
+	display: table-cell;
+	text-align: center;
+	width: 100%;
+	font-weight: bold;
+	font-family: Verdana;
+}
+
+.applications .parameters .applicationsCombo .option,
+.applications .parameters .appNamesCombo .option,
+.applications .parameters .paramOrderCombo .option,
+.applications .parameters .paramFilterCombo .option {
+	/*background-color: #FFC !important;*/
+}
+
+/* NOTE: THIS IS NECESSARY FOR THE NEXT RULE TO WORK!!! */
+.applications .parameters .applicationsCombo .dijitReset .dijitMenu li,
+.applications .parameters .applicationsCombo .dijitReset .dijitMenuItem li,
+.applications .parameters .appNamesCombo .dijitReset .dijitMenu li,
+.applications .parameters .appNamesCombo .dijitReset .dijitMenuItem li,
+.applications .parameters .paramOrderCombo .dijitReset .dijitMenu li,
+.applications .parameters .paramFilterCombo .dijitReset .dijitMenuItem li
+{
+	/*color: #0FF !important;*/
+}
+
+
+/* DRAG SOURCE */
+.applications .parameters .dragSource table {  
+    border: 0 !important;
+	border-collapse: collapse !important;	
+	float: left;
+    margin-top: 0px !important;
+    padding-top: 0px !important;
+    height: auto !important;
+}
+
+.applications .parameters .dragSource tr {
+	/*margin: 0xp !important;*/
+}
+
+.applications .parameters .dragSource {
+	width: 39;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+
+	/*margin-top: 5px;*/
+	width: 120px;	
+	height: auto !important;
+	/* min-height: 100px;
+	
+	text-align: left !important;
+	font-size: 12px;
+	border-color: #333;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	width: 390px !important; */
+	width: 3;
+}
+
+.applications .parameters .dragSource .editParameterRow {
+	width: 100% !important;
+	height: auto !important;
+	white-space: pre !important;
+}
+
+/* NON-TOGGLED NODES */
+.applications .parameters .dragSource .name,
+.applications .parameters .dragSource .discretion,	
+.applications .parameters .dragSource .paramtype {
+	display: inline-block !important;
+	min-height: 20px !important;
+	height: auto !important;
+	max-height: auto !important;
+	background-color: #FFF;	
+}
+
+/* TOGGLED NODES */
+.applications .parameters .dragSource .argument,
+.applications .parameters .dragSource .valuetype,
+.applications .parameters .dragSource .valuetypeToggle,
+.applications .parameters .dragSource .ordinal,
+.applications .parameters .dragSource .ordinalToggle,
+.applications .parameters .dragSource .category,
+.applications .parameters .dragSource .value,
+.applications .parameters .dragSource .description,
+.applications .parameters .dragSource .format,
+.applications .parameters .dragSource .args,
+.applications .parameters .dragSource .inputParams,
+.applications .parameters .dragSource .paramFunction {
+	display: none;
+	/*min-height: 25px !important;*/
+	height: auto !important;
+	max-height: auto !important;
+	background-color: #FFF;
+}
+
+/* WIDTHS */
+	/* LARGE COLUMNS */
+.applications .parameters .dragSource .description,
+.applications .parameters .dragSource .paramFunction {
+	width: 389px !important;
+}
+
+	/* MEDIUM COLUMNS */
+.applications .parameters .dragSource .name,
+.applications .parameters .dragSource .argument {
+	width: 165px !important;
+}
+.applications .parameters .dragSource .format {
+	width: 82px !important;
+}
+	/* LARGE COLUMNS */
+.applications .parameters .dragSource .value {
+	width: 254px !important;
+}
+
+	/* SMALL COLUMNS */
+.applications .parameters .dragSource .valuetype,
+.applications .parameters .dragSource .args {
+	width: 173px !important;
+}
+.applications .parameters .dragSource .inputParams {
+	width: 222px !important;
+}
+.applications .parameters .dragSource .category {
+	width: 110px !important;
+}
+	/* COMBOBOX COLUMNS */
+.applications .parameters .dragSource .ordinal {
+	width: 32px !important;
+}
+.applications .parameters .dragSource .valuetype {
+	width: 100px !important;
+}
+.applications .parameters .dragSource .discretion {	
+	width: 80px !important;
+}
+.applications .parameters .dragSource .lockedValueTypeContainer {
+	display: inline-block;
+	width: 105px !important;
+}
+
+/* MARGIN-LEFT */
+.applications .parameters .dragSource .name,
+.applications .parameters .dragSource .value,
+.applications .parameters .dragSource .argument,
+.applications .parameters .dragSource .description {
+	/*margin-left: 5px !important;*/
+}
+
+/* MARGIN-TOP */
+.applications .parameters .dragSource .name {
+    width: 140px !important;
+}
+
+.applications .parameters .dragSource .paramtype .dijitReset.dijitInline.dijitSelectLabel.dijitValidationTextBoxLabel  {
+    width: 80px !important;
+}
+
+.applications .parameters .dragSource .discretion {
+	width: 140px !important;
+}
+.applications .parameters .dragSource .lockedValueTypeContainer {
+	width: 138px !important;
+}    
+
+.applications .parameters .dragSource .argument,
+.applications .parameters .dragSource .value,
+.applications .parameters .dragSource .description,
+.applications .parameters .dragSource .args,
+.applications .parameters .dragSource .paramFunction {
+	margin-top: 1px !important;
+}
+
+/* DISCRETION COMBOBOX */
+.applications .parameters .dragSource .discretionSelect {
+	background-color: #FFF !important;	
+	color: blue;
+	font-weight: bold;
+	font-size: 12px;
+	background: none;
+}
+
+/* COMBOBOX HEIGHT */
+.applications .parameters .dragSource .valuetype,
+.applications .parameters .dragSource .paramtype,
+.applications .parameters .dragSource .ordinal {
+	height: 20px !important;
+	padding: 0 !important;
+}
+
+
+/* NAME + IMAGE */
+.applications .parameters .dragSource .name {
+	font-size: 14px;
+	color: darkred;
+	font-weight: bolder;
+	text-align: left !important;
+	background-image: url(../../../plugins/apps/images/parameter-18.png);
+	background-repeat: no-repeat;
+	text-indent: 22px;
+}
+
+/* FONT, COLOUR AND TEXT */
+.applications .parameters .dragSource .paramtype .default,
+.applications .parameters .dragSource .discretion .default {
+	color: #555;
+	font-style: italic;	
+}
+
+.applications .parameters .dragSource .valuetype,
+.applications .parameters .dragSource .ordinal,
+.applications .parameters .dragSource .paramtype {
+	font-size: 12px;
+	text-align: center !important;
+}
+
+.applications .parameters .dragSource .valuetype,
+.applications .parameters .dragSource .ordinal {
+	color: darkblue;
+	display: inherit;
+}
+.applications .parameters .dragSource .valuetype {
+	width: 110px !important;
+}
+.applications .parameters .dragSource .ordinal {
+	width: 50px !important;
+}
+.applications .parameters .dragSource .paramtype {
+	color: darkred;
+	width: 50px !important;
+	min-height: 22px !important;
+}
+
+.applications .parameters .dragSource .description {
+	color: #222;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: left !important;
+	background-color: #EED;
+}
+
+.applications .parameters .dragSource .discretion {	
+	color: blue;
+	font-weight: bold;
+	font-size: 12px;
+	background: none;
+	width: 110px !important;
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+.applications .parameters .dragSource .format,
+.applications .parameters .dragSource .args,
+.applications .parameters .dragSource .inputParams,
+.applications .parameters .dragSource .paramFunction {
+	color: #222;
+	font-weight: normal;
+	font-size: 10px;
+	background-color: #FFF;
+}
+
+.applications .parameters .dragSource .args,
+.applications .parameters .dragSource .inputParams {
+	max-width: 49% !important;
+}
+
+.applications .parameters .dragSource .args,
+.applications .parameters .dragSource .paramFunction {
+	margin-left: 5px !important;
+}
+
+.applications .parameters .dragSource .format {
+	font-size: 14px !important;
+}
+
+/* TRASH CAN */
+.applications .parameters .trash {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+
+	margin-top: 5px;
+	width: 150px;	
+	height: 60px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.applications .parameters .trashIcon {
+	height: 100%;
+	width: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	
+	background-image: url(../../../plugins/apps/images/trash-60.png);
+	background-repeat: no-repeat;
+}
+
+
+
+/* SELECT BOXES */
+.applications .parameters .dragSource .dijitReset.dijitInputField.dijitArrowButtonInner {
+    width: 14px !important;
+    height: 15px !important;
+}
+
+.applications .parameters .dragSource .dijitReset.dijitValidationContainer {
+    display: none !important;   
+}
+
+.applications .parameters .dragSource .dijitReset.dijitInline.dijitSelectLabel.dijitValidationTextBoxLabel  {
+    width: 80px !important;
+}
+
+.applications .parameters .dragSource .ordinal .dijitReset.dijitInline.dijitSelectLabel.dijitValidationTextBoxLabel  {
+    width: 30px !important;
+}
+
+.applications .parameters .dragSource .dijitSelect {
+    margin: 0 !important;
+}
+
+.applications .parameters .dragSource .ordinal .dijitReset.dijitInputField.dijitButtonText {
+    width: 20px !important;
+    margin: 0 !important;
+}
+.applications .parameters .dragSource .ordinal .dijitReset.dijitInputField.dijitArrowButtonInner {
+    width: 9px !important;
+    height: 15px !important;
+}
+
+
+/* BORDER AROUND ALL ITEMS */
+.applications .parameters .dragSource .name,
+.applications .parameters .dragSource .paramtype,
+.applications .parameters .dragSource .discretion,
+.applications .parameters .dragSource .argument,
+.applications .parameters .dragSource .valuetype,
+.applications .parameters .dragSource .category,
+.applications .parameters .dragSource .value,
+.applications .parameters .dragSource .ordinal,
+.applications .parameters .dragSource .description,
+.applications .parameters .dragSource .format,
+.applications .parameters .dragSource .args,
+.applications .parameters .dragSource .inputParams,
+.applications .parameters .dragSource .paramFunction,
+.applications .parameters .dragSource .paramtype
+ {
+    border: 1px grey solid;
+    min-height: 20px !important;
+	font-size: 14px !important;
+}
+
+/* ROW BACKGROUND */
+.applications .parameters .dragSource .dojoDndItemAnchor {
+    background-color: white;
+}

@@ -1,0 +1,27 @@
+<div dojoattachpoint="containerNode">
+
+    <div
+        class="form dateTextBox"
+    >
+        <table>
+            <tr>
+                <td class="label">${label}</td>
+                <td colspan="2">
+                    <input
+                        data-dojo-attach-point="input"
+                        class="input"
+                        type="text"
+                        dojoType="dojox/form/DateTextBox"
+                        constraints="{min:'2013-01-01',max:'2022-12-31'}"
+                        lang="en-us"
+                        promptMessage="mm/dd/yyyy"
+                        invalidMessage="Invalid date. Use mm/dd/yyyy format"
+                        required="true"
+                    /> 
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+</div>

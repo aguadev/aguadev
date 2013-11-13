@@ -1,0 +1,212 @@
+.workflowIcon {
+	background-image: url("../../../plugins/workflow/images/workflow-18.png");
+	background-repeat: no-repeat;
+	width: 18px;
+	height: 18px;
+}
+
+.workflowButton {
+	position: relative;
+	font-size: 16px;
+}
+
+/* COMBO ARROW */
+.workflow .dijitArrowButtonInner {
+    /*background: url(../../../dojo-1.6.1/dijit/themes/tundra/images/spriteArrows.png) no-repeat scroll 0 center transparent;*/
+/*	width: 7px !important;*/
+/*	height: 22px !important;*/
+/*    margin: 0 4px !important;*/
+}
+
+/* SKINNY COMBO ARROW */
+.workflow .dijitArrowButtonInner {
+    margin: 0 0px !important;
+}
+
+workflow .dijitTabPaneWrapper {
+	height: auto !important;
+	border:medium none;
+}
+.workflow .dijitTabContainerTop-container {
+	height: auto !important;
+	border-top:medium none !important;
+}
+.workflow .dijitTabPaneWrapper {
+	height: auto !important;
+
+	border:medium none;
+}
+.workflow .dijitTabContainerTop-container {
+	height: auto !important;
+	border-top:medium none !important;
+}
+
+
+.tundra .dijitSplitContainer-dijitContentPane, .tundra .dijitBorderContainer-dijitContentPane {
+	background-color: #FFFFFF;
+	padding: 5px !important;
+}
+
+/* GENERAL WORKFLOW STYLES */
+
+/* EXPANDO PANE PADDING */
+.workflow .dojoxExpandoTitle {
+	padding: 0 !important;
+}
+
+/* EXPANDO PANES */
+.workflow .leftExpando {
+	top: 0 !important;
+}
+.workflow .middleExpando {
+	top: 0 !important;
+}
+.workflow .rightExpando {
+	top: 0 !important;
+}
+
+/* TITLE PANE ARROW */
+.workflow .dijitTitlePane .dijitOpen .dijitArrowNode {
+	/*background: transparent url(images/spriteRoundedIconsSmall.png) no-repeat scroll -15px top;*/
+}
+
+/* SUBHEADING LABELS IN ALL TAB PANES */
+.workflow .tabLabel {
+	color: #243C5F;
+	/*color: #111f82;*/
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.workflow .dijitTabChecked .tabLabel {
+	color: #FF4400 !important;
+	/*color: #0e1a67;*/
+	font-weight: bold;
+}
+
+/* THIS IS NEEDED TO PREVENT TABS FROM JUMPING
+TO THE TOP OF THE MAIN TAB PANE */
+.workflow .dijitTabContainerTop-container {
+	border-top:	medium none !important;
+	/*border-top-width: 0px !important;*/
+	/*background-color: #EEE;*/
+}
+
+.workflow .dijitBorderContainer {
+	background-color: #FFF;
+	padding: 0;
+}
+.workflow .dijitLayoutContainer {
+	top: 0px;
+	left: 0px;
+	overflow: hidden !important;
+}
+.workflow .dijitTabPaneWrapper {
+	border: none;
+	/*background-color: #264eea;*/
+/*	position: relative;*/
+/*    top: 21px !important;	*/
+}
+.workflow .dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient{
+	height: auto;
+/*	position: relative;*/
+/*    top: 21px !important;	*/
+}
+
+.workflow {
+	border: 0px;
+}
+
+.workflow .dijitContentPane {
+	padding : 0 !important;
+	margin: 0 0 0 !important;
+}
+
+
+.workflow .dijitSplitContainer-dijitContentPane {
+	padding: 0 !important;
+	margin: 0 !important;
+	background-color: #FFF !important;
+}
+
+.workflow .dijitTabContainerTop-tabs {
+	background-color: #FFF;
+}
+
+
+/* TAB TITLE */
+.workflow .tabTitle {
+	/*background-color : #264eea !important;*/
+	text-align : center !important;
+	vertical-align : middle !important;
+	font-size : 20px !important;
+	font-stretch : expanded !important;
+	font-weight : bold !important;
+	color : #FFF !important;
+	font-family : Verdana !important;
+}
+
+/*** MIDDLE PANE TABS PADDING ***/
+.workflow .middleExpando  .tabLabel {
+    padding: 5px !important;
+}
+
+.workflow .middleExpando .dijitTabInnerDiv {
+    padding: 0px 3px !important;
+}
+
+
+/*** COMBO BOXES ***/
+
+/* REMOVE BLANK AT RIGHT OF COMBO INPUT */
+.workflow .middlePane .dijitReset .dijitValidationIcon {
+	visibility: hidden;
+	display: none;
+}
+
+/* ?? */
+.workflow .dijitContentPane {
+	padding : 0 !important;
+	margin: 0 0 0 !important;
+}
+
+.workflow .dijitSplitContainer-dijitContentPane {
+	padding: 0 !important;
+	margin: 0 !important;
+	background-color: #FFF !important;
+}
+
+.workflow .dijitTabContainerTop-tabs {
+	background-color: #FFF;
+}
+
+
+/* NO BORDER AND HEIGHT FOR TAB PANE SPACER */
+.workflow .dijitTabContainerBottom-spacer,
+.workflow .dijitTabContainerTop-spacer {
+	border: 0;
+	height: 0px;
+}
+
+
+/* LOADING STATUS */
+.workflow .loaded {
+	background-image: url("../../../plugins/workflow/images/completed-18.png") !important;
+	background-repeat: no-repeat !important;
+	background-position: center;
+	min-width: 35px;
+	min-height: 35px;
+	width: 35px;
+	height: 35px;
+}
+
+.workflow .loading {
+	background-image: url("../../../plugins/workflow/images/loading-32.gif") !important;
+	background-repeat: no-repeat;
+	background-position: center;
+	min-width: 35px;
+	min-height: 35px;
+	width: 35px;
+	height: 35px;
+}
+

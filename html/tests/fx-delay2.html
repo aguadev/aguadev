@@ -1,0 +1,112 @@
+<html>
+<head>
+	<title> fx delay 2: programmatic box </title>
+
+<style type="text/css">
+
+.copyDialog{
+	width: 200px;
+	height: 200px;
+	background-color: #000;
+	color: #FFF;
+	text-align: center;
+	vertical-align: middle;
+	/*overflow: hidden;*/
+}
+
+.titleDiv{
+	color: #FFF;
+	text-align: center;
+	vertical-align: middle;
+	position: relative;
+	top: 43%;
+}
+
+</style>
+
+<!--<script type="text/javascript" src="dojo.1.2.2/dojo/dojo.js"></script>-->
+<script type="text/javascript" src="dojo.1.2.2/dojo/dojo.js"
+		djConfig="parseOnLoad: true, isDebug: true, debugHeight: 600, useCommentedJson: true"></script>
+
+
+<script type="text/javascript">
+
+dojo.require("dojo._base.fx");
+dojo.require("dojo._base.html");
+
+dojo.addOnLoad( function(){
+
+	// CREATE BOX CONTAINER
+	var box = document.createElement('div');
+	box.setAttribute('class', 'copyDialog');
+
+	// CREATE DIV FOR TITLE
+	var titleDiv = document.createElement('div');
+	box.appendChild(titleDiv);
+	titleDiv.setAttribute('class', 'titleDiv');
+
+	// CREATE TITLE TEXT
+	var title = document.createTextNode("Select Group");
+	titleDiv.appendChild(title);
+	document.body.appendChild(box);
+
+	var counter = 0;
+	copyDialog = function (){
+		
+		console.log("copyDialog called");
+		dojo.style(box, "opacity", "0.7");
+
+		dojo.fadeIn(
+			{
+				node:box,
+				delay: 1,
+				duration: 1000,
+				properties: { width: { end: 400 } },
+				easing: function(n){
+					return (n==0) ? 0 : Math.pow(2, 10 * (n - 1));
+				},
+				onEnd: function (){
+					counter++;
+					console.log("counter: " + counter);
+					if ( counter < 10 )
+					{
+						copyDialog();
+					}
+				}
+			}
+		).play();
+	}
+	copyDialog();
+	
+
+	dojo.connect(
+		box,
+		"onclick",
+		function()
+		{
+			dojo.style(box, "opacity", "0.7");
+			dojo.fadeIn(
+				{
+					node:box,
+					delay: 1,
+					repeat: 5,
+					duration: 1000
+				}
+			).play();
+		}
+	);
+	
+	
+});
+
+
+
+</script>
+</head>
+<body>
+
+<h3> fx delay 2: programmatic box </h3>
+
+
+</body>
+</html>

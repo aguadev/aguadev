@@ -1,0 +1,13 @@
+{
+build_location: null,
+build_version: "NCBI37",
+data_analyst: null,
+dbsnp_version: "131",
+description: null,
+include_NPF: "n",
+project_id: "116",
+project_manager: null,
+project_name: "CHUM_Rouleau1",
+project_policy: "build_type: local",
+status_id: "58"
+}

@@ -1,0 +1,179 @@
+.hub .tabTitle {
+	background-color: #264eea;
+	text-align: center !important;
+	vertical-align: middle;
+	font-size: 20px;
+	font-stretch: expanded;
+	font-weight: bold;
+	color: #FFF;
+}
+
+.hub .subPane {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding: 5px;
+	width: 95%;	
+	min-height: 300px;
+	height: auto;
+	text-align: left !important;
+	font-family: Verdana;
+	font-size: 12px;
+	border-color: #333;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	/*display: block !important;*/
+	/*overflow:auto !important;*/
+}
+
+.hub .label {
+	text-align:	center !important;
+	font-weight: bolder;
+	font-size: 18px;
+	font-family: Verdana;
+	font-size: 14px;
+	font-style: oblique;
+	height: 20px;
+	vertical-align: bottom !important;
+	background: #EEE;
+}
+.hub .subLabel {
+	text-align:	center !important;
+	font-size: 12px;
+	vertical-align: center !important;
+	width: 200px !important;
+	color: darkred !important;
+	font-weight: 800;
+}
+.hub .subSubLabel {
+	font-weight: 600;	
+}
+
+.addToken {
+	background: #FFD;
+}
+.hub .login,
+.hub .token {
+	width: 98% !important;
+	height: 25px !important;
+	vertical-align: middle !important;
+	text-align: center !important;
+	font-weight: 600;
+	height: 20px;
+	color: #222;
+}
+
+.hub .login {
+	font-size: 14px;	
+	padding-top: 8px;
+}
+.hub .token {
+	font-size: 12px;
+	padding-top: 10px;
+}
+
+.hub .invalid {
+	border: 2px solid #F00 !important;
+}
+
+.hub .addHubButton,
+.hub .addHubCertificateButton,
+.hub .addTokenButton,
+.hub .goButton {
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	border-radius: 8pt;
+	background: #DDF none repeat scroll 0 0;
+	text-align: center !important;
+	vertical-align: middle !important;
+	padding-top: 4px;
+	width: 100% !important;
+	font-size: 20px !important;
+	height: 30px;
+	color: #888 !important;	
+	border: 1pt solid #CCC;
+	font-weight: 900 !important;
+	-moz-user-select: none !important;	
+}
+
+.hub .goButton {
+	background: #FFDDAA none repeat scroll 0 0;	
+	width: 100% !important;
+}
+
+.hub .addHubButton:hover,
+.hub .addHubCertificateButton:hover,
+.hub .addTokenButton:hover {
+	color: #FFFFFF !important;
+	background-color: #AAAAFF;
+}
+.hub .addHubButton:active,
+.hub .addHubCertificateButton:active,
+.hub .addTokenButton:active {
+	color: #AAFFAA !important;
+	background-color: #7777DD;
+}
+
+.hub .publiccert {
+	width:100%;
+}
+
+.hub .addToken {
+	visibility: invisible;
+	display: none;
+}
+
+.hub .showAddToken {
+	visibility: visible !important;
+	display: block !important;
+}
+
+.hub .addToken .subPane,
+.hub publiccert {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius: 8pt;
+
+	height: auto !important;	
+	width: 100% !important;	
+	border:1px solid #CCCCCC;
+	text-align: center !important;
+	font-family: Verdana;
+	font-size: 12px;	
+}
+
+.hub .addToken .goButton:hover {
+	color: #FFFFFF !important;
+	background-color: #FFAA44;
+}
+.hub .goButton:active {
+	color: #AAFFAA !important;
+	background-color: #FFAA44;
+}
+
+.hub .password,
+.hub .clientid {
+	text-align: center !important;
+}
+
+.hub .publiccert {
+    height:  300px !important;
+    background: #EEE;
+    border: 1px solid #AAA;
+	display: block !important;
+    border-radius: 8pt;	
+	width: 365px !important;
+	
+	white-space: pre-wrap;      /* CSS3 */   
+	white-space: -moz-pre-wrap; /* Firefox */    
+	white-space: -pre-wrap;     /* Opera <7 */   
+	white-space: -o-pre-wrap;   /* Opera 7 */    
+	word-wrap: break-word;      /* IE */
+}

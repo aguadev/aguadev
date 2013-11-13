@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title> inheritance 1: Employee inherits Person  </title>
+
+<style type="text/css">
+
+	/* DOJO style */
+	@import "../dojo.1.2.2/dojo/resources/dojo.css";
+	/*@import "dojo.1.2.2/dijit/tests/css/dijitTests.css";*/
+
+	/* SORIA style */
+	@import "../dojo.1.2.2/dijit/themes/soria/soria.css";
+
+	/* TUNDRA style */
+	/*@import "dojo.1.2.2/dijit/themes/tundra/tundra.css";*/
+	/*@import "dojo.1.2.2/dijit/themes/tundra/tundra_rtl.css";*/
+
+	/* GRID style */
+	/*@import "dojo.1.2.2/dojox/grid/_grid/soriaGrid.css";*/
+
+	/* TESTS style */
+	@import "../dojo.1.2.2/dijit/tests/css/dijitTests.css";
+
+	/* Workflow CSS */
+	/*@import "plugins/workflow/css/workflow.css";*/
+
+	@import "../dojo.1.2.2/css/style.css";
+
+
+</style>
+
+<script type="text/javascript" src="../release-1.2.2/dojo/dojo.js"
+	djConfig="isDebug: true, parseOnLoad: true, useCommentedJson: true"></script>
+
+<!--<script type="text/javascript" src="../build8/dojo/nls/report_en-us.js"></script>-->
+<!--<script type="text/javascript" src="../build8/dojo/report.js.uncompressed.js"></script>-->
+
+<script type="text/javascript">
+	// REGISTER module path FOR PLUGINS
+	dojo.registerModulePath("plugins","../../plugins");	
+
+	// SET URL FOR CGI DIRECTORY
+	var cgiurl = "../../../../cgi-bin/Bioptic0.2.5/";
+
+dojo.declare("Person", null, {
+	
+	name : '',
+	age : '',
+	currentResidence : '',
+		
+	//acts like a java constructor
+	constructor : function(name, age, currentResidence)
+	{
+		console.log("initializer(name, age, currentResidence)");
+		console.log("name: " + name);
+		console.log("age: " + age);
+		console.log("currentResidence: " + currentResidence);
+		this.name=name;
+		this.age=age;
+		this.currentResidence=currentResidence;
+	},
+	
+	
+	getAge : function()
+	{
+		return this.age;
+	},
+	
+	
+	moveToNewCity: function(newState) 
+	{
+		this.currentResidence=newState;
+	} 
+
+});
+
+
+dojo.declare("Employee",Person, {
+	
+	
+	//acts like a constructor
+	constructor : function(name, age, currentResidence, position)
+	{
+		Employee.superclass.constructor (name, age, currentResidence);
+		this.password="";
+		this.position=position;
+	},
+
+	login: function()
+	{
+		if(this.password!="" && this.password!=null){
+		console.log('you have successfully loged in with the password '+this.password);
+	}
+	else
+	{
+		console.log('please ask the administrator for your password');
+	}
+}});
+
+	
+    function init() {
+		console.log("init()");
+		//create an instance of a new person
+
+		var matt= new Person('Matt', 25, 'New Mexico');
+		matt.moveToNewCity('California');
+		console.log("matt: " + matt);
+		console.log("matt.age: " + matt.age);
+		console.log("matt.getAge(): " + matt.getAge());
+		
+		document.getElementById('output').innerHTML = matt.getAge();
+    }
+	dojo.addOnLoad(init);
+</script>
+</head>
+
+<body class="soria">
+	<h1 style="position: relative; top: -10px; left: 50px">  inheritance 1: Employee inherits Person  </h1>
+	<div id="output">
+	</div>
+</body>
+</html>

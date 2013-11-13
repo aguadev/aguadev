@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title></title>
+<style type="text/css">
+html, body {
+margin: 0;
+padding: 0;
+background: #E4ECED;
+color: #000;
+font-size: 12px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+textarea.autosize {
+font-size: 12px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+width: 300px;
+height:auto;
+overflow: visible;
+background:#FFF;
+color: #000;
+border:0;
+}
+#text1, #text2 {
+display:none;
+visibility:hidden;
+width:300px;
+}
+</style>
+<script type="text/javascript">
+var styles = document.createElement('style');
+var stylesprop = document.createTextNode('#text1, #text2 { display:block; }');
+styles.appendChild(stylesprop);
+document.getElementsByTagName('head')[0].appendChild(styles);
+
+window.onload = function()
+{
+document.getElementById('text1').firstChild.nodeValue = document.forms[0].comments1.value;
+document.getElementById('comments1').style.height = document.getElementById('text1').offsetHeight + 'px';
+document.getElementById('text1').style.display = 'none';
+document.getElementById('text2').firstChild.nodeValue = document.forms[0].comments2.value;
+document.getElementById('comments2').style.height = document.getElementById('text2').offsetHeight + 'px';
+document.getElementById('text2').style.display = 'none';
+}
+</script>
+</head>
+<body>
+<form action="#" method="post">
+<textarea name="comments1" id="comments1" class="autosize" rows="3" cols="10">Cuban leader Fidel Castro says he is in a stable condition and good spirits following surgery, according to a statement read on Cuban TV. "I feel perfectly fine," Mr Castro was quoted as saying. On Monday he handed power temporarily to his brother Raul, to recover from his treatment for internal bleeding.</textarea>
+<div id="text1">&nbsp;</div>
+<br>
+<textarea name="comments2" id="comments2" class="autosize" rows="3" cols="10">Castro in hospital.</textarea>
+<div id="text2">&nbsp;</div>
+</form>
+</body>
+</html>

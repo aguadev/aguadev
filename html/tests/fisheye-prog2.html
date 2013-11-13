@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+	<title> fisheye prog 2: basic icons </title>
+
+	<style type="text/css">
+		@import "dojo.1.2.2/dojo/resources/dojo.css";
+		@import "dojo.1.2.2/dijit/themes/tundra/tundra.css";
+		@import "dojo.1.2.2/dijit/themes/dijit.css";
+		@import "dojo.1.2.2/dijit/tests/css/dijitTests.css"; 
+		@import "dojo.1.2.2/dojox/widget/FisheyeList/FisheyeList.css";
+	</style>
+
+	<script type="text/javascript" src="dojo.1.2.2/dojo/dojo.js" djConfig="isDebug:true, parseOnLoad: true"></script>
+	<script type="text/javascript" src="dojo.1.2.2/dojox/widget/FisheyeList.js"></script>
+	<script type="text/javascript">
+
+		//dojo.require("dojox.widget.FisheyeList");
+		dojo.require("dojo.parser");	// scan page for widgets and instantiate them
+
+		dojo.addOnLoad( function()
+        {
+            console.log("++++ dojo.addOnLoad");
+			var fish1 = dijit.byId("fisheye1");
+            console.log("fish1: " + fish1);
+
+            //var listImages = ["icon_browser.png", "icon_calendar.png", "icon_email.png", "icon_texteditor.png", "icon_update.png", "icon_users.png"];
+            var listImages = [ "folder_user","group_add","group_delete","group_edit","group_error","group_gear","group_go","user","user_add","user_delete","user_edit","user_go","world","world_add" ];
+    
+            for ( var counter = 0; counter < listImages.length; counter++)
+            {
+                //console.log("listImages[" + counter + "]: " + listImages[counter]);
+                
+                var item = new dojox.widget.FisheyeListItem();
+                item.label = listImages[counter];
+                item.iconSrc = "plugins/admin/images/" + listImages[counter] + ".png"
+                //item.iconSrc = "images/" + listImages[counter] + ".png"
+                //item.onClick = function(e) {    "console.log(clicked '" + listImages[counter] + "')";   }
+                var itemName = listImages[counter];
+                item.onClick = function(e) { console.log("clicked '" + itemName + "'"); }
+                item.postCreate();                
+                fish1.addChild(item);
+                item.startup();
+            }
+
+            fish1.startup();
+
+		});
+		
+
+
+//        var counter = 1;
+//
+//        function addToFirstList()
+//        {
+//			var item = new dojox.widget.FisheyeListItem();
+//			item.textContent = "Item " + counter;
+//			item.label = "Dynamically Added " + counter;
+//			item.iconSrc = "images/fisheye_" + counter + ".png"
+//			item.postCreate();
+//			counter++;
+//
+//            for ( var counter = 0; counter < listImages.length; counter++)
+//			if(counter > 4){counter=1;}
+//			fish1.addChild(item);
+//			fish1.startup();
+//			item.startup();
+//		}
+	</script>
+
+</head>
+<body class="tundra">
+
+	<h1> fisheye prog 2: basic icons </h1>
+
+	<h5>Source: dojox.widget.FisheyeList test</h5>
+	http://localhost:8080/bioptic1/dojo.1.2.2/dojox/widget/tests/test_FisheyeList.html
+
+<div dojoType="dojox.widget.FisheyeList"
+	itemWidth="20" itemHeight="20"
+	itemMaxWidth="50" itemMaxHeight="50"
+	orientation="horizontal"
+	effectUnits="2"
+	itemPadding="10"
+	attachEdge="center"
+	labelEdge="bottom"
+	conservativeTrigger="true"
+	id="fisheye1"
+>
+
+
+</div>
+
+
+</body>
+</html>
+

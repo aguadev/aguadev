@@ -1,0 +1,65 @@
+/* AGUA VERSION */
+.aguaVersion {
+	font-size: 11px;
+	color: #444;
+	font-family: Arial;
+	top: -3px;
+    position: relative;}
+
+
+/* LOGIN STATUS TABLE */
+.loginStatus {
+	position: fixed !important;
+	right: 0 !important;
+    vertical-align: middle;			
+	z-index: 100;
+	font-size: 14px;
+	font-weight: bold;
+	height: 32px !important;
+	max-height: 20px !important;
+}
+
+.loginStatus .username {
+    top: -4px;
+    left: 4px;
+    text-align: right;	
+    position: relative;
+    color: #888;
+}
+
+.loginStatus .username .label {
+	color: black !important;
+	font-weight: normal !important;
+}
+
+.loginStatus .launcher {
+    background-image: url("../../../plugins/login/images/logout-24.png");
+    background-repeat: no-repeat;
+    background-position: 8px 0px;
+    width:  32px !important;
+    height: 32px !important;
+}
+
+.loginStatus .launcher:hover {
+    background-image: url("../../../plugins/login/images/logout-hover-24.png");
+}
+
+.loginStatus .launcher:active {
+    background-image: url("../../../plugins/login/images/logout-active-24.png");
+}
+
+.loginStatus .launcher.login {
+    background-image: url("../../../plugins/login/images/login-24.png");
+    background-repeat: no-repeat;
+    background-position: 0px -2px;
+    width: 24px !important;
+    height: 24px !important;
+}
+
+.loginStatus .launcher.login:hover {
+    background-image: url("../../../plugins/login/images/login-hover-24.png");
+}
+
+.loginStatus .launcher.login:active {
+    background-image: url("../../../plugins/login/images/login-active-24.png");
+}

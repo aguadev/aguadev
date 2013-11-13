@@ -1,0 +1,2 @@
+ADD track - inputs/trackData-add.json (simpleRepeat)
+REMOVE track - inputs/trackData-remove.json (cytoBand)

@@ -1,0 +1,235 @@
+1	Genentech_Ortmann	58	\N	NCBI36	129	n	\N	build_type: local	\N	\N
+2	23andMe_Wojicki	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+3	Amgen_Misura	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+4	Chicago_Roy	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+5	CHOP_Cheung_2	58	\N	NCBI36	129	y	\N	build_type: local	\N	\N
+6	CHOP_Cheung	58	\N	NCBI36	129	y	\N	build_type: local	\N	\N
+7	CHOP_Daber	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+8	CRUK_Cooper	58	\N	NCBI37	131	y	\N	build_type: local	\N	\N
+9	CRUK_Fitzgerald	58	\N	NCBI37	131	y	\N	build_type: local	\N	\N
+10	FHCRC_Zhao	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+11	Genophen_Fakhrai-Rad	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+12	GeorgiaTech_Gibson	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+13	ISB_Brunkow	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+14	JHU_Papadopoulos	58	\N	NCBI36	129	n	\N	build_type: local	\N	\N
+15	JnJ_Verhasselt	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+16	KennedyKrieger_Pevsner_3	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+17	KennedyKrieger_Pevsner	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+18	Knome_Harvey_10	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+19	Knome_Harvey	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+20	Knome_Harvey_6	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+21	Knome_Harvey_7	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+22	Knome_Harvey_8	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+23	Knome_Harvey_9	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+24	MaxPlanck_Thomas	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+25	Mayo_Kollmeyer	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+26	MDAnderson_Amos	58	\N	NCBI37	131	y	\N	build_type: local	\N	\N
+27	MDAnderson_Krahe	58	\N	NCBI37	131	y	\N	build_type: local	\N	\N
+28	MSKCC_Viale_2	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+29	MSKCC_Viale	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+30	NCI_Khan	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+31	NUSingapore_YY	58	\N	NCBI37	131	y	\N	build_type: local	\N	\N
+32	OSU_Symer_2	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+33	OSU_Symer	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+34	Pfizer_LaJolla_Shi	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+35	Pfizer_Leung_1	58	\N	NCBI37	131	y	\N	build_type: local	\N	\N
+36	Pfizer_Leung_2	58	\N	NCBI37	131	y	\N	build_type: local	\N	\N
+37	Pfizer_Leung_3	58	\N	NCBI37	131	y	\N	build_type: local	\N	\N
+38	Pfizer_Shi-Fruhling	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+39	Pfizer_Shi-VanArsdale	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+40	RussAcadSci_Limborska	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+41	Stanford_Levinson	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+42	Stanford_Snyder	58	\N	NCBI37	131	y	\N	build_type: local	\N	\N
+43	Stanford_Snyder-Chen	58	\N	NCBI37	131	y	\N	build_type: local	\N	\N
+44	UCBerkeley_Skibola	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+45	UCDenver_Castoe	58	\N	NCBI37	131	y	\N	build_type: local	\N	\N
+46	UCDenver_Tan	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+47	Uchicago_Roy	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+48	UCSFGallo_Jorgenson	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+49	Uhelsinki_Aaltonen	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+50	UMelbourne_Southey	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+51	UTokyo_Tsuji	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+52	Vanderbilt_Dahlman	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+53	Vanderbilt_Williams	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+54	WashU_Wang	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+55	Pfizer_Leung	58	\N	NCBI37	131	y	\N	build_type: local	\N	\N
+57	Knome_Harvey_11	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+58	23andMe_Wojcicki_2	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+59	CRUK_Fitzgerald_CHUK	58	\N	NCBI37	131	y	\N	build_type: local	\N	\N
+60	FHCRC_Zhao_2	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+61	Knome_Harvey_12	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+62	MSKCC_Viale_3	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+63	Pfizer_Shi-VanArsdale_2	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+64	Stanford_Ashley	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+65	Taueret_Ward	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+66	UChicago_Roy_2	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+67	Knome_Harvey_13	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+68	OSU_Symer_3	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+70	Knome_Harvey_14	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+71	CRUK_Marais	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+72	CRUK_Fitzgibbon	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+73	UChicago_Roy	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+74	BartsLG_vanHeel	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+75	Mayo_Weiben	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+76	Pfizer_Shi-VanArsdale_3	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+77	Harvard_Reich	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+78	Knome_Harvey_15	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+79	Pfizer_Shi-Fruhling_2	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+80	UCSF_Lauring	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+81	UTasmania_Charlesworth	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+82	JHU_Papadopoulos_3	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+83	Knome_Harvey_16	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+84	EdgeBio_Seed	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+85	Inova_Vockley	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+86	DiversityAnalysis	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+87	NagasakiU_Yoshiura	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+88	MSKCC_Viale_4	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+89	KK_Pevsner_4	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+91	Yale_Lifton	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+92	Edge_Bio	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+93	Knome_Harvey_18	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+94	Knome_Harvey_17	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+95	TestProject	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+96	UHelsinki_Paunio	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+97	JHU_Barnes	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+98	Stanford_VA_1	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+99	Stanford_VA_2	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+100	Knome_Harvey_21	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+101	Knome_Harvey_20	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+102	Knome_Harvey_19	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+103	ScienceVision_Lim	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+104	UCSF_Grinberg	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+106	Cornell_Crystal	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+107	JHU_Mohr	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+109	JHU_Papadopoulos_2	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+110	Covance_Madan	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+111	Stanford_Snyder_2	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+112	Knome_Harvey_22	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+113	JHU_Barnes_2	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+114	Utartu_Kaljuvee	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+115	CHUM_Rouleau2	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+116	CHUM_Rouleau1	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+117	CHUM_Rouleau_1	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+118	CHUM_Rouleau_2	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+119	Harvard_Hunter	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+120	Vanderbilt_Qiuyin	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+121	Knome_Harvey_23	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+122	Genentech_Ortmann_2	58	\N	NCBI36	129	n	\N	build_type: local	\N	\N
+123	CHOP_Cheung_3	58	\N	NCBI36	129	n	\N	build_type: local	\N	\N
+124	Epigen_Kehdy	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+125	TGEN_Craig	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+126	USC_Haiman	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+127	CRUK_Cooper-Bova	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+128	JHU_Barnes_3	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: JHU_Barnes_3	\N	\N
+129	UCambridge_Easton	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: UCambridge_Easton	\N	\N
+130	Knome_Harvey_24	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Knome_Harvey_24	\N	\N
+131	Chum_Sinnett2	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Chum_Sinnett2	\N	\N
+132	Chum_Sinnett1	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Chum_Sinnett1	\N	\N
+133	Personalis_Haudenschild	28	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Personalis_Haudenschild	\N	\N
+134	Columbia_Parsons	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Columbia_Parsons	\N	\N
+135	GeorgiaTech_Vannberg	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: GeorgiaTech_Vannberg	\N	\N
+136	BU_Baldwin	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: BU_Baldwin	\N	\N
+137	JHU_Barnes-Bamshad	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: JHU_Barnes-Bamshad	\N	\N
+138	JHU_Barnes-Beaty	28	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: JHU_Barnes-Beaty	\N	\N
+139	NIH_Sutherland	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: NIH_Sutherland	\N	\N
+140	JHU_Barnes_4	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: JHU_Barnes_4	\N	\N
+141	Stanford_Fire	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Stanford_Fire	\N	\N
+142	JHU_Barnes-Beaty_1	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: JHU_Barnes-Beaty_1	\N	\N
+143	JHU_Cheng	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: JHU_Cheng	\N	\N
+144	23andMe	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: 23andMe	\N	\N
+145	Uppsala_Karlberg	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Uppsala_Karlberg	\N	\N
+146	VATech_Mittelman	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: VATech_Mittelman	\N	\N
+147	CHOC_Sender	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: CHOC_Sender	\N	\N
+148	Knome_Harvey_25	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Knome_Harvey_25	\N	\N
+149	Cornell_Mason	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Cornell_Mason	\N	\N
+150	Stanford_Bustamente	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Stanford_Bustamente	\N	\N
+151	MSKCC_Viale_5	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: MSKCC_Viale_5	\N	\N
+153	NCTR_Shi	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: NCTR_Shi	\N	\N
+154	Stanford_VA_3	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Stanford_VA_3	\N	\N
+155	NIH_Boerkoel	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: NIH_Boerkoel	\N	\N
+156	CRUK_Fitzgerald_2	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: CRUK_Fitzgerald_2	\N	\N
+157	Cornell_Ross	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Cornell_Ross	\N	\N
+158	Knome_Harvey_28	28	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Knome_Harvey_28	\N	\N
+159	MDAnderson_Krahe2	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: MDAnderson_Krahe2	\N	\N
+160	MDAnderson_Thompson	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: MDAnderson_Thompson	\N	\N
+161	UHelsinki_Aaltonen2	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: UHelsinki_Aaltonen2	\N	\N
+162	Knome_Harvey_27	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Knome_Harvey_27	\N	\N
+163	Knome_Harvey_26	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Knome_Harvey_26	\N	\N
+164	CRUK_Cooper_2	28	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: CRUK_Cooper_2	\N	\N
+165	OSU_Symer_4	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: OSU_Symer_4	\N	\N
+166	Stanford_Snyder_3	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Stanford_Snyder_3	\N	\N
+167	UVirginia_Moskaluk	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: UVirginia_Moskaluk	\N	\N
+168	NCI_Chanock	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: NCI_Chanock	\N	\N
+169	Ancestry_Ball	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Ancestry_Ball	\N	\N
+170	CHOC_Sender2	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: CHOC_Sender2	\N	\N
+171	TGEN_Mastrian	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: TGEN_Mastrian	\N	\N
+172	CRUK_Tomlinson-Carvajal	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: CRUK_Tomlinson-Carvajal	\N	\N
+173	Stanford_Snyder_4	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Stanford_Snyder_4	\N	\N
+174	CRUK_Fitzgerald_3	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: CRUK_Fitzgerald_3	\N	\N
+175	CHOB_Tran	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: CHOB_Tran	\N	\N
+176	NYGC_Busuttil	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: NYGC_Busuttil	\N	\N
+177	CRUK_Jones	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: CRUK_Jones	\N	\N
+178	Knome_Harvey_29	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Knome_Harvey_29	\N	\N
+179	Knome_Harvey_30	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Knome_Harvey_30	\N	\N
+180	CRUK_Cooper_3	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: CRUK_Cooper_3	\N	\N
+181	TGEN_Craig2	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: TGEN_Craig2	\N	\N
+182	CCG_Thomas	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: CCG_Thomas	\N	\N
+183	CaseWestern_Scacheri	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: CaseWestern_Scacheri	\N	\N
+184	JHU_Papadopoulos_4	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: JHU_Papadopoulos_4	\N	\N
+185	CRUK_Neoptolemos	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: CRUK_Neoptolemos	\N	\N
+186	JHU_Barnes_5	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: JHU_Barnes_5	\N	\N
+187	Knome_Harvey_31	63	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Knome_Harvey_31	\N	\N
+188	CHOC_Sender3	58	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: CHOC_Sender3	\N	\N
+189	Knome_Harvey_32	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+190	Knome_Harvey_33	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+191	CRUK_ICR_Turajlic	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+192	Stanford_VA_4	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+193	JHU_Barnes-Beaty_2	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+194	OHSU_Spellman	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+195	MarshfieldClinic_Lin	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+196	Genentech_Ortmann_3	63	\N	NCBI36	129	n	\N	build_type: local	\N	\N
+197	Genentech_Ortmann_4	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+198	CHOC_Sender4	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+199	Cornell_Suhre	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+200	23andMe2	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+201	UQueensland_Grimmond	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+202	NYGC_Busuttil_2	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+203	CHOC_Sender5	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+204	UCSF_Seielstad	58	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+205	JHU_Papadopoulos_4_1	63	\N	NCBI36	129	n	\N	build_type: local	\N	\N
+206	Stanford_Snyder_5	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+207	Knome_Harvey_34	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+208	NIH_Ossowski	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+209	JHU_Isaacs	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+210	JHU_Mathias	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+211	JHU_Papadopoulos_5	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+212	CHOC_Sender6	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+213	CHUM_Rouleau3	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+214	Mayo_Wieben2	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+215	Pioneer_May	19	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: Pioneer_May	\N	\N
+216	Mayo_Anderson	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+217	UMinnesota_Beckman	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+218	Emory_Sun	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+219	CHOC_Sender7	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+220	TEST_PROJECT	19	\N	NCBI37	131	n	\N	build_root: \'/illumina/build/services/Projects\' build_type: local build_version: NCBI37 dbsnp_version: 131 project_name: TEST_PROJECT\r workflow:\r 	- casava_bcl_to_gvcf_workflow	\N	\N
+221	Knome_Harvey_35	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+222	CCG_Thomas2	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+223	TBRI_Curran	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+224	MDAnderson_Thompson2	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+225	CRUK_Cooper_4	28	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+226	CHOC_Sender8	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+227	NIH_Karyadi	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+228	CRUK_Fitzgerald_4	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+229	Knome_Harvey_36	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+230	Uqueensland_Grimmond2	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+231	Georgetown_MacArthur	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+232	Knome_Harvey_37	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+233	CHOB_Schneider	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+234	Shire_Guey	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+235	UCLA_Freimer_2	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+236	UCLA_Geschwind	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+237	USC_VanDenBerg	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+238	ClevelandClinic_Eng	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+239	CRUK_Cooper_5	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+240	Knome_Harvey_38	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N
+241	NIH_Rao	63	\N	NCBI37	131	n	\N	build_type: local	\N	\N

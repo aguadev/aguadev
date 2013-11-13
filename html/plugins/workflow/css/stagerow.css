@@ -1,0 +1,15 @@
+.workflow .stagerow .name {
+	font-size: 16px;
+	font-weight: bolder;
+	color: #000;	
+	-moz-user-select: none !important;
+}
+
+.workflow .stagerow .number {
+	width: 20px !important;
+	text-align: left;
+	font-size: 14px;
+	font-weight: bold;
+	color: #800;	
+	-moz-user-select: none !important;
+}

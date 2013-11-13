@@ -1,0 +1,160 @@
+/* DOES THIS HELP AUTOSIZING? */
+.admin .users {
+	height: auto !important;
+}
+
+.admin .users .tabTitle {
+	background-color: #264eea;
+	text-align: center !important;
+	vertical-align: middle;
+	font-size: 20px;
+	font-stretch: expanded;
+	font-weight: bold;
+	color: #FFF;
+}
+
+.admin .users .label {
+	text-align:	center !important;
+	font-weight: bolder;
+	font-size: 18px;
+	font-family: Verdana;
+	font-size: 14px;
+	font-style: oblique;
+	height: 20px;
+	vertical-align: bottom !important;
+	background: #EEE;
+}
+
+.admin .users .refresh {
+	width: 20px !important;
+	background-image: url(../../../plugins/cloud/images/app-18.png);
+	text-indent: 22px;
+	background-repeat: no-repeat;
+	height: 18px;
+	background: #EEE;
+}
+
+.admin .users .addUserButton {
+	font-size: 14px;
+	color: #224;
+}
+
+.admin .users .username,
+.admin .users .firstname,
+.admin .users .lastname,
+.admin .users .email,
+.admin .users .password
+{
+	font-size: 14px;
+	color: #444;
+	text-align: left !important;
+	vertical-align: middle !important;
+	font-style: oblique;
+	font-weight: bolder !important;
+	padding-top: 4px;
+}
+
+.admin .users .invalid ,
+.admin .users .firstname .dijitTextArea .invalid,
+.admin .users .lastname .dijitTextArea .invalid,
+.admin .users .email .dijitTextArea .invalid
+{
+	border: 2px solid #F00 !important;
+}
+
+.admin .users .editUserRow {
+	width: 100%;
+	height: 20px !important;
+}
+
+.admin .users .dragSource .username {
+	font-size: 14px;
+	color: darkred;
+	font-weight: bolder;
+	text-align: left !important;
+
+	background-image: url(../../../plugins/cloud/images/user-18.png);
+	text-indent: 22px;
+	background-repeat: no-repeat;
+	height: 18px;
+}
+
+.admin .users .dragSource {
+	-moz-background-clip:			border;
+	-moz-background-inline-policy:	continuous;
+	-moz-background-origin:			padding;
+	border-radius:	8pt;
+	border-radius-bottomright:	8pt;
+	border-radius:		8pt;
+	border-radius-topright:	8pt;
+
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+
+	/*margin-top: 5px;*/
+	width: 120px;	
+	height: 260px;
+	min-height: 100px;
+	
+	text-align: left !important;
+	font-family: Verdana;
+	font-size: 12px;
+	border-color: #333;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	overflow:auto !important;
+}
+
+.admin .users .dragSource .firstname,
+.admin .users .dragSource .lastname {
+	font-size: 14px;
+	font-weight: bold;
+	text-align: left !important;
+}
+
+.admin .users .dragSource .email {
+	font-weight: normal;
+	font-size: 12px;
+	text-align: left !important;
+}
+
+.admin .users .dragSource .password {
+	color: #000;
+	font-weight: normal;
+	font-size: 12px;
+	font-style: italic;
+	text-align: left !important;
+}
+
+
+.admin .users .trash {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+
+	margin-top: 5px;
+	width: 150px;	
+	height: 60px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.admin .users .trashIcon {
+	height: 100%;
+	width: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	
+	background-image: url(../../../plugins/cloud/images/trash-60.png);
+	background-repeat: no-repeat;
+	
+}
+

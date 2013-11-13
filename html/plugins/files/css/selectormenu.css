@@ -1,0 +1,24 @@
+.fileselectormenu {
+    font-family: Verdana;
+	text-indent: 4px;
+	font-size: 16px;
+	color: darkred;
+	font-weight: bold;
+}
+
+.fileselectormenu .title {
+    color: #822;
+    font-weight: bolder;
+    background-color: #EEE;
+    text-align: left;
+	text-indent: 5px;
+}
+
+.fileselectormenu .select {
+	background-image: url(../../../plugins/files/images/select-20.png);
+	background-repeat: no-repeat;
+}
+.fileselectormenu .add{
+	background-image: url(../../../plugins/files/images/add-20.png);
+	background-repeat: no-repeat;
+}

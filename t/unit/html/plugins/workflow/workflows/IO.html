@@ -1,0 +1,278 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+		"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+<title> plugins.workflow.IO module test</title>
+
+<style type="text/css">
+
+	/* DOJO STYLES */
+	@import "../../../dojo/dojo/resources/dojo.css";
+
+	/* THEMES */
+	@import "../../../dojo/dijit/themes/dijit.css";
+	@import "../../../dojo/dijit/themes/soria/soria.css";
+	@import "../../../dojo/dijit/themes/tundra/tundra.css";
+
+</style>
+
+<link rel="stylesheet" href="plugins/core/css/toolbar.css">
+	
+<!-- LOAD DOJO -->
+
+<script type="text/javascript" src="../../../dojo/dojo/dojo.js"
+	djConfig="parseOnLoad: true, isDebug: true"></script>	
+
+<!-- TO AVOID PROBLEMS WHEN LOADING -->
+<!--<script type="text/javascript" src="../../../dojo/dijit/nls/en-us.js"></script>-->
+<!--<script type="text/javascript" src="../../../dojo/dijit/nls/common.js"></script>-->
+
+<script type="text/javascript">
+
+var data = {
+	"stages" : [
+		{
+		   "name" : "image2eland.pl",
+		   "appname" : "image2eland.pl",
+		   "argument" : "--inputfile",
+		   "number" : "1",
+		   "appnumber" : "1",
+		   "project" : "Project1",
+		   "workflow" : "abacus",
+		   "username" : "syoung"
+		},
+		{
+		   "name" : "eland2ace.pl",
+		   "appname" : "eland2ace.pl",
+		   "number" : "2",
+		   "appnumber" : "2",
+		   "project" : "Project1",
+		   "workflow" : "abacus",
+		   "owner" : "admin"
+		}	
+	],
+	"stageparameters" : [
+      {
+         "project" : "Project1",
+         "args" : "",
+         "argument" : "--outputfile",
+         "appname" : "image2eland.pl",
+         "paramtype" : "output",
+         "category" : "outputfile",
+         "owner" : "admin",
+         "value" : "",
+         "name" : "outputfile",
+         "appnumber" : "1",
+         "discretion" : "required",
+         "description" : "",
+         "username" : "syoung",
+         "params" : "",
+         "workflow" : "abacus",
+         "format" : "",
+         "valuetype" : "file",
+         "paramFunction" : ""
+      },
+      {
+         "project" : "Project1",
+         "args" : "",
+         "argument" : "",
+         "appname" : "image2eland.pl",
+         "paramtype" : "output",
+         "category" : "sortedfile",
+         "owner" : "admin",
+         "value" : "Project1/abacus/s_1_1_sorted.txt",
+         "name" : "sortedfile",
+         "appnumber" : "1",
+         "discretion" : "required",
+         "description" : "",
+         "username" : "syoung",
+         "params" : "",
+         "workflow" : "abacus",
+         "format" : "",
+         "valuetype" : "file",
+         "paramFunction" : ""
+      },
+      {
+         "project" : "Project1",
+         "isValid" : "true",
+         "args" : "",
+         "argument" : "--inputfile",
+         "appname" : "image2eland.pl",
+         "paramtype" : "input",
+         "category" : "inputfile",
+         "owner" : "admin",
+         "value" : "Project1/Workflow1/chr22.faX",
+         "name" : "inputfile",
+         "appnumber" : "1",
+         "discretion" : "essential",
+         "description" : "",
+         "username" : "syoung",
+         "params" : "",
+         "workflow" : "abacus",
+         "format" : "",
+         "valuetype" : "file",
+         "paramFunction" : ""
+      },
+      {
+         "project" : "Project1",
+         "isValid" : "true",
+         "args" : "",
+         "argument" : "--outputdir",
+         "appname" : "image2eland.pl",
+         "paramtype" : "input",
+         "category" : "outputdir",
+         "owner" : "admin",
+         "value" : "Project1/abacus",
+         "name" : "outputdir",
+         "appnumber" : "1",
+         "discretion" : "essential",
+         "description" : "",
+         "username" : "syoung",
+         "params" : "",
+         "workflow" : "abacus",
+         "format" : "",
+         "valuetype" : "directory",
+         "paramFunction" : ""
+      },
+
+      {
+         "project" : "Project1",
+         "isValid" : "false",
+         "args" : "output.sortedfile.value",
+         "argument" : "--inputfile",
+         "appname" : "eland2ace.pl",
+         "paramtype" : "input",
+         "category" : "inputfile",
+         "owner" : "admin",
+         "value" : "",
+         "name" : "inputfile",
+         "appnumber" : "2",
+         "discretion" : "essential",
+         "description" : "",
+         "username" : "syoung",
+         "params" : "",
+         "workflow" : "abacus",
+         "format" : "ace",
+         "valuetype" : "file",
+         "paramFunction" : ""
+      },
+      {
+         "project" : "Project1",
+         "isValid" : "true",
+         "args" : "input.outputdir.value",
+         "argument" : "--outputdir",
+         "appname" : "eland2ace.pl",
+         "paramtype" : "input",
+         "category" : "outputdir",
+         "owner" : "admin",
+         "value" : "Project1/abacus",
+         "name" : "outputdir",
+         "appnumber" : "2",
+         "discretion" : "required",
+         "description" : "",
+         "username" : "syoung",
+         "params" : "",
+         "workflow" : "abacus",
+         "format" : "dir",
+         "valuetype" : "directory",
+         "paramFunction" : ""
+      },
+		{
+		   "project" : "Project1",
+		   "args" : "input.inputfile.value",
+		   "argument" : "",
+		   "appname" : "eland2ace.pl",
+		   "apptype" : "converter",
+		   "ordinal" : "0",
+		   "paramtype" : "output",
+		   "category" : "outputfile",
+		   "owner" : "admin",
+		   "locked" : "0",
+		   "value" : "",
+		   "name" : "outputfile",
+		   "appnumber" : "2",
+		   "discretion" : "Discretion",
+		   "description" : "",
+		   "workflow" : "abacus",
+		   "params" : "inputfile",
+		   "format" : "ace",
+		   "valuetype" : "file",
+		   "paramFunction" : "return inputfile.replace(/.txt/, .ace);"
+		}	  
+	  
+   ]
+};
+
+	// LOAD MODULES
+	dojo.registerModulePath("plugins","../../plugins");	
+	dojo.require("plugins.core.Agua")
+	dojo.require("plugins.workflow.IO")
+	dojo.require("dojox.robot.recorder")
+
+	// GLOBAL Agua VARIABLE
+	var Agua;
+	
+	dojo.addOnLoad(function(){
+
+		// GLOBAL Agua VARIABLE
+		Agua = new plugins.core.Agua([]);
+		Agua.stages = data.stages;
+		Agua.stageparameters = data.stageparameters;	
+		console.log("Agua: " + Agua);
+	
+		var IO = new plugins.workflow.IO({});
+		console.log("Doing IO.chainInputs()");
+		IO.chainInputs(Agua.stages[1]);
+	
+		
+	
+
+
+
+
+//doh.register('dojox.robot.AutoGeneratedTestGroup',{
+//     name: 'autotest0',
+//     timeout: 12950,
+//     runTest: function(){
+//          var d = new doh.Deferred();
+//          doh.robot.mouseMove(4, 54, 456, 2527, true);
+//          doh.robot.mouseMoveAt(function(){ return document.getElementsByTagName('SPAN')[18]; }, 120, 100, 2, 6);
+//          doh.robot.mouseClick({left:true, middle:false, right:false}, 1);
+//          doh.robot.mouseMove(52, 65, 771, 1227, true);
+//          doh.robot.mouseMoveAt('dojox_layout_ExpandoPane_1', 147, 100, 0, 6);
+//          doh.robot.mouseClick({left:true, middle:false, right:false}, 1);
+//          doh.robot.mouseMove(59, 68, 886, 611, true);
+//          doh.robot.mouseMoveAt(function(){ return document.getElementsByTagName('SPAN')[26]; }, 122, 100, 6, 8);
+//          doh.robot.mouseClick({left:true, middle:false, right:false}, 1);
+//          doh.robot.mouseMove(234, 242, 1502, 124, true);
+//          doh.robot.mouseMove(428, 290, 1140, 177, true);
+//          doh.robot.sequence(function(){
+//               if( 1 ){
+//				console.log("Running test");
+//                    d.callback(true);
+//               }else{
+//                    d.errback(new Error('We got a failure'));
+//               }
+//          }, 1000);
+//          return d;
+//     }
+//});
+//
+
+
+	});
+	
+</script>
+
+</head>
+<body class="agua tundra">
+
+
+	<div id="attachPoint"></div>
+
+	<h2> plugins.workflow.IO module test</h2>
+
+
+</body>
+</html>

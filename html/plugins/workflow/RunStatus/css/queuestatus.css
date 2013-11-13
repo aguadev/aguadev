@@ -1,0 +1,52 @@
+/* CONTROL PADDING INSIDE THE TITLE PANES */
+.queuestatus .dijitTitlePaneContentInner {
+	padding: 0px;
+}
+
+/* QUEUE STATUS BLACK BACKGROUND WHITE FONT */
+.queuestatus .queueStatus .statusList {
+	font-size: 12px !important;
+	height: auto !important;
+	max-height: auto !important;
+	font-weight: bolder !important;
+	font-family: monospace !important;
+	white-space: pre !important;
+	background-color: black !important;
+	border-top: 1px solid black !important;
+	color: white !important;
+	margin: 0px !important;
+	padding: 4px !important;
+	display: block !important;
+}
+
+/* CLUSTER STATUS AND QUEUE STATUS */
+.queuestatus .queueStatus pre {
+	font-size: 14px !important;
+	height: auto !important;
+	max-height: auto !important;
+	font-weight: bolder !important;
+	font-family: monospace !important;
+	white-space: pre !important;
+	background-color: black !important;
+	border-top: 1px solid black !important;
+	color: white !important;
+	margin: 0px !important;
+	padding: 4px !important;
+	display: block !important;
+}
+.queuestatus .statusList {
+	height: auto !important;
+}
+
+.queuestatus .queueStatus pre:hover {
+	background-color: #080 !important;
+	font-weight: bold !important;
+	color: white !important;
+	cursor: pointer !important;
+}
+.queuestatus .queueStatus pre:active {
+	background-color: #888 !important;
+	font-weight: bold !important;
+	color: white !important;
+	cursor: pointer !important;
+}

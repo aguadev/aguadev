@@ -1,0 +1,59 @@
+[global]
+DEFAULT_TEMPLATE=smallcluster
+ENABLE_EXPERIMENTAL=True
+
+[aws info]
+AWS_ACCESS_KEY_ID=XXXXXXXXXXXXXXXXXXXX
+AWS_SECRET_ACCESS_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+AWS_USER_ID=000000000000
+
+[key id_rsa-admin-key]
+KEYNAME=id_rsa-admin-key
+KEY_LOCATION=/nethome/admin/.starcluster/id_rsa-admin-key
+
+[cluster smallcluster]
+plugins = automount,sgeConfig
+
+# number of ec2 instances to launch
+CLUSTER_SIZE=2
+
+# create the following user on the cluster
+CLUSTER_USER=sgeadmin
+KEYNAME=id_rsa-admin-key
+
+# AMI for cluster nodes.
+# The base i386 StarCluster AMI is ami-d1c42db8
+# The base x86_64 StarCluster AMI is ami-a5c42dcc
+# ami-b07985d9: EBS-BACKED 64-BIT U10.04 with HADOOP (CAN RUN t1.micro)
+NODE_IMAGE_ID=ami-b07985d9
+
+# instance type for all cluster nodes
+# (options: m1.large, c1.xlarge, m1.small, c1.medium, m1.xlarge, m2.4xlarge, m2.2xlarge)
+#NODE_INSTANCE_TYPE=m1.large
+NODE_INSTANCE_TYPE=t1.micro
+plugins=automount
+
+[cluster mediumcluster]
+CLUSTER_SIZE=8
+EXTENDS=smallcluster
+
+[cluster largecluster]
+CLUSTER_SIZE=16
+EXTENDS=mediumcluster
+
+[plugin automount]
+setup_class=automount.NfsShares
+head_ip=10.122.61.250
+interval=30
+sourcedirs=/data,/nethome
+mountpoints=/data,/nethome
+
+[plugin sge]
+setup_class=sge.createCell
+head_ip=AGUA_HEAD_NODE_IP_GOES_HERE
+sgeroot=LOCATION_GOES_HERE
+sgecell=CELL_NAME_GOES_HERE
+sgeqmasterport=PORT_NUMBER_GOES_HERE
+sgeqmasterport=PORT_NUMBER_GOES_HERE
+
+

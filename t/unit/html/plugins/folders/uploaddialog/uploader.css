@@ -1,0 +1,240 @@
+/* DIALOG */
+.dijitDialog {
+	overflow: visible !important;	
+	-moz-border-radius: 10pt !important;
+}
+
+.dijitDialogCloseIcon {
+	padding: 10px !important;
+}
+
+/* GENERAL TEXT */
+.uploader {
+	width: 600px !important;
+	font-size: 16px !important;
+	font-family: Verdana !important;
+	color: #226 !important;
+	font-weight: bolder !important;
+	z-index: 3000 !important;
+	text-align: center;
+	-moz-border-radius: 10pt !important;
+   -moz-box-shadow: -2px 5px 20px #888;
+   outline: none;
+   -moz-outline: none;
+}
+
+
+/* IMPORTANT: STOP WIDE WINDOW */
+.dojoxInputNode {
+	font-size: 18px !important;
+}
+
+.uploader .dojoxInputButton,
+.browseButton {
+    font-weight: bold;
+    height: 35px !important;
+    left: 0;
+    margin-top: 30px;
+    overflow: visible !important;
+    position: relative;
+}
+
+.uploader .destination {
+	text-align: center;
+	font-size: 18px !important;
+}
+	
+.uploader .dijitDialogPaneContent {
+	border-radius: 0 0 12px 12px !important;	
+}
+
+.uploader .dijitDialogTitleBar {
+	border-radius: 12px 12px 0 0 !important;	
+}
+
+/* NO SHADOW */
+.uploader .dijitDialogTitleBar,
+.uploader .dijitDialogPaneContent,
+.uploader .dijitDialogTitle,
+.uploader .dijitDialogCloseIcon,
+ .uploader .tundra .dijitDialogTitleBar,
+.uploader .tundra .dijitDialogPaneContent,
+.uploader .tundra .dijitDialogTitle,
+.uploader .tundra .dijitDialogCloseIcon {
+   -moz-box-shadow: none  !important;
+}
+
+/* TITLE */
+.dialog .dijitDialogTitleBar .dijitDialogTitle .uploader {
+	font-family: Verdana !important;
+	color: #822 !important;
+}
+
+/* MESSAGE */
+.uploader .message {
+	font-size: 18px !important;
+	text-align: center;
+	color: #A00;
+}
+
+/* ENTER AND CANCEL BUTTONS */
+.uploader .yesButton,
+.uploader .noButton {
+	font-size: 18px;
+}
+.uploader .yesButton {
+	color: #0A0;
+}
+.uploader .noButton {
+	color: #A00;
+}
+
+.browseButton{
+	width:	100% !important;
+	overflow: none;
+	height:	20px;
+	font-weight:bold;
+	margin:10px 0 2px 0;
+	left: 0px;
+	position: relative;
+}
+.dijitTabPane{
+	padding:20px;
+}
+form{
+	width: 100%;
+	margin-right:10px;
+}
+fieldset{
+	text-align:right;
+}
+input[type=text]{
+	width:140px;
+}
+.dijitButton{
+	margin-top:15px;
+}
+.dojoxUploaderFileList{
+	text-align:left;
+	margin-top:10px;
+}
+.pageTable{
+	width:100%;
+}
+.pageTable td{
+	vertical-align:top;
+}
+#colForm{
+	width: 100%;
+}
+#colImages{
+	padding-top:7px;
+}
+.thumb{
+	border:1px solid #ccc;
+	padding:5px;
+	width:123px;
+	background:#eee;
+	float:left;
+	margin:0 5px 5px 0;
+}
+.thumbbk{
+	background: #fff;
+	display: block;
+}
+.thumb img{
+	border: 1px solid #ccc;
+	width: 120px;
+}
+.form, .html5, .iframe, .flash{
+	display: none;
+}
+.Form .form, .HTML5 .html5, .IFrame .iframe, .Flash .flash{
+	display:block;
+}
+#dialog p{
+	width: 100%;
+}
+.claro .attachButton{
+	width:	100%;
+	height:	60px;
+	border:	0;
+}
+.claro .attachButton .dijitButton .dijitButtonNode{
+	background-color:#ffffff;
+	background-image:url(images/attach.png);
+	background-position:left top;
+	background-repeat:no-repeat;
+	height:56px;
+	border:0;
+	-moz-box-shadow:0 0 0;
+	-webkit-box-shadow:0 0 0;
+}
+.claro .attachButton .dijitButtonHover .dijitButtonNode{
+	background-position:0px -60px;
+}
+code{
+	font-family:monospace;
+	white-space:nowrap;
+}
+
+
+
+
+
+/* UploaderFileLIst PROGRESS BAR */
+
+.dojoxUploaderFileList{
+	border:1px solid #ccc;
+	min-height:50px;
+}
+.dojoxUploaderFileListTable{
+	width:100%;
+	border-collapse:collapse;
+	margin-top:5px;
+}
+.dojoxUploaderFileListHeader th{
+	background-color:#eee;
+	padding:3px;
+}
+.dojoxUploaderFileListRow{
+
+}
+.dojoxUploaderIndex{
+	width:20px;
+}
+.dojoxUploaderIcon{
+	width:50px;
+}
+.dojoxUploaderFileName{
+
+}
+.dojoxUploaderSize{
+	width:70px;
+}
+.dojoxUploaderFileListContent{
+	width:100%;
+}
+.dojoxUploaderFileListProgress{
+	border:1px solid #666;
+	height:15px;
+	position:relative;
+	background:#fff;
+	overflow:hidden;
+}
+.dojoxUploaderFileListPercentText{
+	position:absolute;
+	right:3px;
+	top:3px;
+	font-size:10px;
+	text-align:right;
+}
+.dojoxUploaderFileListProgressBar{
+	position:absolute;
+	top:0px;
+	left:0px;
+	height:15px;
+	width:0%;
+	background:#bfe1fd;
+}
+

@@ -1,0 +1,100 @@
+<div data-dojo-attach-point="containerNode">
+
+	<div
+		data-dojo-attach-point="mainTab"
+		data-dojo-type="dijit.layout.ContentPane"
+		class="infusion"
+		iconClass="infusionIcon"
+		minWidth="1000"
+		style="position: relative; min-width: 640px !important; width: 100% !important; min-height: 600px !important; height: 100% !important; padding: 0px; background: #FFF;"
+		closable="true"
+		scrollbar="true"
+		title="Infusion"
+	>
+
+		<div
+			class="leftPaneContainer"
+			style="width: 570px; height:300px; padding: 5px;"
+			data-dojo-type="dijit.layout.BorderContainer">
+
+			<!-- LEFT PANE -->
+			
+			<div
+				data-dojo-type="dojox.layout.ExpandoPane" 
+				splitter="true" 
+				duration="125" 
+				region="left"
+				class="leftPane"
+				title=""
+				previewOnDblClick="true"
+				maxWidth="275" 
+				startExpanded="true"
+				style="width: 560px;">
+				
+				<div
+					data-dojo-type="dijit.layout.TabContainer"
+					data-dojo-attach-point="leftTabContainer"
+					attachParent="true"
+					tabPosition="top"
+					tabStrip="false"
+					data-dojo-attach-point="leftTabContainer"
+				>
+				</div>
+			</div>
+			
+			<div
+				data-dojo-attach-point="centerTabContainer"
+				data-dojo-type="plugins.dijit.layout.TabContainer"
+				class="details"
+				region="center"
+				doLayout="true"
+				tabStrip="true">
+
+			</div>
+
+			
+			<div
+				data-dojo-type="dojox.layout.ExpandoPane" 
+				splitter="true" 
+				duration="125" 
+				region="bottom" 
+				title="Details" 
+				data-dojo-attach-point="bottomPane"
+				class="bottomPane"
+				startExpanded="false"
+				maxWidth="275"
+				style="height: 50%;">
+				
+				<div data-dojo-type="dijit.layout.TabContainer"
+					attachParent="true"
+					tabPosition="top"
+					tabStrip="true"
+					class="detailed"
+					data-dojo-attach-point="bottomTabContainer"
+					>
+				
+				</div>
+			</div>
+		</div>
+
+		<div
+			class="dialog"
+			data-dojo-attach-point="projectDialogAttachPoint">
+		</div>
+		
+		<div
+			class="dialog"
+			data-dojo-attach-point="sampleDialogAttachPoint">
+		</div>
+		<div
+			class="dialog"
+			data-dojo-attach-point="flowcellDialogAttachPoint">
+		</div>
+		<div
+			class="dialog"
+			data-dojo-attach-point="laneDialogAttachPoint">
+		</div>
+
+	</div>
+
+</div>

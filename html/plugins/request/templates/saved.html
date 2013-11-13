@@ -1,0 +1,54 @@
+<div
+	dojoattachpoint="containerNode"
+>
+
+	<!-- TAB -->
+	<div
+		data-dojo-attach-point="mainTab"
+		class="saved"
+		data-dojo-type="dijit.layout.ContentPane"
+		title="Saved"
+	>
+
+		<div
+			class="toggleTitle closed"
+			data-dojo-attach-point="toggler"
+			data-dojo-attach-event="onclick:toggleSaved"
+		>Saved Queries
+		</div>
+
+		<div
+			class="savedSelect"
+			data-dojo-type="dijit/form/Select"
+			data-dojo-attach-point="savedSelect"
+			title="Select how you want to combine the filter with the previous filters ('AND' or 'OR')"
+			autocomplete="false"
+			disabled="false"
+		>
+		</div>
+
+		
+		<div
+			style="display: inline-block"
+			data-dojo-attach-point="togglePoint"
+			class="savedInputContainer"
+		>
+		
+			<div>
+				<div
+					data-dojo-attach-point="dragSourceNode"
+					class="dragSource"
+				>
+				</div>
+				
+			</div>
+
+		</div>
+				
+
+	</div>
+	<!-- END TAB -->
+	
+</div> 
+
+

@@ -1,0 +1,19 @@
+{
+   "package" : "workflows",
+   "type" : "workflow",
+   "version" : "0.6.0",
+   "history" : "",
+   "installtype" : "",
+   "opsfile" : "https://api.github.com/repos/aguatest/private/aguatest/workflows/workflows.ops",
+   "installfile" : "https://api.github.com/repos/aguatest/private/aguatest/workflows/workflows.pm",
+   "licensefile" : "https://api.github.com/repos/aguatest/private/aguatest/workflows/LICENSE",
+   "readmefile" : "https://api.github.com/repos/aguatest/private/aguatest/workflows/README",
+   "description" : "",
+   "website" : "",
+   "authors" : [],
+   "publications" : [],
+   "organisations" : [],
+   "ISA" : {},
+   "acknowledgements" : [],
+   "citations" : []
+}

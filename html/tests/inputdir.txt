@@ -1,0 +1,76 @@
+++++ plugins.project.FileDrag.getMenuItemForItem(item: [object Object], parentPane: [Widget plugins.project._GroupDragPane, plugins_project__GroupDragPane_2], children: null)
+parentWidget: [Widget plugins.project.FileDrag, Project1-ProjectDrag]
+parentWidgetNode: [object HTMLDivElement]
+childNodes: [object NodeList]
+childNodes.length: 2
+dragType: file
+plugins.project.FileDrag.getMenuItemForItem. Returning menuItem: [object Object], {"data":"code.js","type":["file"]}
+lastNode: [object HTMLDivElement]
+Setting lastNode.item = item
+item: {"name":"code.js","_S":{"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]},"parentDir":"Project1/Workflow1-assembly/code.js","path":"code.js","directory":false,"size":"5","modified":1231002050}
+
+
+
+/* {
+'total': '1',
+'items': [
+	{
+		'name': 'input.fasta',
+		'parentDir': 'Project1',
+		'path': 'input.fasta',
+		'directory': false,
+		'size': '5',
+		'modified': 1230997287
+	}
+]
+} */
+
+
+
+XXXXXXXXXXXXXXXXXXX------------------------XXXXXXXXXXXXXXXXx
+++++ plugins.project.FileDrag.getPaneForItem(item: [object Object],
+ parentPane: [object HTMLDivElement],
+ children: undefined)
+this.store: [object Object]
+item.name: inputdir
+item.directory: undefined
+
+item:
+{
+    "name":"inputdir",
+    "_S":
+    {
+        "url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1",
+        "pathAsQueryParam":true,
+        "preamble":null,
+        "declaredClass":"dojox.data.FileStore",
+        "_storeRef":"_S",
+        "label":"name",
+        "_identifier":"path",
+        "_attributes":
+        [
+            "children",
+            "directory",
+            "name",
+            "path",
+            "modified",
+            "size",
+            "parentDir"
+        ],
+        "pathSeparator":"/",
+        "options":[]
+    },
+    
+    "total":"1",
+    "items":
+    [
+        {
+            "name":"input.fasta",
+            "parentDir":"Project1",
+            "path":"input.fasta",
+            "directory":false,
+            "size":"5",
+            "modified":1230997287
+        }
+    ]
+}

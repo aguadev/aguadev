@@ -1,0 +1,8 @@
+aguatest	Project1	Workflow1	1				
+aguatest	Project1	elandRef	2				
+aguatest	Project1	novoRef	3				[{"copiedby":"aguatest","original":{"number":"3","project":"Project1","notes":"","name":"WorkflowA","description":"","username":"aguatest"},"date":"2012-03-18 21:40:36"},{"original":{"number":"5","notes":"","project":"Project1","name":"WorkflowA","description":"","username":"aguatest"},"copiedby":"aguatest","date":"2012-03-18 21:40:36"}]
+aguatest	ProjectX	Workflow1	1				
+aguatest	ProjectX	Workflow2	2				
+aguatest	ProjectX	Workflow3	3				
+aguatest	ProjectY	Workflow1	1				
+aguatest	ProjectY	Workflow2	2				

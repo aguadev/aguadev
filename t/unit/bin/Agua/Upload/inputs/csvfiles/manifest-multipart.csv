@@ -1,0 +1,82 @@
+------WebKitFormBoundary478AoACdpT1Rze4X
+Content-Disposition: form-data; name="uploadedfiles[]"; filename="manifest.csv"
+Content-Type: text/csv
+
+Institute Name,CCG_Thomas3,,,,,,,,,,,,,,,,,,,
+Principal Investigator,Roman Thomas,,,,,,,,,,,,,,,,,,,
+Project Name,CCG_Thomas3,,,,,,,,,,,,,,,,,,,
+Date Received,3/14/2013,,,,,,,,,,,,,,,,,,,
+Comment,NCBI genome build 37,,,,,,,,,,,,,,,,,,,
+Row,Group ID,Sample ID,Plate Barcode,Well,Sample Well,Species,Gender (M/F/U),Volume (ul),Concentration (ng/ul),OD 260/280,Tissue Source,Extraction Method,Ethnicity,Parent 1 ID,Parent 2 ID,Replicate(s) ID,Cancer sample (Y/N),Matched Sample ID(s),Matched Sample Type,Comment
+1,,S00339_N,LP6005479-DNA,A01,LP6005479-DNA_A01,Human,U,100,30,1.8,normal tissue,Puregene,U,,,,N,,,
+2,,S01022_N,LP6005479-DNA,B01,LP6005479-DNA_B01,Human,U,100,42.3,1.8,normal tissue,Puregene,U,,,,N,,,
+3,,S01170_N,LP6005479-DNA,C01,LP6005479-DNA_C01,Human,U,100,48.6,1.8,blood,Puregene,U,,,,N,,,
+4,,S01524_N,LP6005479-DNA,D01,LP6005479-DNA_D01,Human,U,100,43.7,1.8,normal tissue,Puregene,U,,,,N,,,
+5,,S01578_N,LP6005479-DNA,E01,LP6005479-DNA_E01,Human,U,100,30,1.8,normal tissue,Puregene,U,,,,N,,,
+6,,S01733_N,LP6005479-DNA,F01,LP6005479-DNA_F01,Human,U,100,40,1.8,normal tissue,Puregene,U,,,,N,,,
+7,,S01742_N,LP6005479-DNA,G01,LP6005479-DNA_G01,Human,U,100,52.4,1.8,normal tissue,Puregene,U,,,,N,,,
+8,,S02126_N,LP6005479-DNA,H01,LP6005479-DNA_H01,Human,U,100,41.4,1.8,normal tissue,Puregene,U,,,,N,,,
+9,,S02154_N,LP6005479-DNA,A02,LP6005479-DNA_A02,Human,U,100,38.1,1.8,normal tissue,Puregene,U,,,,N,,,
+10,,S02194_N,LP6005479-DNA,B02,LP6005479-DNA_B02,Human,U,100,42.9,1.8,blood,Puregene,U,,,,N,,,
+11,,S02209_N,LP6005479-DNA,C02,LP6005479-DNA_C02,Human,U,100,50,1.8,blood,Puregene,U,,,,N,,,
+12,,S02219_N,LP6005479-DNA,D02,LP6005479-DNA_D02,Human,U,100,39.7,1.8,normal tissue,Puregene,U,,,,N,,,
+13,,S02234_N,LP6005479-DNA,E02,LP6005479-DNA_E02,Human,U,100,36.1,1.8,normal tissue,Puregene,U,,,,N,,,
+14,,S02238_N,LP6005479-DNA,F02,LP6005479-DNA_F02,Human,U,100,44.5,1.8,blood,Puregene,U,,,,N,,,
+15,,S02242_N,LP6005479-DNA,G02,LP6005479-DNA_G02,Human,U,100,30,1.8,normal tissue,Puregene,U,,,,N,,,
+16,,S02249_N,LP6005479-DNA,H02,LP6005479-DNA_H02,Human,U,100,46.7,1.8,normal tissue,Puregene,U,,,,N,,,
+17,,S02255_N,LP6005479-DNA,A03,LP6005479-DNA_A03,Human,U,100,38.7,1.8,normal tissue,Puregene,U,,,,N,,,
+18,,S02273_N,LP6005479-DNA,B03,LP6005479-DNA_B03,Human,U,100,55.8,1.8,normal tissue,Puregene,U,,,,N,,,
+19,,S02274_N,LP6005479-DNA,C03,LP6005479-DNA_C03,Human,U,100,55.5,1.8,normal tissue,Puregene,U,,,,N,,,
+20,,S02277_N,LP6005479-DNA,D03,LP6005479-DNA_D03,Human,U,100,54.2,1.8,normal tissue,Puregene,U,,,,N,,,
+21,,S02279_N,LP6005479-DNA,E03,LP6005479-DNA_E03,Human,U,100,42.7,1.8,normal tissue,Puregene,U,,,,N,,,
+22,,S02289_N,LP6005479-DNA,F03,LP6005479-DNA_F03,Human,U,100,30,1.8,normal tissue,Puregene,U,,,,N,,,
+23,,S02290_N,LP6005479-DNA,G03,LP6005479-DNA_G03,Human,U,100,42.1,1.8,normal tissue,Puregene,U,,,,N,,,
+24,,S02293_N,LP6005479-DNA,H03,LP6005479-DNA_H03,Human,U,100,44.3,1.8,normal tissue,Puregene,U,,,,N,,,
+25,,S02295_N,LP6005479-DNA,A04,LP6005479-DNA_A04,Human,U,100,49.7,1.8,normal tissue,Puregene,U,,,,N,,,
+26,,S02297_N,LP6005479-DNA,B04,LP6005479-DNA_B04,Human,U,100,48.5,1.8,normal tissue,Puregene,U,,,,N,,,
+27,,S02299_N,LP6005479-DNA,C04,LP6005479-DNA_C04,Human,U,100,38.6,1.8,normal tissue,Puregene,U,,,,N,,,
+28,,S02325_N,LP6005479-DNA,D04,LP6005479-DNA_D04,Human,U,100,39.1,1.8,normal tissue,Puregene,U,,,,N,,,
+29,,S02328_N,LP6005479-DNA,E04,LP6005479-DNA_E04,Human,U,100,42.1,1.8,normal tissue,Puregene,U,,,,N,,,
+30,,S02330_N,LP6005479-DNA,F04,LP6005479-DNA_F04,Human,U,100,63.8,1.8,normal tissue,Puregene,U,,,,N,,,
+31,,S02322_N,LP6005479-DNA,G04,LP6005479-DNA_G04,Human,U,100,47.2,1.8,normal tissue,Puregene,U,,,,N,,,
+32,,S02333_N,LP6005479-DNA,H04,LP6005479-DNA_H04,Human,U,100,45.1,1.8,normal tissue,Puregene,U,,,,N,,,
+33,,S02334_N,LP6005479-DNA,A05,LP6005479-DNA_A05,Human,U,100,45.6,1.8,normal tissue,Puregene,U,,,,N,,,
+34,,S02335_N,LP6005479-DNA,B05,LP6005479-DNA_B05,Human,U,100,40.9,1.8,normal tissue,Puregene,U,,,,N,,,
+35,,S01864_N,LP6005479-DNA,C05,LP6005479-DNA_C05,Human,U,100,46.9,1.8,blood,Puregene,U,,,,N,,,
+------WebKitFormBoundary478AoACdpT1Rze4X
+Content-Disposition: form-data; name="index"
+
+0
+------WebKitFormBoundary478AoACdpT1Rze4X
+Content-Disposition: form-data; name="name"
+
+manifest.csv
+------WebKitFormBoundary478AoACdpT1Rze4X
+Content-Disposition: form-data; name="size"
+
+4094
+------WebKitFormBoundary478AoACdpT1Rze4X
+Content-Disposition: form-data; name="type"
+
+text/csv
+------WebKitFormBoundary478AoACdpT1Rze4X
+Content-Disposition: form-data; name="username"
+
+admin
+------WebKitFormBoundary478AoACdpT1Rze4X
+Content-Disposition: form-data; name="sessionid"
+
+0000000000.0000.000
+------WebKitFormBoundary478AoACdpT1Rze4X
+Content-Disposition: form-data; name="token"
+
+0FYIsgyCJZLTdgRR
+------WebKitFormBoundary478AoACdpT1Rze4X
+Content-Disposition: form-data; name="mode"
+
+manifest
+------WebKitFormBoundary478AoACdpT1Rze4X
+Content-Disposition: form-data; name="uploadType"
+
+html5
+------WebKitFormBoundary478AoACdpT1Rze4X--

@@ -1,0 +1,107 @@
+<div dojoAttachPoint="containerNode">
+
+<div
+    dojoAttachPoint="menu"
+    class="workflowmenu"
+    dojoType="plugins.menu.Menu">
+
+    <div dojoType="dijit.MenuItem"
+        label="Workflow Menu"
+        dojoAttachPoint="titleNode"
+        class="title"
+        disabled="false">
+    </div>
+
+    <div
+        dojoAttachPoint="refreshNode"
+        dojoType="dijit.MenuItem"
+        class="refresh"
+        dojoAttachEvent="onClick:refresh"    
+        >
+        <U>R</U>efresh
+    </div>
+
+
+    <div
+        dojoAttachPoint="selectNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:select"
+        class="select"
+        >
+        <U>S</U>elect
+    </div>
+    <div
+        dojoAttachPoint="addNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:add"
+        class="add"
+        >
+        <U>A</U>dd
+    </div>
+
+    <div
+        dojoAttachPoint="newProjectNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:newProject"
+        class="newProject"
+        >
+        New <U>P</U>roject
+    </div>
+
+    <div
+        dojoAttachPoint="newWorkflowNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:newWorkflow"
+        class="newWorkflow"
+        >
+        New <U>W</U>orkflow
+    </div>
+
+    <div
+        dojoAttachPoint="copyWorkflowNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:copyWorkflow"
+        class="copyWorkflow"
+        disabled="false"
+        >
+        <U>C</U>opy Workflow
+    </div>
+
+    <div
+        dojoAttachPoint="renameWorkflowNode"
+        dojoType="dijit.MenuItem"
+        class="renameWorkflow"
+        dojoAttachEvent="onClick:renameWorkflow"    
+        >
+        <U>R</U>ename Workflow
+    </div>
+
+    <div
+        dojoAttachPoint="openWorkflowNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:openWorkflow"
+        class="openWorkflow"
+        >
+        <U>O</U>pen Workflow
+    </div>
+
+    <div
+        dojoAttachPoint="deleteProjectNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:deleteProject"
+        class="deleteProject"
+        >
+        <U>D</U>elete Project
+    </div>
+
+    <div
+        dojoAttachPoint="deleteWorkflowNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:deleteWorkflow"
+        class="deleteWorkflow"
+        >
+        De<U>l</U>ete Workflow
+    </div>
+
+
+</div>

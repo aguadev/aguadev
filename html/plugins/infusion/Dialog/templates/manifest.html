@@ -1,0 +1,252 @@
+<div dojoattachpoint="containerNode">
+
+    <div
+        data-dojo-attach-point="mainTab"
+        class="infusion dialog manifest"
+        modal="true"
+		title="Create Manifest"
+        draggable="true"
+        data-dojo-type="plugins/dojox/widget/Dialog"
+        style="overflow: visible; position: absolute; top: 240px; left: 248px; opacity: 1; width: 500px; min-height: 410px; height: auto !important; align: center;"
+        >
+
+		<table class="mainTable">
+			<tr align="center" width="100%">
+				<td width="100%">
+					<div
+						data-dojo-attach-point="initTable"
+						class="initTable"
+						style="min-height: 500px; "
+					>
+						<table
+							align="center"
+							style="width: 420px;" >
+							<tr>
+								<td colspan="3" align="center">
+									<div
+										data-dojo-attach-point="projectName"
+										data-dojo-type="plugins.form.ValidationTextBox"
+										data-dojo-props="
+											label			: 	'Project Name',
+											required		: 	'true',
+											pattern			: 	'^[A-Za-z]\\w{7,45}',
+											minlength		:	8,
+											invalidMessage	:	'The project name should be a single word starting with a letter. Minimum 8 characters, maximum 45 characters. The project name can only contain letters, numbers or the \'-\' character',
+											promptMessage	:	'The project name should be a single word starting with a letter. Minimum 8 characters, maximum 45 characters. The project name can only contain letters, numbers or the \'-\' character',
+											required		:	true
+										"
+										class="projectName"
+									>
+									</div>									
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3" align="center">
+									<div
+										data-dojo-attach-point="principalInvestigator"
+										data-dojo-type="plugins.form.ValidationTextBox"
+										data-dojo-props="
+											label			: 	'Principal Investigator',
+											required		: 	'true',
+											pattern			: 	'^.{5,45}$',
+											invalidMessage	:	'Minimum 5 characters, maximum 45 characters',
+											promptMessage	:	'Minimum 5 characters, maximum 45 characters',
+											required		:	true
+										"
+										class="projectName"
+									>
+									</div>									
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div
+										data-dojo-type="plugins/form/DateTextBox"
+										data-dojo-attach-point="dateReceived"
+										data-dojo-props="
+											label			: 	'Date Received'
+										"
+									>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div
+										data-dojo-type="plugins/form/DateTextBox"
+										data-dojo-attach-point="dateDue"
+										data-dojo-props="
+											label			: 	'Date Due'
+										"
+									>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3" align="center">
+									<div
+										data-dojo-attach-point="targetCoverage"
+										data-dojo-type="plugins.form.ValidationTextBox"
+										data-dojo-props="
+											label			: 	'Target Coverage (Times)',
+											required		: 	'true',
+											pattern			: 	'^[1-9][\\d]{0,4}$',
+											invalidMessage	:	'A number from 1 to 99999 (DEFAULT: 30)',
+											promptMessage	:	'A number from 1 to 99999 (DEFAULT: 30)',
+											value			:	30,
+											required		:	true
+										"
+										class="targetCoverage"
+									>
+									</div>									
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3" align="center">
+									<div
+										data-dojo-attach-point="targetYield"
+										data-dojo-type="plugins.form.ValidationTextBox"
+										data-dojo-props="
+											label			: 	'Target Yield (Gbp)',
+											required		: 	'true',
+											pattern			: 	'^[1-9][\\d]{0,4}$',
+											invalidMessage	:	'A number from 1 to 99999 (DEFAULT: 30)',
+											promptMessage	:	'A number from 1 to 99999 (DEFAULT: 30)',
+											value			:	105,
+											required		:	true
+										"
+										class="targetYield"
+									>
+									</div>									
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3" align="center">
+									<div
+										data-dojo-attach-point="instituteName"
+										data-dojo-type="plugins.form.ValidationTextBox"
+										data-dojo-props="
+											label			: 	'Institution',
+											required		: 	'true',
+											pattern			: 	'^.{5,45}$',
+											invalidMessage	:	'Minimum 5 characters, maximum 45 characters',
+											promptMessage	:	'Minimum 5 characters, maximum 45 characters',
+											required		:	true
+										"
+										class="instituteName"
+									>
+									</div>									
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3" align="center">
+									<div
+										data-dojo-attach-point="comment"
+										data-dojo-type="plugins.form.TextArea"
+										data-dojo-props="
+											label			: 	'Comment',
+											pattern			: 	'^.{0,250}$',
+											invalidMessage	:	'Max 250 characters',
+											promptMessage	:	'Input up to 250 characters',
+											cols			: 	32,
+											rows			: 	5,
+											required		:	false
+										"
+										class="comment"
+									>
+									</div>									
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3" align="center">
+									<div
+										data-dojo-attach-point="sampleName"
+										data-dojo-type="plugins.form.ValidationTextBox"
+										data-dojo-props="
+											label			: 	'Sample Name',
+											required		: 	'true',
+											pattern			: 	'^[A-Za-z]\\w+',
+											minlength		:	8,
+											invalidMessage	:	'The sample name should be a single word starting with a letter. The word must be longer than 8 characters and can only contain letters, numbers or the \'-\' character',
+											promptMessage	:	'The sample name should be a single word starting with a letter. The word must be longer than 8 characters and can only contain letters, numbers or the \'-\' character',
+											required		:	true
+										"
+										class="sampleName"
+									>
+									</div>									
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3" align="center">
+									<div
+										data-dojo-attach-point="sampleBarcode"
+										data-dojo-type="plugins.form.ValidationTextBox"
+										data-dojo-props="
+											label			: 	'Sample Barcode',
+											required		: 	'true',
+											pattern			: 	'^[A-Za-z]\\w+',
+											minlength		:	8,
+											invalidMessage	:	'The sample name should be a single word starting with a letter. The word must be longer than 8 characters and can only contain letters, numbers or the \'-\' character',
+											promptMessage	:	'The sample name should be a single word starting with a letter. The word must be longer than 8 characters and can only contain letters, numbers or the \'-\' character',
+											required		:	true
+										"
+										class="sampleBarcode"
+									>
+									</div>									
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3" align="center">
+									<div
+										data-dojo-attach-point="plateBarcode"
+										data-dojo-type="plugins.form.ValidationTextBox"
+										data-dojo-props="
+											label			: 	'Plate Barcode',
+											required		: 	'true',
+											pattern			: 	'^[A-Za-z]\\w+',
+											minlength		:	8,
+											invalidMessage	:	'The plate name should be a single word starting with a letter. The word must be longer than 8 characters and can only contain letters, numbers or the \'-\' character',
+											promptMessage	:	'The plate name should be a single word starting with a letter. The word must be longer than 8 characters and can only contain letters, numbers or the \'-\' character',
+											required		:	true
+										"
+										class="plateBarcode"
+									>
+									</div>									
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3" align="center">
+									<div
+										data-dojo-attach-point="sex"
+										data-dojo-type="plugins.form.Select"
+										class="sex"
+										data-dojo-props="
+											label			: 	'Sex'
+										"
+										style="height: 50px !important"
+									>
+									</div>									
+								</td>
+							</tr>
+							<tr>
+								<td
+									colspan="3"
+									data-dojo-attach-point="saveButton"
+									class="saveButton"
+									dojoAttachEvent="onclick:save"
+								>
+									Save
+								</td>
+							</tr>
+							
+						</table>
+		
+					</div>
+				</td>
+			</tr>
+		
+		</table>
+		
+	</div> <!-- mainTab -->
+
+</div>

@@ -1,0 +1,106 @@
+<html>
+<head>
+<!--gvs-b.gs.washington.edu/seattlesequencing-->
+
+<!--http://localhost:8080/agua/html/dojo.1.2.2/dojox/layout/tests/test_FloatingPane.html-->
+
+	<title> adminApp 2: single pane </title>
+
+	<!-- required: a default theme file -->
+	<link rel="stylesheet" id="themeStyles" href="../dojo.1.2.2/dijit/themes/tundra/tundra.css">
+	<link rel="stylesheet" href="../dojo.1.2.2/dojox/layout/resources/FloatingPane.css">	
+	<link rel="stylesheet" href="../dojo.1.2.2/dojox/layout/resources/ResizeHandle.css">
+
+	<!-- required: dojo.js -->
+
+	<!--<script type="text/javascript" src="../dojo.1.2.2/dojo/dojo.js" djConfig="isDebug:false, parseOnLoad: true"></script>-->
+
+<script type="text/javascript" src="../dojo.1.2.2/dojo/dojo.js"
+	djConfig="isDebug: true, parseOnLoad: true, useCommentedJson: true"></script>
+
+<script type="text/javascript" src="../dojo.1.2.2/dijit/nls/en-us.js"></script>
+<script type="text/javascript" src="../dojo.1.2.2/dijit/nls/common.js"></script>
+
+<script type="text/javascript" src="../builds/plugins/dojo/plugins.js"></script>
+<!--<script type="text/javascript" src="builds/plugins/dojo/plugins.js.uncompressed.js"></script>-->
+
+
+
+
+	<!-- do not use! only for testing dynamic themes -->
+	<script type="text/javascript" src="../dojo.1.2.2/dijit/tests/_testCommon.js"></script>
+
+	<!-- for debugging: -->
+	<script type="text/javascript" src="../dojo.1.2.2/dojox/layout/FloatingPane.js"></script>
+	
+	<script type="text/javascript">
+		dojo.require("dojox.layout.FloatingPane"); 
+		dojo.require("dijit.layout.TabContainer");
+		dojo.require("dijit.form.ComboBox"); 
+		dojo.require("dijit.form.Button"); 
+		dojo.require("dojo.parser"); // scan page for widgets
+	</script>
+
+	<style type="text/css">
+		@import "../dojo.1.2.2/dojo/resources/dojo.css";
+		@import "../dojo.1.2.2/dijit/tests/css/dijitTests.css";
+
+	</style>
+
+
+<script type="text/javascript">
+
+// REGISTER module path FOR PLUGINS
+dojo.registerModulePath("plugins","../../../plugins");		
+console.log("AFTER dojo.registerModulePath");
+
+
+	// SET USER AND SESSION ID
+	dojo.cookie('username', "admin");
+	dojo.cookie('sessionId', "1228791394.7868.158");
+	dojo.cookie('project', "Project1");
+	dojo.cookie('workflow', "Workflow3-indels");
+	dojo.cookie('report', "Report1");
+
+	// SET CGI AND HTML URLS (RELATIVE TO dojo.js)
+	var cgiurl = "../../../cgi-bin/agua/";
+	var htmlurl = "../../../agua"
+
+
+function generateApplication ()
+{
+    console.log("dojo.addOnLoad     BEFORE new plugins.admin.Application");
+    var application = new plugins.admin.Application(
+        {
+            id          :   "hisApplicationId"
+            name        :   "mage2eland.pl",
+            location    :   "bin/image2eland.pl",
+            description :    "Process images into base calls with Bustard and align reads against reference sequence with Eland",
+            executor    :   "wperl",
+            type        :   "pipeline"
+        }
+    );
+    // MAKE HEIGHT AUTO??
+    application.size({ w: 900, h: 500});			
+ 
+    console.log("dojo.addOnLoad     AFTER new plugins.admin.Application");
+}
+dojo.addOnLoad(generateApplication);    
+
+            ////var tmp = new dojox.layout.FloatingPane({  
+            ////    title: "dynamically created ...",
+            ////    id:"floater3",
+            ////    closeable:true,
+            ////    resizable:true,
+            ////    dockable: true
+            ////},"nonFloater");
+            ////tmp.startup(); 
+            ////tmp.resize({ w:500, h:500 });			
+    
+</script>
+
+</head>
+<body class="tundra">
+
+</body>
+</html>

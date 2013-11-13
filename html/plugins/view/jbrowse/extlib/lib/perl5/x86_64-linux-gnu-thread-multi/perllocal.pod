@@ -1,0 +1,110 @@
+=head2 Sun Jul 21 02:02:42 2013: C<Module> L<Digest::Crc32|Digest::Crc32>
+
+=over 4
+
+=item *
+
+C<installed into: /mnt/software/jbrowse/1.9.8/extlib/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.01>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sun Jul 21 02:02:44 2013: C<Module> L<Bio::GFF3|Bio::GFF3>
+
+=over 4
+
+=item *
+
+C<installed into: /mnt/software/jbrowse/1.9.8/extlib/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 1.5>
+
+=item *
+
+C<EXE_FILES: bin/gff3_from_fasta>
+
+=back
+
+=head2 Sun Jul 21 02:02:50 2013: C<Module> L<Hash::Util::FieldHash::Compat|Hash::Util::FieldHash::Compat>
+
+=over 4
+
+=item *
+
+C<installed into: /mnt/software/jbrowse/1.9.8/extlib/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.03>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sun Jul 21 02:02:50 2013: C<Module> L<Cache::Ref|Cache::Ref>
+
+=over 4
+
+=item *
+
+C<installed into: /mnt/software/jbrowse/1.9.8/extlib/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.04>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Sun Jul 21 02:10:40 2013: C<Module> L<GD|GD>
+
+=over 4
+
+=item *
+
+C<installed into: /mnt/software/jbrowse/1.9.8/extlib/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 2.50>
+
+=item *
+
+C<EXE_FILES: bdf_scripts/bdf2gdfont.pl>
+
+=back
+

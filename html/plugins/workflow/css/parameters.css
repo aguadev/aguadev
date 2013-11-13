@@ -1,0 +1,362 @@
+/* DISABLE USER SELECT */
+.workflow .parameters .inputRows .name,
+.workflow .parameters .inputRows .discretion,
+.workflow .parameters .inputRows .valuetype,
+.workflow .parameters .outputRows .name,
+.workflow .parameters .outputRows .discretion,
+.workflow .parameters .outputRows .valuetype {
+	-moz-user-select: none !important;
+}
+
+.workflow .parameters .inputRows .name,
+.workflow .parameters .inputRows .value {
+	background-color: #EFF !important;
+}
+
+
+/* EDITING value TEXT AREA */
+.workflow .parameters .value textarea,
+.workflow .parameters .description textarea {
+	width: 98%;
+	font-family: Verdana;
+	color: #222;
+	font-weight: bolder;
+	height: 28px;
+	font-size: 12px;
+}
+
+.workflow .parameters .description textarea {
+	height: 40px;
+}
+
+
+/* BACKGROUND COLOR AND FONT */
+.workflow .workflow .parameters {
+	font-family: Verdana;
+	background-color: #FFF;
+}
+
+/* TITLEPANE BAR */
+.tundra .dijitTitlePaneTitle {
+    background: url() repeat-x scroll left bottom #DDEEFF !important;
+    font-weight: 900 !important;
+}
+
+.workflow .parameters .tundra .dijitTitlePaneTitle {
+    background: url() repeat-x scroll left bottom #DDEEFF !important;
+    font-weight: 900 !important;
+}
+
+.workflow .parameters .tundra .dijitTitlePaneTitle {
+    background: url() repeat-x scroll left bottom #DDEEFF !important;
+    font-weight: 900 !important;
+}
+
+.tundra .workflow .parameters .dijitTitlePaneTitle {
+    background: url() repeat-x scroll left bottom #DDEEFF !important;
+    font-weight: 900 !important;
+}
+
+.workflow .parameters .dijitTitlePaneTitle dijitOpen dijitTitlePaneTitleHover {
+	background: #F00 !important;
+}
+
+
+.workflow .parameters .dijitContentPane .dijitTabPane .dijitTabContainerTop-dijitContentPane .dijitTitlePaneTitle,
+.workflow .parameters .dijitContentPane .dijitTabPane .dijitTabContainerTop-dijitContentPane .dijitTitlePaneTitle .dijitClosed {
+
+	height: 20px !important;
+}
+
+ .workflow .parameters .dijitContentPane .dijitTabPane .dijitTabContainerTop-dijitContentPane td {
+	min-height: 40px !important;
+}
+
+.dijitTitlePane .outputsTitlePane {
+	min-height: 40px !important;	
+}
+
+/* APPLICATION NAME */
+.workflow .parameters .appName {
+	height: 17px;
+	background-color: #DDEEFF;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 17px;
+	font-stretch: expanded;
+	font-weight: bolder;
+	color: darkred;
+}
+
+/* TITLE PANE TITLE */
+.workflow .parameters .dijitTitlePaneTextNode {
+	color: #484 !important;
+	font-weight: bolder;
+	font-size: 16px;
+}
+
+/* SET TAB PANE WRAPPER MIN HEIGHT SO ALL TITLE PANES ARE VISIBLE */
+.dijitTabPaneWrapper .dijitTabContainerTop-container .workflow .parameters {
+	height: auto !important;
+	min-height: 130px !important;
+}
+
+
+/* TITLE PANE HEIGHT */
+.workflow .parameters .dijitTitlePaneContentInner{*/
+}
+.workflow .parameters .dijitTitlePaneTitle .dijitTitlePaneFocused .dijitClosed {
+}
+.workflow .parameters .dijitTitlePane .dijitTitlePaneTitle {
+}
+
+/* INFO PANE CONTAINER */
+.workflow .parameters {
+	height: auto !important;
+	font-family: Verdana;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border: 2px solid #CCCCCC;
+	cursor: default;
+	
+	text-align: left !important;
+	font-size: 12px;
+	border-color: #333;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	overflow:auto !important;
+}
+
+/* INPUT HOVER */
+.workflow .parameters .name {
+	color: darkred;	
+}
+.workflow .parameters .name:hover {
+	/*color: #FFFFFF;*/
+}
+
+.workflow .parameters .input:hover,
+.workflow .parameters .output:hover {
+	background-color: #88CCFF !important;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+}
+
+/* HIDDEN CONTENT (DISPLAYED ONCLICK)*/
+.workflow .parameters .hidden,
+.workflow .parameters .hidden table:hover {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:4pt;
+}
+.workflow .parameters .hidden {
+	padding-bottom: 0px;
+}
+.workflow .parameters .hidden table:hover {
+	background-color: #FF5;
+}
+
+
+.workflow .parameters .name,
+.workflow .parameters .type,
+.workflow .parameters .typeTitle,
+.workflow .parameters .value,
+.workflow .parameters .discretion {
+	height: 20px !important;
+	text-align: left !important;
+	vertical-align: middle !important;
+	font-weight: bold !important;
+	padding-top: 0px;
+}
+
+.workflow .parameters .value {
+	width: auto !important;
+}
+
+/* NAME */
+.workflow .parameters .name {
+	height: 24px !important;
+	font-size: 14px;
+	font-weight: bolder;
+	color: #000;
+	width: 120px !important;
+	vertical-align: middle;
+	background-image: url(../../../plugins/workflow/images/parameter-18.png);
+	background-position: center left;
+	text-indent: 22px;
+	background-repeat: no-repeat;
+	height: 18px;
+}
+
+.workflow .parameters .invalid .name {
+	color: #F00;
+}
+
+/* DISCRETION */
+.workflow .parameters .discretion {
+	color: darkgreen !important;
+	/*font-style: italic;*/
+}
+
+/* TYPE */
+.workflow .parameters .type {
+	text-align: center !important;
+	font-size: 12px;
+	height: 24px !important;
+	padding-top: 0px;
+	position: relative;
+	left: 4px;
+	text-align: left;
+	width: 60px !important;
+	color: darkblue;
+}
+
+/* BACKGROUND FOR ALL HIDDEN ELEMENTS */
+.workflow .parameters .description, 
+.workflow .parameters .uploadButton,
+.workflow .parameters .browseButton {
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	border-radius: 4pt;
+	border-radius-bottomright: 4pt;
+	border-radius: 4pt;
+	border-radius-topright: 4pt;
+}
+
+/* INPUT VALUE LINE */
+.workflow .parameters .input .value {
+	border-radius-topright: 4pt;
+	border-radius-bottomright: 4pt;
+}
+
+/* DISCRETION */
+.workflow .parameters .required {
+	background-color: #FBB !important;
+}
+.workflow .parameters .satisfied {
+	background-color: #AFA !important;
+	border: 1px solid #AFA !important;
+}
+
+/* AVAILABILITY */
+.workflow .parameters .filePresent {
+	color: #000 !important;
+}
+.workflow .parameters .fileMissing {
+	color: #444 !important;
+	font-style: italic !important;
+}
+
+/* DEFAULT INPUT */
+.workflow .parameters .input .value {
+	border: 1px solid #AAA !important;
+	font-style: italic !important;
+    border-radius: 3pt;
+}
+
+/* INVALID INPUT */
+.workflow .parameters .invalid,
+.workflow .parameters .input .required {
+	border: 2px solid #F00 !important;
+	color: #555 !important;
+	font-style: italic !important;
+}
+
+/* UPLOAD, DOWNLOAD AND BROWSE BUTTONS */
+.workflow .parameters .browseButton,
+.workflow .parameters .uploadButton,
+.workflow .parameters .downloadButton {
+	background-color: #FFF;
+	border: 2px solid #EEE;
+	border-bottom-color: #DDD;	
+	border-left-color: #DDD;	
+	vertical-align: middle;
+	min-width: 29px;
+}
+
+.workflow .parameters .browseButton:hover,
+.workflow .parameters .uploadButton:hover,
+.workflow .parameters .downloadButton:hover {
+	border: 2px solid #FFD;
+	border-bottom-color: #EEC;	
+	border-left-color: #EEC;
+	background-color : #CFC;
+}
+
+.workflow .parameters .browseButton:active,
+.workflow .parameters .uploadButton:active,
+.workflow .parameters .downloadButton:active {
+	border: 2px solid #FFD;
+	border-bottom-color: #BBB;	
+	border-left-color: #BBB;
+	background-color : #8F8;
+}
+
+.workflow .parameters .browseButton {
+	float: inherit;
+	background-image: url("../../../plugins/workflow/images/browser-29.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	width: 28px;
+	height: 34px;
+}
+
+.workflow .parameters .uploadButton {
+	background-image: url("../../../plugins/workflow/images/upload-24.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 28px;
+	height: 28px;
+}
+
+.workflow .parameters .downloadButton {
+	background-image: url("../../../plugins/workflow/images/download-24.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 28px;
+	height: 28px;
+}
+
+/* EXPOSE FILE UPLOAD ONCLICK ELEMENT */
+.workflow .parameters .dijitFileInput {
+	position: relative;
+	top: -2px;
+	left: 0px;
+	/*height: 32px !important;*/
+	width: 32px !important;
+	z-index: 10;
+	border: 0px;
+	opacity: 0;
+	max-height: 20px !important;
+}
+
+.workflow .parameters .dijitFileInputReal {
+	height: 20px !important;
+	width: 30px !important;
+	background: none;
+	z-index: 11;
+}
+
+.workflow .parameters .fileInputMask {
+	/*background-color: #F00;*/
+	position: relative;
+	top: 0px;
+	left: 0px;
+	height: 25px !important;
+	width: 200px !important;
+	z-index: 12;
+}
+
+.workflow .parameters .dijitTitlePaneContentInner {
+	overflow-y: auto !important;
+	max-height: 412px !important;
+}
+
+

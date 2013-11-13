@@ -1,0 +1,27 @@
+
+h3. APPLICATION
+
+filetools
+
+h3. PURPOSE
+
+FILE MANIPULATION, QUALITY CHECKING AND OTHER UTILITIES
+
+h3. USAGE
+
+{code}
+./filetools.pl mode [args] [--help]
+{code}
+
+mode           :   File manipulation or QC function
+args           :       Arguments for selected mode
+ --help        :   print help info
+
+h3. EXAMPLES
+
+{code}
+/nethome/bioinfo/apps/agua/0.5/bin/apps/filetools.pl filterReads \
+ --inputdir /nethome/bioinfo/data/sequence/chromosomes/rat/rn4/novoalign
+{code}
+
+

@@ -1,0 +1,221 @@
+* c601dc2 (HEAD, tag: v0.2.0, origin/master, origin/HEAD, master) Updated and added more tests
+* 6ca618f Testing and document @style directive
+* 0e3e331 Updated widget parsing
+* 34bc1ae Error handling of attempting to add rules, and proper call handling in rules, implement extends as a call, add support for "content" to come from element generation, handle sequences and observables, implemented pausable/resumable parsing, @xstyle directives
+* c8053b5 Document @xstyle start and end directives
+* 71ac855 Make extend reusable, and support non-chaining thenables
+* 7b05b82 Fixes for whitespace handling, support for pausing parsing, and clickable href:line numbers
+* 2bb0be9 Fixes for whitespace handling, applying inline rules, and recursive generation
+* c05db03 Correct conversion of name with dashes into JS
+* c663291 Correct handling of deferred property handlers, added method for retrieving matching elements from rule
+* f4e22aa Fix some indentation
+* 7e75ace Update to parser to preserve whitespace, and preserve line returns for proper error reporting of line numbers
+* 1c0d5c3 Updates to readme for whitespace based on hierarchy
+* 08e533d Whitespace driven DOM hierarchy in element generation
+* 2aa550d Get the build to write to the destination instead of the source.
+* 44c6d59 Various fixes to correlate rules properly from the build Properly handle inheriting styles with correlated built rules
+* 9b4aa8c (origin/build-content) Work on getting built x-stylesheets to work
+* 7c7cb76 Conditionally check for require.cache to work properly with AMD loaders that don't provide this
+* d4dfb41 refactoring ruleModel into individual modules
+* 521ee30 Updates to tutorial
+* 06a8388 Various bug fixes and some name changes
+* 449f0ed Update built files
+* f43984c Move core css test into separate stylesheet, so it can be used in IE8
+* 5f699df assume build will run from root
+* f3b666f Add @xstyle directive for turning the parser on and off
+* 7ba47c2 Implement observable handling Support appendable generators Make event execution a snap-shot execution Fix textarea element handling Fixes to tutorial test
+*   9b5d749 Merge branch 'master' of github.com:kriszyp/xstyle
+|\  
+| *   63a2846 Merge pull request #13 from phated/master
+| |\  
+| | * 206b5f8 add volo.type = directory to pull down full repo with volo
+| |/  
+* | 6bfb0c3 Added tutorial test page
+* | e53b6ce Added support contents, element, event, better handling of observable result sets
+|/  
+* 0400aba Better class naming
+* 01a232b more docs
+* fd855b3 More descriptive class names, and better parsing of properties with rules Properly handle link'ed stylesheets Add support for boolean conversion to properties that effective have booleans
+* c0a7335 Only put() if it the method is available
+* 554dc47 Fix pseudo parsing
+* 2daebfe Reference main properly
+* 29d0aea Changing multi-definition handling to support shimming properly
+* b727435 Note about browser compatibility
+* b44c6ad Fixes for supporting IE8
+* 179e473 Remove some of the non-implemented annotations
+* c8e0ec4 Add test for multiple inheritance
+* 7af8e1b Documenting use of setStyle
+* c7ff3e8 Better parsing of successive selector part in generation
+* 1e9918c Add multiple inheritance (extending multiple rules at once)
+* 3534c22 Use the correct definition scope for mixins
+* 1668175 Use async loading in Dojo example in docs
+* eb04516 Create auto-generated selectors for assignment rules Fix derived tag name creation Add deferred creation of styles Lookup of elements against definition in element generation
+* 671d1cd Handle objects/rules as definitions
+* 9620d9a correct parsing on assignment
+* 6623151 Doc fixes
+* 1d08059 More docs
+* ac21862 more doc updates
+* 50c0bc4 More documentation, describe extending and mixing in
+* e3432ff Better handling of errors (with line number), moved extend function to rule method, better selector parsing, some method refactoring, adding support for using rules as properties
+* b3e5e05 Getting target stylesheets to work in dojo build
+* 628d3e8 Upgrading build to directly use parser module
+* db4b7cf Use uncompressed xstyle.js for standalone test
+* d906b4b Fix package.js to properly sort through files that need to be built, fixes #8 and fixes #12
+* c9ef737 Add uncompressed built file
+*   bb5ea1e Merge branch 'master' of git://github.com/kriszyp/xstyle
+|\  
+| *   ad882e3 Merge pull request #11 from SitePen/package-copyonly
+| |\  
+| | * 9476b0b Revise copyOnly logic in package.js to avoid false positives
+| |/  
+* | c30b6c2 (origin/separate-modules) Removed unnecessary gh inindex.html
+* | cd5514d Added put-selector as dependency
+* | 399418e more docs
+* | 637ec67 Track unused rule counts for proper insertion of unmatched css rules implement event handling
+* | 9e9b59c Update build for module refactoring
+* | 00b18b5 Better selector parsing
+* | 8f16c75 Module refactors
+|/  
+* b000a5c bump version
+* dee35b2 bump version
+* e7d1d82 (tag: v0.1.3) Checked in missing main.js
+* a99ef40 (tag: v0.1.2) Add another module to avoid with build
+* 356f2ee bump version
+* 76230b0 Handle URL correction and inlining properly in rhino
+* 09da22e (tag: v0.1.1) Update other main xstyle module references
+* dd535a2 Omit non-AMD modules from build
+* 36aae68 bump version
+* 9325cad Update module references to xstyle
+* b891c6f (tag: v0.1.0, origin/remodularize) Update shims.css to use new property definition syntax
+* 07d2079 remove x.css
+* bb937b2 more doc updates
+* eb4e58b Re-modularizing xstyle
+* dc03509 (origin/define-properties) more test updates
+* ca4b212 Handle calls as properties, and use extend() inline style declarations
+* 8b91b48 Changing to the property definition syntax and semantics
+* d93632b Try to get the Dojo build plugin to function properly
+* a05bea2 Add support for inlining resources in built stylesheets
+* 87f0923 Perform URL correction in combining stylesheets
+* 42963d2 Use a more conservative strategy for building CSS, using the source instead of relying xstyle rule insertion
+* 87e4ce4 Properly call callback when doing cached stylesheets
+* 66c54e0 Fix bad function name, test for layer, remove console outputs
+* f062171 Add version to package.json
+* 144751e Get build working with Dojo
+* 8f81f05 Use the require.cache for checking for inline stylesheets, properly handle content values fixes #9
+* 47e5c00 Fix bad dependencies, refs #8
+* 6d3ebaa More docs
+* 89aff78 Remove unnecessary toAbsMid call, fixes #1
+* e502e1c Making a hyperlink
+* f5a29a1 Better handling of sequences with conditional operators
+* 9ea5c06 Properly handle missing stylesheets
+* 8a35c05 creating gh test page
+* 1ca0ca7 Document has-class
+* 881ebe7 update included module and converter color
+* 4af609e Fix text node insertion in inlined put()
+* 60d1a4f Add ASI for CSS for top level
+* 1fb8335 Fix converter dependency
+* 76fe93d Add standalone test
+* 5754557 Some cleanup
+* 1061645 Enable parsing trigger in CSS loader
+* e51bb87 more code comments
+* 828aab0 Organizing and improving docs
+* d833510 (origin/element-varying-scope) save changes
+* fba7b11 Save various changes
+* 934db69 Add simple AMD loader for standalone cases, updates to some tests
+* 4d21786 Fix typo
+* c782095 Fix typo
+* 3fc50a0 Fix typos
+* 704f392 Try to get brackets right
+* db960de updated docs
+* e5bbe02 Updated documentation
+* 0b84d26 Create a "core" extension CSS stylesheet
+* 625fe1a More work on build, creating dojo build plugin
+* 5cc3405 inline domReady, handle rule parsing with top-level assignments, add integrated var() support, fix promise-based evaluations
+* b2a61d2 Start on build tool
+* aaa884e Added more comments, some code cleanup
+* 8502f5f More work on new scoping approach, try-it should work now
+* 220fb6d Work on switching to using element-varying scope
+* 2d6b260 (origin/bind-attributes) Switch to using slash based path separator in attribute references
+* c4d54a9 More work on attribute bindings
+* fe4c8a5 More work on bindable attributes
+* 9e81d92 Refactoring xstyle to use one file and attribute binding
+* 5c457b4 Add better error handling in parsing, support strings in reactive expressions, add data conversion examples and error handling in try-it.
+* 5fcc774 Allow for clearing renderers on cleanup, properly preserve widget styling, added create style sheet utility, added an in page demo page
+* bb779b6 Properly extend rules, parse each import sheet separately, widget fixes, rendering fix
+* 0e919ad More work on generation, added dbind binding support
+* dff341c New parser, work on extensions
+* a441c28 Switch to scanning of document.styleSheets to detect the loading of the stylesheet, and fix the feature detection, fixes #5 and fixes #7
+* 74472e9 Updated documentation to be more specific about the level of support for different CSS properties.
+*   d610f6e (tag: v0.0.5) Merge pull request #4 from csnover/build-packaging
+|\  
+| * c95a156 Add Dojo build packaging.
+|/  
+* 3b7b176 (tag: v0.0.4, tag: v0.0.3) removed missing dep
+*   b40bb6f Merge branch 'gh-pages' of git://github.com/kriszyp/xstyle
+|\  
+| * d292261 github generated gh-pages branch
+* 1beda3a (tag: v0.0.2) Add null second arg to make old FF happy
+* 5223f41 Adjust timing in demo
+* 0fe5588 Fix CSS resource detection
+* f41b38e Fix module names
+* 5714330 (tag: v0.0.1) Add :supported, :unsupported module and tests for HTML5 elements
+* c04470b Fix render call
+* 424a4ec Transform CSS naming to camelCase in widget property conversion
+* 37284fd Remove shims.css import from ext.css
+* 8410e81 Render waiting elements after rescan
+* 3aac79f Adjust styling of shims test
+* 8b37b3c Avoid IE error on empty cssText
+* e328366 Clean up old files and reorganized directories
+* a6ef606 Rewriting docs
+* 3abd011 Fix IE detection and some reference errors
+* 1e4e80a Remove put as a dependency of has-class
+* 4165324 Get transitions working
+* 5c242ad Handle hover better
+* d2e3c02 Make boolean comparison properly
+* 28c9a36 Remove hstyle.js
+* 14e0835 New default/prefix handling
+* 21b37fc Add has-based classes
+* 2becd0a Add extension css
+* 0afe8bc Move widget
+* b2a4d0e Change default property syntax
+* cb8d60d Fix IE event names
+* 86d0ce8 Fix callbacks in IE
+* d6988c5 More plugins
+* 19567a8 Fix detection of needing parsing in scan
+* 86eb6b4 More work on CSS parsing
+* cb5f75c Beginning refactor make xstyle work properly without a CSS loader (not complete)
+* 211ffaf Remove scan from css loader
+* 8bf58a5 Eliminate unhelpful (for gzip) optimization
+* 94e67bd Update description
+* 60f4189 Fix addRule for IE6
+* f1f5db6 Delegate addRule correctly in IE
+* 2f8ab87 Return last selector element, accept text nodes at end or in substitution
+* a5a2521 Add addRule/deleteRule delegation for deleted/disabled sheets (via import-once semantics)
+* 098a4ba Fix IE input name setting (again)
+* 8021ba0 Fixes and updates for string substition
+* 905f58c Support for ad-hoc sequence of arguments of selector strings and elements and properties
+* 927ed75 Normalize deleteRule
+* 0f904c4 Fix feature detect
+* 5677eda Change to put test
+* 718253e Fix descendant traversal
+* 365fadb Handle descendent operator correctly
+* 8643ee2 Handle attribute deletion correctly and current node in combinators
+* 83c4c97 Eliminating create() in favor of more capable put()
+* 1dafe5d Change to use IE createElement when name is needed
+* c0daf58 Use IE's HTML-in-createElement to create input[type=*] so they work properly
+* 9089f5e Try/catch addImport in case it goes above 31 (and the nested ones are working)
+* dd7770f Allow for CSS loading to be has() eliminated
+* 15d0ea1 Add pluginBuilder
+* 65932bb Added package.json
+* 8fac78f Moving the create module from cssx to xstyle
+* 850e267 Moved @import-once semantics to a module that can it applied to page stylesheets and dynamically loaded stylesheets
+* 28d8abd Reviving xstyle with unscriptable's css loader plugin
+* 68987b7 Properly handle top level rendering
+* c148b72 Fixes
+* 060beef Fix render call
+* f9c0d1f Added more docs
+* a411307 make xstyle work standalone
+* 50971a5 Start of docs
+* fb45426 More work
+* 6bfeef1 insertLink at the right place
+* 791bb2a first commit

@@ -1,0 +1,84 @@
+/* GLOBAL STYLES */
+
+/* FIX MISSING ARROW */
+
+/* COMBOBOX AND INPUT-RELATED STYLES */
+.tundra .dijitInputContainer input, .tundra .dijitTextBox {
+    margin: 0 !important;
+    text-align: center !important;
+	/*font-size: 20px !important;*/
+}
+
+/* NO OUTLINE */
+.dijitDialog,
+.dijitDialog .combo,
+.dijitDialog .dijitDialogHover .dijitHover .dijitDialogFocused .dijitDialogHoverFocused .dijitHoverFocused .dijitFocused {
+	outline: none !important;
+	background: none repeat scroll 0 0 #FFFFFF !important;
+    /*border: 1px solid #7EABCD;*/
+    padding: 0 !important;
+}
+
+/* HEADINGS */
+h3, h4, h5, h6  {
+	margin-top: 0px !important;
+}
+
+/* COMBOBOX */
+.dijitComboBox .dijitReset .dijitInputInner {
+    text-align: center;
+}
+
+/* COMBOBOX MENU */
+.dijitComboBoxMenu .dijitMenuItem,
+.dijitComboBoxMenu .dijitMenuItemHover {
+    font-weight: bolder !important;
+	color: #000000 !important;
+	text-align: center;
+    font-size: 12px !important;	
+}
+
+
+
+.dijitPopup .dijitComboBoxMenuPopup {
+	text-align: center !important;
+	background-color: #FFF !important;
+}
+.tundra .dijitMenuItem {
+	background-color: #FFF !important;
+	font-weight: bold !important; 
+	font-size: 14px !important;
+	text-align: center !important;
+	color: #222 !important;
+}
+
+.tundra .dijitMenuItemSelected {
+	background-color: #f07746 !important;
+	color: #FFF !important;
+}
+
+/* COMBOBOX SELECTBOX */
+.tundra .dijitInputInner {
+    background-color: white !important;
+	text-align: center !important;
+	font-weight: bold !important;
+}
+
+/* TITLE PANES */
+.dijitTitlePaneTitle {
+	background-color: #ddeeff !important;
+	border-color: #aaaac0 !important;
+	color: #048 !important;	
+}
+
+.dijitTitlePaneTitle.dijitTitlePaneTitleHover {
+	background-color: #99ccff !important;
+	border-color: #759dc0 !important;	
+    color: #048 !important;
+    font-weight: bolder;
+    font-size: 16px;
+}
+
+.dijitTitlePaneTitleFocus {
+    outline: none !important;
+}

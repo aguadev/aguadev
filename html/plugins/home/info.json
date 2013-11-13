@@ -1,0 +1,14 @@
+{
+	name: "plugins.home.Controller",
+
+	version : "0.01",
+	
+	url : '',
+	
+	description : "Display the home page and provide links to useful resources and to open other tabs",
+		
+	dependencies :
+	[
+		{	name: "plugins.core.Agua", version: "0.01"	}
+	]
+}

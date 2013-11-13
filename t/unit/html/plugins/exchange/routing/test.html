@@ -1,0 +1,87 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+		"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<style type="text/css">
+	@import "../../../../dojo/dojo/resources/dojo.css";
+	@import "../../../../dojo/dijit/themes/dijit.css";
+	@import "../../../../dojo/dijit/themes/soria/soria.css";
+	@import "../../../../dojo/dijit/themes/tundra/tundra.css";
+</style>
+
+<style type="text/css">
+	.agua .controls {
+		margin-top : 20px;
+	}
+</style>
+
+<title>t.plugins.queue.routing.test</title>
+  
+<script type="text/javascript">
+
+// GLOBAL VARIABLES
+var Agua = {};
+var Data = {};
+var dojoConfig = {
+	isDebug: true,
+	locale: "en-us",
+	packages: [
+		{
+		  name: "plugins",
+		  location: "../../plugins"
+		},
+		{
+		  name: "t",
+		  location: "../../t"
+		},
+		{
+		  name: "doh",
+		  location: "../../dojo/util/doh"
+		}
+	],
+	debugAtAllCosts: true,
+	useCommentedJson: true
+};
+</script>
+
+<script type="text/javascript"
+	src="http://localhost/infusiondev/dojo/dojo/dojo.js">
+</script>
+
+<script type="text/javascript" src="./runTests.js"></script>
+
+</head>
+<body class="infusion tundra claro">
+
+<center>
+	<h3>t.unit.plugins.queue.routing.test</h3>
+</center>
+
+<div id="chat"></div>
+
+<div class="input">
+    <input type="text"
+        autocomplete="off"
+        id="input"
+    >
+    <input
+        type="submit"
+        id="submit"
+    />
+</div>
+
+<style>
+  #chat { height: 200px; overflow: auto; width: 400px; border: 1px solid #eee; font: 13px Helvetica, Arial; }
+  #chat p { padding: 8px; margin: 0; }
+  #chat p:nth-child(odd) { background: #F6F6F6; }
+  .input { width: 380px; background: #333; padding: 5px 10px; }
+  .input input[type=text] { width: 300px; padding: 5px; background: #fff; border: 1px solid #fff; }
+  .input input[type=submit] { cursor: pointer; background: #999; border: none; padding: 6px 8px; -moz-border-radius: 8px; -webkit-border-radius: 8px; margin-left: 5px; text-shadow: 0 1px 0 #fff; }
+  .input input[type=submit]:hover { background: #A2A2A2; }
+  .input input[type=submit]:active { position: relative; top: 2px; }
+</style>
+  
+</body>
+</html>

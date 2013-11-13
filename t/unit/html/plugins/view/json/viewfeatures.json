@@ -1,0 +1,94 @@
+{
+   "viewfeatures" : [
+      {
+         "feature" : "control1-parkinsons",
+         "location" : "/nethome/jgilbert/agua/Project1/Workflow1/jbrowse/control1-parkinsons",
+         "view" : "View1",
+         "project" : "Project1",
+         "species" : "human",
+         "build" : "hg19",
+         "username" : "syoung"
+      },
+      {
+         "feature" : "test2-parkinsons",
+         "location" : "/nethome/jgilbert/agua/Project1/Workflow1/jbrowse/test2-parkinsons",
+         "view" : "View1",
+         "project" : "Project1",
+         "species" : "human",
+         "build" : "hg19",
+         "username" : "syoung"
+      },
+      {
+         "feature" : "control1-parkinsons",
+         "location" : "/nethome/jgilbert/agua/Project1/Workflow1/jbrowse/control1-parkinsons",
+         "view" : "View2",
+         "project" : "Project1",
+         "species" : "human",
+         "build" : "hg19",
+         "username" : "syoung"
+      },
+      {
+         "feature" : "control2-parkinsons",
+         "location" : "/nethome/jgilbert/agua/Project1/Workflow1/jbrowse/control2-parkinsons",
+         "view" : "View2",
+         "project" : "Project1",
+         "species" : "human",
+         "build" : "hg19",
+         "username" : "syoung"
+      },
+      {
+         "feature" : "test1-parkinsons",
+         "location" : "/nethome/jgilbert/agua/Project1/Workflow1/jbrowse/test1-parkinsons",
+         "view" : "View2",
+         "project" : "Project1",
+         "species" : "human",
+         "build" : "hg19",
+         "username" : "syoung"
+      },
+      {
+         "feature" : "test2-parkinsons",
+         "location" : "/nethome/jgilbert/agua/Project1/Workflow1/jbrowse/test2-parkinsons",
+         "view" : "View2",
+         "project" : "Project1",
+         "species" : "human",
+         "build" : "hg19",
+         "username" : "syoung"
+      },
+      {
+         "feature" : "test1-parkinsons-2",
+         "location" : "/nethome/jgilbert/agua/Project1/Workflow1/jbrowse/test1-parkinsons-2",
+         "view" : "View1",
+         "project" : "Project2",
+         "species" : "human",
+         "build" : "hg19",
+         "username" : "syoung"
+      },
+      {
+         "feature" : "test2-parkinsons-2",
+         "location" : "/nethome/jgilbert/agua/Project1/Workflow1/jbrowse/test2-parkinsons-2",
+         "view" : "View1",
+         "project" : "Project2",
+         "species" : "human",
+         "build" : "hg19",
+         "username" : "syoung"
+      },
+      {
+         "feature" : "control1-parkinsons-",
+         "location" : "/nethome/jgilbert/agua/Project1/Workflow1/jbrowse/control1-parkinsons-2",
+         "view" : "View2",
+         "project" : "Project2",
+         "species" : "human",
+         "build" : "hg19",
+         "username" : "syoung"
+      },
+      {
+         "feature" : "control2-parkinsons-2",
+         "location" : "/nethome/jgilbert/agua/Project1/Workflow1/jbrowse/control2-parkinsons-2",
+         "view" : "View2",
+         "project" : "Project2",
+         "species" : "human",
+         "build" : "hg19",
+         "username" : "syoung"
+      }
+   ]
+}

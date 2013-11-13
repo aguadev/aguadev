@@ -1,0 +1,26 @@
+[
+   {
+      "args" : "",
+      "inputParams" : "",
+      "argument" : "--seconds",
+      "ordinal" : "0",
+      "appname" : "sleep",
+      "apptype" : "test",
+      "paramtype" : "input",
+      "category" : "sleep",
+      "owner" : "agua",
+      "locked" : "0",
+      "version" : "0.6.0",
+      "installdir" : "/agua/apps/bioapps",
+      "value" : "10",
+      "name" : "seconds",
+      "description" : "",
+      "discretion" : "optional",
+      "username" : "agua",
+      "package" : "bioapps",
+      "format" : "",
+      "valuetype" : "integer",
+      "paramFunction" : ""
+   }
+]
+

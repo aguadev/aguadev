@@ -1,0 +1,29 @@
+--
+-- Final view structure for view `sample_overview_3`
+--
+
+/*!50001 DROP TABLE IF EXISTS `sample_overview_3`*/;
+/*!50001 DROP VIEW IF EXISTS `sample_overview_3`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`pcruz`@`%` SQL SECURITY DEFINER */
+/*!50001 VIEW `sample_overview_3` AS select `p`.`project_name` AS `project_name`,`p`.`project_id` AS `project_id`,(select `qz`.`status` from `status` `qz` where (`qz`.`status_id` = `p`.`status_id`)) AS `project_status`,`s`.`sample_barcode` AS `sample_barcode`,`s`.`sample_name` AS `sample_name`,(select `qz`.`status` from `status` `qz` where (`qz`.`status_id` = `s`.`status_id`)) AS `sample_status`,`s`.`update_date` AS `sample_last_update`,`s`.`target_fold_coverage` AS `target_fold_coverage`,`s`.`cancer` AS `cancer`,`s`.`gt_gender` AS `gt_gender`,`s`.`genotype_report` AS `genotype_report`,`s`.`gt_deliv_src` AS `gt_deliv_src`,`s`.`gt_call_rate` AS `gt_call_rate`,`s`.`gt_p99_cr` AS `gt_p99_cr`,`s`.`gender` AS `gender`,`s`.`species` AS `species`,`s`.`tissue_source` AS `tissue_source`,`s`.`ethnicity` AS `ethnicity`,`s`.`match_sample_ids` AS `match_sample_ids`,`s`.`comment` AS `comment`,`s`.`delivered_date` AS `delivered_date`,`s`.`due_date` AS `due_date`,`s`.`sample_id` AS `sample_id`,(select count(`fz`.`status_id`) from (`flowcell_samplesheet` `xz` join `flowcell` `fz`) where ((`fz`.`flowcell_id` = `xz`.`flowcell_id`) and (`xz`.`sample_id` = `s`.`sample_id`))) AS `total_lanes`,(select count(`zc`.`status_id`) from ((`flowcell_samplesheet` `xz` join `flowcell_lane_qc` `zc`) join `flowcell` `fz`) where ((`fz`.`flowcell_id` = `xz`.`flowcell_id`) and (`xz`.`flowcell_id` = `zc`.`flowcell_id`) and (`xz`.`sample_id` = `s`.`sample_id`) and (`zc`.`lane` = `xz`.`lane`) and (`fz`.`status_id` = 2) and (`zc`.`status_id` = 61))) AS `good_lanes`,(select count(`xz`.`status_id`) from (`flowcell_samplesheet` `xz` join `flowcell` `fz`) where ((`fz`.`flowcell_id` = `xz`.`flowcell_id`) and (`xz`.`sample_id` = `s`.`sample_id`) and (`fz`.`status_id` in (1,75)))) AS `seq_lanes`,(select count(`fz`.`flowcell_id`) from ((`flowcell_samplesheet` `xz` left join `flowcell_lane_qc` `zc` on(((`zc`.`flowcell_id` = `xz`.`flowcell_id`) and (`zc`.`lane` = `xz`.`lane`)))) join `flowcell` `fz`) where ((`fz`.`flowcell_id` = `xz`.`flowcell_id`) and ((`fz`.`status_id` not in (1,2,75)) or (`zc`.`status_id` <> 61)) and (`xz`.`sample_id` = `s`.`sample_id`))) AS `bad_lanes`,(select coalesce(sum(`rq`.`lanes_requested`),0) from `requeue_report` `rq` where ((`rq`.`status_id` in (59,71,73)) and (`rq`.`sample_id` = `s`.`sample_id`))) AS `requeued_lanes`,(select coalesce(sum(`tr`.`pass_yield_gb`),0) from (((`flowcell_samplesheet` `xz` join `flowcell_lane_qc` `zc`) join `flowcell` `fz`) join `trim_report` `tr`) where ((`fz`.`flowcell_id` = `xz`.`flowcell_id`) and (`xz`.`flowcell_id` = `zc`.`flowcell_id`) and (`xz`.`sample_id` = `s`.`sample_id`) and (`zc`.`lane` = `xz`.`lane`) and (`fz`.`status_id` = 2) and (`zc`.`status_id` = 61) and (`tr`.`flowcell_id` = `zc`.`flowcell_id`) and (`tr`.`lane` = `zc`.`lane`))) AS `yield_trimmed_gb`,(select round(sum((((`r2`.`read1_per_align` + `r2`.`read2_per_align`) / 200) * `tr`.`pass_yield_gb`)),2) from ((((`flowcell_samplesheet` `xz` join `flowcell_lane_qc` `zc`) join `flowcell` `fz`) join `trim_report` `tr`) join `flowcell_report_trim` `r2`) where ((`fz`.`flowcell_id` = `xz`.`flowcell_id`) and (`xz`.`flowcell_id` = `zc`.`flowcell_id`) and (`xz`.`sample_id` = `s`.`sample_id`) and (`zc`.`lane` = `xz`.`lane`) and (`fz`.`status_id` = 2) and (`zc`.`status_id` = 61) and (`tr`.`flowcell_id` = `zc`.`flowcell_id`) and (`tr`.`lane` = `zc`.`lane`) and (`r2`.`flowcell_id` = `tr`.`flowcell_id`) and (`r2`.`lane` = `tr`.`lane`))) AS `yield_align_gb`,(select (`yield_trimmed_gb` + ((`requeued_lanes` + `seq_lanes`) * 37))) AS `total_estimated_yield_gb`,(select `coverageToyield`(`s`.`target_fold_coverage`)) AS `needed_yield`,(select (`coverageToyield`(`s`.`target_fold_coverage`) - `total_estimated_yield_gb`)) AS `missing_yield`,(select if((`missing_yield` > 0),ceiling((`missing_yield` / 37)),0)) AS `need_lanes` from (`sample` `s` join `project` `p`) where (`s`.`project_id` = `p`.`project_id`) group by `s`.`sample_barcode` order by (select coalesce(sum(`rq`.`lanes_requested`),0) from `requeue_report` `rq` where ((`rq`.`status_id` in (59,73)) and (`rq`.`sample_id` = `s`.`sample_id`))) desc */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2013-02-18 18:36:21

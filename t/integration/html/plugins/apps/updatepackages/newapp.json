@@ -1,0 +1,14 @@
+{
+	name		    :   "newApp",
+	type		    :   "test",
+    version         :   "0.0.1",
+	executor	    :   "/bin/sh",
+	location	    :   "test/newApp",
+	localonly	    :   "",
+	url             :   "www.google.com",
+    username        :   "testuser",
+    package		    :	"NEWPACKAGE",
+    packageversion	:	"0.0.1",
+    description     :   "My New Cool App",
+    notes           :   "Notes on my new app"
+}

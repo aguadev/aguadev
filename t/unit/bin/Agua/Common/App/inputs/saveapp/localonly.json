@@ -1,0 +1,20 @@
+{
+    "mode": "saveApp",
+    "module": "Agua::Admin",
+    "sessionid": "9999999999.9999.999",
+    "username": "admin",
+    "data": {
+        "description": "Extract amino acid property data from AAINDEX",
+        "executor": "",
+        "localonly": 1,
+        "location": "bin/aaindexextract",
+        "name": "aaindexextract",
+        "notes": "",
+        "owner": "admin",
+        "package": "emboss",
+        "type": "extract",
+        "url": "http://www.ebi.ac.uk/Tools/emboss",
+        "linkurl": "http://emboss.sourceforge.net/apps/release/6.4/emboss/apps/aaindexextract.html",
+        "username": "admin"
+    }
+}

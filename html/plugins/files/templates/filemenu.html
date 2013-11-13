@@ -1,0 +1,112 @@
+<div dojoAttachPoint="containerNode">
+
+<div
+    dojoAttachPoint="menu"
+    class="filemenu"
+    dojoType="plugins.menu.Menu"
+    title="List of options for file-specific actions"
+>
+
+    <div dojoType="dijit.MenuItem"
+        label="File Menu"
+        dojoAttachPoint="titleNode"
+        class="title"
+        disabled="false"
+    >
+    </div>
+
+    <div
+        dojoAttachPoint="selectNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:select"
+        class="select"
+        disabled="true"
+    >
+        <U>S</U>elect
+    </div>
+    <div
+        dojoAttachPoint="addNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:add"
+        class="add"
+        disabled="true"
+    >
+        <U>A</U>dd
+    </div>
+
+    <div
+        dojoAttachPoint="newFolderNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:newFolder"
+        class="newFolder"
+        >
+        <U>N</U>ew Folder
+    </div>
+
+    <div
+        dojoAttachPoint="renameNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:rename"
+        class="rename"
+        >
+        Rena<U>m</U>e
+
+    </div>
+
+<!--    <div dojoType="dijit.MenuSeparator">
+    </div>
+-->
+    <div
+        dojoAttachPoint="deleteNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:deleteFile"
+        class="delete"
+        >
+        De<U>l</U>ete
+    </div>
+
+<!--    <div dojoType="dijit.MenuSeparator">
+    </div>
+-->
+    <div
+        dojoAttachPoint="openWorkflowNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:openWorkflow"
+        class="openWorkflow"
+        >        
+        <U>O</U>pen Workflow
+    </div>
+
+
+<!--    <div dojoType="dijit.MenuSeparator">
+    </div>
+-->
+    <div
+        dojoAttachPoint="uploadNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:upload"
+        class="upload"
+        style="height: 20px !important;"
+        widgetsInTemplate="true"
+        >
+
+        <U>U</U>pload file
+        <!--<div class="fileInputMask"></div>-->
+        
+    </div>
+
+<!--    <div dojoType="dijit.MenuSeparator">
+    </div>
+-->
+    <div
+        dojoAttachPoint="downloadNode"
+        dojoType="dijit.MenuItem"
+        class="download"
+        dojoAttachEvent="onClick:download"    
+        >
+        Do<U>w</U>nload file
+    </div>
+
+
+
+</div>

@@ -1,0 +1,863 @@
+{
+   "sharedviewfeatures" : [],
+   "sharedstages" : [],
+   "sharedworkflows" : [],
+   "sharedapps" : [],
+   "amis" : [],
+   "apps" : [],
+   "aws" : {
+      "ec2publiccert" : "",
+      "ec2privatekey" : "",
+      "secretaccesskey" : "",
+      "awsaccesskeyid" : ""
+   },
+   "projects" : [
+      {
+         "provenance" : "",
+         "notes" : "",
+         "name" : "Project1",
+         "description" : "",
+         "username" : "aguatest"
+      },
+      {
+         "provenance" : "",
+         "notes" : "",
+         "name" : "Project2",
+         "description" : "",
+         "username" : "aguatest"
+      }
+   ],
+   "users" : [
+      {
+         "email" : "aguatest@trash.com",
+         "firstname" : "test",
+         "lastname" : "user",
+         "description" : "",
+         "username" : "aguatest"
+      }
+   ],
+   "stages" : [],
+   "sharedstageparameters" : [],
+   "views" : [
+      {
+         "stop" : "35000000",
+         "status" : "adding",
+         "project" : "Project1",
+         "species" : "human",
+         "tracklist" : "vegaGene",
+         "build" : "hg19",
+         "datetime" : "2012-05-24 01:12:17",
+         "username" : "aguatest",
+         "notes" : "",
+         "view" : "View1",
+         "chromosome" : "chr1",
+         "start" : "250000000"
+      }
+   ],
+   "filecaches" : {
+      "aguatest" : {
+         "Project1/Workflow1/test-array-sgeid.sh" : {
+            "bytes" : "200",
+            "name" : "test-array-sgeid.sh",
+            "path" : "Project1/Workflow1/test-array-sgeid.sh",
+            "directory" : false,
+            "parentPath" : "Project1/Workflow1",
+            "modified" : 1337922609,
+            "size" : "994",
+            "parentDir" : "Project1/Workflow1",
+            "sample" : "#!/bin/sh&nbsp;&nbsp;#$&nbsp;-N&nbsp;test-array&nbsp;#$&nbsp;-o&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.out.$SGE_TASK_ID&nbsp;#$&nbsp;-e&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.err.$SGE_TASK_ID&nbsp;#$&nbsp;-l&nbsp;h_rt=1:00:00&nbsp;&nbsp;&nbsp;hostname&nbsp;-f&nbsp;&nbsp;da"
+         },
+         "Project1/Workflow1/test/test.out" : {
+            "bytes" : "200",
+            "name" : "test.out",
+            "path" : "Project1/Workflow1/test/test.out",
+            "directory" : false,
+            "parentPath" : "Project1/Workflow1/test",
+            "modified" : 1337908326,
+            "size" : "133727",
+            "parentDir" : "Project1/Workflow1/test",
+            "sample" : "master&nbsp;Mon&nbsp;May&nbsp;9&nbsp;16:21:28&nbsp;UTC&nbsp;2011&nbsp;Completed&nbsp;/root/test/test.pl&nbsp;master&nbsp;Mon&nbsp;May&nbsp;9&nbsp;16:22:28&nbsp;UTC&nbsp;2011&nbsp;Completed&nbsp;/root/test/test.pl&nbsp;master&nbsp;Mon&nbsp;May&nbsp;9&nbsp;16:23:28&nbsp;UTC&nbsp;2011&nbsp;Completed&nbsp;/root/test/test.pl&nbsp;master&nbsp;M"
+         },
+         "Project2/test" : {
+            "name" : "test",
+            "path" : "test",
+            "total" : "7",
+            "items" : [
+               {
+                  "bytes" : "200",
+                  "name" : "test-array-sgeid.sh",
+                  "path" : "Project2/test/test-array-sgeid.sh",
+                  "directory" : false,
+                  "parentPath" : "Project2/test",
+                  "modified" : 1337908305,
+                  "size" : "994",
+                  "parentDir" : "Project2/test",
+                  "sample" : "#!/bin/sh&nbsp;&nbsp;#$&nbsp;-N&nbsp;test-array&nbsp;#$&nbsp;-o&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.out.$SGE_TASK_ID&nbsp;#$&nbsp;-e&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.err.$SGE_TASK_ID&nbsp;#$&nbsp;-l&nbsp;h_rt=1:00:00&nbsp;&nbsp;&nbsp;hostname&nbsp;-f&nbsp;&nbsp;da"
+               },
+               {
+                  "bytes" : "200",
+                  "name" : "test-array.sh",
+                  "path" : "Project2/test/test-array.sh",
+                  "directory" : false,
+                  "parentPath" : "Project2/test",
+                  "modified" : 1337656039,
+                  "size" : "1000",
+                  "parentDir" : "Project2/test",
+                  "sample" : "#!/bin/sh&nbsp;&nbsp;export&nbsp;TASKNUM=$&#40;expr&nbsp;$SGE_TASK_ID&#41;&nbsp;&nbsp;#$&nbsp;-N&nbsp;test-array&nbsp;#$&nbsp;-o&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.out.$TASKNUM&nbsp;#$&nbsp;-e&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.err.$TASKNUM&nbsp;#$&nbsp;-l&nbsp;h"
+               },
+               {
+                  "bytes" : "200",
+                  "name" : "test.OUT",
+                  "path" : "Project2/test/test.OUT",
+                  "directory" : false,
+                  "parentPath" : "Project2/test",
+                  "modified" : 1337656039,
+                  "size" : "359",
+                  "parentDir" : "Project2/test",
+                  "sample" : "Tue&nbsp;May&nbsp;24&nbsp;18:41:36&nbsp;EDT&nbsp;2011&nbsp;0:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:36&nbsp;EDT&nbsp;2011&nbsp;1:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:41&nbsp;EDT&nbsp;2011&nbsp;2:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:46&nbsp;EDT&nbsp;2011&nbsp;3:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:51&nbsp;EDT&nbsp;2011&nbsp;4:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:56&nbsp;EDT&nbsp;2011&nbsp;5:&nbsp;&nbsp;Tu"
+               },
+               {
+                  "bytes" : "200",
+                  "name" : "test.err",
+                  "path" : "Project2/test/test.err",
+                  "directory" : false,
+                  "parentPath" : "Project2/test",
+                  "modified" : 1337656039,
+                  "size" : "8943",
+                  "parentDir" : "Project2/test",
+                  "sample" : "/opt/sge6/default/spool/exec_spool_local/master/job_scripts/1:&nbsp;line&nbsp;13:&nbsp;/root/test/test.pl:&nbsp;No&nbsp;such&nbsp;file&nbsp;or&nbsp;directory&nbsp;/opt/sge6/default/spool/exec_spool_local/master/job_scripts/2:&nbsp;line&nbsp;13:&nbsp;/root/test"
+               },
+               {
+                  "bytes" : "200",
+                  "name" : "test.out",
+                  "path" : "Project2/test/test.out",
+                  "directory" : false,
+                  "parentPath" : "Project2/test",
+                  "modified" : 1337656039,
+                  "size" : "133727",
+                  "parentDir" : "Project2/test",
+                  "sample" : "master&nbsp;Mon&nbsp;May&nbsp;9&nbsp;16:21:28&nbsp;UTC&nbsp;2011&nbsp;Completed&nbsp;/root/test/test.pl&nbsp;master&nbsp;Mon&nbsp;May&nbsp;9&nbsp;16:22:28&nbsp;UTC&nbsp;2011&nbsp;Completed&nbsp;/root/test/test.pl&nbsp;master&nbsp;Mon&nbsp;May&nbsp;9&nbsp;16:23:28&nbsp;UTC&nbsp;2011&nbsp;Completed&nbsp;/root/test/test.pl&nbsp;master&nbsp;M"
+               },
+               {
+                  "bytes" : "200",
+                  "name" : "test.pl",
+                  "path" : "Project2/test/test.pl",
+                  "directory" : false,
+                  "parentPath" : "Project2/test",
+                  "modified" : 1337656039,
+                  "size" : "467",
+                  "parentDir" : "Project2/test",
+                  "sample" : "#!/usr/bin/perl&nbsp;-w&nbsp;&nbsp;use&nbsp;strict;&nbsp;my&nbsp;$filename&nbsp;=&nbsp;$ARGV&#91;0&#93;;&nbsp;my&nbsp;$times&nbsp;=&nbsp;$ARGV&#91;1&#93;;&nbsp;my&nbsp;$sleep&nbsp;=&nbsp;$ARGV&#91;2&#93;;&nbsp;$times&nbsp;=&nbsp;5&nbsp;if&nbsp;not&nbsp;defined&nbsp;$times;&nbsp;$sleep&nbsp;=&nbsp;5&nbsp;if&nbsp;not&nbsp;defined&nbsp;$sleep;&nbsp;open&#40;OUT,&nbsp;&quot;>$filename&quot;&#41;&nbsp;or&nbsp;die&nbsp;"
+               },
+               {
+                  "bytes" : "200",
+                  "name" : "test.sh",
+                  "path" : "Project2/test/test.sh",
+                  "directory" : false,
+                  "parentPath" : "Project2/test",
+                  "modified" : 1337656039,
+                  "size" : "295",
+                  "parentDir" : "Project2/test",
+                  "sample" : "#!/bin/sh&nbsp;&nbsp;#$&nbsp;-N&nbsp;test&nbsp;#$&nbsp;-o&nbsp;/nethome/syoung/agua/Project1/test/test.out&nbsp;#$&nbsp;-e&nbsp;/nethome/syoung/agua/Project1/test/test.err&nbsp;##$&nbsp;-q&nbsp;syoung-Project1-test&nbsp;#$&nbsp;-l&nbsp;h_rt=1:00:00&nbsp;&nbsp;echo&nbsp;`hostname`&nbsp;echo&nbsp;`date`&nbsp;&nbsp;&nbsp;"
+               }
+            ]
+         },
+         "Project1/Workflow1/test2" : {
+            "name" : "test2",
+            "path" : "test2",
+            "total" : "0",
+            "items" : []
+         },
+         "Project1/Workflow1/test/test-array-sgeid.sh" : {
+            "bytes" : "200",
+            "name" : "test-array-sgeid.sh",
+            "path" : "Project1/Workflow1/test/test-array-sgeid.sh",
+            "directory" : false,
+            "parentPath" : "Project1/Workflow1/test",
+            "modified" : 1337908326,
+            "size" : "994",
+            "parentDir" : "Project1/Workflow1/test",
+            "sample" : "#!/bin/sh&nbsp;&nbsp;#$&nbsp;-N&nbsp;test-array&nbsp;#$&nbsp;-o&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.out.$SGE_TASK_ID&nbsp;#$&nbsp;-e&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.err.$SGE_TASK_ID&nbsp;#$&nbsp;-l&nbsp;h_rt=1:00:00&nbsp;&nbsp;&nbsp;hostname&nbsp;-f&nbsp;&nbsp;da"
+         },
+         "Project1/Workflow1/jbrowse/tophat-1/data" : {
+            "name" : "data",
+            "path" : "data",
+            "total" : "1",
+            "items" : [
+               {
+                  "bytes" : "200",
+                  "name" : "refSeqs.js",
+                  "path" : "Project1/Workflow1/jbrowse/tophat-1/data/refSeqs.js",
+                  "directory" : false,
+                  "parentPath" : "Project1/Workflow1/jbrowse/tophat-1/data",
+                  "modified" : 1337912228,
+                  "size" : "4241",
+                  "parentDir" : "Project1/Workflow1/jbrowse/tophat-1/data",
+                  "sample" : "refSeqs&nbsp;=&nbsp;&nbsp;&#91;&nbsp;&nbsp;&nbsp;&nbsp;&#123;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;length&quot;&nbsp;:&nbsp;249250621,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;name&quot;&nbsp;:&nbsp;&quot;chr1&quot;,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;seqDir&quot;&nbsp;:&nbsp;&quot;data/seq/chr1&quot;,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;seqChunkSize&quot;&nbsp;:&nbsp;20000,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;end&quot;&nbsp;:&nbsp;249250621,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;start&quot;&nbsp;:&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&#125;,&nbsp;&nbsp;&nbsp;&nbsp;&#123;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;length"
+               }
+            ]
+         },
+         "Project1/Workflow1/splitfile.txt" : {
+            "bytes" : "200",
+            "name" : "splitfile.txt",
+            "path" : "Project1/Workflow1/splitfile.txt",
+            "directory" : false,
+            "parentPath" : "Project1/Workflow1",
+            "modified" : 1337656039,
+            "size" : "122",
+            "parentDir" : "Project1/Workflow1",
+            "sample" : "0&nbsp;0&nbsp;/nethome/syoung/agua/Project1/Workflow1/1/yoruba_1.1.txt&nbsp;0&nbsp;1&nbsp;/nethome/syoung/agua/Project1/Workflow1/1/yoruba_2.1.txt&nbsp;"
+         },
+         "Project2/test/test.sh" : {
+            "bytes" : "200",
+            "name" : "test.sh",
+            "path" : "Project2/test/test.sh",
+            "directory" : false,
+            "parentPath" : "Project2/test",
+            "modified" : 1337656039,
+            "size" : "295",
+            "parentDir" : "Project2/test",
+            "sample" : "#!/bin/sh&nbsp;&nbsp;#$&nbsp;-N&nbsp;test&nbsp;#$&nbsp;-o&nbsp;/nethome/syoung/agua/Project1/test/test.out&nbsp;#$&nbsp;-e&nbsp;/nethome/syoung/agua/Project1/test/test.err&nbsp;##$&nbsp;-q&nbsp;syoung-Project1-test&nbsp;#$&nbsp;-l&nbsp;h_rt=1:00:00&nbsp;&nbsp;echo&nbsp;`hostname`&nbsp;echo&nbsp;`date`&nbsp;&nbsp;&nbsp;"
+         },
+         "Project1/Workflow1/test/test.pl" : {
+            "bytes" : "200",
+            "name" : "test.pl",
+            "path" : "Project1/Workflow1/test/test.pl",
+            "directory" : false,
+            "parentPath" : "Project1/Workflow1/test",
+            "modified" : 1337908326,
+            "size" : "467",
+            "parentDir" : "Project1/Workflow1/test",
+            "sample" : "#!/usr/bin/perl&nbsp;-w&nbsp;&nbsp;use&nbsp;strict;&nbsp;my&nbsp;$filename&nbsp;=&nbsp;$ARGV&#91;0&#93;;&nbsp;my&nbsp;$times&nbsp;=&nbsp;$ARGV&#91;1&#93;;&nbsp;my&nbsp;$sleep&nbsp;=&nbsp;$ARGV&#91;2&#93;;&nbsp;$times&nbsp;=&nbsp;5&nbsp;if&nbsp;not&nbsp;defined&nbsp;$times;&nbsp;$sleep&nbsp;=&nbsp;5&nbsp;if&nbsp;not&nbsp;defined&nbsp;$sleep;&nbsp;open&#40;OUT,&nbsp;&quot;>$filename&quot;&#41;&nbsp;or&nbsp;die&nbsp;"
+         },
+         "Project1/Workflow1/test" : {
+            "name" : "test",
+            "path" : "test",
+            "total" : "7",
+            "items" : [
+               {
+                  "bytes" : "200",
+                  "name" : "test-array-sgeid.sh",
+                  "path" : "Project1/Workflow1/test/test-array-sgeid.sh",
+                  "directory" : false,
+                  "parentPath" : "Project1/Workflow1/test",
+                  "modified" : 1337908326,
+                  "size" : "994",
+                  "parentDir" : "Project1/Workflow1/test",
+                  "sample" : "#!/bin/sh&nbsp;&nbsp;#$&nbsp;-N&nbsp;test-array&nbsp;#$&nbsp;-o&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.out.$SGE_TASK_ID&nbsp;#$&nbsp;-e&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.err.$SGE_TASK_ID&nbsp;#$&nbsp;-l&nbsp;h_rt=1:00:00&nbsp;&nbsp;&nbsp;hostname&nbsp;-f&nbsp;&nbsp;da"
+               },
+               {
+                  "bytes" : "200",
+                  "name" : "test-array.sh",
+                  "path" : "Project1/Workflow1/test/test-array.sh",
+                  "directory" : false,
+                  "parentPath" : "Project1/Workflow1/test",
+                  "modified" : 1337908326,
+                  "size" : "1000",
+                  "parentDir" : "Project1/Workflow1/test",
+                  "sample" : "#!/bin/sh&nbsp;&nbsp;export&nbsp;TASKNUM=$&#40;expr&nbsp;$SGE_TASK_ID&#41;&nbsp;&nbsp;#$&nbsp;-N&nbsp;test-array&nbsp;#$&nbsp;-o&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.out.$TASKNUM&nbsp;#$&nbsp;-e&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.err.$TASKNUM&nbsp;#$&nbsp;-l&nbsp;h"
+               },
+               {
+                  "bytes" : "200",
+                  "name" : "test.OUT",
+                  "path" : "Project1/Workflow1/test/test.OUT",
+                  "directory" : false,
+                  "parentPath" : "Project1/Workflow1/test",
+                  "modified" : 1337908326,
+                  "size" : "359",
+                  "parentDir" : "Project1/Workflow1/test",
+                  "sample" : "Tue&nbsp;May&nbsp;24&nbsp;18:41:36&nbsp;EDT&nbsp;2011&nbsp;0:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:36&nbsp;EDT&nbsp;2011&nbsp;1:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:41&nbsp;EDT&nbsp;2011&nbsp;2:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:46&nbsp;EDT&nbsp;2011&nbsp;3:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:51&nbsp;EDT&nbsp;2011&nbsp;4:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:56&nbsp;EDT&nbsp;2011&nbsp;5:&nbsp;&nbsp;Tu"
+               },
+               {
+                  "bytes" : "200",
+                  "name" : "test.err",
+                  "path" : "Project1/Workflow1/test/test.err",
+                  "directory" : false,
+                  "parentPath" : "Project1/Workflow1/test",
+                  "modified" : 1337908326,
+                  "size" : "8943",
+                  "parentDir" : "Project1/Workflow1/test",
+                  "sample" : "/opt/sge6/default/spool/exec_spool_local/master/job_scripts/1:&nbsp;line&nbsp;13:&nbsp;/root/test/test.pl:&nbsp;No&nbsp;such&nbsp;file&nbsp;or&nbsp;directory&nbsp;/opt/sge6/default/spool/exec_spool_local/master/job_scripts/2:&nbsp;line&nbsp;13:&nbsp;/root/test"
+               },
+               {
+                  "bytes" : "200",
+                  "name" : "test.out",
+                  "path" : "Project1/Workflow1/test/test.out",
+                  "directory" : false,
+                  "parentPath" : "Project1/Workflow1/test",
+                  "modified" : 1337908326,
+                  "size" : "133727",
+                  "parentDir" : "Project1/Workflow1/test",
+                  "sample" : "master&nbsp;Mon&nbsp;May&nbsp;9&nbsp;16:21:28&nbsp;UTC&nbsp;2011&nbsp;Completed&nbsp;/root/test/test.pl&nbsp;master&nbsp;Mon&nbsp;May&nbsp;9&nbsp;16:22:28&nbsp;UTC&nbsp;2011&nbsp;Completed&nbsp;/root/test/test.pl&nbsp;master&nbsp;Mon&nbsp;May&nbsp;9&nbsp;16:23:28&nbsp;UTC&nbsp;2011&nbsp;Completed&nbsp;/root/test/test.pl&nbsp;master&nbsp;M"
+               },
+               {
+                  "bytes" : "200",
+                  "name" : "test.pl",
+                  "path" : "Project1/Workflow1/test/test.pl",
+                  "directory" : false,
+                  "parentPath" : "Project1/Workflow1/test",
+                  "modified" : 1337908326,
+                  "size" : "467",
+                  "parentDir" : "Project1/Workflow1/test",
+                  "sample" : "#!/usr/bin/perl&nbsp;-w&nbsp;&nbsp;use&nbsp;strict;&nbsp;my&nbsp;$filename&nbsp;=&nbsp;$ARGV&#91;0&#93;;&nbsp;my&nbsp;$times&nbsp;=&nbsp;$ARGV&#91;1&#93;;&nbsp;my&nbsp;$sleep&nbsp;=&nbsp;$ARGV&#91;2&#93;;&nbsp;$times&nbsp;=&nbsp;5&nbsp;if&nbsp;not&nbsp;defined&nbsp;$times;&nbsp;$sleep&nbsp;=&nbsp;5&nbsp;if&nbsp;not&nbsp;defined&nbsp;$sleep;&nbsp;open&#40;OUT,&nbsp;&quot;>$filename&quot;&#41;&nbsp;or&nbsp;die&nbsp;"
+               },
+               {
+                  "bytes" : "200",
+                  "name" : "test.sh",
+                  "path" : "Project1/Workflow1/test/test.sh",
+                  "directory" : false,
+                  "parentPath" : "Project1/Workflow1/test",
+                  "modified" : 1337908326,
+                  "size" : "295",
+                  "parentDir" : "Project1/Workflow1/test",
+                  "sample" : "#!/bin/sh&nbsp;&nbsp;#$&nbsp;-N&nbsp;test&nbsp;#$&nbsp;-o&nbsp;/nethome/syoung/agua/Project1/test/test.out&nbsp;#$&nbsp;-e&nbsp;/nethome/syoung/agua/Project1/test/test.err&nbsp;##$&nbsp;-q&nbsp;syoung-Project1-test&nbsp;#$&nbsp;-l&nbsp;h_rt=1:00:00&nbsp;&nbsp;echo&nbsp;`hostname`&nbsp;echo&nbsp;`date`&nbsp;&nbsp;&nbsp;"
+               }
+            ]
+         },
+         "Project2/test/test-array-sgeid.sh" : {
+            "bytes" : "200",
+            "name" : "test-array-sgeid.sh",
+            "path" : "Project2/test/test-array-sgeid.sh",
+            "directory" : false,
+            "parentPath" : "Project2/test",
+            "modified" : 1337908305,
+            "size" : "994",
+            "parentDir" : "Project2/test",
+            "sample" : "#!/bin/sh&nbsp;&nbsp;#$&nbsp;-N&nbsp;test-array&nbsp;#$&nbsp;-o&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.out.$SGE_TASK_ID&nbsp;#$&nbsp;-e&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.err.$SGE_TASK_ID&nbsp;#$&nbsp;-l&nbsp;h_rt=1:00:00&nbsp;&nbsp;&nbsp;hostname&nbsp;-f&nbsp;&nbsp;da"
+         },
+         "Project2/test/test.err" : {
+            "bytes" : "200",
+            "name" : "test.err",
+            "path" : "Project2/test/test.err",
+            "directory" : false,
+            "parentPath" : "Project2/test",
+            "modified" : 1337656039,
+            "size" : "8943",
+            "parentDir" : "Project2/test",
+            "sample" : "/opt/sge6/default/spool/exec_spool_local/master/job_scripts/1:&nbsp;line&nbsp;13:&nbsp;/root/test/test.pl:&nbsp;No&nbsp;such&nbsp;file&nbsp;or&nbsp;directory&nbsp;/opt/sge6/default/spool/exec_spool_local/master/job_scripts/2:&nbsp;line&nbsp;13:&nbsp;/root/test"
+         },
+         "Project2/test/test.pl" : {
+            "bytes" : "200",
+            "name" : "test.pl",
+            "path" : "Project2/test/test.pl",
+            "directory" : false,
+            "parentPath" : "Project2/test",
+            "modified" : 1337656039,
+            "size" : "467",
+            "parentDir" : "Project2/test",
+            "sample" : "#!/usr/bin/perl&nbsp;-w&nbsp;&nbsp;use&nbsp;strict;&nbsp;my&nbsp;$filename&nbsp;=&nbsp;$ARGV&#91;0&#93;;&nbsp;my&nbsp;$times&nbsp;=&nbsp;$ARGV&#91;1&#93;;&nbsp;my&nbsp;$sleep&nbsp;=&nbsp;$ARGV&#91;2&#93;;&nbsp;$times&nbsp;=&nbsp;5&nbsp;if&nbsp;not&nbsp;defined&nbsp;$times;&nbsp;$sleep&nbsp;=&nbsp;5&nbsp;if&nbsp;not&nbsp;defined&nbsp;$sleep;&nbsp;open&#40;OUT,&nbsp;&quot;>$filename&quot;&#41;&nbsp;or&nbsp;die&nbsp;"
+         },
+         "Project1/Workflow1/test/test-array.sh" : {
+            "bytes" : "200",
+            "name" : "test-array.sh",
+            "path" : "Project1/Workflow1/test/test-array.sh",
+            "directory" : false,
+            "parentPath" : "Project1/Workflow1/test",
+            "modified" : 1337908326,
+            "size" : "1000",
+            "parentDir" : "Project1/Workflow1/test",
+            "sample" : "#!/bin/sh&nbsp;&nbsp;export&nbsp;TASKNUM=$&#40;expr&nbsp;$SGE_TASK_ID&#41;&nbsp;&nbsp;#$&nbsp;-N&nbsp;test-array&nbsp;#$&nbsp;-o&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.out.$TASKNUM&nbsp;#$&nbsp;-e&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.err.$TASKNUM&nbsp;#$&nbsp;-l&nbsp;h"
+         },
+         "Project2/test/test.OUT" : {
+            "bytes" : "200",
+            "name" : "test.OUT",
+            "path" : "Project2/test/test.OUT",
+            "directory" : false,
+            "parentPath" : "Project2/test",
+            "modified" : 1337656039,
+            "size" : "359",
+            "parentDir" : "Project2/test",
+            "sample" : "Tue&nbsp;May&nbsp;24&nbsp;18:41:36&nbsp;EDT&nbsp;2011&nbsp;0:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:36&nbsp;EDT&nbsp;2011&nbsp;1:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:41&nbsp;EDT&nbsp;2011&nbsp;2:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:46&nbsp;EDT&nbsp;2011&nbsp;3:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:51&nbsp;EDT&nbsp;2011&nbsp;4:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:56&nbsp;EDT&nbsp;2011&nbsp;5:&nbsp;&nbsp;Tu"
+         },
+         "Project1/Workflow1/test/test.err" : {
+            "bytes" : "200",
+            "name" : "test.err",
+            "path" : "Project1/Workflow1/test/test.err",
+            "directory" : false,
+            "parentPath" : "Project1/Workflow1/test",
+            "modified" : 1337908326,
+            "size" : "8943",
+            "parentDir" : "Project1/Workflow1/test",
+            "sample" : "/opt/sge6/default/spool/exec_spool_local/master/job_scripts/1:&nbsp;line&nbsp;13:&nbsp;/root/test/test.pl:&nbsp;No&nbsp;such&nbsp;file&nbsp;or&nbsp;directory&nbsp;/opt/sge6/default/spool/exec_spool_local/master/job_scripts/2:&nbsp;line&nbsp;13:&nbsp;/root/test"
+         },
+         "Project1" : {
+            "name" : "Project1",
+            "path" : "Project1",
+            "total" : "1",
+            "items" : [
+               {
+                  "name" : "Workflow1",
+                  "children" : [
+                     "jbrowse",
+                     "splitfile.txt",
+                     "test",
+                     "test-array-sgeid.sh",
+                     "test2",
+                     "test3"
+                  ],
+                  "path" : "Project1/Workflow1",
+                  "directory" : true,
+                  "parentPath" : "Project1",
+                  "modified" : 1337922609,
+                  "size" : "4096",
+                  "parentDir" : "Project1"
+               }
+            ]
+         },
+         "Project1/Workflow1/test/test.sh" : {
+            "bytes" : "200",
+            "name" : "test.sh",
+            "path" : "Project1/Workflow1/test/test.sh",
+            "directory" : false,
+            "parentPath" : "Project1/Workflow1/test",
+            "modified" : 1337908326,
+            "size" : "295",
+            "parentDir" : "Project1/Workflow1/test",
+            "sample" : "#!/bin/sh&nbsp;&nbsp;#$&nbsp;-N&nbsp;test&nbsp;#$&nbsp;-o&nbsp;/nethome/syoung/agua/Project1/test/test.out&nbsp;#$&nbsp;-e&nbsp;/nethome/syoung/agua/Project1/test/test.err&nbsp;##$&nbsp;-q&nbsp;syoung-Project1-test&nbsp;#$&nbsp;-l&nbsp;h_rt=1:00:00&nbsp;&nbsp;echo&nbsp;`hostname`&nbsp;echo&nbsp;`date`&nbsp;&nbsp;&nbsp;"
+         },
+         "Project1/Workflow1/test/test.OUT" : {
+            "bytes" : "200",
+            "name" : "test.OUT",
+            "path" : "Project1/Workflow1/test/test.OUT",
+            "directory" : false,
+            "parentPath" : "Project1/Workflow1/test",
+            "modified" : 1337908326,
+            "size" : "359",
+            "parentDir" : "Project1/Workflow1/test",
+            "sample" : "Tue&nbsp;May&nbsp;24&nbsp;18:41:36&nbsp;EDT&nbsp;2011&nbsp;0:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:36&nbsp;EDT&nbsp;2011&nbsp;1:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:41&nbsp;EDT&nbsp;2011&nbsp;2:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:46&nbsp;EDT&nbsp;2011&nbsp;3:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:51&nbsp;EDT&nbsp;2011&nbsp;4:&nbsp;&nbsp;Tue&nbsp;May&nbsp;24&nbsp;18:41:56&nbsp;EDT&nbsp;2011&nbsp;5:&nbsp;&nbsp;Tu"
+         },
+         "Project2/test/test.out" : {
+            "bytes" : "200",
+            "name" : "test.out",
+            "path" : "Project2/test/test.out",
+            "directory" : false,
+            "parentPath" : "Project2/test",
+            "modified" : 1337656039,
+            "size" : "133727",
+            "parentDir" : "Project2/test",
+            "sample" : "master&nbsp;Mon&nbsp;May&nbsp;9&nbsp;16:21:28&nbsp;UTC&nbsp;2011&nbsp;Completed&nbsp;/root/test/test.pl&nbsp;master&nbsp;Mon&nbsp;May&nbsp;9&nbsp;16:22:28&nbsp;UTC&nbsp;2011&nbsp;Completed&nbsp;/root/test/test.pl&nbsp;master&nbsp;Mon&nbsp;May&nbsp;9&nbsp;16:23:28&nbsp;UTC&nbsp;2011&nbsp;Completed&nbsp;/root/test/test.pl&nbsp;master&nbsp;M"
+         },
+         "Project2" : {
+            "name" : "Project2",
+            "path" : "Project2",
+            "total" : "1",
+            "items" : [
+               {
+                  "name" : "test",
+                  "children" : [
+                     "test-array-sgeid.sh",
+                     "test-array.sh",
+                     "test.OUT",
+                     "test.err",
+                     "test.out",
+                     "test.pl",
+                     "test.sh"
+                  ],
+                  "path" : "Project2/test",
+                  "directory" : true,
+                  "parentPath" : "Project2",
+                  "modified" : 1337922609,
+                  "size" : "4096",
+                  "parentDir" : "Project2"
+               }
+            ]
+         },
+         "Project1/Workflow1/test3" : {
+            "name" : "test3",
+            "path" : "test3",
+            "total" : "0",
+            "items" : []
+         },
+         "Project1/Workflow1" : {
+            "name" : "Workflow1",
+            "path" : "Workflow1",
+            "total" : "6",
+            "items" : [
+               {
+                  "name" : "jbrowse",
+                  "children" : [
+                     "tophat-1"
+                  ],
+                  "path" : "Project1/Workflow1/jbrowse",
+                  "directory" : true,
+                  "parentPath" : "Project1/Workflow1",
+                  "modified" : 1337912228,
+                  "size" : "4096",
+                  "parentDir" : "Project1/Workflow1"
+               },
+               {
+                  "bytes" : "200",
+                  "name" : "splitfile.txt",
+                  "path" : "Project1/Workflow1/splitfile.txt",
+                  "directory" : false,
+                  "parentPath" : "Project1/Workflow1",
+                  "modified" : 1337656039,
+                  "size" : "122",
+                  "parentDir" : "Project1/Workflow1",
+                  "sample" : "0&nbsp;0&nbsp;/nethome/syoung/agua/Project1/Workflow1/1/yoruba_1.1.txt&nbsp;0&nbsp;1&nbsp;/nethome/syoung/agua/Project1/Workflow1/1/yoruba_2.1.txt&nbsp;"
+               },
+               {
+                  "name" : "test",
+                  "children" : [
+                     "test-array-sgeid.sh",
+                     "test-array.sh",
+                     "test.OUT",
+                     "test.err",
+                     "test.out",
+                     "test.pl",
+                     "test.sh"
+                  ],
+                  "path" : "Project1/Workflow1/test",
+                  "directory" : true,
+                  "parentPath" : "Project1/Workflow1",
+                  "modified" : 1337908326,
+                  "size" : "4096",
+                  "parentDir" : "Project1/Workflow1"
+               },
+               {
+                  "bytes" : "200",
+                  "name" : "test-array-sgeid.sh",
+                  "path" : "Project1/Workflow1/test-array-sgeid.sh",
+                  "directory" : false,
+                  "parentPath" : "Project1/Workflow1",
+                  "modified" : 1337922609,
+                  "size" : "994",
+                  "parentDir" : "Project1/Workflow1",
+                  "sample" : "#!/bin/sh&nbsp;&nbsp;#$&nbsp;-N&nbsp;test-array&nbsp;#$&nbsp;-o&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.out.$SGE_TASK_ID&nbsp;#$&nbsp;-e&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.err.$SGE_TASK_ID&nbsp;#$&nbsp;-l&nbsp;h_rt=1:00:00&nbsp;&nbsp;&nbsp;hostname&nbsp;-f&nbsp;&nbsp;da"
+               },
+               {
+                  "name" : "test2",
+                  "children" : [],
+                  "path" : "Project1/Workflow1/test2",
+                  "directory" : true,
+                  "parentPath" : "Project1/Workflow1",
+                  "modified" : 1337907556,
+                  "size" : "4096",
+                  "parentDir" : "Project1/Workflow1"
+               },
+               {
+                  "name" : "test3",
+                  "children" : [],
+                  "path" : "Project1/Workflow1/test3",
+                  "directory" : true,
+                  "parentPath" : "Project1/Workflow1",
+                  "modified" : 1337907556,
+                  "size" : "4096",
+                  "parentDir" : "Project1/Workflow1"
+               }
+            ]
+         },
+         "Project1/Workflow1/jbrowse/tophat-1" : {
+            "name" : "tophat-1",
+            "path" : "tophat-1",
+            "total" : "1",
+            "items" : [
+               {
+                  "name" : "data",
+                  "children" : [
+                     "refSeqs.js"
+                  ],
+                  "path" : "Project1/Workflow1/jbrowse/tophat-1/data",
+                  "directory" : true,
+                  "parentPath" : "Project1/Workflow1/jbrowse/tophat-1",
+                  "modified" : 1337912228,
+                  "size" : "4096",
+                  "parentDir" : "Project1/Workflow1/jbrowse/tophat-1"
+               }
+            ]
+         },
+         "Project1/Workflow1/jbrowse" : {
+            "name" : "jbrowse",
+            "path" : "jbrowse",
+            "total" : "1",
+            "items" : [
+               {
+                  "name" : "tophat-1",
+                  "children" : [
+                     "data"
+                  ],
+                  "path" : "Project1/Workflow1/jbrowse/tophat-1",
+                  "directory" : true,
+                  "parentPath" : "Project1/Workflow1/jbrowse",
+                  "modified" : 1337912228,
+                  "size" : "4096",
+                  "parentDir" : "Project1/Workflow1/jbrowse"
+               }
+            ]
+         },
+         "Project2/test/test-array.sh" : {
+            "bytes" : "200",
+            "name" : "test-array.sh",
+            "path" : "Project2/test/test-array.sh",
+            "directory" : false,
+            "parentPath" : "Project2/test",
+            "modified" : 1337656039,
+            "size" : "1000",
+            "parentDir" : "Project2/test",
+            "sample" : "#!/bin/sh&nbsp;&nbsp;export&nbsp;TASKNUM=$&#40;expr&nbsp;$SGE_TASK_ID&#41;&nbsp;&nbsp;#$&nbsp;-N&nbsp;test-array&nbsp;#$&nbsp;-o&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.out.$TASKNUM&nbsp;#$&nbsp;-e&nbsp;/nethome/syoung/agua/Project1/Workflow1/test.err.$TASKNUM&nbsp;#$&nbsp;-l&nbsp;h"
+         }
+      }
+   },
+   "clusterworkflows" : [],
+   "groups" : [],
+   "clusters" : [],
+   "viewfeatures" : [
+      {
+         "feature" : "test1",
+         "location" : "/mnt/data/jbrowse/species/human/hg19/demo/test1",
+         "view" : "View1",
+         "project" : "Project1",
+         "species" : "human",
+         "build" : "hg19",
+         "username" : "aguatest"
+      }
+   ],
+   "workflows" : [
+      {
+         "number" : "1",
+         "provenance" : "",
+         "notes" : "",
+         "project" : "Project1",
+         "name" : "Workflow1",
+         "description" : "",
+         "username" : "aguatest"
+      },
+      {
+         "number" : "2",
+         "provenance" : "",
+         "notes" : "",
+         "project" : "Project1",
+         "name" : "Workflow2",
+         "description" : "",
+         "username" : "aguatest"
+      },
+      {
+         "number" : "1",
+         "provenance" : "",
+         "notes" : "",
+         "project" : "Project2",
+         "name" : "Workflow1",
+         "description" : "",
+         "username" : "aguatest"
+      }
+   ],
+   "sharedprojects" : {},
+   "groupmembers" : [],
+   "stageparameters" : [],
+   "features" : [
+      {
+         "feature" : "ccdsGene",
+         "workflow" : "",
+         "project" : "",
+         "type" : "static",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "dgv",
+         "workflow" : "",
+         "project" : "",
+         "type" : "static",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "exoniphy",
+         "workflow" : "",
+         "project" : "",
+         "type" : "static",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "hgIkmc",
+         "workflow" : "",
+         "project" : "",
+         "type" : "static",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "hinv70NonCoding",
+         "workflow" : "",
+         "project" : "",
+         "type" : "static",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "hinv70PseudoGene",
+         "workflow" : "",
+         "project" : "",
+         "type" : "static",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "knownAlt",
+         "workflow" : "",
+         "project" : "",
+         "type" : "static",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "knownGene",
+         "workflow" : "",
+         "project" : "",
+         "type" : "static",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "nscanGene",
+         "workflow" : "",
+         "project" : "",
+         "type" : "static",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "refGene",
+         "workflow" : "",
+         "project" : "",
+         "type" : "static",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "sgpGene",
+         "workflow" : "",
+         "project" : "",
+         "type" : "static",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "vegaGene",
+         "workflow" : "",
+         "project" : "",
+         "type" : "static",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "vegaPseudoGene",
+         "workflow" : "",
+         "project" : "",
+         "type" : "static",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "wgEncodeGencode2wayConsPseudoV",
+         "workflow" : "",
+         "project" : "",
+         "type" : "static",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "wgEncodeGencodeAutoV4",
+         "workflow" : "",
+         "project" : "",
+         "type" : "static",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "wgEncodeGencodePolyaV4",
+         "workflow" : "",
+         "project" : "",
+         "type" : "static",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "test1",
+         "workflow" : "Workflow1",
+         "project" : "Project1",
+         "type" : "dynamic",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "test2",
+         "workflow" : "Workflow1",
+         "project" : "Project1",
+         "type" : "dynamic",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "control1",
+         "workflow" : "Workflow1",
+         "project" : "Project1",
+         "type" : "dynamic",
+         "species" : "human",
+         "build" : "hg19"
+      },
+      {
+         "feature" : "control2",
+         "workflow" : "Workflow1",
+         "project" : "Project1",
+         "type" : "dynamic",
+         "species" : "human",
+         "build" : "hg19"
+      }
+   ],
+   "access" : [],
+   "sharedviews" : [],
+   "regionzones" : {
+      "eu-west-1" : [
+         "eu-west-1a",
+         "eu-west-1b",
+         "eu-west-1c"
+      ],
+      "us-west-1" : [
+         "us-west-1a",
+         "us-west-1b",
+         "us-west-1c"
+      ],
+      "ap-southeast-1" : [
+         "ap-southeast-1a",
+         "ap-southeast-1b"
+      ],
+      "us-east-1" : [
+         "us-east-1a",
+         "us-east-1b",
+         "us-east-1c",
+         "us-east-1d"
+      ],
+      "ap-northeast-1" : [
+         "ap-northeast-1a",
+         "ap-northeast-1b"
+      ]
+   },
+   "headings" : {
+      "leftPane" : [
+         "Packages",
+         "GroupProjects",
+         "Access",
+         "Clusters",
+         "Parameters"
+      ],
+      "middlePane" : [
+         "Apps",
+         "Groups",
+         "Sources",
+         "Settings",
+         "Projects"
+      ],
+      "rightPane" : [
+         "Parameters",
+         "GroupSources",
+         "GroupUsers",
+         "Users"
+      ]
+   },
+   "parameters" : [],
+   "sources" : [],
+   "sharedparameters" : [],
+   "sharedsources" : {}
+}

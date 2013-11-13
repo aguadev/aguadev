@@ -1,0 +1,21 @@
+admin	admin		admin	user		me@noreply.com
+admin	admin		Demo data	source	Demo input and output data files	/data/sequence/demo
+admin	admin		Project1	project	Transcriptome	Project1
+admin	admin		Project2	project	MAQ and ERANGE	Project2
+admin	admin		Reference genomes	source	Application-specific reference data	/data/sequence/reference
+admin	bioinfo	Bioinformatics Team	Project1	project	Eland to .ace pipeline	/nethome/syoung/.agua/Project1
+admin	bioinfo	Bioinformatics Team	Project2	project	Transcriptome pipeline	/nethome/syoung/.agua/Project2
+admin	test		Project1	project	Transcriptome	Project1
+admin	users		biouser	user		biouser@trash.com
+admin	users		Demo data	source	Application-specific input/output data	/data/sequence/demo
+admin	users		guest	user		guest@trash.com
+admin	users		Project1	project		Project1
+admin	users		Project2	project		Project2
+admin	users		ProjectX	project		ProjectX
+admin	users		ProjectY	project		ProjectY
+admin	users		Reference	project		Reference
+admin	users		Reference genomes	source	Application-specific reference data	/data/sequence/reference
+admin	users		syoung	user		stuartpyoung@gmail.com
+admin	users		test	project	ss	test
+agua	projects	Agua open-source bioinformatics workflows	Project1	project		
+agua	projects	Agua open-source bioinformatics workflows	Project2	project		

@@ -1,0 +1,148 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<style type="text/css">
+
+	/* DOJO STYLES */
+	@import "dojo-1.5.0/dojo/resources/dojo.css";
+
+	/* THEMES */
+	@import "dojo-1.5.0/dijit/themes/dijit.css";
+	@import "dojo-1.5.0/dijit/themes/soria/soria.css";
+	@import "dojo-1.5.0/dijit/themes/tundra/tundra.css";
+
+</style>
+
+<link rel="stylesheet" href="plugins/core/css/toolbar.css">
+
+		<title>illum2-local</title>
+
+		<style type="text/css" title="text/css">
+			@import "http://ajax.googleapis.com/ajax/libs/dojo/1.5/dijit/themes/claro/claro.css";
+			@import "http://ajax.googleapis.com/ajax/libs/dojo/1.5/dojox/form/resources/CheckedMultiSelect.css";
+			
+			
+		</style>
+
+<script type="text/javascript"
+		src="dojo-1.5.0/dojo/dojo.js"
+		djConfig="parseOnLoad: true, isDebug: false"></script>	
+
+<!--<script type="text/javascript"
+		src="builds/006-workflow-base/dojo/dojo/dojo.js"
+		djConfig="parseOnLoad: true, isDebug: false, locale: ''"></script>	
+
+<script type="text/javascript" src="builds/006-workflow-base/dojo/workflow.js"></script>
+-->
+<!--<script type="text/javascript" src="builds/006-workflow-base-safe/dojo/workflow.js.uncompressed.js"></script>-->
+
+
+<!--<script type="text/javascript"
+		src="builds/006/dojo/dojo/dojo.js.uncompressed.js"
+		djConfig="isDebug: false, parseOnLoad: true, useCommentedJson: true, locale: 'ja-jp'"></script>
+-->
+
+<!--<script type="text/javascript" src="builds/006/dojo/agua.js.uncompressed.js"></script>-->
+
+		
+		<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/dojo/1.5/dojo/dojo.xd.js.uncompressed.js" djConfig="isDebug:false,parseOnLoad:true"></script>-->
+		<!---->
+
+<!--<script type="text/javascript"-->
+<!--		src="dojo-1.5.0/dojo/dojo.js"-->
+<!--		djConfig="parseOnLoad: true, isDebug: true"></script>	-->
+
+		<script type="text/javascript">
+			
+			//dojo.require('dojox.validate');
+			//dojo.require('dojox.validate.us');
+			//dojo.require('dojox.validate.web');
+			//
+			///* basic dijit classes */
+			//dojo.require('dijit.form.CheckBox');
+			//dojo.require('dijit.form.Textarea');
+			//dojo.require('dijit.form.FilteringSelect');
+			//dojo.require('dijit.form.TextBox');
+			//dojo.require('dijit.form.ValidationTextBox');
+			//dojo.require('dijit.form.DateTextBox');
+			//dojo.require('dijit.form.TimeTextBox');
+			//dojo.require('dijit.form.Button');
+			//dojo.require('dijit.form.RadioButton');
+			//dojo.require('dijit.form.Form');
+			//dojo.require('dijit.form.DateTextBox');
+			//
+			///* basic dojox classes */
+			//dojo.require('dojox.form.BusyButton');
+			//dojo.require('dojox.form.CheckedMultiSelect');
+			
+		</script>
+		
+<!-- TO AVOID PROBLEMS WHEN LOADING -->
+<script type="text/javascript" src="dojo-1.5.0/dijit/nls/en-us.js"></script>
+<script type="text/javascript" src="dojo-1.5.0/dijit/nls/common.js"></script>
+
+
+
+<script type="text/javascript">
+
+	// SET CGI AND HTML URLS (RELATIVE TO dojo.js)
+	var cgiUrl = "../../cgi-bin/agua/0.6/";
+	var htmlUrl = "../../agua/0.6/";
+
+	// ***** COMMENT THIS OUT WHEN USING A BUILD !! ******
+	// REGISTER module path FOR PLUGINS
+	dojo.registerModulePath("plugins","../../plugins");	
+
+	//// ***** COMMENT THIS OUT WHEN USING A BUILD !! ******
+	//// REGISTER module path FOR PLUGINS
+	//dojo.registerModulePath("plugins","../../../../plugins");	
+
+
+	// GLOBAL Agua VARIABLE
+	var Agua;
+	dojo.addOnLoad(function(){
+
+		console.log("agua.html    BEFORE require plugins.core.Agua");
+		dojo.require("plugins.core.Agua");
+		console.log("agua.html    AFTER  require plugins.core.Agua");
+
+		// CREATE GLOBAL AGUA OBJECT		
+		console.log("agua.html    BEFORE Agua = new plugins.core.Agua()");
+		Agua = new plugins.core.Agua( {
+			//messageNode : messageNode,
+			//splashNode : splashNode,
+			cgiUrl : cgiUrl,
+			htmlUrl : htmlUrl,
+			database: "aguatest"
+		});
+		console.log("agua.html    AFTER new plugins.core.Agua");
+		//console.log("agua.html    Agua: " + Agua);
+
+		console.log("agua.html    BEFORE Agua.loadPlugins");
+		Agua.loadPlugins();
+		console.log("agua.html    AFTER Agua.loadPlugins");
+		
+		//// NB: THIS IS THE SECOND addOnLoad
+		//// TO HIDE THE LOADING IMAGE ONCE THE MODULES ARE LOADED
+		//dojo.addOnLoad(function(){
+		//	//Agua.hideLoader();
+		//});
+	});
+	
+</script>
+
+		
+		
+	</head>
+
+<!--<body class="claro">-->
+<body class="agua tundra claro">
+
+	<div id="attachPoint" ></div>
+
+</body>
+</html>

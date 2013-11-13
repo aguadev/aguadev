@@ -1,0 +1,166 @@
+/* DOES THIS HELP AUTOSIZING? */
+.saved {
+	width: 430px !important;
+	font-family: Verdana;
+	position: relative;
+}
+
+.saved textarea {
+	overflow: auto !important;
+}
+
+.saved .dojoDndItem,
+.saved .dojoDndItem .dojoDndItemOver {
+	padding: 0px !important;
+}
+
+.saved .savedTitle {
+	display: inline-block;
+	font-size: 15px;
+	font-weight: bolder;
+	top: -10px !important;
+	position: relative;
+}
+
+/* DRAG SOURCE */
+.saved .dragSource table
+{  
+    border: 0 !important;
+	border-collapse: collapse !important;	
+	float: left;
+    margin-top: 0px !important;
+    padding-top: 0px !important;
+    height: auto !important;
+}
+
+.saved .dragSource
+{
+	width: 39;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+	min-height: 200px !important;
+	height: auto !important;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	width: 403px !important; */
+	width: 3;
+}
+
+/* QUERY NAME */
+.saved .nameInput .dijitTextBox {
+	width: 255px !important;
+}
+
+/* BUTTON */
+/* NB: THIS IS NEEDED FOR THE BUTTON CSS BELOW TO WORK! */
+.saved table textarea {
+	font-family: Verdana;
+}
+
+/* MISC */
+.saved .dragSource .dijitReset.dijitValidationContainer {
+    display: none !important;   
+}
+
+.saved .dragSource .dijitReset.dijitInline.dijitSelectLabel.dijitValidationTextBoxLabel  {
+    width: 80px !important;
+}
+
+.saved .dragSource .ordinal .dijitReset.dijitInline.dijitSelectLabel.dijitValidationTextBoxLabel  {
+    width: 30px !important;
+}
+
+/* BORDER AROUND ALL ITEMS */
+.saved .dragSource .actionSelect,
+.saved .dragSource .fieldSelect,
+.saved .dragSource .operatorSelect,
+.saved .dragSource .valueInput
+ {
+    border: 1px grey solid;
+    min-height: 20px !important;
+	font-size: 14px !important;
+}
+
+/* ROW BACKGROUND */
+.saved .dragSource .dojoDndItemAnchor {
+    background-color: white;
+}
+
+/* NO PADDING AROUND DND ITEMS */
+.saved .dojoDndItem,
+.saved .dojoDndItem .dojoDndItemOver {
+	padding: 0px !important;
+}
+
+.saved .invalid 
+{
+	border: 2px solid #F00 !important;
+}
+
+/* TOGGLE */
+.saved .toggleTitle {
+    font-family: Arial;
+	text-align: left !important;
+	font-weight: 800 !important;
+	
+    color: #444 !important;
+	
+    font-size: 16px !important;
+	padding-top: 6px !important;
+}
+.saved .toggleTitle.open {
+	background-image: url(../../../plugins/apps/images/toggle-minus-11.png);
+	text-indent: 20px;
+	background-position: 0.2em 0.6em;
+	background-repeat: no-repeat;
+}
+.saved .toggleTitle.closed {
+	background-image: url(../../../plugins/apps/images/toggle-plus-11.png);
+	text-indent: 20px;
+	background-position: 0.2em 0.6em;
+	background-repeat: no-repeat;
+	height: 22px;
+	overflow: hidden !important;
+}
+
+.saved .savedSelect
+{
+	position: absolute;
+	top: 3px;
+	left: 140px;
+	font-size: 16px;
+	font-weight: 900;	
+	color: black;
+	width: 278px !important;
+	text-align: center !important;	
+	text-indent: 2px !important;
+}
+.saved .savedSelect .dijitArrowButton {
+	width: 16px !important;
+}
+
+.saved .dragSource .queryRow .deleteButton {
+	display: none !important;
+	visibility: hidden !important;
+	width: 0px !important;
+}
+
+.saved .dragSource .queryRow {
+	width: 380px !important;
+}
+
+.saved .savedInputContainer {
+	min-height: 60px;
+	overflow: hidden;
+}
+
+.saved .dijitContentPane {
+	overflow: hidden;
+}

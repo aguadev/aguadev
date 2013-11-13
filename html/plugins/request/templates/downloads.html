@@ -1,0 +1,64 @@
+<div
+	dojoattachpoint="containerNode"
+>
+
+	<!-- TAB -->
+	<div
+		data-dojo-attach-point="mainTab"
+		class="downloads"
+		data-dojo-type="dijit.layout.ContentPane"
+		title="Saved"
+	>
+
+		<div
+			class="toggleTitle closed"
+			data-dojo-attach-point="toggler"
+			data-dojo-attach-event="onclick:toggleDisplay"
+		>Downloads
+		</div>
+
+		<div
+			class="downloadCountTitle"
+		>Files
+		</div>
+		
+		<div
+			class="downloadCount"
+			data-dojo-attach-point="downloadCount"
+		>
+		</div>
+
+		<div
+			class="fileSizeTitle"
+		>Size
+		</div>
+		
+		<div
+			class="fileSize"
+			data-dojo-attach-point="fileSize"
+		>
+		</div>
+		
+		<div
+			style="display: inline-block"
+			data-dojo-attach-point="togglePoint"
+		>
+		
+			<div>
+				<div
+					data-dojo-attach-point="dragSourceNode"
+					class="dragSource"
+				>
+				</div>
+				
+			</div>
+
+		</div>
+				
+
+	</div>
+	<!-- END TAB -->
+	
+</div> 
+
+

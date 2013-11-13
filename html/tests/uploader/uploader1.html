@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd"> 
+<html> 
+	<head> 
+		<title>dojo AJAX file upload demonstration</title> 
+		<script type="text/javascript" src="../../dojo-1.6.1/dojo/dojo.js"
+			djConfig="dojoBlankHtmlUrl: 'blank.html',parseOnLoad: true"></script> 
+		<script type="text/javascript"> 
+		dojo.require("dojo.parser");
+		dojo.require("dojo.io.iframe");
+		function ioIframeGetJson(x){
+			var td = dojo.io.iframe.send({
+				url: "../../../../../cgi-bin/agua/0.6/download.cgi?",
+				//url: "dojo.io.json.php5",
+				form: "frmIO",
+				method: "post",
+				content: {fnx:x},
+				timeoutSeconds: 5,
+				preventCache: true,
+				handleAs: "json",
+				handle: function(res, ioArgs){
+					if(res.status=='Good')
+					{
+						dojo.byId('status').innerHTML=res.status;
+						dojo.byId('textdisplay').value=res.textdata;
+					}
+					else
+						alert('Error1');
+					},							
+				error: function (res,ioArgs) {alert('Error2')}
+			});
+		}
+		</script> 
+		<style type="text/css"> 
+		body
+		{
+			font-family:Verdana,arial,sans-serif;
+			font-size:smaller;
+			width:1024px;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		h1
+		{
+			padding-bottom:5px;
+			border-bottom: 2px dotted #000;
+			text-align:center;
+		}
+		div
+		{
+			border:1px dashed #999;
+			background-color:#eee;
+			padding:5px;
+			margin:5px;
+		}
+		#dText
+		{
+			margin-right:425px;
+			height:515px;
+		}
+		#dForm
+		{
+			/*float:right;*/
+			width:403px;
+			margin-top:0px;
+			height:515px;
+		}
+		blockquote
+		{
+			font-family:Courier,"Times Roman",serif;
+			font-size:.9em;
+			border:1px dotted #555;
+			background-color:#fefefe;
+		}
+		
+		
+		</style> 
+	</head> 
+	<body> 
+	<h1>dojo AJAX file upload demonstration</h1> 
+	<div id="dForm"> 
+	<h3>Form</h3> 
+        <form name="frmIO" id="frmIO" enctype="multipart/form-data" method="post"> 
+                <label for="fFile">Choose file</label> 
+                <input type="file" name="fFile" id="fFile" /><br /> 
+                <button onclick="ioIframeGetJson(1)" type="submit">Go</button> 
+        </form> 
+        <br /> 
+        <strong>Status</strong>&nbsp;
+        <span id="status">None</span> 
+        <br /> 
+	<strong>Response Text</strong> (formatted)<br /> 
+        <textarea id="textdisplay" name="textdisplay" rows="10" cols="40"> 
+        </textarea> 
+        </div> 
+	</body>
+</html>
+	
+	

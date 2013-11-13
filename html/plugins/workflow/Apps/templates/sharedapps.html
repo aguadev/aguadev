@@ -1,0 +1,40 @@
+<div dojoAttachPoint="containerNode">
+
+    <div
+        dojoAttachPoint="mainTab"
+        class="apps"
+        dojoType="dijit.layout.ContentPane"
+        parseOnLoad="false"
+        title="Bioapps"
+		style="position: relative; height: 100%; max-height: auto !important; width: 400px !important; padding: 0 !important;"
+    >
+
+        <!-- NEED margin-bottom TO COMPENSATE FOR 29px MARGIN-TOP OFFSET FOR TABLE-->
+        <table width="200px">
+			<tr valign="top" width="100%">
+				
+				<td colspan="3" class="tabTitle" align="center">
+					<div
+						class="refreshButton"
+						dojoAttachPoint="refreshButton"
+						dojoAttachEvent="onclick:refresh">
+						
+					</div>
+					<div class="header">
+					    Applications
+					</div>
+				</td>
+			</tr>
+            <tr>
+                <td>
+                    <div
+                        dojoAttachPoint="appSourcesContainer"
+					>
+                    </div>
+                    
+                </td>
+            </tr>
+        </table>
+    
+    </div>
+</div>

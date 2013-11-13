@@ -1,0 +1,106 @@
+<div
+	dojoattachpoint="containerNode"
+>
+
+	<!-- TAB -->
+	<div
+		data-dojo-attach-point="mainTab"
+		class="query"
+		data-dojo-type="dijit.layout.ContentPane"
+		title="Query"
+	>
+
+		<div
+			class="toggleTitle closed"
+			data-dojo-attach-point="toggler"
+			data-dojo-attach-event="onclick:toggleQuery"
+		>Advanced Query
+		</div>
+
+		<div
+			style="display: inline-block"
+			data-dojo-attach-point="togglePoint"
+		>
+
+			<div
+				class="actionSelect"
+				data-dojo-type="dijit/form/Select"
+				data-dojo-attach-point="action"
+				title="Select how you want to combine the filter with the previous filters ('AND' or 'OR')"
+				autocomplete="false"
+				disabled="false"
+			>
+			</div>
+	
+			<div
+				class="fieldSelect"
+				data-dojo-attach-point="field"
+				data-dojo-type="dijit/form/Select"
+				title="Select the field to filter using your keyword"
+				autocomplete="false"
+				disabled="false"
+			>
+			</div>
+	
+			<div
+				class="operatorSelect"
+				data-dojo-attach-point="operator"
+				data-dojo-type="dijit/form/Select"
+				title="Select an operator for your filter (NB: '!' means 'NOT')"
+				autocomplete="false"
+				disabled="false"
+			>
+			</div>
+	
+			<div
+				class="valueInput"
+				data-dojo-attach-point="value"
+				title="Enter your search keywords"
+				data-dojo-type="plugins.form.ValidationTextBox"
+			>
+			</div>
+	
+			<div>
+				<div
+					data-dojo-attach-point="dragSourceNode"
+					class="dragSource"
+				>
+				</div>
+				
+				<div
+					class="queryTitle"
+				>Query Name
+				</div>
+		
+				<div
+					class="nameInput"
+					data-dojo-attach-point="nameInput"
+					title="Enter the name of your search"
+					data-dojo-type="plugins.form.ValidationTextBox"
+					regExp="^\S{1,20}$"
+					maxlength="20" 
+					promptMessage="Search name: up to 20 characters (no spaces)" 
+					invalidMessage="Search name: up to 20 characters (no spaces)"
+					tooltipPosition="below"
+					wrap="off"
+		
+				>
+				</div>
+		
+				<div
+					data-dojo-attach-point="saveButton"
+					class="saveButton"
+				>Save
+				</div>
+			</div>
+
+
+		</div>
+				
+
+	</div>
+	<!-- END TAB -->
+	
+</div> 
+
+

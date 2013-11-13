@@ -1,0 +1,629 @@
+<div dojoattachpoint="containerNode">
+
+    <div
+        data-dojo-attach-point="mainTab"
+        class="infusion dialog sample"
+        modal="true"
+		title="Edit Sample"
+        draggable="true"
+        data-dojo-type="plugins/dojox/widget/Dialog"
+        style="overflow: visible; position: absolute; top: 240px; left: 248px; opacity: 1; width: 500px; min-width: 920px !important; min-height: 685px !important; height: auto !important; align: center;"
+	>
+
+	<!-- TWIN COLUMNS -->
+	<table
+		align="center"
+		valign="top"
+	>
+		<tr
+			align="center"
+			valign="top"
+		>
+			<td>
+
+				<table
+					align="center"
+					valign="top"
+					style="width: 420px;" >
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="sampleId"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Sample ID',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="projectId"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Project ID',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="sampleBarcode"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Sample Barcode',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="sampleName"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Sample Name',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="plateBarcode"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Plate Barcode',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="species"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Species',
+									pattern			: 	'^.{0,150}$',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="gender"
+								data-dojo-type="plugins.form.Select"
+								class="customInput"
+								data-dojo-props="
+									label			: 	'Gender',
+									disabled		:	'disabled'
+								"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="volume"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Volume',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="concentration"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Concentration',
+									pattern			: 	'^.{0,150}$',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="od260280"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'OD 260 280',
+									pattern			: 	'^.{0,150}$',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="tissueSource"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Tissue Source',
+									pattern			: 	'^.{0,100}$',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="extractionMethod"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Extraction Method',
+									pattern			: 	'^.{0,100}$',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="ethnicity"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Ethnicity',
+									pattern			: 	'^.{0,100}$',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="parent1SampleId"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Parent 1 Sample ID',
+									pattern			: 	'^.{0,100}$',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="parent2SampleId"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Parent 2 Sample ID',
+									pattern			: 	'^.{0,100}$',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="replicatesId"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Replicates ID',
+									pattern			: 	'^.{0,100}$',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="cancer"
+								data-dojo-type="plugins.form.Select"
+								class="customInput"
+								data-dojo-props="
+									label			: 	'Cancer',
+									disabled		:	'disabled'
+								"
+							>
+							</div>									
+						</td>
+					</tr>
+
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="matchSampleIds"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Match Sample IDs',
+									pattern			: 	'^.{0,100}$',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="matchSampleType"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Match Sample Type',
+									pattern			: 	'^.{0,100}$',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+
+	
+				</table>
+	
+
+
+			<!-- TWIN COLUMNS -->
+			</td>
+			<td>
+			
+
+
+				<table
+					style="width: 420px;" >
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="comment"
+								data-dojo-type="plugins.form.TextArea"
+								data-dojo-props="
+									label			: 	'Comment',
+									pattern			: 	'^.{0,250}$',
+									invalidMessage	:	'Max 250 characters',
+									promptMessage	:	'Input up to 250 characters',
+									cols			: 	32,
+									rows			: 	3,
+									required		:	false
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+		
+
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="dueDate"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Due Date',
+									pattern			: 	'^.{0,100}$',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="targetFoldCoverage"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Target Fold Coverage',
+									pattern			: 	'^.{0,100}$',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="gtGender"
+								data-dojo-type="plugins.form.Select"
+								class="customInput"
+								data-dojo-props="
+									label			: 	'GT Gender',
+									disabled		:	'disabled'
+								"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="doBuild"
+								data-dojo-type="plugins.form.Select"
+								class="customInput"
+								data-dojo-props="
+									label			: 	'Do Build',
+									disabled		:	'disabled'
+								"
+							>
+							</div>									
+						</td>
+					</tr>
+
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="status"
+								data-dojo-type="plugins.form.Select"
+								class="customInput"
+								data-dojo-props="
+									label			: 	'Status',
+									disabled		:	false
+								"
+							>
+							</div>									
+						</td>
+					</tr>
+
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="samplePolicy"
+								data-dojo-type="plugins.form.TextArea"
+								data-dojo-props="
+									label			: 	'Sample Policy',
+									pattern			: 	'^.{0,250}$',
+									invalidMessage	:	'Max 250 characters',
+									promptMessage	:	'Input up to 250 characters',
+									cols			: 	32,
+									rows			: 	2,
+									required		:	false,
+									disabled		:	true
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="updateDate"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Update Date',
+									pattern			: 	'^.{0,100}$',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="deliveredDate"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'Delivered Date',
+									pattern			: 	'^.{0,100}$',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="genotypeReport"
+								data-dojo-type="plugins.form.TextArea"
+								data-dojo-props="
+									label			: 	'GT Report',
+									pattern			: 	'^.{0,250}$',
+									invalidMessage	:	'Max 250 characters',
+									promptMessage	:	'Input up to 250 characters',
+									cols			: 	32,
+									rows			: 	3,
+									required		:	false,
+									disabled		:	true
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+	
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="gtDelivSrc"
+								data-dojo-type="plugins.form.TextArea"
+								data-dojo-props="
+									label			: 	'GT Delivery Source',
+									pattern			: 	'^.{0,250}$',
+									invalidMessage	:	'Max 250 characters',
+									promptMessage	:	'Input up to 250 characters',
+									cols			: 	32,
+									rows			: 	3,
+									required		:	false,
+									disabled		:	true
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="FTAT"
+								data-dojo-type="plugins.form.Select"
+								class="customInput"
+								data-dojo-props="
+									label			: 	'FTAT',
+									disabled		: 	'disabled'
+								"
+							>
+							</div>									
+						</td>
+					</tr>
+					
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="analysis"
+								data-dojo-type="plugins.form.TextArea"
+								data-dojo-props="
+									label			: 	'Analysis',
+									pattern			: 	'^.{0,250}$',
+									invalidMessage	:	'Max 250 characters',
+									promptMessage	:	'Input up to 250 characters',
+									cols			: 	32,
+									rows			: 	3,
+									required		:	false
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+					
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="gtCallRate"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'GT Call Rate',
+									pattern			: 	'^.{0,100}$',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+					
+					<tr>
+						<td colspan="3" align="center">
+							<div
+								data-dojo-attach-point="gtP99Cr"
+								data-dojo-type="plugins.form.ValidationTextBox"
+								data-dojo-props="
+									label			: 	'GT p99 Call Rate',
+									pattern			: 	'^.{0,100}$',
+									disabled		:	'disabled'
+								"
+								class="customInput"
+							>
+							</div>									
+						</td>
+					</tr>
+					
+					
+				</table>
+
+		<!-- TWIN COLUMNS -->
+				</td>
+			</tr>
+		</table>
+				
+		<table
+			width="100%"
+		>
+			<tr>
+				<td
+					height="50"
+					colspan="2"
+					width="100%"
+					data-dojo-attach-point="saveButton"
+					class="saveButton"
+					dojoAttachEvent="onclick:save"
+				>
+					Save
+				</td>
+			</tr>
+					
+		</table>
+
+
+			
+	</div> 
+
+</div>

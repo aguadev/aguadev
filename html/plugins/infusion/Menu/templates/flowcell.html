@@ -1,0 +1,69 @@
+<div dojoAttachPoint="containerNode">
+
+<div
+    dojoAttachPoint="menu"
+    class="flowcellmenu"
+    dojoType="plugins.menu.Menu"
+>
+
+    <div
+        dojoAttachPoint="editNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:edit"
+        class="select"
+        disabled="false"
+    >
+        <U>E</U>dit
+    </div>
+    <div
+        dojoAttachPoint="completeNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:complete"
+        class="select"
+        disabled="false"
+    >
+        <U>C</U>omplete
+    </div>
+
+    <div
+        dojoAttachPoint="failNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:fail"
+        class="select"
+        disabled="false"
+    >
+        <U>F</U>ail
+    </div>
+
+    <div
+        dojoAttachPoint="cancelNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:cancel"
+        class="add"
+        disabled="false"
+    >
+        Cance<U>L</U>
+    </div>
+
+    <div
+        dojoAttachPoint="requeueNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:requeue"
+        class="requeue"
+        disabled="true"
+    >
+        <U>H</U>old
+    </div>
+
+    <div
+        dojoAttachPoint="rehybridizeNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:rehybridize"
+        class="rehybridize"
+        disabled="true"
+    >
+        <U>R</U>ehybridize
+    </div>
+
+</div>
+

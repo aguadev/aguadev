@@ -1,0 +1,18 @@
+/* MAKE DGRID TAKE THE SIZE OF ITS CONTENTS */
+.details .dgrid .dgrid-scroller {
+    position: relative;
+    overflow: auto;
+}
+
+/* WHITE ROWS */
+.details .dgrid-header,
+.details .dgrid-header-row, 
+.details .dgrid-footer {
+    height: auto !important;
+    background-color: #ADF;
+}
+
+/* NO PADDING */
+.details .dijitTitlePaneContentInner {
+    padding: 0 !important;
+}

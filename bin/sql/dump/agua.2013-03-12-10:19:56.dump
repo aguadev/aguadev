@@ -1,0 +1,798 @@
+-- MySQL dump 10.13  Distrib 5.5.29, for debian-linux-gnu (x86_64)
+--
+-- Host: localhost    Database: agua
+-- ------------------------------------------------------
+-- Server version	5.5.29-0ubuntu0.12.10.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `access`
+--
+
+DROP TABLE IF EXISTS `access`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `access` (
+  `owner` varchar(20) NOT NULL DEFAULT '',
+  `groupname` varchar(20) NOT NULL DEFAULT '',
+  `groupwrite` int(1) DEFAULT NULL,
+  `groupcopy` int(1) DEFAULT NULL,
+  `groupview` int(1) DEFAULT NULL,
+  `worldwrite` int(1) DEFAULT NULL,
+  `worldcopy` int(1) DEFAULT NULL,
+  `worldview` int(1) DEFAULT NULL,
+  PRIMARY KEY (`owner`,`groupname`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `access`
+--
+
+LOCK TABLES `access` WRITE;
+/*!40000 ALTER TABLE `access` DISABLE KEYS */;
+INSERT INTO `access` VALUES ('agua','projects',1,1,1,1,1,1);
+/*!40000 ALTER TABLE `access` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ami`
+--
+
+DROP TABLE IF EXISTS `ami`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ami` (
+  `username` varchar(30) NOT NULL,
+  `amiid` varchar(20) NOT NULL DEFAULT '',
+  `aminame` varchar(30) NOT NULL,
+  `amitype` varchar(20) DEFAULT NULL,
+  `description` text,
+  `datetime` datetime NOT NULL,
+  PRIMARY KEY (`username`,`amiid`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ami`
+--
+
+LOCK TABLES `ami` WRITE;
+/*!40000 ALTER TABLE `ami` DISABLE KEYS */;
+INSERT INTO `ami` VALUES ('agua','ami-11c67678','StarCluster-base','EBS','StarCluster base image','2011-08-28 01:07:45'),('agua','ami-ca847aa3','sc-u10.04-hadoop.2','EBS','Ubuntu 10.04 StarCluster exec node image with Hadoop installed','2011-08-27 03:53:20');
+/*!40000 ALTER TABLE `ami` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `app`
+--
+
+DROP TABLE IF EXISTS `app`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `app` (
+  `owner` varchar(30) NOT NULL,
+  `username` varchar(30) NOT NULL,
+  `package` varchar(40) NOT NULL,
+  `version` varchar(40) NOT NULL,
+  `installdir` varchar(255) NOT NULL,
+  `name` varchar(40) NOT NULL,
+  `type` varchar(40) NOT NULL,
+  `location` varchar(255) NOT NULL DEFAULT '',
+  `localonly` int(1) NOT NULL DEFAULT '0',
+  `executor` varchar(40) NOT NULL DEFAULT '',
+  `description` text,
+  `notes` text,
+  `url` text,
+  PRIMARY KEY (`owner`,`name`,`type`,`package`,`installdir`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `app`
+--
+
+LOCK TABLES `app` WRITE;
+/*!40000 ALTER TABLE `app` DISABLE KEYS */;
+INSERT INTO `app` VALUES ('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','bowtieIndex','converter','bin/converters/bowtieIndex.pl',0,'/usr/bin/perl','Run bowtie-build to convert FASTA files into *ebwt indexed files','','http://www.aguadev.org/confluence/display/howto/Bioapps+API'),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','chopfile','utility','bin/utils/chopfile.pl',0,'/usr/bin/perl','Print a user-defined number of lines from one file to another file',' ','http://www.aguadev.org/confluence/display/howto/Bioapps+API'),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','createRefDirs','utility','bin/utils/createRefDirs.pl',0,'/usr/bin/perl','Create reference file sub-directories, one for each chromosome sequence file in the input directory. Each sub-directory contains a linked copy of the corresponding chromosome sequence file in the input directory.',' ','http://www.aguadev.org/confluence/display/howto/Bioapps+API'),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','ELAND','aligner','bin/aligners/ELAND.pl',0,'/usr/bin/perl','Solexa/Illumina short read aligner (max 32 bps aligned)',' ','http://www.aguadev.org/confluence/display/howto/Bioapps+API'),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','eland2ace','converter','bin/apps/eland2ace.pl',0,'/usr/bin/perl','Convert Eland output sorted.txt file into an .ace file',' ','http://www.aguadev.org/confluence/display/howto/Bioapps+API'),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','elandHeader','converter','bin/aligners/elandHeader.pl',0,'/usr/bin/perl','Convert incorrect header formats to the simple header format accepted by ELAND and other aligners matching this regex: 	 ','http://www.aguadev.org/confluence/display/howto/Bioapps+API',' '),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','elandIndex','converter','bin/converters/elandIndex.pl',0,'/usr/bin/perl','Convert FASTA files into squashed/indexed ELAND reference files',' ','http://www.aguadev.org/confluence/display/howto/Bioapps+API'),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','filterSNP','report','bin/filters/filterSNP.pl',0,'/usr/bin/perl','Filter SNPs by quality, coverage, etc.',' ','http://www.aguadev.org/confluence/display/howto/Bioapps+API'),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','FTP','utility','bin/utils/deepvac.pl',0,'/usr/bin/perl','Download FTP files or web pages from a URL','Download all files found in links in a page or raw text file','http://www.aguadev.org/confluence/display/howto/Bioapps+API'),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','image2eland','pipeline','bin/aligners/image2eland.pl',0,'/usr/bin/perl','Process images into base calls with Bustard and align reads against reference sequence with Eland',' ','http://www.aguadev.org/confluence/display/howto/Bioapps+API'),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua','jbrowseFeatures','view','bin/jbrowse/jbrowseFeatures.pl',0,'/usr/bin/perl','Generate JBrowse features for all chromosomes in parallel',' ','http://www.aguadev.org/confluence/display/howto/Bioapps+API'),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','MAQ','pipeline','bin/aligners/MAQ.pl',0,'/usr/bin/perl','Align to reference and predict SNPs.','Runs MAQ version 0.7.1.','http://www.aguadev.org/confluence/display/howto/Bioapps+API'),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','maqIndex','converter','bin/converters/maqIndex.pl',0,'/usr/bin/perl','Run maq-build to convert FASTA files into *.bfa binary indexed files',' ','http://www.aguadev.org/confluence/display/howto/Bioapps+API'),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','novoIndex','converter','bin/converters/novoIndex.pl',0,'/usr/bin/perl','Run novoindex to convert FASTA files into binary indexed files',' ','http://www.aguadev.org/confluence/display/howto/Bioapps+API'),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','replaceString','utility','bin/utils/replaceString.pl',0,'/usr/bin/perl','Convert .ace file into multiple ace files',' ','http://www.aguadev.org/confluence/display/howto/Bioapps+API'),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','SAV','pipeline','bin/snp/SAV.pl',0,'/usr/bin/perl','SNP Annotation and Verification','Call SNPs in pileup format from .SAM or .BAM file generated for each chromosome of the target species (DEFAULT: human hg19) and compare with dbSNP (DEFAULT: dbsnp130)','http://www.aguadev.org/confluence/display/howto/Bioapps+API'),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','sleep','test','/nethome/syoung/agua/Project1/test/test.sh',0,'/bin/sh','Run test.pl to sleep and print to stdout file',' ','http://www.aguadev.org/confluence/display/howto/Bioapps+API'),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','splitace','utility','bin/utils/splitace.pl',0,'/usr/bin/perl','Convert a single .ace file into multiple ace files, one for each contig.',' ','http://www.aguadev.org/confluence/display/howto/Bioapps+API'),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','TOPHAT','expression','bin/aligners/TOPHAT.pl',0,'/usr/bin/perl','A wrapper script to run TOPHAT (which uses Bowtie) to do fast short read alignment against a reference sequence','Uses Tophat v 0.1.12 and Bowtie v 0.12.2','http://www.aguadev.org/confluence/display/howto/Bioapps+API'),('agua','agua','bioapps','0.8.0-alpha.1+build.4','/agua/apps/bioapps','unzipFiles','utility','bin/utils/unzipFiles.pl',0,'/usr/bin/perl','Unzip or gunzip files, with an optional filter',' ','http://www.aguadev.org/confluence/display/howto/Bioapps+API');
+/*!40000 ALTER TABLE `app` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `aws`
+--
+
+DROP TABLE IF EXISTS `aws`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `aws` (
+  `username` varchar(30) NOT NULL,
+  `amazonuserid` varchar(30) NOT NULL,
+  `ec2publiccert` text,
+  `ec2privatekey` text,
+  `awsaccesskeyid` varchar(100) DEFAULT NULL,
+  `awssecretaccesskey` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `aws`
+--
+
+LOCK TABLES `aws` WRITE;
+/*!40000 ALTER TABLE `aws` DISABLE KEYS */;
+/*!40000 ALTER TABLE `aws` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `cluster`
+--
+
+DROP TABLE IF EXISTS `cluster`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cluster` (
+  `username` varchar(30) NOT NULL,
+  `cluster` varchar(30) NOT NULL,
+  `minnodes` int(12) DEFAULT NULL,
+  `maxnodes` int(12) DEFAULT NULL,
+  `instancetype` varchar(20) DEFAULT NULL,
+  `amiid` varchar(20) DEFAULT NULL,
+  `availzone` varchar(20) DEFAULT NULL,
+  `description` text,
+  `datetime` datetime NOT NULL,
+  PRIMARY KEY (`username`,`cluster`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `cluster`
+--
+
+LOCK TABLES `cluster` WRITE;
+/*!40000 ALTER TABLE `cluster` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cluster` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `clusterstatus`
+--
+
+DROP TABLE IF EXISTS `clusterstatus`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `clusterstatus` (
+  `username` varchar(30) NOT NULL,
+  `cluster` varchar(30) NOT NULL,
+  `minnodes` int(12) DEFAULT NULL,
+  `maxnodes` int(12) DEFAULT NULL,
+  `status` varchar(30) DEFAULT NULL,
+  `pid` int(12) DEFAULT NULL,
+  `started` datetime NOT NULL,
+  `stopped` datetime NOT NULL,
+  `termination` datetime NOT NULL,
+  `polled` datetime NOT NULL,
+  `hours` int(12) DEFAULT NULL,
+  PRIMARY KEY (`username`,`cluster`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `clusterstatus`
+--
+
+LOCK TABLES `clusterstatus` WRITE;
+/*!40000 ALTER TABLE `clusterstatus` DISABLE KEYS */;
+/*!40000 ALTER TABLE `clusterstatus` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `clustervars`
+--
+
+DROP TABLE IF EXISTS `clustervars`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `clustervars` (
+  `username` varchar(30) NOT NULL,
+  `cluster` varchar(30) NOT NULL,
+  `qmasterport` int(12) DEFAULT NULL,
+  `execdport` int(12) DEFAULT NULL,
+  `root` varchar(30) NOT NULL,
+  `cell` varchar(30) NOT NULL,
+  PRIMARY KEY (`username`,`cluster`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `clustervars`
+--
+
+LOCK TABLES `clustervars` WRITE;
+/*!40000 ALTER TABLE `clustervars` DISABLE KEYS */;
+/*!40000 ALTER TABLE `clustervars` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `clusterworkflow`
+--
+
+DROP TABLE IF EXISTS `clusterworkflow`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `clusterworkflow` (
+  `username` varchar(30) NOT NULL,
+  `cluster` varchar(30) NOT NULL,
+  `project` varchar(20) NOT NULL,
+  `workflow` varchar(20) NOT NULL,
+  `status` varchar(20) NOT NULL,
+  PRIMARY KEY (`username`,`project`,`workflow`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `clusterworkflow`
+--
+
+LOCK TABLES `clusterworkflow` WRITE;
+/*!40000 ALTER TABLE `clusterworkflow` DISABLE KEYS */;
+/*!40000 ALTER TABLE `clusterworkflow` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `feature`
+--
+
+DROP TABLE IF EXISTS `feature`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `feature` (
+  `username` varchar(30) NOT NULL,
+  `project` varchar(20) NOT NULL,
+  `workflow` varchar(20) NOT NULL DEFAULT '',
+  `feature` varchar(30) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  `species` varchar(20) DEFAULT NULL,
+  `build` varchar(20) DEFAULT NULL,
+  `location` text NOT NULL,
+  PRIMARY KEY (`username`,`project`,`workflow`,`feature`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `feature`
+--
+
+LOCK TABLES `feature` WRITE;
+/*!40000 ALTER TABLE `feature` DISABLE KEYS */;
+INSERT INTO `feature` VALUES ('agua','','','ccdsGene','static','human','hg19','/data/jbrowse/species/human/hg91/ccdsGene   '),('agua','','','dgv','static','human','hg19','/data/jbrowse/species/human/hg19/dgv'),('agua','','','exoniphy','static','human','hg19','/data/jbrowse/species/human/hg19/exoniphy'),('agua','','','hgIkmc','static','human','hg19','/data/jbrowse/species/human/hg19/hgIkmc'),('agua','','','hinv70NonCoding','static','human','hg19','/data/jbrowse/species/human/hg19/hinv70NonCoding'),('agua','','','hinv70PseudoGene','static','human','hg19','/data/jbrowse/species/human/hg19/hinv70PseudoGene'),('agua','','','knownAlt','static','human','hg19','/data/jbrowse/species/human/hg19/knownAlt'),('agua','','','knownGene','static','human','hg19','/data/jbrowse/species/human/hg19/knownGene'),('agua','','','nscanGene','static','human','hg19','/data/jbrowse/species/human/hg19/nscanGene'),('agua','','','refGene','static','human','hg19','/data/jbrowse/species/human/hg19/refGene'),('agua','','','sgpGene','static','human','hg19','/data/jbrowse/species/human/hg19/sgpGene'),('agua','','','vegaGene','static','human','hg19','/data/jbrowse/species/human/hg19/vegaGene'),('agua','','','vegaPseudoGene','static','human','hg19','/data/jbrowse/species/human/hg19/vegaPseudoGene'),('agua','','','wgEncodeGencode2wayConsPseudoV','static','human','hg19','/data/jbrowse/species/human/hg19/wgEncodeGencode2wayConsPseudoV4'),('agua','','','wgEncodeGencodeAutoV4','static','human','hg19','/data/jbrowse/species/human/hg19/wgEncodeGencodeAutoV4'),('agua','','','wgEncodeGencodePolyaV4','static','human','hg19','/data/jbrowse/species/human/hg19/wgEncodeGencodePolyaV4');
+/*!40000 ALTER TABLE `feature` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `fileinfo`
+--
+
+DROP TABLE IF EXISTS `fileinfo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `fileinfo` (
+  `username` varchar(30) NOT NULL,
+  `filepath` varchar(255) NOT NULL,
+  `type` varchar(20) DEFAULT NULL,
+  `modified` datetime DEFAULT NULL,
+  `fileinfo` text,
+  PRIMARY KEY (`username`,`filepath`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `fileinfo`
+--
+
+LOCK TABLES `fileinfo` WRITE;
+/*!40000 ALTER TABLE `fileinfo` DISABLE KEYS */;
+/*!40000 ALTER TABLE `fileinfo` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `groupmember`
+--
+
+DROP TABLE IF EXISTS `groupmember`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `groupmember` (
+  `owner` varchar(20) NOT NULL DEFAULT '',
+  `groupname` varchar(20) NOT NULL DEFAULT '',
+  `groupdesc` varchar(255) DEFAULT NULL,
+  `name` varchar(20) NOT NULL DEFAULT '',
+  `type` varchar(50) NOT NULL DEFAULT '',
+  `description` text,
+  `location` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`owner`,`groupname`,`name`,`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `groupmember`
+--
+
+LOCK TABLES `groupmember` WRITE;
+/*!40000 ALTER TABLE `groupmember` DISABLE KEYS */;
+INSERT INTO `groupmember` VALUES ('agua','projects','Agua open-source bioinformatics workflows','Project1','project','',''),('agua','projects','Agua open-source bioinformatics workflows','Project2','project','','');
+/*!40000 ALTER TABLE `groupmember` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `groups`
+--
+
+DROP TABLE IF EXISTS `groups`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `groups` (
+  `username` varchar(20) NOT NULL DEFAULT '',
+  `groupname` varchar(20) NOT NULL DEFAULT '',
+  `description` varchar(255) DEFAULT NULL,
+  `notes` text,
+  PRIMARY KEY (`username`,`groupname`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `groups`
+--
+
+LOCK TABLES `groups` WRITE;
+/*!40000 ALTER TABLE `groups` DISABLE KEYS */;
+/*!40000 ALTER TABLE `groups` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `hub`
+--
+
+DROP TABLE IF EXISTS `hub`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hub` (
+  `username` varchar(30) NOT NULL,
+  `login` varchar(30) NOT NULL,
+  `hubtype` varchar(30) NOT NULL,
+  `token` varchar(40) NOT NULL,
+  `tokenid` int(12) NOT NULL,
+  `keyfile` varchar(255) NOT NULL,
+  `publiccert` text,
+  PRIMARY KEY (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `hub`
+--
+
+LOCK TABLES `hub` WRITE;
+/*!40000 ALTER TABLE `hub` DISABLE KEYS */;
+/*!40000 ALTER TABLE `hub` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `package`
+--
+
+DROP TABLE IF EXISTS `package`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `package` (
+  `owner` varchar(30) NOT NULL,
+  `username` varchar(30) NOT NULL,
+  `package` varchar(40) NOT NULL,
+  `repository` varchar(40) NOT NULL,
+  `privacy` varchar(40) NOT NULL,
+  `status` varchar(40) NOT NULL,
+  `version` varchar(40) NOT NULL,
+  `opsdir` varchar(255) DEFAULT NULL,
+  `installdir` varchar(255) NOT NULL,
+  `description` text,
+  `notes` text,
+  `url` text,
+  `datetime` datetime NOT NULL,
+  PRIMARY KEY (`username`,`package`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `package`
+--
+
+LOCK TABLES `package` WRITE;
+/*!40000 ALTER TABLE `package` DISABLE KEYS */;
+INSERT INTO `package` VALUES ('agua','agua','agua','agua','public','ready','0.8.0-beta.1+build.2','/agua/repos/public/agua/biorepository/agua/agua','/agua','','','','2012-02-25 01:24:24'),('agua','agua','aguatest','aguatest','public','ready','0.8.0-alpha.1','/agua/t/repos/public/agua/biorepository/agua/aguatest','/agua/t','','','','2012-10-27 04:58:31'),('agua','agua','bioapps','bioapps','private','installing','0.8.0-alpha.1+build.4','/agua/repos/public/agua/biorepository/agua/bioapps','/agua/bioapps','','','','2012-12-24 02:24:59'),('agua','agua','biorepository','biorepository','public','ready','0.8.0-alpha.1+build.4','','/agua/repos/public/agua/biorepository','','','','2012-12-23 19:41:52'),('agua','agua','StarCluster','StarCluster','public','ready','0.92.0-rc2+build.4','/agua/repos/public/agua/biorepository/agua/starcluster','/agua/apps/starcluster','','','','2012-11-17 00:43:48');
+/*!40000 ALTER TABLE `package` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `parameter`
+--
+
+DROP TABLE IF EXISTS `parameter`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `parameter` (
+  `owner` varchar(30) NOT NULL,
+  `username` varchar(30) NOT NULL,
+  `package` varchar(40) NOT NULL,
+  `version` varchar(40) NOT NULL,
+  `installdir` varchar(255) NOT NULL,
+  `appname` varchar(40) NOT NULL,
+  `apptype` varchar(40) DEFAULT NULL,
+  `name` varchar(40) NOT NULL,
+  `ordinal` int(6) NOT NULL DEFAULT '0',
+  `locked` int(1) NOT NULL DEFAULT '0',
+  `paramtype` varchar(40) NOT NULL DEFAULT '',
+  `category` varchar(40) NOT NULL DEFAULT '',
+  `valuetype` varchar(20) NOT NULL DEFAULT '',
+  `argument` varchar(40) NOT NULL DEFAULT '',
+  `value` text,
+  `discretion` varchar(10) NOT NULL DEFAULT '',
+  `format` varchar(40) DEFAULT NULL,
+  `description` text,
+  `args` text,
+  `inputParams` text,
+  `paramFunction` text,
+  PRIMARY KEY (`owner`,`appname`,`name`,`paramtype`,`ordinal`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `parameter`
+--
+
+LOCK TABLES `parameter` WRITE;
+/*!40000 ALTER TABLE `parameter` DISABLE KEYS */;
+INSERT INTO `parameter` VALUES ('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','bowtieIndex','converter','inputdir',1,0,'input','inputdir','directory','--inputdir','','essential','','Location of directory containing *.fa files','input.referencedir.value, input.outputdir.value, input.inputdir.value','refdir,outputdir,inputdir',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','bowtieIndex','converter','outputdir',1,0,'input','inputdir','directory','--outputdir','','required','','Print indexed files to this directory','input.referencedir.value, input.outputdir.value, input.inputdir.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','bowtieIndex','converter','subdirs',1,1,'input','subdirs','flag','--subdirs','1','optional','','','input.subdirs.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','chopfile','utility','inputfile',1,0,'input','inputfile','file','--inputfile','','essential','','Print lines from this source file','output.outputfile.value,input.outputfile.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','chopfile','utility','lines',1,0,'input','lines','integer','--lines','','required','','Print this number of lines','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','chopfile','utility','offset',1,0,'input','lines','integer','--offset','','optional','','Start printing lines from the inputfile after this number of lines','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','chopfile','utility','outputfile',1,0,'input','inputfile','file','--outputfile','','required','','Print lines to this target file','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','chopfile','utility','outputfile',1,0,'output','outputfile','file','','','optional','','File containing the user-specified number of lines from the inputfile, starting from the offset (default: 0)','input.outputfile.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','createRefDirs','utility','inputdir',1,0,'input','inputdir','directory','--inputdir','','essential','','Directory containing reference sequence files','input.referencedir.value,input.inputdir.value,input.outputdir.value','referencedir,inputdir,outputdir              ','if ( referencedir != null && referencedir != ) return referencedir; if ( inputdir != null && inputdir != ) return inputdir; if ( outputdir != null && outputdir != ) return outputdir;'),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','createRefDirs','utility','outputdir',1,0,'input','referencedir','directory','--outputdir','','required','','Create subdirs in this directory containing links to reference files','input.referencedir.value,input.inputdir.value,input.outputdir.value','referencedir,inputdir,outputdir              ','if ( referencedir != null && referencedir != ) return referencedir; if ( inputdir != null && inputdir != ) return inputdir; if ( outputdir != null && outputdir != ) return outputdir;'),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','createRefDirs','utility','referencedir',1,0,'output','','directory','','','','','Output reference directory containing per-chromosome subdirs with (linked) chromosome sequence files.','input.outputdir.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','createRefDirs','utility','regex',1,0,'input','regex','string','--regex','','optional','','Regular expression to identify chromosome files (Default: .fa)','input.regex.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','ELAND','aligner','clean',0,0,'input','clean','flag','--clean','1','optional','','Clean run (remove old splitfile)','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','ELAND','aligner','hits',1,0,'output','hits','files','','','optional','','Chromosome-specific *bam files containing aligned reads','input.outputdir.value','outputdir','return outputdir + /chr*/hit.bam;'),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','ELAND','aligner','inputfile',0,0,'input','inputfile','file','--inputfile','','essential','','Solexa FASTQ format sequence file','output.readfile.value,input.readfile.value','input1,input2',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','ELAND','aligner','inputtype',0,0,'input','inputtype','string','--inputtype','fastq','required','','Type of input sequence. Valid inputs: fastq, fasta, export or qseq','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','ELAND','aligner','label',0,0,'input','label','string','--label','myLabel','required','','Label describing the data or experiment','input.label.value','InputParams',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','ELAND','aligner','matefile',0,0,'input','matefile','file','--matefile','','optional','fastq','Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)','output.matefile.value,input.matefile.value','input1,input2',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','ELAND','aligner','outputdir',0,0,'input','outputdir','directory','--outputdir','%project%/%workflow%','required','','Print ELAND alignment files to this directory (will create the directory if it does not exist)','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','ELAND','aligner','pairparams',0,0,'input','pairparams','string','--pairparams','','optional','','Paired read analysis parameters to pass to pickBestPair. Default: \'--circular\' (treats all chromosomes as circular).','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','ELAND','aligner','quality',0,0,'input','quality','integer','--quality','','optional','','Quality value of all bases in fasta mode (Default: 30)','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','ELAND','aligner','reads',0,0,'input','reads','integer','--reads','1000000','optional','','Number of reads per sub-file','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','ELAND','aligner','referencedir',0,0,'input','referencedir','directory','--referencedir','%project%/%workflow%','essential','','Directory containing squashed reference genome files','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','ELAND','aligner','seedlength',0,0,'input','seedlength','integer','--seedlength','','optional','','Length of read used for ELAND alignment (Default: min. of seedlength and 32)','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','ELAND','aligner','species',0,1,'input','species','string','--species','human','required','','Name of species, e.g., human, mouse, rat.','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','ELAND','aligner','splitfile',0,0,'input','splitfile','file','--splitfile','','optional','','','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','elandHeader','converter','inputfile',0,0,'input','readfile ','file','--inputfile','%project%/%workflow%/sequence.txt','essential','','FASTQ file not in ELAND format (for use with ELAND_standalone.pl)','output.outputfile.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','elandHeader','converter','label',1,1,'input','label','string','--label','myLabel','required','','Add this to the filenames of the converted files to identify the experiment/data test this','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','elandHeader','converter','matefile',1,1,'input','matefile','file','--matefile','','','','Complementary FASTQ reads file for input files ','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','elandHeader','converter','matefile',1,1,'output','matefile','file','--matefile','','	','','','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','elandHeader','converter','readfile',1,0,'output','readfile','file','','','	','','','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','elandIndex','converter','inputdir',0,0,'input','inputdir','directory','--inputdir','%project%/%workflow%/reference/fasta','essential','','Location of directory containing *.fa files','input.referencedir.value,input.outputdir.value,input.inputdir.value','referencedir,outputdir,inputdir','if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; '),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','elandIndex','converter','outputdir',1,0,'input','outputdir','directory','--outputdir','%project%/%workflow%/reference/eland','essential','','Print indexed files to this directory','input.referencedir.value,input.outputdir.value,input.inputdir.value','referencedir,outputdir,inputdir','if ( referencedir != null && referencedir != ) return referencedir; if ( outputdir != null && outputdir != ) return outputdir; if ( inputdir != null && inputdir != ) return inputdir; '),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','elandIndex','converter','subdirs',1,0,'input','subdirs','flag','--subdirs','','optional','','','input.subdirs.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','filterSNP','report','chromosome',0,0,'input','chromosome','string','--chromosome','','optional','','','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','filterSNP','report','coverage',0,0,'input','coverage','integer','--coverage','','optional','','','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','filterSNP','report','filename',0,0,'input','filename','file','--filename','','optional','','','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','filterSNP','report','inputdir',0,0,'input','inputdir','directory','--inputdir','%project%/%workflow%','essential','','Directory with one subdirectory per reference chromosome, each containing an out.sav extended pileup format file of predicted SNPs and annotation information','output.outputdir.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','filterSNP','report','outputdir',0,0,'output','outputdir','directory','--outputdir','%project%/%workflow%','required','','Directory with one subdirectory per reference chromosome, each containing an out.sav.flt filterSNP output file','input.inputdir.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','filterSNP','report','quality',0,0,'input','quality','integer','--quality','','optional','','','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','filterSNP','report','sense',0,0,'input','sense','string','--sense','','optional','','','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','filterSNP','report','species',0,0,'input','species','string','--species','','required','','','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','FTP','utility','filter',0,0,'input','filter','string','--filter','','optional','','Download only files containing this text fragment','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','FTP','utility','outputdir',0,0,'input','outputdir','directory','--outputdir','%project%/%workflow%/downloads','required','','Create this directory and download files to it','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','FTP','utility','regex',0,0,'input','regex','string','--regex','	chr[XYM0-9]+.fa.gz','optional','','Download files matching this regular expression','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','FTP','utility','type',0,0,'input','type','string','--type','','essential','','Type of page: html or text','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','FTP','utility','url',0,0,'input','url','string','--url','','required','','Download files linked on this page','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','jbrowseFeatures','view','build',0,0,'input','build','string','--build','hg19','required','','Reference species build (e.g., hg19, mm9, rn4)','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','jbrowseFeatures','view','cpus',0,0,'input','cpus','integer','--cpus','','optional','','Number of cpus per job','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','jbrowseFeatures','view','filename',0,0,'input','filename','string','--filename','out.bam','required','','Name of input file. If not defined, the application will process all files in the inputdir.','output.hits.value,input','hits,inputs','if ( hits != null && hits !=  ) { return hits.match(/([^\\/]+)$/)[1]; } for ( var i = 0; i < inputs.length; i++) { if ( inputs[i].value.match(/([^/]+.bam)$/) ) { return inputs[i].value.match(/([^/]+.bam)$/)[1]; }}'),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','jbrowseFeatures','view','filetype',0,0,'input','filetype','string','--filetype','bam','required','','Type of input file (bam or gff)','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','jbrowseFeatures','view','inputdir',0,0,'input','inputdir','directory','--inputdir','%project%/%workflow%','essential','','Directory with chromosome subdirs containing input files. JBrowse output files will be printed to subdirs','input.outputdir.value,output.outputdir.value','outdir1,outdir2','if ( outdir1 != null && outdir1 !=  ) return outdir1; if ( outdir2 != null && outdir2 !=  ) return outdir2;'),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','jbrowseFeatures','view','jbrowse',0,0,'input','jbrowse','string','--jbrowse','','optional','','Location of JBrowse installation (default: JBROWSE key value in default.conf file.)','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','jbrowseFeatures','view','key',0,0,'input','key','string','--key','','required','','Key for features in JBrowse','input.label.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','jbrowseFeatures','view','label',0,0,'input','label','string','--label','','required','','Label for experiment (e.g., bowtie)','input.label.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','jbrowseFeatures','view','maxjobs',0,0,'input','maxjobs','integer','--maxjobs','','optional','','Maximum number of jobs to be running or queued concurrently (default: 100)','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','jbrowseFeatures','view','sleep',0,0,'input','sleep','integer','--sleep','','optional','','Length of sleep in seconds between queue polls (default: 5)','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','jbrowseFeatures','view','species',0,0,'input','species','string','--species','human','required','','Reference species (e.g., human, mouse, rat)','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','jbrowseFeatures','view','tempdir',0,0,'input','tempdir','integer','--tempdir','','optional','','Use this temporary directory to write data on execution host','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','clean',0,0,'input','clean','flag','--clean','','optional','','Clean run (remove old splitfile)','input.clean.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','consensus',0,0,'output','cns-maq','file','','%project%/%workflow%/cns.fq','Discretion','fastq','Consensus sequence and qualities in FASTQ format','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','convert',0,0,'input','convert','flag','--convert','%project%/%workflow%','optional','','Convert from Solexa FASTQ to Sanger FASTQ','input.convert.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','dupfile',0,0,'output','dupfile','file','','%project%/%workflow%/rmdup.map','Discretion','','Same as out.map file but with duplicate reads aligned against the reference with identical outer coordinates removed','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','hzsnps-filter',0,0,'output','indelsoa','file','','%project%/%workflow%/out.indelsoa.filter','Discretion','','Filtered predicted homozygous indels','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','indelsoa',0,0,'output','indelsoa','file','','%project%/%workflow%/out.indelsoa','Discretion','','Predicted homozygous indels','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','inputfile',0,0,'input','inputfile','file','--inputfile','%project%/%workflow%/s_1_1_sequence.fastq','essential','','Single read or first paired-end sequence file','input.inputfile.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','label',0,0,'input','label','String','--label','','required','','A one-word label describing the experiment or data','input.label.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','mapfile',0,0,'output','mapfile','file','','%project%/%workflow%/out.map','Discretion','','Binary mapping file containing alignment of all reads against reference','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','matefile',0,0,'input','matefile','file','--matefile','%project%/%workflow%/s_1_2_sequence.fastq','essential','','Second paired-end sequence file','input.matefile.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','maxjobs',0,0,'input','jobs','integer','--jobs','30','optional','','Maximum number of concurrently queued or running jobs on the cluster queue for this run (Default: 30)','input.jobs.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','outputdir',0,0,'input','outputdir','directory','--outputdir','%project%/%workflow%','required','','Output alignment and SNP files will be printed to this directory','input.outputdir.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','PE-indels',0,0,'output','indelpe','string','','%project%/%workflow%/out.indelpe','Discretion','','Indel calls, only produced with paired-end reads','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','queue',0,0,'input','queue','string','--queue','-qgsmall','optional','','Submit to a particular queue or add other submission options','input.queue.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','reads',0,0,'input','reads','integer','--reads','1000000','optional','','Number of reads per batch input file (Default = 1 million)','input.reads.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','referencedir',0,0,'input','referencedir','directory','--referencedir','/nethome/bioinfo/data/sequence/chromosomes/human-bfa','essential','','Directory containing MAQ format binary fasta (.bfa) files for all human chromosomes','input.referencedir.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','snp',0,0,'output','indelsoa.filter','file','','%project%/%workflow%/cns.snp','Discretion','','List of raw SNPs extracted from comparison of consensus and reference files','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','snp-filter',0,0,'output','SNPfilter','file','','%project%/%workflow%/out.SNPfilter','Discretion','','Filtered SNP predictions based on indelsoa, indelpe and cns.snp files','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','species',0,0,'input','species','String','--species','','required','','Species name (e.g., human, mouse)','input.species.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','MAQ','pipeline','splitfile',0,0,'input','splitfile','file','--splitfile','%project%/%workflow%','optional','','File containing list of batch input sequence file locations','input.splitfile.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','maqIndex','converter','inputdir',1,0,'input','inputdir','directory','--inputdir','','essential','','Location of directory containing *.fa files','output.referencedir.value, input.outputdir.value, input.inputdir.value	','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','maqIndex','converter','outputdir',1,0,'input','outputdir','directory','--outputdir','','         ','','Print indexed files to this directory','output.referencedir.value, input.outputdir.value, input.inputdir.value	','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','maqIndex','converter','subdirs',1,0,'input','subdirs','flag','--subdirs','1','optional','','','input.subdirs.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','novoIndex','converter','inputdir',1,0,'input','inputdir','directory','--inputdir','','essential','','Location of directory containing *.fa files','output.referencedir.value, input.outputdir.value, input.inputdir.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','novoIndex','converter','outputdir',1,0,'input','outputdir','directory','--outputdir','','         ','','Print indexed files to this directory','output.referencedir.value, input.outputdir.value, input.inputdir.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','novoIndex','converter','subdirs',1,0,'input','subdirs','flag','--subdirs','1','optional','','','input.subdirs.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','SAV','pipeline','dbsnp',0,0,'input','dbsnp','string','--dbsnp','snp130','optional','','dbSNP version for given species','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','SAV','pipeline','inputdir',0,0,'input','inputdir','directory','--inputdir','%project%/%workflow%','required','','Directory with one subdirectory per reference chromosome, each containing an out.sam or out.bam alignment output file','input.outputdir.value,output.outputdir.value','outdir1,outdir2','if ( outdir1 != null && outdir1 !=  ) return outdir1; if ( outdir2 != null && outdir2 !=  ) return outdir2;'),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','SAV','pipeline','outputdir',0,0,'output','outputdir','directory','--outputdir','%project%/%workflow%','required','','Directory with one subdirectory per reference chromosome, each containing an out.sav output file','input.inputdir.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','SAV','pipeline','referencedir',0,0,'input','referencedir','directory','--referencedir','/nethome/bioinfo/data/sequence/chromosomes/human/hg19/fasta','essential','','Location of directory containing chr*.fa reference files','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','SAV','pipeline','species',0,0,'input','species','string','--species','human','required','','Name of the reference species (e.g., human, mouse)','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','sleep','test','seconds',0,0,'input','sleep','integer','--seconds','10','optional','','','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','TOPHAT','expression','coverage',0,0,'output','coverage','file','','%project%/%workflow%/coverage.wig','Discretion','','A UCSC BedGraph wigglegram track, showing the depth of coverage at each position, including the spliced read alignments.','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','TOPHAT','expression','cpus',0,0,'input','cpus','integer','--cpus','','optional','','Max. number of cpus per job (1 to 4) (DEFAULT = 4)','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','TOPHAT','expression','distance',0,0,'input','distance','integer','--distance','200','required','','The  mean inner distance between first read and its mate pair (corresponds to -r/--mate-inner-dist argument to Tophat)','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','TOPHAT','expression','hits',0,0,'output','hits','file','','%project%/%workflow%/accepted_hits.sam','Discretion','','A list of read alignments in SAM format. SAM is a compact short read alignment format that is increasingly being adopted.','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','TOPHAT','expression','inputfiles',0,0,'input','inputfiles','file','--inputfiles','','required','','Comma-separated *sequence.txt file names (e.g., s_1_1_sequence.txt,s_2_1_sequence.txt)','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','TOPHAT','expression','jobs',0,0,'input','jobs','integer','--jobs','','optional','','Max. number of concurrent cluster jobs (DEFAULT = 30)','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','TOPHAT','expression','junctions',0,0,'output','junctions','file','','%project%/%workflow%/junctions.bed','Discretion','','A UCSC BED track of junctions reported by TopHat. Each junction consists of two connected BED blocks, where each block is as long as the maximal overhang of any read spanning the junction. The score is the number of alignments spanning the junction.','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','TOPHAT','expression','keep',0,0,'input','keep','flag','--keep','','optional','','Keep intermediate files','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','TOPHAT','expression','label',0,0,'input','label','string','--label','','required','','Name to used to submit jobs to cluster (e.g., tophat-sample1)','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','TOPHAT','expression','matefiles',0,0,'input','matefiles','file','--matefiles','','optional','','Comma-separated *sequence.txt mate file names (e.g., s_1_2_sequence.txt,s_2_2_sequence.txt) with locations as paths relative to the output directory','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','TOPHAT','expression','outputdir',0,0,'input','outputdir','directory','--outputdir','','required','','Create this directory and write output files to it','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','TOPHAT','expression','outputfile',0,0,'output','outputfile','file','','%project%/%workflow%/out.sam','Discretion','sam','SAM file containing','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','TOPHAT','expression','params',0,0,'input','params','string','--params','','optional','','Additional parameters to be passed to tophat (e.g., --solexa1.3-quals','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','TOPHAT','expression','queue',0,0,'input','queue','string','--queue','','optional','','Cluster queue options','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','TOPHAT','expression','reference',0,0,'input','reference','file','--reference','','required','','Location of indexed reference file  (NB: Use file stub, e.g., /some/path/hg19)','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','unzipFiles','utility','delete',1,0,'input','delete','flag','--delete','1','optional','','Remove zipped files after unzipping','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','unzipFiles','utility','filter',0,0,'input','filter','string','--filter','','optional','','Unzip only files containing this text fragment','','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','unzipFiles','utility','inputdir',0,0,'input','inputdir','directory','--inputdir','%project%/%workflow%','essential','','Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)','input.outputdir.value','InputParams',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','unzipFiles','utility','outputdir',0,0,'input','outputdir','directory','--outputdir','%project%/%workflow%','required','','Unzip files to this directory','input.outputdir.value','InputParams',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','unzipFiles','utility','regex',0,0,'input','filter','string','--regex','	chr[XYM0-9]+.fa.gz','optional','','Unzip only files matching this regular expression','input.regex.value','',''),('agua','agua','bioapps','0.6.0','/agua/apps/bioapps','unzipFiles','utility','type',0,0,'input','type','string','--type','gunzip','required','','Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)','','','');
+/*!40000 ALTER TABLE `parameter` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `project`
+--
+
+DROP TABLE IF EXISTS `project`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `project` (
+  `username` varchar(20) NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `number` int(12) DEFAULT NULL,
+  `status` varchar(30) NOT NULL DEFAULT '',
+  `description` text NOT NULL,
+  `notes` text NOT NULL,
+  `provenance` text NOT NULL,
+  PRIMARY KEY (`username`,`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `project`
+--
+
+LOCK TABLES `project` WRITE;
+/*!40000 ALTER TABLE `project` DISABLE KEYS */;
+INSERT INTO `project` VALUES ('agua','Project1',NULL,'','','',''),('agua','Project2',NULL,'','','',''),('agua','ProjectX',NULL,'','','',''),('agua','ProjectY',NULL,'','','',''),('agua','Reference',NULL,'','','','');
+/*!40000 ALTER TABLE `project` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sessions`
+--
+
+DROP TABLE IF EXISTS `sessions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sessions` (
+  `username` varchar(30) NOT NULL,
+  `sessionid` varchar(255) NOT NULL DEFAULT '',
+  `datetime` datetime NOT NULL,
+  PRIMARY KEY (`username`,`sessionid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sessions`
+--
+
+LOCK TABLES `sessions` WRITE;
+/*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `source`
+--
+
+DROP TABLE IF EXISTS `source`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `source` (
+  `username` varchar(30) NOT NULL,
+  `name` varchar(30) NOT NULL DEFAULT '',
+  `description` text,
+  `location` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`username`,`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `source`
+--
+
+LOCK TABLES `source` WRITE;
+/*!40000 ALTER TABLE `source` DISABLE KEYS */;
+/*!40000 ALTER TABLE `source` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `stage`
+--
+
+DROP TABLE IF EXISTS `stage`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stage` (
+  `owner` varchar(30) NOT NULL,
+  `package` varchar(40) NOT NULL,
+  `version` varchar(40) NOT NULL,
+  `installdir` varchar(255) NOT NULL,
+  `username` varchar(30) NOT NULL,
+  `project` varchar(20) NOT NULL,
+  `workflow` varchar(20) NOT NULL,
+  `workflownumber` int(12) DEFAULT NULL,
+  `name` varchar(40) NOT NULL DEFAULT '',
+  `number` varchar(10) NOT NULL DEFAULT '',
+  `type` varchar(40) DEFAULT NULL,
+  `location` varchar(255) NOT NULL DEFAULT '',
+  `executor` varchar(40) NOT NULL DEFAULT '',
+  `cluster` varchar(20) NOT NULL DEFAULT '',
+  `submit` int(1) DEFAULT NULL,
+  `stderrfile` varchar(255) DEFAULT NULL,
+  `stdoutfile` varchar(255) DEFAULT NULL,
+  `queued` datetime DEFAULT NULL,
+  `started` datetime DEFAULT NULL,
+  `completed` datetime DEFAULT NULL,
+  `workflowpid` int(12) DEFAULT NULL,
+  `stagepid` int(12) DEFAULT NULL,
+  `stagejobid` int(12) DEFAULT NULL,
+  `status` varchar(20) DEFAULT NULL,
+  `stagename` varchar(40) DEFAULT NULL,
+  `stagedescription` text,
+  `stagenotes` text,
+  PRIMARY KEY (`username`,`project`,`workflow`,`number`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `stage`
+--
+
+LOCK TABLES `stage` WRITE;
+/*!40000 ALTER TABLE `stage` DISABLE KEYS */;
+INSERT INTO `stage` VALUES ('agua','bioapps','0.6.0','/agua/bioapps','agua','Project1','Workflow1',1,'FTP','1','utility','bin/utils/FTP.pl','/usr/bin/perl','',0,'/nethome/admin/agua/Project1/Workflow1/stdout/1-FTP.stderr','/nethome/admin/agua/Project1/Workflow1/stdout/1-FTP.stdout','0000-00-00 00:00:00','2012-02-26 04:24:14','2012-02-26 04:36:30',0,7860,0,'completed','','',''),('agua','bioapps','0.6.0','/agua/bioapps','agua','Project1','Workflow1',1,'unzipFiles','2','utility','bin/utils/unzipFiles.pl','/usr/bin/perl','',0,'/nethome/admin/agua/Project1/Workflow1/stdout/2-unzipFiles.stderr','/nethome/admin/agua/Project1/Workflow1/stdout/2-unzipFiles.stdout','0000-00-00 00:00:00','2012-02-27 03:39:00','2012-02-27 03:39:27',0,8997,0,'completed','','',''),('agua','bioapps','0.6.0','/agua/bioapps','agua','Project1','Workflow1',1,'elandIndex','3','converter','bin/converters/elandIndex.pl','/usr/bin/perl','',0,'','','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0,0,0,'','','',''),('agua','bioapps','0.6.0','/agua/bioapps','agua','Project1','Workflow2',2,'ELAND','1','aligner','bin/aligners/ELAND.pl','/usr/bin/perl','',0,'','','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0,0,0,'','','',''),('agua','bioapps','0.6.0','/agua/bioapps','agua','Project1','WorkflowA',5,'FTP','1','utility','bin/utils/FTP.pl','/usr/bin/perl','',0,'/nethome/admin/agua/ProjectY/Workflow2/stdout/1-FTP.stderr','/nethome/admin/agua/ProjectY/Workflow2/stdout/1-FTP.stdout','0000-00-00 00:00:00','2012-02-18 09:03:39','2012-02-18 09:04:13',0,3371,0,'completed','','',''),('agua','bioapps','0.6.0','/agua/bioapps','agua','Project1','WorkflowA',5,'unzipFiles','2','utility','bin/utils/unzipFiles.pl','/usr/bin/perl','',0,'/nethome/admin/agua/ProjectY/Workflow2/stdout/2-unzipFiles.stderr','/nethome/admin/agua/ProjectY/Workflow2/stdout/2-unzipFiles.stdout','0000-00-00 00:00:00','2012-02-18 09:23:36','2012-02-18 09:23:39',0,3634,0,'error','','',''),('agua','bioapps','0.6.0','/agua/bioapps','agua','Project1','WorkflowA',5,'novoIndex','3','converter','bin/converters/novoIndex.pl','/usr/bin/perl','',0,'','','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0,0,0,'','','',''),('agua','bioapps','0.6.0','/agua/bioapps','agua','ProjectY','Workflow2',2,'FTP','1','utility','bin/utils/FTP.pl','/usr/bin/perl','',0,'/nethome/admin/agua/ProjectY/Workflow2/stdout/1-FTP.stderr','/nethome/admin/agua/ProjectY/Workflow2/stdout/1-FTP.stdout','0000-00-00 00:00:00','2012-02-18 09:03:39','2012-02-18 09:04:13',0,3371,0,'completed','','',''),('agua','bioapps','0.6.0','/agua/bioapps','agua','ProjectY','Workflow2',2,'unzipFiles','2','utility','bin/utils/unzipFiles.pl','/usr/bin/perl','',0,'/nethome/admin/agua/ProjectY/Workflow2/stdout/2-unzipFiles.stderr','/nethome/admin/agua/ProjectY/Workflow2/stdout/2-unzipFiles.stdout','0000-00-00 00:00:00','2012-02-18 09:23:36','2012-02-18 09:23:39',0,3634,0,'error','','',''),('agua','bioapps','0.6.0','/agua/bioapps','agua','ProjectY','Workflow2',2,'novoIndex','3','converter','bin/converters/novoIndex.pl','/usr/bin/perl','',0,'','','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0,0,0,'','','','');
+/*!40000 ALTER TABLE `stage` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `stageparameter`
+--
+
+DROP TABLE IF EXISTS `stageparameter`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stageparameter` (
+  `owner` varchar(30) NOT NULL,
+  `username` varchar(30) NOT NULL,
+  `project` varchar(20) NOT NULL,
+  `workflow` varchar(20) NOT NULL,
+  `workflownumber` int(12) NOT NULL DEFAULT '0',
+  `appname` varchar(40) DEFAULT NULL,
+  `appnumber` varchar(10) NOT NULL DEFAULT '',
+  `name` varchar(40) NOT NULL DEFAULT '',
+  `ordinal` int(6) NOT NULL DEFAULT '0',
+  `locked` int(1) NOT NULL DEFAULT '0',
+  `paramtype` varchar(40) NOT NULL DEFAULT '',
+  `category` varchar(40) NOT NULL DEFAULT '',
+  `valuetype` varchar(20) NOT NULL DEFAULT '',
+  `argument` varchar(40) NOT NULL DEFAULT '',
+  `value` text,
+  `discretion` varchar(10) NOT NULL DEFAULT '',
+  `format` varchar(40) DEFAULT NULL,
+  `description` text,
+  `args` text,
+  `inputParams` text,
+  `paramFunction` text,
+  `chained` int(1) DEFAULT NULL,
+  PRIMARY KEY (`username`,`project`,`workflow`,`workflownumber`,`appnumber`,`name`,`paramtype`,`ordinal`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `stageparameter`
+--
+
+LOCK TABLES `stageparameter` WRITE;
+/*!40000 ALTER TABLE `stageparameter` DISABLE KEYS */;
+INSERT INTO `stageparameter` VALUES ('agua','agua','Project1','Workflow1',0,'FTP','1','filter',0,0,'input','filter','string','--filter','','optional','','Download only files containing this text fragment','','','',0),('agua','agua','Project1','Workflow1',0,'FTP','1','outputdir',0,0,'input','outputdir','directory','--outputdir','Project1/Workflow1/downloads','required','','Create this directory and download files to it','','','',0),('agua','agua','Project1','Workflow1',0,'FTP','1','regex',0,0,'input','regex','string','--regex','chr[XYM0-9]+.fa.gz','optional','','Download files matching this regular expression','','','',0),('agua','agua','Project1','Workflow1',0,'FTP','1','type',0,0,'input','type','string','--type','html','essential','','Type of page: html or text','','','',0),('agua','agua','Project1','Workflow1',0,'FTP','1','url',0,0,'input','url','string','--url','http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomes','required','','Download files linked on this page','','','',0),('agua','agua','Project1','Workflow1',0,'unzipFiles','2','delete',1,0,'input','delete','flag','--delete','1','optional','','Remove zipped files after unzipping','','','',0),('agua','agua','Project1','Workflow1',0,'unzipFiles','2','filter',0,0,'input','filter','string','--filter','','optional','','Unzip only files containing this text fragment','','','',0),('agua','agua','Project1','Workflow1',0,'unzipFiles','2','inputdir',0,0,'input','inputdir','directory','--inputdir','Project1/Workflow1/downloads','essential','','Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)','input.outputdir.value','InputParams','',0),('agua','agua','Project1','Workflow1',0,'unzipFiles','2','outputdir',0,0,'input','outputdir','directory','--outputdir','Project1/Workflow1/downloads','required','','Unzip files to this directory','input.outputdir.value','InputParams','',0),('agua','agua','Project1','Workflow1',0,'unzipFiles','2','regex',0,0,'input','filter','string','--regex','chr[XYM0-9]+.fa.gz','optional','','Unzip only files matching this regular expression','input.regex.value','','',1),('agua','agua','Project1','Workflow1',0,'unzipFiles','2','type',0,0,'input','type','string','--type','gunzip','required','','Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)','','','',0),('agua','agua','Project1','Workflow1',0,'elandIndex','3','inputdir',0,0,'input','inputdir','directory','--inputdir','Project1/Workflow1/reference/fasta','essential','','Location of directory containing *.fa files','input.referencedir.value,input.outputdir.value,input.inputdir.value','referencedir,outputdir,inputdir','if ( referencedir ) return referencedir; if ( outputdir ) return outputdir; if ( inputdir ) return inputdir;',0),('agua','agua','Project1','Workflow1',0,'elandIndex','3','outputdir',1,0,'input','outputdir','directory','--outputdir','Project1/Workflow1/reference/eland','required','','Print indexed files to this directory','input.referencedir.value,input.outputdir.value,input.inputdir.value','referencedir,outputdir,inputdir','if ( referencedir ) return referencedir; if ( outputdir ) return outputdir; if ( inputdir ) return inputdir;',0),('agua','agua','Project1','Workflow1',0,'elandIndex','3','subdirs',1,0,'input','subdirs','flag','--subdirs','','optional','','','input.subdirs.value','','',0),('agua','agua','Project1','Workflow2',0,'ELAND','1','clean',0,0,'input','clean','flag','--clean','1','optional','','Clean run (remove old splitfile)','','','',0),('agua','agua','Project1','Workflow2',0,'ELAND','1','hits',1,0,'output','hits','files','','','optional','','Chromosome-specific *bam files containing aligned reads','input.outputdir.value','outputdir','return outputdir + /chr*/hit.bam;',0),('agua','agua','Project1','Workflow2',0,'ELAND','1','inputfile',0,0,'input','inputfile','file','--inputfile','','essential','','Solexa FASTQ format sequence file','output.readfile.value,input.readfile.value','input1,input2','',0),('agua','agua','Project1','Workflow2',0,'ELAND','1','inputtype',0,0,'input','inputtype','string','--inputtype','fastq','required','','Type of input sequence. Valid inputs: fastq, fasta, export or qseq','','','',0),('agua','agua','Project1','Workflow2',0,'ELAND','1','label',0,0,'input','label','string','--label','myLabel','required','','Label describing the data or experiment','input.label.value','InputParams','',0),('agua','agua','Project1','Workflow2',0,'ELAND','1','matefile',0,0,'input','matefile','file','--matefile','','optional','fastq','Paired-end mate file complementary to inputfile (e.g., s_1_2_sequence.fastq)','output.matefile.value,input.matefile.value','input1,input2','',0),('agua','agua','Project1','Workflow2',0,'ELAND','1','outputdir',0,0,'input','outputdir','directory','--outputdir','Project1/Workflow2','required','','Print ELAND alignment files to this directory (will create the directory if it does not exist)','','','',0),('agua','agua','Project1','Workflow2',0,'ELAND','1','pairparams',0,0,'input','pairparams','string','--pairparams','','optional','','Paired read analysis parameters to pass to pickBestPair. Default: \'--circular\' (treats all chromosomes as circular).','','','',0),('agua','agua','Project1','Workflow2',0,'ELAND','1','quality',0,0,'input','quality','integer','--quality','','optional','','Quality value of all bases in fasta mode (Default: 30)','','','',0),('agua','agua','Project1','Workflow2',0,'ELAND','1','reads',0,0,'input','reads','integer','--reads','1000000','optional','','Number of reads per sub-file','','','',0),('agua','agua','Project1','Workflow2',0,'ELAND','1','referencedir',0,0,'input','referencedir','directory','--referencedir','Project1/Workflow2','essential','','Directory containing squashed reference genome files','','','',0),('agua','agua','Project1','Workflow2',0,'ELAND','1','seedlength',0,0,'input','seedlength','integer','--seedlength','','optional','','Length of read used for ELAND alignment (Default: min. of seedlength and 32)','','','',0),('agua','agua','Project1','Workflow2',0,'ELAND','1','species',0,1,'input','species','string','--species','human','required','','Name of species, e.g., human, mouse, rat.','','','',0),('agua','agua','Project1','Workflow2',0,'ELAND','1','splitfile',0,0,'input','splitfile','file','--splitfile','','optional','','','','','',0),('agua','agua','Project1','WorkflowA',0,'FTP','1','filter',0,0,'input','filter','string','--filter','','optional','','Download only files containing this text fragment','','','',0),('agua','agua','Project1','WorkflowA',0,'FTP','1','outputdir',0,0,'input','outputdir','directory','--outputdir','ProjectY/Workflow2/downloads','required','','Create this directory and download files to it','','','',0),('agua','agua','Project1','WorkflowA',0,'FTP','1','regex',0,0,'input','regex','string','--regex','chr[XYM0-9]+.fa.gz','optional','','Download files matching this regular expression','','','',0),('agua','agua','Project1','WorkflowA',0,'FTP','1','type',0,0,'input','type','string','--type','html','essential','','Type of page: html or text','','','',0),('agua','agua','Project1','WorkflowA',0,'FTP','1','url',0,0,'input','url','string','--url','http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx','required','','Download files linked on this page','','','',0),('agua','agua','Project1','WorkflowA',0,'unzipFiles','2','delete',1,0,'input','delete','flag','--delete','1','optional','','Remove zipped files after unzipping','','','',0),('agua','agua','Project1','WorkflowA',0,'unzipFiles','2','filter',0,0,'input','filter','string','--filter','','optional','','Unzip only files containing this text fragment','','','',0),('agua','agua','Project1','WorkflowA',0,'unzipFiles','2','inputdir',0,0,'input','inputdir','directory','--inputdir','ProjectY/Workflow2','essential','','Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)','input.outputdir.value','InputParams','',0),('agua','agua','Project1','WorkflowA',0,'unzipFiles','2','outputdir',0,0,'input','outputdir','directory','--outputdir','ProjectY/Workflow2','required','','Unzip files to this directory','input.outputdir.value','InputParams','',0),('agua','agua','Project1','WorkflowA',0,'unzipFiles','2','regex',0,0,'input','filter','string','--regex','chr[XYM0-9]+.fa.gz','optional','','Unzip only files matching this regular expression','input.regex.value','','',0),('agua','agua','Project1','WorkflowA',0,'unzipFiles','2','type',0,0,'input','type','string','--type','gunzip','required','','Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)','','','',0),('agua','agua','Project1','WorkflowA',0,'novoIndex','3','inputdir',1,0,'input','inputdir','directory','--inputdir','ProjectX/Workflow1','essential','','Location of directory containing *.fa files','output.referencedir.value, input.outputdir.value, input.inputdir.value','','',0),('agua','agua','Project1','WorkflowA',0,'novoIndex','3','outputdir',1,0,'input','outputdir','directory','--outputdir','','         ','','Print indexed files to this directory','output.referencedir.value, input.outputdir.value, input.inputdir.value','','',0),('agua','agua','Project1','WorkflowA',0,'novoIndex','3','subdirs',1,0,'input','subdirs','flag','--subdirs','1','optional','','','input.subdirs.value','','',0),('agua','agua','ProjectY','Workflow2',0,'FTP','1','filter',0,0,'input','filter','string','--filter','','optional','','Download only files containing this text fragment','','','',0),('agua','agua','ProjectY','Workflow2',0,'FTP','1','outputdir',0,0,'input','outputdir','directory','--outputdir','ProjectY/Workflow2/downloads','required','','Create this directory and download files to it','','','',0),('agua','agua','ProjectY','Workflow2',0,'FTP','1','regex',0,0,'input','regex','string','--regex','chr[XYM0-9]+.fa.gz','optional','','Download files matching this regular expression','','','',0),('agua','agua','ProjectY','Workflow2',0,'FTP','1','type',0,0,'input','type','string','--type','html','essential','','Type of page: html or text','','','',0),('agua','agua','ProjectY','Workflow2',0,'FTP','1','url',0,0,'input','url','string','--url','http://hgdownload.cse.ucsc.edu/goldenPath/hg19/chromosomesxx','required','','Download files linked on this page','','','',0),('agua','agua','ProjectY','Workflow2',0,'unzipFiles','2','delete',1,0,'input','delete','flag','--delete','1','optional','','Remove zipped files after unzipping','','','',0),('agua','agua','ProjectY','Workflow2',0,'unzipFiles','2','filter',0,0,'input','filter','string','--filter','','optional','','Unzip only files containing this text fragment','','','',0),('agua','agua','ProjectY','Workflow2',0,'unzipFiles','2','inputdir',0,0,'input','inputdir','directory','--inputdir','ProjectY/Workflow2','essential','','Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)','input.outputdir.value','InputParams','',0),('agua','agua','ProjectY','Workflow2',0,'unzipFiles','2','outputdir',0,0,'input','outputdir','directory','--outputdir','ProjectY/Workflow2','required','','Unzip files to this directory','input.outputdir.value','InputParams','',0),('agua','agua','ProjectY','Workflow2',0,'unzipFiles','2','regex',0,0,'input','filter','string','--regex','chr[XYM0-9]+.fa.gz','optional','','Unzip only files matching this regular expression','input.regex.value','','',0),('agua','agua','ProjectY','Workflow2',0,'unzipFiles','2','type',0,0,'input','type','string','--type','gunzip','required','','Name of unzip application (unzip|gunzip) (DEFAULT: gunzip)','','','',0),('agua','agua','ProjectY','Workflow2',0,'novoIndex','3','inputdir',1,0,'input','inputdir','directory','--inputdir','ProjectX/Workflow1','essential','','Location of directory containing *.fa files','output.referencedir.value, input.outputdir.value, input.inputdir.value','','',0),('agua','agua','ProjectY','Workflow2',0,'novoIndex','3','outputdir',1,0,'input','outputdir','directory','--outputdir','','         ','','Print indexed files to this directory','output.referencedir.value, input.outputdir.value, input.inputdir.value','','',0),('agua','agua','ProjectY','Workflow2',0,'novoIndex','3','subdirs',1,0,'input','subdirs','flag','--subdirs','1','optional','','','input.subdirs.value','','',0);
+/*!40000 ALTER TABLE `stageparameter` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `users` (
+  `username` varchar(30) NOT NULL,
+  `password` varchar(30) NOT NULL,
+  `email` varchar(50) DEFAULT NULL,
+  `firstname` varchar(20) DEFAULT NULL,
+  `lastname` varchar(20) DEFAULT NULL,
+  `description` text,
+  `datetime` datetime NOT NULL,
+  PRIMARY KEY (`username`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `view`
+--
+
+DROP TABLE IF EXISTS `view`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `view` (
+  `username` varchar(30) NOT NULL,
+  `project` varchar(20) NOT NULL,
+  `view` varchar(20) NOT NULL,
+  `species` varchar(20) DEFAULT NULL,
+  `build` varchar(20) DEFAULT NULL,
+  `chromosome` varchar(20) DEFAULT NULL,
+  `tracklist` text,
+  `start` int(15) DEFAULT NULL,
+  `stop` int(15) DEFAULT NULL,
+  `notes` text,
+  `status` varchar(20) DEFAULT NULL,
+  `datetime` datetime NOT NULL,
+  PRIMARY KEY (`username`,`project`,`view`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `view`
+--
+
+LOCK TABLES `view` WRITE;
+/*!40000 ALTER TABLE `view` DISABLE KEYS */;
+/*!40000 ALTER TABLE `view` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `viewfeature`
+--
+
+DROP TABLE IF EXISTS `viewfeature`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `viewfeature` (
+  `username` varchar(30) NOT NULL,
+  `project` varchar(20) NOT NULL,
+  `view` varchar(20) NOT NULL,
+  `feature` varchar(30) NOT NULL,
+  `species` varchar(20) DEFAULT NULL,
+  `build` varchar(20) DEFAULT NULL,
+  `location` varchar(255) NOT NULL,
+  PRIMARY KEY (`username`,`project`,`view`,`feature`,`location`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `viewfeature`
+--
+
+LOCK TABLES `viewfeature` WRITE;
+/*!40000 ALTER TABLE `viewfeature` DISABLE KEYS */;
+/*!40000 ALTER TABLE `viewfeature` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `volume`
+--
+
+DROP TABLE IF EXISTS `volume`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `volume` (
+  `username` varchar(30) NOT NULL,
+  `volumeid` varchar(30) NOT NULL,
+  `volumesize` int(6) DEFAULT NULL,
+  `instance` varchar(30) NOT NULL,
+  `availabilityzone` varchar(12) NOT NULL,
+  `mountpoint` varchar(255) NOT NULL,
+  `device` varchar(30) NOT NULL,
+  `snapshot` varchar(30) NOT NULL,
+  `created` date DEFAULT NULL,
+  PRIMARY KEY (`username`,`volumeid`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `volume`
+--
+
+LOCK TABLES `volume` WRITE;
+/*!40000 ALTER TABLE `volume` DISABLE KEYS */;
+/*!40000 ALTER TABLE `volume` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `workflow`
+--
+
+DROP TABLE IF EXISTS `workflow`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `workflow` (
+  `username` varchar(30) NOT NULL,
+  `project` varchar(20) NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `number` int(12) NOT NULL,
+  `status` varchar(30) NOT NULL DEFAULT '',
+  `description` text NOT NULL,
+  `notes` text NOT NULL,
+  `provenance` text NOT NULL,
+  PRIMARY KEY (`username`,`project`,`name`,`number`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `workflow`
+--
+
+LOCK TABLES `workflow` WRITE;
+/*!40000 ALTER TABLE `workflow` DISABLE KEYS */;
+INSERT INTO `workflow` VALUES ('agua','Project1','Workflow1',1,'','','',''),('agua','Project1','Workflow2',2,'','','',''),('agua','Project1','Workflow3',3,'','','',''),('agua','Project1','Workflow4',4,'','','',''),('agua','Project1','WorkflowA',3,'','','',''),('agua','Project1','WorkflowA',5,'','','',''),('agua','ProjectX','Workflow3',3,'','','',''),('agua','ProjectY','Workflow2',1,'','','',''),('agua','Reference','genomes',1,'','','','');
+/*!40000 ALTER TABLE `workflow` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2013-03-12 10:19:56

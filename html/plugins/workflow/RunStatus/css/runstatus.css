@@ -1,0 +1,387 @@
+/* RUN STATUS */
+
+/* SET BACKGROUND COLOR AND FONT */
+.runstatus .runstatus {
+	font-family: Verdana;
+	background-color: #FFF;
+}
+
+/* CONTROL PADDING INSIDE THE TITLE PANES */
+.runstatus .dijitTitlePaneContentInner {
+	/* padding: 0px; */
+}
+
+/* REMOVE PADDING */
+.workflow .stages .dijitContentPane {
+	/* padding : 0 !important; */
+	margin: 0 0 0 !important;
+}
+
+.workflow .stages .dijitSplitContainer-dijitContentPane {
+	/* padding: 0 !important; */
+	margin: 0 !important;
+	background-color: #FFF !important;
+}
+
+/* NB: THIS DOESN'T WORK BECAUSE THE CONTENT
+PANE IS NOT YET INSIDE THE runstatus CCS SPACE */
+.runstatus .dijitTitlePaneContentInner {
+	/*padding:0 !important;*/
+}
+
+.runstatus .dijitContentPane {
+	width: auto !important;
+	/* padding : 0 !important; */
+	margin: 0 0 0 !important;
+}
+
+.runstatus .dijitTitlePaneContentOuter {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	background:#FFFFFF none repeat scroll 0 0;
+	border-color:#FFF;
+	/*border-style:solid;*/
+	border-width:2px;
+	/* padding : 0 !important; */
+	margin: 0 0 0 !important;
+}
+
+/* SET TAB PANE WRAPPER MIN HEIGHT SO ALL TITLE PANES ARE VISIBLE */
+.dijitTabPaneWrapper .dijitTabContainerTop-container .runstatus {
+	height: auto !important;
+	min-height: 120px !important;
+	width: auto !important;
+}
+
+/*.dijitContentPane .dijitTabPane .dijitTabContainerTop-dijitContentPane table {*/
+/*	height: auto !important;*/
+/*	min-height: 120px !important;*/
+/*}*/
+
+/* TITLE PANE TITLE */
+.runstatus .status {
+	/*min-height: 20px !important;*/
+}
+
+/* TITLE PANE TITLE */
+.runstatus .dijitTitlePaneTextNode {
+	color: #484 !important;
+	font-weight: bolder;
+	font-size: 16px;
+}
+
+/* TITLE PANE HEIGHT */
+.runstatus .dijitTitlePaneContentInner{
+	/*height: auto !important;*/
+	/*min-height: 30px !important;*/
+	/*margin-bottom: 20px;*/
+}
+
+.runstatus .dijitTitlePaneTitle .dijitTitlePaneFocused .dijitClosed {
+	/*min-height: 20px !important;*/
+	/*margin-bottom: 20px;*/
+}
+
+.runstatus .dijitTitlePaneTitle, .runstatus .dijitTitlePaneTitle .dijitClosed {
+	min-height: 20px !important;	
+}
+
+/* STATUS ROWS CONTAINER */
+.runstatus {
+	/*min-height: 40px !important;	*/
+	height: auto !important;
+	font-family: Verdana;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border: 2px solid #CCCCCC;
+	cursor: default;
+	width: auto !important;	
+	text-align: left !important;
+	font-size: 12px;
+	border-color: #333;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	/*display: block !important;*/
+	overflow:auto !important;
+}
+
+/* ALL BUTTONS */
+.runstatus .pollCountdown {
+    font-size: 10px;
+    margin-top: 9px;
+}
+.runstatus .play,
+.runstatus .pause,
+.runstatus .stop,
+.runstatus .pollingActive,
+.runstatus .pollingStopped,
+.runstatus .pollingStarted {
+	float: left;
+	
+	background-color: #FFF;
+	border: 2px solid #EEE;
+	border-bottom-color: #DDD;	
+	border-left-color: #DDD;	
+	background-repeat: no-repeat;
+	background-image: url();
+	width: 32px;
+	height: 32px;
+	color: #888 !important;
+	font-size: 10px !important;
+}
+
+.runstatus .play:hover,
+.runstatus .pause:hover,
+.runstatus .stop:hover,
+.runstatus .pollingStopped:hover {
+	background-color: #FF0 !important;
+}
+
+.runstatus .play:active,
+.runstatus .pause:active,
+.runstatus .stop:active,
+.runstatus .pollingStopped:active {
+	background-color: #0F0;
+}
+
+/* TOGGLE TIMER */
+.runstatus .pollingActive {
+	background-image: url(../../../../../plugins/workflow/images/loading-32.gif);
+	background-position: -2px;
+}
+.runstatus .pollingStopped {
+	background-image: url(../../../../../plugins/workflow/images/ready-36.png);
+	background-position: -2px;
+}
+.runstatus .pollingStarted {
+	background-image: url(../../../../../plugins/workflow/images/spinner-36.gif);
+	background-position: -2px;
+}
+
+/* PLAY, PAUSE AND STOP */
+.runstatus .play {
+	background-image: url(../../../../../plugins/workflow/images/play-28.png);	
+}
+.runstatus .pause {
+	background-image: url(../../../../../plugins/workflow/images/pause-28.png);	
+}
+.runstatus .stop {
+	background-image: url(../../../../../plugins/workflow/images/stop-28.png);	
+}
+.runstatus .play:hover {
+	background-image: url(../../../../../plugins/workflow/images/play-wide-green-28.png);	
+}
+.runstatus .pause:hover {
+	background-image: url(../../../../../plugins/workflow/images/pause-orange-28.png);	
+}
+.runstatus .stop:hover {
+	background-image: url(../../../../../plugins/workflow/images/stop-red-28.png);	
+}
+
+/* WORKFLOW NAME */
+.workflowHeading,
+.workflowText {
+	position: relative !important;
+	height: 32px;
+	font-size: 20px;
+	top: 7px;
+}
+.workflowHeading {
+	color:	#888;
+	font-weight: 100;
+	min-width: 75px !important;
+	float: left;
+	text-align: right;
+}
+
+.workflowText {
+	color: #000;
+	font-weight: 400;
+	min-width: 150px !important;
+	text-indent: 5px;
+	float: left;
+	text-align: left;
+}
+
+.workflowTime {
+	color:	#888;
+	font-weight: 100;
+	min-width: 75px !important;
+	float: left;
+	text-align: right;
+	font-size: 16px;
+}
+
+
+
+/* DATETIME */
+.runstatus .notifier {
+	width: 310px;
+	background-color: #000;
+	color: white;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+}
+
+/* STAGE STATUS */
+.runstatus .stageTable,
+.runstatus .stageTable tr {
+	position: relative;
+	min-width: 458px !important;
+	width: 20% !important;
+	background-color: #CCC;
+}
+
+.runstatus .stageTable .completed,
+.runstatus .stageTable .completed .stageRow .key,
+.runstatus .stageTable .completed .stageRow .completedIcon {
+	background-color :  #CFC !important;
+	color: #222 !important;
+    /*font-family: Arial !important;*/
+    /*font-size: 14px !important;*/
+    font-weight: bold !important;
+}
+
+.runstatus .stageTable .running,
+.runstatus .stageTable .running .stageRow .key,
+.runstatus .stageTable .running .stageRow .runningIcon {
+	background-color : #FFC !important;
+	color: darkred !important;
+	font-weight: bolder !important;
+}
+
+.runstatus .stageRow {
+	text-align: center !important;
+	vertical-align: middle !important;
+	text-align: center !important;
+	font-size: 16px !important;
+	background-color: #FFF !important;
+	border-collapse: collapse !important;
+}
+
+.runstatus .stageRow .Icon,
+.runstatus .stageRow .completedIcon,
+.runstatus .stageRow .runningIcon,
+.runstatus .stageRow .errorIcon,
+.runstatus .stageRow .stoppedIcon {
+	background-color: #EEE !important;
+	font-size: 20px !important;
+	color: #000 !important;
+	text-align: center !important;
+	text-indent: 10px !important;
+    width: 40px !important;
+	background-repeat: no-repeat;
+	background-position: 0.3em 0.09em !important;
+}
+
+.runstatus .stageRow .Icon {
+	background-image: url(../../../../../plugins/workflow/images/workflow-20.png) !important;
+}
+
+.runstatus .stageRow .completedIcon {
+	background-image: url(../../../../../plugins/workflow/images/workflow-completed-20.png) !important;
+}
+
+.runstatus .stageRow .runningIcon {
+	background-image: url(../../../../../plugins/workflow/images/spinner-18.gif) !important;
+}
+
+.runstatus .stageRow .errorIcon {
+	background-image: url(../../../../../plugins/workflow/images/warning.png) !important;
+}
+
+.runstatus .stageRow .stoppedIcon {
+	background-image: url(../../../../../plugins/workflow/images/stopped-20.png) !important;
+}
+
+.runstatus .stageRow .key {
+	width: 60px !important;
+	font-weight: bolder !important;	
+	color: #000 !important;
+	background-color: #EEE;
+}
+
+.runstatus .stageRow .name {
+	min-width: 220px !important;
+	font-size: 20px !important;
+	color: #000 !important;
+	-moz-user-select: text !important;
+}
+
+.runstatus .stageRow .value {
+	background-color: #FFF !important;
+	color: #222;
+	min-width: 220px !important;
+	font-weight: bold;	
+}
+
+.runstatus .stageRow .stdout,
+.runstatus .stageRow .stderr {
+	text-align: left !important;
+	text-indent: 10px !important;
+	min-width: 300px !important;
+	font-size: 10px !important;
+	color: blue !important;
+}
+.runstatus .stageRow .stdout:hover,
+.runstatus .stageRow .stderr:hover {
+	color: #F0F !important;
+}
+.runstatus .stageRow .stdout:active,
+.runstatus .stageRow .stderr:active {
+	color: #F0F !important;
+}
+
+.runstatus .stageRow .subkey {
+	width: 60px !important;
+	font-weight: bolder !important;	
+	color: #000 !important;
+	background-color: #EEE !important;	
+}
+
+.runstatus .stageRow .spacer {
+	background-color: #EEE !important;
+	width: 2px !important;
+}
+
+/* CLUSTER STATUS AND QUEUE STATUS */
+.runstatus .clusterStatus pre,
+.runstatus .queueStatus pre {
+	font-size: 14px !important;
+	height: auto !important;
+	max-height: auto !important;
+	font-weight: bolder !important;
+	font-family: monospace !important;
+	white-space: pre !important;
+	background-color: black !important;
+	border-top: 1px solid black !important;
+	color: white !important;
+	margin: 0px !important;
+	/* padding: 4px !important; */
+	display: block !important;
+}
+.runstatus .clusterStatusContainer {
+	height: auto !important;
+}
+
+.runstatus .clusterStatus pre:hover,
+.runstatus .queueStatus pre:hover {
+	background-color: #080 !important;
+	font-weight: bold !important;
+	color: white !important;
+	cursor: pointer !important;
+}
+.runstatus .clusterStatus pre:active,
+.runstatus .queueStatus pre:active {
+	background-color: #888 !important;
+	font-weight: bold !important;
+	color: white !important;
+	cursor: pointer !important;
+}
+
+

@@ -1,0 +1,13 @@
+---
+workflow_name: casava_bcl_to_gvcf
+workflow_version: v1
+config_format: yaml
+driver_location: /home/pcruz/src/saffrondev/data/test_submission.sh 
+sge_min_parameters: "qsub -cwd -V  -q '*' "
+report_file_name: build_stats.txt
+report_thresholds:
+    hello:
+        gt_gen_concordance:
+	    - ge
+	    - 0.9924
+

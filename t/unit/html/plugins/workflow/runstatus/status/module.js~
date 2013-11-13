@@ -1,0 +1,11 @@
+dojo.provide("t.plugins.workflow.module");
+
+try{
+    dojo.require("t.plugins.workflow.execute.test");
+    dojo.require("t.plugins.workflow.io.test");
+    dojo.require("t.plugins.workflow.runstatus.test");
+    dojo.require("t.plugins.workflow.runworkflow.test");
+}
+catch(e) {
+    doh.debug(e);
+}

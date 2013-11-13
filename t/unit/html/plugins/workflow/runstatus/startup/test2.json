@@ -1,0 +1,73 @@
+{    
+    "clusterstatus": {
+        "status": "running",
+        "cluster": "microclusterXXXXXXXXXXXXXx",
+        "log": ">>> ** 3 ** Oldest job is from 2011-05-10 18:29:20. # queued jobs = 53. # hosts = 5.\n>>> Avg job duration = 50 sec Avg wait time = 517 sec.\n>>> Won't add another host, currently at max (5).\n>>> Sleeping, looping again in 10 seconds. XXXXX CORRECT ENTRY XXXXX\n",
+        "list": "-------------------------------------------------------------\n    syoung-microcluster (security group: @sc-syoung-microcluster)\n    -------------------------------------------------------------\n    Launch time: 2011-08-27 04:59:16\n    Uptime: 04:18:37\n    Zone: us-east-1a\n    Keypair: id_rsa-admin-key\n    EBS volumes: N/A\n    Cluster nodes:\n         master running i-d94f46b8 ec2-184-73-37-171.compute-1.amazonaws.com\n    Total nodes: 1\n"
+    },
+    
+    "queuestatus":{
+        "queue":"admin-Project1-Workflow1",
+        "status":"=================================================================================\n\nPENDING JOBS:\n"
+    },
+    
+    "stagestatus":{
+        "project":"Project1",
+        "workflow":"Workflow1",
+        "status":"running",
+        "stages":[{
+            "stagedescription":null,
+            "stagepid":"22243",
+            "number":"1",
+            "status":"completed",
+            "project":"Project1",
+            "submit":"1",
+            "workflowpid":"22234",
+            "stagenotes":null,
+            "stagename":null,
+            "stagejobid":"0",
+            "owner":"admin",
+            "workflownumber":"1",
+            "cluster":"",
+            "stderrfile":null,
+            "location":"apps/expression/TOPHAT.pl",
+            "executor":"/usr/bin/perl",
+            "name":"TOPHAT",
+            "username":"syoung",
+            "stdoutfile":null,
+            "workflow":"Workflow1",
+            "type":"aligner",
+            "queued":"0000-00-00 00:00:00",
+            "started":"2011-05-12 11:03:08",
+            "completed":"2011-05-12 12:14:19",
+            "now":"2011-05-13 01:45:58"
+        },
+        {
+            "stagedescription":null,
+            "stagepid":"20636",
+            "number":"2",
+            "status":"completed",
+            "project":"Project1",
+            "submit":null,
+            "workflowpid":"20374",
+            "stagenotes":null,
+            "stagename":null,
+            "stagejobid":"0",
+            "owner":"admin",
+            "workflownumber":"1",
+            "cluster":"",
+            "stderrfile":null,
+            "location":"apps/index/indexReads.pl",
+            "executor":"/usr/bin/perl",
+            "name":"indexReads",
+            "username":"syoung",
+            "stdoutfile":null,
+            "type":"index",
+            "workflow":"Workflow1",
+            "queued":"2011-05-12 12:14:25",
+            "started":"2011-05-12 12:14:59",
+            "completed":"2011-05-13 01:46:04",
+            "now":"2011-05-13 01:46:04"
+        }]
+    }
+}

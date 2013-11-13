@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+<head>
+  <title>rabbit.js and Socket.IO publish/subscribe example</title>
+  
+  <script type="text/javascript" src="http://localhost:8080/socket.io/socket.io.js"/>
+  
+  <!--<script src="/aguadev/socket.io/support/socket.io-client/socket.io.js"/>-->
+
+  <!-- OLD VERSION: 0.6
+  <script src="http://cdn.socket.io/stable/socket.io.js"></script>
+    -->
+  
+  <!--<script type="text/javascript" src="/socket.io/socket.io.js"/>-->
+  <!--<script src="/aguadev/socket.io/node_modules/lib/socket.io.js"/>-->
+
+</head>
+<body>
+
+<p>
+  If you <a href="index.html">open the page</a> in more than one
+  tab or window, you'll see published messages are sent to each
+  and every subscriber (but only the messages since it subscribed,
+  of course).
+</p>
+
+<script>
+  
+//return;
+
+
+// VERSION 0.7+
+//var socket = new io.Socket('http://localhost', {
+//    port: 8080
+//});
+//console.log("socket6.html    DOING socket.connect()");
+//socket.connect();
+//console.log("socket6.html    AFTER socket.connect()");
+//function send(){
+//    var val = document.getElementById('text').value;
+//    socket.send(val);
+//}
+//
+//function esc(msg){
+//    return msg.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+//};
+//
+//socket.on('message', function(obj){
+//    message(obj);
+//});
+
+// VERSION 0.9.11
+var conn = io.connect('http://localhost:8080');
+//var conn = io.connect('http://localhost', {
+//    port: 8080
+//});
+
+console.log("CONNECTED");
+
+function send(){
+    console.log("socket6.html    send");
+    var val = document.getElementById('text').value;
+    conn.send(val);
+}
+
+function esc(msg){
+    return msg.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+};
+
+conn.on('message', function(obj){
+    message(obj);
+});
+
+
+</script>
+
+<div id="chat"></div>
+
+<form id="form" onsubmit="send(); return false">
+<!--<form id="form" onsubmit="return false">-->
+
+  <input type="text" autocomplete="off" id="text"><input type="submit" value="Send">
+</form>
+
+<style>
+  #chat { height: 200px; overflow: auto; width: 400px; border: 1px solid #eee; font: 13px Helvetica, Arial; }
+  #chat p { padding: 8px; margin: 0; }
+  #chat p:nth-child(odd) { background: #F6F6F6; }
+  #form { width: 380px; background: #333; padding: 5px 10px; }
+  #form input[type=text] { width: 300px; padding: 5px; background: #fff; border: 1px solid #fff; }
+  #form input[type=submit] { cursor: pointer; background: #999; border: none; padding: 6px 8px; -moz-border-radius: 8px; -webkit-border-radius: 8px; margin-left: 5px; text-shadow: 0 1px 0 #fff; }
+  #form input[type=submit]:hover { background: #A2A2A2; }
+  #form input[type=submit]:active { position: relative; top: 2px; }
+</style>
+
+<script>
+
+
+// VERSION 0.9.11
+var conn = io.connect('http://localhost:8080');
+console.log("conn: ");
+console.dir({conn:conn});
+
+//var conn = io.connect('http://localhost', {
+//    port: 8080
+//});
+
+console.log("CONNECTED");
+
+function message(obj){
+    var el = document.createElement('p');
+    el.innerHTML = '<em>' + esc(obj) + '</em>'
+    document.getElementById('chat').appendChild(el);
+    document.getElementById('chat').scrollTop = 1000000;
+}
+
+console.log("socket6.html    io: ");
+console.dir({io:io});
+console.log("socket6.html    io.version: " + io.version);
+ 
+
+function send(){
+    console.log("socket6.html    send");
+    var val = document.getElementById('text').value;
+    conn.send(val);
+}
+
+function esc(msg){
+    return msg.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+};
+
+conn.on('message', function(obj){
+    message(obj);
+});
+
+</script>
+  
+</body>
+</html>

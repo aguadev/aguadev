@@ -1,0 +1,235 @@
+<div dojoattachpoint="containerNode">
+
+    <div
+        data-dojo-attach-point="mainTab"
+        class="infusion dialog project"
+        modal="true"
+		title="Edit Project"
+        draggable="true"
+        data-dojo-type="plugins/dojox/widget/Dialog"
+        style="overflow: visible; position: absolute; top: 240px; left: 248px; opacity: 1; width: 500px; min-width: 500px !important; min-height: 640px !important; height: auto !important; align: center;"
+        >
+
+			<table
+				align="center"
+				style="width: 420px; min-height: 590px;" >
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="projectId"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Project Id',
+								disabled		:	'disabled'
+							"
+							class="projectId"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="projectName"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Project Name',
+								disabled		:	'disabled'
+							"
+							class="projectName"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="status"
+							data-dojo-type="plugins.form.Select"
+							class="projectName"
+							data-dojo-props="
+								label			: 	'Status'
+							"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="description"
+							data-dojo-type="plugins.form.TextArea"
+							data-dojo-props="
+								label			: 	'Description',
+								pattern			: 	'^.{0,250}$',
+								invalidMessage	:	'Max 250 characters',
+								promptMessage	:	'Input up to 250 characters',
+								cols			: 	32,
+								rows			: 	5,
+								required		:	false
+							"
+							class="projectName"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="workflow"
+							data-dojo-type="plugins.form.Select"
+							class="projectName"
+							data-dojo-props="
+								label			: 	'Workflow'
+							"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="workflowVersion"
+							data-dojo-type="plugins.form.Select"
+							class="projectName"
+							data-dojo-props="
+								label			: 	'Workflow Version'
+							"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="buildVersion"
+							data-dojo-type="plugins.form.Select"
+							class="projectName"
+							data-dojo-props="
+								label			: 	'Build Version'
+							"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="dbsnpVersion"
+							data-dojo-type="plugins.form.Select"
+							class="dbsnpVersion"
+							data-dojo-props="
+								label			: 	'dbSNP Version'
+							"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="includeNpf"
+							data-dojo-type="plugins.form.Select"
+							class="includeNpf"
+							data-dojo-props="
+								label			: 	'Include NPF'
+							"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="projectManager"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Project Manager',
+								required		: 	'true',
+								pattern			: 	'.+',
+								minlength		:	1,
+								maxlength		:	45,
+								invalidMessage	:	'Max 45 characters',
+								promptMessage	:	'Max 45 characters',
+								required		:	false
+							"
+							class="projectName"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="dataAnalyst"
+							data-dojo-type="plugins.form.ValidationTextBox"
+							data-dojo-props="
+								label			: 	'Data Analyst',
+								required		: 	'true',
+								pattern			: 	'.+',
+								minlength		:	1,
+								maxlength		:	45,
+								invalidMessage	:	'Max 45 characters',
+								promptMessage	:	'Max 45 characters',
+								required		:	false
+							"
+							class="projectName"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="buildLocation"
+							data-dojo-type="plugins.form.TextArea"
+							data-dojo-props="
+								label			: 	'Build Location',
+								pattern			: 	'^.{0,250}$',
+								invalidMessage	:	'Max 250 characters',
+								promptMessage	:	'Input up to 250 characters',
+								cols			: 	32,
+								rows			: 	5,
+								required		:	false
+							"
+							class="projectName"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td colspan="3" align="center">
+						<div
+							data-dojo-attach-point="projectPolicy"
+							data-dojo-type="plugins.form.TextArea"
+							data-dojo-props="
+								label			: 	'Project Policy',
+								pattern			: 	'^.{0,250}$',
+								invalidMessage	:	'Max 250 characters',
+								promptMessage	:	'Input up to 250 characters',
+								cols			: 	32,
+								rows			: 	5,
+								required		:	false
+							"
+							class="projectName"
+						>
+						</div>									
+					</td>
+				</tr>
+				<tr>
+					<td
+						height="50"
+						colspan="3"
+						data-dojo-attach-point="saveButton"
+						class="saveButton"
+						dojoAttachEvent="onclick:save"
+					>
+						Save
+					</td>
+				</tr>
+				
+			</table>
+			
+	</div> 
+
+</div>

@@ -1,0 +1,131 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+body {
+    font-family: "Lucida Grande", sans-serif;
+    font-size: 11px;
+    position: relative;
+}
+.logo {
+    width: 30px;
+    height: 30px;
+    background-image: url(../../../../../../images/logo-30.png);
+    background-repeat: no-repeat !important;
+    display: inline-block;
+}
+.projects-header,
+.samples-header,
+.lanes-header{
+    width: 200px;
+    font-size: 20px;
+    font-family: Helvetica;
+    font-weight: bolder;
+    display: inline-block;
+}
+.list {
+    /*top: 40px !important;*/
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 120px;
+}
+.projects-header {
+    background-image: url(../../../../images/logo-30.png);
+    background-repeat: none;
+    display: inline-block;
+}	
+#header {
+    position: relative;
+    height: 64px;
+    background-image: url(resources/images/header-background.png);
+    background-repeat: repeat-x;
+}
+#header-content {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    width: 431px;
+    height: 45px;
+    margin-left: -215px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 12px;
+    background-image: url(resources/images/header.png);
+    background-repeat: no-repeat;
+}
+.logo {
+    width: 30px;
+    height: 30px;
+    background-image: url(../../../../../images/logo-30.png);
+    background-repeat: none;
+}
+#list-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 120px;
+}
+
+/* styles for the three lists in the top region */
+#projects, #samples, #lanes {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 33.3%;
+    height: auto;
+}
+#list-container .dgrid-row { /* all rows in all 3 lists */
+    padding: 0.25em;
+    cursor: default;
+}
+
+/* IE<7 doesn't support height/width: auto w/ top/bottom / left/right. */
+.has-ie-6 #projects, .has-ie-6 #samples, .has-ie-6 #lanes {
+    height: 120px;
+}
+.has-ie-6 #list-container {
+    width: 100%;
+}
+
+#samples { left: 33.3%; }
+#lanes { right: 0; }
+
+#grid {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 187px;
+    bottom: 0;
+    height: auto; /* override default height: 30em; in dgrid.css */
+}
+
+.has-ie-6 #grid {
+    width: 100%;
+    /* Give the grid a height.  Not optimal, but we'd need more JS for better. */
+    height: 20em;
+}
+
+#grid .dgrid-cell {
+    border: 0;
+}
+#grid .dgrid-header th {
+    border: 0;
+    border-right: 1px solid #a6a6a6;
+}
+#grid .dgrid-header th:last-child {
+    border: 0;
+}
+#grid .dgrid-row-even {
+    background-color: #f2f6fa;
+}
+#grid .dgrid-row-even.dgrid-selected {
+    background-color: #bfd6eb;
+}
+
+#grid .field-Time,
+#grid .field-Year { 
+    text-align: right; 
+}

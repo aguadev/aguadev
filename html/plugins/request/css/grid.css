@@ -1,0 +1,31 @@
+.grid .dgrid-row-odd {
+    background: #F2F5F9;
+}
+
+.grid .dgrid-column-Analysis-ID,
+.grid .dgrid-column-Analysis-URI,
+.grid .dgrid-column-Participant-ID,
+.grid .dgrid-column-File-Name {
+    width: 200px;
+}
+
+.grid .dgrid-column-Select,
+.grid .dgrid-column-Details,
+.grid .dgrid-column-Source,
+.grid .dgrid-column-Study,
+.grid .dgrid-column-Strategy,
+.grid .dgrid-column-Platform,
+.grid .dgrid-column-State,
+.grid .dgrid-column-File-Size
+{
+    width: 50px;
+}
+
+.grid .dgrid-column-Disease,
+.grid .dgrid-column-Modified-Date,
+.grid .dgrid-column-Upload-Date,
+.grid .dgrid-column-Published-Date
+{
+    width: 100px;
+}
+

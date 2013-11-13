@@ -1,0 +1,7 @@
+Project	Barcode	Fold Coverage	GT Gender	Analysis:version;Analysis:version	Sex
+project_demo1	tinkerbell	30		casava_bcl_to_gvcf:v1	F	
+project_demo2	mickey_mouse	30		casava_bcl_to_gvcf:v1	M	
+project_demo1	cinderella	30		casava_bcl_to_gvcf:v1	F	
+project_demo2	peppa_pig	30		casava_bcl_to_gvcf:v1	F	
+project_demo3	pokemon	30		casava_bcl_to_gvcf:v1	U	
+project_demo1	snow_white	30		casava_bcl_to_gvcf:v1	F	

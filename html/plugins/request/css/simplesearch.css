@@ -1,0 +1,61 @@
+/* DOES THIS HELP AUTOSIZING? */
+.simpleSearch {
+	width: 430px !important;
+	/* font-family: Verdana; */
+	position: relative;
+}
+.simpleSearch .simpleSearchTitle {
+	display: inline-block;
+	font-size: 15px;
+	font-weight: bolder;
+	top: -10px !important;
+	position: relative;
+}
+
+/* TOGGLE */
+.simpleSearch .toggleTitle {
+    font-family: Arial;
+	text-align: left !important;
+	font-weight: 800 !important;
+	
+    color: #444 !important;
+	
+    font-size: 16px !important;
+	padding-top: 6px !important;
+}
+.simpleSearch .toggleTitle.open {
+	background-image: url(../../../plugins/apps/images/toggle-minus-11.png);
+	text-indent: 20px;
+	background-position: 0.2em 0.6em;
+	background-repeat: no-repeat;
+}
+.simpleSearch .toggleTitle.closed {
+	background-image: url(../../../plugins/apps/images/toggle-plus-11.png);
+	text-indent: 20px;
+	background-position: 0.2em 0.6em;
+	background-repeat: no-repeat;
+}
+
+.simpleSearch .searchInput
+{
+	position: absolute;
+	top: 23px;
+	left: 0px;
+	font-size: 16px;
+	font-weight: 900;	
+	color: black;
+	/* height: 20px !important; */
+	font-size: 20px !important;
+	width: 423px !important;
+	text-align: center !important;	
+	text-indent: 2px !important;
+}
+
+.simpleSearch .searchInputContainer {
+	height: 40px;
+}
+
+.search .simpleSearch .dijitContentPane {
+	max-height: 50px;
+	overflow: hidden;
+}

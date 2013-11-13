@@ -1,0 +1,13 @@
+#### INSERT TABLES 
+INSERT INTO ami VALUES ('admin','ami-c6a877af','StarCluster-base','EBS','StarCluster base image','2011-08-28 01:07:45');
+INSERT INTO ami VALUES ('admin','ami-ca847aa3','sc-u10.04-hadoop.2','EBS','Ubuntu 10.04 StarCluster exec node image with Hadoop installed','2011-08-27 03:53:20');
+INSERT INTO cluster VALUES ('admin','admin-largecluster',7,12,'t1.micro','ami-d1c42db8','us-east-1a','Large','0000-00-00 00:00:00');
+INSERT INTO cluster VALUES ('admin','admin-mediumcluster',3,5,'t1.micro','ami-d1c42db8','us-east-1a','Medium','0000-00-00 00:00:00');
+INSERT INTO cluster VALUES ('admin','admin-microcluster',1,1,'t1.micro','ami-d1c42db8','us-east-1a','micro cluster for testing','0000-00-00 00:00:00');
+INSERT INTO cluster VALUES ('admin','admin-smallcluster',3,5,'t1.micro','ami-d1c42db8','us-east-1a','Small','0000-00-00 00:00:00');
+INSERT INTO clustervars VALUES ('admin','admin-largecluster',36291,36292,'/opt/sge6','admin-largecluster');
+INSERT INTO clustervars VALUES ('admin','admin-mediumcluster',36301,36302,'/opt/sge6','admin-mediumcluster');
+INSERT INTO clustervars VALUES ('admin','admin-microcluster',36281,36282,'/opt/sge6','admin-microcluster');
+INSERT INTO clustervars VALUES ('admin','admin-smallcluster',36311,36312,'/opt/sge6','admin-smallcluster');
+INSERT INTO source VALUES ('admin','Demo data','Application-specific input/output data','/data/sequence/demo');
+INSERT INTO source VALUES ('admin','Reference genomes','Application-specific reference data','/data/sequence/reference');

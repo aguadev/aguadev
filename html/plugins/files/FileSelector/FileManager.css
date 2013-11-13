@@ -1,0 +1,27 @@
+@import url("RollingList.css");
+
+/* ALIGN FILES TO TOP */
+.dojoxFileSelectorPane, dojoxRollingListPane {
+	vertical-align: top;
+}
+
+.fileManagerTitle {
+	text-align: center;
+	font-size: 25px;
+	color: #666;
+	height: 30px;
+}
+
+.soria .dojoxDialogTitle {
+	/*color: #666;*/
+}
+
+.soria .dojoxDialogPaneContent {
+	background-color: #EEF;
+}
+
+.soria .browseButton {
+	background-color: #EEF;
+	background-image: url("../../../plugins/project/FileDrag/images/directory-closed.png");
+}
+

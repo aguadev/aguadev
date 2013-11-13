@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title> layout 8-7: dojo.1.2.2 workflow save info & run </title>
+
+<style type="text/css">
+
+	/* DOJO style */
+	@import "dojo.1.2.2/dojo/resources/dojo.css";
+	/*@import "dojo.1.2.2/dijit/tests/css/dijitTests.css";*/
+
+	/* SORIA style */
+	@import "dojo.1.2.2/dijit/themes/soria/soria.css";
+
+	/* GRID style */
+	@import "dojo.1.2.2/dojox/grid/_grid/soriaGrid.css";
+
+
+	/* TUNDRA style */
+	/*@import "dojo.1.2.2/dijit/themes/tundra/tundra.css";*/
+	/*@import "dojo.1.2.2/dijit/themes/tundra/tundra_rtl.css";*/
+
+	/* TESTS style */
+	@import "dojo.1.2.2/dijit/tests/css/dijitTests.css";
+
+	/* Workflow CSS */
+	@import "plugins/workflow/css/workflow.css";
+
+	@import "../css/style.css";
+
+
+
+		/*html, body{	*/
+		/*	width: 100%;	/* make the body expand to fill the visible window */*/
+		/*	height: 100%;*/
+		/*	overflow: hidden;	/* erase window level scrollbars */
+		/*	padding: 0 0 0 0;*/
+		/*	margin: 0 0 0 0;*/
+		/*}*/
+		/*.dijitSplitPane{*/
+		/*	margin: 5px;*/
+		/*}*/
+		/*#rightPane {*/
+		/*	margin: 0;*/
+		/*}*/
+
+	#creator, #current {
+		/*border: 3px solid blue;*/
+		padding: 10px;
+		margin: 10px;
+	}
+
+	#wrapper {
+	/*	border: 3px solid green;*/
+		padding: 10px;
+		margin: 10px;
+	}
+
+	/* hide grid hidden focus elements */		
+	.dojoxGrid-hidden-focus {
+		display: none;
+	}
+	
+	.soria .dojoxGrid-row-odd {
+		/*background-color: #f2f5f9;*/
+		/*background-color: #F9F7E8;*/
+		background-color: #F9E8E8;
+	}
+
+	.soria .dojoxGrid {
+		background-color: #e9e9e9;
+		font-size: 1.25em; /* inherit font-family from dojo.css */
+		-moz-outline-style: none;
+		outline: none;
+		overflow: auto;
+		height: 0;
+	}
+	
+	.soria .dojoxGrid-header {
+		font-style: italic;
+		font-weight: bold;
+	}
+	
+	.orderedList {
+		position: relative;
+		top: 0px;
+		left: 5px;
+		width: 100px;
+		height: 600px;
+		text-align: center;";
+		font-weight: bold;
+		font-size: 15px;
+		color: #CCCCCC;
+	}
+	.dropTarget {
+		position: relative;
+		top: 0px;
+		left: -40px;
+		width: 100px;
+		height: 600px;
+		text-align: center;";
+		font-weight: bold;
+		font-size: 18px;
+		color: #000000;
+	}
+
+</style>
+
+
+<script type="text/javascript" src="dojo.1.2.2/dojo/dojo.js"
+	djConfig="isDebug: true, parseOnLoad: true, useCommentedJson: true"></script>
+<script type="text/javascript" src="dojo.1.2.2/dijit/tests/_testCommon.js"></script>
+
+
+<script type="text/javascript">
+
+	// LAYOUT CLASSES
+	dojo.require("dijit.layout.BorderContainer");
+	dojo.require("dijit.layout.LayoutContainer");
+	dojo.require("dijit.layout.AccordionContainer");
+	dojo.require("dijit.layout.ContentPane");
+	dojo.require("dijit.layout.SplitContainer");
+	dojo.require("dijit.layout.TabContainer");
+
+	// Used in doc0.html
+//	dojo.require("dijit.form.ComboBox");
+	dojo.require("dijit.form.Button");
+
+    // DnD
+	dojo.require("dojo.dnd.Source"); // Source & Target
+	dojo.require("dojo.dnd.Moveable");
+	dojo.require("dojo.dnd.Mover");
+	dojo.require("dojo.dnd.move");
+
+	// Menu
+	dojo.require("dijit.Menu");
+
+	// Grid
+	dojo.require("dojox.grid.Grid");
+
+	// parser
+	// scan page for widgets and instantiate them
+	dojo.require("dojo.parser");	
+
+
+// REGISTER module path FOR PLUGINS
+dojo.registerModulePath("plugins","../../plugins");	
+
+// LOAD PLUGINS
+dojo.require("plugins.core.PluginManager");
+
+console.log("After load PluginManager");
+
+dojo.addOnLoad(
+	function()
+	{
+		var loginWindow = new Login();
+console.log("console.log("");");	}
+);
+
+
+
+//console.log("before dojo.require(plugins.workflow.Workflow)");
+//dojo.require("plugins.workflow.Workflow");
+//console.log("after dojo.require(plugins.workflow.Workflow)");
+
+
+	</script>
+
+</head>
+<body class="soria">
+	
+	<h1 style="position: relative; top: -10px; left: 50px">  layout 8-7: dojo.1.2.2 workflow save info & run  </h1>
+
+	<div id="controls">
+		The controls go here
+	</div>
+
+	<div style="position: absolute; top: 550px; left: 50px;">
+
+		<!--This pane will let you try certain operations on each of the widgets.-->
+		<!--<div id="operations" style="height: 200px; overflow: auto;"></div>-->	
+		
+		Sources
+		<BR>
+		1. http://localhost:8080/bioptic1/dojo.1.2.2/dijit/tests/layout/test_LayoutCode.html
+		<br>
+		2. http://download.dojotoolkit.org/release-1.2.2/dojo-release-1.2.2/dojo/tests/dnd/test_form.html
+		<br>
+		3. http://localhost:8080/bioptic1/test/dnd-target-form1.html
+
+	</div>
+
+
+<div dojoType="dijit.Menu" id="gridMenu"  style="display: none;">
+	<div dojoType="dijit.MenuItem" onClick="reportCell">See cell text...</div>
+	<div dojoType="dijit.MenuItem" disabled="true">Disabled Item</div>
+	<div dojoType="dijit.MenuSeparator"></div>
+
+	<div dojoType="dijit.MenuItem" iconClass="dijitEditorIcon dijitEditorIconCut"
+		onClick="alert('not actually cutting anything, just a test!')">Cut</div>
+	<div dojoType="dijit.MenuItem" iconClass="dijitEditorIcon dijitEditorIconCopy"
+		onClick="alert('not actually copying anything, just a test!')">Copy</div>
+	<div dojoType="dijit.MenuItem" iconClass="dijitEditorIcon dijitEditorIconPaste"
+		onClick="alert('not actually pasting anything, just a test!')">Paste</div>
+	<div dojoType="dijit.MenuSeparator"></div>
+</div>
+
+
+</body>
+</html>

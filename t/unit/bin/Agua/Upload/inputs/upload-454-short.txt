@@ -1,0 +1,30 @@
+Content-Type: multipart/form-data; boundary=---------------------------20142238441416
+Content-Length: 1173186
+
+-----------------------------20142238441416
+Content-Disposition: form-data; name="uploadedfiles[]"; filename="454AllDiffs-headers-SNP.txt"
+Content-Type: text/plain
+
+name	chromosome	ccdsstart	ccdsstop	referencenucleotide	variantnucleotide	depth	variantfrequency	chromosomestart	chromosomestop	sense	referencecodon	variantcodon	referenceaa	variantaa	strand	snp	score	strand
+CCDS2.2	chr1	1726	1726	C	A	2	100%	868977	868977	missense	CCA	ACA	Proline	Threonine	+			+	
+CCDS3.1	chr1	756	756	T	G	2	100%	881107	881107	synonymous	GCT	GCG	Alanine	Alanine	-			-	
+CCDS3.1	chr1	770	770	C	T	3	100%	881093	881093	missense	GCC	GTC	Alanine	Valine	-			-	
+CCDS3.1	chr1	780	780	G	A	3	100%	879243	879243	synonymous	CTG	CTA	Leucine	Leucine	-			-	
+CCDS3.1	chr1	790	790	C	G	3	100%	879233	879233	missense	CTG	GTG	Leucine	Valine	-			-	
+CCDS3.1	chr1	793	793	T	G	3	100%	879230	879230	missense	TCG	GCG	Serine	Alanine	-
+CCDS44017.1	chrX	250	250	C	T	5	40%	151678792	151678792	missense	CCA	TCA	Proline	Serine	+			+	
+CCDS44017.1	chrX	290	290	A	T	4	50%	151678832	151678832	missense	AAC	ATC	Asparagine	Isoleucine	+			+	
+
+-----------------------------20142238441416
+Content-Disposition: form-data; name="username"
+
+admin
+-----------------------------20142238441416
+Content-Disposition: form-data; name="sessionId"
+
+1234567890.1234.123
+-----------------------------20142238441416
+Content-Disposition: form-data; name="path"
+
+Project1/Workflow1
+-----------------------------20142238441416--

@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+		"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+	<title>Agua 0.5</title>
+
+	<style type="text/css">
+
+		/* DOJO STYLES */
+		@import "dojo.1.4.2/dojo/resources/dojo.css";
+	
+		/* THEMES */
+		@import "dojo.1.4.2/dijit/themes/dijit.css";
+		@import "dojo.1.4.2/dijit/themes/soria/soria.css";
+		@import "dojo.1.4.2/dijit/themes/tundra/tundra.css";
+	
+		/* AGUA STYLES */
+		@import "../css/style.css";
+		@import "dojo.1.4.2/dijit/tests/css/dijitTests.css";
+
+		/* add padding to each contentpane inside the tab container, and scrollbar if necessary */
+		.dojoTabPane {
+			/*padding : 10px 10px 10px 10px;*/
+			/*overflow: auto;*/
+		}
+
+	</style>
+
+	<!-- required: the default dijit theme: -->
+	<link id="themeStyles" rel="stylesheet" href="dojo.1.4.2/dijit/themes/tundra/tundra.css">
+
+	<!-- required: dojo.js -->
+	<script type="text/javascript" src="dojo.1.4.2/dojo/dojo.js"
+		djConfig="isDebug: true, parseOnLoad: true"></script>
+
+<script type="text/javascript" src="dojo.1.4.2/dijit/nls/en-us.js"></script>
+<script type="text/javascript" src="dojo.1.4.2/dijit/nls/common.js"></script>
+
+	<!-- only needed for alternate theme testing: do NOT use in your code! -->
+	<script type="text/javascript" src="../_testCommon.js"></script>
+
+
+
+<script language="JavaScript" type="text/javascript"> 
+
+	/* TABS */
+	dojo.require("dijit.dijit"); // optimize: load dijit layer
+	dojo.require("dijit.layout.LayoutContainer");
+	dojo.require("dijit.layout.BorderContainer");
+	dojo.require("dijit.Toolbar");
+	dojo.require("dijit.layout.ContentPane");
+	dojo.require("dijit.layout.TabContainer");
+	dojo.require("dijit.layout.SplitContainer");
+	dojo.require("dijit.layout.BorderContainer");
+	dojo.require("dijit.Tooltip");
+	dojo.require("dijit.layout.LinkPane");
+	dojo.require("dijit.form.Button");
+	dojo.require("dojo.parser");	// scan page for widgets and instantiate them
+
+	/* TOOLBAR */
+	dojo.require("dijit.Declaration");
+	dojo.require("dijit.Toolbar");
+	dojo.require("dijit.ToolbarSeparator");
+
+	dojo.require("dijit.form.Button");
+	dojo.require("dijit.form.DropDownButton");
+	dojo.require("dijit.form.ComboButton");
+	dojo.require("dijit.form.ToggleButton");
+
+	dojo.require("dijit.ColorPalette");
+	dojo.require("dijit.TooltipDialog");
+	dojo.require("dijit.form.TextBox");
+	dojo.require("dijit.Menu");
+
+
+	/* RESIZE BUTTON */
+	dojo.require("dojox.layout.ResizeHandle");
+
+	/* PARSER */
+	dojo.require("dojo.parser");
+
+
+	function testClose(pane,tab){
+	  return confirm("Please confirm that you want tab "+tab.title+" closed");
+	}
+
+	startTime = new Date();
+	dojo.addOnLoad(function(){
+		var elapsed = new Date().getTime() - startTime;
+		var p = document.createElement("p");
+		p.appendChild(document.createTextNode("Widgets loaded in " + elapsed + "ms"));
+		document.body.appendChild(p);
+	});
+
+	var progTabCounter = 1;
+	function makeTab(){
+		var tc = dijit.byId("mainTabContainer");
+		var cp = new dijit.layout.ContentPane({
+			title: 'Programmatically created tab ' + (progTabCounter++) ,
+			closable: true
+		});
+		cp.domNode.innerHTML = "I was created programmatically!";
+		tc.addChild(cp, 0);
+	}
+
+
+	var hostname = window.location.hostname;
+	console.log("agua.html    hostname: " + hostname);
+
+	// SET CGI AND HTML URLS (RELATIVE TO dojo.js)
+	var cgiUrl = "../../../cgi-bin/agua/0.5/";
+	var htmlUrl = "../../../agua/0.5/"
+
+	// REGISTER module path FOR PLUGINS
+	dojo.registerModulePath("plugins","../../plugins");	
+
+	// LOAD CORE MODULES
+	//dojo.require("plugins.core.DataManager");
+
+	console.log("agua.html    BEFORE require plugins.core.Agua");
+	dojo.require("plugins.core.Agua");
+	console.log("agua.html    AFTER  require plugins.core.Agua");
+
+	var Agua;
+
+	dojo.addOnLoad( function() {
+
+		// CREATE GLOBAL AGUA OBJECT
+		var messageNode = dojo.byId("loadingProgress");
+		console.log("agua.html    AFTER  messageNode: " + messageNode);
+		var splashNode = dojo.byId("splashNode");
+		console.log("agua.html    AFTER  splashNode: " + splashNode);
+		
+		Agua = new plugins.core.Agua( {
+			messageNode : messageNode,
+			splashNode : splashNode,
+			cgiUrl : cgiUrl,
+			htmlUrl : htmlUrl
+		});
+		console.log("agua.html    AFTER new plugins.core.Agua, Agua: " + Agua);
+		
+		console.log("agua.html    BEFORE Agua.startup");
+		Agua.startup();
+		console.log("agua.html    AFTER Agua.startup");
+
+		// NB: THIS IS THE SECOND addOnLoad
+		// TO HIDE THE LOADING IMAGE ONCE THE MODULES ARE LOADED
+		dojo.addOnLoad(function(){
+			Agua.hideLoader();
+		});
+
+
+		//// CREATE TOOLBAR BUTTONS
+		//dojo.forEach(["toolbar2", "toolbar3", "toolbar4"], function(toolbarId){
+		//	var toolbar = new dijit.Toolbar({}, dojo.byId(toolbarId));
+		//	dojo.forEach(["Cut", "Copy", "Paste"], function(label){
+		//		var button = new dijit.form.Button({
+		//			id: toolbarId+"."+label,
+		//			// note: should always specify a label, for accessibility reasons.
+		//			// Just set showLabel=false if you don't want it to be displayed normally
+		//			label: label,
+		//			showLabel: (toolbarId == "toolbar2" ? false : true),
+		//			iconClass: toolbarId == "toolbar4" ? "" : "dijitEditorIcon dijitEditorIcon"+label
+		//		});
+		//		toolbar.addChild(button);
+		//	});
+		//});
+		
+
+	}); // dojo.addOnLoad
+
+</script>
+
+
+</head>
+<body class="tundra">
+
+
+
+
+
+	<div id="controls"
+		 class="controls"
+		 style="position: absolute; top: 0px !important; left: 20px">
+		
+		
+		<div
+            dojoAttachPoint="controlButtonsContainer"
+            dojoType="dijit.layout.LayoutContainer"
+        >
+
+            <div
+                dojoAttachPoint="reloadAgua"
+                class="aguaIcon"
+                dojoAttachEvent="onclick:reload"
+            >
+            </div>
+
+            <div
+				id="toolbar"
+                dojoAttachPoint="toolbar"
+                class="toolbar"
+                dojoType="dijit.Toolbar";
+                style="left: 34px; top: 0px; right: auto; bottom: auto;"
+                >
+            </div>
+
+        </div>
+
+            <div
+                dojoAttachPoint="tabs"
+                dojoType="dijit.layout.TabContainer"
+                useSlider="false"
+                tabPosition="top"
+                class="tabs"
+                tabStrip="false"
+                id="tabs"
+                style="position: relative; top: 0px; left: 0px; height: 770px; width: 100%; right: auto; bottom: auto;"
+            >
+            </div>
+        
+
+		
+		
+	</div>
+
+
+	<div id="splashNode">
+		<span id="loadingProgress" class="loadingProgress"><br></span>
+	</div>
+
+	<div id="backgroundNode">
+		<div class="loadingTitle"> Loading Agua
+		</div>
+	</div>
+
+	<div
+		id="mainTabContainer"
+		dojoType="dijit.layout.TabContainer"
+		persist="false" tabStrip="true" style="width: 800px; height: 400px;">
+	</div>
+
+
+	<button id="firstButton" onclick="makeTab()">Click To Add Tab</button> 
+ 
+
+</body>
+</html>

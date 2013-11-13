@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+<title> file browse 3: multiple filesystems</title>
+
+<script type="text/javascript" src="dojo.1.2.2/dojo/dojo.js"
+		djConfig="parseOnLoad: true, isDebug: true, useCommentedJson: true"></script>
+	
+<script type="text/javascript">
+
+    //dojo.require("dijit.layout.TabContainer");
+    //dojo.require("dijit.form.Button");
+
+    // REGISTER module path FOR PLUGINS
+    dojo.registerModulePath("plugins","../../plugins");	
+    
+    // LOAD PLUGINS
+    dojo.require("plugins.projects.Projects");
+
+    // ADD ON LOAD    
+    dojo.addOnLoad(
+        function()
+        {
+            var projects = new plugins.projects.Projects();
+        }
+    );
+
+</script>
+
+</head>
+
+<body class="soria">
+
+<h1>
+    file browse 3: multiple filesystems
+</h1>
+
+<h5>
+    Source:
+	<br>
+    http://localhost:8080/bioptic1/dojo.1.2.2/dojox/widget/tests/test_FilePicker.html
+    <br>
+</h5>
+
+</body>
+</html>
+
+

@@ -1,0 +1,53 @@
+------WebKitFormBoundaryA0rO0MHAJoJt8AER
+Content-Disposition: form-data; name="uploadedfiles[]"; filename="upload_post_text.txt"
+Content-Type: image/gif
+
+GIF89add�������@@@���000������pppPPP���   ���```������!�,dd��#�di�h��l�Bp,�tm�x�������P���_1�l2�Ψ� �Z��*v+�r�I/xL|��G1z}S��Y3|ns���;:�'��`�\��X��V��]r�x��{��~�������������F4<p�514�; ��<���1�0�4�1�7�a�;	��
+ �� �3�
+�5 M�4���1�	�5�
+
+�ǀMsmG<Y���0�@���5@p
+
+
+�x7� ���B ��� ��Do�&��B�Q���"��F �
+�@�jǢJ4"M�t鐣Ns@�ڦ)դWEe�2uk8z�B� Ȁ�O�F	
+c�N 	��*@@f۰1����0�άA�AN8c4�� F��@ZH�`؃+1�)P�7��d$�
+��O|.`7�Z�00&��N>�
+-�&��0_��g�j°�����݆��T)	0#�V�����/�Pe���A�0p{��0�
+�����*��&�F>C�u�S@C
+������U]=�
+~vDa��\���"��z�V#B�T��!�"j1$�c���1�u�}
+�@�\i�,�X$h5pK� IN5��'��"�X�- ��
+f
+PB�fV�֋ʀ#�_�,�+z�e5	�X�N4�@5�5�%�Wh�ܠøș0.�M,d#�(�@�Y��Y�eԘ r*��$��ՊQ�z��W����*�J�E����к����Z������������;��� ۇ�z�����F+�!;
+
+
+------WebKitFormBoundaryA0rO0MHAJoJt8AER
+Content-Disposition: form-data; name="index"
+
+0
+------WebKitFormBoundaryA0rO0MHAJoJt8AER
+Content-Disposition: form-data; name="name"
+
+upload_post_text.txt
+------WebKitFormBoundaryA0rO0MHAJoJt8AER
+Content-Disposition: form-data; name="size"
+
+3352
+------WebKitFormBoundaryA0rO0MHAJoJt8AER
+Content-Disposition: form-data; name="type"
+
+text/plain
+------WebKitFormBoundaryA0rO0MHAJoJt8AER
+Content-Disposition: form-data; name="username"
+
+admin
+------WebKitFormBoundaryA0rO0MHAJoJt8AER
+Content-Disposition: form-data; name="sessionid"
+
+0000000000.0000.000
+------WebKitFormBoundaryA0rO0MHAJoJt8AER
+Content-Disposition: form-data; name="uploadType"
+
+html5
+------WebKitFormBoundaryA0rO0MHAJoJt8AER--

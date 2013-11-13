@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title> report snp 3 : using Template.js </title>
+
+<style type="text/css">
+
+	/* DOJO style */
+	@import "../dojo.1.2.2/dojo/resources/dojo.css";
+	/*@import "dojo.1.2.2/dijit/tests/css/dijitTests.css";*/
+
+	/* SORIA style */
+	@import "../dojo.1.2.2/dijit/themes/soria/soria.css";
+
+	/* TUNDRA style */
+	/*@import "dojo.1.2.2/dijit/themes/tundra/tundra.css";*/
+	/*@import "dojo.1.2.2/dijit/themes/tundra/tundra_rtl.css";*/
+
+	/* GRID style */
+	/*@import "dojo.1.2.2/dojox/grid/_grid/soriaGrid.css";*/
+
+	/* TESTS style */
+	@import "../dojo.1.2.2/dijit/tests/css/dijitTests.css";
+
+	/* Workflow CSS */
+	/*@import "plugins/workflow/css/workflow.css";*/
+
+	@import "../dojo.1.2.2/css/style.css";
+
+
+</style>
+
+<script type="text/javascript" src="../release-1.2.2/dojo/dojo.js"
+	djConfig="isDebug: true, parseOnLoad: true, useCommentedJson: true"></script>
+
+<!--<script type="text/javascript" src="../build8/dojo/nls/report_en-us.js"></script>-->
+<!--<script type="text/javascript" src="../build8/dojo/report.js.uncompressed.js"></script>-->
+
+
+		<style type="text/css">
+			/*@import "../dojo.1.2.2/dojo/resources/dojo.css";*/
+			/*@import "../dojo.1.2.2/dojox/grid/resources/Grid.css";*/
+
+			@import "../dojo.1.2.2/dojox/grid/resources/soriaGrid.css";
+
+			/*@import "../dojo.1.2.2/dojox/grid/resources/tundraGrid.css";*/
+			.heading {
+				font-weight: bold;
+				/*padding-bottom: 0.25em;*/
+			}
+			
+			.reportSNPGrid { 
+				border: 1px solid #333;
+				width: 85em;
+				height: 80em;
+			}
+		</style>
+
+
+
+<script type="text/javascript">
+	// REGISTER module path FOR PLUGINS
+	dojo.registerModulePath("plugins","../../plugins");	
+
+	// SET URL FOR CGI DIRECTORY
+	var cgiurl = "../../../../cgi-bin/Bioptic0.2.5/";
+
+	// LOAD PLUGINS
+	//dojo.require("dojo.data.ItemFileReadStore");
+	//dojo.require("dojo.data.ItemFileReadStore");
+	//dojo.require("plugins.report.Report");
+	dojo.require("plugins.report.Template.SNP");
+	console.log("++++ After dojo.require('plugins.report.Template.SNP')");
+
+    function init() {
+		console.log("init()");
+
+		// SET USER, SESSIONID, ETC IN dojo.cookie
+		dojo.require("dojo.cookie"); 
+		dojo.cookie('username', 'admin');
+		dojo.cookie('sessionId', '1228791394.7868.158');
+		dojo.cookie('project', 'Project1');
+		dojo.cookie('workflow', 'Workflow3-indels');
+		dojo.cookie('report', 'Report1');
+		
+		// USE UNIQUE ID FOR EACH INSTANCE OF REPORT PANE (I.E., report.paneId)
+		var snp = new plugins.report.Template.SNP(
+			{
+				id: "snpReport1",
+				filename: "Project1/Workflow3-indels/454HCDiffs-headers-SNPs.txt",
+				url : cgiurl + "report.cgi?"
+			}
+		);
+		snp.startup();
+
+        document.getElementById('report-snp').appendChild(snp.domNode);   
+    }
+	dojo.addOnLoad(init);
+</script>
+</head>
+
+<body class="soria">
+	<h1 style="position: relative; top: -40px; left: 50px; height: 20px;">  report snp 3 : using Template.js </h1>
+	<div id="report-snp">
+	</div>
+</body>
+</html>

@@ -1,0 +1,613 @@
+/* STANDBY */
+.viewStandby {
+	font-size: 26px !important;
+}
+
+/* MAKE TRACKS APPEAR AT TOP OF SCREEN */
+#gridtrack {
+	
+/*	height: 0px !important;
+	max-height: 0px !important;
+*/
+
+}
+
+.view .tabLabel {
+    height: 26px !important;
+    margin-top: 5px !important;    
+}
+
+/* BROWSER CONTAINER */
+.view .container {
+    border: 0px;
+    padding: 0 0;    
+    position: absolute;
+    z-index: 0;
+    overflow: scroll;
+}
+
+/* TRACK LIST CONTAINER*/
+view .tracklist-container {
+    padding: 2px;
+    /*margin-top: -3px;*/
+    /*margin-bottom: -3px;*/
+    font-size: 9px !important;
+}
+
+.view .tracklist-container
+Before {
+    border-top: 3px solid #999;
+    padding-top: 2px;
+}
+
+.view .tracklist-container.dojoDndItemAfter {
+    border-bottom: 3px solid #999;
+    padding-bottom: 2px;
+}
+
+/* DISPLAYED TRACK LABELS */
+.view .track-label,
+.view .tracklist-label {
+    background-color: #FFD !important;
+}
+.view .track-label {
+    font-family: sans-serif;
+    z-index: 20;
+    top: 0px !important;
+    border: 2px #888 solid;
+    color: #224;
+    padding: 5px;
+    cursor: pointer;
+	font-weight: bold !important;
+}
+
+
+/* EXPANDO PANE CLOSED */
+.dojoxExpandoPane.dijitExpandoPane.leftPane.dojoxExpandoLeft.dijitBorderContainer-child.dijitBorderContainer-dijitExpandoPane.dijitBorderContainerPane.dijitAlignLeft.dojoxExpandoClosed {
+    width: 25px !important;
+    left: 5px !important;    
+}
+
+/* BROWSER EXPANDO PANE TITLE */
+.view .leftPane .dojoxExpandoTitle,
+.view .rightPane .leftPane .dojoxExpandoTitle,
+.view .rightPane .rightPane .dojoxExpandoTitle {
+	-moz-user-select: none;
+    background: none repeat scroll 0 0 #EEEEFF !important;
+    color: darkblue;
+    font-family: Verdana;
+    font-size: 20px;
+    font-weight: bolder;
+    height: 20px;
+    padding-bottom: 5px !important;
+    text-align: center;
+    vertical-align: bottom;
+}
+
+/* TRACK LIST LABELS */
+.view .tracklist-label {
+	-moz-user-select: none !important;
+    font-family: sans-serif;
+    font-size: 10px !important;
+    font-weight: bold !important;
+    z-index: 20;
+    color: #2b434c;
+    cursor: pointer;
+    padding: 3px;
+    border: 2px solid !important;
+    border-color: #888 !important;
+	border-radius: 4pt !important;
+}
+
+.view .DNA-label {
+	background-color: #6F6 !important;
+}
+
+.view .dynamic-label {
+	background-image: url("../../../plugins/view/images/parameter-18.png");	
+    border: 2px solid !important;
+    border-color: #888 !important;
+    background-color: #F66 !important;
+}
+
+.view .tracklist-label .static {
+    /*border: 3px solid !important;*/
+    /*border-color: #222 !important;*/
+    /*background-color: #A22;*/
+}
+
+.view .knownGene-label {
+	background-image: url("../../../plugins/view/images/label-ucsc-16.png");	
+}
+
+.view .hinv70NonCoding-label {
+	background-image: url("../../../plugins/view/images/label-h-inv-16.png");	
+}
+
+.view .hinv70PseudoGene-label {
+	background-image: url("../../../plugins/view/images/label-h-inv-16.png");	
+}
+
+.view .hgIkmc-label {
+	background-image: url("../../../plugins/view/images/label-sanger-16.png");	
+}
+
+.view .dgv-label {
+	background-image: url("../../../plugins/view/images/label-dgv-16.png");	
+}
+
+.view .vegaGene-label {
+	background-image: url("../../../plugins/view/images/label-vega-16.png");	
+}
+
+.view .wgEncodeGencodeAutoV4-label {
+	background-image: url("../../../plugins/view/images/label-gencode-16.png");	
+}
+
+.view .vegaPseudoGene-label {
+	background-image: url("../../../plugins/view/images/label-vega-16.png");	
+}
+
+.view .wgEncodeGencodePolyaV4-label {
+	background-image: url("../../../plugins/view/images/label-gencode-16.png");	
+}
+
+.view .wgEncodeGencode2wayConsPseudoV4-label {
+	background-image: url("../../../plugins/view/images/label-gencode-16.png");	
+}
+
+.view .ccdsGene-label {
+	background-image: url("../../../plugins/view/images/label-ccds-16.png");	
+}
+
+.view .refGene-label {
+	background-image: url("../../../plugins/view/images/label-refseq-16.png");	
+}
+
+.view .nscanGene-label {
+	background-image: url("../../../plugins/view/images/label-nscan-16.png");	
+}
+
+.view .sgpGene-label {
+	background-image: url("../../../plugins/view/images/label-gencode-16.png");	
+}
+
+.view .geneid-label {
+	background-image: url("../../../plugins/view/images/label-gencode-16.png");	
+}
+
+
+.view .exoniphy-label {
+	background-image: url("../../../plugins/view/images/label-exoniphy-16.png");	
+}
+ 
+.view .DNA-label,
+.view .dynamic-label,
+.view .knownGene-label,
+.view .hinv70NonCoding-label,
+.view .hinv70PseudoGene-label,
+.view .hgIkmc-label,
+.view .dgv-label,
+.view .vegaGene-label,
+.view .wgEncodeGencodeAutoV4-label,
+.view .vegaPseudoGene-label,
+.view .wgEncodeGencodePolyaV4-label,
+.view .wgEncodeGencode2wayConsPseudoV4-label,
+.view .ccdsGene-label,
+.view .refGene-label,
+.view .nscanGene-label,
+.view .sgpGene-label,
+.view .geneid-label,
+.view .exoniphy-label {
+	background-repeat: no-repeat;
+	position: relative;
+	top: 0px;
+	text-align: center;
+}
+
+.view .tracklist-label {
+	background-position: 2px 1px;
+}
+
+.view .dojoDndHandle {
+	opacity: 0.8 !important;
+	color: black !important;
+	background-position: 4px 3px !important;
+	text-indent: 18px !important;
+	border-radius: 8pt !important;
+}
+
+.statusReady,
+.statusLoading {
+	background-repeat: no-repeat;
+	width: 36px;
+	height: 36px;
+	position: relative;
+	top: 0px;
+	text-align: center;
+}
+
+.statusReady {
+	background-image: url("../../../plugins/view/images/ready-36.png");	
+}
+
+.statusLoading {
+	background-image: url("../../../plugins/view/images/spinner-36.gif");	
+}
+
+.view .leftPane table {
+	border-collapse: collapse !important;
+}
+
+/* NEEDED FOR PROPER SPACING */
+.view .dojoDndItem {
+	padding: 2px !important;
+}
+
+/* REMOVE BACKGROUND COLOUR ON ANCHOR */
+.view .dojoDndItemAnchor,
+.view .track .dojoDndItem .dojoDndItemAnchor {
+    background: none repeat scroll 0 0 #FFF;
+}
+
+.view .standby {
+	font-size: 24px !important;
+}
+
+.view .spacerTitle {
+	-moz-user-select: none;
+	padding-bottom: 5px !important;
+	text-align: center;
+	font-size: 20px;
+	font-weight: bolder;
+	font-family: Verdana;
+	/*font-style: oblique;*/
+	height: 20px;
+	vertical-align: bottom;
+	background: #EEF;
+	color: darkblue;
+}
+
+/* SPECIES/BUILD LABEL */
+.view .speciesLabel, .view .buildLabel{
+	width: 50% !important;	
+	padding: 5px !important;
+	text-align: center;
+	font-size: 16px;
+	font-weight: bolder;
+	font-family: Verdana;
+	/*font-style: oblique;*/
+	height: 20px;
+	vertical-align: bottom;
+	background: #FFF;
+	color: #222;
+}
+
+
+
+/* VIEW COMBOBOX MENU */
+
+/* Background colors to match menus */
+.tundra .dojoxRollingList {
+	border-color: #b3b3b3;
+}
+.tundra .dijitPopup .dojoxRollingList {
+	border-color: #406b9b;
+}
+.tundra .dojoxRollingListPane {
+	background-color: #f7f7f7;
+}
+
+/* NOTE: THIS IS NECESSARY FOR THE NEXT RULE TO WORK!!! */
+.view .viewCombo .dijitReset .dijitMenu li,
+.view .viewCombo .dijitReset .dijitMenuItem li
+{
+	/*color: #0FF !important;*/
+}
+.view .dijitMenu li,
+.view .dijitMenuItem li
+{
+	color: #224 !important;
+	height: 25px;
+}
+
+
+/* VIEW ICON */
+.viewIcon
+.view .dijitTabButtonIcon {
+    background-image: url("../../../plugins/view/images/view-18.png");
+	background-repeat: no-repeat;
+	width: 18px;
+	height: 18px;
+	position: relative;
+	top: 0px;
+	text-align: center;
+}
+.view .viewIcon* { background-position: 0px; }
+.view .viewIcon:hover {
+	background-image: url("../../../plugins/view/images/view-reload-18.png");
+}
+
+/* LEFT PANE */
+.view .leftPane .projectTitle, .view .leftPane .workflowTitle,
+.view .leftPane .reportTitle, .view .leftPane .fileTitle,
+.view .leftPane .viewTitle {
+	-moz-user-select: none;
+	text-align: center;
+	font-size: 16px;
+	font-weight: bolder;
+	font-family: Verdana;
+	/*font-style: oblique;*/
+	height: 20px;
+	vertical-align: bottom;
+	background: #DDF;
+	color: white;
+}
+
+.view .leftPane .message {
+	color: #444;
+	font-family: Verdana;
+	font-size: 12px;
+	font-style: italic;
+	text-align: center;
+	padding-right: 35px;
+}
+
+.view .leftPane .featureIcon, .view .leftPane .reportIcon,
+.view .leftPane .viewIcon, .view .leftPane .workflowIcon,
+.view .leftPane .projectIcon, .view .leftPane .speciesIcon {
+	background-repeat: no-repeat;
+	background-position: center;
+	min-width: 35px;
+	min-height: 35px;
+	width: 35px;
+	height: 35px;
+}
+
+.view .leftPane .featureIcon {
+	background-image: url("../../../plugins/view/images/features-28.png");
+}
+.view .leftPane .speciesIcon {
+	background-image: url("../../../plugins/view/images/species-28.png");
+}
+.view .leftPane .reportIcon {
+	background-image: url("../../../plugins/view/images/report-28.png");
+}
+.view .leftPane .viewIcon {
+	background-image: url("../../../plugins/view/images/view-28.png");
+}
+.view .leftPane .viewIcon:hover {
+	background-image: url("../../../plugins/view/images/view-reload-28.png");
+}
+
+.view .leftPane .workflowIcon {
+	background-image: url("../../../plugins/view/images/workflow-28.png");
+}
+.view .leftPane .projectIcon {
+	background-image: url("../../../plugins/view/images/project-28.png");
+}
+
+.view .leftPane .deleteFeatureButton,
+.view .leftPane .saveViewButton, .view .leftPane .deleteViewButton,
+.view .leftPane .saveReportButton,  .view .leftPane .deleteReportButton,
+.view .leftPane .okButton {
+	background-color: #FFF;
+	border: 2px solid #EEE;
+	border-bottom-color: #DDD;	
+	border-left-color: #DDD;	
+	vertical-align: middle;
+	background-position: center;
+	background-repeat: no-repeat;
+	width: 28px !important;
+	height: 28px !important;
+}}
+
+.view .leftPane .saveViewButton {
+	background-image: url("../../../plugins/view/images/save-24.png");
+}
+.view .leftPane .deleteViewButton {
+	background-image: url("../../../plugins/view/images/delete-24.png");
+}
+.view .leftPane .deleteFeatureButton {
+	background-image: url("../../../plugins/view/images/delete-24.png");
+}
+.view .leftPane .okButton {
+	background-image: url("../../../plugins/view/images/OK-34.png");
+}
+
+.view .leftPane .deleteFeatureButton:hover,
+.view .leftPane .saveReportButton:hover, .view .leftPane .fileUpload:hover,
+.view .leftPane .fileBrowse:hover, .view .leftPane .deleteReportButton:hover,
+.view .leftPane .okButton:hover {
+	border-bottom-color: #BBB;	
+	border-left-color: #BBB;
+	background-color : #FF8;
+}
+
+.view .leftPane .deleteFeatureButton:active,
+.view .leftPane .saveReportButton:active, .view .leftPane .fileUpload:active,
+.view .leftPane .fileBrowse:active, .view .leftPane .deleteReportButton:active,
+.view .leftPane .okButton:active {
+	border-bottom-color: #BBB;	
+	border-left-color: #BBB;
+	background-color : #8F8;
+}
+
+.view .leftPane .completed {
+	background-image: url("../../../plugins/view/images/completed-18.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	min-width: 35px;
+	min-height: 35px;
+	width: 35px;
+	height: 35px;
+}
+
+.view .leftPane .loading {
+	background-image: url("../../../plugins/view/images/loading-32.gif") !important;
+	background-repeat: no-repeat;
+	background-position: center;
+	min-width: 35px;
+	min-height: 35px;
+	width: 35px;
+	height: 35px;
+}
+
+.view .leftPane .fileBrowse,
+.view .leftPane .fileUpload {
+	background-color: #FFF;
+	border: 2px solid #EEE;
+	border-bottom-color: #DDD;	
+	border-left-color: #DDD;	
+	vertical-align: middle;
+	float: inherit;
+	min-width: 28px;
+	background-position: center;
+	background-repeat: no-repeat;
+	width: 28px;
+	height: 28px;
+}
+
+.view .leftPane .fileBrowse td:hover, .
+view .leftPane .fileUpload td:hover {
+	color: #F00;
+	border: 2px solid #FFD;
+	border-bottom-color: #EEC;	
+	border-left-color: #EEC;
+	background-color : #0F0;
+}
+
+.view .leftPane .fileBrowse {
+	background-image: url("../../../plugins/view/images/browse-28.png");
+}
+.view .leftPane .fileUpload {
+	background-image: url("../../../plugins/view/images/upload-28.png");
+}
+
+/* EXPOSE FILE UPLOAD ONCLICK ELEMENT */
+.view .leftPane .dijitFileInput {
+	position: relative;
+	top: -2px;
+	left: -3px;
+	height: 32px !important;
+	width: 32px !important;
+	z-index: 10;
+	border: 0px;
+}
+
+.view .leftPane .dijitFileInputReal {
+	background-color: #00F !important;
+	height: 30px !important;
+	width: 30px !important;
+	z-index: 11;
+}
+
+/* REMOVE BLANK AT RIGHT OF COMBO INPUT */
+.view .leftPane .dijitReset .dijitValidationIcon {
+	visibility: hidden;
+	display: none;
+}
+
+.view .leftPane .featureList, .view .leftPane .speciesCombo,
+.view .leftPane .projectCombo,
+.view .leftPane .viewCombo {
+    font-family: sans-serif;
+    font-size: 18px;
+    width: 130px !important;
+	color: #333333 !important;
+}
+
+.view .leftPane .featureList {
+	background: #FFF none repeat scroll 0 0;
+	font-size: 13px !important;
+}
+.view .leftPane .speciesCombo {
+	font-size: 15px !important;
+}
+
+/* GENOME BROWSER */
+
+/* AVAILABLE TRACKS */
+.view .tracks {
+	text-align: center;
+}
+.view .tracks .title,
+.view .tracks .subtitle {
+	font-weight: bold;
+}
+.view .tracks .title {
+	font-size: 20px;
+}
+.view .tracks .subtitle {
+	font-size: 15px;
+}
+
+.view .leftPaneTabContainer {
+	background-color: #000;
+}
+
+.view .dijitLayoutContainer {
+	top: 0px;
+	left: 0px;
+}
+
+.dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient {
+	height: 800px !important;
+	
+}
+.view .dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient{
+	min-height: 800px !important;
+	height: 800px !important;
+}
+
+.view .rightPane .dijitContentPane {
+    height: 100% !important;    
+}
+
+ .dijitTabContainer .rightPane .dijitContainer .dijitTabContainerTop .dijitLayoutContainer .tabStrip-disabled .dijitBorderContainer-child .dijitBorderContainer-dijitTabContainerTop .dijitBorderContainerPane {
+	top: 0px !important;
+	bottom: 0px !important;
+}
+
+
+.view dijitContainer dijitBorderContainer dijitTabPane dijitTabContainerTop-child dijitTabContainerTop-dijitBorderContainer dijitVisible {
+	top: 0px !important;
+	bottom: 0px !important;
+}
+
+.view .dojoxExpandoPane .leftPane .dijitExpandoPane .dojoxExpandoLeft .dijitBorderContainer-child .dijitBorderContainer-dijitExpandoPane .dijitBorderContainerPane {
+	top: 0px !important;
+	bottom: 0px !important;
+}
+
+
+.view .dojoxExpandoClosed .dojoxExpandoWrapper * {
+	/*height: 0px !important;*/
+	overflow:hidden !important;
+}
+
+
+.view .dojoxExpandoTitle {
+	height: 20px !important;
+}
+
+/* INTERACTIVE DIALOGUE */
+.tundra .dijitDialog {
+    border: 1px solid #B7B7B7;
+    border-radius: 9pt 9pt 9pt 9pt;
+    box-shadow: -2px 5px 20px #888888 !important;
+    padding: 1.5em 3px 3px;
+}
+
+.view .dijitDialog {
+   box-shadow: -2px 5px 20px #888;
+}
+
+.dojoxExpandoPane .dojoxExpandoTitle .status {
+    position: absolute;
+    top: 0px;
+}
+.dojoxExpandoPane.dojoxExpandoClosed .dojoxExpandoTitle .status {
+    display: none;
+}
+

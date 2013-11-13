@@ -1,0 +1,20 @@
+.appsmenu {
+    font-family: Verdana;
+    font-size: 16px;
+}
+
+.appsmenu .title {
+    color: #822;
+    font-weight: bolder;
+    background-color: #EEE;
+    text-align: left;
+    text-indent: 5px;
+}
+
+.appsmenu .dijitReset .dijitMenuItem .title .dijitMenuItemIcon {
+    width: 0px !important;
+}
+
+.appsmenu .title .dijitMenuItemLabel {
+    width: 100% !important;
+}

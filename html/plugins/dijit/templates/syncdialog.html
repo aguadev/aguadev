@@ -1,0 +1,91 @@
+<div dojoAttachPoint="containerNode">
+
+    <table
+        cellspacing="0px"
+        height="300px" width="100%" style="padding: 0; margin: 0;"
+        class="syncDialog">
+        <tr>
+            <td align="center">
+                
+                <div
+                    dojoAttachPoint="dialog"
+                    dojoType="dijit.Dialog"
+                    closeText="false"
+                    title="Sync"
+                    style="margin-right: auto; margin-left: auto; text-align: center;"
+                    >
+                    
+                    <table
+                        cellpadding="0"
+                        cellspacing="0"
+                        class="syncDialog"
+                        width="100%"
+                        >
+
+                        <tr class="header" align="center">
+                            <td
+                                align="center"
+                                dojoAttachPoint="headerNode"
+                                colspan="2">${header}</td>
+                        </tr>
+
+						<tr>
+							<td align=center
+                                class="sublabel">Commit Message</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<input
+									dojoAttachPoint="message"
+									class="message"
+									dojoType="dijit.form.ValidationTextBox"
+									type="text"
+									maxlength="52"
+									regExpGen="return '[^;^`]{1,52}'"
+									invalidMessage="Max 52 characters, no ';' or '`'"
+									promptMessage="Max 52 characters, no ';' or '`'"
+									value=""
+								>
+							</td>
+						</tr>
+
+						<tr>
+							<td align=center
+                                class="sublabel">Details</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<textarea
+									spellcheck="false"
+									dojoAttachPoint="details"
+									class="details"
+									style="width:100%;";
+									cols="40"
+									rows="10"></textarea>
+							</td>
+						</tr>
+
+                        
+                        <tr>
+                            <td colspan="2"
+                                align="center"
+                                class="enterButton">
+                                <button
+                                    dojoType="dijit.form.Button"
+                                    type="button"
+                                    label="Enter"
+                                    dojoAttachEvent="onClick:doEnter"
+                                    >
+                                </button>
+                            </td>
+                        </tr>
+                        
+                        
+                    </table>
+
+                </div>
+            
+            </td>
+        </tr>
+    </table>
+</div>

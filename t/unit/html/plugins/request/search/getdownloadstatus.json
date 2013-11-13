@@ -1,0 +1,16 @@
+{
+    "Request_uuid": "0154ec15-90a2-4b3f-8a22-ee7523f4056d",
+	"Source_Uri": "https://cghub.ucsc.edu/cghub/data/analysis/download/9f4ddc3d-0690-4dd1-921d-f902eb84a3c3",
+	"total_bytes_to_transfer": "4294967296",
+	"Completion_Message": "NULL",
+	"Request_status": "NULL",
+	"request_dtm_stamp": "2013-05-30 05:16:48.000",
+	"Progress": "NULL",
+	"Dest_dir": "",
+	"path": "",
+	"Request_Name": "NULL",
+	"gta_hostname": "test",
+	"Transaction_state": "User requests download",
+	"Transaction_uuid": "84D6D2E4-8616-4E4F-81A6-C265F7688712",
+	"File_size": "4294967296"
+}

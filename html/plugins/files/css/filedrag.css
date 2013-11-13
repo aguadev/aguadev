@@ -1,0 +1,186 @@
+@import url("RollingList.css");
+
+/* ALIGN FILES TO TOP OF PANE */
+/* AND MAKE SURE THE PANE ISN'T TALLER THAN THE PAGE */
+.fileManager .dojoxFileDragPane {
+	vertical-align: top;
+	height: auto !important;
+	max-height: 200px !important;
+	min-width: 60px !important;
+}
+
+.fileDragInlineEditBox {
+	position: relative;
+	left: 20px;
+	font-size: 25px;
+}
+
+.fileDrag .directory {
+	text-indent: 18px;
+	/*color: #F00;*/
+	background-repeat: no-repeat;
+	background-image: url(../../../plugins/files/FileDrag/images/directory-closed.png);
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+}
+
+.fileDrag .directory .dojoDndItemAnchor {
+	text-indent: 18px;
+	/*background-color:#99CC99;*/
+	/*color: #F00;*/
+	background-repeat: no-repeat;
+	background-image: url(../../../plugins/files/FileDrag/images/directory-open.png);
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+}
+
+.fileDrag .file .dojoDndItemAnchor {
+	text-indent: 18px;
+	/*background-color:#99CC99;*/
+	/*color: #F00;*/
+	background-repeat: no-repeat;
+	background-image: url(../../../plugins/files/FileDrag/images/file-open.png);
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+}
+
+.fileDrag .file {
+	text-indent: 18px;
+	/*color: #F00;*/
+	background-repeat: no-repeat;
+	background-image: url(../../../plugins/files/FileDrag/images/file-closed.png);
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+	min-height: 20px;
+}
+
+
+.directoryIcon {
+	background-image: url(../../../plugins/files/FileDrag/images/soriaFileIcons.gif);
+	/*background-image: url(../../../"../images/soriaFileIcons.gif");*/
+	background-repeat: no-repeat;
+	/*background-color: #F00;*/
+	color: #F00;
+	background-position: 0px;
+	width: 16px;
+	height: 18px;
+	/*text-align: center;*/
+	position: relative;
+	top: 1px;
+
+}
+
+/*.directoryIcon* { background-position: 0px; }*/
+
+.copyDialog{
+	
+	/*width: 200px;*/
+	/*height: 200px;*/
+	background-color: #F00;
+	color: #FFF;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 20px;
+	/*overflow: hidden;*/
+}
+
+.titleDiv{
+	color: #FFF;
+	text-align: center;
+	vertical-align: middle;
+	position: relative;
+	top: 43%;
+	width: 100% !important;
+}
+
+
+.fileManager .dojoxFileInfoPane *{
+	white-space: normal;
+}
+
+.fileManager .dojoxFileInfoLabel {
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+.fileManager .dojoxFileInfoPane {
+	width: 20em;
+	overflow: inherit !important;
+}
+
+
+
+.tundra .dojoxFileDragItem .dijitMenuItemIcon {
+	background-image: url("images/tundraFileIcons.gif");
+	background-repeat: no-repeat;
+}
+
+
+
+/*.tundra .dojoxFileDragItem .dojoxEmpty {*/
+/*	background-image: none;*/
+/*}*/
+/*.tundra .dojoxFileDragItem .dojoxDirectoryItemIcon {*/
+/*	background-position: 0px;*/
+/*}*/
+/*.tundra .dojoxFileDragItemSelected .dojoxDirectoryItemIcon {*/
+/*	background-position: -16px;*/
+/*}*/
+/*.tundra .dojoxFileDragItem .dojoxFileItemIcon {*/
+/*	background-position: -32px;*/
+/*}*/
+/*.tundra .dojoxFileDragItemSelected .dojoxFileItemIcon {*/
+/*	background-position: -48px;*/
+/*}*/
+/**/
+/*.soria .dojoxFileDragItem .dijitMenuItemIcon {*/
+/*	background-image: url("images/soriaFileIcons.gif");*/
+/*	background-repeat: no-repeat;*/
+/*}*/
+/*.soria .dojoxFileDragItem .dojoxEmpty {*/
+/*	background-image: none;*/
+/*}*/
+/*.soria .dojoxFileDragItem .dojoxDirectoryItemIcon {*/
+/**/
+/*	background-image: url("../../../dojo-1.5.0/dojox/widget/FileDrag/images/soriaFileIcons.gif");*/
+/*	/*background-image: url("../images/soriaFileIcons.gif");*/*/
+/*	background-repeat: no-repeat;*/
+/*	background-color: #F00;*/
+/**/
+/*	background-position: 0px;*/
+/*}*/
+/*.soria .dojoxFileDragItemSelected .dojoxDirectoryItemIcon {*/
+/*	background-position: -16px;*/
+/*}*/
+/*.soria .dojoxFileDragItem .dojoxFileItemIcon {*/
+/*	background-position: -32px;*/
+/*}*/
+/*.soria .dojoxFileDragItemSelected .dojoxFileItemIcon {*/
+/*	background-position: -48px;*/
+/*}*/
+/**/
+/**/
+/*.nihilo .fileManager .dojoxFileDragItem .dijitMenuItemIcon {*/
+/*	background-image: url("images/nihiloFileIcons.gif");*/
+/*	background-repeat: no-repeat;*/
+/*}*/
+/*.nihilo .fileManager .dojoxFileDragItem .dojoxEmpty {*/
+/*	background-image: none;*/
+/*}*/
+/*.nihilo .fileManager .dojoxFileDragItem .dojoxDirectoryItemIcon {*/
+/*	background-position: 0px;*/
+/*}*/
+/*.nihilo .fileManager .dojoxFileDragItemSelected .dojoxDirectoryItemIcon {*/
+/*	background-position: -16px;*/
+/*}*/
+/*.nihilo .fileManager .dojoxFileDragItem .dojoxFileItemIcon {*/
+/*	background-position: -32px;*/
+/*}*/
+/*.nihilo .fileManager .dojoxFileDragItemSelected .dojoxFileItemIcon {*/
+/*	background-position: -48px;*/
+/*}*/
+/**/

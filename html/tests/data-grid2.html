@@ -1,0 +1,411 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html lang="en">
+<head>
+    <title> data grid 2 : prog grid with floating pane </title>
+
+<script type="text/javascript" src="../release-1.2.2/dojo/dojo.js"
+	djConfig="isDebug: true, parseOnLoad: true, useCommentedJson: true"></script>
+
+<script type="text/javascript">
+
+<!-- Page-id=lve\GlacctL.jsp -->
+
+
+
+
+<!-- Page-id: GlacctL --><HEAD>
+<link rel="stylesheet" href="http://janmic.rubicorp.net:9080/RubicorpPrototype/config/default.css" type="text/css"><script type="text/javascript">var imgsrc="http://janmic.rubicorp.net:9080/RubicorpPrototype/images/"; var scriptsrc="http://janmic.rubicorp.net:9080/RubicorpPrototype/config/"; var langue="en"; var contextPath="http://janmic.rubicorp.net:9080/RubicorpPrototype";</script>
+
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<META HTTP-EQUIV="Expires" CONTENT="-1">
+
+<!--<script type="text/javascript">-->
+<!--var djConfig = {-->
+<!--isDebug:false, parseOnLoad:true, usePlainJson: true, debugAtAllCosts: false-->
+<!--};-->
+<!--</script>-->
+
+<!--<script type="text/javascript" src="../release-1.2.2/dojo/dojo.js"></script>-->
+
+<script type="text/javascript">
+
+dojo.require("dojox.layout.FloatingPane"); 
+dojo.require("dijit.form.Button"); 
+dojo.require("dijit.Dialog");
+dojo.require("dijit.form.TextBox");
+dojo.require("dojo.parser"); // scan page for widgets
+dojo.require("dijit.form.DateTextBox");
+dojo.require("dijit.Editor");
+dojo.require("dijit._editor.plugins.LinkDialog");
+dojo.require("dijit._editor.plugins.FontChoice");
+dojo.require("dijit._editor.plugins.TextColor");
+
+dojo.require("dojo.parser");
+//dojo.require("dojo.data.ItemFileReadStore");
+//dojo.require("dojo.io.script");
+//dojo.require("dojox.grid.compat.Grid");
+    
+dojo.require("dojox.grid.Grid");
+dojo.require("dojox.grid.DataGrid");
+//dojo.require("dojox.grid._data.model");
+
+dojo.require("dojo.data.ItemFileReadStore");
+dojo.require("dojox.data.QueryReadStore");
+
+
+
+// REGISTER module path
+dojo.registerModulePath("custom","../../tests/custom");	
+
+
+dojo.require("custom.QueryDojoData");
+dojo.require("custom.Grid");
+
+dojo.require("dijit.Menu");
+
+dojo.require("dijit.form.FilteringSelect");
+
+
+</script>
+
+<html>
+<style type="text/css">
+@import "../release-1.2.2/dojo/resources/dojo.css";
+@import "../release-1.2.2/dijit/themes/dijit.css";
+@import "../release-1.2.2/dijit/themes/nihilo/nihilo.css";
+@import "../release-1.2.2/dijit/themes/nihilo/nihilo_rtl.css";
+@import "../release-1.2.2/dojox/layout/resources/FloatingPane.css";
+@import "../release-1.2.2/dojox/layout/resources/ResizeHandle.css";
+
+@import "../release-1.2.2/dojox/grid/_grid/nihiloGrid.css";
+@import "../release-1.2.2/dojo/resources/dojo.css";
+
+/* body { background:url('gridUnderlay.png') top left; }  */
+
+.heading {
+		font-weight: bold;
+		padding-bottom: 0.25em;
+}
+			   
+#grid {
+		border: 1px solid #333;
+		width: 55em;
+		height: 30em;
+}
+
+.alternateDock {
+	position:absolute;
+	background-color:#ededed;
+	right:0px;
+	top:0px;
+	border-left:0px solid #ccc;
+	height:100%;
+}
+#alternateDock ul.dojoxDockList {
+	display:block;
+}
+body {
+	padding:2em 2em 2em 2em;
+}
+
+.deleteImage {
+background-image:url(http://janmic.rubicorp.net:9080/RubicorpPrototype/images/application/Delete.png);
+}
+.addImage {
+background-image:url(http://janmic.rubicorp.net:9080/RubicorpPrototype/images/application/Add.png);
+}
+.editImage {
+background-image:url(http://janmic.rubicorp.net:9080/RubicorpPrototype/images/application/Edit.png);
+}
+.searchImage {
+background-image:url(http://janmic.rubicorp.net:9080/RubicorpPrototype/images/application/Search.png);
+}
+.exitImage {
+background-image:url(http://janmic.rubicorp.net:9080/RubicorpPrototype/images/application/Exit.png);
+}
+</style>
+
+<script type="text/javascript">
+
+var loading = false;
+function toggleLoad(){
+	if(loading)
+		dojo.style("loadingNode","display","none");
+	else
+		dojo.style("loadingNode","display","block");
+	loading = !loading;
+}
+
+dojo.addOnLoad(function(){
+	//dojo.parser.parse(dojo.body());
+
+	createButton("customGridDojoBody1","Create 1st Demo into Dojo.body",
+		function(){
+			createGlacctGrid(dojo.byId("gridNode1"));
+			dijit.byId("customGridDojoBody1").setAttribute('disabled',true);
+			dijit.byId("customGridFloatingPane1").setAttribute('disabled',true);
+		}
+	,"contentNode1");
+
+	var fpId = 0;
+	createButton("customGridFloatingPane1", "Create 1st Demo into Floating Pane", 
+		function(){
+			createFloatingPane( "floatingPane" + fpId, null, "New title Pane #" + fpId, true, true, true, true, null, null, 700, 500, "50px", "50px");
+			createGlacctGrid(dojo.byId("floatingPane" + fpId + "Content"));
+			dijit.byId("customGridDojoBody1").setAttribute('disabled',true);
+			dijit.byId("customGridFloatingPane1").setAttribute('disabled',true);
+			fpId++;
+		}
+	, "contentNode1");
+
+	createButton("customGridDojoBody2","Create 2nd Demo into Dojo.body",
+		function(){
+			createTextGrid(dojo.byId("gridNode2"));
+			dijit.byId("customGridDojoBody2").setAttribute('disabled',true);
+			dijit.byId("customGridFloatingPane2").setAttribute('disabled',true);
+		}
+	,"contentNode2");
+
+	createButton("customGridFloatingPane2", "Create 2nd Demo into Floating Pane", 
+		function(){
+			createFloatingPane( "floatingPane" + fpId, null, "New title Pane #" + fpId, true, true, true, true, null, null, 880, 500, "50px", "50px");
+			createTextGrid(dojo.byId("floatingPane" + fpId + "Content"));
+			dijit.byId("customGridDojoBody2").setAttribute('disabled',true);
+			dijit.byId("customGridFloatingPane2").setAttribute('disabled',true);
+			fpId++;
+		}
+	, "contentNode2");
+
+	createButton("toggleLoad","Toggle loading image",
+		toggleLoad
+	,"contentNode1");
+
+});
+
+
+function createGlacctGrid(node){
+		var gridPath = "" + dojo.moduleUrl("custom","templates/editors/glacct_GridDialog.html");
+		//array of function pointers, function methods, and the object that will be exect
+		var newGrid = new custom.Grid(
+			{
+				containerNode: node,
+				webAppPath: "http://janmic.rubicorp.net:9080/RubicorpPrototype/",
+				baseAction: "glacct.do",
+				dialogPrefix: "glacct",
+				editorTemplatePath: gridPath,
+				viewFields: ["pmacct_id","company_code","glacct_id","pmacct_desc"],
+				viewNames: ["Pmacct Id","Company Code","Glacct Id","Pmacct Desc"],
+				viewWidths: ["125px","125px","125px","125px"],
+				keyNames: ["pmacct_id","company_code"],
+				dataNames: ["pmacct_id","company_code","glacct_id","pmacct_desc"],
+				filterNames: ["pmacct_id","company_code","glacct_id","pmacct_desc"],
+				itemsPerPageSelect_beginIndex: 3,
+				itemsPerPageSelect_increment: 1,
+				itemsPerPageSelect_endIndex: 11,
+				btnViewVis: false,
+				mnuViewVis: false
+			}
+		);
+		newGrid.startup();
+}
+
+
+
+
+var editor = null;
+var createRichEditor = function(){
+	editor = new dijit.Editor(
+		{id:this.dialogPrefix + "_textEditor",
+		plugins:['undo','redo','cut','copy','paste','|','bold','italic','underline','strikethrough','subscript','superscript','removeFormat','foreColor','hiliteColor','|','indent','outdent','justifyCenter','justifyFull','justifyLeft','justifyRight','delete','selectall','|','insertOrderedList','insertUnorderedList','createLink','insertImage','inserthtml']
+	},dojo.byId("article_textEditor"));
+}
+var saveRichEditor = function(){
+	dijit.byId("article_text").setValue(editor.getValue());
+}
+var openRichEditor = function(){
+	editor.setValue(dijit.byId("article_text").getValue());
+}
+
+var clearDateEditor = function(){
+	dijit.byId("article_dateEditor").setValue(null);
+}
+var openDateEditorNew = function(){
+	//var dateObject = dijitWidget.parse(getDataStore.getValue(retrievedItem,value));
+	var dateObject = new Date();
+	dijit.byId("article_dateEditor").setValue(dateObject);
+}
+var openDateEditor = function(){
+	//var dateObject = dijitWidget.parse(getDataStore.getValue(retrievedItem,value));
+	var retDate = dijit.byId("article_date").getValue();
+	var dateObject = new Date();
+	var year = parseInt(retDate.substring(0,4));
+	var month = parseInt(retDate.substring(5,8));
+	var day = parseInt(retDate.substring(8,10));
+	dateObject.setFullYear(year, month - 1, day);
+	dijit.byId("article_dateEditor").setValue(dateObject);
+}
+var saveDateEditor = function(){
+	dijit.byId("article_date").setValue(dijit.byId("article_dateEditor").getDisplayedValue());
+}
+
+var addDefault = function(){
+	dijit.byId("article_articleid").setAttribute('disabled',true);
+	dijit.byId("article_articleid").setValue("Auto");
+	dijit.byId("article_views").setAttribute('disabled',true);
+	dijit.byId("article_views").setValue("0");
+}
+var removeDefault = function(){
+	dijit.byId("article_articleid").setAttribute('disabled',false);
+	dijit.byId("article_views").setAttribute('disabled',false);
+}
+
+function createTextGrid(node){
+		var gridPath = "" + dojo.moduleUrl("custom","templates/editors/article_GridDialog.html");
+
+		var startupFunctions = [
+				{func: createRichEditor, method: "null", source: "null", type: "null"}
+			];
+		//array of function pointers, function methods, and the object that will be exectuted
+		var editorFunctions = [
+				{func: removeDefault, method: "add"},
+				{func: removeDefault, method: "change"},
+				{func: addDefault, method: "preAdd"},
+				{func: removeDefault, method: "preChange"},
+				{func: saveRichEditor, method: "add"},
+				{func: saveRichEditor, method: "change"},
+				{func: openRichEditor, method: "preAdd"},
+				{func: openRichEditor, method: "preChange"},
+				{func: openRichEditor, method: "preBatchChange"},
+				{func: saveDateEditor, method: "add"},
+				{func: saveDateEditor, method: "change"},
+				{func: openDateEditorNew, method: "preAdd"},
+				{func: openDateEditor, method: "preChange"},
+				{func: clearDateEditor, method: "preBatchChange"}
+			];
+
+		var newGrid = new custom.Grid(
+			{
+				id: "article",
+				width: 870,
+				height: 400,
+				passedInFunctions: startupFunctions,
+				eventFunctions: editorFunctions,
+				containerNode: node,
+				webAppPath: "http://janmic.rubicorp.net:9080/RubicorpPrototype/",
+				baseAction: "article.do",
+				dialogPrefix: "article",
+				editorTemplatePath: gridPath,
+				viewFields: ["articleid","userid","imageid","date","title1","title2","text","views"],
+				viewNames: ["Article Id","User Id","Image Id","Date","Title 1","Title 2","Text","Views"],
+				viewWidths: ["65px","60px","65px","80px","125px","125px","200px","50px"],
+				keyNames: ["articleid"],
+				dataNames: ["articleid","userid","imageid","date","title1","title2","text","views"],
+				filterNames: ["articleid","userid","imageid","date","title1","title2","text","views"],
+				itemsPerPageSelect_beginIndex: 10,
+				itemsPerPageSelect_increment: 10,
+				itemsPerPageSelect_endIndex: 110,
+				btnViewVis: false,
+				mnuViewVis: false
+			}
+		);
+		newGrid.startup();
+}
+
+//Create a button
+//btnId[str] - id attribute of the button to create
+//btnText[str] - the text inside the button
+//btnOnClickFunc[funcptr] - a variable pointing to a function to be executed on click
+//appendToId[str] - the DOM that this button will be added to
+function createButton( btnId, btnText, btnOnClickFunc, appendToId ){
+	var btnNode = document.createElement('button');
+	dojo.attr(btnNode,"id", btnId );
+	var dojoBtn = new dijit.form.Button({label: btnText , onClick: btnOnClickFunc },btnNode); 
+	dojo.byId( appendToId  ).appendChild(dojoBtn.domNode);
+	return dojoBtn;
+}
+
+//Create Dojo foating pane
+//fpId[str], fpStyleClass[str], fpTitle[str], fpTitle[str], fpDockable[bool], 
+//fpMaxable[bool], fpClosable[bool], fpResizable[bool], fpMaximizeFunc[funcptr], 
+//fpCloseFunc[funcptr], fpWidth[int], fpHeight[int], fpTop[str+px], fpLeft[str+px]
+function createFloatingPane( fpId, fpStyleClass,
+	fpTitle, fpDockable, fpMaxable, fpClosable, fpResizable,
+	fpMaximizeFunc, fpCloseFunc,
+	fpWidth, fpHeight, fpTop, fpLeft ){
+	var fpNode = document.createElement("div");
+	
+	var fpContentNode = document.createElement("div");
+	dojo.attr(fpContentNode, "id", fpId + "Content");
+	fpNode.appendChild(fpContentNode);
+	
+	dojo.body().appendChild(fpNode);
+	dojo.attr(fpNode,"id", fpId );
+	
+	if(fpStyleClass != null)
+		dojo.addClass(fpNode, fpStyleClass );
+	
+	var tmp = new dojox.layout.FloatingPane({
+		title: fpTitle ,
+		dockable: fpDockable,
+		maxable: fpMaxable,
+		closable: fpClosable,
+		resizable: fpResizable
+		}, fpNode );
+
+	// Make it go top left
+	tmp.connect(tmp,"maximize",function(e){
+			dojo.byId(fpId).style.top = "0px";
+			dojo.byId(fpId).style.left = "0px";
+		});
+
+	if(fpMaximizeFunc != null)
+		tmp.connect(tmp,"maximize",fpMaximizeFunc);
+	if(fpCloseFunc != null)
+		tmp.connect(tmp,"close",fpCloseFunc);
+	
+	tmp.startup();
+	// Resize does not require px
+	tmp.resize({ w: fpWidth, h: fpHeight });
+	// Style top/left require px
+	dojo.byId(fpId).style.top = fpTop;
+	dojo.byId(fpId).style.left = fpLeft;
+}
+
+</script>
+
+<title> data grid 2 : prog grid with floating pane </title>
+
+<base href="http://janmic.rubicorp.net:9080http://janmic.rubicorp.net:9080/RubicorpPrototype/lve/GlacctL.jsp">
+</HEAD>
+<body class="nihilo">
+
+<H1>Dojo Custom Grid Example with Floating Pane and Modal Dialog Editor</H1>
+<H1 style="font-size:12px">&nbsp;&nbsp;&nbsp;&nbsp;by <a href="http://www.rubicorp.com/">Rubicorp.com</a> </H1>
+<br/>
+
+<p><b>Description:</b><br/>
+<ul>
+<li>Create the custom grid into one of the following nodes: the body | floating pane</li>
+<li>Right click on the grid and a popup menu will be displayed. Choose any of the menu items. For more information visit the following links.</li>
+</ul>
+
+Feedback and comments are appreciated: <br/>
+
+&nbsp;&nbsp;&nbsp;&nbsp;Visit <a href="http://www.rubicorp.com/Rubicorp/article?reqCode=viewArticle&a=6">Demo 1 Article</a> and <a href="http://www.rubicorp.com/Rubicorp/article?reqCode=viewArticle&a=9">Demo 2 Article</a></p>
+<br/>
+<b>Updated September 8, 2008 - <i>Updated user interface!</i></b>
+
+<div id="contentNode1"></div>
+<br/>
+<div id="contentNode2"></div>
+
+<div id="gridNode1"></div>
+<div id="gridNode2"></div>
+
+<div id="loadingNode" style="display:none"><img src="http://janmic.rubicorp.net:9080/RubicorpPrototype/config/ajax-loader.gif"></div>
+
+<div dojoType="dojox.layout.Dock" id="alternateDock" class="alternateDock"></div>
+
+</body>
+</html>
+

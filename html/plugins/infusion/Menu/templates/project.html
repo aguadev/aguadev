@@ -1,0 +1,59 @@
+<div dojoAttachPoint="containerNode">
+
+<div
+    dojoAttachPoint="menu"
+    class="projectmenu"
+    dojoType="plugins.menu.Menu"
+>
+
+    <div
+        dojoAttachPoint="editNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:newProject"
+        class="select"
+        disabled="false"
+    >
+        <U>N</U>ew
+    </div>
+
+    <div
+        dojoAttachPoint="editNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:edit"
+        class="select"
+        disabled="false"
+    >
+        <U>E</U>dit
+    </div>
+
+    <div
+        dojoAttachPoint="completeNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:complete"
+        class="select"
+        disabled="false"
+    >
+        <U>C</U>omplete
+    </div>
+
+    <div
+        dojoAttachPoint="cancelNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:cancel"
+        class="add"
+        disabled="false"
+    >
+        Cance<U>L</U>
+    </div>
+
+    <div
+        dojoAttachPoint="holdNode"
+        dojoType="dijit.MenuItem"
+        dojoAttachEvent="onClick:hold"
+        class="hold"
+        disabled="true"
+    >
+        <U>H</U>old
+    </div>
+
+</div>

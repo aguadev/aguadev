@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Infusion</title>
+<meta name="viewport" content="width=570">
+<link rel="stylesheet" href="../../../dojo/resources/dojo.css">
+<!--<link rel="stylesheet" href="resources/dTuned.css">-->
+<link rel="stylesheet" href="css/saffron.css">
+<script src="../../../dojo/dojo.js" 
+	data-dojo-config="async: true"></script>
+<script>
+
+// Require Saffron.js
+require(["dgrid/demos/saffron/Saffron"], function(Saffron){
+	var saffron = new dgrid.demos.saffron.Saffron({}); 
+});
+
+</script>
+</head>
+<body class="dTuned">
+	<table>
+		<tr>
+			<td align="center">
+				<div class="projects-header">
+					Projects
+				</div>
+			</td>
+			<td align="center">
+				<div class="samples-header">
+					Samples
+				</div>
+			</td>
+			<td align="center">
+				<div class="lanes-header">
+					Lanes
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div id="list-container">
+					<div id="projects"></div>
+					<div id="samples"></div>
+					<div id="lanes"></div>
+				</div>
+			</td>
+		</tr>
+	</table>
+	<div id="grid"></div>
+</body>
+</html>

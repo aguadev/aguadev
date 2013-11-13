@@ -1,0 +1,1 @@
+6	casava_bcl_to_gvcf_workflow	v1	2013-02-09 22:33:42	/home/sajay/src/illumina/scripts/analysis_wrapper/wrapper.sh	qsub -cwd -V -pe threaded 12 -q prod-s.q -notify -b y -terse	

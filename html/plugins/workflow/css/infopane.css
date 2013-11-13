@@ -1,0 +1,349 @@
+/* SET BACKGROUND COLOR AND FONT */
+.workflow .infopane {
+	font-family: Verdana;
+	background-color: #FFF;
+}
+
+.infopane .dijitContentPane .dijitTabPane .dijitTabContainerTop-dijitContentPane .dijitTitlePaneTitle,
+.infopane .dijitContentPane .dijitTabPane .dijitTabContainerTop-dijitContentPane .dijitTitlePaneTitle .dijitClosed {
+
+	height: 20px !important;
+}
+
+ .infopane .dijitContentPane .dijitTabPane .dijitTabContainerTop-dijitContentPane td {
+	min-height: 40px !important;
+}
+
+.dijitTitlePane .outputsTitlePane {
+	min-height: 40px !important;	
+}
+
+/* APPLICATION NAME */
+.infopane .appName {
+	height: 17px;
+	background-color: #DDEEFF;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 17px;
+	font-stretch: expanded;
+	font-weight: bolder;
+	color: darkred;
+}
+
+/* TITLE PANE TITLE */
+.infopane .dijitTitlePaneTextNode {
+	color: #484 !important;
+	font-weight: bolder;
+	font-size: 16px;
+}
+
+/* SET TAB PANE WRAPPER MIN HEIGHT SO ALL TITLE PANES ARE VISIBLE */
+.dijitTabPaneWrapper .dijitTabContainerTop-container .infopane {
+	height: auto !important;
+	min-height: 130px !important;
+}
+
+
+/*/* TITLE PANE HEIGHT */*/
+/*.infopane .dijitTitlePaneContentInner{*/
+/*	/*min-height: 30px !important;*/*/
+/*	margin-bottom: 20px;*/
+/*}*/
+/**/
+/*.infopane .dijitTitlePaneTitle .dijitTitlePaneFocused .dijitClosed {*/
+/*	/*min-height: 20px !important;*/*/
+/*	/*margin-bottom: 20px;*/*/
+/*}*/
+/**/
+/*.infopane .dijitTitlePane .dijitTitlePaneTitle {*/
+/*	/*min-height: 40px !important;	*/*/
+/*}*/
+
+/* INFO PANE CONTAINER */
+
+.infopane {
+
+	/*min-height: 40px !important;	*/
+
+	height: auto !important;
+	font-family: Verdana;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border: 2px solid #CCCCCC;
+	cursor: default;
+	/*padding: 0 0 !important;*/
+	/*padding:1em 0.5em;*/
+	/*margin: 0 0 !important;*/
+	/*width: 300px;	*/
+	
+	text-align: left !important;
+	font-size: 12px;
+	border-color: #333;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	/*display: block !important;*/
+	overflow:auto !important;
+}
+
+/* INPUT HOVER */
+.infopane .name {
+	color: darkred;	
+}
+.infopane .name:hover {
+	color: #FFFFFF;
+}
+
+.infopane .input:hover,
+.infopane .output:hover {
+	background-color: #88CCFF !important;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	/*margin: 0 0 !important;*/
+	/*padding: 0 0 !important;*/
+}
+
+/* EDITING value TEXT AREA */
+.infopane .value textarea,
+.infopane .description textarea {
+	width: 98%;
+	font-family: Verdana;
+	color: #222;
+	font-weight: bolder;
+	height: 28px;
+	font-size: 12px;
+}
+.infopane .description textarea {
+	height: 40px;
+}
+
+
+/* HIDDEN CONTENT (DISPLAYED ONCLICK)*/
+
+.infopane .hidden {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:4pt;
+	
+	padding-bottom: 0px;
+	/*margin-bottom: 20px !important;*/
+
+	/*background-color: #FFF;*/
+	background-color: #FFB;
+
+}
+.infopane .hidden table:hover {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:4pt;
+	background-color: #FF5;
+}
+
+
+.infopane .name,
+.infopane .type,
+.infopane .typeTitle,
+.infopane .value,
+.infopane .discretion {
+	height: 20px !important;
+	text-align: left !important;
+	vertical-align: middle !important;
+	font-weight: bold !important;
+	padding-top: 0px;
+}
+
+
+.infopane .value {
+	width: auto !important;
+	/*font-weight:bold !important;*/
+	/*height:20px !important;*/
+	/*padding-top:0;*/
+	/*text-align:left !important;*/
+	/*vertical-align:middle !important;*/
+	/*width: 300px !important;*/
+}
+
+/* NAME */
+.infopane .name {
+	height: 24px !important;
+	font-size: 14px;
+	font-weight: bolder;
+	color: darkred;
+	width: 120px !important;
+	/*text-align: left !important;*/
+	/*margin-top: 5px;*/
+
+	vertical-align: middle;
+	background-image: url(../../../../plugins/workflow/images/parameter-18.png);
+	background-position: center left;
+	text-indent: 22px;
+	background-repeat: no-repeat;
+	height: 18px;
+}
+
+/* DISCRETION */
+.infopane .discretion {
+	color: darkgreen !important;
+	/*font-style: italic;*/
+}
+
+/* TYPE */
+.infopane .type {
+	text-align: center !important;
+	font-size: 12px;
+	height: 24px !important;
+	padding-top: 0px;
+	position: relative;
+	left: 4px;
+	text-align: left;
+	width: 60px !important;
+	color: darkblue;
+}
+
+
+/* BACKGROUND FOR ALL HIDDEN ELEMENTS */
+.infopane .description, 
+.infopane .uploadButton,
+.infopane .browseButton {
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	border-radius: 4pt;
+	border-radius-bottomright: 4pt;
+	border-radius: 4pt;
+	border-radius-topright: 4pt;
+	background-color:  #FFC;	
+}
+
+/* INPUT VALUE LINE */
+.infopane .input .value {
+	border-radius-topright: 4pt;
+	border-radius-bottomright: 4pt;
+}
+
+/* DISCRETION */
+.infopane .required {
+	background-color: #FBB !important;
+}
+.infopane .satisfied {
+	background-color: #AFA !important;
+	border: 2px solid #AFA !important;
+}
+
+/* AVAILABILITY */
+.infopane .filePresent {
+	color: #000 !important;
+}
+.infopane .fileMissing {
+	color: #444 !important;
+	font-style: italic !important;
+}
+
+/* INVALID INPUT */
+.infopane .invalid,
+.infopane .input .required {
+	border: 2px solid #F00 !important;
+	color: #555 !important;
+	font-style: italic !important;
+}
+
+
+
+/* UPLOAD, DOWNLOAD AND BROWSE BUTTONS */
+
+.infopane .browseButton,
+.infopane .uploadButton,
+.infopane .downloadButton {
+	background-color: #FFF;
+	border: 2px solid #EEE;
+	border-bottom-color: #DDD;	
+	border-left-color: #DDD;	
+	vertical-align: middle;
+	min-width: 28px;
+}
+
+.infopane .browseButton:hover,
+.infopane .uploadButton:hover,
+.infopane .downloadButton:hover {
+	border: 2px solid #FFD;
+	border-bottom-color: #EEC;	
+	border-left-color: #EEC;
+	background-color : #CFC;
+}
+
+.infopane .browseButton:active,
+.infopane .uploadButton:active,
+.infopane .downloadButton:active {
+	border: 2px solid #FFD;
+	border-bottom-color: #BBB;	
+	border-left-color: #BBB;
+	background-color : #8F8;
+}
+
+.infopane .browseButton {
+	float: inherit;
+	background-image: url("../../../../plugins/workflow/images/browse-28.png");
+	background-position: center;
+	background-repeat: no-repeat;
+	width: 28px;
+	height: 34px;
+}
+
+.infopane .uploadButton {
+	background-image: url("../../../../plugins/workflow/images/upload-24.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 28px;
+	height: 28px;
+}
+
+.infopane .downloadButton {
+	background-image: url("../../../../plugins/workflow/images/download-24.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 28px;
+	height: 28px;
+}
+
+/* EXPOSE FILE UPLOAD ONCLICK ELEMENT */
+
+.infopane .dijitFileInput {
+	position: relative;
+	top: -2px;
+	left: 0px;
+	/*height: 32px !important;*/
+	width: 32px !important;
+	z-index: 10;
+	border: 0px;
+	opacity: 0;
+	max-height: 20px !important;
+}
+
+.infopane .dijitFileInputReal {
+	height: 20px !important;
+	width: 30px !important;
+	background: none;
+	z-index: 11;
+}
+
+.infopane .fileInputMask {
+	/*background-color: #F00;*/
+	position: relative;
+	top: 0px;
+	left: 0px;
+	height: 25px !important;
+	width: 200px !important;
+	z-index: 12;
+}
+
+
+.infopane .dijitTitlePaneContentInner {
+	overflow-y: auto !important;
+	max-height: 420px !important;
+}

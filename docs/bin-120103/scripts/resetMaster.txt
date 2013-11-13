@@ -1,0 +1,46 @@
+
+h3. APPLICATION
+
+resetMaster
+
+h3. PURPOSE
+
+1. SET HEADNODE HOSTNAME TO LONG INTERNAL IP (AFTER REBOOT)
+
+2. IF HOSTNAME HAS CHANGED, UPDATE HOSTNAME IN CLUSTERS
+
+- REMOVE OLD HOSTNAME AS ADMIN/SUBMIT HOST
+
+- ADD NEW HOSTNAME AS ADMIN/SUBMIT HOST
+
+h3. USAGE
+
+{code}
+./resetMaster.pl <String cell> <String masterid> <String cgiscript>
+       [--help]
+ --cell          :   Name of SGE cell (also name of cluster)
+ --masterid      :   EC2 ID of master node
+ --cgiscript     :   Partial path to CGI script to be called by this script
+ --help      :   Print help info
+{code}
+
+h3. EXAMPLES
+
+resetMaster.pl --cell syoung-microcluster --masterid i-b34d25d2
+ --cgiscript "agua/0.6/reset.cgi"
+
+SUBROUTINE              getInstanceInfo
+
+h3. PURPOSE
+
+RETURN A HASH OF INSTANCE VARIABLES
+
+NOTES
+
+RESERVATION     r-e30f5d89      558277860346    default
+                       INSTANCE        i-b42f3fd9      ami-90af5ef9    ec2-75-101-214-196.compute-1.amazonaws.com      ip-10-127-158-202.ec2.internal running aquarius        0               t1.micro        2010-12-24T09:51:37+0000        us-east-1a     aki-b51cf9dc    ari-b31cf9da            monitoring-disabled     75.101.214.196  10.127.158.202        ebs
+                       BLOCKDEVICE     /dev/sda1       vol-c6e346ae    2010-12-24T09:51:40.000Z
+                       BLOCKDEVICE     /dev/sdh        vol-266dc84e    2010-12-24T23:03:04.000Z
+                       BLOCKDEVICE     /dev/sdi        vol-fa6dc892    2010-12-24T23:05:50.000Z
+
+

@@ -1,0 +1,242 @@
+/* ALL-ADMIN STYLES */
+
+.cloud .subPane {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius: 10pt;
+}
+
+.cloud .dragSource table {
+	border-collapse: collapse !important;	
+}
+
+.cloud .dragSource table td:hover {
+	background-color: #FF8 !important;
+}
+
+.cloud textarea {
+	font-size: 10px !important;
+	white-space: pre-wrap !important;
+}
+
+.cloud textarea,
+.cloud td {
+	word-wrap: break-word !important;
+	z-index: 900 !important;
+	min-height: 25px !important;
+}
+
+.cloud .dragSource textarea, .cloud .dragSource td {
+	min-height: 20px !important;
+}
+
+/* MAIN PANES */
+.cloud .rightPane {
+	left: 780px !important;	
+}
+
+/* DRAG SOURCE */
+.cloud .dragSource {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+
+	background:#FFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+
+	/*margin-top: 5px;*/
+	width: 120px;	
+	height: 260px;
+	min-height: 100px;
+	
+	text-align: left;
+	/*color: #339;*/
+	/*color: darkgreen;*/
+	/*font-weight: bold;*/
+	font-family: Verdana;
+	font-size: 12px;
+	border-color: #333;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	overflow:auto !important;
+}
+
+.dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient,
+.cloud .dijitTabPaneWrapper,
+.cloud .tundra .dijitTabPaneWrapper,
+.tundra .cloud .dijitTabPaneWrapper {
+	height: 100% !important;
+}
+
+.cloud .dragSource table td:hover {
+	background-color: #FF8 !important;
+}
+
+.cloud .dojoDndItem .dojoDndItemOver {
+	background-color: #FF8 !important;
+}
+
+.cloud .dojoDndItem {
+    min-height: 24px !important;
+	padding-bottom: 2px !important;
+}
+
+/* SHOW LOCKED/UNLOCKED */
+.cloud .dragSource td {
+	/*background: none repeat scroll 0 0 #FFF !important; */
+	background-color: #FFF !important;
+}
+
+.cloud .dragSource .dojoDndItem,
+.cloud .dragSource .dojoDndItemOver,
+.cloud .dragSource .dojoDndItemAnchor {
+	/*background-color: #CCFFCC !important;*/
+	background-color: #DAF0F2 !important;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	border-radius:8pt;
+}
+
+
+.cloud .dragSource .dojoDndContainerOver {
+	border : inherit !important;
+}
+
+
+.cloud .dragSource .dojoDndItemOver,
+.cloud .dragSource .dojoDndItemAnchor {
+	background-color: #88FF88 !important;
+	/*background-color: #DAF0F2 !important;*/
+}
+
+/* EDITING ROW */
+.cloud .editRow {
+	width: 100% !important;
+	height: auto !important;
+	white-space: pre !important;
+}
+
+/* TAB BACKGROUND COLOUR */
+.cloud .dijitTabContent {
+	/*background-color: #EEE;*/
+}
+
+/* TAB LABEL SIZE */
+.cloud .dijitTabInnerDiv .dijitTabContent {
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	position: relative;
+
+	/* IF UNCOMMENTED PUTS A WHITE BLANK IN ADJACENT TAB WHEN NOT FOCUSED */
+	/*background: transparent url(../images/tabContainerSprite.gif) repeat-x scroll 0 -350px;*/
+
+	/* CHANGE THE HEIGHT OF THE TAB LABEL HERE */
+	/*padding: 5px 3px 4px 4px;*/
+	
+	/*padding: 0px 0px 0px 0px !important;*/
+}
+
+/* DECREASE TABLE LABEL SIZE */
+.cloud .dijitTabInnerDiv {
+	/*padding: 0px 0px 0px 0px !important;*/
+}
+
+/* TAB LABELS */
+.cloud .tabLabel {
+	color: #243C5F !important;
+	padding: 3px;
+	border: solid 2px transparent;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+.cloud .dijitTabChecked .tabLabel {
+	color: #8245DA !important; /* purple */
+	font-weight: bold;
+}
+
+.cloud .dijitFocused .tabLabel {
+	padding: 3px;
+	/*border: solid 2px #0F0;*/
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:3pt;
+	-moz-outline-style: none;
+}
+
+.cloud .tabTitle {
+	color: white;
+	background-color: #264eea;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 20px;
+	font-weight: bold;
+	-moz-user-select: none !important;
+}
+
+
+/* PANES & CONTAINERS */
+
+.cloud .middlePane {
+	left: 390px !important;
+}
+
+.cloud .dijitTabContainer .tabStripButton {
+    display: none;
+    visibility: hidden;
+    z-index: 12;
+}
+
+
+
+/* NO SCROLLBARS IN LEFT, MIDDLE AND RIGHT PANES */
+.cloud .dijitContentPane {
+	overflow: hidden !important;
+}
+
+/* GREY BORDER AROUND TAB PANE */
+.cloud .dijitContentPane {
+    border: 1px solid #DDD;
+}
+
+/* CONTAINERS HAVE WHITE BACKGROUND AND NO PADDING */
+.cloud .dijitBorderContainer {
+	background-color: #FFF;
+	padding: 0;
+}
+
+.cloud .inputsTitlePane {
+	background-color: #000;
+}
+
+/* CONTAINER HEIGHT */
+.browserContainer {	
+	height:	900px;
+}
+
+.cloud .dijitLayoutContainer {
+	top: 0px;
+	left: 0px;
+}
+
+.cloud .dijitTabPaneWrapper {
+	width: auto !important;
+	/*top: 20px !important;*/
+	/*border: none;*/
+}
+
+.cloud .dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient{
+	height: auto;
+}
+
+.cloud .groups .dijitContentPane .dijitTabPane .dijitTabContainerTop-dijitContentPane {
+	width: auto !important;
+}
+

@@ -1,0 +1,33 @@
+
+
+AAPPPPLLIICCAATTIIOONN     ssttaarrcclluusstteerr..ppll
+
+h3. PURPOSE
+
+DRIVE TESTS OF StarCluster.pm, WHICH PERFORMS THE FOLLOWING TASKS:
+
+1. MOUNT BY DEFAULT /agua, /data AND /nethome ON STARCLUSTER NODES
+
+2. SHUTS DOWN CLUSTER WHEN ALL WORKFLOWS ARE COMPLETED
+
+3. ALLOW USERS TO RUN JOBS ON SMALL, MEDIUM OR LARGE CLUSTERS
+
+4. RUN ONE CLUSTER FOR EACH PROJECT OR SHARE IT WITH MULTIPLE PROJECTS
+
+h3. USAGE
+
+{code}
+./starcluster.pl <mode> [additional_arguments - SEE Agua API]
+{code}
+
+h3. EXAMPLE
+
+{code}
+/data/agua/0.5/bin/apps/cluster/starcluster.pl start \
+ --username admin \
+ --cluster smallcluster \
+ --privatekey /nethome/admin/.keypairs/private.pem \
+ --publiccert /nethome/admin/.keypairs/public.pem \
+ --keyname admin-key
+{code}
+

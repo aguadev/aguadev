@@ -1,0 +1,113 @@
+<div dojoAttachPoint="containerNode">
+
+    <div
+        dojoAttachPoint="mainTab"
+        dojoType="dijit.layout.ContentPane"
+        parseOnLoad="false"
+		overflow="auto"
+		title="Cluster"
+		class="clusterstatus"
+		style="position: relative; top: 0px !important; height: 100%; max-height: auto !important; min-width: 400px !important; width: auto !important; padding: 0 !important; background: #FFF;"
+        >
+
+		<table width="100%">
+<!--			<tr>
+				<td
+					dojoAttachPoint="statusTitle"
+					class="tabTitle"
+					align="center">Cluster</td>
+			</tr>
+-->			<tr>
+				<td align="left">
+					<table align="left" width="100%">
+						<tr>
+							<td align="center">
+								<!--<div>-->
+									<div
+										dojoAttachPoint="stop"
+										dojoAttachEvent="onclick:stopCluster"
+										class="stop">
+									</div>
+									<!--<div-->
+									<!--	dojoAttachPoint="pause"-->
+									<!--	dojoAttachEvent="onclick:pauseCluster"-->
+									<!--	class="pause">-->
+									<!--</div>-->
+									<div
+										dojoAttachPoint="start"
+										dojoAttachEvent="onclick:startCluster"
+										class="play">
+									</div>
+									<div class="clusterHeading">Cluster</div>
+									<div dojoAttachPoint="clusterName"
+										class="clusterText">
+									</div>
+									<div class="clusterHeading">Status</div>
+									<div dojoAttachPoint="clusterStatus"
+										class="clusterText">
+									</div>
+								<!--</div>-->
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<div
+						dojoType="dijit.TitlePane"
+						title="Cluster List"
+						class="clusterStatus"
+						style="background: #FFF; height: auto; width: 100% !important; font-size: 10px !important"
+						>
+						<div
+							dojoAttachPoint="list"
+							class="clusterStatusContainer"
+						>
+						</div>
+					</div>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<div
+						dojoType="dijit.TitlePane"
+						title="Cluster Log"
+						class="clusterStatus"
+						style="background: #FFF; height: auto; width: 100% !important; font-size: 10px !important"
+						>
+						<div
+							dojoAttachPoint="log"
+							class="clusterStatusContainer"
+						>
+						</div>
+					</div>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<div
+						dojoType="dijit.TitlePane"
+						title="Balancer Log"
+						class="balancerStatus"
+						style="background: #FFF; height: auto; width: 100% !important; font-size: 10px !important"
+						>
+						<div
+							dojoAttachPoint="balancer"
+							class="clusterStatusContainer"
+						>
+						</div>
+					</div>
+				</td>
+			</tr>
+
+		</table>
+
+	</div>
+
+
+
+</div>

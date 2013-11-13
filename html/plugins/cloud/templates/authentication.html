@@ -1,0 +1,109 @@
+<div dojoattachpoint="containerNode">
+
+	<!-- authentication TAB -->
+	<div
+		dojoAttachPoint="authenticationTab"
+		class="authentication"
+		dojoType="dijit.layout.ContentPane"
+		title="Authentication"
+		style="height: 700px; max-height: auto !important; width: 350px !important; padding: 0 !important;"
+		>
+
+		<table width="100%">
+			<tr valign="top" width="100%">
+				<td colspan="2" class="tabTitle" align="center"> Authentication </td>
+			</tr>
+
+			<tr valign="top" width="95%">
+				<td>
+					<div class="label">  </div>
+					<table>
+						<tr>
+							<td>Username</td>
+							<td	dojoAttachPoint="newUsername"
+									class="newUsername"
+									style="width:100%; font-weight: bolder; font-family: Verdana;";
+							></td>
+							<td>
+								<div
+									dojoAttachPoint="addUserButton"
+									class="addUserButton"
+									dojoType="dijit.form.Button"
+									label="Save"
+									>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<textarea
+									spellcheck="false"
+									dojoAttachPoint="newFirstname"
+									class="newFirstname"
+									style="width:100%; font-weight: bolder; font-family: Verdana;";
+									cols="40"
+									rows="1"
+									>Firstname</textarea>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<textarea
+									spellcheck="false"
+									dojoAttachPoint="newLastname"
+									class="newLastname"
+									style="width:100%; font-weight: bolder; font-family: Verdana;";
+									cols="40"
+									rows="1"
+									>Lastname</textarea>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<textarea
+									spellcheck="false"
+									dojoAttachPoint="newEmail"
+									class="newEmail"
+									value="Email"
+									style="width:100%; font-weight: bolder; font-family: Verdana;";
+									cols="40"
+									rows="1"
+									>Email</textarea>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<input
+									dojoAttachPoint="newPassword"
+									class="newPassword"
+									value="Password"
+									type="password"
+									style="width:100%; font-weight: bolder; font-family: Verdana;";
+									value="its-a-secret"
+								>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			
+			<tr valign="top" width="95%">
+				<td width="95%">
+					<div class="label"> Amazon Cloud Authentication </div>
+					<div
+						dojoAttachPoint="authenticationTable"
+						class="authenticationTable"
+						style="height: 400px; width: 95%;"
+					>
+					</div>
+				</td>
+			</tr>
+
+		</table>
+
+	</div>
+	<!-- END authentication TAB -->
+	
+</div> 
+
+

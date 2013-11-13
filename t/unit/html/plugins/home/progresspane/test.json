@@ -1,0 +1,15 @@
+{
+   "packages" : [
+      {
+         "package"   : "testpackage",
+         "owner"     :  "testuser",
+         "username"  :  "testuser",
+         "version"   :  "0.0.1+build.1",    
+         "current"   : [
+            "0.0.1+build.1",
+            "0.0.1+build.2",
+            "0.0.1+build.3"
+         ]
+      }
+   ]
+}

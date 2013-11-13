@@ -1,0 +1,10 @@
+chrY    108200  T       G       4       1       0.00    4       4       N26N
+chrY    108204  C       T       4       1       0.00    4       4       N26N
+chrY    108208  C       T       4       1       0.00    4       4       N26N
+chrY    118889  C       T       4       1       15.00   0       4       N26N
+chrY    156812  C       T       4       1       0.00    0       4       N26N
+chrY    156821  C       T       4       1       0.00    0       4       N26N
+chrY    158552  C       G       4       1       6.00    0       4       N26N
+chrY    165137  C       G       4       1       0.00    0       4       N26N
+chrY    165144  T       G       4       1       0.00    0       4       N26N
+chrY    165145  T       C       4       1       0.00    0       4       N26N

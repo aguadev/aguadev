@@ -1,0 +1,198 @@
+/* ALL TEXT IN APPS */
+.workflow .appSource {
+	-moz-user-select: none !important;
+}
+
+/* REMOVE TITLE PANE TILE BACKGROUND IMAGE */
+.tundra .dijitTitlePaneTitle {
+    background: url() repeat-x scroll left bottom #DDEEFF !important;
+    font-weight: 900 !important;
+}
+
+/* REFRESH BUTTON */
+.workflow .apps .refreshButton {
+	display: inline-block !important;
+	-moz-user-select: none !important;
+
+	border-radius: 9pt;
+	
+	background-image: url(../../../../plugins/workflow/Apps/images/refresh-18.png) !important;
+	background-repeat: no-repeat;
+	width: 18px !important;
+	height: 18px !important;
+	z-index: 99 !important;
+	position: absolute !important;
+	top: 4px !important;
+	left: 8px !important;
+}
+
+.workflow .apps .refreshButton:hover {
+	background-image: url(../../../../plugins/workflow/Apps/images/refresh-18-yellow.png) !important;
+	-moz-user-select: none !important;
+	/*border-color: #BB5 !important;*/
+}
+
+.workflow .apps .refreshButton:active {
+	background-image: url(../../../../plugins/workflow/Apps/images/refresh-18-green.png) !important;
+	-moz-user-select: none !important;
+	/*border-color: #8F5 !important;*/
+}
+
+
+/* DOES THIS HELP AUTOSIZING? */
+.workflow .apps {
+	height: auto !important;
+	/*font-family: Cursive;*/
+	position: relative;
+	top: 29px;
+	overflow: hidden;
+}
+
+.workflow .apps .header {
+	-moz-user-select: none !important;
+	/*text-indent: 26px !important;*/
+	z-index: 10 !important;
+	/*height: 30px !important;*/
+}
+
+/* CONTROL PADDING INSIDE TITLE PANES */
+.workflow .apps .dijitTitlePaneContentInner {
+	padding: 0px !important;
+}
+
+/* REMOVE PADDING */
+
+.workflow .apps .dijitContentPane {
+	padding : 0 !important;
+	margin: 0 0 0 !important;
+}
+
+.workflow .apps .dijitSplitContainer-dijitContentPane {
+	padding: 0 !important;
+	margin: 0 !important;
+	background-color: #FFF !important;
+}
+
+/* DRAG SOURCE */
+
+/* THIS IS NECESSARY FOR THE ROUNDED CORNERS TO WORK */
+.workflow .apps {
+	margin-bottom: 29px;
+}
+
+.workflow .apps .dragSource {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	
+	border-radius: 8pt;
+	
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC !important;
+	border-color: #333;
+	cursor:default;
+
+	width: 120px;	
+	height: auto;
+	
+	text-align: left !important;
+	font-size: 12px;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	overflow:auto !important;
+
+	padding: 0 !important;
+    min-height: 20px;
+	font-family: Arial;
+}
+
+.workflow .apps .dragSource .approw:hover {
+	/*background-color: #FFA;*/
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+
+	border-radius: 4pt;
+}
+
+.workflow .apps .dragSource .dojoDndItem {
+	background-color: #FFF !important;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+
+	min-height: 16px !important;
+	border-radius: 4pt;	
+}
+
+.workflow .apps .dragSource .dojoDndItem:hover {
+	background-color: #8F8 !important;
+}
+
+.workflow .apps .dragSource .dojoDndItem:active {
+	background-color: #AFA !important;
+}
+
+.workflow .apps .dragSource .name {
+	font-size: 14px;
+	color: #FF4400;
+	font-weight: bolder;
+	text-align: left !important;
+	background-image: url(../../../../plugins/workflow/Apps/images/app-18.png);
+	text-indent: 22px;
+	background-repeat: no-repeat;
+	height: 18px;
+}
+
+.workflow .apps .dragSource .type {
+	text-align: right;
+	width: 40px;
+	font-size: 12px;
+	color: blue;
+	font-weight: bold;
+}
+
+.workflow .apps .dragSource .executor,
+.workflow .apps .dragSource .cluster,
+.workflow .apps .dragSource .location,
+.workflow .apps .dragSource .description,
+.workflow .apps .dragSource .version,
+.workflow .apps .dragSource .localonly {
+	text-align: left !important;
+	background: #FFF;
+}	
+
+.workflow .apps .dragSource .executor {
+	font-weight: bold;
+}
+.workflow .apps .dragSource .location{
+	color: #222;
+	font-size: 10px;
+	font-weight: normal;
+}
+
+.workflow .apps .dragSource .cluster {
+	font-weight: bolder;
+	text-align: right !important;
+	width: 60px !important;
+	color: darkblue !important;
+}
+
+.workflow .apps .dragSource .description {
+	color: #222;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: left !important;
+}
+
+
+.workflow .apps .dragSource .notes {
+	color: #000;
+	font-weight: normal;
+	font-size: 12px;
+	font-style: italic;
+	text-align: left !important;
+	background: #EFEFEF;
+}
+

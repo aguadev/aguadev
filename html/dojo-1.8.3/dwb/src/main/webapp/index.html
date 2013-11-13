@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<!-- Force IE8 to render in IE8 mode or using Chrome Frame if available. -->
+	<meta http-equiv="X-UA-Compatible" content="IE=8" /> 
+	<meta http-equiv="X-UA-Compatible" content="chrome=1">
+	<link rel="stylesheet" type="text/css" href="./js/release/dijit/themes/claro/claro.css">
+	<link rel="stylesheet" type="text/css" href="./js/release/dojox/grid/enhanced/resources/claroEnhancedGrid.css">
+	<link rel="stylesheet" type="text/css" href="./js/release/dojox/form/resources/BusyButton.css">
+	<link rel="stylesheet" type="text/css" href="./css/style.css">
+	<link rel="stylesheet" type="text/css" href="./css/dtk.css">
+	<!--[if IE]>
+        <link rel="stylesheet" type="text/css" href="./css/style-ie.css" />
+	<![endif]-->
+	<!--[if lte IE 7]>
+        <link rel="stylesheet" type="text/css" href="./css/style-ie7.css" />
+	<![endif]-->
+
+	<link rel="shortcut icon" href="./img/favicon.png"/>  	
+	<title>Dojo Toolkit Web Builder</title>
+</head>
+<body class="claro">
+ 	<div id="preloader"></div>
+ 	<div id="header">
+	    <div class="container">
+	        <span id="logo"><a title="Homepage" href="http://www.dojotoolkit.org/"><img alt="Dojo Toolkit" src="./img/logo.png"></a></span>
+	        <ul id="navigation">
+	                <li class="dojo_version">Dojo Version: <a id="version_link" href="#"></a></li>
+	                <li class="display_mode">Display Mode: <a id="display_mode_link" href="#">Simple</a></li>
+	        </ul>
+	    </div>
+	</div>
+	<div id="dwb_main" class="centre_panel" dojoType="dwb.Main">				
+	</div>	
+    <div id="feedback" class="hidden"> 
+        <img src="./img/star.png"></img>
+        <a href="javascript:void(0);">Got feedback? Want a new feature? Found a bug? Send us a message here!</a>
+    </div>
+    <a class="github" href="http://github.com/dojo/dwb"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+</body>
+<script>
+	// Flag to show whether we are in debug or production mode. Replaced automatically
+	// during deployment.
+	var inDebug=false;
+	
+	// During development mode, load cross domain uncompressed Dojo. Otherwise, include release versions of the 
+	// code.
+	var sourceScripts = inDebug ? ["http://ajax.googleapis.com/ajax/libs/dojo/1.5/dojo/dojo.xd.js.uncompressed.js"]
+		: ["./js/release/dojo/dojo.js", "./js/release/dwb/dwb.js"];
+	
+	var djConfig = {
+		parseOnLoad: false
+	};
+	
+	// Set up djConfig values for different modes
+	if (inDebug) {
+		djConfig.dojoBlankHtmlUrl = "./blank.html";
+		djConfig.isDebug = true;
+		djConfig.baseUrl = "./";
+		djConfig.modulePaths = {
+			dwb: "./js/dwb"
+		};
+	}
+	
+	// Dynamically add source scripts to document before anything else is parsed
+	var head= document.getElementsByTagName('head')[0];
+	
+	for(var i = 0; i < sourceScripts.length; i++) {
+		// Ensure dynamically inserted scripts block further parsing until dojo has loaded.
+		// Using method detailed here, http://hsivonen.iki.fi/script-execution/
+		document.write("\u003Cscript src='" + sourceScripts[i] + "'>\u003C/script>");
+	}
+	
+</script> 
+<script>
+	dojo.require("dwb.Main");
+
+	dojo.ready(function () {
+		var cookieId = "dontShowDialogAtLoad";
+		if (!dojo.cookie(cookieId)) {
+			// Create and show dialog.
+	        var dialog = new dwb.ui.IntroDialog({topOffset: 108});
+            dialog.show();
+		}
+        
+		// Parse page widget and fade out preloading screen when complete
+		dojo.parser.parse();
+		dojo.fadeOut({
+            node:"preloader",
+            duration:700,
+            onEnd: function(){
+                dojo.style("preloader", "display", "none"); 
+            }
+       	}).play();					
+
+        // Show a new feedback submission form when a user
+        // clicks the link.
+        var feedback = dojo.byId("feedback");
+        dojo.connect(feedback, "onclick", function () {
+            var dialog = new dwb.ui.FeedbackDialog({topOffset: 108});
+            dialog.show();
+
+            // Destroy the widget when it's closed by the user or after
+            // feedback submission.
+            dojo.connect(dialog, "onHide", function () {
+                dialog.destroyRecursive();
+            });
+            window.scrollTo(0,0);
+        });
+        dojo.removeClass(feedback, "hidden");
+	});
+</script>
+</html>

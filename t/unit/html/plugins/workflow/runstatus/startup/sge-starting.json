@@ -1,0 +1,24 @@
+{
+    "queuestatus":{
+        "queue":"admin-Project1-Workflow1",
+        "status":""
+    },
+    
+    "clusterstatus":{
+        "cluster"	: "aguatest-testcluster",
+        "status"    : "sge starting",
+        "list":"StarCluster - (http://web.mit.edu/starcluster)\nSoftware Tools for Academics and Researchers (STAR)\nPlease submit bug reports to starcluster\@mit.edu\n\n\n-----------------------------------------------\nsmallcluster (security group: \@sc-aguatest-testcluster)\n-----------------------------------------------\nLaunch time: 2012-10-15T05:49:36.000Z\nZone: us-east-1a\nKeypair: gsg-keypair\nCluster nodes:\n     master running i-7609f31b ec2-67-202-25-182.compute-1.amazonaws.com \n    node001 running i-7209f31f ec2-184-72-81-94.compute-1.amazonaws.com\n    ",
+        "log":">>> Oldest job is from 2011-06-16 13:17:59. # queued jobs = 4. # hosts = 3.\n>>> Avg job duration = 50 sec, Avg wait time = 4 sec.\n>>> A job has been waiting for 44219 sec, longer than max 100.\n>>> *** ADDING 1 NODES.\n>>> Launching node(s): node004\n>>> Waiting for node(s) to come up... (updating every 30s)\n>>> Waiting for all nodes to be in a 'running' state...\n5/5 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 100%  \n>>> Waiting for SSH to come up on all nodes...\n5/5 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 100%  \n>>> Configuring hostnames...\n1/1 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 100%  \n>>> Configuring /etc/hosts on each node\n>>> Configuring /etc/hosts for node i-1fba7771\n>>> Configuring /etc/hosts for node i-bbf13bd5\n>>> Configuring /etc/hosts for node i-d9f73db7\n>>> Configuring /etc/hosts for node i-af0d42c1\n>>> Configuring /etc/hosts for node i-ad0c43c3\n5/5 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 100%  \n>>> Configuring NFS...\n>>> Mounting shares for node node004\n1/1 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 100%  \n>>> _setup_nfs took 0.035 mins\n1/1 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 100%  \n>>> Configuring scratch space for user: sgeadmin\n1/1 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| 100%  \n>>> Configuring passwordless ssh for root\n>>> Using existing key: /root/.ssh/id_rsa\n>>> Configuring passwordless ssh for sgeadmin\n>>> Using existing key: /home/sgeadmin/.ssh/id_rsa\n>>> Adding node004 to SGE\nssh.py:382 - ERROR - command 'cd /opt/sge6 && TERM=rxvt ./inst_sge -x -noremote -auto ./ec2_sge.conf' failed with status 1\n>>> Done adding nodes.\n>>> Sleeping, looping again in 30 seconds.\n"
+    },
+
+    "stagestatus": {
+        "status":"pending",
+        "project":"Project1",
+        "workflow":"Workflow1",
+        "stages":[
+            {"stagedescription":"","stagepid":"7860","number":"1","status":"completed","project":"Project1","submit":"0","workflowpid":"0","stagenotes":"","stagename":"","stagejobid":"0","completed":"2012-02-26 04:36:30","owner":"aguatest","workflownumber":"1","cluster":"","stderrfile":"/nethome/admin/agua/Project1/Workflow1/stdout/1-FTP.stderr","location":"bin/utils/FTP.pl","version":"0.6.0","installdir":"/agua/bioapps","executor":"/usr/bin/perl","name":"FTP","stdoutfile":"/nethome/admin/agua/Project1/Workflow1/stdout/1-FTP.stdout","package":"bioapps","username":"aguatest","workflow":"Workflow1","now":"2012-11-09 19:07:01","started":"2012-02-26 04:24:14","type":"utility","queued":"0000-00-00 00:00:00"},
+            {"stagedescription":"","stagepid":"8997","number":"2","status":"completed","project":"Project1","submit":"0","workflowpid":"0","stagenotes":"","stagename":"","stagejobid":"0","completed":"2012-02-27 03:39:27","owner":"aguatest","workflownumber":"1","cluster":"","stderrfile":"/nethome/admin/agua/Project1/Workflow1/stdout/2-unzipFiles.stderr","location":"bin/utils/unzipFiles.pl","version":"0.6.0","installdir":"/agua/bioapps","executor":"/usr/bin/perl","name":"unzipFiles","stdoutfile":"/nethome/admin/agua/Project1/Workflow1/stdout/2-unzipFiles.stdout","package":"bioapps","username":"aguatest","workflow":"Workflow1","now":"2012-11-09 19:07:01","started":"2012-02-27 03:39:00","type":"utility","queued":"0000-00-00 00:00:00"},
+            {"stagedescription":"","stagepid":"0","number":"3","status":"","project":"Project1","submit":"0","workflowpid":"0","stagenotes":"","stagename":"","stagejobid":"0","completed":"0000-00-00 00:00:00","owner":"aguatest","workflownumber":"1","cluster":"","stderrfile":"","location":"bin/converters/elandIndex.pl","version":"0.6.0","installdir":"/agua/bioapps","executor":"/usr/bin/perl","name":"elandIndex","stdoutfile":"","package":"bioapps","username":"aguatest","workflow":"Workflow1","now":"2012-11-09 19:07:01","started":"0000-00-00 00:00:00","type":"converter","queued":"0000-00-00 00:00:00"}
+        ],
+    }
+}

@@ -1,0 +1,9 @@
+dojo.provide("t.plugins.workflow.runstatus.module");
+
+try{
+    dojo.require("t.plugins.workflow.runstatus.duration.test");
+
+}
+catch(e) {
+    doh.debug(e);
+}

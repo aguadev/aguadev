@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title> FileUpload 1 </title>
+
+<style type="text/css">
+
+	/* ../dojo.1.2.2 style */
+	@import "../dojo.1.2.2/../dojo.1.2.2/resources/../dojo.1.2.2.css";
+
+	/* SORIA style */
+	@import "../dojo.1.2.2/dijit/themes/soria/soria.css";
+
+	/* TESTS style */
+	@import "../dojo.1.2.2/dijit/tests/css/dijitTests.css";
+
+	@import "../css/style.css";
+
+	@import "../dojo.1.2.2/dojox/form/resources/FileInput.css"; 
+	@import "../dojo.1.2.2/dijit/themes/tundra/form/Button.css";
+
+
+	@import "../dojo.1.2.2/dojo/resources/dojo.css";
+	@import "../dojo.1.2.2/dijit/themes/dijit.css";
+	@import "../dojo.1.2.2/dijit/themes/tundra/tundra.css";
+	
+</style> 
+
+<link rel="stylesheet" href="plugins/project/FileUpload/fileUpload.css" />
+
+
+<link rel="stylesheet" href="../dojo.1.2.2/dojox/layout/resources/ResizeHandle.css" />
+<!--<script type="text/javascript" src="../build8/dojo/nls/en-us.js"></script>-->
+<!--<script type="text/javascript" src="../build8/dijit/nls/en-us.js"></script>-->
+
+<script type="text/javascript" src="../dojo.1.2.2/dojo/dojo.js"
+	djConfig="isDebug: true, parseOnLoad: true, useCommentedJson: true"></script>
+
+<script type="text/javascript" src="../dojo.1.2.2/dijit/nls/en-us.js"></script>
+<script type="text/javascript" src="../dojo.1.2.2/dijit/nls/common.js"></script>
+
+<script type="text/javascript" src="builds/plugins/dojo/plugins.js"></script>
+
+
+<script type="text/javascript">
+
+	var cgiurl = "../../../cgi-bin/agua/";
+
+	// REGISTER module path FOR PLUGINS
+	dojo.registerModulePath("plugins","../../plugins");	
+	
+	// LOAD PLUGINS
+	dojo.require("plugins.project.FileUpload");
+
+	function showUploader()
+	{
+		console.log("showLoader     tests.FileUpload-1.html");
+		
+		var fileUpload = new plugins.project.FileUpload(
+			{
+				paneId: "programmatic"
+			}
+		);
+		console.log("showLoader     fileUpload: " + fileUpload);
+		
+		//var handle = document.createElement('div');
+		//dojo.byId("programatic").appendChild(handle);
+		//
+		//var resizer = new dojox.layout.ResizeHandle({
+		//	targetId: "programatic",
+		//	activeResize: true
+		//},handle);
+		//resizer.startup();
+	}
+	dojo.addOnLoad(showUploader);
+
+</script>
+
+</head>
+
+<body class="soria">
+
+
+</body>
+</html>

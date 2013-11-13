@@ -1,0 +1,122 @@
+LOAD PAGE
+
+item: {
+    "name":"Workflow2-SNPs",
+    "parentDir":"Project1",
+    "path":"Workflow2-SNPs",
+    "directory":true,"size":"0",
+    "modified":1231517171,
+    "children":[],
+    "_S":
+    {
+        "url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1",
+        "pathAsQueryParam":true,
+        "preamble":null,
+        "declaredClass":"dojox.data.FileStore",
+        "_storeRef":"_S",
+        "label":"name",
+        "_identifier":"path",
+        "_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]
+    }
+}
+
+
+CLICK WORKFLOW1-ASSEMBLY
+
+item: {
+    "name":"inputdir",
+    "_S":{
+        "url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1",
+        "pathAsQueryParam":true,
+        "preamble":null,
+        "declaredClass":"dojox.data.FileStore",
+        "_storeRef":"_S","label":"name",
+        "_identifier":"path",
+        "_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]
+    },
+    "total":"2",
+    "items":[
+        {"name":"input.fasta","parentDir":"Project1","path":"input.fasta","directory":false,"size":"5","modified":1231505987},
+        {"name":"resultsdir","parentDir":"Project1","path":"resultsdir","directory":true,"size":"0","modified":1231551942,"children":["results.txt"]}
+    ]
+}
+    
+    
+    item after adding _S to each child: {"name":"inputdir","_S":{"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]},
+    "total":"2",
+    "items":[
+        {
+            "name":"input.fasta","parentDir":"Project1","path":"input.fasta","directory":false,"size":"5","modified":1231505987,
+            "_S":{"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]}
+        },
+        {
+            "name":"resultsdir","parentDir":"Project1","path":"resultsdir","directory":true,"size":"0","modified":1231551942,"children":["results.txt"],
+            "_S":{"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]}
+        }
+    ],
+    "children":[{"name":"input.fasta","parentDir":"Project1","path":"input.fasta","directory":false,"size":"5","modified":1231505987,"_S":{"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]}},{"name":"resultsdir","parentDir":"Project1","path":"resultsdir","directory":true,"size":"0","modified":1231551942,"children":["results.txt"],"_S":{"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]}}]}
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+>>> console.log("END OF LOAD")
+END OF LOAD
+>>> console.log("Clicking Project1, Workflow1...")
+Clicking Project1, Workflow1...
+item.children: [object Object],[object Object],[object Object],[object Object]
+item.items: undefined
+++++ plugins.project.FileDrag._getPaneForItem(item: [object Object], parentPane: [object HTMLDivElement], children: [object Object],[object Object],[object Object],[object Object])
+XXXXXXXXXXXXXXXXXXX------------------------XXXXXXXXXXXXXXXXx
+++++ plugins.project.FileDrag.getPaneForItem(item: [object Object], parentPane: [object HTMLDivElement], children: [object Object],[object Object],[object Object],[object Object])
+this.store: [object Object]
+item.name: Workflow1-assembly
+item.directory: true
+item: {"name":"Workflow1-assembly","parentDir":"Project1","path":"Workflow1-assembly","directory":true,"size":"0","modified":1231519649,"children":[{"name":"code.js","_loaded":false,"parentPath":"Workflow1-assembly","_S":{"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]}},{"name":"inputdir","_loaded":false,"parentPath":"Workflow1-assembly","_S":{"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]}},{"name":"inputfile.txt","_loaded":false,"parentPath":"Workflow1-assembly","_S":{"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]}},{"name":"sequence.fasta","_loaded":false,"parentPath":"Workflow1-assembly","_S":{"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]}}],"_S":{"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]}}
+this.store.isItem(item): true
+generating a FILE LIST pane...
+plugins.project.FileDrag.getPaneForItem returning ret: [Widget plugins.project._GroupDragPane, plugins_project__GroupDragPane_2]
+itemPane: [Widget plugins.project._GroupDragPane, plugins_project__GroupDragPane_2]
+itemPane is defined. Calling groupDragPane.parentWidget.addChild(itemPane, groupDragPane.getIndexInParent() + 1)
+++++ >>>> dojox.widget.RollingList.addChild
+plugins.project.FileDrag._itemsMatch(item1, item2)
+
+
+
+
+
+
+>>> console.log("END OF LOAD Workflow1");
+END OF LOAD Workflow1
+
+>>> console.log("Clicking Workflow1/inputdir")
+Clicking Workflow1/inputdir
+item.children: [object Object],[object Object]
+item.items: [object Object],[object Object]
+++++ plugins.project.FileDrag._getPaneForItem(item: [object Object], parentPane: [object HTMLDivElement], children: [object Object],[object Object])
+XXXXXXXXXXXXXXXXXXX------------------------XXXXXXXXXXXXXXXXx
+++++ plugins.project.FileDrag.getPaneForItem(item: [object Object], parentPane: [object HTMLDivElement], children: [object Object],[object Object])
+this.store: [object Object]
+item.name: inputdir
+item.directory: undefined
+item.directory: undefined
+item: {"name":"inputdir","_S":{"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]},"total":"2","items":[{"name":"input.fasta","parentDir":"Project1","path":"input.fasta","directory":false,"size":"5","modified":1231507224,"_S":{"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]}},{"name":"resultsdir","parentDir":"Project1","path":"resultsdir","directory":true,"size":"0","modified":1231553179,"children":["results.txt"],"_S":{"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]}}],"children":[{"name":"input.fasta","parentDir":"Project1","path":"input.fasta","directory":false,"size":"5","modified":1231507224,"_S":{"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]}},{"name":"resultsdir","parentDir":"Project1","path":"resultsdir","directory":true,"size":"0","modified":1231553179,"children":["results.txt"],"_S":{"url":"http://localhost:8080/cgi-bin/Bioptic0.2.3/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin&parentDir=Project1","pathAsQueryParam":true,"preamble":null,"declaredClass":"dojox.data.FileStore","_storeRef":"_S","label":"name","_identifier":"path","_attributes":["children","directory","name","path","modified","size","parentDir"],"pathSeparator":"/","options":[]}}]}
+this.store.isItem(item): true
+generating a FILE LIST pane...
+plugins.project.FileDrag.getPaneForItem returning ret: [Widget plugins.project._GroupDragPane, plugins_project__GroupDragPane_3]
+itemPane: [Widget plugins.project._GroupDragPane, plugins_project__GroupDragPane_3]
+itemPane is defined. Calling groupDragPane.parentWidget.addChild(itemPane, groupDragPane.getIndexInParent() + 1)
+++++ >>>> dojox.widget.RollingList.addChild
+plugins.project.FileDrag._itemsMatch(item1, item2)
+
+
+    

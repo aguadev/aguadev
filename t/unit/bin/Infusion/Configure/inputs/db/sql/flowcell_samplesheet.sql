@@ -1,0 +1,21 @@
+CREATE TABLE  flowcell_samplesheet (
+  flowcell_samplesheet_id int(10) unsigned NOT NULL AUTO_INCREMENT,
+  flowcell_id int(10) unsigned NOT NULL,
+  sample_id int(10) unsigned NOT NULL,
+  lane tinyint(1) unsigned NOT NULL,
+  ref_sequence varchar(250) NOT NULL,
+  control enum('N','Y') NOT NULL,
+  status_id int(10) unsigned NOT NULL DEFAULT '0',
+  indexval varchar(100) DEFAULT NULL,
+  md5sum varchar(45) NOT NULL,
+  location varchar(250) NOT NULL,
+  date_updated timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (flowcell_samplesheet_id),
+  UNIQUE KEY un_fc_lane (flowcell_id,lane),
+  KEY fk_flowcell_id (flowcell_id),
+  KEY fk_sample_id (sample_id),
+  KEY lane_idx (lane),
+  KEY status_id (status_id),
+  CONSTRAINT fk_flowcell_id FOREIGN KEY (flowcell_id) REFERENCES flowcell (flowcell_id) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT fk_sample_id FOREIGN KEY (sample_id) REFERENCES sample (sample_id) ON DELETE CASCADE ON UPDATE NO ACTION
+)

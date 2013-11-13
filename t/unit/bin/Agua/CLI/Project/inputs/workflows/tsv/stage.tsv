@@ -1,0 +1,9 @@
+aguatest	testapps	0.6.0	/agua/0.6/t/bin/Agua/Common/Package/inputs/apps	aguatest	Project1	Workflow1	1	FTP	1	utility	/agua/0.6/bioapps/bin/utils/deepvac.pl	/usr/bin/perl			/nethome/aguatest/agua/Project1/Workflow1/stdout/1-FTP.stderr	/nethome/aguatest/agua/Project1/Workflow1/stdout/1-FTP.stdout	0000-00-00 00:00:00	2012-01-12 19:08:03	2012-01-12 19:08:08		3390		error
+aguatest	testapps	0.6.0	/agua/0.6/t/bin/Agua/Common/Package/inputs/apps	aguatest	Project1	Workflow1	1	unzipFiles	2	utility	/agua/0.6/bioapps/bin/utils/unzipFiles.pl	/usr/bin/perl											
+aguatest	testapps	0.6.0	/agua/0.6/t/bin/Agua/Common/Package/inputs/apps	aguatest	Project1	Workflow1	1	bowtieIndex	3	converter	/agua/0.6/bioapps/bin/converters/bowtieIndex.pl	/usr/bin/perl											
+aguatest	testapps	0.6.0	/agua/0.6/t/bin/Agua/Common/Package/inputs/apps	aguatest	Project1	Workflow1	1	TOPHAT	4	expression	/agua/0.6/bioapps/bin/aligners/TOPHAT.pl	/usr/bin/perl											
+aguatest	testapps	0.6.0	/agua/0.6/t/bin/Agua/Common/Package/inputs/apps	aguatest	Project1	Workflow2	2	FTP	1	utility	/agua/0.6/bioapps/bin/utils/deepvac.pl	/usr/bin/perl											
+aguatest	testapps	0.6.0	/agua/0.6/t/bin/Agua/Common/Package/inputs/apps	aguatest	Project1	Workflow2	2	unzipFiles	2	utility	/agua/0.6/bioapps/bin/utils/unzipFiles.pl	/usr/bin/perl											
+aguatest	testapps	0.6.0	/agua/0.6/t/bin/Agua/Common/Package/inputs/apps	aguatest	Project1	Workflow2	2	elandIndex	4	converter	/agua/0.6/bioapps/bin/converters/elandIndex.pl	/usr/bin/perl											
+aguatest	testapps	0.6.0	/agua/0.6/t/bin/Agua/Common/Package/inputs/apps	aguatest	Project1	Workflow2	2	elandHeader	3	converter	/agua/0.6/bioapps/bin/aligners/elandHeader.pl	/usr/bin/perl											
+aguatest	testapps	0.6.0	/agua/0.6/t/bin/Agua/Common/Package/inputs/apps	aguatest	Project2	Workflow1	1	TOPHAT	1	expression	/agua/0.6/bioapps/bin/aligners/TOPHAT.pl	/usr/bin/perl		0									

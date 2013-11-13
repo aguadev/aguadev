@@ -1,0 +1,82 @@
+<div dojoAttachPoint="containerNode">
+
+<div class="${paramtype}">
+    
+    <table width="100%">
+        <tr>
+            <td
+                colspan="1"
+                width="120px"
+                dojoAttachPoint="nameNode"
+                class="name"
+                >${name}</td>
+            <td
+                colspan="1"
+                dojoAttachPoint="valueNode"
+                class="value"
+                title="Click to edit value then press 'Return' to save (ESC to quit)"
+                >${value}</td>
+        </tr>
+    </table>
+    <table
+        dojoAttachPoint="hidden"
+        class="hidden"
+        style="display: none;"
+        width="100%">
+        
+        <tr width="100%">
+            <td colspan="2">
+                <table width="100%">
+                    <tr width="100%">
+                        <td
+                            colspan="1"
+                            width="60px"
+                            dojoAttachPoint="typeTitle"
+                            class="discretion"
+                            style="display: none;">${discretion}</td>
+                        <td 
+                            colspan="1"
+                            width="60px"
+                            dojoAttachPoint="typeNode"
+                            class="valuetype"
+                            title="Parameter type, e.g., file, directory, integer or text string"
+                            style="display: none;">${valuetype}</td>
+                        <td 
+                            colspan="1"
+                            width="50px"
+                            dojoAttachPoint="browseButton"
+                            class="browseButton"
+                            title="Click to browse the filesystem in your home directory on the server"
+                            style="display: none;">&nbsp;</td>
+                        <td
+                            dojoAttachPoint="downloadButton"
+                            class="downloadButton"
+                            title="Click to download this file to your computer"
+                            style="display: none;">&nbsp;</td>
+                        <td
+                            dojoAttachPoint="uploadButton"
+                            dojoAttachEvent="onclick:upload"
+                            class="uploadButton"
+                            title="Click to upload a file from your computer"
+                            style="display: none;">&nbsp;</td>
+                        <td dojoAttachPoint="fileInputMask"
+                            class="fileInputMask"
+                            style="display: none;" ></td>
+                        <td class="filler">&nbsp;</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td 
+                colspan="2"
+                dojoAttachPoint="descriptionNode"
+                class="description"
+                title="Click to edit description then press 'Return' to save (ESC to quit)"
+                style="display: none;" >${description}</td>
+        <tr>
+    </table>
+
+</div>
+
+</div>

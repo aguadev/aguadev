@@ -1,0 +1,23 @@
+-----------------------------311073019118007
+Content-Disposition: form-data; name="uploadedfile"; filename="syoung-saveUsers.bsv"
+Content-Type: application/octet-stream
+
+Project1	project	Next Generation Analysis Tools	bioinfo	Bioinformatics Team
+skhuri	user	Sawsan Khuri	bioinfo	Bioinformatics Team
+Project2	project	Next Generation Data Analysis	nextgen	Next Generation Sequencing
+yedwards	user	Yvonne Edwards	nextgen	Next Generation Sequencing
+dhedges	user	Dale Hedges	nextgen	Next Generation Sequencing
+
+-----------------------------311073019118007
+Content-Disposition: form-data; name="username"
+
+syoung
+-----------------------------311073019118007
+Content-Disposition: form-data; name="sessionId"
+
+1228791394.7868.158
+-----------------------------311073019118007
+Content-Disposition: form-data; name="path"
+
+Project1/Workflow1
+-----------------------------311073019118007--

@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+
+<title>t.plugins.project.uploader</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<style type="text/css">
+
+/* DOJO STYLES */
+@import "../../../../dojo/dojo/resources/dojo.css";
+
+/* THEMES */
+@import "../../../../dojo/dijit/themes/dijit.css";
+@import "../../../../dojo/dijit/themes/soria/soria.css";
+@import "../../../../dojo/dijit/themes/tundra/tundra.css";
+
+@import "http://ajax.googleapis.com/ajax/libs/dojo/1.5/dijit/themes/claro/claro.css";
+@import "http://ajax.googleapis.com/ajax/libs/dojo/1.5/dojox/form/resources/CheckedMultiSelect.css";
+
+</style>
+
+
+<link href="../../../../dojo/dojox/form/resources/UploaderFileList.css" rel="stylesheet" />
+
+<link href="../../../../dojo/dijit/tests/css/dijitTests.css" rel="stylesheet" />
+
+<script type="text/javascript">
+
+// GLOBAL VARIABLES
+var Agua = {};
+var Data = {};
+var dojoConfig = {
+	isDebug: true,
+	locale: "en-us",
+	packages: [
+		{
+		  name: "plugins",
+		  location: "../../plugins"
+		},
+		{
+		  name: "t",
+		  location: "../../t"
+		},
+		{
+		  name: "doh",
+		  location: "../../dojo/util/doh"
+		}
+	],
+	debugAtAllCosts: true,
+	useCommentedJson: true
+};
+</script>
+
+<!-- LOAD DOJO -->
+<script type="text/javascript"
+	src="../../../../dojo/dojo/dojo.js"
+	djConfig="parseOnLoad: true, isDebug: true, useCommentedJson: true"></script>	
+
+<script type="text/javascript" src="./runTests.js"></script>
+
+
+</head>
+<body class="agua tundra">
+
+<div id="attachPoint" ></div>
+
+<h1>Test dojox.form.UploadDialog</h1>
+
+</body>
+</html>

@@ -1,0 +1,109 @@
+<div dojoattachpoint="containerNode">
+
+	<!-- groupusers TAB -->
+	<div
+		dojoAttachPoint="groupusersTab"
+		class="groupusers"
+		dojoType="dijit.layout.ContentPane"
+		title="Group Users"
+		style="height: 100% !important; max-height: auto !important; width: 370px !important; padding: 0 !important;"
+	>
+
+		<table width="100%">
+			<tr valign="top" width="370">
+				<td colspan="2" class="tabTitle" align="center"> Group Users </td>
+			</tr>
+			<tr valign="top" width="95%">
+				<td width="50%">
+					<table width="100%">
+						<tr>
+							<td align="center">
+
+								<!-- GROUP COMBO -->
+								<div class="comboLabel"> Groups </div>
+								<div dojoAttachPoint="groupCombo"
+										dojoType="dijit.form.ComboBox"
+										class="groupCombo"
+										popupClass="groupusers groupCombo dijitReset dijitMenu"
+										autocomplete="true"
+										hasDownArrow="true"
+										disabled="false"
+										style="width: 150px;"
+								>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td align="center">
+
+								<!-- DROP TARGET CONTAINER -->
+								<div class="comboLabel"> Group Users </div>
+								<div
+									dojoAttachPoint="dropTargetContainer"
+									class="dropTarget"
+									style="height: 622px; width: 170px;"
+									>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</td>
+				<td width="50%">
+					<table width="100%">
+						<tr>
+							<td align="center">
+								<div class="comboLabel"> Users </div>
+								<div
+									dojoAttachPoint="dragSourceSlider"
+									dojoType="dijit.form.HorizontalSlider" 
+									value="0"
+									maximum="100"
+									minimum="0"
+									pageIncrement="100"
+									showButtons="true"
+									intermediateChanges="true"
+									slideDuration="200"
+									style="width: 150px;"
+									>
+								</div>
+							</td>
+						</tr>
+						<tr>
+							<td align="center">
+
+								<!-- DRAG SOURCE CONTAINER -->
+								<div
+									dojoAttachPoint="dragSourceContainer"
+									class="dragSource"
+									style="height: 560px; width: 150px;"
+									>
+								</div>
+							</td>
+						</tr>
+						<tr align="center">
+							<td align="center">
+
+								<!-- TRASH CONTAINER -->
+								<div
+									dojoAttachPoint="trashContainer"
+									class="trash"
+									style="height: 60px; width: 150px; align: center;" 
+									>
+									<div
+										dojoAttachPoint="trashIcon"
+										class="trashIcon"
+										style="height: 60px; width: 60px;"
+										>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+
+	</div>
+	<!-- END groupusers TAB -->
+	
+</div> 

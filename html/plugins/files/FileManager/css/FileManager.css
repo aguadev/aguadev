@@ -1,0 +1,287 @@
+/* ALIGN FILES TO TOP OF PANE */
+.dojoxFileDragPane {
+	vertical-align: top;
+	height: auto;
+	max-height: 400px;
+	min-width: 40px;
+}
+
+.fileManager .dijitDialog {
+	position: inherit !important;
+}
+
+
+.fileManager {
+	position: relative;
+	top: 100px;
+	/*height: auto;*/
+    /*background: black;*/
+    /*filter:alpha(opacity=70);*/
+	/*color: #FFF;*/
+	z-index: 100;
+}
+
+.dojoxDialogTitle {
+	text-align: center;
+	font-size: 24px;
+	font-weight: bold;
+	font-family: Verdana;
+}
+
+.fileManagerTitle {
+    background: black;
+	color: #FFF;
+	z-index: 1000;
+}
+
+.projectTitle {
+	font-weight: bold;
+	font-size: 20px;
+	color: #33C;
+}
+
+.fileManagerUnderlay {
+	z-index: 999;
+    background: black;
+}
+
+
+.dijitDialog {
+	background: black;
+	z-index: 999;
+	height: auto;
+}
+
+
+.dijitDialogUnderlayWrapper {
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 10;
+	display: inline;
+	/*background: transparent !important;*/
+}
+
+.dijitDialogUnderlayWrapper_underlay {
+    /*display: none;*/
+}
+
+
+/*.dijitDialogUnderlay {*/
+/*    background: grey;*/
+/*	z-index: 998;*/
+	/*display: none;*/
+/*	opacity: 0.5;*/
+/*}*/
+/*.dj_ie .dijitDialogUnderlay {*/
+/*	filter: alpha(opacity=50);*/
+/*}*/
+
+.dijitDialog {
+	position: absolute;
+	z-index: 999;
+	padding: 1px;
+}
+.dijitDialogFixed div.dijitDialogTitleBar {
+	cursor:default; 
+}
+
+/*.dijitDialogUnderlay {*/
+/*	background: #eee;*/
+/*	opacity: 0.5;*/
+/*}*/
+
+.dijit_a11y .dijitInputLayoutContainer,
+.dijit_a11y .dijitDialog {
+	opacity: 1 !important;
+	background-color: white !important;
+}
+.dijitDialog .closeText {
+	display:none;
+	
+	position:absolute;
+}
+.dijit_a11y .dijitDialog .closeText {
+	display:inline;
+}
+
+
+/* this is how you style underlays */	
+/*#thirdTest_underlay { background-color: #000 }*/
+/*#fourthTest_underlay,*/
+/*#secondTest_underlay { background-color: #369 }*/
+
+.fileManager .dijitDialog {
+	position: inherit !important;
+}
+
+
+
+
+@import url("RollingList.css");
+
+.fileDragInlineEditBox {
+	position: relative;
+	left: 20px;
+	font-size: 25px;
+}
+
+.fileManager .directoryClosed {
+	text-indent: 18px;
+	/*color: #F00;*/
+	background-repeat: no-repeat;
+	background-image: url("http://ngsdev.ccs.miami.edu/agua/trunk/0.3/plugins/project/FileDrag/images/directory-closed.png");
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+}
+
+.fileManager .directoryOpen {
+	text-indent: 18px;
+	/*color: #F00;*/	
+	background-repeat: no-repeat;
+	background-image: url("http://ngsdev.ccs.miami.edu/agua/trunk/0.3/plugins/project/FileDrag/images/directory-open.png");
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+}
+
+.fileClosed {
+	text-indent: 18px;
+	/*color: #F00;*/
+	background-repeat: no-repeat;
+	background-image: url("http://ngsdev.ccs.miami.edu/agua/trunk/0.3/plugins/project/FileDrag/images/file-closed.png");
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+}
+
+.fileOpen {
+	text-indent: 18px;
+	/*color: #F00;*/
+	background-repeat: no-repeat;
+	background-image: url("http://ngsdev.ccs.miami.edu/agua/trunk/0.3/plugins/project/FileDrag/images/file-open.png");
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+}
+
+
+.directoryIcon {
+	background-image: url("http://ngsdev.ccs.miami.edu/agua/trunk/0.3/plugins/project/FileDrag/images/soriaFileIcons.gif");
+	/*background-image: url("../images/soriaFileIcons.gif");*/
+	background-repeat: no-repeat;
+	/*background-color: #F00;*/
+	color: #F00;
+	background-position: 0px;
+	width: 16px;
+	height: 18px;
+	/*text-align: center;*/
+	position: relative;
+	top: 1px;
+
+}
+
+/*.directoryIcon* { background-position: 0px; }*/
+
+.copyDialog{
+	
+	/*width: 200px;*/
+	/*height: 200px;*/
+	background-color: #000;
+	color: #FFF;
+	text-align: center;
+	vertical-align: middle;
+	font-size: 20px;
+	/*overflow: hidden;*/
+}
+
+.titleDiv{
+	color: #FFF;
+	text-align: center;
+	vertical-align: middle;
+	position: relative;
+	top: 43%;
+}
+
+
+.dojoxFileInfoPane *{
+	white-space: normal;
+}
+
+.dojoxFileInfoLabel {
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+.dojoxFileInfoPane {
+	width: 20em;
+}
+
+.tundra .dojoxFilePickerItem .dijitMenuItemIcon {
+	background-image: url("images/tundraFileIcons.gif");
+	background-repeat: no-repeat;
+}
+.tundra .dojoxFilePickerItem .dojoxEmpty {
+	background-image: none;
+}
+.tundra .dojoxFilePickerItem .dojoxDirectoryItemIcon {
+	background-position: 0px;
+}
+.tundra .dojoxFilePickerItemSelected .dojoxDirectoryItemIcon {
+	background-position: -16px;
+}
+.tundra .dojoxFilePickerItem .dojoxFileItemIcon {
+	background-position: -32px;
+}
+.tundra .dojoxFilePickerItemSelected .dojoxFileItemIcon {
+	background-position: -48px;
+}
+
+.soria .dojoxFilePickerItem .dijitMenuItemIcon {
+	background-image: url("images/soriaFileIcons.gif");
+	background-repeat: no-repeat;
+}
+.soria .dojoxFilePickerItem .dojoxEmpty {
+	background-image: none;
+}
+.soria .dojoxFilePickerItem .dojoxDirectoryItemIcon {
+
+	background-image: url("../../../dojo-1.5.0/dojox/widget/FileDrag/images/soriaFileIcons.gif");
+	/*background-image: url("../images/soriaFileIcons.gif");*/
+	background-repeat: no-repeat;
+	background-color: #F00;
+
+	background-position: 0px;
+}
+.soria .dojoxFilePickerItemSelected .dojoxDirectoryItemIcon {
+	background-position: -16px;
+}
+.soria .dojoxFilePickerItem .dojoxFileItemIcon {
+	background-position: -32px;
+}
+.soria .dojoxFilePickerItemSelected .dojoxFileItemIcon {
+	background-position: -48px;
+}
+
+
+.nihilo .dojoxFilePickerItem .dijitMenuItemIcon {
+	background-image: url("images/nihiloFileIcons.gif");
+	background-repeat: no-repeat;
+}
+.nihilo .dojoxFilePickerItem .dojoxEmpty {
+	background-image: none;
+}
+.nihilo .dojoxFilePickerItem .dojoxDirectoryItemIcon {
+	background-position: 0px;
+}
+.nihilo .dojoxFilePickerItemSelected .dojoxDirectoryItemIcon {
+	background-position: -16px;
+}
+.nihilo .dojoxFilePickerItem .dojoxFileItemIcon {
+	background-position: -32px;
+}
+.nihilo .dojoxFilePickerItemSelected .dojoxFileItemIcon {
+	background-position: -48px;
+}
+

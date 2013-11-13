@@ -1,0 +1,20 @@
+* 18cd14e (HEAD, origin/master, origin/HEAD, master) make arrayCopy work with more than just typed arrays
+* 450d8f1 set the statusCode and statusString in thrown exception objects, so that calling code can catch errors and make decisions about them
+* e24b283 improve error message output
+* f1eefce remove tab chars
+* fb8037c fix some more missing "this"s in unusual code paths
+* 26885a4 factor fast `arrayCopy` out into a separately-includable AMD module
+* ca54634 don't fail to parse on platforms that don't support typed arrays
+* 90f910c add a package.json and a dojo build profile
+* 89d0158 add newline to the end of README.md
+* aca586b move inflate.js into root dir out of js/ dir, add a main.js to make it a proper AMD package
+* cdc899e fix whitespace and syntax abnormalities, and convert to AMD format
+* 84497c1 Inlined some arrayCopy calls for a substantial speedup (especially on Chrome).
+* 73de50f .
+* 6c84899 Optionally return a pointer to the end of the compressed data.
+* 3154215 Fixed call to inflate_tree_fixed.
+* 1e31485 Compiles cleanly with Closure Compiler.
+* f614acf Fixed some missing 'this's in unusual code paths.
+* e7d2b0b Speeded up the arraycopy impl.
+* 0bc85de Return buffer rather than array when inflate output fits in a single block.
+* f16bc4a Initial import.

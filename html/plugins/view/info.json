@@ -1,0 +1,14 @@
+{
+	name: "plugins.view.Controller",
+
+	version : "0.01",
+	
+	url : '',
+	
+	description : "Display genome elements",
+		
+	dependencies :
+	[
+		{	name: "plugins.core.Agua", version: 0.01	}
+	]
+}

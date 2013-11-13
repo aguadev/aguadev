@@ -1,0 +1,163 @@
+<html>
+<head>
+<title> form 1 : FAILS -- OLD VERSION Simplest Form Binding with Validation</title>
+<script type="text/javascript" src="../dojo.1.2.2/dojo/dojo.js"></script>
+<script type="text/javascript">
+
+console.log("loaded dojo");
+   dojo.require("dojox.io.*");
+   dojo.require("dojox.validate");
+   dojo.require("dojox.validate.check");
+   dojo.require("dojox.widget.validate");
+   dojo.require("dojox.widget.ValidationTextbox");
+   dojo.require("dojox.widget.RealNumberTextbox");
+   dojo.require("dojox.widget.IntegerTextbox");
+   dojo.require("dojox.widget.DateTextbox");
+   dojo.require("dojox.widget.RegexpTextbox");
+
+   //djConfig.isDebug=1;
+
+   function init() {
+
+      // Note: Uncomment this next line for testing.
+      //alert('You should only see this once. If you see it more than once,
+      //then we did not use an ajax call to update the results.');
+
+      // set focus to first form, first input field, and select all text in box
+      document.forms[0][0].select();
+      window.status="";
+
+      x = new dojo.io.FormBind({
+         formNode: "test",
+         load: function(type, data, e) {
+            dojo.byId("output").innerHTML = dojo.string.escapeXml(data);
+            // Note: For the status area to change, the user might have to
+            // change a setting in their browser preferences
+            window.status="Submitted!";
+         }
+      });
+      x.onSubmit = function(form) {
+         window.status = "Checking...";
+
+         // To prevent the form from submitting you need to ensure
+         // the input fields are set when added to the form as well
+         // as defined here.
+         var profile = {
+            required: [ "name", "integer1", "real1", "date1", "grade" ],
+            constraints: {
+               grade: function() {
+                  var re = new RegExp("^[ABCDF]$");
+                  if (form.grade.value.match(re)) {
+                     return(true);
+                  }
+               },
+               integer1: dojo.validate.isInteger,
+                  // Note: You can validate the same fields multiple times.
+                  // Also note that if you forget to add a field that has
+                  // "form" validation, then you will not be able to see
+                  // that input in the getMissing() call. Should submit
+                  // enhancement to dojo to perhaps check for that.
+               integer2: dojo.validate.isInteger,
+               integer2: [dojo.validate.isInRange, { min:"10", max:"20" }
+],
+               real1: dojo.validate.isRealNumber,
+               date1: [dojo.validate.isValidDate, "M/D/YYYY"]
+            }
+         };
+
+         var results = dojo.validate.check(form, profile);
+
+         // Let the user know why they cannot continue...
+         var s="";
+         if (!results.isSuccessful()) {
+            s="Warning: Could not submit form.";
+            if (results.hasInvalid()) {
+               s += "Review these fields:" + results.getInvalid() + ":";
+               alert(s);
+            }
+            if (results.hasMissing()) {
+               s += "These fields are required:" + results.getMissing() +
+":";
+               alert(s);
+            }
+         }
+         else {
+            s="Submitting form.";
+         }
+         window.status=s;
+
+         return(results.isSuccessful());
+        // return true if it passed the validation
+        // if false, then the form will not be submitted
+      }
+   }
+
+   dojo.addOnLoad(init);
+</script>
+</head>
+<body>
+
+   <!-- Note: '/showPost' simply prints out the name/value pairs -->
+   <form action="/showPost" method="post" id="test" name="test">
+   <!--form action="" method="post" id="test" name="test"-->
+
+      <table>
+         <tr>
+            <td>Name:</td>
+            <td><input type="text" dojoType="ValidationTextBox"
+required="true" missingMessage="* Required" name="name" id="name"
+trim="true" value="mike" /></td>
+         </tr>
+         <tr>
+            <td>integer:</td>
+            <td><input type="text" dojoType="IntegerTextbox" required="true"
+missingMessage="* Required" invalidMessage="Enter an integer value."
+id="integer1" name="integer1" trim="true" value="2" /></td>
+         </tr>
+         <tr>
+         <tr>
+            <td>integer2: <br>(10-20)</td>
+            <td><input type="text" dojoType="IntegerTextbox" required="true"
+missingMessage="* Required" invalidMessage="Enter an integer value. (10-20)"
+min="10" max="20" id="integer2" name="integer2" trim="true" value="18"
+/></td>
+         </tr>
+         <tr>
+            <td>real1:</td>
+            <td><input type="text" dojoType="RealNumberTextbox"
+required="true" missingMessage="* Required" invalidMessage="Enter a real
+number." id="real1" name="real1" trim="true" value="1.01" /></td>
+         </tr>
+         <tr>
+            <td>Date:</td>
+            <td><input type="text" dojoType="DateTextbox" trim="true"
+required="true" missingMessage="* Required" invalidMessage="Enter a valid
+date. (mm/dd/yyyy)" format="M/D/YYYY" id="date1" name="date1"
+value="1/1/2007" /></td>
+         </tr>
+         <tr>
+            <td>Grade:</td>
+            <td><input type="text" dojoType="RegexpTextbox" required="true"
+missingMessage="* Required" invalidMessage="Enter a valid grade. (A, B, C,
+D, or F)" size="1" regexp="^[ABCDF]$" uppercase="true" name="grade"
+id="grade" value="" /></td>
+         </tr>
+         <tr>
+            <td>Location:</td>
+            <td><input type="text" name="loc" value="" /></td>
+         </tr>
+      </table>
+
+      <br>
+
+      <!-- Hide the submit button (Thanks, Jeff!) -->
+      <input type="submit" style="display:none" value="submit" />
+
+      <br>
+
+      <div id="output">Complete the form and press ENTER.</div>
+
+   </form>
+
+</body>
+</html>

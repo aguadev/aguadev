@@ -1,0 +1,74 @@
+[
+    {
+        query       :   "leukemia Or Lymphoma",
+        ordinal     :   1,
+        action      :   "AND",
+        field       :   "Disease",
+        operator    :   "CONTAINS",
+        value       :   "leukemia"
+    },
+    {
+        query       :   "leukemia Or Lymphoma",
+        ordinal     :   2,
+        action      :   "OR",
+        field       :   "Disease",
+        operator    :   "CONTAINS",
+        value       :   "lymphoma"
+    },
+    {
+        query       :   "Hodgkins Disease",
+        ordinal     :   3,
+        action      :   "OR",
+        field       :   "Disease",
+        operator    :   "CONTAINS",
+        value       :   "lymphoma"
+    },
+    {
+        query       :   "Hodgkins Disease",
+        ordinal     :   2,
+        action      :   "AND",
+        field       :   "Disease",
+        operator    :   "CONTAINS",
+        value       :   "leukemia"
+    },
+    {
+        query       :   "Hodgkins Disease",
+        ordinal     :   1,
+        action      :   "AND",
+        field       :   "Disease",
+        operator    :   "CONTAINS",
+        value       :   "leukemia"
+    },
+    {
+        query       :   "Hodgkins (non-mononucleosis)",
+        ordinal     :   1,
+        action      :   "AND",
+        field       :   "Disease",
+        operator    :   "CONTAINS",
+        value       :   "leukemia"
+    },
+    {
+        query       :   "Hodgkins (non-mononucleosis)",
+        ordinal     :   2,
+        action      :   "AND",
+        field       :   "Disease",
+        operator    :   "CONTAINS",
+        value       :   "leukemia"
+    },
+    {
+        query       :   "Hodgkins (non-mononucleosis)",
+        ordinal     :   3,
+        action      :   "OR",
+        field       :   "Disease",
+        operator    :   "CONTAINS",
+        value       :   "lymphoma"
+    },
+    {
+        query       :   "Hodgkins (non-mononucleosis)",
+        ordinal     :   4,
+        action      :   "NOT",
+        field       :   "Disease",
+        operator    :   "CONTAINS",
+        value       :   "mononucleosis"
+    }
+]

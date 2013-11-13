@@ -1,0 +1,14 @@
+.post .actions .bookmark-actions {position:absolute; right:0; top:0; z-index:3; display:none; height:20px; width:400px; overflow:hidden; }
+.post .actions .bookmark-actions li {margin:0 0 5px 10px; font-size:13px; display:inline; float:right; position:relative;}
+.post .actions .bookmark-actions a {font-size:13px; line-height:21px; height:20px; color:#9fbbe5;}
+.post .actions .bookmark-actions a:hover {color:#7793bb;}
+.post .actions .bookmark-actions a.btn {margin: 0 auto; color:#fff; padding:0 15px; text-align:center; color:#fff; font-size:12px;}
+.post .bookmark { padding: 0;}
+.post .bookmark:hover {background: #d9e4f5;}
+.post.bookmark .postThumbnail {display: none;}
+.introMessage a.bookmarklet {border:none !important;}
+.bookmarklet .introMessage fieldset {margin-left:57px;}
+.bookmarklet.login .introMessage {width: 540px;}
+.bookmarklet.login .breadcrumbs ul {margin-left:115px; width:400px;}
+.help .bookmarkletContainer {width:200px; position:relative; top:-50px; left:-30px;}
+.help .bookmarkletContainer img {position:relative;}

@@ -1,0 +1,43 @@
+    -h --help       Print this help file and exit
+    
+    -v --version    Print the version of the program and exit
+    
+    -o --outdir     Create all output files in the specified output directory.
+                    Please note that this directory must exist as the program
+                    will not create it.  If this option is not set then the 
+                    output file for each sequence file is created in the same
+                    directory as the sequence file which was processed.
+                   
+    --extract       If set then the zipped output file will be uncomressed in
+                    the same directory after it has been created.  By default
+                    this option will be set if fastqc is run in non-interactive
+                    mode.
+                   
+    --noextract     Do not uncompress the output file after creating it.  You
+                    should set this option if you do not wish to uncompress
+                    the output when running in non-interactive mode.
+                    
+    --nogroup       Disable grouping of bases for reads >50bp. All reports will
+                    show data for every base in the read.  WARNING: Using this
+                    option will cause fastqc to crash and burn if you use it on
+                    really long reads, and your plots may end up a ridiculous size.
+                    You have been warned!
+                    
+    -f --format     Bypasses the normal sequence file format detection and
+                    forces the program to use the specified format.  Valid
+                    formats are bam,sam,bam_mapped,sam_mapped and fastq
+                    
+    -t --threads    Specifies the number of files which can be processed
+                    simultaneously.  Each thread will be allocated 250MB of
+                    memory so you shouldn't run more threads than your
+                    available memory will cope with, and not more than
+                    6 threads on a 32 bit machine
+                  
+    -c --contaminants   Specifies a non-default file which contains the list of
+                    contaminants to screen overrepresented sequences against.
+                    The file must contain sets of named contaminants in the
+                    form name[tab]sequence.  Lines prefixed with a hash will
+                    be ignored.
+                    
+   -q --quiet       Supress all progress messages on stdout and only report errors.
+                    

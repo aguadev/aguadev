@@ -1,0 +1,11 @@
+{
+	name : "plugins.data.Controller",
+	
+	version : "0.01",
+	
+	description : "Load the data for all plugins",
+	
+	url : '',
+	
+	dependencies : []
+}

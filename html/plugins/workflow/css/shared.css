@@ -1,0 +1,230 @@
+/* ICONS */
+.workflow .shared .workflowIcon,
+.workflow .shared .projectIcon,
+.workflow .shared .usernameIcon {
+	background-repeat: no-repeat;
+	min-width: 28px;
+	width: 28px;
+	height: 28px;
+	position: relative;
+	top: 10px;
+	text-align: center;
+}
+.workflow .shared .projectIcon {
+	background-image: url(../../../plugins/workflow/images/project-28.png);
+}
+.workflow .shared .usernameIcon {
+	background-image: url(../../../plugins/workflow/images/users-28.png);
+}
+.workflow .shared .workflowIcon {
+	background-image: url(../../../plugins/workflow/images/workflow-28.png);
+}
+
+.workflow .shared .fileIcon,
+.workflow .shared .reportIcon,
+.workflow .shared .workflowIcon,
+.workflow .shared .projectIcon,
+.workflow .shared .usernameIcon {
+	background-repeat: no-repeat;
+	background-position: center;
+	min-width: 35px;
+	min-height: 35px;
+	width: 35px;
+	height: 35px;
+}
+
+.workflow .shared .comboColumn {
+	width: 130px !important;
+	text-align: center !important;
+}
+.workflow .shared .buttonColumn {
+	width: 60px !important;
+}
+.workflow .shared .fileIcon {
+	background-image: url(../../../plugins/workflow/images/file-28.png);
+}
+.workflow .shared .reportIcon {
+	background-image: url(../../../plugins/workflow/images/report-28.png);
+}
+.workflow .shared .workflowIcon {
+	background-image: url(../../../plugins/workflow/images/workflow-28.png);
+}
+.workflow .shared .workflowIcon {
+	background-image: url(../../../plugins/workflow/images/workflow-28.png);
+}
+.workflow .shared .projectIcon {
+	background-image: url(../../../plugins/workflow/images/project-28.png);
+}
+
+
+/* TITLES */
+.workflow .shared .projectTitle,
+.workflow .shared .workflowTitle,
+.workflow .shared .reportTitle,
+.workflow .shared .fileTitle,
+.workflow .shared .workflowTitle {
+	text-align: center;
+	font-size: 14px;
+	font-weight: bolder;
+	font-family: Verdana;
+	font-style: oblique;
+	height: 20px;
+	vertical-align: bottom;
+	background: #EEE;
+}
+
+.workflow .shared .message {
+	color: #444;
+	font-family: Verdana;
+	font-size: 12px;
+	font-style: italic;
+	text-align: center;
+	padding-right: 35px;
+}
+
+
+/* BUTTONS */
+.workflow .shared .deleteProjectButton,
+.workflow .shared .deleteWorkflowButton,
+.workflow .shared .copyWorkflowButton,
+.workflow .shared .copyProjectButton,
+.workflow .shared .okButton {
+	background-color: #FFF;
+	border: 2px solid #EEE;
+	border-bottom-color: #DDD;	
+	border-left-color: #DDD;	
+	vertical-align: middle;
+	background-position: center;
+	background-repeat: no-repeat;
+	width: 46px;
+	height: 28px;
+}
+
+.workflow .shared .deleteProjectButton {
+	background-image: url(../../../plugins/workflow/images/delete-24.png);
+}
+.workflow .shared .deleteWorkflowButton {
+	background-image: url(../../../plugins/workflow/images/delete-24.png);
+}
+.workflow .shared .okButton {
+	background-image: url(../../../plugins/workflow/images/OK-34.png);
+}
+.workflow .shared .copyWorkflowButton {
+	background-image: url(../../../plugins/workflow/images/copyworkflow-20.png);
+}
+.workflow .shared .copyProjectButton {
+	background-image: url(../../../plugins/workflow/images/copyproject-20.png);
+}
+
+
+
+.workflow .shared .fileUpload:hover,
+.workflow .shared .fileBrowse:hover,
+.workflow .shared .deleteProjectButton:hover,
+.workflow .shared .deleteWorkflowButton:hover,
+.workflow .shared .okButton:hover {
+	border-bottom-color: #BBB;	
+	border-left-color: #BBB;
+	background-color : #FF8;
+}
+
+.workflow .shared .fileUpload:active,
+.workflow .shared .fileBrowse:active,
+.workflow .shared .deleteProjectButton:active,
+.workflow .shared .deleteWorkflowButton:active,
+.workflow .shared .okButton:active {
+	border-bottom-color: #BBB;	
+	border-left-color: #BBB;
+	background-color : #8F8;
+}
+
+
+/* COMBO BOX */
+.workflow .shared .projectCombo,
+.workflow .shared .workflowCombo,
+.workflow .shared .reportCombo,
+.workflow .shared .usernameCombo {
+    font-family: sans-serif;
+    font-size: 18px;
+    width: 150px;
+	text-indent: 2px;
+}
+
+/* DROP TARGET */
+.shared .dropTarget li:hover {
+	background-color: #BCF;
+}
+
+.shared .dropTarget {
+
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+
+	min-height: 300px;
+	height: auto;
+	width: 230px;
+	list-style: none;
+	position: relative;
+	top: 0px !important;
+	left: 0px;
+	margin-left: 0px;
+
+	background: #FFFFFF none repeat scroll 0 0;
+	border: 3px solid #CCCCCC;
+	cursor: default;
+	padding:1em 0.5em;
+
+	text-align: left;
+	font-size: 14px;
+	font-family: Verdana;
+
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	overflow:auto !important;
+}
+
+.shared .dropTarget .dndNode {
+	height: 30px !important;
+	background-color: #F00;
+	z-index: 101 !important;
+	position: relative;
+	top: 0px;
+}
+
+.shared .dropTarget .dndNode .appRow {
+	position: relative;
+	top: -10px;
+	background-color: #0F0;
+	z-index: 100 !important;
+	height: 0px;
+}
+
+.shared .dropTarget .name {
+	font-weight: bolder;
+	color: #222;
+	font-size: 14px;
+	text-align: left !important;
+
+	background-image: url(../../../plugins/workflow/images/app-18.png);
+	text-indent: 22px;
+	background-repeat: no-repeat;
+	height: 18px;
+}
+
+.shared .dropTarget .dojoDndItemAnchor .satisfied,
+.shared .dropTarget .satisfied .dojoDndItemAnchor {
+	background-color: #CCFFCC !important;
+}
+
+.shared .dropTarget .satisfied {
+	background-color: #CFC;
+}
+.shared .dropTarget .satisfied:hover {
+	background-color: #ACA !important;
+}
+.shared .dropTarget .unsatisfied {
+	background-color: #FCC;
+}
+

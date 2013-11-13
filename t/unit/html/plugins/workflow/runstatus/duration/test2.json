@@ -1,0 +1,25 @@
+{
+    "stagestatus": [
+        {
+            "childpid": "235904",
+            "number": "1",
+            "status": "running",
+            "project": "Project1",
+            "workflowpid": "2839",
+            "owner": "admin",
+            "cluster": "PBS",
+            "location": "apps/expression/TOPHAT.pl",
+            "executor": "/usr/bin/perl",
+            "name": "TOPHAT",
+            "username": "syoung",
+            "workflow": "Workflow1",
+            "parentpid": "2839",
+            "valuetype": "pipeline",
+            "queued": "2010-02-22 09:05:00",
+            "started": "2010-02-22 09:05:05",
+            "completed": "2010-02-22 09:25:06",
+            "now": "2010-02-22 09:35:07"
+        }
+    ],
+    "duration": "0 hours 20 min 1 sec"
+}

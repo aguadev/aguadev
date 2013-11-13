@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+		"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+	<title>Agua 0.5</title>
+
+	<style type="text/css">
+		@import "dojo.1.4.2/dojo/resources/dojo.css";
+		@import "css/dijitTests.css";
+	</style>
+
+	<!-- required: a default dijit theme: -->
+	<link id="themeStyles" rel="stylesheet" href="dojo.1.4.2/dijit/themes/tundra/tundra.css">
+
+	<!-- required: dojo.js -->
+	<script type="text/javascript" src="dojo.1.4.2/dojo/dojo.js"
+		djConfig="parseOnLoad: true, isDebug: true"></script>
+
+	<!-- not needed, for testing alternate themes -->
+	<script type="text/javascript" src="_testCommon.js"></script>
+
+	<!-- required: a default dijit theme: -->
+	<link rel="stylesheet" href="plugins/core/css/toolbar.css">
+
+
+<style type="text/css">
+
+
+
+	
+</style>
+
+
+	<script type="text/javascript">
+		dojo.require("dijit.dijit"); // optimize: load dijit layer
+
+		dojo.require("dijit.Declaration");
+		dojo.require("dijit.Toolbar");
+		dojo.require("dijit.ToolbarSeparator");
+
+		dojo.require("dijit.form.Button");
+		dojo.require("dijit.form.DropDownButton");
+		dojo.require("dijit.form.ComboButton");
+		dojo.require("dijit.form.ToggleButton");
+
+		dojo.require("dijit.ColorPalette");
+		dojo.require("dijit.TooltipDialog");
+		dojo.require("dijit.form.TextBox");
+		dojo.require("dijit.Menu");
+
+		dojo.require("dojo.parser");
+
+		dojo.addOnLoad(function(){
+			// programatic creation
+
+			
+			dojo.forEach(["toolbar3"], function(toolbarId){
+
+			console.log("Doing toolbarId: " + toolbarId);
+
+				var toolbar = new dijit.Toolbar({}, dojo.byId(toolbarId));
+				dojo.forEach(["View", "Workflow", "Project", "Report", "Admin", "Help"], function(label){
+					var button = new dijit.form.Button({
+
+                        // note: should always specify a label, for accessibility reasons.
+                        // Just set showLabel=false if you don't want it to be displayed normally
+                        id: toolbarId+"."+label,
+                        label: label,
+                        showLabel: (toolbarId == "toolbar2" ? false : true),
+                        iconClass: toolbarId == "toolbar4" ? "" : "dijitEditorIcon dijitEditorIcon"+label
+                    });
+					
+                    toolbar.addChild(button);
+				});
+			});
+			
+			var viewWidget = dijit.byId("toolbar3.View");
+			viewWidget.attr('iconClass', 'dijitEditorIcon dijitEditorIconView');
+			
+		});
+	</script>
+
+
+
+</head>
+<body class="tundra">
+
+	<div
+		dojoAttachPoint="reloadAgua"
+		class="aguaIcon"
+		dojoAttachEvent="onclick:reload"
+	>
+	</div>
+
+	<span dojoType="dijit.Declaration" widgetClass="ToolbarSectionStart" defaults="{ label: 'Label'}">
+		<span dojoType="dijit.ToolbarSeparator"></span><i>${label}:</i>
+	</span>
+
+	<div id="toolbar3"></div>
+
+    <!-- leave some space before the console window -->
+    <br><br>
+  </body>
+</html>

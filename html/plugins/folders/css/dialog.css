@@ -1,0 +1,71 @@
+/* UNDERLAY FOR PROJECT DIALOGS */
+/* (CHANGED FROM PURPLE TO GREY */
+.dijitDialogUnderlay {
+	background: #CCC;
+}
+
+
+/* FILE COPY PROGRESS BAR */
+.folders .copyDialog{
+    opacity: 0.8;
+    filter:alpha(opacity=80);
+	width: 200px;
+	height: 200px;
+	background-color: #000 !important;
+	color: #FFF;
+	text-align: center;
+	vertical-align: middle;
+	/*overflow: hidden;*/
+}
+
+
+.dialogStatus {
+    position: relative;
+    left: 730px;
+    width: 120px;
+    text-align: center;
+    vertical-align: center;			
+}
+.dialogMessage {
+    color: #FF0000;
+    position: relative;
+    left: 300px;
+    width: 80px;
+    text-align: center;
+    vertical-align: center;			
+}
+
+.dialogLauncher {
+    color: #0000FF;
+    position: relative;
+    left: 300px;
+    text-align: right;
+    vertical-align: center;			
+}
+
+.dialogTable {
+    margin-left: 20px;
+    position: relative;
+    top: 30%;
+    text-align: center;
+    vertical-align: center;			
+}
+
+.centered {
+    text-align: center;
+}
+
+.dialogButton, .dialogButtonError {
+    color: #88CC88;
+    font-weight: bolder;
+    font-size: 20px;
+}
+
+.dialogButtonError {
+    color: #FF0000;
+}
+
+/* this is how you style underlays */	
+/*#thirdTest_underlay { background-color: #000 }*/
+/*#fourthTest_underlay,*/
+/*#secondTest_underlay { background-color: #369 }*/

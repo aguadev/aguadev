@@ -1,0 +1,70 @@
+/* DIALOG */
+.confirmDialog .dijitDialog {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin: padding;
+	border-radius: 10pt !important;
+}
+
+/* DIALOG */
+.tundra .dijitDialog .confirmDialog {
+	padding: 25px !important;
+   box-shadow: -2px 5px 20px #888;
+}
+
+/* GENERAL TEXT */
+.confirmDialog {
+	font-size: 20px !important;
+	font-family: Verdana !important;
+	color: #226 !important;
+	font-weight: bolder !important;
+	z-index: 2000 !important;
+	text-align: center;
+	border-radius: 10pt !important;
+   box-shadow: -2px 5px 20px #888;
+   outline: none;
+   -moz-outline: none;
+}
+
+.confirmDialog .dijitDialogPaneContent,
+.confirmDialog .dijitDialogTitleBar,
+.confirmDialog .dijitDialogCloseIcon {
+	border-radius: 0 0 0 0 !important;	
+}
+
+/* NO SHADOW */
+.confirmDialog .dijitDialogTitleBar,
+.confirmDialog .dijitDialogPaneContent,
+.confirmDialog .dijitDialogTitle,
+.confirmDialog .dijitDialogCloseIcon,
+ .confirmDialog .tundra .dijitDialogTitleBar,
+.confirmDialog .tundra .dijitDialogPaneContent,
+.confirmDialog .tundra .dijitDialogTitle,
+.confirmDialog .tundra .dijitDialogCloseIcon {
+   box-shadow: none  !important;
+}
+
+/* TITLE */
+.dialog .dijitDialogTitleBar .dijitDialogTitle .confirmDialog {
+	font-family: Verdana !important;
+	color: #822 !important;
+}
+
+/* MESSAGE */
+.confirmDialog .message {
+	font-size: 18px !important;
+	text-align: center;
+	color: #A00;
+}
+
+/* ENTER AND CANCEL BUTTONS */
+.confirmDialog .yesButton,
+.confirmDialog .noButton {
+	font-size: 18px;
+}
+.confirmDialog .yesButton {
+	color: #0A0;
+}
+.confirmDialog .noButton {
+	color: #A00;
+}

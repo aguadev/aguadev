@@ -1,0 +1,216 @@
+<div data-dojo-attach-point="containerNode">
+    <table class="parameterrow" width="100%" cellspacing="2">
+        <tr>
+            <td
+                colspan="1"
+                data-dojo-attach-point="name"
+                class="name"
+                width="100px"
+                title="name: Name of parameter"
+                >${name}</td>
+
+
+            <td colspan="1"
+                width="140px"
+                class="lockedValueTypeContainer"
+            >
+
+                <table>
+                    <tr>
+                        <td data-dojo-attach-point="locked"
+                            data-dojo-attach-event="onclick:toggleLock"
+                            class="unlocked"
+                        >
+                        </td>
+                        
+                        <td
+                            colspan="1"
+                            class='paramtype'
+                            width="100px"
+                            align="left"
+                        >
+            
+                            <select
+                                data-dojo-attach-point="paramtype"
+                                data-dojo-type="dijit/form/Select"
+                                data-dojo-props="
+                                    name    :   '${paramtype}',
+                                    value   :   '${paramtype}'
+                                "
+                                title="paramtype: Select type of parameter (input, resource or output)"
+                                >
+                                <option value="input">input</option>
+                                <option value="resource">resource</option>
+                                <option value="output">output</option>
+                            </select>
+                        
+                        </td>
+                    </tr>
+                </table>
+            
+            </td>
+
+            <td
+                colspan="1"
+                width="100px"
+                class="discretion"
+            >
+
+                <select
+                    data-dojo-attach-point="discretion"
+                    class='discretionSelect'
+                    data-dojo-type="dijit/form/Select"
+                    data-dojo-props="
+                        name    :   '${discretion}',
+                        value   :   '${discretion}'
+                    "
+                    title="discretion: Select 'optional',  'required' (must not be empty) or 'essential' (file/directory must be present)"
+                >
+                    <option value="essential">essential</option>
+                    <option value="required">required</option>
+                    <option value="optional">optional</option>
+                </select>
+            
+            </td>
+        </tr>
+        
+        
+<!-- TOGGLED PORTION STARTS HERE -->
+<!-- TOGGLED PORTION STARTS HERE -->
+<!-- TOGGLED PORTION STARTS HERE -->
+
+        
+        <tr>
+            <td 
+                data-dojo-attach-point="argument"
+                colspan="1"
+                class="argument"
+                title="argument: Command line argument for parameter (e.g., '--inputfile')"
+                >${argument}</td>
+
+            <td
+                data-dojo-attach-point="valuetypeToggle"
+                class="valuetypeToggle"
+                colspan="1"
+                >
+
+                <select
+                    data-dojo-attach-point="valuetype"
+                    class="valuetype"
+                    data-dojo-type="dijit/form/Select"
+                    data-dojo-props="
+                        name    :   '${valuetype}',
+                        value   :   '${valuetype}'
+                    "
+                    title="valuetype: Type of parameter may be physical (e.g., file or directory) or abstract (e.g., integer or text string)"
+                    >
+                    <option value="file">file</option>
+                    <option value="files">files</option>
+                    <option value="directory">directory</option>
+                    <option value="directories">directories</option>
+                    <option value="integer">integer</option>
+                    <option value="string">string</option>
+                    <option value="flag">flag</option>
+                </select>            
+            </td>
+
+            <td
+                colspan="1"
+                data-dojo-attach-point="category"
+                class="category"
+                title="category: User-defined category for parameter to be used with input/output chaining. (E.g, the category 'inputfile' includes parameters with arguments '-i', '-infile' and '--inputfile'.)"
+                >${category}</td>
+        </tr>
+        <tr>
+            <td colspan="2"
+                data-dojo-attach-point="value"
+                class='value'
+                title="value: Default value of parameter (use '%project%/%workflow%/' for default file path)"
+                >${value}</td>
+
+            <td colspan="1"
+                class="ordinalToggle"
+                data-dojo-attach-point="ordinalToggle"
+            >
+                <table>
+                    <tr>
+                        <td>
+                            <select
+                                class="ordinal"
+                                data-dojo-attach-point="ordinal"
+                                data-dojo-type="dijit/form/Select"
+                                data-dojo-props="
+                                    name    :   '${ordinal}',
+                                    value   :   '${ordinal}'
+                                "
+                                title="ordinal: Adjust the ordinal value if your application requires the parameters to be in a certain order. Parameters with the same ordinal will be grouped together in alphabetical order."
+                                >
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                                <option value="13">13</option>
+                                <option value="14">14</option>
+                                <option value="15">15</option>
+                            </select>            
+            
+            
+                        <td 
+                            colspan="1"
+                            data-dojo-attach-point="format"
+                            class="format"
+                            title="format: Special file format, to be used for parameter chaining or file checking (e.g., FASTA, FASTQ)"
+                        >${format}</td>
+
+                    </tr>
+                </table>
+
+            </td>
+            
+        </tr>
+
+        <tr>
+            <td colspan="3"
+                data-dojo-attach-point="description"
+                class='description'
+                title="description: A description of the parameter and its usage"
+            >${description}</td>
+
+        </tr>
+
+        <tr>
+            <td
+                colspan="1"
+                data-dojo-attach-point="args"
+                class="args"
+                title="args: Arguments for input/output chaining function (e.g., 'input.inputfile.value')"
+            >${args}</td>
+            <td
+                colspan="2"
+                data-dojo-attach-point="inputParams"
+                class="inputParams"
+                title="inputParams: Comma-separated list of variable names for each arg in the list of args for the paramFunction (e.g., 'inputfile')"
+            >${inputParams}</td>
+        </tr>
+
+        <tr>
+            <td colspan="3"
+                width="360px"
+                data-dojo-attach-point="paramFunction"
+                class='paramFunction'
+                title="paramFunction: Input/output chaining function to automatically determine parameter value from the application itself or the preceding application in the workflow (e.g., 'if ( inputfile != null ) return inputfile')"
+            >${paramFunction}</td>
+        </tr>
+
+    </table>
+</div>
+

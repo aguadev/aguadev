@@ -1,0 +1,129 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+#### EXTERNAL MODULES
+use Data::Dumper;
+use FindBin qw($Bin);
+use lib "$Bin/../../../../lib";
+use Test::Simple tests => 1;
+use lib "$Bin/../../../lib/external";
+
+# use Test::File::Contents;
+#file_contents_is       ($file,  $string,  $test_description);
+#file_contents_like     ($file,  qr/foo/,  $test_description);
+#file_md5sum            ($file,  $md5sum,  $test_description);
+#file_contents_identical($file1, $file2,   $test_description);
+
+#### INTERNAL MODULES
+use File::Tools;
+
+#### TEST FILE NUMBER
+my ($test_number) = $0 =~ /[\.\/]*(\d+)[^\/]+$/;
+print "Test file number $test_number (script: $0)\n";
+
+#### TEST DATA
+my $inputfiles = [ "$Bin/01/Project.js", "$Bin/01/Project-commented.js", "dojox/widget/RollingList.js" ];
+my $outputfiles = [ "$Bin/01/Project-commented.js", "$Bin/01/Project-uncommented.js", "dojox/widget/RollingList-add.js"  ];
+my $expectedfiles = [ "$Bin/01/Project-commented-expected.js", "$Bin/01/Project-uncommented-expected.js", "dojox/widget/RollingList-add-expected.js"  ];
+my $actions = [ "comment", "uncomment", "clean", "add" ];
+my $filetools = File::Tools->new();
+
+#### RUN COMMENT OPERATIONS ON INDIVIDUAL FILES
+my $i = 0;
+if ( $i )
+#for ( my $i = 0; $i < @$inputfiles; $i++ )
+#for ( my $i = 0; $i < 1; $i++ )
+#for ( my $i = 1; $i < 2; $i++ )
+{
+    my $inputfile = $$inputfiles[$i];    
+    my $outputfile = $$outputfiles[$i];    
+    my $expectedfile = $$expectedfiles[$i];
+    
+    my $type = "js";
+    my $action = $$actions[$i];
+    my $regex = "^.+?\\s*console\\.log\\(";
+    my $comment = "//";
+
+    $filetools->comment(
+        {
+            'inputfile' => $inputfile,
+            'outputfile' => $outputfile,
+            'action' => $action,
+            'type' => $type,
+            'comment' => $comment,
+            'regex' => $regex
+        }
+    );
+    my $output = Util::contents($outputfile);
+    my $expected = Util::contents($expectedfile);
+    $output =~ s/^\s+//;
+    $output =~ s/\s+$//;
+    $expected =~ s/^\s+//;
+    $expected =~ s/\s+$//;
+    print "length(output): ", length($output), "\n";
+    print "length(expected): ", length($expected), "\n";
+
+    print "inputfile: $inputfile\n";
+    print "outputfile: $outputfile\n";
+    print "expectedfile: $expectedfile\n";
+
+    #### DO DIFF ON output AND expected FILES
+    file_contents_identical($outputfile, $expectedfile, "Expected and actual output file content match");
+    #ok( $output eq $expected, "Expected and actual output file content match");
+}
+
+#### RUN COMMENT OPERATIONS ON DIRECTORIES
+my $diractions = [ "clean"];
+my $inputdirs = [ "$Bin/01/project" ];
+my $outputdirs = [ "$Bin/01/project-output" ];
+my $expecteddirs = [ "$Bin/01/project-output-expected" ];
+for ( my $i = 0; $i < @$inputdirs; $i++ )
+{
+    my $inputdir = $$inputdirs[$i];    
+    my $outputdir = $$outputdirs[$i];    
+    my $expecteddir = $$expecteddirs[$i];
+    print "inputdir: $inputdir\n";
+    print "outputdir: $outputdir\n";
+    
+    
+    my $type = "js";
+    my $action = $$diractions[$i];
+    my $regex = "^.+?\\s*console\\.log\\(";
+    my $comment = "//";
+
+    $filetools->comment(
+        {
+            'inputdir' => $inputdir,
+            'outputdir' => $outputdir,
+            'action' => $action,
+            'type' => $type,
+            'comment' => $comment,
+            'regex' => $regex
+        }
+    );
+
+    my $outputfiles = Util::files($outputdir);
+    my $expectedfiles = Util::files($expecteddir);
+    for ( my $file_counter = 0; $file_counter < @$outputfiles; $file_counter++ )
+    {
+        my $outputfile = "$outputdir/$$outputfiles[$file_counter]";
+        my $expectedfile = "$expecteddir/$$expectedfiles[$file_counter]";
+
+        my $output = Util::contents($outputfile);
+        my $expected = Util::contents($expectedfile);
+        $output =~ s/^\s+//;
+        $output =~ s/\s+$//;
+        $expected =~ s/^\s+//;
+        $expected =~ s/\s+$//;
+        print "length(output): ", length($output), "\n";
+        print "length(expected): ", length($expected), "\n";
+    
+        print "outputfile: $outputfile\n";
+        print "expectedfile: $expectedfile\n";
+    
+        #### DO DIFF ON output AND expected FILES
+        ok( $output eq $expected, "Expected and actual output dir content match");
+    }
+
+}

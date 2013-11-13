@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+	<title> file browse 2: Bioptic pipeline filesystem </title>
+
+	<style type="text/css">
+		@import "dojo.1.2.2/dojo/resources/dojo.css";
+		@import "dojo.1.2.2/dijit/tests/css/dijitTests.css";
+	</style>
+
+	<!-- required: a default dijit theme: -->
+	<link id="themeStyles" rel="stylesheet" href="dojo.1.2.2/dijit/themes/tundra/tundra.css">
+	
+	<!-- the additional styles for the widget -->
+	<link id="widgetStyle" rel="stylesheet" href="dojo.1.2.2/dojox/widget/FilePicker/FilePicker.css">
+	
+    
+	<!-- required: dojo.js -->
+	<script type="text/javascript" src="dojo.1.2.2/dojo/dojo.js"
+		djConfig="parseOnLoad: true, isDebug: true, useCommentedJson: true"></script>
+	
+	<!-- not needed, for testing alternate themes -->
+	<script type="text/javascript" src="dojo.1.2.2/dijit/tests/_testCommon.js"></script>
+
+	<script type="text/javascript">
+		dojo.require("dojox.widget.FilePicker");
+		dojo.require("dojox.data.FileStore");
+	</script>
+
+<script>
+
+dojo.addOnLoad (
+	function()
+	{
+
+		//	<div dojoType="dojox.widget.FilePicker" jsId="myPicker" id="myPicker" style="width: 50%;" store="fileStore" query="{}"></div>
+
+        
+        var containerNode = document.createElement('div');
+        containerNode.id = "filePickerContainer";
+		document.body.appendChild(containerNode);
+
+		var filePicker = new dojox.widget.FilePicker(
+			{
+				id: "myPicker",
+				style: "width: 90%",
+				store: fileStore,
+				query: {}
+			}
+		);
+        console.log("filePicker: " + filePicker);
+        console.log("filePicker.domNode: " + filePicker.domNode);
+        //filePicker.domNode.style.backgroundColor = "#000000";
+        //filePicker.domNode.innerHTML = "filePicker is here";
+        console.log("filePicker.domNode.innerHTML: " + filePicker.domNode.innerHTML);
+        filePicker.startup();
+
+        
+        var containerNode = document.createElement('div');
+        containerNode.id = "filePickerContainer";
+        containerNode.appendChild(filePicker.domNode);
+		document.body.appendChild(containerNode);
+
+	}
+);
+
+
+</script>
+
+</head>
+
+<body class="tundra">
+
+<h1>
+    file browse 2: Bioptic pipeline filesystem 
+</h1>
+
+<h5>
+    Source:
+    <br>
+    File Browser widget using dojox.data.FileStore
+	<br>
+    http://localhost:8080/bioptic1/dojo.1.2.2/dojox/widget/tests/test_FilePicker.html
+    <br>
+</h5>
+
+	<p>The picker below uses the dojox.data.FileStore and a PHP implementation for the serverside to browse the dojo tree hierarchy in a lazy-load fashion.</p>
+	<p><i><b>This demo must be run from a web-server with PHP support enabled.  Without PHP support, this demo cannot function.</b></i></p>
+	<hr>
+
+	<div dojoType="dojox.data.FileStore" url="dojo.1.2.2/dojox/data/demos/stores/filestore_dojotree.php" jsId="fileStore" pathAsQueryParam="true"></div>
+
+<!--<div dojoType="dojox.data.FileStore" url="http://localhost:8080/cgi-bin/Bioptic2/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin" jsId="fileStore" pathAsQueryParam="true"></div>-->
+
+<!--<div dojoType="dojox.data.FileStore" url="fileSystem.json" jsId="fileStore" pathAsQueryParam="true"></div>-->
+
+	<!--<div dojoType="dojox.widget.FilePicker" jsId="myPicker" id="myPicker" style="width: 50%;" store="fileStore" query="{}"></div>-->
+</body>
+</html>
+
+

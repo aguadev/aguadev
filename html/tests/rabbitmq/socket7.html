@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		* { margin:0; padding:0; font-size:11px; font-family:arial; color:#444; }
+		body { padding:20px; }
+		#message-list { list-style-type:none; width:300px; height:300px; overflow:auto; border:1px solid #999; padding:20px; }
+		#message-list li { border-bottom:1px solid #ccc; padding-bottom:2px; margin-bottom:5px; }
+		code { font-family:courier; background:#eee; padding:2px 4px; }
+	</style>
+
+	<script src="http://cdn.socket.io/stable/socket.io.js"></script>
+
+	<script>
+
+		// VERSION 0.6
+		//// Create SocketIO instance
+		//var socket = new io.Socket('localhost',{
+		//	port: 8080
+		//});
+		//socket.connect(); 
+		
+		// Add a connect listener
+		socket.on('connect',function() {
+			log('<span style="color:green;">Client has connected to the server!</span>');
+		});
+		// Add a connect listener
+		socket.on('message',function(data) {
+			log('Received a message from the server:  ' + data);
+		});
+		// Add a disconnect listener
+		socket.on('disconnect',function() {
+			log('<span style="color:red;">The client has disconnected!</span>');
+		});
+		
+		// Sends a message to the server via sockets
+		function sendMessageToServer(message) {
+			socket.send(message);
+			log('<span style="color:#888">Sending "' + message + '" to the server!</span>');
+		}
+		
+		// Outputs to console and list
+		function log(message) {
+			var li = document.createElement('li');
+			li.innerHTML = message;
+			document.getElementById('message-list').appendChild(li);
+		}
+		
+		/*
+		// Create a socket instance
+		socket = new WebSocket('ws://localhost:8080');
+		
+		// Open the socket
+		socket.onopen = function(event) {
+			console.log('Socket opened on client side',event);
+			
+			// Listen for messages
+			socket.onmessage = function(event) {
+				console.log('Client received a message',event);
+			};
+			
+			// Listen for socket closes
+			socket.onclose = function(event) {
+				console.log('Client notified socket has closed',event);
+			};
+			
+		};
+		*/
+		
+	</script>
+</head>
+<body>
+	
+	<p>Messages will appear below (and in the console).</p><br />
+	<ul id="message-list"></ul>
+	<ul style="margin:20px 0 0 20px;">
+		<li>Type <code>socket.disconnect()</code> to disconnect</li>
+		<li>Type <code>socket.connect()</code> to reconnect</li>
+		<li>Type <code>sendMessageToServer('Your Message')</code> to send a message to the server</li>
+	</ul>
+	
+</body>
+</html>

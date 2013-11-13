@@ -1,0 +1,94 @@
+
+h3. APPLICATION
+
+trackData
+
+h3. PURPOSE
+
+1. 'PRETTIFY' A trackData.json FILE
+
+2. GET/INSERT/REMOVE ENTRIES IN PRETTIFIED trackData.json
+
+3. OPTIONALLY SPECIFY POSITION OF NEW ENTRIES IN FILE
+
+h3. INPUT
+
+1. KEY NAME
+
+2. KEY VALUE
+
+3. POSITION OF INSERTED VALUE
+
+4. INPUTFILE LOCATION WITH OR WITHOUT WILDCARD '
+'
+
+h3. OUTPUT
+
+1. EDITED FILE
+
+NOTES
+
+FOR EXAMPLE, GIVEN THIS FILE FORMAT:
+
+trackData =
+                               [
+                                  {
+                                         "url" : "plugins/view/jbrowse/data/seq/{refseq}/",
+                                         "args" : {
+                                                "chunkSize" : 20000
+                                         },
+                                         "label" : "DNA",
+                                         "type" : "SequenceTrack",
+                                         "key" : "DNA"
+                                  },
+
+THIS APPLICATION CAN BE USED TO CHANGE THIS:
+
+"url" : "data/seq/{refseq}/",
+
+TO THIS:
+
+"url" : "plugins/view/jbrowse/data/seq/{refseq}/",
+
+I.E., THIS WILL CHANGE THE LOADING URLS FOR THE FEATURE FILES
+
+FROM
+
+http://localhost/agua/0.4/data/tracks/chr1/exon/...
+
+TO
+
+http://localhost/agua/0.4/plugins/view/jbrowse/data/tracks/chr1/exon/...
+
+h3. USAGE
+
+{code}
+./trackData.pl  <--mode String> <--inputfile String> <--key String> [--value String] [--help]
+ --mode                  :   Either 'insert' or 'remove'
+ --inputfile             :   Inputfile location, substitute '
+' for directory as a wildcard
+ --key                   :   Name of key to insert/remove
+ --value                 :   Value of key to insert
+ --position                      :       Position in file to insert key (0, 1, 2, ...)
+ --help              :   print help info
+{code}
+
+h3. EXAMPLES
+
+PRETTIFY ALL trackData.json FILES FOR ALL EXPERIMENTS AND ALL
+       CHROMOSOMES:
+
+sudo /agua/0.6/bin/jbrowse/trackData.pl \ --inputfile
+       "/data/jbrowse/species/human/hg19/demo/
+/data/tracks/chr22/
+/trackData.json"
+       \ --mode pretty
+
+SET lazyfeatureUrlTemplate KEY FOR ALL chr22 trackData.json FILE:
+
+sudo /agua/0.6/bin/jbrowse/trackData.pl \ --inputfile
+       /data/jbrowse/species/human/hg19/demo/test1/data/tracks/chr22/test1/trackData.json
+       \ --mode insert \ --key "lazyfeatureUrlTemplate" \ --value
+       "data/tracks/chr22/test1/lazyfeatures-{chunk}.json"
+
+

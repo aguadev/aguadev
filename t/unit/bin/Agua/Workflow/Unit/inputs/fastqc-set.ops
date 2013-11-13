@@ -1,0 +1,24 @@
+{
+   "package" : "FASTQC",
+   "type" : "application",
+   "version" : "0.9.3",
+   "history" : "",
+   "installtype" : "ops",
+   "opsfile" : "https://api.github.com/repos/syoung/biorepository/syoung/fastqc/fastqc.ops",
+   "installfile" : "https://api.github.com/repos/syoung/biorepository/syoung/fastqc/fastqc.pm",
+   "licensefile" : "https://api.github.com/repos/syoung/biorepository/syoung/fastqc/LICENSE",
+   "readmefile" : "https://api.github.com/repos/syoung/biorepository/syoung/fastqc/README",
+   "description" : "A quality control tool for high throughput sequence data",
+   "website" : "http://www.bioinformatics.bbsrc.ac.uk/projects/fastqc",
+   "authors" : [
+      {
+         "email" : "stuartpyoung@gmail.com",
+         "name" : "Stuart Young"
+      }
+   ],
+   "publications" : [],
+   "organisations" : [],
+   "ISA" : {},
+   "acknowledgements" : [],
+   "citations" : []
+}

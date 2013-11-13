@@ -1,0 +1,626 @@
+<html>
+<head>
+
+<title> new function 1: with multiple arguments </title>
+
+<script type="text/javascript" src="dojo.1.2.2/dojo/dojo.js"
+	djConfig="isDebug: true, parseOnLoad: true, useCommentedJson: true"></script>
+
+</head>
+
+<body>
+
+
+<h1> new function 1: with multiple arguments </h1>
+
+<script>
+
+var workflowApplications =
+[
+    {
+        "name":"image2eland.pl",
+        "location":"bin/image2eland.pl",
+        "description": "Process images into base calls with Bustard and align reads against reference sequence with Eland",
+        "executor": "wperl",
+
+        "inputs":
+        {
+            "type":
+            {
+                'type': 'parameter',
+                'args': [ 'arguments.type.value' ]
+            },
+            
+            "rundir":
+            {
+                'type': 'directory',
+                'args': [ 'arguments.rundir.value' ]
+            },
+            
+            "geraldfile":
+            {
+                'type': 'parameter',
+                'args': [ 'arguments.geraldfile.value' ]
+            },
+            
+            "referencefile":
+            {
+                'type': 'file',
+                'format': 'fasta',
+                'args': [ 'arguments.referencefile.value' ]
+            },
+            
+            "outputdir":
+            {
+                'type': 'directory',
+                'value' : 'Project1/Workflow3-indels',
+                'args': [ 'arguments.outputdir.value' ]
+            },
+
+            "readlength":
+            {
+                'type': 'parameter',
+                'args': [ 'arguments.readlength.value' ]
+            },
+
+            "tiles":
+            {
+                'type': 'parameter',
+                'args': [ 'arguments.tiles.value' ]
+            }
+        },
+
+        "outputs":
+        {
+            "geraldfile":
+            {
+                'type': 'file',
+                'format': 'text',
+                'args': [ 'arguments.geraldfile.value' ]
+            },
+
+            "sequencefile":
+            {
+                'type': 'file',
+                'format': 'sequence',
+                'args': [ 'arguments.tiles.value', 'arguments.outputdir.value' ],
+                'params': 'tiles, outputdir',
+                'function': 'var tilesArray = tiles.split(","); var sequenceFiles = new Array; var sequenceFiles = ""; for ( var i = 0; i < tilesArray.length; i++ ) {   sequenceFile = tilesArray[i] + "_sequence.txt"; sequenceFiles += outputdir + "/" + sequenceFile + ","; } sequenceFiles = sequenceFiles.replace(/,$/, ""); return sequenceFiles;'
+            },
+            
+            "sortedfile":
+            {
+                'type': 'file',
+                'format': 'sorted',
+                'args': [ 'arguments.tiles.value', 'arguments.outputdir.value' ],
+                'params': 'tiles, outputdir',
+                'function': 'var tilesArray = tiles.split(","); var sortedFiles = new Array; var sortedFiles = ""; for ( var i = 0; i < tilesArray.length; i++ ) {   sortedFile = tilesArray[i] + "_sorted.txt"; sortedFiles += outputdir + "/" + sortedFile + ","; } sortedFiles = sortedFiles.replace(/,$/, ""); return sortedFiles;'
+            },
+
+            "make-error":
+            {
+                'type': 'file',
+                'format': 'error',
+                'args': [ 'arguments.outputdir.value' ],
+                'params': 'outputdir',
+                'function': 'var file = outputdir + "/make.error"; return file;'
+            },
+
+            "make-out":
+            {
+                'type': 'file',
+                'format': 'error',
+                'args': [ 'arguments.outputdir.value' ],
+                'params': 'outputdir',
+                'function': 'var file = outputdir + "/make.out"; return file;'
+            },
+
+            "makefile-error":
+            {
+                'type': 'file',
+                'format': 'error',
+                'args': [ 'arguments.outputdir.value' ],
+                'params': 'outputdir',
+                'function': 'var file = outputdir + "/makefile.error"; return file;'
+            },
+
+            "makefile-out":
+            {
+                'type': 'file',
+                'format': 'error',
+                'args': [ 'arguments.outputdir.value' ],
+                'params': 'outputdir',
+                'function': 'var file = outputdir + "/makefile.out"; return file;'
+            }
+        },
+    
+        'arguments':
+        {
+            'type':
+            {
+                'option': '--type',
+                'value': 'single',
+                'type': 'parameter',
+                'description': "Either single or paired reads",
+                'required' : true,
+                'args': [ 'inputs.type.value' ]
+            },
+
+            'rundir':
+            {
+                'option': '--rundir',
+                'value': 'Project1/Workflow3-indels',
+                'type': 'file',
+                'format': 'eland-sorted',
+                'description': '',
+                'required' : true,
+                'args': [ 'inputs.rundir.value' ]
+            },
+
+            'geraldfile':
+            {
+                'option': '--geraldfile',
+                'value': '/run2lane6-test/geraldfile.txt',
+                'type': 'file',
+                'format': 'gerald',
+                'description': '/full/path/to/eland_sorted.txt (output from Eland alignment)',
+                'required' : true,
+                'args': [ 'inputs.geraldfile.value' ]
+            },
+
+            'outputdir':
+            {
+                'option': '--outputdir',
+                'value': '',
+                'type': 'directory',
+                'format': 'eland-sorted',
+                'description': '/full/path/to/eland_sorted.txt (output from Eland alignment)',
+                'required' : true,
+                'args': [ 'inputs.outputdir.value' ]
+            },
+
+            'referencefile':
+            {
+                'option': '--referencefile',
+                'value': '/store/home/syoung/base/pipeline/human-mtdna/human-mtDNA-AC_000021.fasta',
+                'type': 'file',
+                'format': 'fasta',
+                'description': '/full/path/to/reference fasta file',
+                'required': true,
+                'args': [ 'inputs.referencefile.value' ]
+            },
+
+            'readlength':
+            {
+                'option': "--readlength",
+                'type': 'parameter',
+                'value': '30',
+                'format': '',
+                'description': 'Run Eland with "--readlength" option (Boolean)',
+                'required': false,
+                'args': [ 'inputs.readlength.value' ]
+            },
+
+            'tiles':
+            {
+                'option': "--tiles",
+                'type': 'parameter',
+                'value': 's_6_150',
+                'format': '',
+                'description': 'Process images for these tiles only',
+                'required': false,
+                'args': [ 'inputs.tiles.value' ]
+            }
+        }
+    },
+    
+    {
+        "name":"eland2ace.pl",
+        "location":"bin/eland2ace.pl",
+        "description": "Convert Eland output 'sorted.txt' file into an .ace file",
+        "executor": "wperl",
+
+        "inputs":
+        {
+            "sortedfile":
+            {
+                'format': 'sorted',
+                'type': 'file',
+                'args': [ 'outputs.sortedfile.value' ]
+            }
+        },
+
+        'arguments':
+        {
+            'inputfile':
+            {
+                'option': '-i',
+                'type': 'file',
+                'format': 'eland-sorted',
+                'description': '/full/path/to/eland_sorted.txt (output from Eland alignment)',
+                'required' : true,
+                'args': [ 'inputs.sortedfile.value' ]
+            },
+            
+            'referencefile':
+            {
+                'option': '-r',
+                'type': 'directory',
+                'format': 'fasta',
+                'description': '/full/path/to/directory/containing/reference_sequences.2bpb, .idx and .vld files',
+                'required': true,
+                'value' : ''
+            }
+        },
+
+        "outputs":
+        {
+            'acefile':
+            {
+                'format': 'ace', 'type': 'file',
+                'args': [ 'arguments.inputfile.value' ],
+                'params': 'inputfile',
+                'function': 'var acefile = inputfile; acefile = acefile.replace(/\\.txt/, ".ace"); return acefile;'
+            }
+        }
+    },
+    
+
+
+    {
+        "name":"splitace.pl",
+        "location":"bin/splitace.pl",
+        "description": "Convert .ace file into multiple ace files",
+        "executor": "wperl",
+
+        "inputs":
+        {
+            "acefile":
+            {
+                'format': 'ace', 'type': 'file',
+                'args': [ 'outputs.acefile.value' ]
+            }
+        },
+        
+        "outputs":
+        {
+            "acefiles":
+            {
+                'format': 'ace', 'type': 'file',
+                'args': [ 'arguments.inputfile.value' ],
+                'params': 'inputfile',
+                'function': 'var acefile = inputfile; acefile = acefile.replace(/\\.ace/, ".*.ace"); return acefile;'
+            }
+        },
+        
+        'arguments':
+        {
+            'inputfile':
+            {
+                'option': '-i',
+                'value': '',
+                'type': 'file',
+                'format': 'ace',
+                'description': '/full/path/to/input_file',
+                'required' : true,
+                'args': [ 'inputs.acefile.value' ],
+            },
+            
+            'outputdir':
+            {
+                'option': '-o',
+                'value': '',
+                'type': 'directory',
+                'format': 'inputfile',
+                'description': '/full/path/to/directory/containing/reference_sequences.2bpb, .idx and .vld files',
+                'required': false,
+                'args': [ 'inputs.acefile.value'],
+                'params': 'acefile',
+                'function': 'var outputdir = acefile; outputdir = outputdir.replace(/\\\\/[^\\/]+$/, ""); return outputdir;'
+            }
+        }
+    }
+    
+
+];
+
+var workflow = {
+
+	// EXTRACT ARGUMENT VALUES FROM APPLICATION OBJECT FOR EACH ARGUMENT
+	// USED AS FOLLOWS:
+	//
+	//		CURRENT application AND CURRENT APPLICATION functionArguments 
+	//			-> GENERATE OUTPUTS FOR CURRENT APPLICATION
+	//
+	//		PREVIOUS application AND CURRENT APPLICATION functionArguments 
+	//			-> GENERATE INPUTS FOR CURRENT APPLICATION
+	//
+	
+	parameterValues : function (application, functionArguments)
+	{
+		//console.log("9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9* parameterValues(application, functionArguments)");
+		//console.log("9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9* application.name: " + application.name);
+		//console.log("9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9* application: " + dojo.toJson(application));
+		//console.log("9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9* functionArguments: " + dojo.toJson(functionArguments));
+		if ( ! functionArguments )
+		{
+			return;
+		}
+        
+        // RETURN AN ARRAY
+		var parameterValues = new Array;
+		for ( var index = 0; index < functionArguments.length; index++ )
+		{
+			// EXTRACT ARGUMENT VALUE FROM APPLICATION OBJECT
+			var array = functionArguments[index].split(".");
+			var value = application;
+			for ( var itemIndex = 0; itemIndex < array.length; itemIndex++ )
+			{
+				//console.log("9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9* value " + itemIndex + " (BEFORE): " + dojo.toJson(value));
+				value = value[array[itemIndex]];
+				//console.log("9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9* value (AFTER): " + dojo.toJson(value));
+			}	
+            parameterValues.push(value);
+        }
+
+        // RETURN A STRING
+//		var parameterValues = '';
+//		for ( var index = 0; index < functionArguments.length; index++ )
+//		{
+//			// EXTRACT ARGUMENT VALUE FROM APPLICATION OBJECT
+//			var array = functionArguments[index].split(".");
+//			var value = application;
+//			for ( var itemIndex = 0; itemIndex < array.length; itemIndex++ )
+//			{
+//				//console.log("9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9* value " + itemIndex + " (BEFORE): " + dojo.toJson(value));
+//				value = value[array[itemIndex]];
+//				//console.log("9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9* value (AFTER): " + dojo.toJson(value));
+//			}	
+//        	parameterValues += value + ",";
+//        	//parameterValues += "\'" + value + "\',";
+//        	//parameterValues += '"' + value + '",';
+//        }
+//		parameterValues = parameterValues.replace(/,$/, '');
+
+
+		//console.log("9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9*9* parameterValues: " + dojo.toJson(parameterValues));
+		
+		return parameterValues;
+	},
+
+
+
+	//	METHOD:		workflowIO
+	//
+	//	FOR EACH APPLICATION IN workflowApplications
+	//
+	// 		1. SET INPUTS DEPENDENT ON THE OUTPUTS OF THE PREVIOUS APPLICATION
+	//
+	// 		2. SET ARGUMENTS DEPENDENT ON INPUTS
+	//
+	// 		3. SET OUTPUTS DEPENDENT ON ARGUMENTS
+	//
+	// (NB: REPEAT STEP 3 IF USER CHANGES ARGUMENTS MANUALLY)
+
+
+	// THE REASON FOR EXTRACTING THE LIST OF OUTPUT FILES FROM THE
+	// APPLICATION LIKE THIS IS THAT THE OUTPUT FILES MAY NOT BE
+	// MENTIONED IN THE ARGUMENTS SO WE HAVE TO INFER THE OUTPUT FILE
+	// NAMES FROM THE APPLICATIONS ARGUMENT LIST USING SOME ADDITIONAL LOGIC
+	// CONTAINED IN THE 'outputs' ENTRY FOR EACH APPLICATION. E.G.:
+	//  "outputs":
+	//	{
+	//		{
+	//			'name': "acefile",
+	//			'format': 'ace', 'type': 'file',
+	//			'arguments': [ 'arguments.inputfile.value' ],
+	//			'javascript': "function(inputfile) { var acefile = inputfile; acefile = acefile.replace(/\\.txt/, \".ace\"); return acefile; }"
+	//		}
+	//	}
+	//
+	//
+	//	"inputs":
+	//	{
+	//		"sortedfile":
+	//		{
+	//			'format': 'sorted',
+	//			'type': 'file',
+	//			'args': [ 'outputs.sortedfile.value' ],
+	//			'javascript': "new Function('inputfile', 'var acefile = inputfile; acefile = acefile.replace(/\\.txt/, \".ace\"); return acefile;')"
+	//		}
+	//	},
+	//
+	//
+	//	'arguments':
+	//	{
+	//		'type':
+	//		{
+	//			'option': '--type',
+	//			'value': 'single',
+	//			'type': 'parameter',
+	//			'description': "Either 'single' or 'paired' reads",
+	//			'required' : true
+	//		},
+	//
+	//		'rundir':
+	//		{
+	//			'option': '--rundir',
+	//			'value': 'Project1/Workflow3-indels',
+	//			'type': 'file',
+	//			'format': 'eland-sorted',
+	//			'description': '',
+	//			'required' : true
+	//		}
+	//	}
+	//
+	//
+
+	value : function (parameterValues, params, newFunction)
+	{
+		//console.log("dddddddddddddddddddddddddddd plugins.workflow.Workflow.value");
+		//console.log("dddddddddddddddddddddddddddd parameterValues: " + dojo.toJson(parameterValues));
+		
+		var value;
+		if ( ! params )
+		{
+			//console.log("dddddddddddddddddddddddddddd params NOT DEFINED. Setting inputFile to parameterValues: " + parameterValues);
+			if ( parameterValues )
+			{
+				value = parameterValues[0];
+			}
+			else
+			{
+				value = '';
+			}
+		}
+		else
+		{
+			//console.log("dddddddddddddddddddddddddddd params IS DEFINED. Generating parameterValues with params: " + params);
+			//console.log("dddddddddddddddddddddddddddd params IS DEFINED. Generating parameterValues with newFunction: " + newFunction);
+			//console.log("dddddddddddddddddddddddddddd new Function('" + params + "', '" + newFunction + "')");
+			
+			var argumentFunction = eval("new Function('" + params + "', '" + newFunction + "')");
+			//console.log("dddddddddddddddddddddddddddd argumentFunction : " + argumentFunction);
+			//console.log("dddddddddddddddddddddddddddd Doing argumentFunction(" + parameterValues + ")");
+
+
+
+            //var argumentString  = "'s_6_150' " + ", 'Project1/Workflow3-indels'";
+    //        var argumentString = '';
+    //        for ( var index in parameterValues )
+    //        {
+    //            argumentString += "'" + parameterValues[index] + "',";
+    //        }
+    //		argumentString = argumentString.replace(/,$/, '');
+    //        console.log("dddddddddddddddddddddddddddd argumentString: " + argumentString);
+			//value = argumentFunction(argumentString);
+
+            //var array = new Array;
+            //array.push(parameterValues[0]);
+            //array.push(parameterValues[1]);
+			//value = argumentFunction(array);
+
+            
+            // HACK TO DEAL WITH UP TO FIVE ARGUMENTS
+			value = argumentFunction(parameterValues[0], parameterValues[1], parameterValues[2], parameterValues[3], parameterValues[4]);
+
+            // DIDN'T WORK
+			//value = argumentFunction(parameterValues.split(","));
+			//value = argumentFunction(parameterValues[0], parameterValues[1]);
+            
+            // WORKED
+			//value = argumentFunction('s_6_150', 'Project1/Workflow3-indels');
+		}
+		
+		//console.log("dddddddddddddddddddddddddddd value: " + value);
+		return value;
+	},
+
+
+    getValues : function(resources, application)
+    {
+        //console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm Doing resourceS for application : " + application.name);
+        
+        // MAKE SURE resources IS AN OBJECT, CONVERT FROM JSON IF NOT
+        if ( typeof resources !== "object" )
+        {
+            resources = dojo.fromJson(resources);
+        }
+        //console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm resources json: " + dojo.toJson(resources));
+    
+        // GET resources
+        for ( var resource in resources )
+        {
+            //console.log("\mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmn resource: " + resource + ", current value: " + resources[resource].value);
+            
+            var functionArguments = resources[resource].args;
+            //console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm functionArguments: " + functionArguments);
+
+            //console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm Getting parameterValues...");
+            var parameterValues = this.parameterValues(application, functionArguments);
+            //console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm parameterValues: " + dojo.toJson(parameterValues));
+            
+            //if ( resources[resource].function )
+            //{
+                //console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm resources[resource].function: " + resources[resource].function);
+            //}
+
+            if ( parameterValues )
+            {
+                //console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm Getting the value for " + resource + "...");
+                var value = this.value(parameterValues, resources[resource].params, resources[resource].function);
+                //console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm value " + dojo.toJson(value));
+
+                if ( value && value != '' && value != "undefined" && value[0] != "undefined" )
+                {
+                    resources[resource]["value"] = value;
+                    //console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm " + resource + " value: " + dojo.toJson(value));
+                }
+                else
+                {
+                    //console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm No new value for " + resource);
+                    //console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm Keeping original value: " + resources[resource]["value"]);
+                }
+            }
+            else
+            {
+                //console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm parameterValues not defined for " + resource);
+            }
+
+            console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm resources[" + resource + "]['value']: " + resources[resource]["value"]);
+            
+
+        }
+    },
+
+
+	workflowIO : function (workflowApplications)
+	{
+		
+		console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn plugins.workflow.Workflow.workflowIO(workflowApplications)");
+		for ( var applicationIndex = 0; applicationIndex < workflowApplications.length; applicationIndex++ )
+		{
+			var application = workflowApplications[applicationIndex];
+			var previousApplication = workflowApplications[applicationIndex - 1];
+			//console.log("--*--*--*--*--*--*--*--*--* application: " + dojo.toJson(application));
+			//console.log("--*--*--*--*--*--*--*--*--* previousApplication: " + dojo.toJson(previousApplication));
+			
+			// 1. SET INPUTS DEPENDENT ON THE OUTPUTS OF THE PREVIOUS APPLICATION
+			//
+			if ( applicationIndex > 0 )
+			{
+                console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn ********************************\n\n");
+                console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn Doing INPUTS for application: " + application.name);
+                this.getValues(application.inputs, previousApplication);
+			} // if ( applicationIndex > 0 )
+
+
+			// 2. SET ARGUMENTS DEPENDENT ON INPUTS
+			//
+            console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn ********************************\n\n");
+			console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn Doing ARGUMENTS for application: " + application.name);
+            this.getValues(application.arguments, application);
+			
+			// 3. SET OUTPUTS DEPENDENT ON ARGUMENTS
+			//
+            console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn ********************************\n\n");
+			console.log("nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn Doing OUTPUTS for application: " + application.name);
+            this.getValues(application.outputs, application);
+
+		} // foreach workflowApplications
+	},
+};
+
+
+workflow.workflowIO(workflowApplications);
+                     
+
+ 
+
+</script>
+
+</body>
+
+</html>
+
+    

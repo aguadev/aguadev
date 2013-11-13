@@ -1,0 +1,25 @@
+{
+    "name":   "aguatest",
+    "version":        "0.8.0",
+    "build":          "",
+    "type":           "application",
+    "source":         "git",
+    "keywords":       ["tests", "agua", "bioinformatics", "workflows", "cloud", "next-generation", "sequencing", "analysis"],
+    "description":    "Tests for Agua cloud workflow platform",
+    "website ":       "http://www.aguadev.org",
+    "installtype":    "ops",
+    "opsfile":        "https://api.github.com/repos/syoung/biorepository/syoung/aguatest/aguatest.ops",
+    "installfile":    "https://api.github.com/repos/syoung/biorepository/syoung/aguatest/aguatest.pm",
+    "resources":      {
+        "ec2snapshot": "XXXXXXXX"
+    },
+    "licensefile":    "https://api.github.com/repos/syoung/biorepository/syoung/aguatest/LICENSE",
+    "readmefile":     "https://api.github.com/repos/syoung/biorepository/syoung/aguatests/README",
+    "installtype":    "ops",
+    "author":         [{ "name": "Stuart", "surname": "Young", "email": "stuartpyoung@gmail.com" }],
+    "publication":    [],
+    "organisation":   [],
+    "ISA":            {},
+    "acknowledgements": [],
+    "citations":      []
+}

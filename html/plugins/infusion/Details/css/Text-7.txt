@@ -1,0 +1,98 @@
+/* 'DETAILED' GRIDS */
+.infusion .information .dgrid-column-0,
+.infusion .information .dgrid-header .dgrid-column-0{
+    width: 250px !important;
+}
+
+.infusion .detailed .dgrid-column-0,
+.infusion .detailed .dgrid-header .dgrid-column-0 {
+    width: 150px !important;
+}
+
+.infusion .detailed .hidden {
+    display: none;
+    visibility: invisible;
+}
+
+.infusion .detailed {
+    position: absolute;
+    left: 0;
+    top: 300px;
+    bottom: 0;
+    min-width: 600px;
+    min-height: 300px; /* override default height: 30em; in dgrid.css */
+    max-height: 100% !important;
+}
+
+.infusion .has-ie-6 .infusion .detailed {
+    width: 100%;
+    /* Give the grid a height.  Not optimal, but we'd need more JS for better. */
+    height: 20em;
+}
+
+.infusion .detailed .dgrid-cell {
+    width: auto;
+    border: 0;
+}
+.infusion .detailed .dgrid-header th {
+    border: 0;
+    border-right: 1px solid #a6a6a6;
+}
+.infusion .detailed .dgrid-header th:last-child {
+    border: 0;
+}
+.infusion .detailed .dgrid-row-even {
+    background-color: #f2f6fa;
+}
+.infusion .detailed .dgrid-row-even.dgrid-selected {
+    background-color: #bfd6eb;
+}
+.infusion .detailed .dgrid-row {
+}
+
+.infusion .detailed .field-Time,
+.infusion .detailed .field-Year { 
+    text-align: right; 
+}
+.infusion .detailed .dgrid-cell .dgrid-cell-padding .dgrid-column-0 .field-sample_barcode,
+.infusion .detailed .dgrid-cell .field-sample_barcode {
+    width: 150px !important;
+    margin-right: 10px !important;
+    /*border: 3px solid red;*/
+}
+.infusion .detailed .dgrid-column-project_id {
+    width: 25px !important;
+}
+.infusion .detailed .dgrid-column-status_id {
+    width: 60px !important;
+}
+.infusion .detailed .dgrid-column-build_version {
+    width: auto !important;
+}
+.infusion .detailed .dgrid-column-build_location {
+    width: auto !important;
+}
+.infusion .detailed .dgrid-column-project_manager {
+    width: 60px !important;
+}
+.infusion .detailed .dgrid-column-data_analyst {
+    width: auto !important;
+}
+
+
+.infusion .detailed .dijitTitlePaneContentInner {
+    padding: 0px !important;
+}
+
+.infusion .detailed .information .dgrid  {
+    height: 50px !important;
+}
+.infusion .detailed .information .dgrid-scroller  {
+    top: -5px !important;
+}
+
+/*.infusion .detailed .information .dgrid-cell {
+    width: auto !important;
+}
+*/
+

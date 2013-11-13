@@ -1,0 +1,10 @@
+/mnt/software/jbrowse/1.9.8/extlib/bin/gff3_from_fasta
+/mnt/software/jbrowse/1.9.8/extlib/lib/perl5/Bio/GFF3/LowLevel.pm
+/mnt/software/jbrowse/1.9.8/extlib/lib/perl5/Bio/GFF3/LowLevel/Parser.pm
+/mnt/software/jbrowse/1.9.8/extlib/lib/perl5/Bio/GFF3/LowLevel/Parser/1_0_backcompat.pm
+/mnt/software/jbrowse/1.9.8/extlib/lib/perl5/Bio/GFF3/Transform/FromFasta.pm
+/mnt/software/jbrowse/1.9.8/extlib/man/man1/gff3_from_fasta.1p
+/mnt/software/jbrowse/1.9.8/extlib/man/man3/Bio::GFF3::LowLevel.3pm
+/mnt/software/jbrowse/1.9.8/extlib/man/man3/Bio::GFF3::LowLevel::Parser.3pm
+/mnt/software/jbrowse/1.9.8/extlib/man/man3/Bio::GFF3::LowLevel::Parser::1_0_backcompat.3pm
+/mnt/software/jbrowse/1.9.8/extlib/man/man3/Bio::GFF3::Transform::FromFasta.3pm

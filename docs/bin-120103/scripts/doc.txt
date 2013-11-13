@@ -1,0 +1,39 @@
+
+h3. APPLICATION
+
+doc
+
+h3. PURPOSE
+
+GENERATE PERLDOC-BASED WIKI MARKUP FOR APPLICATIONS AND MODULES
+
+h3. INPUT
+
+1. bin DIRECTORY LOCATION
+
+2. LOCATION OF OUTPUT DIRECTORY FOR DOCUMENTATION FILES
+
+h3. OUTPUT
+
+ONE DOCUMENTATION FILE FOR EACH 
+.pl APPLICATION IN NESTED
+
+SUBDIRS MIRRORING THE bin DIRECTORY
+
+h3. USAGE
+
+{code}
+sudo ./doc.pl <--inputdir String> <--outputdir String> [--help]
+ --name      :   Name of application
+ --inputdir   : Name of inputdir where the .git directory is located
+ --outputdir :  Create packages inside RELEASE dir in the outputdir
+ --help      :   Print help info
+{code}
+
+h3. EXAMPLES
+
+./doc.pl \
+ --inputdir /agua/0.6/bin \
+ --outputdir /agua/0.6/docs/bin
+
+

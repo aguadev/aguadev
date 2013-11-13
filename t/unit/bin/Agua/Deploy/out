@@ -1,0 +1,25 @@
+1..11
+ok 1 - use Conf::Agua;
+ok 2 - use Test::Agua::Common::App;
+ok 3 - conf isa Conf::Agua
+ok 4 - object isa Test::Agua::Common::App
+2013-07-06 06:46:38    [DEBUG]   	Agua::Common::App::parseEmboss	382	description: Translate nucleic acid sequences
+2013-07-06 06:46:38    [DEBUG]   	Agua::Common::App::parseEmboss	385	version: 6.5.7.0
+2013-07-06 06:46:38    [DEBUG]   	Agua::Common::App::parseEmboss	394	standard: 
+  [-sequence]          seqall     Nucleotide sequence(s) filename and optional
+                                  format, or reference (input USA)
+  [-outseq]            seqoutall  [<sequence>.<format>] Protein sequence
+                                  set(s) filename and optional format (output
+                                  USA)
+***
+2013-07-06 06:46:38    [DEBUG]   	Agua::Common::App::parseEmbossParameters	458	lines: ["  [-abc]               one        No default description of abc and","                                  rest of ABC description","  [-cde]               two        [default cde] Description of cde and","                                  rest of CDE description"]
+2013-07-06 06:46:38    [DEBUG]   	Agua::Common::App::parseEmbossParameters	462	line:   [-abc]               one        No default description of abc and
+2013-07-06 06:46:38    [DEBUG]   	Agua::Common::App::parseEmbossParameters	468	lines[1]:                                   rest of ABC description
+2013-07-06 06:46:38    [DEBUG]   	Agua::Common::App::parseEmbossParameters	471	HERE
+2013-07-06 06:46:38    [DEBUG]   	Agua::Common::App::parseEmbossParameters	480	argument: [-abc]
+2013-07-06 06:46:38    [DEBUG]   	Agua::Common::App::parseEmbossParameters	482	name: one
+2013-07-06 06:46:38    [DEBUG]   	Agua::Common::App::parseEmbossParameters	486	value: 
+2013-07-06 06:46:38    [DEBUG]   	Agua::Common::App::parseEmbossParameters	487	description: No default description of abc and rest of ABC description
+2013-07-06 06:46:38    [DEBUG]   	Agua::Common::App::parseEmbossParameters	462	line:   [-cde]               two        [default cde] Description of cde and
+2013-07-06 06:46:38    [DEBUG]   	Agua::Common::App::parseEmbossParameters	468	lines[3]:                                   rest of CDE description
+2013-07-06 06:46:38    [DEBUG]   	Agua::Common::App::parseEmbossParameters	471	HERE

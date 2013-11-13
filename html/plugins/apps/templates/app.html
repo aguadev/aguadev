@@ -1,0 +1,320 @@
+<div dojoattachpoint="containerNode">
+
+	<!-- APPS TAB -->
+	<div
+		dojoAttachPoint="mainTab"
+		dojoType="dijit.layout.ContentPane"
+		title="Apps"
+		style="height: 100% !important; max-height: auto !important; width: 390px !important; padding: 0 !important;"
+	>
+
+<table width="100%" class="app">
+	<tr valign="top" width="100%">
+		<td colspan="2" class="tabTitle" align="center">
+			Apps
+		</td>
+	</tr>
+
+	<tr valign="top" width="95%">
+		<td width="100%">
+			<table width="100%">
+				<tr>
+					<td
+						colspan="3"
+						dojoAttachPoint="syncAppsButton"
+						class="syncAppsButton"
+						title="Click to sync apps to biorepository"
+						dojoAttachEvent="onclick:showSyncDialog"
+					>
+						Sync
+					</td>
+				</tr>
+
+				<tr width="100%">
+
+					<td colspan="3" height="32px">
+						
+						<table cellspacing="0" cellpadding="0" border="0" style="padding: 0; margin: 0;">
+
+							<tr>
+
+								<td 
+									style="padding-right: 10px;" >
+									<textarea
+										spellcheck="false"
+										dojoAttachPoint="name"
+										class="name"
+										cols="30"
+										rows="1"
+										title="name: Name of application"
+										>Name</textarea>
+								</td>
+	
+								<td height="20px"
+									width="120px"
+									align="right">
+									
+									<div
+										dojoAttachPoint="addAppButton"
+										class="addAppButton"
+									>
+									New App
+									</div>
+								</td>
+					
+							</tr>
+						</table>
+					</td>
+
+				</tr>
+
+				<tr class="headerRow" width="100%" height="8px">
+					<td width="67%" colspan="2">Version</td>
+					<td> &nbsp; </td>
+				</tr>
+
+
+				<tr width="100%">
+					<td width="67%" colspan="2">
+						<textarea
+							spellcheck="false"
+							dojoAttachPoint="version"
+							class="version"
+							cols="40"
+							rows="1"
+							title="version: Version of package (format: N.N.N, i.e., major.minor.patch)"
+						>0.0.1</textarea>
+					</td>
+					
+					<td colspan="1"
+						title="localonly: Select so that application will only run locally (e.g., a herder that submits jobs to the cluster))"
+					>
+						<span
+							dojoAttachPoint="localonly"
+							class="localonly">
+							Local
+						</span>
+						
+						<span
+							dojoAttachPoint="localonly"
+							dojoType="dijit.form.CheckBox"
+							checked="false"
+							class="localonlyCheckbox"
+						></span>
+					</td>
+				</tr>
+				
+				<tr class="headerRow" width="100%" height="8px">
+					<td width="33%">Type</td>
+					<td width="33%">Executor</td>
+					<td width="33%">Package</td>
+				</tr>
+
+				<tr width="100%">
+					<td width="33%">
+						<textarea
+							spellcheck="false"
+							dojoAttachPoint="type"
+							class="type"
+							style="width: 100%; font-weight: bolder; font-family: Verdana;";
+							cols="40"
+							rows="1"
+							title="type: Type of application (e.g., 'pipeline', 'converter', 'utility')"
+							>Type</textarea>
+					</td>
+
+					<td width="34%"
+						style="padding-left: 4px; padding-right: 4px;" >
+						<textarea
+							spellcheck="false"
+							dojoAttachPoint="executor"
+							class="executor"
+							style="width: 100%; font-weight: bolder; font-family: Verdana;";
+							cols="40"
+							rows="1"
+							title="executor: Additional executable used to run application (e.g., '/usr/bin/perl')"
+							>Executor</textarea>
+					</td>
+
+					<td width="33%">
+						<div
+							dojoAttachPoint="packageCombo"
+							dojoType="dijit.form.ComboBox"
+							class="packageCombo"
+							autocomplete="true"
+							hasDownArrow="true"
+							disabled="false"
+							style="width: 150px;"
+							title="Select the order of the displayed applications"
+						>
+						</div>
+					</td>
+				</tr>
+
+				<tr class="headerRow" width="100%" height="8px">
+					<td width="67%" colspan="2">Location</td>
+					<td width="33%">&nbsp;</td>
+				</tr>
+
+				<tr width="100%">
+					<td colspan="3">
+						<textarea
+							spellcheck="false"
+							dojoAttachPoint="location"
+							class="location"
+							style="width: 100%; font-weight: bolder; font-family: Verdana;";
+							cols="40"
+							rows="1"
+							title="location: Path relative to package installdir, e.g., (e.g., 'bin/apps/myScript.pl')"
+							>Location</textarea>
+					</td>
+				</tr>
+
+
+				<tr class="headerRow">
+					<td width="100%"
+						colspan="3"
+						class="toggleTitle closed"
+						dojoAttachPoint="toggler"
+						dojoAttachEvent="onclick:toggle"
+					>Details</td>
+				</tr>
+			</table>
+		</td>
+
+	</tr>
+	<tr class="inputs" >
+		<td>
+
+			<table
+				style="display: none"
+				dojoAttachPoint="togglePoint"
+				width="100%"
+				style="padding: 0px;"
+			>
+				
+				<tr class="headerRow">
+					<td colspan="3">Description</td>
+				</tr>
+
+				<tr>
+					<td colspan="3">
+						<textarea
+							spellcheck="false"
+							dojoAttachPoint="description"
+							class="description"
+							style="width:100%; font-weight: bolder; font-family: Verdana;";
+							cols="40"
+							rows="1"
+							title="description: A brief description of the application"
+						>Description</textarea>
+					</td>
+				</tr>
+
+				<tr class="headerRow" width="100%">
+					<td colspan="3">Notes</td>
+				</tr>
+
+				<tr>
+					<td colspan="3">
+						<textarea
+							spellcheck="false"
+							dojoAttachPoint="notes"
+							class="notes"
+							value="Notes"
+							style="width: 100%; font-weight: bolder; font-family: Verdana;";
+							cols="40"
+							rows="1"
+							title="notes: Notes on the application/build/etc. (e.g., release notes, constraints)"
+						>Notes</textarea>
+					</td>
+				</tr>
+
+				<tr class="headerRow" width="100%">
+					<td
+						colspan="3"
+						title="url: Web address of website providing further details (e.g., http://mysite.com/applications)"
+						>URL</td>
+				</tr>
+
+				<tr>
+					<td colspan="3">
+						<textarea
+							spellcheck="false"
+							dojoAttachPoint="url"
+							class="url"
+							value="URL"
+							style="width: 100%; font-weight: bolder; font-family: Verdana;";
+							cols="40"
+							rows="1"
+							title="url: Web address of website providing further details (e.g., http://mysite.com/applications)"
+						>URL</textarea>
+					</td>
+				</tr>
+
+			</table>
+		</td>
+	</tr>
+	
+	<tr valign="top" width="95%">
+		<td width="95%">
+			<div class="label"> Application List Order </div>
+		</td>
+	</tr>
+
+	<tr>
+		<td align="center">
+			<div
+				dojoAttachPoint="appsCombo"
+				dojoAttachEvent="onChange:changeDragSource"
+				dojoType="dijit.form.ComboBox"
+				class="appsCombo"
+				popupClass="sources appsCombo dijitReset dijitMenu"
+				autocomplete="true"
+				hasDownArrow="true"
+				disabled="false"
+				style="width: 250px;"
+			>
+			</div>
+		</td>
+	</tr>
+	
+	<tr>
+		<td>
+			<div
+				dojoAttachPoint="dragSourceNode"
+				class="dragSource"
+				style="height: 395px; width: 96%;"
+			>
+			</div>
+		</td>
+	</tr>
+
+	<tr align="center">
+		<td align="center">
+
+			<!-- TRASH CONTAINER -->
+			<div
+				dojoAttachPoint="trashContainer"
+				class="trash"
+				style="height: 60px; width: 150px; align: center;" 
+				>
+				<div
+					dojoAttachPoint="trashIcon"
+					class="trashIcon"
+					style="height: 60px; width: 60px;"
+					>
+				</div>
+			</div>
+		</td>
+	</tr>
+</table>
+
+
+
+	</div>
+	<!-- END SOURCES TAB -->
+	
+</div> 
+
+

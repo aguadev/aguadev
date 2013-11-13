@@ -1,0 +1,51 @@
+.adminIcon {
+	background-image: url("../../../plugins/admin/images/admin.png");
+	background-repeat: no-repeat;
+	width: 18px;
+	height: 18px;
+	position: relative;
+	top: 2px;
+	text-align: center;
+}
+
+.adminIcon* { background-position: 0px; }
+
+.firstLabel, .adminHeader {
+	text-align:	center;
+	font-weight: bolder;
+	font-size: 18px;
+	font-family: Times New Roman;
+}
+
+.adminHeaderRow {
+	text-align:	center;
+	font-weight: bolder;
+	font-style: italic; 
+	font-size: 20px;
+	font-family: Verdana, Arial;
+}
+
+
+.adminTable {
+    position: relative;
+	top: 100px;
+	left: 20px;
+	margin: 5px;
+    border-collapse: collapse;	
+}
+
+.adminTable td {
+    border-width: 1px;
+    border-style: solid;
+    border-color: #ccc;
+    padding: 5px;
+}
+
+.adminTable th {
+    border-width: 1px;
+    border-style: solid;
+    border-color: #ccc;
+    padding: 5px;
+    background-color: #f0f0f0;
+    text-align: left;
+}

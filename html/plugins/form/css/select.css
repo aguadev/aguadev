@@ -1,0 +1,22 @@
+.form.select .label {
+    min-width: 200px !important;
+    font-weight: bold;
+    text-align: center;
+    height: 10px !important;
+    float: right !important;
+    vertical-align: middle !important;
+    background-color: #EEE !important;
+    height: 100% !important;
+}
+
+.form.select .input,
+.form.select .dijitSelect {
+    border: 2px solid red !important;
+    color: red !important;
+    width: 200px !important;
+}
+
+.form.select .options {
+    position: relative !important;
+    top: -2px !important;
+}

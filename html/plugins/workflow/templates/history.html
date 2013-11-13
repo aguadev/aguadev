@@ -1,0 +1,52 @@
+<div dojoAttachPoint="containerNode">
+
+    <!-- HISTORY TAB -->
+    <div
+        dojoAttachPoint="mainTab" 
+        dojoType="dijit.layout.ContentPane"
+        title="History"
+        parseOnLoad="false"
+        class="history"
+        style=" height: 100%; width: 100%; padding: 0 !important;"
+    >
+
+        <table width="100%">
+            <tr>
+                <td colspan="5" class="tabTitle" align="center">Workflow History</td>
+            </tr>
+            <tr>
+                <td width="20%"></td>
+                <td
+                    dojoAttachPoint="downloadHistoryButton"
+                    dojoAttachEvent="onclick:downloadHistory"
+                    class="downloadHistoryButton"															width="20%"
+                    align="center" >
+                </td>
+                <td width="20%"></td>
+                <td
+                    dojoAttachPoint="refreshHistoryButton"
+                    dojoAttachEvent="onclick:showHistory"
+                    class="refreshHistoryButton" 															width="20%"
+                    align="center" >
+                </td>
+                <td width="20%"></td>
+            </tr>
+            <tr class="titles">
+                <td width="20%"></td>
+                <td width="20%" height="12px" align="center">Download</td>
+                <td width="20%"></td>
+                <td width="20%" height="12px" align="center">Refresh</td>
+                <td width="20%"></td>
+            </tr>
+
+        </table>
+
+        <div
+            dojoAttachPoint="historyTable" 
+            style="height:100%;width:100%;"
+            parseOnLoad="false"
+            >
+        </div>
+
+    </div>
+    <!-- END OF HISTORY TAB -->

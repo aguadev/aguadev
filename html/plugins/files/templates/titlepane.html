@@ -1,0 +1,32 @@
+<div dojoAttachPoint="containerNode">
+
+		<div dojoAttachEvent="onclick:toggle,onkeypress: _onTitleKey,onfocus:_handleFocus,onblur:_handleFocus" tabindex="0"
+			waiRole="button"
+			class="dijitTitlePaneTitle" dojoAttachPoint="titleBarNode,focusNode">
+	
+			<img src="${_blankGif}" alt="" dojoAttachPoint="arrowNode" class="filesArrowNode" waiRole="presentation">
+				<span dojoAttachPoint="arrowNodeInner" class="dijitArrowNodeInner"></span>
+			<img src="${_blankGif}" dojoAttachPoint="refresh" class="refreshTitlePane" dojoAttachEvent="onclick:refresh">
+	
+			<span dojoAttachPoint="titleNode" class="dijitTitlePaneTextNode">
+				
+				<table dojoAttachPoint='header' class='header'>
+					<tr>
+						<td dojoAttachPoint="ownerNode" class='owner' title='Owner'></td>
+						<td dojoAttachPoint="nameNode" class='name'></td>
+						<td dojoAttachPoint="locationNode" class='location'></td>
+						<td dojoAttachPoint="descriptionNode" class='description' title='Description'></td>
+					</tr>
+				</table>
+				
+			</span>
+			
+		</div>
+		<div class="dijitTitlePaneContentOuter" dojoAttachPoint="hideNode">
+			<div class="dijitReset" dojoAttachPoint="wipeNode">
+				<div class="dijitTitlePaneContentInner" dojoAttachPoint="containerNode" waiRole="region" tabindex="-1">
+					<!-- nested divs because wipeIn()/wipeOut() doesn't work right on node w/padding etc.  Put padding on inner div. -->
+				</div>
+			</div>
+		</div>
+</div>

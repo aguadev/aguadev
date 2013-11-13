@@ -1,0 +1,29 @@
+
+h3. APPLICATION
+
+updateHostname
+
+h3. PURPOSE
+
+RUN THIS AFTER REBOOT TO:
+
+1. SET HEADNODE HOSTNAME TO NEW INTERNAL DNS NAME
+
+2. UPDATE HOSTNAME IN CLUSTERS
+
+- REMOVE OLD HOSTNAME AS ADMIN/SUBMIT HOST
+
+- ADD NEW HOSTNAME AS ADMIN/SUBMIT HOST
+
+h3. USAGE
+
+{code}
+./updateHostname.pl [--help]
+ --help      :   Print help info
+{code}
+
+h3. EXAMPLES
+
+updateHostname.pl
+
+

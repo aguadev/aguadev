@@ -1,0 +1,21 @@
+.version .major {
+	top: 		0px !important;
+	left: 		0px !important;
+}
+.version .minor {
+	top: 		0px !important;
+	left: 		40px !important;
+}
+.version .patch {
+	top: 		0px !important;
+	left: 		80px !important;
+}
+.version .suffix {
+	top: 		2px !important;
+	left: 		120px !important;
+	width:		80px !important;	
+}
+.version select {
+	background-color: transparent !important;
+	-webkit-appearance: menulist;
+}

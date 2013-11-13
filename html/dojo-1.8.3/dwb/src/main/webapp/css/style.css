@@ -1,0 +1,668 @@
+/* Global Dojo style rules */
+html, body { 
+	width: 100%; 
+	height: 100%; 
+	margin: 0;
+}
+
+.claro .dijitBorderContainer {
+	width: 100%; 
+	height: 100%; 
+	border: none; 
+}
+
+/* Set default fonts and increase min. font size */
+body.claro {
+	font-family:Lucida Sans,Lucida Grande,Arial !important;
+	font-size: 0.75em;
+}
+
+/* Main page panel, centred with fixed height and width */
+.centre_panel {
+	margin: 0px auto; 
+	height: 750px; 
+	width: 1024px;
+	position: relative;
+	top: 0px;
+}
+
+/* Remove top padding on the border container children */
+.centre_panel .dijitBorderContainer > .dijitContentPane {
+    padding-top: 0;
+}
+
+/* Size of the build options content container */
+.rightContentPane {
+	width: 260px;
+}
+
+/* All filtering select boxes should be 90% on parent */
+.buildConfigPanel .filteringSelect {
+	width: 90%;
+}
+
+/* Position vertical module panel components, search box and module grid */
+.modulesPanel .searchBox {
+	width: 100%;
+	height: 13%; 
+}
+
+/* Search container elements should be offset from top and centred. */
+.modulesPanel .searchBox > div {
+	text-align:center; 
+	padding-top: 20px;
+}
+	
+/* Module grid should be most of the height of main panel */
+.modulesPanel .modulesGrid {
+	width: 100%;
+	height: 84.5%;
+}
+
+/* Align module counter to right hand side */
+.modulesPanel .modulesGrid .moduleCounter {
+	text-align: right; 
+	padding-bottom: 4px;
+}
+
+/* Hide failure message by default and all other panels
+   when we have failure state. */
+.modulesPanel .failureMessage,
+.modulesPanel.failure > div {
+	display:none; 
+}
+
+/* Center failure message box */
+.modulesPanel .failureMessage {
+	text-align: center; 
+	width: 450px; 
+	margin: 60px auto;
+}
+
+/* Offset image to align with h2 text */
+.modulesPanel .failureMessage > img {
+	position: relative; 
+	top: 6px;
+}
+
+/* Display header next to failure image */
+.modulesPanel .failureMessage > h2 {
+	display: inline; 
+	width: 100px; 
+	font-size: 4em;
+	margin: 0 0 0 20px;  
+}
+
+/* Format failure message text */
+.modulesPanel .failureMessage > p {
+	font-size: 1.95em; 
+	font-style: italic; 
+	text-align: center; 
+	margin-top: 40px;
+}
+
+/* Display failure message when in failed state */
+.modulesPanel.failure .failureMessage {
+	display:block; 
+}
+
+/* Right hand panel should be take most of visible screen. */
+.buildConfigPanel {
+	height: 95%;
+}
+
+/* We don't want an outer border on the main content panes */
+.claro .dijitSplitContainer-child, .claro .dijitBorderContainer-child {
+	border: medium none;
+}
+
+/* Panel holding multiple content panes should take
+   up most of the right hand side, also use margin to 
+   align with border of tab container. */
+.titlePaneConfig {
+	height: 80%;
+	margin-top: 29px;
+}
+
+/* Spacer between configuration title panes */
+.titlePaneConfig .dijitTitlePane {
+	padding-bottom: 12px;
+}
+
+/* Noticeable font for search box and large width */
+.searchBox .searchBoxInput {
+	font-size: 1.5em;
+	width: 64%; 
+}
+
+.analyse_container .remoteWebAddr {
+	width: 75%;
+	font-size: 0.6em;
+}
+
+.titlePanelDropDown {
+	width: 90%;
+	margin-left: 5px;
+}
+
+/* Ensure selecting a drop down with a long title doesn't cause
+   distortion of the parent element. Hide any overflowing text. */
+.titlePanelDropDown .dijitButtonText {
+	max-width: 162px;
+	overflow: hidden;
+}
+
+/* Increase padding around search text and inside text field */
+.searchBox .searchBoxInput .dijitInputContainer, .searchBox .searchBoxInput .dijitPlaceHolder,
+.analyse_container .remoteWebAddr .dijitInputContainer, .analyse_container .remoteWebAddr .dijitPlaceHolder {
+	padding: 4px;
+}
+
+/* Increase button size to match text box height */
+.searchBox .searchButton {
+	font-size: 1.75em
+}
+
+/* Panel containing visible right hand buttons */
+.buttonPanels {
+	width: 100%; 
+	padding-top: 30px; 
+	text-align: center;	
+}
+
+.buttonPanels .dijitButton {
+	font-size: 2.9em;
+}
+
+.dojoBaseLayerInfo {
+	margin-left: 5px;
+	margin-right: 5px;
+	font-size:1.25em;
+}
+
+
+.dojoBaseLayerInfo p {
+	margin-top: 5px;
+}
+
+/* Use shading on title panes */
+.titlePaneConfig .dijitTitlePaneContentInner {
+	background-color:rgb(233, 243, 252); /* Fallback for IE, rough conversion of RGBA to RGB */
+	background-color:rgba(224, 238, 251, 0.3);
+}
+
+/* CSS hovering and style for module overview table*/
+.moduleOverviewTitlePane table {
+	border-spacing: 0; 
+	width: 230px;
+	padding-left: 10px;
+	table-layout: fixed;
+}
+
+/* Highlight selected row */
+.moduleOverviewTitlePane table tr:hover td {
+	border-bottom:1px solid #BFD6EB;
+	border-top:1px solid #BFD6EB;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	background-color:#D3E9FB;
+	cursor: pointer;
+}
+
+/* Fix padding... */
+.moduleOverviewTitlePane table tr td.moduleLabel {
+	padding-left:5px;
+	padding-right:1px;
+	width: 87%;
+	overflow: hidden;
+}
+
+.moduleOverviewTitlePane table tr td.moduleRemoval {
+	text-align: right;
+	padding-right: 6px;
+}
+
+/* Simulate row highlights, border on left and right edges */
+.moduleOverviewTitlePane table tr:hover td.moduleLabel {
+	padding-left:4px;
+	border-left:1px solid #BFD6EB;
+}
+
+.moduleOverviewTitlePane table tr:hover td.moduleRemoval {
+	border-right:1px solid #BFD6EB;
+	padding-right: 5px;
+}
+
+/** CSS visibility rules for title panes */
+/** Default rules to hide all title panes by default **/
+.buildConfigPanel .dijitTitlePane,
+.buildConfigPanel .dojoBaseLayerInfo,
+.buildConfigPanel .dijitButton {
+	display: none;
+}
+
+/** Set up combination of CSS classes, to show those title panes
+    and buttons only when parent container is of the same type.  
+**/
+.buildConfigPanel.simpleMode.Modules .simple.Modules,
+.buildConfigPanel.simpleMode.Auto-Analyse .simple.Auto-Analyse,
+.buildConfigPanel.simpleMode.Help .simple.Help,
+.buildConfigPanel.advancedMode.Modules .advanced.Modules,
+.buildConfigPanel.advancedMode.Layers .advanced.Layers,
+.buildConfigPanel.advancedMode.Auto-Analyse .advanced.Auto-Analyse,
+.buildConfigPanel.advancedMode.Help .advanced.Help {
+	display: block;
+}
+
+/** CSS Classes for simple mode **/
+/* Fix maximum height for title pane when one panel is visible and closed */
+.buildConfigPanel.simpleMode .moduleOverviewTitlePane .dijitTitlePaneContentInner {
+	max-height:493px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+/* Fix maximum height for overview pane when two panels are open */
+.buildConfigPanel.simpleMode.SearchOptionsOpen .moduleOverviewTitlePane .dijitTitlePaneContentInner  {
+	max-height: 294px;
+}
+
+/** CSS Classes for advanced mode **/
+/* Fix maximum height for title pane when both panels are visible and closed */
+.buildConfigPanel.advancedMode .moduleOverviewTitlePane .dijitTitlePaneContentInner {
+	max-height:459px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+/* Fix maximum height for overview pane when search options panel is open */
+.buildConfigPanel.advancedMode.SearchOptionsOpen .moduleOverviewTitlePane .dijitTitlePaneContentInner  {
+	max-height: 255px;
+}
+
+/* Fix maximum height for overview pane when module layers panel is open */
+.buildConfigPanel.advancedMode.ModuleLayersOptionsOpen .moduleOverviewTitlePane .dijitTitlePaneContentInner  {
+	max-height: 374px;
+}
+
+/* Fix maximum height for overview pane when search options panels is open */
+.buildConfigPanel.advancedMode.SearchOptionsOpen.ModuleLayersOptionsOpen .moduleOverviewTitlePane .dijitTitlePaneContentInner  {
+	max-height: 170px;
+}
+
+
+/* Remove border for field set element */
+.titlePaneConfig fieldset {
+	padding: 4px 9px 15px 9px;
+	border: none;
+}
+
+/* Remove left/right padding */
+.titlePaneConfig fieldset legend {
+	font-style: italic;
+	padding: 0px;
+}
+
+/* Display at block level elements */
+.titlePaneConfig fieldset label {
+	display: block;
+	padding: 5px;
+}
+
+/* Minimise padding for the last fieldset and label */
+.titlePaneConfig fieldset label.lastChild, .titlePaneConfig fieldset.lastChild {
+	padding-bottom: 1px;
+}
+
+/** Help title panel rules **/
+/* Panel title */
+.titlePaneConfig .Help .dijitTitlePaneContentInner p {
+	font-style: italic;
+	margin: 0 0 0 10px;
+}
+
+/* Question list */
+.titlePaneConfig .Help .dijitTitlePaneContentInner ul {
+	padding-left: 20px;
+}
+
+/* Question links */
+.titlePaneConfig .Help .dijitTitlePaneContentInner li {
+	margin-bottom: 5px;
+}
+
+/** Help panel container rules **/
+.helpPanelContainer {
+	margin:0 auto;
+	width:92%;
+}
+
+/* Help container, q&a list */
+.helpPanelContainer ul {
+	list-style:none outside none;
+	padding: 0;
+	margin: 0;
+}
+
+/* Help container, q&a */
+.helpPanelContainer ul li {
+	padding-top: 8px
+}
+
+/* Help container, question */
+.helpPanelContainer ul li h1 {
+	font-weight:bold;
+	font-style: italic;
+}
+
+/* Help container, answer */
+.helpPanelContainer ul li p {
+	font-size: 1.1em;
+	line-height: 1.5em;
+	text-align: justify;
+}
+
+/** Introduction dialog rules **/
+.introDialog {
+	font-size: 1.1em;
+}
+
+.introDialog h1 {
+	font-size: 1.5em;
+}
+
+.introDialog .content {
+	line-height: 1.35em; 
+	text-align: justify;
+}
+
+.introDialog .footer {
+	width: 100%;
+	padding-top: 14px;
+}
+	
+.introDialog .footer > div {
+	display: inline;
+}
+
+.introDialog .footer .confirmation {
+	float: right;
+}
+
+.introDialog .footer .confirmation .label {
+	font-size: 0.9em;
+	display: inline;
+	position: relative;
+	top: 1px;
+}
+
+/* Show raised remove icon on hovering over module overview */
+.rowCloseIcon:hover {
+	background-position: -14px 50%;
+}
+
+/* Layout rules for panels contents on the analyse tab */
+.analyse_container {		
+	font-size:2.5em;
+	height:188px;
+	margin: 45px auto;
+	padding-top: 25px;
+	text-align: center;
+	width: 524px; 
+}
+
+.analyse_container > div:first-child {
+	height: 111px;
+}
+
+.analyse_container > .analyse_form_container { 
+    padding-top: 50px;
+}
+
+/* Analyse button, normal */
+.analyse_container > .analyse_form_container .build { 
+    padding-top: 40px;
+}
+
+/* Analyse button, larger text field parent so less padding */
+.analyse_container > .analyse_form_container .build_small { 
+    padding-top: 38px;
+}
+
+/* Text shown on base module layer, when empty */
+.analyse_container > .baseLayerHintText {
+	font-size: 0.75em;
+	font-style: italic;
+}
+
+/* Make base layer hint text visible on the base module pane only */
+.baseModuleLayerPane .analyse_container > .baseLayerHintText {
+	display: inline;
+}
+
+.analyse_container > .baseLayerHintText > p:first-child {
+	margin-top: 70px;
+}
+
+/* Styling for the failure message on the analyse container */
+.analyse_container.failureMessage {
+	text-align:left;
+}
+
+/* Offset image slight to align with heading */
+.analyse_container.failureMessage > img {
+	position: relative; 
+	top: 10px; 
+	margin-left: 8px;
+}
+
+/* Display heading next to image */
+.analyse_container.failureMessage > h2 {
+	display: inline; 
+	width: 217px; 
+	font-size: 1.2em; 
+	margin-left: 14px;
+}
+
+/* Justify failure text.... */
+.analyse_container.failureMessage > p {
+	font-size: 0.75em;
+	text-align: justify;
+	margin-top: 45px;
+}
+
+
+/* Fix validation highlight on enlarged text boxes, normal image is too small */
+.claro .dijitTextBox .dijitValidationContainer {
+	padding: 4px 2px;
+	background-image: none;
+	color: white;
+}
+
+/* 
+ * Build Progress Dialog styles. Showing build status and success/failure results 
+ */
+
+/* Hide build progress when we have a success/failure event */
+.buildProgressDialog.success .buildProgressMessage,
+.buildProgressDialog.failure .buildProgressMessage {
+	display: none;
+}
+
+/* Show corresponding success/failure messages */
+.buildProgressDialog.success .successMessage,
+.buildProgressDialog.failure .failureMessage {
+	display:block;
+}
+
+.buildProgressDialog .buildProgressContainer {
+	table-layout:fixed; 
+	height:100px; 
+	width: 434px; 
+	border: 1px solid; 
+	overflow: hidden; 
+	margin-top: 10px;
+}
+
+/* Set up message layout */
+.buildProgressDialog .endMessages {
+	display: none;
+	padding-left: 0px; 
+	padding-top: 0px; 
+	height: 85px; 
+	margin-left: 10px; 
+	margin-top: 5px;
+}
+
+.buildProgressDialog .endMessages > img {
+	float: left; 
+	padding: 0px;
+}
+
+.buildProgressDialog .endMessages > div {
+	float: left; 
+	margin-left: 16px;
+}
+
+.buildProgressDialog .endMessages > div > h2 {
+	display: inline; 
+	margin-top: 0px; 
+	margin-bottom: 0px; 
+	font-size: 2.2em;
+}
+
+.buildProgressDialog .endMessages > div > p {
+	font-size: 1.3em; 
+	margin-top: 8px; 
+	margin-bottom: 0px;
+}
+
+.buildProgressDialog .dijitProgressBar { 
+    width: 434px;
+}
+
+/* Formatting for build log lines */
+.buildProgressDialog .buildProgressMessage table {
+    width: 100%;
+    height: 100%;
+}  
+
+.buildProgressDialog .buildProgressMessage table tr {
+    height: 18px;
+}
+
+.buildProgressDialog .buildProgressMessage table td {
+    font-family: "Courier New";
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* Feedback section at the bottom of the page */
+#feedback {
+    margin: 0 auto;
+    position: relative;
+    top: -8px;
+    text-align:center;
+    z-index: 10;
+}
+
+#feedback > a {
+    font-style: italic;
+    position: relative;
+    top: -3px;
+}
+
+#feedback > a:link {
+    color: #505050;
+}
+
+
+/* Feedback submission form layout */
+.feedbackDialog .content {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+/* Fixed label style and padding */
+.feedbackForm label {
+    font-style:italic;
+    padding-bottom: 5px;
+    padding-top: 10px;
+}
+
+/* Clear default margin around elements */
+.feedbackForm .dijitSelect, .feedbackForm .dijitTextArea {
+    margin: 0;
+}
+
+/* Vertical line up of form elements */
+.feedbackForm > div, label  {
+    display: block;
+}
+
+.feedbackForm .name {
+    float: left;
+}
+
+.feedbackForm .email {
+    float: right;
+}
+
+.feedbackForm > .categoryLabel {
+    clear: both;
+}
+
+/* Feedback input fields, fixed width */
+.feedbackForm .dijitTextBox {
+    width: 200px;
+}
+
+/* Feedback details area, min. size */
+.feedbackForm .dijitTextArea {
+    width: 426px;
+    height: 120px;
+}
+
+.feedbackForm .submit {
+    padding-top: 10px;
+    text-align: center;
+}
+
+.closeIcon {
+    margin: 0 auto; 
+    width: 28px;
+}
+
+/* Tooltip dialogs used to change Dojo version and display mode */
+
+
+.option_dropdown label {
+    font-family: "Helvetica","Arial",sans-serif;
+    font-size: 1.15em;
+    padding: 4px 3px;
+}
+
+.option_dropdown .dijitRadio {
+    margin-left: 10px;
+    margin-bottom: 4px;
+    float: right;
+}
+
+/* Used to cover screen while application is loading. */
+#preloader {
+  width:100%; height:100%; margin:0; padding:0;
+  background:#fff url("../js/release/dojox/image/resources/images/loading.gif") no-repeat center center;
+  position:absolute;
+  z-index:900;
+}
+
+/* Utility class to hide element */
+.hidden {
+	display: none;
+}
+
+@media all and (max-width: 1090px) {
+	.github {
+		display: none;
+	}
+}

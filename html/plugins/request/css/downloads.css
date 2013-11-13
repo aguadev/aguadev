@@ -1,0 +1,160 @@
+/* DOES THIS HELP AUTOSIZING? */
+.downloads {
+	height: auto !important;
+	width: 430px !important;
+	font-family: Verdana;
+	position: relative;
+}
+.downloads textarea {
+	overflow: auto !important;
+}
+.downloads .dojoDndItem,
+.downloads .dojoDndItem .dojoDndItemOver {
+	padding: 0px !important;
+}
+.downloads .downloadsTitle {
+	display: inline-block;
+	font-size: 15px;
+	font-weight: bolder;
+	top: -10px !important;
+	position: relative;
+}
+
+/* DRAG SOURCE */
+.downloads .dragSource table
+{  
+    border: 0 !important;
+	border-collapse: collapse !important;	
+	float: left;
+    margin-top: 0px !important;
+    padding-top: 0px !important;
+    height: auto !important;
+}
+
+.downloads .dragSource
+{
+	width: 39;
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+	min-height: 200px !important;
+	height: auto !important;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	width: 403px !important; */
+	width: 3;
+}
+
+/* QUERY NAME */
+.downloads .nameInput .dijitTextBox {
+	width: 255px !important;
+}
+
+/* BUTTON */
+/* NB: THIS IS NEEDED FOR THE BUTTON CSS BELOW TO WORK! */
+.downloads table textarea {
+	font-family: Verdana;
+}
+
+/* MISC */
+.downloads .dragSource .dijitReset.dijitValidationContainer {
+    display: none !important;   
+}
+
+.downloads .dragSource .dijitReset.dijitInline.dijitSelectLabel.dijitValidationTextBoxLabel  {
+    width: 80px !important;
+}
+
+.downloads .dragSource .ordinal .dijitReset.dijitInline.dijitSelectLabel.dijitValidationTextBoxLabel  {
+    width: 30px !important;
+}
+
+
+/* ROW BACKGROUND */
+.downloads .dragSource .dojoDndItemAnchor {
+    background-color: white;
+}
+
+/* NO PADDING AROUND DND ITEMS */
+.downloads .dojoDndItem,
+.downloads .dojoDndItem .dojoDndItemOver {
+	padding: 0px !important;
+}
+
+.downloads .invalid 
+{
+	border: 2px solid #F00 !important;
+}
+
+/* TOGGLE */
+.downloads .toggleTitle {
+    font-family: Arial;
+	text-align: left !important;
+	font-weight: 800 !important;
+	
+    color: #444 !important;
+	
+    font-size: 16px !important;
+	padding-top: 6px !important;
+}
+.downloads .toggleTitle.open {
+	background-image: url(../../../plugins/apps/images/toggle-minus-11.png);
+	text-indent: 20px;
+	background-position: 0.2em 0.6em;
+	background-repeat: no-repeat;
+}
+.downloads .toggleTitle.closed {
+	background-image: url(../../../plugins/apps/images/toggle-plus-11.png);
+	text-indent: 20px;
+	background-position: 0.2em 0.6em;
+	background-repeat: no-repeat;
+}
+
+.downloads .dragSource .downloadRow {
+	width: 380px !important;
+}
+
+.deleteButton
+{
+	padding-top: 2px !important;
+	display: inline-block !important;
+	height: 20px;
+	text-indent: 4px;
+	margin-right: -4px;
+	width: 20px !important;
+	height: 18px !important;
+	background-color: transparent;
+	background-image: url(../../../plugins/request/images/delete-20.png) !important;	
+	top: 5px !important;
+	background-repeat: no-repeat;
+	position: relative;
+}
+
+.downloads .downloadCount,
+.downloads .downloadCountTitle,
+.downloads .fileSize,
+.downloads .fileSizeTitle {
+	position: absolute;
+	top: 8px;
+	font-size: 14px
+}
+.downloads .downloadCountTitle {
+	left: 150px;
+}
+.downloads .fileSizeTitle {
+	left: 210px;	
+}
+.downloads .downloadCount {
+	left: 185px;		
+	font-weight: bolder
+}
+.downloads .fileSize {
+	left: 245px;			
+	font-weight: bolder
+}

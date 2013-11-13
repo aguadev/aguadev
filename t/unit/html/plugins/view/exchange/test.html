@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<style type="text/css">
+
+	/* DOJO STYLES */
+	@import "../../../../dojo/dojo/resources/dojo.css";
+
+	/* THEMES */
+	@import "../../../../dojo/dijit/themes/dijit.css";
+	@import "../../../../dojo/dijit/themes/soria/soria.css";
+	@import "../../../../dojo/dijit/themes/tundra/tundra.css";
+
+</style>
+
+<link rel="stylesheet" type="text/css" href="../../../../dojo/dgrid/css/dgrid.css">
+
+
+<title>t.plugins.view.exchange.test</title>
+
+<script type="text/javascript">
+
+// GLOBAL VARIABLES
+var Agua;
+var Data;
+var dojoConfig = {
+	isDebug: true,
+	locale: "en-us",
+	packages: [
+		{
+			name: "plugins",
+			location: "../../plugins"
+		}
+		,
+		{
+			name: "t",
+			location: "../../t"
+		}
+		,
+		{
+			name: "doh",
+			location: "../../dojo/util/doh"	
+		}
+		,
+		{
+			name: "dgrid",
+			location: "../../dojo/dgrid"
+		}
+		,
+		{
+			name: "xstyle",
+			location: "../../dojo/xstyle"
+		}
+		,
+		{
+			name: "put-selector",
+			location: "../../dojo/put-selector"
+		}
+		,
+		{
+			name: "JBrowse",
+			location: "../../plugins/view/jbrowse/src/JBrowse"
+		}
+		,
+		{
+			name: 'lazyload',
+			main: 'lazyload',
+			location: "../../dojo/lazyload"
+		}
+		,
+		{
+			name: 'jDataView',
+			location: 'jDataView/src',
+			main: 'jdataview'
+		}
+	],
+
+	debugAtAllCosts: true,
+	useCommentedJson: true
+};
+</script>
+<script type="text/javascript"
+	src="../../../../dojo/dojo/dojo.js">
+</script>
+
+<script type="text/javascript" src="./runTests.js"></script>
+</head>
+
+<body class="agua tundra claro">
+
+<center>
+	<h3>t.plugins.view.exchange.test</h3>
+</center>
+
+	<div id="attachPoint" ></div>
+
+</body>
+</html>
+

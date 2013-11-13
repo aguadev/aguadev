@@ -1,0 +1,43 @@
+
+h3. APPLICATION
+
+ops
+
+h3. PURPOSE
+
+Run system commands and other operations by calling subroutines
+
+in a dynamically loaded perl module (default: 'ops.pm') which
+
+automatically inherts from Ops.pm
+
+h3. USAGE
+
+{code}
+./ops.pl subroutine [options] [args] [--help]
+
+module   :    Location of module file (default: ./ops.pm) options  :
+       Keys or key:value pairs for slots in the dynamic class args     :
+       AList of arguments for the selected subroutine --help   :    print help
+       info
+{code}
+
+h3. EXAMPLES
+
+#### install fastq ./ops.pl fastq install --keyfile
+       /nethome/admin/.starcluster/id_rsa-admin-key --hosts
+       ec2-184-73-22-214.compute-1.amazonaws.com --user root
+
+#### NB: YOU CAN MIX UP OPTIONS AND ARGUMENTS:
+
+./ops.pl --keyfile /nethome/admin/.starcluster/id_rsa-admin-key --hosts
+       ec2-184-73-22-214.compute-1.amazonaws.com --user root fastq install
+
+#### ... BUT FLAGS MUST BE PLACED AT THE END OF THE LIST OF ARGUMENTS
+       AND OPTIONS
+
+./ops.pl --keyfile /nethome/admin/.starcluster/id_rsa-admin-key --hosts
+       ec2-184-73-22-214.compute-1.amazonaws.com --user root fastq install
+ --warn
+
+

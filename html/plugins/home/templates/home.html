@@ -1,0 +1,109 @@
+<div dojoAttachPoint="containerNode">
+
+	<div
+		dojoAttachPoint="mainTab"
+		class="home"
+		iconClass="homeIcon"
+		style="position: relative; min-width: 1140px !important; width: 100% !important; min-height: 770px !important; height: 100% !important; padding: 0px; background: #FFF;"
+		title="Home"
+		closable="true"
+		dojoType="dijit.layout.BorderContainer"
+		>
+		<div
+			class="homeContainer"
+			dojoType="dijit.layout.ContentPane"
+			region="top">
+			<table width="100%">
+				<tr>
+					<td>
+						<table class="navigationTable">
+							<tr>
+								<td>
+									Use
+								</td>
+								<td class="leftArrow">
+									ALT +
+								</td>
+								<td>
+									and
+								</td>
+								<td class="rightArrow">
+									ALT +
+								</td>
+								<td class="navigationInfo">
+									to Navigate
+								</td>
+							</tr>
+						</table>
+					</td>
+					
+					<td align="right">
+						<table class="packageTable">
+							<tr>
+								<td class=packageTitle>Package</td>
+								<td class=packageTitle title="Current installed version">Version</td>
+							</tr>
+							<tr>
+								<td>
+									<div
+										dojoType="dijit.form.ComboBox"
+										dojoAttachPoint="packageCombo"
+										dojoAttachEvent='onChange:showCurrentVersion'
+										class="packageCombo"
+										autocomplete="false"
+										disabled="false"
+									>
+									</div>
+								</td>
+								<td>
+									<div
+										class="currentVersion"
+										dojoAttachPoint="currentVersion"
+									>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td>
+						<button
+							class="checkVersion"
+							dojoAttachPoint="checkVersion"
+							dojoAttachEvent="onclick:showUpgrades"
+						>Check For Upgrades</button>
+					</td>
+					<td width="400">
+					</td>
+				</tr>
+			</table>
+
+			<div
+				id="authTarget"
+				dojoAttachPoint="bottomPane"
+				class="bottomPane"
+				alt="Agua Home Page"
+			>
+			</div>
+		
+		</div>
+		
+		<div
+			class="progressPane"
+			dojoAttachPoint="progressPane"
+			dojoType="plugins.dojox.layout.FloatingPane"
+			region="top"
+			resizable="false"
+			moveable="false"
+			dockable="true"
+			maxable="false"
+			closable="false"
+			duration="1500"
+			height="500px"
+			width="900px"
+			title="Upgrade Log"
+			dockClass="homeDockNode"
+			> 
+		</div>
+	</div>
+			
+</div>

@@ -1,0 +1,32 @@
+<div dojoAttachPoint="containerNode">
+
+<div
+    dojoAttachPoint="menu"
+    class="appsmenu"
+    dojoType="plugins.menu.Menu">
+
+<!--    <div dojoType="dijit.MenuItem"
+        label="Info"
+        dojoAttachPoint="title"
+        class="title"
+        disabled="false">
+    </div>
+-->
+
+    <div
+        dojoAttachPoint="aboutNode"
+        dojoType="dijit.MenuItem"
+        iconClass="dijitEditorIcon dijitEditorIconWikiword"
+        >
+        About
+    </div>
+    <div
+        dojoAttachPoint="websiteNode"
+        dojoAttachEvent="onClick:website"
+        dojoType="dijit.MenuItem"
+        iconClass="dijitEditorIcon dijitEditorIconInsertImage"
+        >
+        Website
+    </div>
+
+</div>

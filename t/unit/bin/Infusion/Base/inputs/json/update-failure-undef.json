@@ -1,0 +1,18 @@
+{
+    "data": {
+		"module"			:	"Base",
+        "project_name"		:	null,
+		"description"		:	"aaaaa",
+		"build_version"		:	"NCBI37",
+		"dbsnp_version"		:	"131",
+		"project_manager"	:	"aaa",
+		"data_analyst"		:	"aaa",
+		"build_location"	:	null,
+		"project_policy"	:	"build_type: local"
+    },
+    "mode"		:	"updateProject",
+    "sessionid"	:	"0000000000.0000.000",
+    "taskid"	:	"MajTvpKxhkeDnQHb",
+    "token"		:	"WYS1IyMlihIx6MHs",
+    "username"	:	"admin"
+}

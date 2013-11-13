@@ -1,0 +1,11 @@
+{
+    username    :   "testuser",
+    package		:	"NEWPACKAGE",
+    version		:	"6.4.0.0",
+    privacy		:	"public",
+    opsdir		:	"word",
+    installdir	:	"/aguadev/apps/NEWPACKAGE",
+    description	:	"Desc of new package",
+    notes		:	"My notes on new package",
+    url			:	"www.google.com"
+}

@@ -1,0 +1,362 @@
+
+.applications .modules {
+	font-family: Verdana;
+}
+
+/* TOGGLE */
+.applications .modules .toggleTitle {
+	font-weight: 800 !important;
+	text-align: left !important;
+	font-size: 14px !important;
+	color: #444;
+}
+
+.applications .modules .headerRow {
+    color: darkblue !important;
+    font-size: 10px !important;
+    padding: 0 !important;
+    text-align: center !important;
+}
+
+/* DND AVATAR ICON */
+.applications .modules .dojoDndAvatarHeader,
+.applications .modules .tundra.dojoDndCopy .dojoDndAvatarHeader {
+	background-image: url(../../../plugins/apps/images/app-18.png) !important;
+	background-position: 0.3em 0.2em !important;
+}
+
+.applications .modules .label {
+	text-align:	center !important;
+	font-weight: bolder;
+	font-size: 14px;
+	font-style: oblique;
+	color: darkblue;
+	height: 20px;
+	vertical-align: bottom !important;
+	/*background-color: #FF4;*/
+	background-color: #EEE;
+}
+
+
+/* NB: THIS IS NEEDED FOR THE BUTTON CSS BELOW TO WORK! */
+.applications .modules table textarea {
+	font-family: Verdana;
+	font-size: 14px !important;
+}
+.applications .modules .addPackageButton {
+	height: 20px !important;
+	width: 115px !important;
+	/*margin-left: auto;*/
+	margin-right: 0px;
+
+	text-align: center;
+	vertical-align: middle;
+	-moz-user-select: none;
+	font-size: 14px;
+	font-family: Verdana;
+	font-weight: bolder;
+	color: #224;
+	background-color: #EEF;
+	
+	border: 4px solid #BBB;
+	border-bottom-color: #888;	
+	border-left-color: #888;
+}
+
+.applications .modules .addPackageButton:hover {
+	border-color: #999;
+	border-bottom-color: #555;	
+	border-left-color: #555;
+	background-color : #FF8;
+}
+
+.applications .modules .addPackageButton:active {
+	border-color: #999;
+	border-bottom-color: #555;	
+	border-left-color: #555;
+	background-color : #8F8;
+}
+
+.applications .modules .package,
+.applications .modules .version,
+.applications .modules .opsdir,
+.applications .modules .installdir,
+.applications .modules .description,
+.applications .modules .notes,
+.applications .modules .url {
+	display: inline-block;
+	vertical-align: middle !important;
+    min-height: 20px !important;
+	font-size: 14px;	
+	text-align: left !important;
+	font-weight: bolder !important;
+	padding-top: 0px;
+}
+
+/* NON-TOGGLED NODES */
+.applications .applications .modules .dragSource .package,
+.applications .applications .modules .dragSource .version {
+	display: inline-block !important;
+	min-height: 20px !important;
+	height: auto !important;
+	max-height: auto !important;
+	background-color: #FFF;	
+}
+
+/* HEIGHT AND FONT-WEIGHT */
+.applications .modules .package,
+.applications .modules .opsdir,
+.applications .modules .installdir,
+.applications .modules .description,
+.applications .modules .notes,
+.applications .modules .url {
+	min-height: 30px !important;	
+	font-weight: bolder;
+}
+.applications .modules .package {
+	width: 100%;
+}
+
+.applications .modules .version {
+	height: 30px !important;	
+	font-weight: bolder;
+	width: 260px !important;
+}
+
+.applications .modules .description,
+.applications .modules .notes,
+.applications .modules .url {
+	height: 30px;	
+	width: 100%;
+	font-weight: bolder;
+}
+
+.applications .modules .invalid ,
+.applications .modules .description .dijitTextArea .invalid,
+.applications .modules .notes .dijitTextArea .invalid {
+	border: 2px solid #F00 !important;
+}
+
+/* NOTE: THIS IS NECESSARY FOR THE NEXT RULE TO WORK!!! */
+.applications .modules .applications .packagesCombo .dijitReset .dijitMenu li,
+.applications .modules .applications .packagesCombo .dijitReset .dijitMenuItem li {
+	/*color: #0FF !important;*/
+}
+.applications .modules .dijitMenu li,
+.applications .modules .dijitMenuItem li {
+	color: #224 !important;
+	height: 25px;
+}
+
+
+/* NOTE: THIS DOESN'T WORK!!! */
+.applications .modules .applications .packagesCombo .dijitReset .dijitInputField {
+	/*color: #0FF !important;*/
+	text-align: center !important;
+}
+
+/****** DRAG SOURCE ******/
+.applications .modules .dragSource table {
+	background-color: #AFA;
+}
+
+.applications .modules .dragSource,
+.applications .modules .dragSource:hover {
+	-moz-background-clip:			border !important;
+	-moz-background-inline-policy:	continuous !important;
+	-moz-background-origin:			padding !important;
+	border-radius:	8pt !important;
+	border-radius-bottomright:	8pt !important;
+	border-radius:		8pt !important;
+	border-radius-topright:	8pt !important;
+
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+
+	/* ALLOW LENGTHENING TO FIT EXPANDED ROWS */
+	height: auto !important;
+	text-align: left !important;
+	font-size: 12px;
+	border-color: #333;
+	
+	/* NEEDED SO THAT SCROLLBAR WILL SHOW */
+	display: block !important;
+	overflow:auto !important;
+}
+
+/* NAME + IMAGE */
+.applications .modules .dragSource .package {
+	font-size: 14px;
+	color: darkred;
+	font-weight: bolder;
+	text-align: left !important;
+	background-image: url(../../../plugins/apps/images/app-18.png);
+	text-indent: 22px;
+	background-repeat: no-repeat;
+}
+
+/* TOGGLED NODES */
+.applications .modules .dragSource .opsdir,
+.applications .modules .dragSource .installdir,
+.applications .modules .dragSource .description,
+.applications .modules .dragSource .notes,
+.applications .modules .dragSource .url {
+	display: none;
+	/*min-height: 25px !important;*/
+	height: auto !important;
+	max-height: auto !important;
+	background-color: #FFF;
+	font-weight: bold !important;
+}
+
+/* WIDTHS */
+.applications .modules .dragSource .package {
+	width: 160px !important;	
+}
+.applications .modules .dragSource .version {
+	width: 150px !important;
+}
+.applications .modules .dragSource .opsdir,
+.applications .modules .dragSource .installdir,
+.applications .modules .dragSource .description,
+.applications .modules .dragSource .notes,
+.applications .modules .dragSource .url {
+	width: 35
+	8px !important;	
+}
+
+/* MARGIN-LEFT */
+.applications .modules .dragSource .package,
+.applications .modules .dragSource .opsdir,
+.applications .modules .dragSource .installdir,
+.applications .modules .dragSource .description,
+.applications .modules .dragSource .notes,
+.applications .modules .dragSource .url {
+	margin-left: 5px !important;
+}
+
+/* MARGIN-TOP */
+.applications .modules .dragSource .package,
+.applications .modules .dragSource .version {
+	margin-top: 1px !important;
+}
+.applications .modules .dragSource .opsdir,
+.applications .modules .dragSource .installdir,
+.applications .modules .dragSource .description,
+.applications .modules .dragSource .notes,
+.applications .modules .dragSource .url {
+	margin-top: 1px !important;
+}
+
+/* HEIGHTS */
+.applications .modules .dragSource .package,
+.applications .modules .dragSource .version {
+	min-height: 20px !important;
+	height: 20px !important;
+}
+
+/* FONT COLOR, ETC. */
+.applications .modules .dragSource .version {
+	color: blue;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: center !important;
+}
+
+.applications .modules .dragSource .opsdir,
+.applications .modules .dragSource .installdir {
+	color: #222;
+	font-size: 13px;
+    font-family: Helvetica !important;
+	font-weight: bold;
+	text-align: left !important;
+	background: #EFEFEF;
+	width: 100% !important;
+}	
+
+.applications .modules .dragSource .description {
+	color: #222;
+	font-weight: bold;
+	text-align: left !important;
+	background: #EFEFEF;
+}
+
+.applications .modules .dragSource .notes,
+.applications .modules .dragSource .url {
+	color: #000;
+	font-weight: normal;
+	font-size: 12px;
+	font-style: italic;
+	text-align: left !important;
+	background: #EFEFEF;
+}
+
+.applications .modules .dragSource .url {
+	font-style: normal !important;
+}
+
+/****** TRASH ******/
+.applications .modules .trash {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	border:3px solid #CCCCCC;
+	cursor:default;
+	padding:1em 0.5em;
+
+	margin-top: 5px;
+	width: 150px;	
+	height: 60px;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.applications .modules .trashIcon {
+	height: 100%;
+	width: 100px;
+	margin-left: auto;
+	margin-right: auto;
+	
+	background-image: url(../../../plugins/apps/images/trash-60.png);
+	background-repeat: no-repeat;
+}
+
+/* PRIVACY COMBOBOX IN PACKAGE */
+.applications .modules .privacy {
+	width: 120px !important;
+}
+.applications .modules .applications .privacy,
+.applications .modules .dijitMenu li,
+.applications .modules .dijitMenuItem li {
+	text-indent: 10px;
+}
+
+.applications .modules .privacy {
+	font-size: 14px !important;
+	background-color: #FFF !important;
+	text-indent: 0px !important;
+	width: 165px !important;
+	display: table-cell !important;
+	text-align: center !important;
+	font-weight: bold !important;
+	font-family: Verdana !important;
+	height: 28px !important;
+	color: #000;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* PRIVACY DISPLAY IN PACKAGEROW*/
+.applications .modules .privacy {
+	width: 120px !important;
+}
+
+/* PRIVACY IN PACKAGE ROW */
+.applications .modules .dragSource .privacy {
+	height: 18px !important;
+	width: 80px !important;
+	margin-top: 1px !important;
+}

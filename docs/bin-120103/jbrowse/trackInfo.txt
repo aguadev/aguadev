@@ -1,0 +1,73 @@
+
+h3. APPLICATION
+
+trackInfo
+
+h3. PURPOSE
+
+1. GET/INSERT/REMOVE ENTRIES IN trackInfo.js
+
+E.G., EDIT trackInfo.js BY ADDING 'plugins/view/jbrowse/' TO URL ENTRIES:
+
+trackInfo.pl \
+ --path "plugins/view/jbrowse/" \
+ --inputfile /data/jbrowse/human/hg19/chr1/data/trackInfo.js
+
+TO CHANGE THIS
+
+"url" : "data/seq/{refseq}/",
+
+TO THIS
+
+"url" : "plugsin/view/jbrowse/data/seq/{refseq}/",
+
+WITH THIS FILE FORMAT
+
+trackInfo =
+                       [
+                          {
+                                 "url" : "data/seq/{refseq}/",
+                                 "args" : {
+                                        "chunkSize" : 20000
+                                 },
+                                 "label" : "DNA",
+                                 "type" : "SequenceTrack",
+                                 "key" : "DNA"
+                          },
+
+SO THAT LOADED URLS WILL CHANGE FROM
+
+http://localhost/agua/0.4/data/tracks/chr1/exon/trackData.json
+
+TO
+
+http://localhost/agua/0.4/plugins/view/jbrowse/data/tracks/chr1/exon/trackData.json
+
+h3. INPUT
+
+1. ADDITIONAL FILE PATH
+
+2. INPUT trackInfo.js FILE
+
+h3. OUTPUT
+
+1. EDITED trackInfo.js FILE
+
+h3. USAGE
+
+{code}
+./trackInfo.pl  <--inputfile String> <--path String> [--help]
+ --inputfile             :   Name or full path to inputfile directory
+ --path                  :   Name or full path to path directory
+ --help              :   print help info
+{code}
+
+h3. EXAMPLES
+
+cd /nethome/syoung/base/pipeline/jbrowse1/ucsc/chr1
+
+/data/agua/0.6/bin/apps/trackInfo.pl \ --mode insert \ --inputfile
+       /nethome/syoung/base/pipeline/jbrowse1/ucsc/chr1/data/trackInfo.js \
+ --path "plugins/view/jbrowse"
+
+

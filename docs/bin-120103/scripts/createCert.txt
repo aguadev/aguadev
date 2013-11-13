@@ -1,0 +1,48 @@
+
+h3. APPLICATION
+
+install
+
+h3. PURPOSE:
+
+1. AUTOMATICALLY CREATE A CA CERTIFICATE:
+
+-   QUIT IF FLAG FILE IS PRESENT
+
+-   FAIL IF CAN'T CREATE FLAG FILE
+
+-   FLAG FILE IS INSIDE conf DIRECTORY (WRITABLE ONLY BY ROOT)
+
+-   OTHERWISE, GENERATE CA CERTIFICATE
+
+h3. INPUT
+
+1. INSTALLATION DIRECTORY (DEFAULT: /agua)
+
+2. APACHE DIRECTORY (DEFAULT: /etc/apache2)
+
+3. (OPTIONAL) DOMAIN NAME, E.G. www.mydomain.com
+
+4. (OPTIONAL) LOG FILE
+
+5. REQUIRED: WORKING INSTALLATION OF APACHE2
+
+h3. OUTPUT
+
+1. RUNNING HTTPS INSTALLATION
+
+h3. USAGE
+
+{code}
+sudo ./createCert.pl <--installdir String> [--apachedir String] [--domainname String] [--help]
+ --installdir       :   Path to Agua install directory (default: /agua)
+ --apachedir        :   Path to apache2 installation (default: /etc/apache2)
+ --domainname       :   Optional domain name (e.g., www.mydomain.com)
+ --help             :   Print help info
+{code}
+
+h3. EXAMPLES
+
+sudo createCert.pl --installdir /path/to/installdir
+
+

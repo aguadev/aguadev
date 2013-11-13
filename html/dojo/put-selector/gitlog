@@ -1,0 +1,104 @@
+* 0635899 (HEAD, tag: v0.3.5, origin/master, origin/HEAD, master) Add license note
+* 9a33724 fix typo
+* a3d0fd4 adjust fragment logic to workaround weird optimization bug in ios
+* 27655b7 bump version
+* d3cb8ca (tag: v0.3.4) Fixing the build by reverting the issue refs #19, as it breaks the Dojo build since it doesn't properly use define.amd, fixes #20. Will fix #19 once Dojo build tool is fixed
+* 8e0e11e bump version number
+* 99850e5 Remove AMD tag, since it doesn't work in Dojo build, fixes #20
+*   ae120ef (tag: v0.3.3) Merge branch 'master' of github.com:kriszyp/put-selector
+|\  
+| *   d60689d Merge pull request #19 from eduardo-matos/fix-expose-amd
+| |\  
+| | * cc6d11f fix expose AMD
+| |/  
+* | 80857e8 Upgrade version
+* | 71cde84 More detailed description of how to append elements and return values, fixes #18
+|/  
+* 02b943a Updated docs, refs #18
+*   17806a5 Merge branch 'master' of github.com:kriszyp/put-selector
+|\  
+| *   887a177 Merge pull request #17 from kfranqueiro/build-fixes
+| |\  
+| | * 608b3b0 Store RegExp for amd resource tag in variable
+| | * dac833d Mark node-html as copyOnly to avoid build wrapping/complaints
+| |/  
+* | cdad13d Workaround for RequireJS bug in sending extra arguments to factory functions,
+|/  
+*   60f7a9c Merge pull request #16 from ttrenka/master
+|\  
+| * 89ef8ee Update README.md
+|/  
+* 1869230 Switch to using CSS syntax for namespacing, fixes #15
+* 4a0e668 Use removeChild for element removal when not in IE for better performance and to fix svg issue, fixes #14
+* 73428d7 Add namespace support, fixes #13
+* f64ede2 Added styling test
+* 075f7af Added license
+* 95377da Fixed factory call in node, fixes #12
+* b8e8c88 (tag: v0.3.2) Updated package.json version
+* 48211d3 Use a different test to check for IE's old weird createElement behavior, rather than throwing an error
+* eb2cbd2 (tag: v0.3.1) Don't set array document fragments as return value.
+* cc39bac Add array/document fragment support for node and don't make Element as subclass of Array.
+* cf47e6e (origin/first-arg-as-default-return-value) Make the first argument be the default return value rather than setting element arguments as return values
+*   fd79f92 Merge pull request #9 from neonstalwart/put-element
+|\  
+| * 4f00794 put(div) will now return the div
+| * 9da0121 add failing assertion for put(div) === div
+|/  
+*   83ab8d4 Merge pull request #8 from mbulman/master
+|\  
+| * f5465c7 Non-amd exclusion from dojo amd processing
+|/  
+*   2b4ff28 (tag: v0.3.0) Merge pull request #7 from csnover/build-packaging
+|\  
+| * a5bc559 Add Dojo build packaging.
+|/  
+*   a6d6db1 Merge branch 'array'
+|\  
+| * fc92e1d (origin/array) Update parser regex to allow % in the element ids
+| * 99d1fed Change array check
+| * d9a7704 Added support for array arguments
+* | a69a5b0 Added support for % in parser
+|/  
+* df559a1 Avoid use of reserved parent variable, fixing test in Opera
+* 4550ee5 Change forDocument function creation to workaround shrinksafe compression bug.
+* 0cb1426 Use more predictable determination of a text node argument
+* 1ff28ae Allow !.className syntax (in addition to !className) for removing classes
+* cb6c002 More docs
+* 61c5986 Add note on using put for multiple documents
+* 143fedf (origin/forDocument) Make it more compact
+* 13627e3 Removed comment
+* 80444f1 Inherit the fragment heuristic
+* 3611ab2 Use forDocument to create a new put() function instead of using setDocument to modify the existing one
+* ed97c39 (tag: v0.2.0) Updated version number
+* 38ab003 Make a note about limitations of - combinator
+* 1d2dc5e More robust handling of spaces in combinators, and reduced arguments (for hopefully better performance)
+* 37661d2 Pass null as second arg to insertBefore when no nextSibling to keep IE happy
+* ae9ea34 Add support for put() method
+* 79aa2ab (tag: v0.1.3) Added version
+* f65adb3 More notes on server side usage
+* a6fcad5 Add better error message for improper element addition
+* 385b80b Performance optimization of tag closing
+* 710acfb Note about efficiency
+* 55c8142 Added maintainers to package.json
+* d10e0b9 More docs on streaming
+* e94b399 (tag: v0.1.2) Added documentation on streaming
+* 557d2e5 Added streaming support
+* 42907d2 Renamed modules, fixed some issues
+* 512a68e Added docs for NodeJS usage
+* 8fa250e Remove old code
+* 317d3d5 Added support for server side HTML generation
+* be10ae1 Fix referencing last element
+* 69c14ae Add note about creating inputs in IE
+* dbe4b63 check for empty string properly
+* 50dbdca Properly handle falsy attribute substitution
+* b4f239e Fix element deletion
+* cf39df7 (tag: v0.1.1) Update intro comments and key enumeration
+* 20dacd7 Fix handling of spaces around combinators
+* db9c067 Added tests
+* b60c245 Add info on removing attributes
+* 69f43c8 Add info on deleting elements
+* 17595db Add info on removing classes
+* 5317cf8 more accurate size
+* 19f5c60 update install info
+* fba1288 (tag: v0.1.0) fix typo
+* 0f29fd1 first commit

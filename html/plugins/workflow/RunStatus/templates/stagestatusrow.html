@@ -1,0 +1,45 @@
+<div dojoAttachPoint="containerNode" class="stageTable">
+
+	<!-- NB: EXTRA dojoAttachPointS ADDED FOR TESTING -->
+
+	<table class="stageTable ${status}" width="100%">
+
+		<tr width="100%" class='stageRow'>
+			<td class='${status}Icon header'
+				align="left" width="100px">${number} </td>
+			<td dojoAttachPoint="nameNode" class='name'>${name}</td>
+			<td class='key'>Queued</td>
+			<td dojoAttachPoint="queuedNode" class='value'>${queued}</td>
+			<td class='key'>Lapsed</td>
+			<td dojoAttachPoint="lapsedNode" dojoAttachPoint="lapsed"
+				class='value'>${lapsed}</td>
+		</tr>
+
+		<tr width="100%" class='stageRow'>
+			<td class='key'>Status</td>
+			<td dojoAttachPoint="statusNode" class='value ${status}'>${status}</td>
+			<td class='key'>Started</td>
+			<td dojoAttachPoint="startedNode" class='value'>${started}</td>
+			<td class='key'>Output</td>
+			<td dojoAttachPoint="stdoutNode"
+				class='stdout'
+				width="50%"
+				title="Click to view run output">STDOUT file</td>
+		</tr>
+
+		<tr width="100%" class='stageRow'>
+			<td class='key'>Duration</td>
+			<td dojoAttachPoint="durationNode" class='value'>${duration}</td>
+			<td class='key'>Ended</td>
+			<td dojoAttachPoint="completedNode" class='value'>${completed}</td>
+			<td class='key'>Errors</td>
+			<td dojoAttachPoint="stderrNode"
+				class='stderr'
+				width="50%"
+				title="Click to view error messages">STDERR file</td>
+		</tr>
+
+	</table>
+	
+</div>
+

@@ -1,0 +1,37 @@
+
+
+
+NAME                dumpDb
+
+h3. PURPOSE
+
+DUMP ALL THE TABLES IN A DATABASE TO .TSV FILES
+
+h3. INPUT
+
+1. DATABASE NAME
+
+2. LOCATION TO PRINT .TSV FILES
+
+h3. OUTPUT
+
+1. ONE .TSV FILE FOR EACH TABLE IN DATABASE
+
+h3. USAGE
+
+{code}
+./dumpDb.pl <--db String> <--outputdir String> [-h]
+ --db          :   Name of database
+ --outputdir   :   Location of output directory
+ --help        :   print this help message
+
+< option > denotes REQUIRED argument
+               [ option ] denotes OPTIONAL argument
+{code}
+
+h3. EXAMPLE
+
+{code}
+perl dumpDb.pl --db agua --outputdir /agua/0.6/bin/sql/tsv/110808
+{code}
+

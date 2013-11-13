@@ -1,0 +1,10 @@
+
+[client]
+user=agua
+password=open4agua
+
+[mysqldump]
+no-data
+result-file=/agua/t/bin/Agua/Common/Package/Sync/inputs/dump/create-agua.dump
+ignore-table=agua.diffs
+ignore-table=agua.report

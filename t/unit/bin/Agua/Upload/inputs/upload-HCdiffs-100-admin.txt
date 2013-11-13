@@ -1,0 +1,100 @@
+Content-Type: multipart/form-data; boundary=---------------------------153501500631101
+Content-Length: 1173191
+
+-----------------------------153501500631101
+Content-Disposition: form-data; name="username"
+
+admin -----------------------------153501500631101
+Content-Disposition: form-data; name="sessionId"
+
+1234567890.1234.123 -----------------------------153501500631101
+Content-Disposition: form-data; name="path"
+
+Project1/Workflow1 -----------------------------153501500631101
+Content-Disposition: form-data; name="uploadedfiles[]"; filename="454AllDiffs-headers-SNP.txt"
+Content-Type: text/plain
+
+CCDS2.2	chr1	1726	1726	C	A	2	100	868977	868977	missense	CCA	ACA	Proline	Threonine	+	+		
+CCDS3.1	chr1	756	756	T	G	2	100	881107	881107	synonymous	GCT	GCG	Alanine	Alanine	-	-		
+CCDS3.1	chr1	770	770	C	T	3	100	881093	881093	missense	GCC	GTC	Alanine	Valine	-	-		
+CCDS3.1	chr1	780	780	G	A	3	100	879243	879243	synonymous	CTG	CTA	Leucine	Leucine	-	-		
+CCDS3.1	chr1	790	790	C	G	3	100	879233	879233	missense	CTG	GTG	Leucine	Valine	-	-		
+CCDS3.1	chr1	793	793	T	G	3	100	879230	879230	missense	TCG	GCG	Serine	Alanine	-	-		
+CCDS3.1	chr1	803	803	C	T	3	100	879220	879220	missense	ACG	ATG	Threonine	Methionine	-	-		
+CCDS3.1	chr1	823	823	C	T	3	100	879200	879200	missense	CGG	TGG	Arginine	Tryptophan	-	-		
+CCDS3.1	chr1	840	840	G	A	3	100	879183	879183	synonymous	CTG	CTA	Leucine	Leucine	-	-		
+CCDS3.1	chr1	885	885	C	T	5	60	879138	879138	synonymous	CTC	CTT	Leucine	Leucine	-	-		
+CCDS3.1	chr1	898	898	A	G	7	86	879014	879014	missense	ATC	GTC	Isoleucine	Valine	-	-		
+CCDS3.1	chr1	912	912	T	A	7	57	879000	879000	synonymous	ACT	ACA	Threonine	Threonine	-	-		
+CCDS3.1	chr1	924	924	T	C	8	62	878988	878988	synonymous	TCT	TCC	Serine	Serine	-	-		
+CCDS3.1	chr1	990	990	C	T	7	43	878922	878922	synonymous	GGC	GGT	Glycine	Glycine	-	-		
+CCDS3.1	chr1	994	994	G	A	7	29	878918	878918	missense	GTC	ATC	Valine	Isoleucine	-	-		
+CCDS3.1	chr1	1016	1016	C	T	5	100	878403	878403	missense	ACG	ATG	Threonine	Methionine	-	-		
+CCDS3.1	chr1	1070	1070	T	C	5	40	878349	878349	missense	TTC	TCC	Phenylalanine	Serine	-	-		
+CCDS3.1	chr1	1078	1078	T	C	3	67	878341	878341	missense	TGG	CGG	Tryptophan	Arginine	-	-		
+CCDS3.1	chr1	1084	1084	T	C	3	67	878335	878335	synonymous	TTG	CTG	Leucine	Leucine	-	-		
+CCDS3.1	chr1	1102	1102	C	T	3	67	878317	878317	synonymous	CTG	TTG	Leucine	Leucine	-	-		
+CCDS3.1	chr1	1166	1166	G	A	4	75	878253	878253	missense	CGC	CAC	Arginine	Histidine	-	-		
+CCDS3.1	chr1	1182	1182	T	C	4	75	878237	878237	synonymous	ACT	ACC	Threonine	Threonine	-	-		
+CCDS3.1	chr1	1300	1300	C	T	4	75	877545	877545	missense	CCC	TCC	Proline	Serine	-	-		
+CCDS3.1	chr1	1311	1311	A	G	4	75	877534	877534	synonymous	CAA	CAG	Glutamine	Glutamine	-	-		
+CCDS3.1	chr1	1359	1359	G	A	5	80	877214	877214	synonymous	CCG	CCA	Proline	Proline	-	-		
+CCDS3.1	chr1	1422	1422	G	A	3	67	877151	877151	synonymous	CCG	CCA	Proline	Proline	-	-		
+CCDS3.1	chr1	1736	1736	A	G	2	100	873296	873296	missense	GAG	GGG	Glutamic	Glycine	-	-		
+CCDS3.1	chr1	1791	1791	G	C	2	100	873241	873241	missense	GAG	GAC	Glutamic	Aspartic	-	-		
+CCDS3.1	chr1	1813	1813	G	C	2	100	871634	871634	missense	GAG	CAG	Glutamic	Glutamine	-	-		
+CCDS3.1	chr1	1826	1826	G	T	2	100	871621	871621	missense	CGG	CTG	Arginine	Leucine	-	-		
+CCDS3.1	chr1	1867	1867	C	T	2	100	871580	871580	missense	CGC	TGC	Arginine	Cysteine	-	-		
+CCDS3.1	chr1	1882	1882	C	T	2	100	871565	871565	missense	CGG	TGG	Arginine	Tryptophan	-	-		
+CCDS3.1	chr1	2018	2018	C	G	5	60	871314	871314	missense	TCT	TGT	Serine	Cysteine	-	-		
+CCDS3.1	chr1	2045	2045	C	T	5	60	871287	871287	missense	TCG	TTG	Serine	Leucine	-	-		
+CCDS3.1	chr1	2049	2049	G	A	5	60	871283	871283	synonymous	GAG	GAA	Glutamic	Glutamic	-	-		
+CCDS3.1	chr1	2081	2081	A	G	2	100	870732	870732	missense	CAT	CGT	Histidine	Arginine	-	-		
+CCDS3.1	chr1	2192	2192	A	G	3	100	870250	870250	missense	CAG	CGG	Glutamine	Arginine	-	-		
+CCDS3.1	chr1	2208	2208	G	A	3	100	870234	870234	synonymous	CCG	CCA	Proline	Proline	-	-		
+CCDS3.1	chr1	2214	2214	C	T	3	100	870228	870228	synonymous	GAC	GAT	Aspartic	Aspartic	-	-		
+CCDS3.1	chr1	2229	2229	G	A	3	100	870213	870213	synonymous	CTG	CTA	Leucine	Leucine	-	-		
+CCDS3.1	chr1	2244	2244	C	G	2	100	870198	870198	missense	GAC	GAG	Aspartic	Glutamic	-	-		
+CCDS8.1	chr1	940	940	A	G	5	80	1109233	1109233	missense	ACC	GCC	Threonine	Alanine	+	+		
+CCDS11.1	chr1	205	205	C	T	2	100	1139165	1139165	missense	CCG	TCG	Proline	Serine	-	-		
+CCDS15.1	chr1	150	150	G	C	23	61	1193085	1193085	missense	TGG	TGC	Tryptophan	Cysteine	-	-		
+CCDS15.1	chr1	161	161	T	C	25	12	1193074	1193074	missense	CTG	CCG	Leucine	Proline	-	-		
+CCDS15.1	chr1	171	171	G	A	17	12	1193064	1193064	missense	TGG	TGA	Tryptophan	Stop	-	-		
+CCDS15.1	chr1	175	175	T	C	17	12	1193060	1193060	missense	TAC	CAC	Tyrosine	Histidine	-	-		
+CCDS21.1	chr1	264	264	G	C	3	100	1245634	1245634	synonymous	GGG	GGC	Glycine	Glycine	-	-		
+CCDS21.1	chr1	264	264	G	C	3	100	1245634	1245634	synonymous	GGG	GGC	Glycine	Glycine	-	-		
+CCDS27.1	chr1	593	593	T	A	2	100	1362689	1362689	missense	CTG	CAG	Leucine	Glutamine	+	+		
+CCDS30.1	chr1	821	821	T	A	2	100	1410329	1410329	missense	TTC	TAC	Phenylalanine	Tyrosine	+	+		
+CCDS30.1	chr1	882	882	G	T	2	100	1410390	1410390	synonymous	CTG	CTT	Leucine	Leucine	+	rs11546154	0	+
+CCDS31.1	chr1	287	287	G	A	4	50	1442414	1442414	missense	CGG	CAG	Arginine	Glutamine	+	rs1619925	0	+
+CCDS31.1	chr1	302	302	G	A	6	50	1442429	1442429	missense	AGC	AAC	Serine	Asparagine	+	rs1619896	0	+
+CCDS31.1	chr1	328	328	T	C	7	57	1442455	1442455	missense	TGG	CGG	Tryptophan	Arginine	+	rs1619815	0	+
+CCDS31.1	chr1	351	351	C	T	8	62	1442478	1442478	synonymous	GCC	GCT	Alanine	Alanine	+	rs2478791	0	+
+CCDS31.1	chr1	1777	1777	G	A	2	100	1459187	1459187	missense	GAG	AAG	Glutamic	Lysine	+	+		
+CCDS31.1	chr1	1810	1810	A	G	2	100	1459220	1459220	missense	ACC	GCC	Threonine	Alanine	+	+		
+CCDS31.1	chr1	1813	1813	C	T	2	100	1459223	1459223	missense	CGC	TGC	Arginine	Cysteine	+	+		
+CCDS32.1	chr1	225	225	C	G	2	100	1490014	1490014	synonymous	CTC	CTG	Leucine	Leucine	-	-		
+CCDS32.1	chr1	296	296	A	T	2	100	1489943	1489943	missense	CAG	CTG	Glutamine	Leucine	-	-		
+CCDS36.1	chr1	330	330	T	C	3	100	1946897	1946897	synonymous	GGT	GGC	Glycine	Glycine	+	rs2229110	0	+
+CCDS36.1	chr1	1053	1053	G	T	2	100	1951055	1951055	missense	AGG	AGT	Arginine	Serine	+	+		
+CCDS42.1	chr1	2162	2162	T	C	3	67	2431106	2431106	missense	GTG	GCG	Valine	Alanine	-	-		
+CCDS43.1	chr1	717	717	C	G	3	100	2481140	2481140	synonymous	GTC	GTG	Valine	Valine	-	-		
+CCDS51.1	chr1	1502	1502	T	A	2	100	3688995	3688995	missense	CTG	CAG	Leucine	Glutamine	-	-		
+CCDS57.1	chr1	3988	3988	C	T	3	67	6110607	6110607	missense	CAG	TAG	Glutamine	Stop	-	-		
+CCDS64.1	chr1	860	860	T	A	4	50	6236290	6236290	missense	GTG	GAG	Valine	Glutamic	-	-		
+CCDS70.1	chr1	1003	1003	C	T	3	100	6427140	6427140	missense	CGC	TGC	Arginine	Cysteine	+	+		
+CCDS70.1	chr1	1011	1011	T	C	3	100	6427148	6427148	synonymous	CTT	CTC	Leucine	Leucine	+	+		
+CCDS70.1	chr1	1074	1074	T	C	5	100	6427211	6427211	synonymous	AAT	AAC	Asparagine	Asparagine	+	+		
+CCDS70.1	chr1	1095	1095	G	T	5	100	6427232	6427232	synonymous	CCG	CCT	Proline	Proline	+	+		
+CCDS70.1	chr1	1126	1126	A	T	4	75	6427263	6427263	missense	ACC	TCC	Threonine	Serine	+	+		
+CCDS70.1	chr1	2151	2151	T	C	4	50	6434569	6434569	synonymous	AAT	AAC	Asparagine	Asparagine	+	+		
+CCDS70.1	chr1	2166	2166	C	G	4	50	6434584	6434584	synonymous	CCC	CCG	Proline	Proline	+	+		
+CCDS72.1	chr1	542	542	C	G	2	100	6447021	6447021	missense	ACG	AGG	Threonine	Arginine	-	-		
+CCDS85.1	chr1	824	824	A	G	4	50	6604205	6604205	missense	CAA	CGA	Glutamine	Arginine	+	+		
+CCDS85.1	chr1	883	883	C	A	4	75	6604264	6604264	synonymous	CGG	AGG	Arginine	Arginine	+	+		
+CCDS86.1	chr1	22	22	C	T	2	100	6607887	6607887	missense	CGG	TGG	Arginine	Tryptophan	+	+		
+CCDS86.1	chr1	387	387	T	C	2	100	6615070	6615070	synonymous	AGT	AGC	Serine	Serine	+	+		
+CCDS86.1	chr1	411	411	A	G	2	100	6615094	6615094	synonymous	GCA	GCG	Alanine	Alanine	+	+		
+CCDS93.1	chr1	376	376	C	T	4	50	7960352	7960352	missense	CAC	TAC	Histidine	Tyrosine	+	+		
+CCDS93.1	chr1	409	409	G	A	2	100	7967540	7967540	missense	GGT	AGT	Glycine	Serine	+	+		
+CCDS93.1	chr1	419	419	C	G	3	67	7967550	7967550	missense	ACC	-----------------------------153501500631101--

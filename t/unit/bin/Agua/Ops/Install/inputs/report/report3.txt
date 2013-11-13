@@ -1,0 +1,12 @@
+Updated status to 'installing'
+Installation directory: /mnt/agua/t/bin/Agua/Ops/Install/outputs/agua
+Pulling from remote repo: agua (owner: agua)
+Checked out version: 0.8.0-alpha.1+build6
+Updated status to 'ready'
+Completed installation, version: 0.8.0-alpha.1+build6
+Updated status to 'installing'
+Installation directory: /mnt/agua/t/bin/Agua/Ops/Install/outputs/agua/bioapps
+Pulling from remote repo: bioapps (owner: agua)
+Checked out version: 0.7.2
+Updated status to 'ready'
+Completed installation, version: 0.7.2

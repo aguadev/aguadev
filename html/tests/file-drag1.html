@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+        "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+<title> file drag 1: FileDrag basic class </title>
+
+<script type="text/javascript" src="dojo.1.2.2/dojo/dojo.js"
+		djConfig="parseOnLoad: true, isDebug: true, useCommentedJson: true"></script>
+	
+<script type="text/javascript">
+
+    //dojo.require("dijit.layout.TabContainer");
+    //dojo.require("dijit.form.Button");
+
+    // REGISTER module path FOR PLUGINS
+    dojo.registerModulePath("plugins","../../plugins");	
+    
+    // LOAD PLUGINS
+    //dojo.require("plugins.projects.Projects");
+
+    // LOAD DEPENDENCIES
+    dojo.require("plugins.project.FileDrag");
+    //dojo.require("dojox.widget.FilePicker");
+    dojo.require("dojox.data.FileStore");
+
+
+
+    // ADD ON LOAD    
+    dojo.addOnLoad(
+
+        function(){
+
+            // LOAD CSS
+            var cssFiles = [ "dojo.1.2.2/dojo/resources/dojo.css", "dojo.1.2.2/dijit/tests/css/dijitTests.css" ];
+            for ( var i in cssFiles )
+            {
+                var cssFile = cssFiles[i];
+                var cssNode = document.createElement('link');
+                cssNode.type = 'text/css';
+                cssNode.rel = 'stylesheet';
+                cssNode.href = cssFile;
+                cssNode.media = 'screen';
+                cssNode.title = 'loginCSS';
+                document.getElementsByTagName("head")[0].appendChild(cssNode);
+            }
+    
+            // THIS CSS FILE PROVIDES THE ICONS AND FORMATTING FOR INDIVIDUAL FILES/DIRECTORIES
+            var cssFile = "dojo.1.2.2/dijit/themes/soria/soria.css";
+            var cssNode = document.createElement('link');
+            cssNode.type = 'text/css';
+            cssNode.rel = 'stylesheet';
+            cssNode.href = cssFile;
+            cssNode.media = 'screen';
+            cssNode.title = 'loginCSS';
+            cssNode.id = "themeStyles";
+            document.getElementsByTagName("head")[0].appendChild(cssNode);
+    
+            // THIS CSS FILE PROVIDES THE ICONS AND FORMATTING FOR INDIVIDUAL FILES/DIRECTORIES
+            var cssFile = "dojo.1.2.2/dojox/widget/FilePicker/FilePicker.css";
+            var cssNode = document.createElement('link');
+            cssNode.type = 'text/css';
+            cssNode.rel = 'stylesheet';
+            cssNode.href = cssFile;
+            cssNode.media = 'screen';
+            cssNode.title = 'loginCSS';
+            cssNode.id = "widgetStyle";
+            document.getElementsByTagName("head")[0].appendChild(cssNode);
+    
+            // CREATE FILESTORE 
+            var fileStore = new dojox.data.FileStore(
+                {
+                    id: sourceId + "-fileStore",
+                    url: "http://localhost:8080/cgi-bin/Bioptic2/projects.cgi?mode=fileSystem&sessionId=1228319084.3060.776&username=admin",
+                    pathAsQueryParam: true
+                }
+            );
+    
+    
+            // CREATE 'PROJECTS' FILE DRAGGER
+            var sourceId = "leftPane";
+            var containerNode = document.createElement('div');
+            containerNode.id = sourceId + "-projectContainer";
+            document.body.appendChild(containerNode);
+            
+            //var ProjectDrag = new dojox.widget.FilePicker(
+            var ProjectDrag = new plugins.project.FileDrag(
+                //sourceId,
+                //{
+                //    accept: ["none"],
+                //    copyOnly: true,
+                //    onClick: function () {	console.log("clicked!")	}
+                //}
+                //sourceId,
+                {
+                    id: sourceId + "-ProjectDrag",
+                    style: "height: 200px; width: 90%;",
+                    store: fileStore,
+                    query: {}
+                    //,
+                    //accept: ["none"],
+                    //copyOnly: true,
+                    //onClick: function () {	console.log("clicked!")	}
+                }
+            );
+            ProjectDrag.startup();
+            dojo.byId(sourceId).appendChild(ProjectDrag.domNode);
+            
+    //        var applications = [
+    //            { data: "Base callers",     type: ["notDraggable"]    },
+    //            { data: "Bustard",          type: ["isDraggable"]    },
+    //            { data: "Alta-Cyclic",      type: ["isDraggable"]    },
+    //            { data: "Assemblers",       type: ["notDraggable"]    },
+    //            { data: "AMOS",             type: ["isDraggable"]    },
+    //            { data: "Eland",            type: ["isDraggable"]    },
+    //            { data: "MAQ",              type: ["isDraggable"]    },
+    //            { data: "SOAP",             type: ["isDraggable"]    },
+    //            { data: "Velvet",           type: ["isDraggable"]    }
+    //		];
+    //		ProjectDrag.insertNodes(false, applications);
+
+            
+        }
+    );
+
+</script>
+
+</head>
+
+<body class="soria">
+
+<h1>
+    file drag 1: FileDrag basic class
+</h1>
+
+<div id="leftPane">leftPane </div>
+
+</body>
+</html>
+
+

@@ -1,0 +1,26 @@
+{
+    "name":   "agua",
+    "version":        "0.6.0",
+    "build":          "",
+    "type":           "application",
+    "source":         "git",
+    "keywords":       ["bioinformatics", "workflows", "cloud", "next-generation", "sequencing", "analysis"],
+    "description":    "A cloud bioinformatics workflow platform for next-generation sequencing",
+    "website ":       "http://www.aguadev.org",
+    "installtype":    "ops",
+    "opsfile":        "https://api.github.com/repos/syoung/biorepository/syoung/agua/agua.ops",
+    "installfile":    "https://api.github.com/repos/syoung/biorepository/syoung/agua/agua.pm",
+    "resources":      {
+        "ec2snapshot": "XXXXXXXX"
+    },
+    "appfiles":       [ "https://api.github.com/repos/syoung/biorepository/syoung/agua/agua.app" ],
+    "licensefile":    "https://api.github.com/repos/syoung/biorepository/syoung/agua/LICENSE",
+    "readmefile":     "https://api.github.com/repos/syoung/biorepository/syoung/agua/README",
+    "installtype":    "ops",
+    "author":         [{ "name": "Stuart", "surname": "Young", "email": "stuartpyoung@gmail.com" }],
+    "publication":    [],
+    "organisation":   [],
+    "ISA":            {},
+    "acknowledgements": [],
+    "citations":      []
+}

@@ -1,0 +1,122 @@
+.confirm {
+	background-color: #EEE;
+	font-size: 14px !important;
+	font-family: Verdana !important;
+	color: #822 !important;
+	font-weight: bolder;
+
+	position: relative !important;
+	top: 100px !important
+	left: 3px !important;
+
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:4pt;
+}
+
+.confirm .dijitDialog .dijitContentPane {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:4pt;
+}
+
+.confirm .dijitDialog {
+	color: #F00 !important;
+	text-align: center;
+}
+
+.confirm .dialog .dijitDialog .dijitDialogTitle {
+	font-size: 14px !important;
+	font-family: Verdana !important;
+	color: #822 !important;
+}
+
+.soria .dijitDialog .dijitDialogTitle {
+	text-align: center !important;
+	font-size: 16px !important;
+	font-family: Verdana !important;
+	color: #448 !important;
+}
+
+
+.confirm .dijitDialogCloseIcon {
+	visibility: hidden;
+	display: none;
+}
+
+.dijitDialogCloseIcon {
+	display: none;
+}
+
+.confirm .dijitDialogTitleBar .dijitDialogTitle {
+}
+
+.confirm .dijitDialogPaneContent{
+	font-family: Verdana !important;
+	color: #822 !important;	
+}
+
+.confirm .yesButton,
+.confirm .noButton {
+	font-size: 18px;
+	color: #222;
+}
+
+/*.aguaIcon {*/
+/*	z-index: 10;*/
+/*	background-image: url("../../../plugins/core/images/agua-icon-24.png");	*/
+/*	background-position: center;*/
+/*	min-width: 24px;*/
+/*	background-repeat: no-repeat;*/
+/*	width: 28px;*/
+/*	height: 28px;*/
+/*	text-align: center;*/
+/*}*/
+/**/
+/*.commit .dijit .dijitToolbar {*/
+/*	height: 30px;*/
+/*	background-image: url();*/
+/*	background: none;*/
+/*	*/
+/*}*/
+/**/
+/*.commit .toolbar {*/
+/*	height: 30px;*/
+/*	background-image: url();*/
+/*	background: none;*/
+/*	border: none !important;*/
+/*}*/
+/**/
+/*.toolbar .dijitReset .dijitInline .dijitButtonNode{*/
+/*	/*position: relative;*/*/
+/*	/*top: -28px;*/*/
+/*	/*left: 30px;*/*/
+/*	height: 30px;*/
+/*	background-image: url();*/
+/*	background: none;*/
+/*}*/
+/**/
+/*.commit .tabs dijitTabPaneWrapper dijitTabContainerTop-container dijitAlignClient,*/
+/*.commit .tabs dijitContainer dijitBorderContainer,*/
+/*.commit .tabs .dijitLayoutContainer {*/
+/*	/*position: relative;*/*/
+/*	/*top: -25px;*/*/
+/*	/*left: 30px;*/*/
+/*	height: 100% !important;*/
+/*	width: 100% !important;*/
+/*}*/
+/**/
+/**/
+/*.resizeHandle {*/
+/*	height: 13px;*/
+/*	width: 13px;*/
+/*	float: right;*/
+/*	position: absolute;*/
+/*	right: 2px;*/
+/*	bottom: 2px;*/
+/*	z-index: 10;*/
+/*	background-image: url('../../../dojo-1.5.0/dojox/layout/resources/icons/resize.png');*/
+/*}*/
+/**/

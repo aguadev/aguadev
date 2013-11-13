@@ -1,0 +1,57 @@
+<div dojoAttachPoint="containerNode">
+
+    <table class="amiRow" width="100%">
+        <tr width="95%">
+            
+            <td
+				dojoAttachEvent="onclick:toggle"
+				align="center"
+				class="amiid"
+				dojoAttachPoint="amiid"
+			>${amiid}
+			</td>
+			<td
+                dojoAttachPoint="cluster"
+                class="aminame"
+                title="AMI Name"
+            >
+				<input
+					dojoAttachPoint="aminame"
+					class="aminame"
+					type="text"
+					value="${aminame}"
+					dojoType="dijit.form.ValidationTextBox"
+					regExp="^\S{1,20}$"
+					maxlength="20" 
+					promptMessage="AMI name: up to 20 characters (no spaces)" 
+					invalidMessage="AMI name: up to 20 characters (no spaces)"
+					tooltipPosition="below"
+					wrap="off"
+					>
+			</td>
+            <td class="amitype">
+                <select
+                    dojoAttachPoint="amitype"
+					class="amitype"
+					title="AMI type: EBS-backed (stop/startable, retains its state) or emphemeral S3 type">
+					<option value="${amitype}">${amitype}</option> 
+					<option value="S3">S3</option>
+					<option value="EBS">EBS</option> 
+                </select>
+            </td>
+
+		</tr>
+		<tr width="95%">
+			<td
+                align="center"
+                colspan="3"
+                dojoAttachPoint="description"
+                dojoAttachEvent="onclick:editCluster"
+                class="description"
+                width="100%"
+                title="A brief description of the cluster group"
+            >${description}</td>
+		</tr>
+    </table>
+
+</div>

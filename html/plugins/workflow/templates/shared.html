@@ -1,0 +1,109 @@
+<div dojoAttachPoint="containerNode">
+
+    <!-- SHARED TAB -->
+    <div
+        dojoAttachPoint="mainTab"
+        dojoType="dijit.layout.ContentPane"
+        title="Shared"
+        class="shared"
+        parseOnLoad="false"
+        style=" height: 100%; width: 100%; padding: 0 !important;"
+        >
+            
+        <table width="265px">
+            <tr>
+                <td colspan="4" class="tabTitle" align="center">Shared Projects</td>
+            </tr>
+            <tr>
+                <td class="projectTitle" colspan="3">User</td>
+            </tr>
+                
+            <tr>
+                <td class="usernameIcon">
+                </td>
+                
+                <td>
+                    <div dojoType="dijit.form.ComboBox"
+                        dojoAttachPoint="usernameCombo"
+                        class="usernameCombo"
+                        autocomplete="false"
+                    >
+                    </div>
+                </td>
+            </tr>
+            
+            <tr>
+                <td class="projectTitle" colspan="3">Project</td>
+            </tr>
+            <tr>
+
+                <td class="projectIcon">
+                </td>
+                
+                <td>
+                    <div dojoType="dijit.form.ComboBox"
+                        dojoAttachPoint="sharedProjectCombo"
+                        class="projectCombo"
+                        autocomplete="false"
+                    >
+                    </div>
+                </td>
+                
+                <td
+                    dojoAttachPoint="sharedCopyProjectButton"
+                    class="sharedCopyProjectButton" 															width="20%"
+                    align="center"
+                    class="fileUpload" >
+                </td>
+
+            </tr>
+            <tr>
+                <td class="workflowTitle" colspan="3">Workflow</td>
+            </tr>
+            <tr>
+
+                <td class="workflowIcon">
+                </td>
+                
+                <td>
+                    <div dojoType="dijit.form.ComboBox"
+                        dojoAttachPoint="sharedWorkflowCombo"
+                        class="workflowCombo"
+                        autocomplete="false"
+                    >
+                    </div>
+                </td>
+
+                <td 
+                    dojoAttachPoint="sharedCopyWorkflowButton"
+                    class="copyWorkflowButton" 															width="20%"
+                    align="center"
+                    class="fileUpload" >
+                </td>
+            </tr>
+            
+            <tr>
+                <td 
+                    dojoAttachPoint="sharedDisplayStatus"
+                    class="displayStatus"
+                    colspan="3"
+                    >
+                </td>
+            </tr>
+            
+            <tr>
+                <td colspan="3">
+                    <div
+                        dojoAttachPoint="sharedDropTargetContainer"
+                        class="dropTarget"
+                        style="position:relative; top: 20px;">
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+    
+    </div>
+    <!-- END OF SHARED TAB -->
+
+</div>

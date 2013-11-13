@@ -1,0 +1,411 @@
+*   62f414b (HEAD, origin/master, origin/HEAD, master) Merge branch 'master' of github.com:jDataView/jDataView
+|\  
+| * 639621c Removed redundant BMP demo (already included in jBinary.Repo)
+| * f9889bf Updated WOW model viewer links.
+| * f4634af Put back link to fixed and updated WoW model viewer demo.
+| * 3612fb0 Updated demos, added hacksparrow/talking-image
+| * 52b2537 Updated demos, added hacksparrow/talking-image
+| * b1aec93 Updated demos, added ynakajima/ttf.js as example
+| * 6a93fa7 Added dist/ to gitignore.
+| * a028eeb Removed redundant submodule update, looks like Travis now does it on its own.
+| * 68b145f Added publisher as Git submodule.
+| * 84b0c89 Added .noConflict() method. Moved publisher call from package.json to .travis.yml so it won't run automatically on developer's machine.
+| * 07b4964 Better debug messages for Git publisher.
+| * 993e943 Fixed support for old (`//@`) source map comments format.
+| * 8b2e91d Removed debug statement, fixed source map comments format.
+| * 7e3ce5c Re-enabled npm publisher, added source map comments to generated code.
+| * 34adcbe Added git username and email configuration in publish.js.
+| * 705648e Added repository argument for GitHub publisher.
+| * 524fb23 Explicitly set Node.js version to 0.10.x for PhantomJS runner task.
+| * cc57748 Added automatic deployment of minified version of script to jDataView/dist. Refactored publish script.
+* | 3296427 Updated Phantom runner.
+|/  
+* dd11f79 Output detailed errors when running tests in PhantomJS.
+* 19f8a6f Update .travis.yml
+* 6257e13 Update .travis.yml
+* fc66ada Manual call of npm test.
+* 11ee1b4 Added PhantomJS testing.
+* 7a046a6 Update README.md
+* c1b2fb3 Added advanced slice() behavior (allowed passing only start offset and negative offsets relative to the end of data).
+*   eec5605 Merge branch 'master' of github.com:jDataView/jDataView
+|\  
+| * 5a7a448 Update README.md
+* | d120b37 Workaround for component.js bug.
+|/  
+* 2d2359f Trying to utilize component.json.
+* 0fa2d13 Moving documentation to wiki with TOC in README and CHANGELOG in separate file.
+* 4837830 Improved workaround condition for Node.js <= 0.8 when creating Uint8Array from another Uint8Array or Buffer instance.
+* a45cf42 Added workaround for Node.js v0.11.6 (`new Buffer(bufferInstance)` call corrupts original data).
+* 40c94f7 (tag: v2.4) Complete bitfield support; dynamic writeXXX methods definition.
+* 2a67955 Refactored tests to structured style with correct engine switching by using BDD-style description and QUnit-style assertions.
+* 26d08e8 One more fix for Node <= 0.8.
+* 5a13d90 Test fix.
+* 49f9280 Combined with fix for Node.js <= 0.8.
+* ce0681c Fixed creating jDataView on Uint8Array subarray.
+* 4dca732 Added bitfield reader methods.
+* 35f8d32 Updated homepage.
+* 9da8d4f (tag: v2.3) Version update according to name change.
+* e5a5371 Changed Mocha reporter to "spec".
+* 0fbba88 Moved testing engine to Mocha.
+* 2101ce1 Fixed weird bug with `new Uint8Array(some Uint8Array).buffer` :: `Uint8Array` (not `ArrayBuffer`) in Node.js <= 0.8.
+* 343fce6 Revert "Workaround for problem with old Buffer implementation and big floats."
+* 3320fc7 Workaround for problem with old Buffer implementation and big floats.
+* 1b1ce08 Returned back source file.
+* 77e312c Renamed to lowercase for RequireJS+Node.js support due to new NPM limitations.
+* 37d72ab Better publish error handling.
+* 2c22eb7 Depend on job number for publishing from Travis (only first job in list will be used for publish).
+* 114500e Env matrix fix.
+* ca6891b Publish only once.
+*   285df15 Merge branch 'master' of github.com:jDataView/jDataView
+|\  
+| * cb23ccd Added Travis badge.
+* | c9e3e12 Added NPM auto-publish on successful tests; changed name of package to lowercase corresponding to new NPM restrictions.
+|/  
+* 786e6f6 Fixed test for Node.js 0.6.
+* 5d30121 Providing detailed child process error message to console.
+* 3e90191 More error information.
+* ea7f6e4 Possible fix for Node<=0.8; test improvement.
+* fde9736 Disabled support for old Node.js Buffer implementation (using alternative engines instead).
+* a3b46c6 Fix process exit code on test fail (for Travis-CI).
+* 643d17f Added Travis config.
+* f46070a Faster AMD definition by explicit empty dependencies declaration.
+* 4b27942 Anonymous AMD definition.
+* 233a5f5 Node.js test fixes.
+* a7b8192 Added tests for Uint64.
+* 559abb7 Indentation fix.
+* 40e78b7 Added ability to run JSHint test from file:/// protocol.
+* 52f7722 More filename case sensitivity fixes.
+*   2799160 Merge branch 'master' of github.com:jDataView/jDataView
+|\  
+| *   f956b47 Merge branch 'master' of github.com:jDataView/jDataView
+| |\  
+| * | 3ce8ad9 Fix of file name in package.json
+* | | a752383 Simplified tests, added test for Bytes setter.
+| |/  
+|/|   
+* | 5241c7d Performance improvement using pow2 dynamically cached implementation
+* | dac85df Update README.md
+* | 31621c2 Update README.md
+|/  
+* a7b4b20 Renamed library file to camel case (as constructor itself) for correct AMD autoload.
+* 4f3b8f5 Using native string -> binary conversion in Node.js.
+* ff82d43 Demo link update.
+* 209b5ac Updated name for AMD module.
+* 561a3ff Added AMD support.
+* af4b400 Updated package info.
+* 128edb6 Better PixelData support detection.
+* d83c115 Fix for deeply sliced jDataView based on Typed Arrays.
+*   af46fec Merge branch 'master' of github.com:RReverser/jDataView
+|\  
+| * 4c02af4 Added jshint local copy.
+* | 2d25792 Allowed passing another jDataView as buffer parameter into constructor.
+|/  
+* b74842f Fix.
+* b7d4ab0 (tag: v2.2) Added `skip` method; updated NPM package info.
+*   3989bec Merge branch 'master' of github.com:vjeux/jDataView
+|\  
+| *   2bd0122 Merge pull request #52 from RReverser/master
+| |\  
+* | | 18c7f8f Moved demos to gh-pages branch. Updated demo list in README.
+| |/  
+|/|   
+* | ab09e60 Indentation fix.
+* | 5e233fa Update of README about 64-bit integers.
+* | 5f1bf7d Moved engine-dependent action implementations into prototype.
+* | 8ea719f Renamed action method to "private" _action (and _action to _engineAction).
+* |   8ec6285 Merge branch 'master' of git://github.com/vjeux/jDataView
+|\ \  
+| |/  
+| *   a2da6cb Merge pull request #51 from RReverser/master
+| |\  
+| * \   1a3b99b Merge pull request #50 from RReverser/master
+| |\ \  
+| * \ \   8f4c24a Merge pull request #49 from RReverser/master
+| |\ \ \  
+* | | | | 4efcdb6 Refactoring pack (merged read+write methods of each engine into "actions" and much more). + Added JSHint project configuration, fixed code to match it. + Added JSHint runner as QUnit test (using `XMLHttpRequest` in browser and `fs` module in Node.js, so won't work locally). JSHint does not work in IE<9 but it's not smth we should be worried about. + Changed optional string encoding parameter from boolean to string. + Added tests for UTF-8 encoded strings.
+| |_|_|/  
+|/| | |   
+* | | | d211301 Added ability to run tests for all the supported engines at once.
+| |_|/  
+|/| |   
+* | | 24f58da Update for README.
+* | | 2c691c9 Added CanvasPixelArray as fast byte array for platforms that do support Canvas but have no Typed Arrays support. Fixed offsets after 64-bit integer I/O operations. Fixed getString(length = undefined) call for Node Buffer.
+| |/  
+|/|   
+* |   4a3cb9f Merge branch 'master' of git://github.com/vjeux/jDataView
+|\ \  
+| |/  
+| *   71d4f4a Merge pull request #48 from RReverser/master
+| |\  
+* | | 3decff9 Added simple unit test to show problem with BigData strings.
+| |/  
+|/|   
+* |   4080edd Merge branch 'master' of git://github.com/vjeux/jDataView
+|\ \  
+| |/  
+| *   b3840ba Merge pull request #47 from RReverser/master
+| |\  
+* | | a953fd9 Using Buffer I/O operations for strings in Node.js.
+* | | 376271b Removed `String.fromCharCode.apply` since it fails on big arrays; Array.prototype.slice.call => arrayFrom.
+| |/  
+|/|   
+* | 4308607 Fix.
+* | 6852f63 Read/write operation on blobs (byte sequences) should be as fast as possible by default.
+|/  
+*   02f2bb4 Merge pull request #46 from RReverser/master
+|\  
+| * f41fcf5 Chars actually are also strings and should support UTF-8 as well.
+* |   5950cf7 Merge pull request #45 from RReverser/master
+|\ \  
+| |/  
+| *   73a8f43 Added support for UTF-8 strings.
+| |\  
+| | * 3dcb645 Update README.md
+* | |   70a21a1 Merge pull request #44 from RReverser/master
+|\ \ \  
+| |/ /  
+| | /   
+| |/    
+|/|     
+| * a9e15c1 Opera throws RangeError: Offset larger than array size if trying to create Uint8Array view with zero length.
+|/  
+*   1c81c0d Merge pull request #42 from RReverser/master
+|\  
+| * 86b20f4 Added 64-bit integers (not really, still limited by 53 bits due to IEEE.754 restrictions).
+|/  
+* 7829ea6 Update README.md
+*   081e2dd Merge pull request #39 from mmthomas/patch-1
+|\  
+| * cc68769 Changed spaces to tabs as per request.
+| * 14c09d8 Update test.js
+* |   bd26af4 Merge pull request #40 from mmthomas/patch-2
+|\ \  
+| |/  
+|/|   
+| * 50873e0 Moved 'if' onto same line as 'else' as per request.
+| * 8d6d980 Replaced spaces with tabs as per request.
+| * 36961be Update jdataview.js
+|/  
+*   062b5dd Merge pull request #37 from RReverser/master
+|\  
+| * dc52b25 Updated untar demo to work in IE7.
+| * 990b871 Removed `Array.prototype.map` dependency to support old IE.
+* |   4ec8e24 Merge pull request #35 from RReverser/master
+|\ \  
+| |/  
+| *   9ecce82 Merge branch 'master' of git://github.com/vjeux/jDataView
+| |\  
+| |/  
+|/|   
+* |   d0cd543 Merge pull request #34 from RReverser/master
+|\ \  
+* \ \   7af715e Merge pull request #33 from RReverser/master
+|\ \ \  
+| | | * ef6532d Added ability to create empty buffer (and operate on it) by passing count of bytes to wrapBuffer.
+| | |/  
+| | * 70a7869 Doc update.
+| |/  
+| * c0fd6fd Fix for write methods.
+| * e7d8452 Changelog update.
+| *   fbacdd8 Updated docs + added native support for Uint8Array as input.
+| |\  
+| |/  
+|/|   
+* | 8096a36 Update README.md
+* | 037bddc Update README.md
+* | 5fad53f Update README.md
+* |   9de1c84 (tag: v2.0) Merge pull request #32 from RReverser/master
+|\ \  
+* \ \   6ccbff7 Merge pull request #31 from RReverser/master
+|\ \ \  
+* \ \ \   330b1e8 Merge pull request #30 from RReverser/master
+|\ \ \ \  
+* \ \ \ \   7c079d1 Merge pull request #28 from RReverser/master
+|\ \ \ \ \  
+| | | | | * a82ba55 Bunch of performance improvements. Using [String->]Array->(Buffer|ArrayBuffer) conversion chain for best performance on used platform. String buffers are now implicitly converted to inner byte buffer formats too: for getters, this means no need to convert chars to bytes on each read access; for setters, this means no need to rebuild strings using slice+concat on each write access (since JS Strings are immutable and it was the only way for modifying their contents). Typed arrays are now used even if values are misaligned (operating on sliced part of byte buffer in that case). Added jDataView.wrapBuffer function for converting any supported input buffer (than can be String or any Array-like type) to best suitable inner type; jDataView.createBuffer is left only for backward compatibility. Added jDataView.prototype.slice function for retrieving jDataView on part of original one (supports options for pointing to the same memory buffer or copying data into new one). getBytes now supports call w/o length argument (reads to the end of buffer by default).
+| | | | |/  
+| | | | * bd461f7 Added writeXXX helpers for Char, String, Bytes.
+| | | | * 143e8d7 Doc fix.
+| | | | * 6e47e44 Re-enabled ArrayBuffer and DataView support (was disabled for debug purposes).
+| | | | * 31b4f37 Added writeXXX methods for easier sequential writing. Updated documentation (added info on setters). Added ability to create jDataView from byte array.
+| | | | *   956a848 Added binary float setters with tests. Merged simplified test syntax from master.
+| | | | |\  
+| | | | | * a3551a5 Simplified writing tests by wrapping tests inside each module into common functions with testcase suites in arguments.
+| | | | * |   ed95087 Merge branch 'master' into writer
+| | | | |\ \  
+| | | | | |/  
+| | | | | * 26ad259 Removed jQuery-related code from master branch (since it's really needed for small percent of all lib users).
+| | | | |/  
+| | | |/|   
+| | | | * 5b87551 Added filtering characters in setString.
+| | | | * a0967d3 Using _setInt* instead of _setUint* since they do the same actions. Finished [U]Int{8/16/32} suite.
+| | | | * c15bd16 Converted indents to tabs.
+| | | | * c2deb08 Added [U]Int16 setters.
+| | | | * 6e44ad4 Added Int8/Uint8 setters.
+| | | | * bff7cfd Implemented setters core, added tests for Char and String setting.
+| | | |/  
+| | | * b95bf6e Changed littleEndian argument in _getBytes to reflect expected byte order; small optimizations.
+| | | * 46cda1e Fix integer reading.
+| | |/  
+| | * 36e5519 Fixed bug when using Node Buffers - jDataView did not take into mind custom endianness argument and always used the one was set in constructor.
+| |/  
+| * 72fbdb2 Fixed mistake in changelog (really Big Endian is used by default now to be compatible with DataView specification).
+| * 47ab2ad Update README.md
+| * b35a3c8 Fixed indentation; changed tests to reflect new Char/String processing mode.
+| * a2439dc Fixed getBytes seeking.
+| * 93cbe0e Fixed getBytes range check.
+| * f50eda7 Added getBytes wrapper for _getBytes inner method to return immutable result.
+| * 654360a .createBuffer() constructor optimizations;
+| * ba414f1 Revert "Added tests for future Bits type."
+| * 1a0d72c Added tests for future Bits type.
+|/  
+* 9ded4be Update master
+* f14bd54 Update master
+* 805d4e6 Update master
+* b346094 Update master
+* 3b761ac Update master
+* f8e0876 (tag: v1.1) Upgrade version number from 1.0.2 to 1.1.0
+*   1036ea9 Merge pull request #21 from Reggino/master
+|\  
+| * 6face66 typo, breaks in Firefox
+|/  
+*   8cb9870 Merge pull request #20 from scintill/patch-1
+|\  
+| * 218f0aa Fix mismatched string delimiter
+|/  
+*   a7824e4 Merge pull request #18 from Mithgol/readme
+|\  
+| * 22cae18 subsection 8
+| * 83e7e83 the spec is at http://www.khronos.org/registry/typedarray/specs/latest/#8 now
+* |   74f7727 Merge pull request #19 from Mithgol/errormsg
+|\ \  
+| |/  
+|/|   
+| * cab5e8c better (less cryptic) error messages
+|/  
+*   0d8b4e6 Merge pull request #14 from divergentdave/readme2
+|\  
+| * 99f2527 Update README.md
+|/  
+* a6a73af Updated module.export declaration
+* 9ae7371 One-line export
+* 00b7645 Update README.md
+*   4c2675e Merge pull request #8 from scintill/ie
+|\  
+| * c80d8eb add support for IE 6. tar demo works in 6-9
+| * ee792c8 added JSON emulation for older IE, modified HTML so IE 9 will render in IE9 standards mode, giving native JSON
+* |   10a7d4f Merge pull request #7 from scintill/ie
+|\ \  
+| |/  
+| * 91c22b1 add IE support (tested in 8 and 9), updated doc and demo, and made getString() for String-backed buffers consistent with the others
+|/  
+* 1633146 (tag: v1.0) package.json
+* eb461ff Added patched jQuery 1.7.1 for binary files
+*   20e20ee Merge branch 'master' of github.com:vjeux/jDataView
+|\  
+| * 9f6902b Update README.md
+* | d0093d4 Seek now returns the new position
+|/  
+*   e9644cf Merge branch 'master' of github.com:vjeux/jDataView
+|\  
+| * b67f1bb Update README.md
+* | 870444a getChar uses getString(1). getChar now respects basic ascii
+|/  
+*   e73f002 Merge branch 'master' of github.com:vjeux/jDataView
+|\  
+| * a6731c0 Update README.md
+* | d78ff73 getString: Removed support for extended ascii to follow nodeJS Buffer specification
+* | 0781fda Addition of a test suite
+|/  
+* 0309f71 Improved many checks and fixed bugs when constructor byteOffset != 0. Thanks to @divergentdave
+*   00eae1a Merge branch 'master' of github.com:vjeux/jDataView
+|\  
+| * cbf0e85 Update README.md
+| * 84b6b62 Update README.md
+* | 3dca47c Initial NodeJS Buffer Support
+|/  
+* 096fc1e Added buffer, byteLength and byteOffset attributes as written in the DataView specifications
+*   c98e77b merges
+|\  
+| *   dd604ab Merge pull request #5 from clockworkgeek/master
+| |\  
+| | * 129c86c Fix for working in web workers.
+| |/  
+| * d9249da Edited README.md via GitHub
+| * 47b885a Added littleEndian argument to _getInt16
+| *   a06d078 Merge pull request #4 from gmarty/master
+| |\  
+| | * bd3dbc9 No need to declare an argument
+| | * 40444df _end property was not defined, I assume it should be byteOffset
+| | * 4a6a810 Removing reference to undeclared var length in getChar()
+| |/  
+| *   cfc91f7 Merge pull request #3 from nelhage/fix-offset
+| |\  
+| | * 4d9a3de Fix several methods for buffers with a non-zero byteOffset.
+| |/  
+| * 06210b0 Edited README.md via GitHub
+* | 9c30432 Removed jsHint warnings
+|/  
+* 01de976 Relaxed error on seek for the end of file
+* 7507292 Rewind wrong patch
+* c1e07ff Edited src/jdataview.js via GitHub
+* 9fb5417 Edited README.md via GitHub
+* 5a5fe43 Edited README.md via GitHub
+* 144f85c Edited README.md via GitHub
+* d5cab7d Edited README.md via GitHub
+* 2ee4906 Extremely large unsigned int would be considered as signed
+* 68d1a6b untar demo updated
+* 0f5a163 Added support for denormalized floats
+*   27005e6 Merge branch 'master' of github.com:vjeux/jsDataView
+|\  
+| * 58a6c8e Edited README.md via GitHub
+* | 5202958 Fixed an issue with Float32
+|/  
+*   7ec31a6 Merge branch 'master' of github.com:vjeux/jsDataView
+|\  
+| * 07d9ad1 Edited README.md via GitHub
+| * 4e5a8e3 Edited README.md via GitHub
+| * 5637580 Edited README.md via GitHub
+| * 8896ec1 Edited README.md via GitHub
+* | b12b3f9 Added littleEndian argument on the constructor. Opera 11.50 does not fully implement DataView, improved check.
+|/  
+* 66a523f Fixed issue with getInt16 returning a wrong value and ArrayBuffer ignoring the endianess
+* 4b5717a uint32 is now working correctly
+*   8035b05 Merge branch 'master' of github.com:vjeux/jsDataView
+|\  
+| * 402d2ae 
+| * 0c572f9 
+* | 3a1d60b Fixed bounds issues
+|/  
+*   b94994b Merge branch 'master' of github.com:vjeux/jsDataView
+|\  
+| * 3d2dc3c 
+| * 822ae14 
+* | f25adc9 Added jQuery patched for binary xhr, added untar demo, modified getString api
+|/  
+*   10d2803 Merge branch 'master' of github.com:vjeux/jsDataView
+|\  
+| * 252e7ba 
+| * e4d5f90 
+| * 69e2afc 
+| * 59f6969 
+| * a42715c 
+| * d4068a1 
+| * 4e88ce5 
+| * 0c33c3b 
+| * c3f70ad 
+| * c303022 
+| * 04486fe 
+| * df59b37 
+| * 0a57905 
+| * e3ae6a0 
+| * 1e9a186 
+| * 79138f8 
+* | 3b60520 changes
+|/  
+* e6509f2 readme
+* bdc8423 
+* 1041be8 
+* 837de55 
+* 42cb036 
+* aa7d788 Initial Commit

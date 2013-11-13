@@ -1,0 +1,74 @@
+
+h3. APPLICATION
+
+jbrowseView
+
+h3. PURPOSE
+
+1. INCORPORATE JBROWSE FEATURES AS DYNAMIC TRACKS INTO A
+
+WHOLE-GENOME VIEW WITH DEFAULT STATIC TRACKS
+
+2. COPY SELECTED THE data DIRECTORY OF THE USER'S JBROWSE
+
+FEATURE DIRECTORY:
+
+username/project/workflow/view/species/data
+
+
+THE WEB ROOT DIRECTORY FOR THIS VIEW:
+
+jbrowse/username/project/workflow/viewname/data
+
+3. ADD FEATURES TO tracksInfo.js FILE
+
+h3. INPUT
+
+1. data FOLDER LOCATIONS OF JBROWSE FEATURES
+
+2. LOCATION OF
+
+3. LOCATES pileup FILES USING THE STANDARD DIRECTORY ARCHITECTURE
+
+LAID OUT IN PARENT Cluster.pm
+
+h3. OUTPUT
+
+1. MODIFIED pileup FORMAT FILE WITH APPENDED COLUMNS CONTAINING
+
+SNP ANNOTATION INFORMATION
+
+NOTES
+
+INHERITS Cluster.pm IN ORDER TO:
+
+1. ACCESS THE DIRECTORY ARCHITECTURE INFO TO LOCATE INPUT FILES
+
+2. RUN SCRIPTS ON AN HPC CLUSTER
+
+h3. USAGE
+
+{code}
+./jbrowseView.pl <--inputfiles String> <--outputdir String>
+               <--inputdir String> [--splitfile String] [--reads Integer] [--convert]
+               [--clean] [--queue String] [--maxjobs Integer] [--cpus Integer] [--help]
+ --outputdir       :   Directory with one subdirectory per reference chromosome
+                                   containing an out.sam or out.bam alignment output file
+ --inputdir    :   Location of directory containing chr
+.fa reference files
+ --chromodir         :   Name of the reference chromodir (e.g., 'mouse')
+ --queue           :   Cluster queue name
+ --cluster         :   Cluster type (LSF|PBS)
+ --help            :   print help info
+{code}
+
+h3. EXAMPLES
+
+/nethome/bioinfo/apps/agua/0.5/bin/apps/jbrowseView.pl \ --refseqfile
+       /nethome/syoung/base/pipeline/jbrowse/ucsc/reference/refSeqs.js \
+ --outputdir /scratch/syoung/base/pipeline/jbrowse/agua/0.5/maq1 \
+ --inputdir /scratch/syoung/base/pipeline/SRA/NA18507/maq/maq1 \
+ --filetype bam \ --filename "out.bam" \ --label maq1 \ --key maq1 \
+ --queue large \ --cluster LSF
+
+

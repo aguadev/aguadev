@@ -1,0 +1,982 @@
+/* FRAME AROUND TITLE PANE */
+tundra .dijitTitlePaneContentOuter {
+    border-style: none solid solid;
+	
+}
+
+/* HIDE 'OK' AND 'CANCEL' BUTTONS */
+.folders .dojoxRollingListButtons {
+	display: none !important;
+}
+.folders .dojoxRollingListContainer {
+	height: auto !important;
+	/*padding-right: 20px !important;*/
+}
+
+/* FILE MANAGER FONTS */
+.dijitDialog .folders {
+	font-size: 15px !important;
+	font-weight: 400 !important;
+	/*font-family: Serif !important;*/
+	border-radius: 9pt !important;
+	border-radius-bottomright: 9pt !important;
+}
+
+/* DIALOG STYLES */
+
+/* DIRECTORY TITLE PANES - DIFFERENT COLOR FROM MAIN TITLE PANES */
+.folders .directories .dijitTitlePaneFocused .dijitTitlePaneTextNode {
+	color: #000 !important;
+}
+
+.folders .directories .dijitTitlePane .dijitTitlePaneTitle {
+	color: #FFF !important;
+	background-color: #88F !important;
+	font-weight: bolder !important;
+}
+.folders .directories .dijitTitlePaneTextNode,
+.folders .directories .dijitTitlePaneFocused .dijitTitlePaneTextNode {
+	color: inherit !important;
+	background-color: inherit !important;
+	font-weight: bolder !important;
+}
+
+/* ITEM COLOR ON OVER */
+.dojoDndItem .fileDrag .directory .dojoDndItemAnchor {
+	background-color: #CCFFCC !important;
+	background-image: url(../../../../plugins/files/FileDrag/images/directory-open.png);
+}
+/* NO DOTTED BORDER AROUND DIALOG */
+.soria .dijitDialog,
+.tundra .dijitDialog {
+	border: 0 none !important;
+	/*border: 1px solid #EAF0F2 !important;*/
+}
+
+/* THIS CONTROLS THE OPACITY OF THE ENTIRE FILE MANAGER */
+.tundra .dijitDialog {
+    opacity: 0.9 !important;
+	height: auto !important;
+	width: auto !important;
+}
+
+/* DIALOG TITLE */
+.dojoxDialogTitle {
+	text-align: center;
+	font-size: 24px;
+	font-weight: bold;
+	font-family: Verdana;
+}
+
+/* NO DOTTED BORDER AROUND TITLE PANE TITLE */
+.tundra .dijitTitlePaneTitleFocus,
+.soria .dijitTitlePaneTitleFocus {
+	outline: 0 !important;
+}
+
+.folders .dijitDialog .dijitDialogHover .dijitHover .dijitDialogFocused .dijitDialogHoverFocused .dijitHoverFocused .dijitFocused {
+	outline: 0 !important;
+}
+
+.folders .dijitDialog .dijitDialogFocused .dijitFocused,
+.dijitTitlePane .dijitTitlePaneFocused .dijitFocused,
+.soria .dijitTitlePane .dijitTitlePaneFocused .dijitFocused,
+.soria .dijitTitlePane .dijitTitlePaneFocused .dijitFocused .dijitTitlePaneTitleFocus,
+.tundra .dijitTitlePane .dijitTitlePaneFocused .dijitFocused {
+	outline: 0 !important;
+}
+
+/* DIALOG */
+.tundra .dijitDialog .folders {
+	border-width		: 	0px !important;
+	border-top-width	: 	0px !important;
+	border-bottom-width	: 	0px !important;
+	border-left-width	: 	0px !important;
+	border-right-width	: 	0px !important;
+	background-color	: 	white !important;
+	border		:	1px solid #CCCCCC !important;
+	padding		:	0 !important;
+	height		: 	auto !important;
+	width		: 	auto !important;
+}
+
+.folders .dijitTitlePane {
+	z-index: 9999 !important;
+	border-radius: 9pt !important;
+	border-radius-bottomright: 9pt !important;
+}
+
+.foldersUnderlay {
+	z-index: 999;
+    background: black;
+}
+
+.dijitDialog .folders {
+	background: black;
+	z-index: 999;
+	height: auto;
+	position: absolute;
+	z-index: 999;
+	padding: 1px;
+	border-radius:9pt;
+	border-radius-bottomright:9pt;
+	border-radius:9pt;
+	border-radius-topright:9pt;	
+}
+
+.dijitDialogUnderlayWrapper {
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 10;
+	display: inline;
+	/*background: transparent !important;*/
+}
+
+.dijitDialogPaneContent {
+	background-color: #FFFFFF !important;
+}
+
+.dijit_a11y .dijitInputLayoutContainer,
+.dijit_a11y .dijitDialog {
+	opacity: 0.8 !important;
+	background-color: white !important;
+}
+
+.dijitDialog .closeText {
+	/*display:none;*/	
+	position:absolute;
+}
+.dijit_a11y .dijitDialog .closeText {
+	display:inline;
+}
+
+.folders .dijitDialog {
+	position: inherit !important;
+}
+
+.foldersUnderlay {
+	z-index: 999;
+    background: black;
+}
+
+.dijitDialog {
+	background: black;
+	z-index: 999;
+	height: auto;
+}
+
+.dijitDialogUnderlayWrapper {
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 10;
+	display: inline;
+	/*background: transparent !important;*/
+}
+
+.dijitDialogUnderlayWrapper_underlay {
+/* this is how you style underlays */	
+/*#thirdTest_underlay { background-color: #000 }*/
+/*#fourthTest_underlay,*/
+/*#secondTest_underlay { background-color: #369 }*/
+    /*display: none;*/
+}
+
+.dijitDialog {
+	position: absolute;
+	/*position: inherit !important;*/
+
+	z-index: 999;
+	padding: 1px;
+}
+
+.dijitDialogFixed div.dijitDialogTitleBar {
+	cursor:default; 
+}
+
+.dijit_a11y .dijitDialog .closeText {
+	display:inline;
+}
+
+.folders .dijitTitlePaneContentOuter {
+	background-color: #FFFFFF !important;
+	border-radius: 9pt !important;
+	border-radius-bottomright: 9pt !important;
+}
+
+/* UNCOMMENT background-color FOR WHITE BACKGROUND */
+.tundra .dijitTitlePaneContentOuter {
+    background: none repeat scroll 0 0 #FFFFFF !important;
+    border-color: -moz-use-text-color #BFBFBF #BFBFBF;
+    border-right: 1px solid #BFBFBF;
+    border-style: none solid solid;
+    border-width: 0 1px 1px;
+
+	border-bottom-left-radius: 9pt !important;
+	border-bottom-right-radius: 9pt !important;
+}
+
+
+.folders {
+	outline-style: none !important;
+}
+
+.folders .dijitDialog,
+.folders .dijitDialog .moveItem {
+	border: 0 none !important;
+	padding: 0 !important;
+	outline-style: none !important;
+}
+
+.dojoxDialog {
+	outline-color:-moz-use-text-color;
+	outline-style:none;
+	outline-width:0;
+	position:absolute;
+	z-index:999;
+}
+.dojoxDialog .closeText {
+	display:none;
+	position:absolute;
+}
+.dojoxDialogFixed div.dojoxDialogTitleBar {
+	cursor:default;
+}
+.dojoxDialogWrapper {
+	left:0;
+	top:0;
+}
+
+.folders .title {
+	background-color: black !important;
+	color: #FFFFFF !important;
+	-moz-background-clip: border;
+	-moz-background-inline-policy: continuous;
+	-moz-background-origin: padding;
+	/*border-radius:9pt;*/
+	/*border-radius-bottomright:9pt;*/
+	border-radius: 9pt;
+	border-radius-topright: 9pt;
+	border-radius:9pt;
+	border-radius-bottomright:9pt;
+	width: 100% !important;
+}
+
+.folders .dojoxDialogPaneContent {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:9pt;
+	border-radius-bottomright:9pt;
+	/*border-radius:9pt;*/
+	/*border-radius-topright:9pt;*/
+	background:#FFFFFF none repeat scroll 0 0 !important;
+	/*border:1px solid #B7B7B7 !important;*/
+	/*padding: 0px 3px 3px;*/
+	
+}
+
+.folders .dojoxDialogWrapper {
+	width: 100% !important;
+}
+
+.dojoxDialog {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:9pt;
+	background:#FFFFFF none repeat scroll 0 0;
+	width: 100% !important;
+	/*border:1px solid #B7B7B7;*/
+	/*padding:1.5em 3px 3px;*/
+}
+
+.dojoxDialog:hover {
+	border:1px solid #CCCCCC;
+}
+.dojoxDialogFocused {
+	border:1px solid #CCCCCC;
+}
+.dojoxDialog .dojoxDialogPaneContent {
+	border:medium none;
+	padding:0;
+}
+
+.dojoxDialogTitleBar {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	border-radius:8pt;
+	border-radius-topright:8pt;
+	border-radius:9pt;
+	border-radius-bottomright:9pt;
+	background:#EDEDED none repeat scroll 0 0;
+	cursor:move;
+	height:1.5em;
+	left:0;
+	outline-color:-moz-use-text-color;
+	outline-style:none;
+	outline-width:0;
+	position:absolute;
+	right:0;
+	top:0;
+}
+.dj_safari .dojoxDialogTitleBar {
+	border:1px solid #CCCCCC;
+}
+.dojoxDialogNoTitle .dojoxDialogTitleBar {
+	display:none;
+}
+.dojoxDialogContent {
+	margin-top: 1.4em;
+	padding:3px;
+}
+.dojoxDialogTitle {
+	border-bottom:medium none #B7B7B7;
+	font-weight:bold;
+	outline-color:-moz-use-text-color;
+	outline-style:none;
+	outline-width:0;
+	padding:8px 12px;
+	-moz-user-select: none !important;
+}
+div.dojoxDialogNoTitle {
+padding-top:9px;
+}
+
+/* DIALOG CLOSE ICON */
+
+/* DIALOG CLOSE ICON */
+.folders .dijitDialogCloseIconHover {
+	background : url("../../../plugins/workflow/images/dialogCloseButton.png") no-repeat scroll right top transparent !important;
+}
+
+.folders .dojoxDialogCloseIcon,
+.folders .dojoxDialogCloseIcon .dijitDialogCloseIconHover {
+	background : url("../../../plugins/workflow/images/dialogCloseButton.png") no-repeat scroll right top transparent !important;
+}
+
+/*.dojoxDialogCloseIcon, .dojoxDialogCloseIconHover {*/
+/*	background : url("../../../../plugins/workflow/images/dialogCloseButton.png") no-repeat scroll right top transparent !important;*/
+/*}*/
+
+.dojoxDialogCloseIcon {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	/*background:transparent url(images/dialogCloseButton.png) no-repeat scroll right top;*/
+	cursor:pointer;
+	height:29px;
+	left:-19px;
+	position:absolute;
+	top:-19px;
+	vertical-align:middle;
+	width:29px;
+	z-index:999;
+}
+
+.dojoxDialogNoTitle .dojoxDialogCloseIcon {
+left:-15px;
+top:-15px;
+}
+
+
+/* NO BORDER IN FILE PANE */
+.fileDrag .dojoxRollingList {
+	border: 0 none !important;
+	/*border: 1px solid #000;*/
+	height: 10em;
+	overflow: scroll;
+	overflow-y: hidden;
+	overflow-x: scroll;
+	white-space: nowrap;
+	background-color: #FFF;
+}
+
+.fileDrag .dojoxRollingListPane {
+	overflow: scroll;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	display:-moz-inline-box;		/* FF2 */
+	display:inline-block;			/* webkit and FF3 */
+	/*#zoom: 1; /* set hasLayout:true to mimic inline-block */
+	/*#display:inline; /* don't use .dj_ie since that increases the priority */
+	border:0;
+	padding:0;
+	vertical-align: middle;
+	/*#vertical-align: auto;*/
+	/* makes TextBox,Button line up w/native counterparts on IE6 */
+}
+
+.folders .dojoxRollingListPane .dijitMenuItemLabel,
+.folders .dojoxRollingListPane .dijitMenuItemIcon {
+	position: static !important;
+}
+
+.dj_safari .dojoxRollingListPane,
+.dj_ie .dojoxRollingListPane {
+	padding-right: 15px; /* Account for scroll bar */
+}
+
+.fileDrag .dojoxRollingListPane .dijitMenu {
+	border: none !important;
+}
+
+
+.folders .dojoxRollingListPane .dijitMenu {
+	border: none !important;
+}
+
+.folders .dojoxRollingListItem {
+	cursor: default;
+}
+
+/* REFRESH BUTTON */
+.folders .refreshButton {
+	display: inline-block !important;
+	-moz-user-select: none !important;
+	border-radius: 9pt;
+	border-radius-topright: 9pt;
+	border-radius: 9pt;
+	border-radius-bottomright: 9pt;
+	background-image: url("../../../plugins/workflow/images/refresh-18.png");
+	background-repeat: no-repeat;
+	width: 18px !important;
+	height: 18px !important;
+	z-index: 99 !important;
+	position: relative !important;
+	top: -2px !important;
+}
+
+.folders .refreshButton:hover {
+	background-image: url("../../../plugins/workflow/images/refresh-blueish-18.png");
+	-moz-user-select: none !important;
+	/*border-color: #BB5 !important;*/
+}
+
+.folders .refreshButton:active {
+	background-image: url("../../../plugins/workflow/images/refresh-hover-18.png");
+	-moz-user-select: none !important;
+	/*border-color: #8F5 !important;*/
+}
+
+/* NO BORDER ON HOVER */
+.folders .dojoDndContainerOver {
+	border: 0px !important;	
+}
+
+/* COLOR OF SELECTED ITEM */
+.dojoDndItemAnchor {
+	/* LEAVE IT TO FileDrag.css */
+	/*background-color: #CCFFCC !important;*/
+}
+
+/* Background colors to match menus */
+.tundra .folders .dojoxRollingList {
+	border-color: #b3b3b3;
+	border-radius: 9pt !important;
+	border-radius-bottomright: 9pt !important;
+}
+.tundra .folders .dijitPopup .dojoxRollingList {
+	border-color: #406b9b;
+}
+
+.tundra .folders .dojoxRollingListPane {
+	background-color: #FFF !important;
+	height: auto !important;
+	border-radius: 9pt !important;
+	border-radius-bottomright: 9pt !important;
+}
+.tundra .folders .dojoxRollingListPane .dojoxRollingListItemHover,
+.tundra .folders .dojoxRollingListPane .dojoxRollingListItemFocus {
+	background-color: #e3e3e3;
+}
+.tundra .folders .dojoxRollingListPane .dojoxRollingListItemSelected {
+	color: #fff;
+	background-color: #3559ac;
+	font-weight: bold;
+}
+.tundra .folders .dojoxRollingListPane .dojoxRollingListItemHoverSelected,
+.tundra .folders .dojoxRollingListPane .dojoxRollingListItemFocusSelected {
+	background-color: #9aacd6;
+}
+.tundra .folders .dojoxRollingListItem {
+	font-family: inherit;
+}
+
+.soria .folders .dojoxRollingList {
+	border-color: #8ba0bd;
+}
+.soria .folders .dijitPopup .dojoxRollingList {
+	border-color: #406b9b;
+}
+.soria .folders .dojoxRollingListPane {
+	background-color: #fff;
+}
+.soria .folders .dojoxRollingListPane .dojoxRollingListItemHover, 
+.soria .folders .dojoxRollingListPane .dojoxRollingListItemFocus {
+	background-color: #e3e3e3;
+}
+.soria .folders .dojoxRollingListPane .dojoxRollingListItemSelected {
+	color: #243C5F;
+	background-color: #d9e6f9;
+	font-weight: bold;
+}
+.soria .folders .dojoxRollingListPane .dojoxRollingListItemHoverSelected,
+.soria .folders .dojoxRollingListPane .dojoxRollingListItemFocusSelected {
+	background-color: #ecf3fc;
+}
+.soria .folders .dojoxRollingListItem {
+	font-family: inherit;
+}
+
+
+.nihilo .folders .dojoxRollingList {
+	border-color: #d3d3d3;
+}
+.nihilo .folders .dijitPopup .dojoxRollingList {
+	border-color: #b3b3b3;
+}
+.nihilo .folders .dojoxRollingListPane {
+	background-color: #fff;
+}
+.nihilo .folders .dojoxRollingListPane .dojoxRollingListItemHover,
+.nihilo .folders .dojoxRollingListPane .dojoxRollingListItemFocus {
+	background-color: #e3e3e3;
+}
+.nihilo .folders .dojoxRollingListPane .dojoxRollingListItemSelected {
+	color: #243C5F;
+	background-color: #ffe284;
+	font-weight: bold;
+}
+.nihilo .folders .dojoxRollingListPane .dojoxRollingListItemHoverSelected,
+.nihilo .folders .dojoxRollingListPane .dojoxRollingListItemFocusSelected {
+	background-color: #fff1c2;
+}
+.nihilo .folders .dojoxRollingListItem {
+	font-family: inherit;
+}
+
+
+/* ALIGN FILES TO TOP OF PANE */
+.folders .dojoxFileSelectorPane {
+	vertical-align: top !important;
+	height: auto;
+	max-height: 400px;
+	min-width: 40px;
+}
+
+/* REMOVE PADDING */
+.folders .dijitTitlePane .dijitTitlePaneTitle {
+    background: url() !important;
+	border-radius: 9pt;
+	border-radius-topright: 9pt;
+	color: white !important;
+	background-color: #448 !important;
+	/*background-color: #FFFFDD !important;*/
+	border: 1px solid #CCCCCC !important;
+	height: 20px !important;
+}
+
+.folders .dijitContentPane {
+	display: inline-block;
+	padding: 3px !important;
+}
+
+/* GREEN ON ANCHOR */
+.folders .dojoDndItemAnchor {
+	background-color: #8F8 !important;
+}
+
+/* GREEN ON HOVER */
+.folders .directories .dijitTitlePane .dijitTitlePaneTitle:hover,
+.folders .dojoDndItemOver .dojoDndItemAnchor,
+.folders .dojoDndItemAnchor .dojoDndItemOver {
+	background-color: #8F8 !important;
+	color: #000 !important;
+}
+
+.dojoDndItemOver.dojoDndItemAnchor {
+	background-color: #8F8 !important;
+	color: #000 !important;
+}
+
+.folders .directories .dijitTitlePane .dijitTitlePaneTitle .dijitTitlePaneTextNode:hover {
+	background-color: inherit !important;
+}
+
+
+.folders .dijitTitlePaneContentInner {
+	border: 0 none !important;
+	padding: 0 !important;
+	border-radius: 9pt !important;
+	border-radius-bottomright: 9pt !important;
+}
+.folders .dijitTitlePaneContentOuter {
+	border: 0 none !important;
+}
+
+/* REMOVE ROLLING LIST BORDER ON HOVER */
+.folders div:hover {
+	/*border: 0 none !important;*/
+}
+
+
+.folders .dijitTitlePaneTitle {
+	border: 0 !important;	
+}
+
+
+.folders .title {
+	font-size: 24px !important;
+	font-weight: bold !important;
+	font-family: Verdana !important;
+	text-align: center !important;
+    /*background: darkblue;*/
+	/*background-color: transparent !important;*/
+	/*background-color:  #F0F8FF;*/
+	background-color: #FFF;
+ 	color: #333388;
+	font-weight: 900 !important;
+	z-index: 1000;
+	border-color: transparent !important;
+	border-width: 0px !important;
+	border-top-width: 0px !important;
+	border-bottom-width: 0px !important;
+	border-left-width: 0px !important;
+	border-right-width: 0px !important;
+}
+
+.projectTitle {
+	font-weight: bold;
+	font-size: 20px;
+	color: #33C;
+}
+
+/* EDIT BOX */
+.fileDragInlineEditBox {
+	position: relative;
+	left: 20px;
+	font-size: 25px;
+}
+
+/* OPEN/CLOSED DIRECTORY */
+.folders .directoryClosed {
+	text-indent: 18px;
+	/*color: #F00;*/
+	background-repeat: no-repeat;
+	background-image: url("../../../../plugins/workflow/images/filedrag/directory-closed.png");
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+}
+
+.folders .directoryOpen {
+	text-indent: 18px;
+	/*color: #F00;*/	
+	background-repeat: no-repeat;
+	background-image: url("../../../../plugins/workflow/images/filedrag/directory-open.png");
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+}
+
+.folders .fileClosed {
+	text-indent: 18px;
+	/*color: #F00;*/
+	background-repeat: no-repeat;
+	background-image: url("../../../../plugins/workflow/images/filedrag/file-closed.png");
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+}
+
+.folders .fileOpen {
+	text-indent: 18px;
+	/*color: #F00;*/
+	background-repeat: no-repeat;
+	background-image: url("../../../../plugins/workflow/images/filedrag/file-open.png");
+	background-position: 0px;
+	position: relative;
+	top: 1px;
+}
+
+
+.folders .directoryIcon {
+	background-image: url("../../../../plugins/workflow/images/filedrag/soriaFileIcons.gif");
+	/*background-image: url("../images/filedrag/soriaFileIcons.gif");*/
+	background-repeat: no-repeat;
+	/*background-color: #F00;*/
+	color: #F00;
+	background-position: 0px;
+	width: 16px;
+	height: 18px;
+	/*text-align: center;*/
+	position: relative;
+	top: 1px;
+
+}
+
+.folders .titleDiv{
+	color: #F00;
+	text-align: center;
+	vertical-align: middle;
+	position: relative;
+	top: 43%;
+}
+
+
+.folders .dojoxFileInfoPane *{
+	white-space: normal;
+	width: 80%;
+}
+
+.folders .dojoxFileInfoLabel {
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+
+
+
+/* FOLDERS CSS */
+/* FOLDERS CSS */
+/* FOLDERS CSS */
+/* FOLDERS CSS */
+
+/* DND ITEM OVER */
+.folders .dojoDndItemOver {
+	background-color: #8F8 !important;
+}
+
+
+/* NO BORDER ON MOUSEOVER DND CONTAINER */
+.folders .dojoDndContainerOver {
+	border : none !important;
+}
+
+/* DISPLAY MUST BE inline-block FOR HORIZONTAL PANE EXPANSION */
+.folders .dijitContentPane {
+    display: inline-block !important;
+}
+
+/* MOVE DOWN TAB TO BOTTOM OF TAB LABEL */
+.dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient {
+	position: relative;
+	top: 24px !important;
+}
+
+.folders .dijitContainer .dijitBorderContainer .dijitTabPane .dijitTabContainerTop-dijitBorderContainer
+{
+	top: 70px;
+	overflow: scroll;
+}
+
+.dijitTabContainer .tabs .dijitContainer .dijitTabContainerTop .dijitAlignNone .dijitLayoutContainer {
+	/*position: absolute;*/
+	/*top: 24px !important;*/
+	overflow: scroll !important;	
+}
+
+.dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient {
+	overflow: scroll !important;	
+}
+
+/* FILEDRAG - NO BORDER ON CONTAINEROVER */
+.fileDrag .dojoDndSource .dojoDndTarget .dojoDndContainer,
+.fileDrag .dojoDndSource .dojoDndTarget .dojoDndContainerOver {
+	border : 0 !important;
+}
+
+/* SCROLL ON OVERFLOW */
+.folders .dijitContainer .dijitBorderContainer .dijitTabPane .dijitTabContainerTop-dijitBorderContainer {
+	overflow: scroll !important;
+	overflow: 
+}
+
+.folders .directories .dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient {
+	position: absolute !important;
+	top: 0px !important;
+	overflow: scroll !important;
+}
+
+.tabs .dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient {
+	overflow: scroll !important;	
+}
+
+.folders .directories {
+    width: 100% !important;
+	/*vertical-align: top;*/
+	/*position: relative;*/
+	/*top: 24px !important;*/
+
+	/*overflow: scroll !important;*/
+}
+
+
+.folders .directories .header {
+    color: red !important;
+}
+
+
+/**/
+
+/* ALIGN FILES TO TOP OF PANE */
+.folders .dojoxRollingListPane {
+	vertical-align: top !important;
+	height: auto !important;
+	max-height: 250px;
+	min-width: 40px;
+	max-width: 250px !important;
+	overflow: scroll;
+}
+
+.folders .fileDrag .dojoDndSource .dojoDndTarget .dojoDndContainer {
+	border: 0;
+}
+
+.tundra .folders .dijitClosed .dijitTitlePaneTextNode,
+.soria .folders .dijitClosed .dijitTitlePaneTextNode {
+	height: auto !important;
+	width: auto !important;
+}
+
+.tundra .folders .dijitClosed .dijitTitlePaneTextNode,
+.soria .folders .dijitClosed .dijitTitlePaneTextNode {
+	color: #448 !important;	
+	font-size: 12px !important;
+	font-family: Verdana;
+	font-weight: bold !important;
+}
+
+.tundra .folders .dijitOpen .dijitTitlePaneTextNode,
+.soria .folders .dijitOpen .dijitTitlePaneTextNode {
+	color: #FFF !important;	
+	font-size: 16px !important;
+	font-family: Verdana;
+	font-weight: bolder !important;
+}
+
+.folders .dijitTitlePaneContentInner {
+	padding:0.05em;
+	margin : 0px;
+}
+
+.folders .dojoxRollingList,
+.folders .dojoxFileDrag {
+	padding:0.05em;
+	margin: 0px;
+}
+
+
+.dojoxFileDrag {
+	height: auto;
+}
+
+
+.folders .dojoxFileInfoPane {
+     max-width: 100% ! important;
+}
+
+
+
+/* dojox.layout.FloatingPane */
+ul.dojoxDockList {
+	height: 20px !important;
+}
+
+.dojoxDockList {
+	height: 30px !important;
+}
+
+.dojoxDockList li {
+	float: left;
+    list-style-type: none !important;
+}
+
+
+.folders .dojoxFloatingPaneTitle {
+    padding: 0 !important;
+	background: none repeat scroll 0% 0% #448 ! important;
+	color: #FFFFFF ! important;
+	font-size: 25px ! important;
+	font-weight: bolder ! important;
+	text-align: center ! important;
+	border-radius: 9pt !important;
+	border-radius-topright: 9pt !important;
+	height		:	auto !important;
+	width		:	auto !important;	
+	-moz-user-select: none !important;
+}
+
+.dojoxFloatingCloseIcon {
+	background	:	url('../../../dijit/themes/tundra/images/tabClose.png') no-repeat center center; 
+	width		:	16px;
+	height		:	16px; 
+	overflow	:	hidden;
+	float		:	right; 	
+}
+
+.dojoxFloatingPaneFg {
+	height		:	auto !important;
+	width		:	auto !important;
+}
+
+.dojoxFloatingPaneCanvas {
+    background-color: #FFFFFF;
+    height		: 	auto !important;
+	width		:	auto !important;
+}
+
+.tundra .dijitTitlePaneContentInner {
+    width: auto !important;
+}
+
+.dojoxFloatingPaneContent {
+    height		: 	auto !important;
+	width		:	auto !important;
+}
+
+.folders .dojoxFloatingCloseIcon, .folders .dojoxFloatingRestoreIcon, .folders .dojoxFloatingMaximizeIcon {
+     background: none repeat scroll 0% 0% transparent ! important;
+     height: 0px ! important;
+     width: 0px ! important;
+}
+
+.folders .dojoxFloatingMinimizeIcon {
+    background: url("../../files/images/dialogCloseButton.png") no-repeat scroll 0 center transparent;
+    margin: 0 4px;
+    overflow: hidden;
+    width: 29px; 
+}
+
+.filesDockNode .dojoxDockRestoreButton {
+	background: url("../../files/images/browser-24.png") no-repeat scroll 0pt center transparent ! important;
+	height: 24px !important;
+    width: 24px !important;
+	margin-top: 2px !important;
+}
+
+.filesDockNode .dojoxDockTitleNode {
+    font-weight: bold;
+	left: 5px !important;
+    padding-right: 5px !important;
+	position: relative;
+	opacity: 0.8;
+    font-size: 16px;
+    top: 5px;
+}
+
+.dojoxDockNode {
+	background: none !important;
+	border: none !important;
+	height: auto ! important;
+	margin: 0 !important;
+}
+.dojoxDock {
+	background: none !important;
+	border: none !important;
+	opacity: 0.8 !important;
+}
+

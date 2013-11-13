@@ -1,0 +1,89 @@
+<div dojoAttachPoint="containerNode">
+    <table width="100%" cellspacing="2">
+        <tr>
+            <td
+                colspan="2"
+                dojoAttachPoint="name"
+                class="name"
+				title="name: Name of application"
+                >${name}</td>
+            <td
+                colspan="1"
+                dojoAttachPoint="type"
+                class="type"
+				title="type: Type of application (e.g., 'pipeline', 'converter', 'utility')"
+                >${type}</td>
+        </tr>
+
+<!-- TOGGLED PORTION STARTS HERE -->
+<!-- TOGGLED PORTION STARTS HERE -->
+<!-- TOGGLED PORTION STARTS HERE -->
+
+		
+        <tr>
+            <td
+                colspan="1"
+                dojoAttachPoint="executor"
+                class="executor"
+				title="executor: Additional executable used to run application (e.g., '/usr/bin/perl')"
+            >${executor}</td>
+
+            <td 
+                colspan="1"
+                dojoAttachPoint="packageCombo"
+                class="package"
+				title="package: Package to which the application belongs"
+            >${package}</td>
+            
+            <td colspan="1"
+                class="localonly"
+                title="localonly: Select to make application only executable locally (e.g., a herder that manages cluster jobs)"
+                dojoAttachPoint="localonlyContainer"
+            >
+                <span>
+                    Local Only
+                </span>
+                
+                <span
+                    dojoAttachPoint="localonly"
+                    dojoType="dijit.form.CheckBox"
+                    dojoAttachEvent="onClick:submitChange"
+                    checked="false"
+                    class="newLocalOnlyCheckbox"
+                ></span>
+            </td>
+
+        </tr>
+        <tr>
+
+            <td colspan="3"
+                dojoAttachPoint="location"
+                class='location'
+				title="location: Absolute path (e.g., '/home/myname/myapp.pl') or path relative to Agua base folder (e.g., 'bin/apps/myScript.pl')"
+            >${location}</td>
+							
+
+        </tr>
+        <tr>
+            <td colspan="3"
+                dojoAttachPoint="description"
+                class='description'
+				title="description: A brief description of the application"
+            >${description}</td>
+        </tr>
+        <tr>
+            <td colspan="3"
+                dojoAttachPoint="notes"
+                class='notes'
+				title="notes: Notes on the application (e.g., release notes, constraints)"
+            >${notes}</td>
+        </tr>
+        <tr>
+            <td colspan="3"
+                dojoAttachPoint="url"
+                class='url'
+				title="url: Web address of website providing further details (e.g., http://mysite.com/applications)"
+			>${url}</td>
+        </tr>
+    </table>
+</div>
