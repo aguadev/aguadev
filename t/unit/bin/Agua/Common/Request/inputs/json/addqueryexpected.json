@@ -1,0 +1,47 @@
+[
+    {
+		"username"    :   "aguatest",
+		"query"       :   "Hodgkins Disease",
+		"ordinal"     :   1,
+		"action"      :   "AND",
+		"field"       :   "Disease",
+		"operator"    :   "CONTAINS",
+		"value"       :   "lymphoma"
+    },
+    {
+		"username"    :   "aguatest",
+		"query"       :   "Hodgkins Disease",
+		"ordinal"     :   2,
+		"action"      :   "AND",
+		"field"       :   "Disease",
+		"operator"    :   "CONTAINS",
+		"value"       :   "leukemia"
+    },
+    {
+		"username"    :   "aguatest",
+		"query"       :   "Hodgkins Disease",
+		"ordinal"     :   3,
+		"action"      :   "OR",
+		"field"       :   "Disease",
+		"operator"    :   "CONTAINS",
+		"value"       :   "early-onset"
+    },
+    {
+		"username"    :   "aguatest",
+		"query"       :   "leukemiaANDlymphoma",
+		"ordinal"     :   1,
+		"action"      :   "AND",
+		"field"       :   "Disease",
+		"operator"    :   "CONTAINS",
+		"value"       :   "leukemia"
+    },
+    {
+		"username"    :   "aguatest",
+		"query"       :   "leukemiaANDlymphoma",
+		"ordinal"     :   2,
+		"action"      :   "OR",
+		"field"       :   "Disease",
+		"operator"    :   "CONTAINS",
+		"value"       :   "lymphoma"
+    }
+]

@@ -189,12 +189,16 @@ sub validateTest {
 	$self->logDebug("username", $username);
 	my $testuser	=	$self->conf()->getKey("database", "TESTUSER");
 	$self->logDebug("testuser", $testuser);
+
+	my $testdatabase	=	$self->conf()->getKey("database", "TESTDATABASE");
+	$self->logDebug("testdatabase", $testdatabase);
 	
 	if ( $testuser eq $username ) {
 		my $testpassword = $self->conf()->getKey("database", "TESTPASSWORD");
 		$self->logDebug("Doing setDbh()");
 		
 		$self->setDbh({
+			database	=>	$testdatabase,
 			user		=>	$testuser,
 			password	=>	$testpassword
 		});

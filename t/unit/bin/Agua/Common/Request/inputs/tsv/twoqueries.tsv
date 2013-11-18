@@ -1,0 +1,5 @@
+aguatest	leukemiaANDlymphoma	1	AND	Disease	CONTAINS	leukemia
+aguatest	leukemiaANDlymphoma	2	OR	Disease	CONTAINS	lymphoma
+aguatest	Hodgkins Disease	3	OR	Disease	CONTAINS	early-onset
+aguatest	Hodgkins Disease	2	AND	Disease	CONTAINS	leukemia
+aguatest	Hodgkins Disease	1	AND	Disease	CONTAINS	lymphoma

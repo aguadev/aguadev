@@ -17,16 +17,19 @@ method setUpTestDatabase () {
 
 method prepareTestDatabase {
 	$self->logNote("");
-    my $database 	= 	$self->database();
-	$database 		= 	$self->conf()->getKey("database", "TESTDATABASE");
+    my $database 	= 	$self->conf()->getKey("database", "TESTDATABASE");
     my $user 		=	$self->conf()->getKey("database", "TESTUSER");
     my $password 	= 	$self->conf()->getKey("database", "TESTPASSWORD");
+	my $sessionid	=	$self->conf()->getKey("database", "TESTSESSIONID");
+
 	$self->logNote("database not defined or empty") if not defined $database or not $database;
+	$self->logNote("sessionid", $sessionid);
 	$self->logNote("database", $database);
 	$self->logNote("user", $user);
 	$self->logNote("password", $password);
 
     $self->setDbh({
+		sessionid	=>	$sessionid,
 		database	=>	$database,
 		user  		=>  $user,
 		password    =>  $password
@@ -319,14 +322,17 @@ method setTestDatabaseRow {
 }
 
 method loadTsvFile ($table, $file) {
+	$self->logCaller("self->can('db')", $self->can('db'));
+	
 	return if not $self->can('db');
-	#$self->logNote("table", $table);
-	#$self->logNote("file", $file);
+	$self->logNote("table", $table);
+	$self->logNote("file", $file);
 	
 	$self->setDbh() if not defined $self->db();
-	return if not defined $self->db();print Dumper ;
+	return if not defined $self->db();
+	
 	my $query = qq{LOAD DATA LOCAL INFILE '$file' INTO TABLE $table};
-	#$self->logNote("query", $query);
+	$self->logNote("query", $query);
 	my $success = $self->db()->do($query);
 	$self->logCritical("load data failed") if not $success;
 	

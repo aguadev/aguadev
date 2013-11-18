@@ -60,8 +60,9 @@ method getPackages {
 	my $query = qq{SELECT * FROM package};
 	$self->logDebug("query", $query);
 	my $packages = $self->db()->queryhasharray($query);
-	$packages = $self->defaultPackages() if not defined $packages;
-	$self->logDebug("BEFORE packages", $packages);
+	$packages = [] if not defined $packages;
+	#$packages = $self->defaultPackages() if not defined $packages;
+	#$self->logDebug("BEFORE packages", $packages);
 	
 	#### SET USER LOGIN token
 	my ($login, $token) = $self->setLoginCredentials($username, $hubtype, "private");

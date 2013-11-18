@@ -1,0 +1,23 @@
+[
+    {
+        action      :   "AND",
+        avatarType  :   "parameters",
+        field       :   "Source",
+        operator    :   "==",
+        value       :   "CGHUB1"
+    },
+    {
+        action      :   "OR",
+        avatarType  :   "parameters",
+        field       :   "Source",
+        operator    :   "==",
+        value       :   "CGHUB2"
+    },
+    {
+        action      :   "OR",
+        avatarType  :   "parameters",
+        field       :   "Source",
+        operator    :   "==",
+        value       :   "CGHUB3"
+    }
+]

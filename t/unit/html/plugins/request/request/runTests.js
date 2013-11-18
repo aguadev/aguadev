@@ -49,14 +49,10 @@ doh.register("plugins.request.Request", [
 			console.log("new    object: ");
 			console.dir({object:object});
 
-			
-			var data = util.fetchJson("./data.json");
-			console.log("new    data: ");
-			console.dir({data:data});
-			
-			object.core.grid.setGrid(data); 		
-			
-			
+			//var data = util.fetchJson("./data.json");
+			//console.log("new    data: ");
+			//console.dir({data:data});
+			//object.core.grid.setGrid(data); 		
 			
 			console.log("new    instantiated");
 			doh.assertTrue(true);

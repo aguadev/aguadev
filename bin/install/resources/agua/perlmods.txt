@@ -25,6 +25,7 @@ Net::LDAP
 File::Sort
 Getopt::Simple
 MooseX::Getopt
+MooseX::App::Cmd --force
 MooseX::Method::Signatures::Meta::Method --force
 MooseX::UndefTolerant
 Digest::HMAC_SHA1
@@ -56,10 +57,8 @@ POSIX
 File::Copy::Recursive
 File::Spec::Functions
 Class::DBI::Lite
-Method::Signatures::Modifiers
+Data::Alias
+Method::Signatures::Modifiers --force
 Net::RabbitFoot
-
 #### DO THIS MANUALLY
 #Bio::DB::SeqFeature
-
-

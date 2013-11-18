@@ -169,7 +169,8 @@ cssFiles : [
 
 // url: String
 // URL FOR REMOTE DATABASE
-url: "http://reqapi.annairesearch.com:8080/api/SubmitQuery.req",
+//url: "http://reqapi.annairesearch.com:8080/api/SubmitQuery.req",
+url: "t/unit/plugins/request/request/data.json",
 
 // core : HashRef
 //		Hash of core classes
@@ -183,11 +184,8 @@ constructor : function(args) {
 	// MIXIN ARGS
 	lang.mixin(this, args);
 	
-	console.log("Request.constructor    this.baseUrl: " + this.baseUrl);
-	
-	// SET url
-	if ( Agua.cgiUrl )	this.url = Agua.cgiUrl + "/agua.cgi";
-	
+	console.log("Request.constructor    this.url: " + this.url);
+		
 	// LOAD CSS FILES
 	this.loadCSS(this.cssFiles);		
 },
@@ -232,7 +230,7 @@ setSearch : function () {
 },
 setGrid : function () {
 
-	var data = this.fetchSyncJson("t/unit/plugins/request/request/data.json");
+	var data = this.fetchSyncJson(this.url);
 
 	//var data = this.fetchSyncJson("./data.json");
 

@@ -111,7 +111,11 @@ sub getData {
 
 	#### CACHES
 	$output->{filecaches}		= $self->getFileCaches();
-	
+
+	#### REQUEST
+	$output->{queries}			= $self->getQueries();
+	$output->{downloads}		= $self->getDownloads();
+
 	#### PRINT JSON AND EXIT
 	use JSON -support_by_pp; 
 	my $jsonParser = JSON->new();
@@ -296,18 +300,18 @@ sub _addToTable {
 	my $inserted_fields	=	shift;
 	
 	#### CHECK FOR ERRORS
-    $self->logError("hash not defined") and return if not defined $hash;
-    $self->logError("required_fields not defined") and return if not defined $required_fields;
+    $self->logError("hash not defined for table: $table") and return if not defined $hash;
+    $self->logError("required_fields not defined for table: $table") and return if not defined $required_fields;
     $self->logError("table not defined") and return if not defined $table;
 	
 	#### CHECK REQUIRED FIELDS ARE DEFINED
 	my $not_defined = $self->db()->notDefined($hash, $required_fields);
-    $self->logError("undefined values: @$not_defined") and return if @$not_defined;
+    $self->logError("table '$table' undefined values: @$not_defined") and return if @$not_defined;
 
 	#### GET ALL FIELDS BY DEFAULT IF INSERTED FIELDS NOT DEFINED
 	$inserted_fields = $self->db()->fields($table) if not defined $inserted_fields;
 
-	$self->logError("fields not defined") and return if not defined $inserted_fields;
+	$self->logError("table '$table' fields not defined") and return if not defined $inserted_fields;
 	my $fields_csv = join ",", @$inserted_fields;
 	
 	##### INSERT INTO TABLE

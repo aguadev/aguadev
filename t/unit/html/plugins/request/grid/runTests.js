@@ -91,11 +91,14 @@ doh.register("plugins.request.Grid", [
 			object.setGrid(data); 		
 			
 			// RUN FILTERS
-			var filters	=	util.fetchJson("./filters.json");
+			var filters	=	util.fetchJson("./filters-or-three.json");
 			console.log("updateGrid    filters: " + JSON.stringify(filters));
 			console.dir({filters:filters});
 			
 			object.updateGrid(filters, dojo.clone(data));
+			
+			// VERIFY FILTER
+			var rows = 
 			
 			console.log("updateGrid    instantiated");
 			doh.assertTrue(true);

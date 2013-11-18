@@ -46,7 +46,7 @@ sub addProject {
 =cut
 
 	my $self		=	shift;
-        my $data 			=	$self->json();
+    my $data 		=	$self->json();
 
  	$self->logDebug("Common::addProject()");
 

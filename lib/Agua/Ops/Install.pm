@@ -447,10 +447,12 @@ method loadOpsInfo ($opsdir, $package) {
 }
 
 method loadConfig ($configfile, $mountpoint, $installdir) {
+
 	my $packageconf = Conf::Yaml->new({
 		inputfile	=>	$configfile,
 		SHOWLOG		=>	2
 	});
+
 	$self->logNote("packageconf: $packageconf");
 	
 	my $sectionkeys = $packageconf->getSectionKeys();
@@ -468,16 +470,18 @@ method loadConfig ($configfile, $mountpoint, $installdir) {
 			$self->conf()->setKey($sectionkey, $key, $value);
 		}
 	}	
+
 }
 
 method loadTsvFile ($table, $file) {
+	$self->logCaller("");
 	return if not $self->can('db');
 	
 	$self->logDebug("table", $table);
 	$self->logDebug("file", $file);
 	
 	$self->setDbh() if not defined $self->db();
-	return if not defined $self->db();print Dumper ;
+	return if not defined $self->db();
 	my $query = qq{LOAD DATA LOCAL INFILE '$file' INTO TABLE $table};
 	my $success = $self->db()->do($query);
 	$self->logCritical("load data failed") if not $success;

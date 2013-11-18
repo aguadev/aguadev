@@ -209,8 +209,6 @@
     z-index: 12;
 }
 
-
-
 /* NO SCROLLBARS IN LEFT, MIDDLE AND RIGHT PANES */
 .applications .dijitContentPane {
 	overflow: hidden !important;

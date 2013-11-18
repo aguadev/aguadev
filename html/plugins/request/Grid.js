@@ -106,24 +106,12 @@ return declare("plugins/request/Grid",
 	[ _Widget, _TemplatedMixin, Common ], {
 
 // templateString : String	
-// 		WIDGET TEMPLATE
+// 		Template for this widget
 templateString: dojo.cache("plugins", "request/templates/grid.html"),
-
-// PARENT NODE, I.E., TABS NODE
-parentWidget : null,
 
 // PROJECT NAME AND WORKFLOW NAME IF AVAILABLE
 project : null,
 workflow : null,
-
-// onChangeListeners : Array. LIST OF COMBOBOX ONCHANGE LISTENERS
-onChangeListeners : new Object,
-
-// setListeners : Boolean. SET LISTENERS FLAG 
-setListeners : false,
-
-// Calls dijit._Templated.widgetsInTemplate
-widgetsInTemplate : true,
 
 // cssFiles: Array
 // CSS FILES
@@ -133,37 +121,9 @@ cssFiles : [
 	require.toUrl("dgrid/css/extensions/ColumnHider.css")
 ],
 
-// browsers: Array
-// HASH ARRAY OF OPENED BROWSERS
-browsers : new Array,
-
 // url: String
 // URL FOR REMOTE DATABASE
 url: "http://reqapi.annairesearch.com:8080/api/SubmitQuery.req",
-
-// polling : Bool
-// Polling for completion of new view
-polling : false,
-
-// delay : Int
-// Delay between each poll (1000 = 1 second)
-delay : 10000,
-
-// ready: Boolean
-// 		Set to true once startup has completed
-ready : false,
-
-// loadOnStartup: Boolean
-// 		Call loadBrowser at end of startup method
-loadOnStartup : true,
-
-// lastViewComboValue : String
-//		Holder to avoid fire viewCombo while setting it's value
-lastViewComboValue : null,
-
-// isSelected : Boolean
-//		
-isSelected : false,
 
 // data : ArrayRef
 //		Data to load into Grid
@@ -212,52 +172,58 @@ startup : function () {
 
 	console.groupEnd("Grid-" + this.id + "    startup");
 },
+// UPDATE GRID WITH FILTERS
 updateGrid : function (filters, data) {
 	console.group("Grid-" + this.id + "    updateGrid");
 
 	console.log("Grid.updateGrid    filters.length: " + filters.length);
 	console.log("Grid.updateGrid    filters: ");
 	console.dir({filters:filters});
-	console.log("Grid.updateGrid    BEGIN data: ");
-	console.dir({data:data});
-	console.log("Grid.updateGrid    BEGIN data.length: " + data.length);
 	
-	if ( ! data ) return;	
+	var newData = dojo.clone(data);
+	console.log("Grid.updateGrid    BEGIN newData: ");
+	console.dir({newData:newData});
+	console.log("Grid.updateGrid    BEGIN newData.length: " + newData.length);
+	
+	if ( ! newData ) return;	
 	
 	for ( var i = 0; i < filters.length; i++ ) {
 		var filter	=	filters[i];
 		console.log("Grid.updateGrid    filter: " + JSON.stringify(filter));
+		console.log("Grid.updateGrid    newData.length: " + newData.length);
 		
 		if ( filter.action == "AND" ) {
 			console.log("Grid.updateGrid    DOING 'AND' filter: ");
 			console.dir({filter:filter});
 			
-			data = this.filterData(filter, data);
-			console.log("Grid.updateGrid    DOING 'AND' data: ");
-			console.dir({data:data});
+			newData = this.filterData(filter, newData);
+			console.log("Grid.updateGrid    DOING 'AND' newData: ");
+			console.dir({newData:newData});
 		}
 		else if ( filter.action == "OR" ) {
 			console.log("Grid.updateGrid    DOING 'OR' filter: ");
 			console.dir({filter:filter});
 			
 			var orData = dojo.clone(data);
+			console.log("Grid.updateGrid    BEGIN orData.length: " + orData.length);
 			orData	=	this.filterData(filter, orData);
-			console.log("Grid.updateGrid    DOING 'AND' orData: ");
+			console.log("Grid.updateGrid    AFTER orData.length: " + orData.length);
+			console.log("Grid.updateGrid    orData: ");
 			console.dir({orData:orData});
 	
-			if ( !orData && orData.length != 0 ) {
-				data = data.concat(orData);
+			if ( orData && orData.length != 0 ) {
+				newData = newData.concat(orData);
 			}
 		}
 		else {
 			console.log("Grid.updateGrid    SKIPPING filter.action neither 'AND' nor 'OR': " + filter.action);
 		}
 	}
-	console.log("Grid.updateGrid    FINAL data.length: " + data.length);
-	console.log("Grid.updateGrid    FINAL data: ");
-	console.dir({data:data});
+	console.log("Grid.updateGrid    FINAL newData.length: " + newData.length);
+	console.log("Grid.updateGrid    FINAL newData: ");
+	console.dir({newData:newData});
 
-	this.setGrid(data);
+	this.setGrid(newData);
 
 	console.groupEnd("Grid-" + this.id + "    updateGrid");
 },
@@ -286,6 +252,7 @@ filterData : function (filter, data) {
 
 	return [];
 },
+// FILTERS
 equals : function (filter, data) {
 	console.log("Grid.equals    filter: " + JSON.stringify(filter));
 
@@ -298,7 +265,19 @@ equals : function (filter, data) {
 	return data;
 },
 notEquals : function (filter, action, data) {
+	console.log("Grid.notEquals    filter: " + JSON.stringify(filter));
+	console.log("Grid.notEquals    FILTERING FOR " + filter.field + " = " + filter.value);
+
+	var newData = [];
+	for ( var i = 0; i < data.length; i++ )	 {
+		if ( data[i][filter.field] != filter.value ) {
+			newData.push(data[i]);
+		}
+	}
+	console.log("Grid.notEquals    RETURNING newData: ");
+	console.dir({newData:newData});
 	
+	return newData;	
 },
 greaterThan : function (filter, action, data) {
 	
@@ -318,17 +297,18 @@ contains : function (filter, action, data) {
 notContains : function (filter, action, data) {
 	
 },
+// UTIL
 setGrid : function (data) {
 	console.group("Grid-" + this.id + "    setGrid");
-	console.log("Grid.setGrid    data: ");
-	console.dir({data:data});
+	//console.log("Grid.setGrid    data: ");
+	//console.dir({data:data});
 	
 	this.clear();
 
 	//var StandardGrid = declare([Grid, Selection, Keyboard, Hider, Resizer]);
 	var StandardGrid = declare([Grid, Selection, Keyboard, Hider]);
-	console.log("Grid.setGrid    StandardGrid:");
-	console.dir({StandardGrid:StandardGrid});
+	//console.log("Grid.setGrid    StandardGrid:");
+	//console.dir({StandardGrid:StandardGrid});
 	
 	var store = this.setDataStore(data);
 
@@ -347,24 +327,24 @@ setGrid : function (data) {
 	console.groupEnd("Grid-" + this.id + "    setGrid");
 },
 setCheckboxListeners : function (checkboxes) {
-	console.log("Grid.setCheckboxListeners    checkboxes: " + checkboxes);
-	console.dir({checkboxes:checkboxes});
+	//console.log("Grid.setCheckboxListeners    checkboxes: " + checkboxes);
+	//console.dir({checkboxes:checkboxes});
 
 	var thisObj =	this;	
 	for ( var i = 0; i < checkboxes.length; i++ ) {
 		var checkbox	=	checkboxes[i];
 		
 		on(checkbox, "mouseup", function() {
-			console.log("Grid.setCheckboxListeners    checkbox: " + checkbox);
-			console.dir({checkbox:checkbox});
-			console.log("Grid.setCheckboxListeners    thisObj.grid: " + thisObj.grid);
-			console.dir({thisObj_grid:thisObj.grid});
+			//console.log("Grid.setCheckboxListeners    checkbox: " + checkbox);
+			//console.dir({checkbox:checkbox});
+			//console.log("Grid.setCheckboxListeners    thisObj.grid: " + thisObj.grid);
+			//console.dir({thisObj_grid:thisObj.grid});
 			var row = thisObj.grid.view.findRowIndex(checkbox);
-			console.log("Grid.setCheckboxListeners    row: " + row);
-			console.dir({row:row});
+			//console.log("Grid.setCheckboxListeners    row: " + row);
+			//console.dir({row:row});
 			var record = thisObj.grid.store.getAt(row);
-			console.log("Grid.setCheckboxListeners    record: " + record);
-			console.dir({record:record});
+			//console.log("Grid.setCheckboxListeners    record: " + record);
+			//console.dir({record:record});
 
 			
 		});
@@ -400,8 +380,8 @@ setCheckboxListeners : function (checkboxes) {
 	//	},
 },
 clear : function () {
-	console.log("Grid.clear    BEFORE this.grid:");
-	console.dir({this_grid:this.grid});
+	//console.log("Grid.clear    BEFORE this.grid:");
+	//console.dir({this_grid:this.grid});
 	
 	if ( this.grid ) {
 		if ( this.grid.containerNode && this.grid.containerNode.parentNode ) {
@@ -410,21 +390,21 @@ clear : function () {
 		this.grid.destroy();
 	}
 
-	console.log("Grid.clear    AFTER grid:");
-	console.dir({this_grid:this.packageApps});
+	//console.log("Grid.clear    AFTER grid:");
+	//console.dir({this_grid:this.packageApps});
 
 	this.grid = null;
 },
 setDataStore : function (data) {
-	console.log("Grid.setDataStore");
+	//console.log("Grid.setDataStore");
 	
 	// ADD DATA TO DATA STORE
 	this.dataStore = new Observable(new DataStore({
 		data : data
 	}));
 	this.dataStore.startup();
-	console.log("Grid.setDataStore    this.dataStore:");
-	console.dir({this_core_dataStore:this.dataStore});
+	//console.log("Grid.setDataStore    this.dataStore:");
+	//console.dir({this_core_dataStore:this.dataStore});
 	
 	return this.dataStore;
 },
@@ -450,16 +430,16 @@ getColumns : function (){
 	};
 },
 attachPane : function () {
-	console.log("Grid.constructor    this.attachPoint: " + this.attachPoint);
-	console.log("Grid.constructor    this.containerNode: " + this.containerNode);
+	//console.log("Grid.constructor    this.attachPoint: " + this.attachPoint);
+	//console.log("Grid.constructor    this.containerNode: " + this.containerNode);
 		
 	if ( this.attachPoint.selectChild ) {
-		console.log("Grid.attachPane    DOING this.addChild(this.containerNode)");
+		//console.log("Grid.attachPane    DOING this.addChild(this.containerNode)");
 		this.attachPoint.addChild(this.containerNode);
 		this.attachPoint.selectChild(this.containerNode);
 	}
 	else {
-		console.log("Grid.attachPane    DOING this.appendChild(this.containerNode)");
+		//console.log("Grid.attachPane    DOING this.appendChild(this.containerNode)");
 		this.attachPoint.appendChild(this.containerNode);
 	}
 }
