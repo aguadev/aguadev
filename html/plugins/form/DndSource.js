@@ -132,8 +132,7 @@ clearDragSource : function () {
 	//console.log("DndSource.clearDragSource     this.dragSource: " + this.dragSource);
 	var nodes = this.dragSource.getAllNodes();
 	//console.log("DndSource.clearDragSource     TO DELETE nodes: " + nodes);
-	if ( nodes != null )
-	{
+	if ( nodes != null ) {
 		//console.log("DndSource.clearDragSource     TO DELETE nodes.length: " + nodes.length);
 		for ( var i = 0; i < nodes.length; i++ )
 		{
@@ -147,8 +146,7 @@ clearDragSource : function () {
 	}
 
 	if ( this.childWidgets.length != 0 )
-	for ( var i = 0; i < this.childWidgets.length; i++ )
-	{
+	for ( var i = 0; i < this.childWidgets.length; i++ ) {
 		dojo.destroy(this.childWidgets[i]);
 	}
 
@@ -206,8 +204,7 @@ loadDragItems : function (itemArray) {
 	// SET TABLE ROW STYLE IN dojDndItems
 	var allNodes = this.dragSource.getAllNodes();
 	//console.log("DndSource.loadDragItems     allNodes.length: " + allNodes.length);
-	for ( var k = 0; k < allNodes.length; k++ )
-	{
+	for ( var k = 0; k < allNodes.length; k++ ) {
 		// SET NODE DATA
 		var node = allNodes[k];
 		node.data = dataArray[k].data;
@@ -227,7 +224,6 @@ loadDragItems : function (itemArray) {
 		//console.dir({itemObject:itemObject});
 		itemObject.parentWidget = this;
 
-	
 		// CREATE ROW
 		var rowClass = this.rowClass;
 		//console.log("DndSource.loadDragItems     rowClass: " + rowClass);

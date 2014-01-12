@@ -22,7 +22,7 @@ my $outputsdir = "$Bin/outputs";
 use Test::Agua::Monitor::SGE;
 use Conf::Yaml;
 
-my $logfile = "/tmp/aguatest.monitor.sge.log";
+my $logfile = "/tmp/testuser.monitor.sge.log";
 my $SHOWLOG = 2;
 my $PRINTLOG = 2;
 

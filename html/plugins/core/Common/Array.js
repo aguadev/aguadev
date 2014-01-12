@@ -1,9 +1,15 @@
-dojo.provide("plugins.core.Common.Array");
-/* SUMMARY: THIS CLASS IS INHERITED BY Common.js AND CONTAINS 
-	
-	ARRAY METHODS  
-*/
-dojo.declare( "plugins.core.Common.Array",	[  ], {
+define([
+	"dojo/_base/declare"
+],
+
+function (
+	declare
+) {
+
+/////}}}}}
+
+return declare("plugins.core.Common.Array",
+	[], {
 
 ///////}}}
 // HASHARRAY METHODS
@@ -463,4 +469,7 @@ uniqueValues : function(array) {
 	return array;
 }
 
-});
+}); //	end declare
+
+});	//	end define
+

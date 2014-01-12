@@ -133,7 +133,7 @@ reloadWidget : function (paneName) {
 	this.paneWidgets[paneName] = new plugins.cloud[paneName](
 		{
 			parentWidget: adminObject,
-			tabContainer : adminObject.leftTabContainer
+			attachPoint : adminObject.leftTabContainer
 		}
 	);
 },
@@ -175,7 +175,7 @@ loadPane : function(side) {
 		var tabPane = new plugins["cloud"][tabPaneName](
 			{
 				parentWidget: adminObject,
-				tabContainer : adminObject[tabContainer]
+				attachPoint : adminObject[tabContainer]
 			}
 		);
 		

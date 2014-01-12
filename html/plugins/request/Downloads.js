@@ -213,21 +213,6 @@ toggleDisplay : function () {
 	//console.log("Downloads.toggleDownloads");
 	this.toggle(this.togglePoint);
 },
-//toggle : function (togglePoint) {
-//	//console.log("Downloads.toggle    togglePoint: " + togglePoint);
-//	console.dir({togglePoint:togglePoint});
-//	
-//	if ( togglePoint.style.display == 'inline-block' )	{
-//		togglePoint.style.display='none';
-//		dojo.removeClass(this.toggler, "open");
-//		dojo.addClass(this.toggler, "closed");
-//	}
-//	else {
-//		togglePoint.style.display = 'inline-block';
-//		dojo.removeClass(this.toggler, "closed");
-//		dojo.addClass(this.toggler, "open");
-//	}
-//},
 getItemArray : function () {
 	console.log("Downloads.getItemArray    this.dragSource: " + this.dragSource);
 	console.dir({this_dragSource:this.dragSource});
@@ -254,6 +239,10 @@ getItemArray : function () {
 	}
 	
 	return itemArray;
+},
+createDownload : function () {
+	wget http://reqapi.annairesearch.com:8080/api/SubmitQuery.req?data=%5B%7B"password"%3A+"mypass"%2C+"userid"%3A+"andyh"%7D%2C+%7B"PAGE"%3A+%5B%7B"PAGENUM"%3A+"-1"%7D%5D%7D%5D
+
 }
 
 

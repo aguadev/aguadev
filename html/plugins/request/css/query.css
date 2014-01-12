@@ -17,7 +17,6 @@
 
 .query .actionSelect,
 .query .operatorSelect,
-.query .fieldSelect,
 .query .valueInput
 {
 	font-size: 16px;
@@ -29,13 +28,21 @@
 	color: black;
 }
 .query .fieldSelect {
+	font-weight: 900;	
+	font-size: 13px;
 	color: darkred;
-	width: 160px !important;
+	width: 130px !important;
 	min-height: 22px !important;
 }
 .query .operatorSelect {	
+	font-size: 13px;
 	color: darkgreen;
-	width: 90px !important;
+	width: 80px !important;
+	height: 22px !important;
+}
+
+.query .dijitSelect .dijitArrowButton {
+	width: 7px !important;
 }
 
 .query .operatorSelect .dijitReset.dijitInputField.dijitButtonText,
@@ -44,6 +51,15 @@
 {
 	text-align: center !important;	
 	text-indent: 2px !important;
+}
+
+.query .valueInput .inputType {
+	display: inline-block !important;
+	width: 140px !important;
+	position: absolute !important;
+	left: 278px !important;
+	height: 18px !important;
+	top: 24px !important;	
 }
 
 .query .valueInput .form.validationTextBox
@@ -116,6 +132,7 @@
 /* QUERY NAME */
 .query .nameInput .dijitTextBox {
 	width: 255px !important;
+	height: 22px !important;
 }
 
 /* BUTTON */
@@ -124,6 +141,7 @@
 	font-family: Verdana;
 }
 .query .saveButton {
+	-webkit-user-select: none;
 	height: 20px !important;
 	width: 60px !important;
 	position: relative;
@@ -196,9 +214,15 @@
 	padding: 0px !important;
 }
 
-.query .invalid 
+.query .invalid, 
+.query .invalid:focus,
+.query .invalid:active
 {
 	border: 2px solid #F00 !important;
+}
+
+.query input:focus{
+    outline: 0;
 }
 
 /* TOGGLE */

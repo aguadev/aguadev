@@ -1,0 +1,15 @@
+description "Run rabbit.js"
+author "Stuart Young"
+
+start on (local-filesystems and net-device-up IFACE=eth0)
+stop on shutdown
+
+respawn
+
+script
+
+    cd INSTALLDIR/apps/node-amqp//node_modules/rabbit.js/example/socketio
+    # exec /usr/local/bin/node test-mysql.js 2>&1 >> /var/log/test-mysql.log
+    /usr/local/bin/forever server.js 2>&1 >> /var/log/rabbitjs-server.log
+
+end script

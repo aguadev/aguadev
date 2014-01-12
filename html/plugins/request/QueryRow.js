@@ -1,6 +1,7 @@
 define([
 	"dojo/_base/declare",
 	"dojo/on",
+	"dojo/json",
 	"dojo/_base/lang",
 	"dojo/dom-attr",
 	"dojo/dom-class",
@@ -16,6 +17,7 @@ define([
 function (
 	declare,
 	on,
+	JSON,
 	lang,
 	domAttr,
 	domClass,
@@ -56,8 +58,12 @@ field : "",
 operator : "",
 
 // value : String
-//		Query term
+//		Value of query term
 value : "",
+
+// ordinal : String
+//		Ordinal position of term in query
+ordinal : "",
 
 // cssFiles : Array
 //		Array of CSS files to be loaded for all widgets in template
@@ -71,6 +77,7 @@ cssFiles : [
 ],
 /////}}}}}
 constructor : function(args) {
+	console.group("QueryRow-" + this.id + "    constructor");
 	console.log("QueryRow.constructor    args: ");
 	console.dir({args:args});
 
@@ -82,29 +89,39 @@ constructor : function(args) {
 	
 	this.lockedValue = args.locked;
 
-	console.log("QueryRow.constructor    END");
+	console.groupEnd("QueryRow-" + this.id + "    constructor");
 },
 postCreate : function(args) {
-	console.log("QueryRow.postCreate    plugins.workflow.QueryRow.postCreate(args)");
+	//console.log("QueryRow.postCreate    plugins.workflow.QueryRow.postCreate(args)");
 	//this.formInputs = this.parentWidget.formInputs;
 
 	this.startup();
 },
 startup : function () {
-	console.log("QueryRow.startup    plugins.workflow.QueryRow.startup()");	
-	this.actionNode.innerHTML = this.action;
+	console.log("QueryRow.startup    this.ordinal: " + this.ordinal);	
+	if ( parseInt(this.ordinal) === 1 ) {
+		this.actionNode.innerHTML = "&nbsp;";
+	}
+	else {
+		this.actionNode.innerHTML = this.action;
+	}
 	this.fieldNode.innerHTML = this.field;	
 	this.operatorNode.innerHTML = this.operator;	
 	this.valueNode.innerHTML = this.value;	
 },
 setValues : function (values) {
+	//console.log("QueryRow.setValues    values: " + JSON.stringify(values));	
+
 	for ( var key in values ) {
 		var nodeName = values[key] + "Node";
-		
-
 		this[key]	=	values[key];
-		this[nodeName].innerHTML = values[key];	
 		
+		if ( key === "action" && values.ordinal == 1 ) {
+			this[nodeName].innerHTML = "&nbsp;";	
+		}
+		else {
+			this[nodeName].innerHTML = values[key];	
+		}
 	}
 },
 deleteSelf : function () {

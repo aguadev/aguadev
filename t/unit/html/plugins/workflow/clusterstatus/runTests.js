@@ -43,7 +43,7 @@ dojo.addOnLoad(function(){
 	runStatus.core.userWorkflows = userWorkflows;
 
 	runStatus.clusterStatus.runner = {
-		username:	"aguatest",
+		username:	"testuser",
 		sessionid:	"",
 		cluster: 	"microcluster",
 		project:	"Project1",
@@ -76,7 +76,7 @@ dojo.addOnLoad(function(){
 				document.body.appendChild(childNode2);
 		
 				var runner = {
-					username:	"aguatest",
+					username:	"testuser",
 					sessionid:	"",
 					cluster: 	"microcluster",
 					project:	"Project1",

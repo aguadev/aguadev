@@ -93,6 +93,7 @@ attachPoint : null,
 // formInputs : HashKey
 //		Hash of input names
 formInputs : {
+	ordinal 	: 	"integer",
 	action 		: 	"word",
 	field		:	"phrase",
 	operator	:	"word",
@@ -166,17 +167,13 @@ updateQuery : function () {
 	queries	=	this.sortHasharrayByKeys(queries, ["ordinal"]);
 	console.log("Saved.updateQuery    SORTED queries: ");
 	console.dir({queries:queries});
-	queries[0].action = " . ";
 
-	var ordinals = "";
-	for ( var i = 0; i < queries.length; i++ ) {
-		ordinals += queries[i].ordinal + ", ";
-	}
-	console.log("Saved.updateQuery    ordinals: " + ordinals);
+	// HACK TO DISPLAY 'action' FIELD WITH FULL SIZE
+	var data = dojo.clone(queries);
 	
 	this.clearDragSource();
 	
-	this.loadDragItems(queries);
+	this.loadDragItems(data);
 },
 _onKey : function(key, callback, event){
 	//console.log("Saved._onKey    key: " + key);
@@ -214,25 +211,17 @@ toggleSaved : function () {
 	this.toggle(this.togglePoint);
 },
 getItemArray : function () {
-	console.log("Saved.getItemArray    this.dragSource: " + this.dragSource);
-	console.dir({this_dragSource:this.dragSource});
+	//console.log("Saved.getItemArray    this.dragSource: " + this.dragSource);
+	//console.dir({this_dragSource:this.dragSource});
 
 	var childNodes	=	this.dragSource.getAllNodes();
-	console.log("Saved.getItemArray    childNodes: " + childNodes);
-	console.dir(childNodes);
-
-	console.log("DndSource.loadDragItems     childNodes.length: " + childNodes.length);
 	var itemArray	=	[];
-	for ( var i = 0; i < childNodes.length; i++ )
-	{
+	for ( var i = 0; i < childNodes.length; i++ ) {
 		var widget = dijit.getEnclosingWidget(childNodes[i].firstChild);
-		
-		console.log("Saved.getItemArray    childNodes: " + childNodes);
-		console.dir(childNodes);
 	
 		var hash = {};	
+		hash.ordinal = parseInt(i + 1);
 		for ( key in this.formInputs ) {
-			console.log("Saved.getItemArray    widget[" + key + "]: " + widget[key]);
 			hash[key]	=	widget[key];
 		}
 		itemArray.push(hash);

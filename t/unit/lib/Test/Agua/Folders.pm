@@ -106,7 +106,7 @@ method testRenameWorkflow {
 	$self->loadTsvFile("stage", $stagefile);
 	$self->loadTsvFile("stageparameter", $stageparameterfile);
 	
-	my $username		=	"aguatest";
+	my $username		=	"testuser";
 	my $project			=	"Project1";
 	my $oldworkflow		=	"Workflow1";
 	my $newworkflow		=	"downloadFiles";

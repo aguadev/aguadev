@@ -45,7 +45,7 @@ method initialise () {
     $self->logDebug("");
 
 	#### SET SESSION ID FOR HTML TESTS
-	my $query = qq{insert into sessions values ('aguatest', '1234567890.1234.123', NOW())};
+	my $query = qq{insert into sessions values ('testuser', '1234567890.1234.123', NOW())};
 	$self->logDebug("$query");
 	$self->db()->do($query);
 

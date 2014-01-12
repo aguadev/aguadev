@@ -47,7 +47,7 @@ use Conf::Yaml;
 my $SHOWLOG		=	2;
 my $PRINTLOG	=	5;
 my $configfile 	= "$Bin/../../conf/config.yaml";
-my $logfile 	= "$Bin/../../log/dump/dumpuser.log";
+my $logfile 	= "$Bin/../../log/dumpuser.log";
 my $conf = Conf::Yaml->new(
     memory      =>  1,
     inputfile	=>	$configfile,

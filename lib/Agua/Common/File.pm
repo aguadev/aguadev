@@ -548,6 +548,9 @@ method fileJson ($path, $filepath, $parentDir) {
 	$self->logDebug("path", $path);
 	$self->logDebug("filepath", $filepath);
 	$self->logDebug("parentDir", $parentDir);
+	
+	#### DEFAULT parentDir
+	$parentDir = "" if not defined $parentDir;
 		
     #### START JSON    
     my $json = "{\n";

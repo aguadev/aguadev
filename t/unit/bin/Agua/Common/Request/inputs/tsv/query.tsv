@@ -1,2 +1,0 @@
-aguatest	leukemiaANDlymphoma	1	AND	Disease	CONTAINS	leukemia
-aguatest	leukemiaANDlymphoma	2	OR	Disease	CONTAINS	lymphoma

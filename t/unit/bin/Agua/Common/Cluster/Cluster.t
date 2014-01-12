@@ -22,7 +22,7 @@ use Conf::Yaml;
 
 my $SHOWLOG     = 3;
 my $PRINTLOG    = 3;
-my $logfile = "$Bin/outputs/aguatest.cluster.log";
+my $logfile = "$Bin/outputs/testuser.cluster.log";
 
 #### SET CONF FILE
 my $installdir  =   $ENV{'installdir'} || "/agua";
@@ -46,14 +46,14 @@ my $conf = Conf::Yaml->new(
 my $dumpfile    =   "$Bin/../../../../dump/create.dump";
 
 my $tester = new Test::Agua::Common::Cluster(
-    database    =>  "aguatest",
+    database    =>  "testuser",
     dumpfile    =>  $dumpfile,
     logfile     =>  $logfile,
     conf        =>  $conf,
     json        =>  {
         username    =>  'syoung'
     },
-    username    =>  "aguatest",
+    username    =>  "testuser",
     project     =>  "Project1",
     workflow    =>  "Workflow1",
     SHOWLOG     =>  $SHOWLOG,

@@ -1,4 +1,7 @@
+install --force
 Term::ReadKey
+File::Remove
+File::Copy::Recursive
 FindBin::Real
 Test::DatabaseRow
 Test::Output
@@ -19,28 +22,24 @@ JSON
 JSON::PP
 CPAN::Meta
 Config::JSON
-File::Remove
-File::Copy::Recursive
 Net::LDAP
 File::Sort
 Getopt::Simple
-MooseX::Getopt
+MooseX::Getopt --force
 MooseX::App::Cmd --force
 MooseX::Method::Signatures::Meta::Method --force
 MooseX::UndefTolerant
 Digest::HMAC_SHA1
 Params::Validate
 DBI
-DBD::mysql
+DBD::mysql --force
 DBD::SQLite
 PerlIO::gzip
-Heap::Simple
+Heap::Simple --force
 Heap::Simple::Perl
 Heap::Simple::XS
 Devel::Size
 XML::Simple
-Net::OpenSSH
-VM::EC2
 Net::GitHub
 Method::Signatures::Simple
 File::Wildcard
@@ -58,7 +57,17 @@ File::Copy::Recursive
 File::Spec::Functions
 Class::DBI::Lite
 Data::Alias
+MooseX::Types::Path::Tiny --force
 Method::Signatures::Modifiers --force
-Net::RabbitFoot
-#### DO THIS MANUALLY
-#Bio::DB::SeqFeature
+
+#### Net::RabbitFoot
+XML::LibXML
+Net::AMQP
+
+AnyEvent --force
+AnyEvent::RabbitMQ
+MooseX::ConfigFromFile --force
+Net::RabbitFoot --force
+
+##### DO THIS MANUALLY
+##Bio::DB::SeqFeature

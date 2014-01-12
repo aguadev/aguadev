@@ -1,5 +1,5 @@
 {
-   "owner" : "aguatest",
+   "owner" : "testuser",
    "number" : "1",
    "provenance" : "",
    "status" : "",
@@ -14,7 +14,7 @@
          "url" : null,
          "stagejobid" : "0",
          "completed" : "0000-00-00 00:00:00",
-         "owner" : "aguatest",
+         "owner" : "testuser",
          "stderrfile" : "",
          "location" : "/agua/0.6/bioapps/bin/aligners/TOPHAT.pl",
          "version" : "0.6.0",

@@ -1,13 +1,17 @@
-dojo.provide("plugins.core.Common.Util");
+define([
+	"dojo/_base/declare",
+	"dojo/on",
+],
 
-/* SUMMARY: THIS CLASS IS INHERITED BY Common.js AND CONTAINS 
-	
-	UTIL METHODS  
-*/
+function (
+	declare,
+	on
+) {
 
-dojo.declare( "plugins.core.Common.Util",	[  ], {
+/////}}}}}
 
-///////}}}
+return declare("plugins.core.Common.Util",
+	[], {
 
 cookie : function (name, value) {
 // SET OR GET COOKIE-CONTAINED USER ID AND SESSION ID
@@ -15,13 +19,10 @@ cookie : function (name, value) {
 	//console.log("Util.core.Common.Util.cookie     plugins.core.Agua.cookie(name, value)");
 	//console.log("Util.core.Common.Util.cookie     name: " + name);
 	//console.log("Util.core.Common.Util.cookie     value: " + value);		
-
-	if ( value != null )
-	{
+	if ( value != null ) {
 		this.cookies[name] = value;
 	}
-	else if ( name != null )
-	{
+	else if ( name != null ) {
 		return this.cookies[name];
 	}
 
@@ -128,12 +129,23 @@ getClassName : function (object) {
 	console.dir({object:object});
 	var className = new String(object);
 	console.log("    Common.Util.getClassName    className: " + className);
-
+	
 	if ( className.match(/^\[Widget\s+(\S+),/) ) {
 		return className.match(/^\[Widget\s+(\S+),/)[1];
 	}
 	else if ( className.match(/^\[object/) ) {
-		return object.declaredClass.replace("\.", "_");
+		if ( object.declareClass ) {
+			return object.declaredClass.replace("\.", "_");
+		}
+		else if ( object.type ) {
+			return object.type
+		}
+		else if ( object.tagName ) {
+			return object.tagName
+		}
+		else {
+			return "unknown"
+		}
 	}
 
 	return "";
@@ -182,6 +194,8 @@ attachPane : function (childNode) {
 		childNode = this.mainTab;
 	}
 
+	console.log("Common.Util.attachPane    this.mainTab: " + this.mainTab);
+	console.dir({this_mainTab:this.mainTab});
 	console.log("Common.Util.attachPane    childNode: " + childNode);
 	console.dir({childNode:childNode});
 	console.log("Common.Util.attachPane    this.attachPoint: " + this.attachPoint);
@@ -196,7 +210,6 @@ attachPane : function (childNode) {
 		console.log("Common.Util.attachPane    DOING this.attachPoint.addChild");
 		this.attachPoint.addChild(childNode);
 		this.attachPoint.selectChild(childNode);
-	
 	}
 	else if ( this.attachPoint.appendChild ) {
 		if ( childNode.domNode ) {
@@ -338,8 +351,11 @@ fetchSyncText : function(url, timeout) {
 },
 // SELECT LIST
 setSelect : function(select, optionsList) {
-	console.log("Saved.setSelect    select:");
+	console.log("Common.Util.setSelect    select:");
 	console.dir({select:select});
+	console.log("Common.Util.setSelect    optionsList: ");
+	console.dir({optionsList:optionsList});
+	
 
 	var options = this.setOptions(optionsList);
 	select.options 	=	options;
@@ -364,20 +380,40 @@ setOptions : function (array) {
 	
 	return options;
 },
+
 // TOGGLE
-toggle : function (togglePoint) {
-	if ( togglePoint.style.display == 'inline-block' )	{
-		togglePoint.style.display='none';
-		dojo.removeClass(this.toggler, "open");
-		dojo.addClass(this.toggler, "closed");
-	}
-	else {
-		togglePoint.style.display = 'inline-block';
-		dojo.removeClass(this.toggler, "closed");
-		dojo.addClass(this.toggler, "open");
+//toggle : function (togglePoint) {
+//	if ( togglePoint.style.display == 'inline-block' )	{
+//		togglePoint.style.display='none';
+//		dojo.removeClass(this.toggler, "open");
+//		dojo.addClass(this.toggler, "closed");
+//	}
+//	else {
+//		togglePoint.style.display = 'inline-block';
+//		dojo.removeClass(this.toggler, "closed");
+//		dojo.addClass(this.toggler, "open");
+//	}
+//},
+
+// LISTENERS
+setOnkeyListener : function (object, key, callback) {
+	console.log("Common.Util.setOnKeyListener    object: " + object);
+	console.log("Common.Util.setOnKeyListener    key: " + key);
+
+	on(object, "keypress", dojo.hitch(this, "_onKey", key, callback));
+},
+_onKey : function(key, callback, event){
+	//console.log("Common.Util._onKey    key: " + key);
+	//console.log("Common.Util._onKey    callback: " + callback);
+	
+	var eventKey = event.keyCode;			
+	//console.log("Common.Util._onKey    eventKey: " + eventKey);
+	if ( eventKey == key ) {
+		this[callback]();
 	}
 }
 
+}); //	end declare
 
+});	//	end define
 
-});

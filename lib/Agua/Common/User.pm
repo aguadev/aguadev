@@ -32,7 +32,7 @@ sub getUsers {
 	$query = qq{SELECT username, firstname, lastname, email, description  FROM users WHERE username='$username'} if not $self->isAdminUser($username);
 	$self->logDebug("$query");	;
 	my $users = $self->db()->queryhasharray($query);
-	$users = {} if not defined $users;
+	$users = [] if not defined $users;
 	
 	return $users;
 }
@@ -269,7 +269,7 @@ sub _addLinuxUser {
 	print `$chown`;
 
     #### SET chmod SO THAT agua USER CAN ACCESS AND CREATE FILES
-    my $chmod = "chmod 770 $userdir/$username $userdir/$username/$aguadir";
+    my $chmod = "chmod 775 $userdir/$username $userdir/$username/$aguadir";
 	$self->logDebug("$chmod");
 	print `$chmod`;
     

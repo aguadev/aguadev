@@ -93,6 +93,7 @@ attachPoint : null,
 // formInputs : HashKey
 //		Hash of input names
 formInputs : {
+	ordinal 	: 	"word",
 	action 		: 	"word",
 	field		:	"phrase",
 	operator	:	"word",
@@ -101,57 +102,21 @@ formInputs : {
 
 // fields : ArrayRef
 //		Array of field options
-fields : [
-	"Source",
-	"Source Name",
-	"Analysis ID",
-	"state",
-	"reason",
-	"Modified Date",
-	"Upload Date",
-	"Published Date",
-	"Short Center Name",
-	"study",
-	"Aliquot ID",
-	"Sample Accession",
-	"Legacy Sample ID",
-	"Disease Abbreviation",
-	"TSS ID",
-	"Participant ID",
-	"Sample ID",
-	"Analyte Code",
-	"Sample Type",
-	"Library Strategy",
-	"platform",
-	"Analysis URI",
-	"filename",
-	"filesize",
-	"checksum",
-	"Checksum Type",
-	"Disease",
-	"Analyte",
-	"Sample",
-	"Center Name"
-],
+fields : null,
+
+// fieldOperators : HashRef
+//		Hash of fields against operators
+fieldOperators : null,
+
+// fieldTypes : HashRef
+//		Hash of fields against input types
+fieldTypes : null,
 
 // actions : ArrayRef
 //		Array of action options
 actions : [
 	"AND",
 	"OR"
-],
-
-// operators : ArrayRef
-//		Array of actions related to query term
-operators : [
-	"==",
-	"!=",
-	">",
-	"<",
-	">=",
-	"<=",
-	"contains",
-	"!contains"
 ],
 
 // dragSource : DndSource Widget
@@ -202,43 +167,72 @@ startup : function () {
 },
 setListeners : function () {
 	console.log("Search.setListeners");
-	var returnKey = 13;
-	this.setOnkeyListener(this.value, returnKey, "addFilter");	
-},
-setOnkeyListener : function (object, key, callback) {
-	console.log("Query.setOnKeyListener    object: " + object);
-	console.log("Query.setOnKeyListener    key: " + key);
-
-	on(object, "keypress", dojo.hitch(this, "_onKey", key, callback));
-},
-_onKey : function(key, callback, event){
-	//console.log("Query._onKey    key: " + key);
-	//console.log("Query._onKey    callback: " + callback);
 	
-	var eventKey = event.keyCode;			
-	//console.log("Query._onKey    eventKey: " + eventKey);
-	if ( eventKey == key ) {
-		this[callback]();
-	}
+	// SET VALUE LISTENER
+	var returnKey = 13;
+	this.setOnkeyListener(this.value, returnKey, "addFilter");
+
+	// SET OPERATOR LISTENER
+	on(this.field, "change", dojo.hitch(this, "_setOperators"));
+	on(this.field, "change", dojo.hitch(this, "_setInputType"));
+
+	// SUBMIT SAVE
+	on(this.saveButton, "click", dojo.hitch(this, "saveSearch"));
+},
+_setInputType : function () {
+	console.log("Query._setInputType    this.operator.value: " + this.field.value);
+	
+	var fieldTypes	=	this.fieldTypes[this.field.value];
+	console.log("Query._setInputType    fieldTypes: " + JSON.stringify(this.fieldTypes));
+	
+	//this.setSelect(this.operator, fieldTypes);	
+	var fieldType	=	this.fieldTypes[this.field.value];
+	console.log("Query._setInputType    fieldType: " + fieldType);
+	console.log("Query._setInputType    this.value: ");
+	console.dir({this_value:this.value});
+
+	domAttr.set(this.value, "type", fieldType);
+},
+_setOperators : function () {
+	console.log("Query._setOperators    this.field.value: " + this.field.value);
+	
+	var operators	=	this.fieldOperators[this.field.value];
+	console.log("Query._setOperators    operators: " + JSON.stringify(operators));
+	
+	this.setSelect(this.operator, operators);
 },
 addFilter : function () {
-	console.log("Query.addFilter   DOING this.getFormInputs()");
+	console.log("Query.addFilter   ");
+
+	// GET FILTER
 	var filter = this.getFormInputs(this);
 	console.log("Query.addFilter   filter: " + filter);
 	console.dir({filter:filter});
+	console.log("Query.addFilter   filter.value: " + filter.value);
+
+	// QUIT IF value IS EMPTY
+	if ( ! filter.value || filter.value === "" ) {
+		console.log("Query.addFilter   filter.value is invalid");
+		domClass.add(this.value, "invalid");
+		this.setInvalidValue();
+		return;
+	}
+	else {
+		domClass.remove(this.value, "invalid");
+	}
 	
+	// ADD TERM TO QUERY
 	this.addQueryRow(filter);
 	
-	// GET DATA
-	var data = this.fetchSyncJson("t/unit/plugins/request/request/data.json");
-
-	this.core.grid.updateGrid(this.filters, data);
+	// UPDATE GRID
+	this.core.grid.updateGrid(this.filters);
 },
 setSelects : function () {
 	console.log("Query.setSelects");
 	this.setSelect(this.action, this.actions);
 	this.setSelect(this.field, this.fields);
-	this.setSelect(this.operator, this.operators);
+
+	this.setSelect(this.operator, this.fieldOperators[this.field.value]);
 },
 toggleQuery : function () {
 	//console.log("Query.toggleQuery");
@@ -257,13 +251,9 @@ addQueryRow : function (inputs) {
 	// SET FILTERS
 	this.filters = itemArray;
 	
-	// EMPTY FIRST ACTION
-	var array = dojo.clone(itemArray);
-	array[0].action = " . ";
-
 	this.clearDragSource();
 	
-	this.loadDragItems(array);
+	this.loadDragItems(itemArray);
 },
 deleteQueryRow : function (node) {
 	var item = this.dragSource.getItem(node.id);
@@ -273,21 +263,18 @@ deleteQueryRow : function (node) {
 	dojo.destroy(node);
 
 	var itemArray 	=	this.getItemArray();
+	console.log("Query.deleteQueryRow    itemArray: " + JSON.stringify(itemArray));
 
 	// SET FILTERS
 	this.filters = itemArray;
 
-	// EMPTY FIRST ACTION
-	var array = dojo.clone(itemArray);
-	array[0].action = " . ";
-	console.log("Query.deleteQueryRow    array: " + array);
-	console.dir({array:array});
-
-	
 	this.clearDragSource();
 	
-	this.loadDragItems(array);
+	this.loadDragItems(itemArray);
 	
+	// UPDATE GRID
+	this.core.grid.updateGrid(this.filters);
+
 	return itemArray;
 },
 getItemArray : function () {
@@ -300,14 +287,10 @@ getItemArray : function () {
 
 	console.log("DndSource.loadDragItems     childNodes.length: " + childNodes.length);
 	var itemArray	=	[];
-	for ( var i = 0; i < childNodes.length; i++ )
-	{
-		var widget = dijit.getEnclosingWidget(childNodes[i].firstChild);
-		
-		console.log("Query.getItemArray    childNodes: " + childNodes);
-		console.dir(childNodes);
-	
+	for ( var i = 0; i < childNodes.length; i++ ) {
+		var widget = dijit.getEnclosingWidget(childNodes[i].firstChild);	
 		var hash = {};	
+		hash.ordinal = parseInt(i + 1);
 		for ( key in this.formInputs ) {
 			console.log("Query.getItemArray    widget[" + key + "]: " + widget[key]);
 			hash[key]	=	widget[key];
@@ -325,6 +308,8 @@ getFormInputs : function (widget) {
 	for ( var name in this.formInputs )
 	{
 		console.log("Query.getFormInputs    name: " + name);
+
+		
 		
 		var value = this.getWidgetValue(widget[name]);			
 		console.log("Query.getFormInputs    " + name + ": " + value);
@@ -332,7 +317,14 @@ getFormInputs : function (widget) {
 	}
 	
 	return inputs;
+},
+saveSearch : function () {
+	console.log("Query.saveSearch");
+	
+	
+	
 }
+
 
 
 }); //	end declare

@@ -72,7 +72,7 @@ method testLoadStarCluster {
     #### SET USERNAME AND CLUSTER
 	my $username =  $self->conf()->getKey("database", "TESTUSER");
     $self->username($username);
-	my $cluster =  "aguatest-testcluster";
+	my $cluster =  "$username-testcluster";
     $self->cluster($cluster);
 
     $self->logDebug("username", $username);
@@ -166,10 +166,10 @@ method setUpStarCluster ($testname, $username, $cluster) {
     });
 
     #### SET OUTPUT DIR    
-    $self->outputdir("$Bin/outputs/$testname/aguatest/.starcluster");    
+    $self->outputdir("$Bin/outputs/$testname/testuser/.starcluster");    
 
     #### SET CONFIG FILE
-    $self->configfile("$Bin/outputs/$testname/aguatest/.starcluster/aguatest-testcluster.config");
+    $self->configfile("$Bin/outputs/$testname/testuser/.starcluster/testuser-testcluster.config");
     
     #### SET INSTALL DIR FOR EC2 KEY FILE
     $self->conf()->setKey("agua", 'INSTALLDIR', "$Bin/outputs/$testname");
@@ -219,7 +219,7 @@ method testStartStarCluster {
     #### SET USERNAME AND CLUSTER
 	my $username =  $self->conf()->getKey("database", "TESTUSER");
     $self->username($username);
-	my $cluster =  "aguatest-testcluster";
+	my $cluster =  "testuser-testcluster";
     $self->cluster($cluster);
 	my $project =  "Project1";
 	my $workflow =  "Workflow1";
@@ -267,7 +267,7 @@ method testExecuteWorkflow {
 	
 	my $username 	=  	$self->conf()->getKey("database", "TESTUSER");
 	my $sessionid	=	"0000000000.0000.000";
- 	my $cluster 	=  	"aguatest-testcluster";
+ 	my $cluster 	=  	"testuser-testcluster";
 	my $project 	=  	"Project1";
 	my $workflow 	=  	"Workflow1";
 	my $workflownumber 	=  1;
@@ -350,7 +350,7 @@ method testGetStatus {
     #### SET USERNAME AND CLUSTER
 	my $testname = "getstatus";
 	my $username =  $self->conf()->getKey("database", "TESTUSER");
-	my $cluster = "aguatest-testcluster";
+	my $cluster = "testuser-testcluster";
 	my $start = 1;
 	my $project =  "Project1";
 	my $workflow =  "Workflow1";
@@ -421,7 +421,7 @@ method testGetStatus {
 	$self->conf()->setKey("cluster", "SGEROOT", "$Bin/outputs/$testname/opt/sge6");
 	
 	#### SET ENVIRONMENT VARIABLES
-	my $envarcommand = "export SGE_QMASTER_PORT=56321; export SGE_EXECD_PORT=56322; export SGE_ROOT=$Bin/outputs/$testname/opt/sge6; export SGE_CELL=aguatest-testcluster; export USERNAME=aguatest;";
+	my $envarcommand = "export SGE_QMASTER_PORT=56321; export SGE_EXECD_PORT=56322; export SGE_ROOT=$Bin/outputs/$testname/opt/sge6; export SGE_CELL=testuser-testcluster; export USERNAME=testuser;";
 	`$envarcommand`;
 	
 	#### SET CLUSTER RUNNING
@@ -445,7 +445,7 @@ method testGetClusterWorkflow {
     #### SET USERNAME AND CLUSTER
 	my $testname	=	"getclusterworkflow";
 	my $username 	=  	$self->conf()->getKey("database", "TESTUSER");
-	my $cluster 	= 	"aguatest-testcluster";
+	my $cluster 	= 	"testuser-testcluster";
 	my $project 	=  	"Project1";
 	my $workflow 	=  	"Workflow1";
 	my $status 		= 	"stopped";
@@ -479,7 +479,7 @@ method testUpdateClusterWorkflow {
     #### SET USERNAME AND CLUSTER
 	my $testname	=	"getclusterworkflow";
 	my $username 	=  	$self->conf()->getKey("database", "TESTUSER");
-	my $cluster 	= 	"aguatest-testcluster";
+	my $cluster 	= 	"testuser-testcluster";
 	my $project 	=  	"Project1";
 	my $workflow 	=  	"Workflow1";
 	my $status 		= 	"running";
@@ -534,7 +534,7 @@ method testUpdateWorkflowStatus {
     #### SET USERNAME AND CLUSTER
 	my $testname	=	"getworkflowstatus";
 	my $username 	=  	$self->conf()->getKey("database", "TESTUSER");
-	my $cluster 	= 	"aguatest-testcluster";
+	my $cluster 	= 	"testuser-testcluster";
 	my $project 	=  	"Project1";
 	my $workflow 	=  	"Workflow1";
 	my $status 		= 	"running";
@@ -608,7 +608,7 @@ method getExpected ($key) {
 			"project"		=>	"Project1",
 			"name"			=>	"Workflow1",
 			"description"	=>	"",
-			"username"		=>	"aguatest",
+			"username"		=>	"testuser",
 			"notes"			=>	""
 		},
 	
@@ -622,14 +622,14 @@ method getExpected ($key) {
 				"status" 	=> "",
 				"project" 	=> "Project1",
 				"stages" 	=> [
-					{"stagedescription"=>"","stagepid"=>"7860","number"=>"1","status"=>"completed","project"=>"Project1","submit"=>"0","workflowpid"=>"0","stagenotes"=>"","stagename"=>"","stagejobid"=>"0","completed"=>"2012-02-26 04:36:30","owner"=>"aguatest","workflownumber"=>"1","cluster"=>"","stderrfile"=>"/nethome/admin/agua/Project1/Workflow1/stdout/1-FTP.stderr","location"=>"bin/utils/FTP.pl","version"=>"0.6.0","installdir"=>"/agua/bioapps","executor"=>"/usr/bin/perl","name"=>"FTP","stdoutfile"=>"/nethome/admin/agua/Project1/Workflow1/stdout/1-FTP.stdout","package"=>"bioapps","username"=>"aguatest","workflow"=>"Workflow1","now"=>"2012-11-09 19:07:01","started"=>"2012-02-26 04:24:14","type"=>"utility","queued"=>"0000-00-00 00:00:00"},
-					{"stagedescription"=>"","stagepid"=>"8997","number"=>"2","status"=>"completed","project"=>"Project1","submit"=>"0","workflowpid"=>"0","stagenotes"=>"","stagename"=>"","stagejobid"=>"0","completed"=>"2012-02-27 03:39:27","owner"=>"aguatest","workflownumber"=>"1","cluster"=>"","stderrfile"=>"/nethome/admin/agua/Project1/Workflow1/stdout/2-unzipFiles.stderr","location"=>"bin/utils/unzipFiles.pl","version"=>"0.6.0","installdir"=>"/agua/bioapps","executor"=>"/usr/bin/perl","name"=>"unzipFiles","stdoutfile"=>"/nethome/admin/agua/Project1/Workflow1/stdout/2-unzipFiles.stdout","package"=>"bioapps","username"=>"aguatest","workflow"=>"Workflow1","now"=>"2012-11-09 19:07:01","started"=>"2012-02-27 03:39:00","type"=>"utility","queued"=>"0000-00-00 00:00:00"},
-					{"stagedescription"=>"","stagepid"=>"0","number"=>"3","status"=>"","project"=>"Project1","submit"=>"0","workflowpid"=>"0","stagenotes"=>"","stagename"=>"","stagejobid"=>"0","completed"=>"0000-00-00 00:00:00","owner"=>"aguatest","workflownumber"=>"1","cluster"=>"","stderrfile"=>"","location"=>"bin/converters/elandIndex.pl","version"=>"0.6.0","installdir"=>"/agua/bioapps","executor"=>"/usr/bin/perl","name"=>"elandIndex","stdoutfile"=>"","package"=>"bioapps","username"=>"aguatest","workflow"=>"Workflow1","now"=>"2012-11-09 19:07:01","started"=>"0000-00-00 00:00:00","type"=>"converter","queued"=>"0000-00-00 00:00:00"
+					{"stagedescription"=>"","stagepid"=>"7860","number"=>"1","status"=>"completed","project"=>"Project1","submit"=>"0","workflowpid"=>"0","stagenotes"=>"","stagename"=>"","stagejobid"=>"0","completed"=>"2012-02-26 04:36:30","owner"=>"testuser","workflownumber"=>"1","cluster"=>"","stderrfile"=>"/nethome/admin/agua/Project1/Workflow1/stdout/1-FTP.stderr","location"=>"bin/utils/FTP.pl","version"=>"0.6.0","installdir"=>"/agua/bioapps","executor"=>"/usr/bin/perl","name"=>"FTP","stdoutfile"=>"/nethome/admin/agua/Project1/Workflow1/stdout/1-FTP.stdout","package"=>"bioapps","username"=>"testuser","workflow"=>"Workflow1","now"=>"2012-11-09 19:07:01","started"=>"2012-02-26 04:24:14","type"=>"utility","queued"=>"0000-00-00 00:00:00"},
+					{"stagedescription"=>"","stagepid"=>"8997","number"=>"2","status"=>"completed","project"=>"Project1","submit"=>"0","workflowpid"=>"0","stagenotes"=>"","stagename"=>"","stagejobid"=>"0","completed"=>"2012-02-27 03:39:27","owner"=>"testuser","workflownumber"=>"1","cluster"=>"","stderrfile"=>"/nethome/admin/agua/Project1/Workflow1/stdout/2-unzipFiles.stderr","location"=>"bin/utils/unzipFiles.pl","version"=>"0.6.0","installdir"=>"/agua/bioapps","executor"=>"/usr/bin/perl","name"=>"unzipFiles","stdoutfile"=>"/nethome/admin/agua/Project1/Workflow1/stdout/2-unzipFiles.stdout","package"=>"bioapps","username"=>"testuser","workflow"=>"Workflow1","now"=>"2012-11-09 19:07:01","started"=>"2012-02-27 03:39:00","type"=>"utility","queued"=>"0000-00-00 00:00:00"},
+					{"stagedescription"=>"","stagepid"=>"0","number"=>"3","status"=>"","project"=>"Project1","submit"=>"0","workflowpid"=>"0","stagenotes"=>"","stagename"=>"","stagejobid"=>"0","completed"=>"0000-00-00 00:00:00","owner"=>"testuser","workflownumber"=>"1","cluster"=>"","stderrfile"=>"","location"=>"bin/converters/elandIndex.pl","version"=>"0.6.0","installdir"=>"/agua/bioapps","executor"=>"/usr/bin/perl","name"=>"elandIndex","stdoutfile"=>"","package"=>"bioapps","username"=>"testuser","workflow"=>"Workflow1","now"=>"2012-11-09 19:07:01","started"=>"0000-00-00 00:00:00","type"=>"converter","queued"=>"0000-00-00 00:00:00"
 					}
 				]
 			},
 			"clusterstatus"	=>	{
-				"cluster" 	=> "aguatest-testcluster",
+				"cluster" 	=> "testuser-testcluster",
 				"balancer" 	=> "",
 				"status" 	=> "none",
 				"log" 		=> "NO CLUSTER OUTPUT",
@@ -648,19 +648,19 @@ method getExpected ($key) {
 				"status" 	=> "pending",
 				"project"	=> "Project1",
 				"stages" 	=> [
-					{"stagedescription"=>"","stagepid"=>"7860","number"=>"1","status"=>"completed","project"=>"Project1","submit"=>"0","workflowpid"=>"0","stagenotes"=>"","stagename"=>"","stagejobid"=>"0","completed"=>"2012-02-26 04:36:30","owner"=>"aguatest","workflownumber"=>"1","cluster"=>"","stderrfile"=>"/nethome/admin/agua/Project1/Workflow1/stdout/1-FTP.stderr","location"=>"bin/utils/FTP.pl","version"=>"0.6.0","installdir"=>"/agua/bioapps","executor"=>"/usr/bin/perl","name"=>"FTP","stdoutfile"=>"/nethome/admin/agua/Project1/Workflow1/stdout/1-FTP.stdout","package"=>"bioapps","username"=>"aguatest","workflow"=>"Workflow1","now"=>"2012-11-09 19:07:01","started"=>"2012-02-26 04:24:14","type"=>"utility","queued"=>"0000-00-00 00:00:00"},
-					{"stagedescription"=>"","stagepid"=>"8997","number"=>"2","status"=>"completed","project"=>"Project1","submit"=>"0","workflowpid"=>"0","stagenotes"=>"","stagename"=>"","stagejobid"=>"0","completed"=>"2012-02-27 03:39:27","owner"=>"aguatest","workflownumber"=>"1","cluster"=>"","stderrfile"=>"/nethome/admin/agua/Project1/Workflow1/stdout/2-unzipFiles.stderr","location"=>"bin/utils/unzipFiles.pl","version"=>"0.6.0","installdir"=>"/agua/bioapps","executor"=>"/usr/bin/perl","name"=>"unzipFiles","stdoutfile"=>"/nethome/admin/agua/Project1/Workflow1/stdout/2-unzipFiles.stdout","package"=>"bioapps","username"=>"aguatest","workflow"=>"Workflow1","now"=>"2012-11-09 19:07:01","started"=>"2012-02-27 03:39:00","type"=>"utility","queued"=>"0000-00-00 00:00:00"},
-					{"stagedescription"=>"","stagepid"=>"0","number"=>"3","status"=>"","project"=>"Project1","submit"=>"0","workflowpid"=>"0","stagenotes"=>"","stagename"=>"","stagejobid"=>"0","completed"=>"0000-00-00 00:00:00","owner"=>"aguatest","workflownumber"=>"1","cluster"=>"","stderrfile"=>"","location"=>"bin/converters/elandIndex.pl","version"=>"0.6.0","installdir"=>"/agua/bioapps","executor"=>"/usr/bin/perl","name"=>"elandIndex","stdoutfile"=>"","package"=>"bioapps","username"=>"aguatest","workflow"=>"Workflow1","now"=>"2012-11-09 19:07:01","started"=>"0000-00-00 00:00:00","type"=>"converter","queued"=>"0000-00-00 00:00:00"}
+					{"stagedescription"=>"","stagepid"=>"7860","number"=>"1","status"=>"completed","project"=>"Project1","submit"=>"0","workflowpid"=>"0","stagenotes"=>"","stagename"=>"","stagejobid"=>"0","completed"=>"2012-02-26 04:36:30","owner"=>"testuser","workflownumber"=>"1","cluster"=>"","stderrfile"=>"/nethome/admin/agua/Project1/Workflow1/stdout/1-FTP.stderr","location"=>"bin/utils/FTP.pl","version"=>"0.6.0","installdir"=>"/agua/bioapps","executor"=>"/usr/bin/perl","name"=>"FTP","stdoutfile"=>"/nethome/admin/agua/Project1/Workflow1/stdout/1-FTP.stdout","package"=>"bioapps","username"=>"testuser","workflow"=>"Workflow1","now"=>"2012-11-09 19:07:01","started"=>"2012-02-26 04:24:14","type"=>"utility","queued"=>"0000-00-00 00:00:00"},
+					{"stagedescription"=>"","stagepid"=>"8997","number"=>"2","status"=>"completed","project"=>"Project1","submit"=>"0","workflowpid"=>"0","stagenotes"=>"","stagename"=>"","stagejobid"=>"0","completed"=>"2012-02-27 03:39:27","owner"=>"testuser","workflownumber"=>"1","cluster"=>"","stderrfile"=>"/nethome/admin/agua/Project1/Workflow1/stdout/2-unzipFiles.stderr","location"=>"bin/utils/unzipFiles.pl","version"=>"0.6.0","installdir"=>"/agua/bioapps","executor"=>"/usr/bin/perl","name"=>"unzipFiles","stdoutfile"=>"/nethome/admin/agua/Project1/Workflow1/stdout/2-unzipFiles.stdout","package"=>"bioapps","username"=>"testuser","workflow"=>"Workflow1","now"=>"2012-11-09 19:07:01","started"=>"2012-02-27 03:39:00","type"=>"utility","queued"=>"0000-00-00 00:00:00"},
+					{"stagedescription"=>"","stagepid"=>"0","number"=>"3","status"=>"","project"=>"Project1","submit"=>"0","workflowpid"=>"0","stagenotes"=>"","stagename"=>"","stagejobid"=>"0","completed"=>"0000-00-00 00:00:00","owner"=>"testuser","workflownumber"=>"1","cluster"=>"","stderrfile"=>"","location"=>"bin/converters/elandIndex.pl","version"=>"0.6.0","installdir"=>"/agua/bioapps","executor"=>"/usr/bin/perl","name"=>"elandIndex","stdoutfile"=>"","package"=>"bioapps","username"=>"testuser","workflow"=>"Workflow1","now"=>"2012-11-09 19:07:01","started"=>"0000-00-00 00:00:00","type"=>"converter","queued"=>"0000-00-00 00:00:00"}
 				]
 			},
 
 			"clusterstatus"	=>	{
 				"hours"			=>	undef,
 				"polled"		=>	"2013-10-01 00:35:16",
-				"cluster"		=>	"aguatest-testcluster",
+				"cluster"		=>	"testuser-testcluster",
 				"status"		=>	"cluster running",
 				"minnodes"		=>	"0",
-				"username"		=>	"aguatest",
+				"username"		=>	"testuser",
 				"stopped"		=>	"0000-00-00 00:00:00",
 				"termination"	=>	"0000-00-00 00:00:00",
 				"pid"			=>	"0",
@@ -676,7 +676,7 @@ method getExpected ($key) {
     
     
     -----------------------------------------------
-    smallcluster (security group: \@sc-aguatest-testcluster)
+    smallcluster (security group: \@sc-testuser-testcluster)
     -----------------------------------------------
     Launch time: 2012-10-15T05:49:36.000Z
     Zone: us-east-1a
@@ -685,12 +685,12 @@ method getExpected ($key) {
          master running i-7609f31b ec2-67-202-25-182.compute-1.amazonaws.com 
         node001 running i-7209f31f ec2-184-72-81-94.compute-1.amazonaws.com
 		},
-			clusterLog	=>qq{BALANCER IS RUNNING FOR CLUSTER: aguatest-testcluster
+			clusterLog	=>qq{BALANCER IS RUNNING FOR CLUSTER: testuser-testcluster
 SLEEPING FOR 30 seconds
 COMPLETED BALANCER RUN
 },
 			status 	=> "cluster running",
-			cluster	=> "aguatest-testcluster"
+			cluster	=> "testuser-testcluster"
 		},
 		
 		"getstatus-queueoutput" => qq{=================================================================================
@@ -720,7 +720,7 @@ test	56 jobs
 #    
 #    
 #    -----------------------------------------------
-#    smallcluster (security group: \@sc-aguatest-testcluster)
+#    smallcluster (security group: \@sc-testuser-testcluster)
 #    -----------------------------------------------
 #    Launch time: 2012-10-15T05:49:36.000Z
 #    Zone: us-east-1a
@@ -729,13 +729,13 @@ test	56 jobs
 #         master running i-7609f31b ec2-67-202-25-182.compute-1.amazonaws.com 
 #        node001 running i-7209f31f ec2-184-72-81-94.compute-1.amazonaws.com
 #		},
-#				log	=>	qq{BALANCER IS RUNNING FOR CLUSTER: aguatest-testcluster
+#				log	=>	qq{BALANCER IS RUNNING FOR CLUSTER: testuser-testcluster
 #SLEEPING FOR 30 seconds
 #COMPLETED BALANCER RUN
 #},
 #				status 		=> 	"cluster running",
 #				balancer 	=> 	"",
-#				cluster		=> 	"aguatest-testcluster",
+#				cluster		=> 	"testuser-testcluster",
 #				hours		=>	undef
 
 	

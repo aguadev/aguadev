@@ -90,6 +90,18 @@ url: null,
 //		Hash of core classes
 core : {},
 
+// fields : ArrayRef
+//		Array of field options
+fields : null,
+
+// fieldOperators : HashRef
+//		Hash of fields against operators
+fieldOperators : null,
+
+// fieldTypes : HashRef
+//		Hash of fields against input types
+fieldTypes : null,
+
 ////}}}
 constructor : function(args) {	
 	console.log("Search.constructor    args:");
@@ -143,8 +155,11 @@ setQuery : function () {
 	this.core.query = new Query({
 		parent : this,
 		attachPoint : this.queryAttachPoint,
-		url : this.url,
-		core : this.core
+		url 			: 	this.url,
+		core 			: 	this.core,
+		fields			:	this.fields,
+		fieldOperators	:	this.fieldOperators,
+		fieldTypes		:	this.fieldTypes
 	});
 },
 setSimpleSearch : function () {
@@ -192,34 +207,6 @@ attachPane : function () {
 		console.log("Search.attachPane    DOING this.appendchild(this.containerNode)");
 		this.attachPoint.appendChild(this.containerNode);
 	}
-},
-setListeners : function () {
-	console.log("Search.setListeners");
-	var returnKey = 13;
-	this.setOnkeyListener(this.simpleQuery, returnKey, "doSimpleQuery");	
-},
-setOnkeyListener : function (object, key, callback) {
-	console.log("Request.setOnKeyListener    object: " + object);
-	console.log("Request.setOnKeyListener    key: " + key);
-
-	on(object, "keypress", dojo.hitch(this, "_onKey", key, callback));
-},
-_onKey : function(key, callback, event){
-	//console.log("View.simpleQueryOnKey    key: " + key);
-	//console.log("View.simpleQueryOnKey    callback: " + callback);
-	
-	var eventKey = event.keyCode;			
-	console.log("View.simpleQueryOnKey    eventKey: " + eventKey);
-	if ( eventKey == key ) {
-		this[callback]();
-	}
-},
-doSimpleQuery : function () {
-	console.log("Search.simpleQuery    this.simpleQuery.value: " + this.simpleQuery.value);
-	
-	
-//        window.location = "./RequestDownload.aspx?k=" + document.getElementById("quickquery").value + "&qq=1";
-	
 },
 
 //    var allSelectedFiles2 = [];
@@ -442,97 +429,7 @@ doSimpleQuery : function () {
 //            allSelectedFiles2 = [];
 //
 //    }
-//
-//    function GetFileSizeInUnit2(bytes) {
-//        var tempSize = 0;
-//        var totalFileSizeInUnit = "";
-//
-//        if (bytes < 1024) {
-//            tempSize = bytes;
-//            totalFileSizeInUnit = tempSize + " Bytes";
-//        }
-//        else if (bytes < 1024 * 1024) {
-//            tempSize = bytes / 1024;
-//            totalFileSizeInUnit = Math.ceil(tempSize.toFixed(2)) + " KB";
-//        }
-//        else if (bytes < 1024 * 1024 * 1024) {
-//            tempSize = bytes / (1024 * 1024);
-//            totalFileSizeInUnit = Math.ceil(tempSize.toFixed(2)) + " MB";
-//        }
-//        else if (bytes >= 1024 * 1024 * 1024) {
-//            tempSize = bytes / (1024 * 1024 * 1024);
-//            totalFileSizeInUnit = Math.ceil(tempSize.toFixed(2)) + " GB";
-//        }
-//        return totalFileSizeInUnit;
-//    }
 
-//    //User Defined Function to Open Dialog Framework
-//    function OpenDownloadDialog2(strPageURL) {
-//        var dialogOptions = SP.UI.$create_DialogOptions();
-//        dialogOptions.url = strPageURL; // URL of the Page
-//        dialogOptions.width = 480; // Width of the Dialog
-//        dialogOptions.height = 155; // Height of the Dialog
-//        dialogOptions.args = $.cookie("itemSelection").split('$');
-//        dialogOptions.dialogReturnValueCallback = CloseCallback;
-//
-//        // Function to capture dialog closed event
-//        SP.UI.ModalDialog.showModalDialog(dialogOptions); // Open the Dialog
-//        return false;
-//    }
-//
-//    //User Defined Function to Open Dialog Framework
-//    function OpenDialog2(strPageURL, wide, high) {
-//        var dialogOptions = SP.UI.$create_DialogOptions();
-//        dialogOptions.url = strPageURL; // URL of the Page
-//        dialogOptions.width = wide; // Width of the Dialog
-//        dialogOptions.height = high; // Height of the Dialog
-//        dialogOptions.dialogReturnValueCallback = CloseCallback;
-//
-//        // Function to capture dialog closed event
-//        SP.UI.ModalDialog.showModalDialog(dialogOptions); // Open the Dialog
-//        return false;
-//    }
-//
-//    var od3web = null;
-//    var od3url = null;
-//
-//    function OpenDownloadDialog(myurl) {
-//        SP.SOD.executeFunc('sp.js', 'SP.ClientContext', function () {
-//            var context = new SP.ClientContext.get_current();
-//            od3web = context.get_web();
-//            var user = od3web.get_currentUser();
-//            od3url = myurl;
-//            user.retrieve();
-//            context.load(od3web);
-//            context.executeQueryAsync(Function.createDelegate(this, this.od3onSuccessMethod),
-//	    	Function.createDelegate(this, this.od3onFailureMethod));
-//        });
-//
-//    }
-//
-//
-//    function initdownload() {
-//
-//        var qq = window.getParameterByName("qq");
-//        if (qq.length > 0) {
-//            document.getElementById('quickquery').value = window.getParameterByName("k");
-//            document.getElementById('showeditlink').style.display = "none";
-//            document.getElementById('hideeditlink').style.display = "inline";
-//            document.getElementById('showsavelink').style.display = "none";
-//            document.getElementById('hidesavelink').style.display = "inline";
-//        }
-//        else {
-//            document.getElementById('currentquery').value = window.getParameterByName("k");
-//            autoGrow('currentquery');
-//            document.getElementById('showeditlink').style.display = "inline";
-//            document.getElementById('hideeditlink').style.display = "none";
-//            document.getElementById('showsavelink').style.display = "inline";
-//            document.getElementById('hidesavelink').style.display = "none";
-//        }
-//        getSavedQueries();
-//        showNotice();
-//    }
-//
 
 
 //SelectAllCheckBoxes: function() { 

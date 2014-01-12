@@ -26,7 +26,7 @@ dojo.addOnLoad(function(){
 		, dataUrl: dojo.moduleUrl("t", "json/getData-111127.json")
 	});
 
-	Agua.cookie('username', 'aguatest');
+	Agua.cookie('username', 'testuser');
 	Agua.cookie('sessionid', '9999999999.9999.999');
 
     Agua.setFileCaches("../../../json/fileCaches.json");

@@ -8,6 +8,9 @@ dojo.declare( "plugins.core.Agua.Hub",	[  ], {
 
 getHub : function () {
 // RETURN CLONE OF this.hub
+	console.log("Agua.Hub.getHub    data:");
+	console.dir({this_data:this.data});
+	
 	return this.cloneData("hub");
 },
 

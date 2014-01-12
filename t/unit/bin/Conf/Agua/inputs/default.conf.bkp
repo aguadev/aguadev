@@ -30,7 +30,7 @@ DATABASE                agua
 USER                    agua
 PASSWORD                open4agua
 TESTDATABASE            aguatest
-TESTUSER                aguatest
+TESTUSER                testuser
 TESTPASSWORD            99999999
 DUMPFILE                bin/sql/dump/agua.dump
 SESSIONTIMEOUT          24

@@ -1,31 +1,52 @@
+/* ENSURE GRID HAS HEIGHT */
+.grid .dgrid-scroller {
+	position: relative !important;
+}
+
 .grid .dgrid-row-odd {
     background: #F2F5F9;
 }
 
 .grid .dgrid-column-Analysis-ID,
 .grid .dgrid-column-Analysis-URI,
-.grid .dgrid-column-Participant-ID,
-.grid .dgrid-column-File-Name {
+.grid .dgrid-column-Participant-ID {
     width: 200px;
 }
 
+.grid .dgrid-column-filename {
+    width: 250px;
+}
 .grid .dgrid-column-Select,
 .grid .dgrid-column-Details,
 .grid .dgrid-column-Source,
 .grid .dgrid-column-Study,
 .grid .dgrid-column-Strategy,
 .grid .dgrid-column-Platform,
-.grid .dgrid-column-State,
-.grid .dgrid-column-File-Size
+.grid .dgrid-column-State 
 {
-    width: 50px;
+    width: 60px;
 }
 
+.grid .dgrid-column-filesize
+{
+    width: 80px;
+}
 .grid .dgrid-column-Disease,
 .grid .dgrid-column-Modified-Date,
-.grid .dgrid-column-Upload-Date,
 .grid .dgrid-column-Published-Date
 {
     width: 100px;
 }
 
+.grid .dgrid-column-UploadDate {
+}
+
+/* PAGINATION */
+.grid .dgrid-pagination .dgrid-navigation, .dgrid-pagination .dgrid-page-size {
+    float: left !important;
+}
+
+/* MIN HEIGHT */
+.grid .dgrid-content {
+	min-height: 50px !important;
+}

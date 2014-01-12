@@ -84,7 +84,7 @@ define("plugins/request/Request", [
 	"plugins/core/Common",
 	"plugins/request/Search",
 	"plugins/request/Grid",
-
+	"dojo/io/script",
 	// STORE	
 	"dojo/store/Memory",
 	
@@ -134,6 +134,7 @@ function (
 	Common,
 	Search,
 	Grid,
+	script,
 
 	Memory,
 	Status,
@@ -160,21 +161,125 @@ templateString : dojo.cache("plugins", "request/templates/request.html"),
 // cssFiles: ArrayRef
 // 		CSS files for this widget
 cssFiles : [
-	dojo.moduleUrl("plugins", "request/css/request.css"),
-	dojo.moduleUrl("dgrid", "css/dgrid.css"),
-	dojo.moduleUrl("dojox", "layout/resources/ExpandoPane.css"),
-	dojo.moduleUrl("dojox", "layout/tests/_expando.css"),
-	dojo.moduleUrl("plugins", "dnd/css/dnd.css")
+	require.toUrl("plugins/request/css/request.css"),
+	require.toUrl("dojox/layout/resources/ExpandoPane.css"),
+	require.toUrl("dojox/layout/tests/_expando.css"),
+	require.toUrl("plugins/dnd/css/dnd.css")
 ],
 
 // url: String
 // URL FOR REMOTE DATABASE
-//url: "http://reqapi.annairesearch.com:8080/api/SubmitQuery.req",
-url: "t/unit/plugins/request/request/data.json",
+//url : "http://reqapi.annairesearch.com:8080/api/SubmitQuery.req",
+url : "t/unit/plugins/request/request/data-10.json",
 
 // core : HashRef
 //		Hash of core classes
 core : {},
+
+// fields : ArrayRef
+//		Array of field options
+fields : [
+	"Source",
+	"Source Name",
+	"Analysis ID",
+	"state",
+	"reason",
+	"Modified Date",
+	"Upload Date",
+	"Published Date",
+	"Short Center Name",
+	"study",
+	"Aliquot ID",
+	"Sample Accession",
+	"Legacy Sample ID",
+	"Disease Abbreviation",
+	"TSS ID",
+	"Participant ID",
+	"Sample ID",
+	"Analyte Code",
+	"Sample Type",
+	"Library Strategy",
+	"platform",
+	"Analysis URI",
+	"filename",
+	"filesize",
+	"checksum",
+	"Checksum Type",
+	"Disease",
+	"Analyte",
+	"Sample",
+	"Center Name"
+],
+
+// fieldOperators : HashRef
+//		Hash of fields against operators
+fieldOperators : {
+	"Source" : ["is", "is not", "contains", "NOT contains"],
+	"Source Name" : ["is", "is not", "contains", "NOT contains"],
+	"Analysis ID" : ["is", "is not", "contains", "NOT contains"],
+	"state" : ["is", "is not", "contains", "NOT contains"],
+	"reason" : ["is", "is not", "contains", "NOT contains"],
+	"Modified Date" : ["before", "after"],
+	"Upload Date" : ["before", "after"],
+	"Published Date" : ["before", "after"],
+	"Short Center Name" : ["is", "is not", "contains", "NOT contains"],
+	"study" : ["is", "is not", "contains", "NOT contains"],
+	"Aliquot ID" : ["is", "is not", "contains", "NOT contains"],
+	"Sample Accession" : ["is", "is not", "contains", "NOT contains"],
+	"Legacy Sample ID" : ["is", "is not", "contains", "NOT contains"],
+	"Disease Abbreviation" : ["is", "is not", "contains", "NOT contains"],
+	"TSS ID" : ["is", "is not", "contains", "NOT contains"],
+	"Participant ID" : ["is", "is not", "contains", "NOT contains"],
+	"Sample ID" : ["is", "is not", "contains", "NOT contains"],
+	"Analyte Code" : ["is", "is not", "contains", "NOT contains"],
+	"Sample Type" : ["is", "is not", "contains", "NOT contains"],
+	"Library Strategy" : ["is", "is not", "contains", "NOT contains"],
+	"platform" : ["is", "is not", "contains", "NOT contains"],
+	"Analysis URI" : ["is", "is not", "contains", "NOT contains"],
+	"filename" : ["is", "is not", "contains", "NOT contains"],
+	"filesize" : ["==", "!=", ">", "<", ">=", "<="],
+	"checksum" : ["is", "is not", "contains", "NOT contains"],
+	"Checksum Type" : ["is", "is not", "contains", "NOT contains"],
+	"Disease" : ["is", "is not", "contains", "NOT contains"],
+	"Analyte" : ["is", "is not", "contains", "NOT contains"],
+	"Sample" : ["is", "is not", "contains", "NOT contains"],
+	"Center Name" : ["is", "is not", "contains", "NOT contains"]
+},
+
+// fieldTypes : HashRef
+//		Hash of fields against input types
+fieldTypes : {
+	"Source" : ["text"],
+	"Source Name" : ["text"],
+	"Analysis ID" : ["text"],
+	"state" : ["text"],
+	"reason" : ["text"],
+	"Modified Date" : ["date"],
+	"Upload Date" : ["date"],
+	"Published Date" : ["date"],
+	"Short Center Name" : ["text"],
+	"study" : ["text"],
+	"Aliquot ID" : ["text"],
+	"Sample Accession" : ["text"],
+	"Legacy Sample ID" : ["text"],
+	"Disease Abbreviation" : ["text"],
+	"TSS ID" : ["text"],
+	"Participant ID" : ["text"],
+	"Sample ID" : ["text"],
+	"Analyte Code" : ["text"],
+	"Sample Type" : ["text"],
+	"Library Strategy" : ["text"],
+	"platform" : ["text"],
+	"Analysis URI" : ["text"],
+	"filename" : ["text"],
+	"filesize" : ["number"],
+	"checksum" : ["text"],
+	"Checksum Type" : ["text"],
+	"Disease" : ["text"],
+	"Analyte" : ["text"],
+	"Sample" : ["text"],
+	"Center Name" : ["text"]
+},
 
 ////}}}
 constructor : function(args) {	
@@ -207,11 +312,13 @@ startup : function () {
 	
 	// SET SEARCH
 	this.setSearch();	
-	
+
+	// SET DATA
+	this.setData();
+
 	// SET GRID
 	this.setGrid();	
 
-	
 //// EXPAND LEFT PANE
 	//this.leftPane.toggle();
 
@@ -222,29 +329,100 @@ setSearch : function () {
 	console.log("Request.setSearch    ");
 	
 	this.core.search = new Search({
-		parent : this,
-		attachPoint : this.searchAttachPoint,
-		url : this.url,
-		core : this.core
+		parent 			: 	this,
+		attachPoint 	: 	this.searchAttachPoint,
+		url 			: 	this.url,
+		core 			: 	this.core,
+		fields			:	this.fields,
+		fieldOperators	:	this.fieldOperators,
+		fieldTypes		:	this.fieldTypes
 	});
 },
-setGrid : function () {
+rowsToObject : function (rows) {
+	//console.log("Request.rowsToObject    rows: " + rows);
+	//console.dir({rows:rows});
 
-	var data = this.fetchSyncJson(this.url);
-
-	//var data = this.fetchSyncJson("./data.json");
-
+	var headers =	rows.splice(0,1)[0];
+	console.log("Request.rowsToObject    headers: " + headers);
+	console.dir({headers:headers});
 	
-	console.log("Request.setGrid    data: ");
-	console.dir({data:data});
-	console.log("Request.setGrid    this.url: " + this.url);
+	var data = [];
+	for ( var i = 0; i < rows.length; i++ ) {
+		var hash = {};
+		for ( var j = 0; j < headers.length; j++ ) {
+			hash[headers[j]] = rows[i][j];
+		}
+		//console.log("Request.rowsToObject    hash: " + hash);
+		//console.dir({hash:hash});		
+		data.push(hash);
+	}
+
+	return data;
+},
+setData : function () {
+	console.log("Request.setData    this.url: " + this.url);
+
+	//var data = this.fetchSyncJson(this.url);
+
+	var rows = this.fetchSyncJson(this.url);
+	var data = this.rowsToObject(rows);
+
+	this.data = data;
+	return ;
+
+	//var data = {"data": [{"password": "mypass", "userid": "andyh"}, {"PAGE": [{"PAGENUM": "-1"}]}]};
+	//var data = {"password": "mypass", "userid": "andyh","PAGE": [{"PAGENUM": "-1"}]};
+	var data = {"password": "mypass", "userid": "andyh","PAGENUM": "-1"};
+	
+	var thisObj	=	this;
+	script.get({
+        //url: "http://reqapi.annairesearch.com:8080/api/SubmitQuery.req",
+		url: "http://reqapi.annairesearch.com:8080/api/SubmitQuery.req?data=%5B%7B\"password\"%3A+\"mypass\"%2C+\"userid\"%3A+\"andyh\"%7D%2C+%7B\"PAGE\"%3A+%5B%7B\"PAGENUM\"%3A+\"-1\"%7D%5D%7D%5D",
+
+        //content: JSON.stringify(data),
+        content: data,
+        callbackParamName: "callback"
+    }).then(function(data){
+ 
+		console.log("Request.setData    data: ");
+		console.dir({data:data});
+		thisObj.data	=	data;
+    });
+	
+	//var callback 		= function (response) {
+	//	console.log("View._remoteAddView    response: ");
+	//	thisObj.data	=	response;
+	//	console.log("Request.setGrid    thisObj.data: ");
+	//	console.dir({thisObj_data:thisObj.data});
+	//}
+	//
+	////http://reqapi.annairesearch.com:8080/api/SubmitQuery.test
+	//var inputs = {
+	//	url 	:	"http://reqapi.annairesearch.com:8080/api/SubmitQuery.test",
+	//	query	:	[{"password":"mypass","userid":"andyh"},{"PAGE":[{"PAGENUM":"-1"}]}],
+	//	sync	:	true,
+	//	callback:	callback,
+	//	doToast	:	false
+	//	//sourceid:	this.id,
+	//	//token	:	this.token,
+	//	//mode 	: 	"addView",
+	//	//module 	:	"Agua::View",
+	//};
+	//
+	////this.doPut({ url: url, query: putData, callback: callback, doToast: false });
+	//this.doGet(inputs);
+},
+setGrid : function () {
+	console.log("Request.setGrid    this.data: ");
+	console.dir({this_data:this.data});
 
 	this.core.grid = new Grid({
-		data : data,
-		parent : this,
-		attachPoint : this.gridAttachPoint,
-		url : this.url,
-		core : this.core
+		data 			: 	this.data,
+		parent 			: 	this,
+		attachPoint 	: 	this.gridAttachPoint,
+		url 			: 	this.url,
+		core 			: 	this.core,
+		fields			:	this.fields
 	});
 },
 attachPane : function () {

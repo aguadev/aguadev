@@ -34,8 +34,13 @@ method syncWorkflows () {
 	}
 	$self->logDebug("FINAL message", $message);
 
+	#### GET EMAIL FOR DEFAULT IDENTITY
+	my $query	=	"SELECT email FROM users WHERE username='$username'";
+	$self->logDebug("query", $query);
+	my $email	=	$self->db()->query($query);
+	
 	#### SYNC PUBLIC WORKFLOWS
-	my $success = $self->syncPublicWorkflows($username, $message, $branch);
+	my $success = $self->syncPublicWorkflows($username, $email, $message, $branch);
 	$self->logError("Failed to sync public workflows") and exit if not $success;
 	
 	##### SYNC PRIVATE WORKFLOWS
@@ -45,32 +50,32 @@ method syncWorkflows () {
 	$self->logStatus("Finished sync workflows");
 }
 
-method syncPublicWorkflows ($username, $message, $branch) {
+method syncPublicWorkflows ($username, $email, $message, $branch) {
 	$self->logDebug("message", $message);
 	my $resource 	= 	"workflows";
 	my $privacy		=	"public";
 	my $createsub 	=	\&createProjectFiles;
 	$self->logDebug("createsub", $createsub);
 
-	my $success 	= 	$self->_syncResource($username, $resource, $privacy, $message, $branch, $createsub);
+	my $success 	= 	$self->_syncResource($username, $email, $resource, $privacy, $message, $branch, $createsub);
 
 	return 0 if not $success;
 	return 1;
 }
 
-method syncPrivateWorkflows ($username, $message, $branch) {
+method syncPrivateWorkflows ($username, $email, $message, $branch) {
 	$self->logDebug("message", $message);
 	my $resource 	= 	"workflows";
 	my $privacy		=	"private";
 	my $createsub 	=	\&createProjectFiles;
 
-	my $success 	= 	$self->_syncResource($username, $resource, $privacy, $message, $branch, $createsub);
+	my $success 	= 	$self->_syncResource($username, $email, $resource, $privacy, $message, $branch, $createsub);
 
 	return 0 if not $success;
 	return 1;
 }
 
-method _syncResource ($username, $resource, $privacy, $message, $branch, $createsub) {
+method _syncResource ($username, $email, $resource, $privacy, $message, $branch, $createsub) {
 	$self->logDebug("username", $username);
 	$self->logDebug("resource", $resource);
 	$self->logDebug("privacy", $privacy);
@@ -97,6 +102,10 @@ method _syncResource ($username, $resource, $privacy, $message, $branch, $create
 	$self->logDebug("login", $login);
 	$self->logDebug("token", $token);
 
+	#### RETRIEVE keyfile FROM self->keyfile OR hub TABLE
+	my $keyfile = $self->setKeyfile($username, $hubtype);
+	$self->logDebug("keyfile", $keyfile);
+	
 	### SET RESOURCE DIR
 	my $resourcedir = $self->setResourceDir($packagedir, $username, $resource);
 	$self->logDebug("resourcedir", $resourcedir);
@@ -115,6 +124,15 @@ method _syncResource ($username, $resource, $privacy, $message, $branch, $create
 	$isrepo = $self->head()->ops()->isRepo($login, $opsrepo, $privacy);
 	$self->logDebug("isrepo", $isrepo);
 
+	##### CHANGE TO REPO
+	$self->head()->ops()->changeToRepo($packagedir);
+
+	#### SET DEFAULT IDENTITY
+	$self->head()->ops()->setDefaultIdentity($username, $email);
+
+	#### PULL FROM REPO (git pull --commit --no-edit remote branch)
+	$self->head()->ops()->pullFromRemote ($owner, $opsrepo, $hubtype, $login, $privacy, $keyfile);
+	
 	#### REMOVE EXISTING RESOURCE DIR
 	my $remove = "rm -fr $resourcedir";
 	$self->logDebug("remove", $remove);
@@ -122,10 +140,7 @@ method _syncResource ($username, $resource, $privacy, $message, $branch, $create
 	
 	#### PRINT RESOURCE FILES
 	$self->$createsub($username, $resourcedir);
-	
-	##### CHANGE TO REPO
-	$self->head()->ops()->changeToRepo($packagedir);
-	
+		
 	#### ADD TO REPO
 	$self->head()->ops()->addToRepo();
 
@@ -139,10 +154,6 @@ method _syncResource ($username, $resource, $privacy, $message, $branch, $create
 	$self->head()->ops()->removeRemote($remote) if $isremote;
 	$self->head()->ops()->addRemote($login, $opsrepo, $remote);	
 
-	#### RETRIEVE keyfile FROM self->keyfile OR hub TABLE
-	my $keyfile = $self->setKeyfile($username, $hubtype);
-	$self->logDebug("keyfile", $keyfile);
-	
 	#### PUSH packagedir TO REMOTE
 	$self->logDebug("Doing self->pushToRemoteRepo()");
 	my $force = 1;
@@ -976,8 +987,8 @@ method pullLatestChanges ($username, $repository, $hubtype, $repodir, $branch, $
 	$self->head()->ops()->addRemote($login, $repository, $remote) if not $isremote;	
 
 	#### PULL REMOTE
-	$self->logDebug("Doing self->head()->ops()->pullRemoteRepo");
-	$self->head()->ops()->pullRemoteRepo($login, $repository, $hubtype, $login, $privacy, $keyfile);
+	$self->logDebug("Doing self->head()->ops()->pullFromRemote");
+	$self->head()->ops()->pullFromRemote($login, $repository, $hubtype, $login, $privacy, $keyfile);
 }
 
 method initRemoteRepo ($username, $repository, $privacy) {

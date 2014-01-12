@@ -26,35 +26,49 @@ sudo ./deploy.pl \
  [--mode String] \ 
  [--configfile String] \ 
  [--logfile String] \ 
+ [--s3bucket String] \
+ [--opsrepo String] \
+ [--opsfile String] \
+ [--pmfile String] \
+ [--repository String] \
+ [--logfile String] \
+ [--SHOWLOG String] \
+ [--PRINTLOG String] \
  [--help]
 
- --mode      :    deploy | bioapps | biorepo | ... options (see below)
- --configfile:    Location of configfile
- --logfile   :    Location of logfile
- --help      :    Print help info
+ --mode       :	deploy | bioapps | biorepo | ... options (see below)
+ --configfile :	Location of configfile
+ --logfile    :	Location of logfile
+ --configfile :	Location of *.yaml config file
+ --opsrepo    :	Name of ops repo (e.g., biorepodev, default: biorepo)
+ --opsfile    :	Location of *.ops file containing configuration information
+ --pmfile     :	Location of *.pm file containing installation instructions
+ --repository :	Name of Git repository to be used as the code source
+ --logfile    :	Location of log file
+ --SHOWLOG    :	Print debug and other information to STDOUT (levels 1-5)
+ --PRINTLOG   :	Print debug and other information to logfile (levels 1-5)
+ --help       :	Print help info
 
 The 'mode' options are as follows:
 
 aguatest    Install the Agua tests package
-
 bioapps     Install the Bioapps package
-
 biorepo     Install the Biorepository package
-
 sge         Install the SGE (Sun Grid Engine) package
-
 starcluster Install the StarCluster package
-
 deploy      (DEFAULT) Do all of the above
-
 
 EXAMPLES
 
 Install all dependencies
 sudo deploy.pl
 
-Install only the Biorepository package
+Install the Biorepository package ('biorepo')
 sudo deploy.pl --mode biorepo
+
+Install the Biorepository package ('biorepo') from the 'biorepodev' repository
+sudo deploy.pl --mode biorepo --repository biorepodev
+
 
 =cut
 
@@ -86,6 +100,7 @@ my $configfile   =	"$Bin/../../conf/config.yaml";
 my $opsrepo;
 my $opsfile;
 my $pmfile;
+my $s3bucket;
 my $repository;
 my $login;
 my $token;
@@ -119,12 +134,13 @@ my $conf = Conf::Yaml->new(
     logfile     =>  $logfile
 );
 
-$login 		= 	$ENV{login} if defined $ENV{login};
+
+$login 		= 	$ENV{'login'} if defined $ENV{'login'};
 $token 		= 	$ENV{'token'} if defined $ENV{'token'};
 $keyfile 	= 	$ENV{'keyfile'} if defined $ENV{'keyfile'};
 $password 	= 	$ENV{'password'} if defined $ENV{'password'};
-print "deploy.pl    login: $login\n";
-print "deploy.pl    token: $token\n";
+#print "deploy.pl    login: $login\n";
+#print "deploy.pl    token: $token\n";
 
 my $object = Agua::Deploy->new({
     conf        =>  $conf,

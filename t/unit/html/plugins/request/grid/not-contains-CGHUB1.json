@@ -1,0 +1,9 @@
+[
+    {
+        action      :   "AND",
+        avatarType  :   "parameters",
+        field       :   "Source",
+        operator    :   "NOT contains",
+        value       :   "CGHUB1"
+    }
+]

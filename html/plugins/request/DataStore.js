@@ -24,10 +24,10 @@ startup : function () {
 	if ( ! this.core ) {
 		this.core = new Object();
 	}
-	console.log("request.DataStore.startup    DOING this.getData()");
+	//console.log("request.DataStore.startup    DOING this.getData()");
 	var data = this.data;
-	console.log("request.DataStore.startup    data: ");
-	console.dir({data:data});
+	//console.log("request.DataStore.startup    data: ");
+	//console.dir({data:data});
 
 	if ( data )	{
 		this.setData(data);
@@ -36,17 +36,17 @@ startup : function () {
 	return data;
 },
 setData : function (data) {
-	console.log("request.DataStore.setData    data:");
-	console.dir({data:data});
+	//console.log("request.DataStore.setData    data:");
+	//console.dir({data:data});
 
 	this.data	=	data;
 },
 getData : function () {
 // GET DATA FOR dataStore
-	console.log("request.DataStore.getData    DOING this.getItems()");
+	//console.log("request.DataStore.getData    DOING this.getItems()");
 	var items = this.getItems();	
-	console.log("request.DataStore.getData    items:");
-	console.dir({items:items});
+	//console.log("request.DataStore.getData    items:");
+	//console.dir({items:items});
 
 	var data = {
 		identifier	: 	"Analysis ID",
@@ -55,13 +55,13 @@ getData : function () {
 	};	
 	this.data = data;
 
-	console.log("request.DataStore.getData    Returning data:");
-	console.dir({data:data});
+	//console.log("request.DataStore.getData    Returning data:");
+	//console.dir({data:data});
 	
 	return data;
 },
 getItems : function () {
-	console.log("request.DataStore.getItems");
+	//console.log("request.DataStore.getItems");
 
 	var thisObject = this;
 	var items = [];

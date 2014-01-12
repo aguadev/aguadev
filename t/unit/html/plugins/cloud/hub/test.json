@@ -5,7 +5,7 @@
       ]
    },
    "hub" : {
-		"login" :	"aguatest",
+		"login" :	"testuser",
 		"token" :	"999999999999999999"
    }
 }

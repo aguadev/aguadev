@@ -27,7 +27,7 @@ use Test::Agua::Util;
 
 my $SHOWLOG 	=	2;
 my $PRINTLOG 	=	5;
-my $logfile = "/tmp/aguatest.util.log";
+my $logfile = "/tmp/testuser.util.log";
 my $object = Test::Agua::Util->new(
     logfile     =>  $logfile,
     SHOWLOG     =>  $SHOWLOG,

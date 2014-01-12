@@ -36,6 +36,7 @@ has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 1 );
 has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 1 );
 
 # Strings
+has 's3bucket'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'configfile'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'opsfile'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'pmfile'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
@@ -130,11 +131,14 @@ method biorepo {
 }
 
 method installApplication ($owner, $login, $username, $repository, $package, $privacy, $installdir, $pmfile, $opsdir) {
+	$self->logDebug("owner", $owner);
+	$self->logDebug("login", $login);
 	$self->logDebug("package", $package);
+	$self->logDebug("privacy", $privacy);
 	$self->logDebug("pmfile", $pmfile);
 
 	#### GET VERSION
-	my $versions 	=	$self->getVersions($login, $repository, $privacy);
+	my $versions 	=	$self->getVersions($owner, $repository, $privacy);
 	my $version = shift @$versions;
 
 	my $opsmodloaded = 0;
@@ -159,8 +163,7 @@ method installApplication ($owner, $login, $username, $repository, $package, $pr
 		}
 	}
 
-	
-	my $ops	=	Agua::Ops->new({
+	my $args	=	{
 		owner		=>	$owner,
 		login		=>	$login,
 		repository	=>	$repository,
@@ -168,7 +171,6 @@ method installApplication ($owner, $login, $username, $repository, $package, $pr
 		package		=>	$package,
 		version		=>	$version,
 		opsdir		=>	$opsdir,
-		login		=>	$self->login(),
 		token		=>	$self->token(),
 		keyfile		=>	$self->keyfile(),
 		password	=>	$self->password(),
@@ -178,12 +180,19 @@ method installApplication ($owner, $login, $username, $repository, $package, $pr
 		SHOWLOG		=>	$self->SHOWLOG(),
 		PRINTLOG	=>	$self->PRINTLOG(),
 		conf		=>	$self->conf()
-	});
+	};
+	#$self->logDebug("args", $args);
+	
+	my $ops	=	Agua::Ops->new($args);
 
 	$ops->install();
 }
 
 method getVersions ($owner, $repository, $privacy) {
+	$self->logDebug("owner", $owner);
+	$self->logDebug("repository", $repository);
+	$self->logDebug("privacy", $privacy);
+	
 	#### GET LATEST VERSION	
 	my $ops 	= 	"$Bin/../logic/ops.pl";
 	my $command = qq{$ops \\
@@ -391,10 +400,13 @@ method bioapps {
 	my $repository	=	$self->conf()->getKey("agua", "APPSPACKAGE");
 	my $package 	= 	$self->conf()->getKey("agua", "APPSPACKAGE");
 	my $appsdir		= 	$self->conf()->getKey("agua", "APPSDIR");
+	my $login		=	$self->login();
 	my $owner		=	"agua";
 	my $privacy		=	"public";
 	my $username 	= 	$self->conf()->getKey("agua", "ADMINUSER");
 	my $opsdir 		=	"$installdir/repos/$privacy/$owner/$opsrepo/$owner/$package";
+	my $pmfile		=	"$opsdir/bioapps.pm";
+
 	$self->logDebug("installdir", $installdir);
 	$self->logDebug("repository", $repository);
 	$self->logDebug("package", $package);
@@ -402,8 +414,9 @@ method bioapps {
 	$self->logDebug("username", $username);
 	$self->logDebug("privacy", $privacy);
 	$self->logDebug("opsdir", $opsdir);
+	$self->logDebug("pmfile", $pmfile);
 
-	return $self->installApplication($owner, $username, $repository, $package, $privacy, "$installdir/$appsdir/$package", $opsdir);	
+	return $self->installApplication($owner, $login, $username, $repository, $package, $privacy, "$installdir/$appsdir/$package", $pmfile, $opsdir);	
 }
 
 #### STARCLUSTER
@@ -414,20 +427,23 @@ method starcluster {
 	require Conf::Yaml;
 	my $conf 		= 	Conf::Yaml->new({inputfile=>"$Bin/../../conf/config.yaml"});
 	my $opsrepo 	= 	$self->conf()->getKey("agua", "OPSREPO");
+	my $login		=	$self->login();
 	my $repository	=	"StarCluster";
 	my $package 	= 	"starcluster";
 	my $owner		=	"agua";
 	my $privacy		=	"public";
 	my $username 	= 	$self->conf()->getKey("agua", "ADMINUSER");
-	my $opsdir 		=	"$installdir/repos/public/$owner/$opsrepo/$owner/starcluster";
+	my $opsdir 		=	"$installdir/repos/public/$owner/$opsrepo/$owner/$package";
+	my $pmfile		=	"$opsdir/bioapps.pm";
 	$self->logDebug("repository", $repository);
 	$self->logDebug("package", $package);
 	$self->logDebug("owner", $owner);
 	$self->logDebug("username", $username);
 	$self->logDebug("privacy", $privacy);
 	$self->logDebug("opsdir", $opsdir);
+	$self->logDebug("pmfile", $pmfile);
 
-	return $self->installApplication($owner, $username, $repository, $package, $privacy, "$installdir/apps/starcluster", $opsdir);	
+	return $self->installApplication($owner, $login, $username, $repository, $package, $privacy, "$installdir/apps/starcluster", $pmfile, $opsdir);	
 }
 
 
@@ -449,39 +465,17 @@ method sge {
 	my ($targetdir) = $sgeroot =~ /^(.+)\/[^\/]+$/;
 	
 	#### SET SOURCE
-	my $installdir = $self->conf()->getKey('agua', 'INSTALLDIR');
-	$self->logDebug("installdir", $installdir);
-	my $tarfile = "$installdir/bin/scripts/resources/sge/sge6.tar.gz";
+	my $sourcefile	=	"sge6.tar.gz";
+	my $s3bucket	=	$self->conf()->getKey("agua", "S3BUCKET");
+	my $source = "$s3bucket/$sourcefile";
+	$self->logDebug("source", $source);
 	
-	my $command = "cd $targetdir; tar xvfz $tarfile\n";
+	#### INSTALL
+	my $command = "cd $targetdir; wget --no-check-certificate $source; tar xvfz $sourcefile\n";
 	$self->logDebug("command", $command);
 	`$command`;
 }
 
-
-
-#### AGUA TESTS
-method aguatest {
-    my $basedir		= 	$self->conf()->getKey("agua", "INSTALLDIR");
-	my $installdir 	= 	"$basedir/t";
-	my $opsrepo 	= 	$self->conf()->getKey("agua", "OPSREPO");
-	my $repository	=	"aguatest";
-	my $package 	= 	"aguatest";
-	my $owner		=	"agua";
-	my $privacy		=	"public";
-	my $username 	= 	$self->conf()->getKey("agua", "ADMINUSER");
-	my $opsdir 		=	"$basedir/repos/public/$owner/$opsrepo/$owner/$package";
-	$self->logDebug("basedir", $basedir);
-	$self->logDebug("installdir", $installdir);
-	$self->logDebug("repository", $repository);
-	$self->logDebug("package", $package);
-	$self->logDebug("owner", $owner);
-	$self->logDebug("username", $username);
-	$self->logDebug("privacy", $privacy);
-	$self->logDebug("opsdir", $opsdir);
-
-	return $self->installApplication($owner, $username, $repository, $package, $privacy, $installdir, $opsdir);		
-}
 
 
 }

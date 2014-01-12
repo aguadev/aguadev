@@ -2,6 +2,7 @@ require([
 	"dojo/_base/declare",
 	"dijit/registry",
 	"dojo/dom",
+	"dojo/json",
 	"dojo/parser",
 	"doh/runner",
 	"t/unit/doh/util",
@@ -12,7 +13,18 @@ require([
 	"dojo/dnd/Source"
 ],
 
-function (declare, registry, dom, parser, doh, util, Agua, Saved, ready) {
+function (
+	declare,
+	registry,
+	dom,
+	JSON,
+	parser,
+	doh,
+	util,
+	Agua,
+	Saved,
+	ready
+) {
 
 window.Agua = Agua;
 console.dir({Agua:Agua});
@@ -40,19 +52,15 @@ doh.register("plugins.request.Saved", [
 			attachPoint : dom.byId("attachPoint")
 		});
 	
-
-		//console.log("new    node: " + node);
-		//console.dir({node:node});
-		//
-		//var itemArray = util.fetchJson("./rows.json");
-		//console.log("new    itemArray:");
-		//console.dir({itemArray:itemArray});
-		//
-		//query.dragSourceNode.loadDragItems(itemArray);
-		//
-		//
-		//console.log("new    instantiated");
-		////doh.assertTrue(true);
+		// VERIFY ORDINALS
+		var expectedOrdinals = [1,2,3,4];
+		var itemArray = query.getItemArray();
+		var ordinals = [];
+		for ( var i = 0; i < itemArray.length; i++ ) {
+			ordinals.push(itemArray[i].ordinal);
+		}
+		console.log("new    ordinals");
+		doh.assertTrue(util.identicalArrays(ordinals, expectedOrdinals, "ordinals"));
 	},
 	tearDown: function () {}
 }

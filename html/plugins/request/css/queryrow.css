@@ -27,29 +27,39 @@
 	height: 20px;
 	text-indent: 4px;
 	margin-right: -4px;
+	top: 1px !important;
+	position: relative;
 }
 .queryRow .action {
 	font-weight: bolder !important;
-	width: 40px !important;
+	min-width: 40px !important;
 	background-color: #eee;
 	font-size: 13px;
 	font-family: Arial;
 }
+,
+.queryRow .action:empty {
+	position: relative;
+	top: 5px !important;
+	background-color: red !important;
+	
+}
 .queryRow .field {
+	top: 2px !important;
 	display: inline-block;
 	width: 100px;
 	background-color: #FDD;
 }
 .queryRow .operator {
 	font-weight: bolder !important;
-	width: 80px;	
+	width: 85px;	
 	background-color: #DFD;
 	font-size: 13px;
 }
 .queryRow .value {
-	width: 160px;
-	background-color: #DDF;
-	
+	top: 2px !important;
+	width: 155px;
+	background-color: #DDF;	
 }
 
 .queryRow .deleteButton {

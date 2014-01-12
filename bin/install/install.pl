@@ -44,10 +44,23 @@ sudo ./install.pl \
  [--domainname String] \
  [--logfile String] \
  [--newlog] \
+ [--SHOWLOG ] \ 
+ [--PRINTLOG ] \ 
  [--help]
 
- --mode          :  Installation option (see ./install.pl -h for options)
- --target        :  Target directory to install repository to (e.g., 1.2.0)
+ --mode          :  Installation option
+	upgrade 		- 	Link directories and set permissions
+	installApache	-	Install Apache2 and its dependencies
+	enableHttps		-	Enable HTTPS and generate CA certificate
+	installExchange	-	Install node.js and rabbitmq exchange
+	enableReboot	-	Fix /etc/fstab to enable reboot of m1.micro instance
+	installEc2		-	Install AWS ec2-api-tools
+	installR		-	Install R statistical package
+	installMysql	-	Install MySQL 5
+	linkDirectories	-	Create required links for Agua 
+	setPermissions	-	Set required permissions for Agua
+	setStartup		-	Set Agua startup script
+ --installdir    :  Target directory to install repository to (e.g., 1.2.0)
  --urlprefix     :  Prefix to URL (e.g., http://myhost.com/URLPREFIX/agua.html)
                     (default: agua)
  --userdir       :  Path to users home directory (default: /nethome)
@@ -57,13 +70,23 @@ sudo ./install.pl \
  --domainname    :  Domain name to use for CA certificate
  --logfile       :  Print log to this file
  --newlog        :  Flag to create new log file and backup old
+ --SHOWLOG       :  Print log output to STDOUT (5 levels of increasing info: 1,2,3,4,5, default: 2, 'warning' and 'critical' info only)
+ --PRINTLOG      :  Print log output to logfile (5 levels of increasing info: 1,2,3,4,5, default: 5, all log output) 
  --help          :  Print help info
  
 EXAMPLES
 
-sudo install.pl --installdir /path/to/installdir
+# Install Agua (Agua files are located in the default /agua directory)
+sudo install.pl --mode installBioApps
 
-sudo install.pl --mode installBioApps --version 2.0.0 --target 2.0.0 --installdir /agua/0.8
+# Install Agua (Agua files are located in /aguadev directory)
+sudo install.pl --mode installBioApps --installdir /aguadev
+
+# Install BioApps package into Agua (Agua files are located in default /agua directory)
+sudo install.pl --mode installBioApps
+
+# Install BioApps package into Agua (Agua files are located in /aguadev directory)
+sudo install.pl --mode installBioApps --installdir /aguadev
 
 =cut
 
@@ -85,20 +108,23 @@ use lib "$Bin/../../lib";
 use Getopt::Long;
 
 #### INTERNAL MODULES
-use Agua::Installer;
+use Agua::Install;
 
 #### GET OPTIONS
-my $mode        = "install";
-my $urlprefix   = "agua";
-my $installdir  = "$Bin/../..";
-my $userdir     = "/nethome";
-my $apachedir   = "/etc/apache2";
-my $wwwdir      = "/var/www";
-my $wwwuser     = "www-data";
-my $logfile     = "/tmp/agua-install.log";
+my $mode        = 	"install";
+my $urlprefix   = 	"agua";
+my $installdir  = 	"$Bin/../..";
+my $userdir     = 	"/nethome";
+my $apachedir   = 	"/etc/apache2";
+my $wwwdir      = 	"/var/www";
+my $wwwuser     = 	"www-data";
+my $logfile     = 	"/tmp/agua-install.log";
+my $tempdir		=	"/tmp";
 my $database;
 my $domainname;
 my $newlog;
+my $SHOWLOG		=	2;
+my $PRINTLOG	=	5;
 my $help;
 GetOptions (
     'mode=s'        =>  \$mode,
@@ -111,29 +137,21 @@ GetOptions (
     'wwwdir=s'      =>  \$wwwdir,
     'wwwuser=s'     =>  \$wwwuser,
     'logfile=s'     =>  \$logfile,
+    'tempdir=s'     =>  \$tempdir,
     'newlog=s'      =>  \$newlog,
+    'SHOWLOG=s'     =>  \$SHOWLOG,
+    'PRINTLOG=s'    =>  \$PRINTLOG,
     'help'          =>  \$help
 ) or die "No options specified. Try '--help'\n";
 
 #### PRINT HELP IF REQUESTED
 if ( defined $help )	{	usage();	}
 
-print "install.pl    mode: $mode\n";
-print "install.pl    installdir: $installdir\n";
-print "install.pl    urlprefix: $urlprefix\n";
-print "install.pl    apachedir: $apachedir\n";
-print "install.pl    userdir: $userdir\n";
-print "install.pl    wwwdir: $wwwdir\n";
-print "install.pl    wwwuser: $wwwuser\n";
-print "install.pl    logfile: $logfile\n";
-print "install.pl    domainname: $domainname\n" if defined $domainname;
-print "install.pl    newlog: $newlog\n" if defined $newlog;
-
 #### CHECK IF URL PREFIX EXISTS
 my $urlprefixpath = "$wwwdir/$urlprefix";
 print "install.pl    urlprefix directory already exists: $urlprefix\n" and exit if -d $urlprefixpath;
 
-my $object = Agua::Installer->new(
+my $object = Agua::Install->new(
     {
         urlprefix   =>  $urlprefix,
         installdir  =>  $installdir,
@@ -144,7 +162,10 @@ my $object = Agua::Installer->new(
         wwwdir      =>  $wwwdir,
         wwwuser     =>  $wwwuser,
         logfile     =>  $logfile,
-        newlog      =>  $newlog
+        tempdir     =>  $tempdir,
+        newlog      =>  $newlog,
+        SHOWLOG     =>  $SHOWLOG,
+		PRINTLOG    =>  $PRINTLOG
     }
 );
 

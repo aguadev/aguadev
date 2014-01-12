@@ -1,0 +1,14 @@
+[
+    {
+        action      :   "OR",
+        field       :   "ALL",
+        operator    :   "contains",
+        value       :   "oropharyngeal"
+    },
+    {
+        action      :   "OR",
+        field       :   "ALL",
+        operator    :   "contains",
+        value       :   "cancer"
+    }
+]

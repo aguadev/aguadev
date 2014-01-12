@@ -1,0 +1,20 @@
+[
+    {
+		"username"    :   "testuser",
+		"query"       :   "leukemiaANDlymphoma",
+		"ordinal"     :   1,
+		"action"      :   "AND",
+		"field"       :   "Disease",
+		"operator"    :   "CONTAINS",
+		"value"       :   "leukemia"
+    },
+    {
+		"username"    :   "testuser",
+		"query"       :   "leukemiaANDlymphoma",
+		"ordinal"     :   2,
+		"action"      :   "OR",
+		"field"       :   "Disease",
+		"operator"    :   "CONTAINS",
+		"value"       :   "lymphoma"
+    }
+]

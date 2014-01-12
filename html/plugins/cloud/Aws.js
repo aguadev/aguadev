@@ -59,9 +59,8 @@ startup : function () {
 	// COMPLETE CONSTRUCTION OF OBJECT
 	this.inherited(arguments);
 
-	// ADD ADMIN TAB TO TAB CONTAINER		
-	this.tabContainer.addChild(this.mainTab);
-	this.tabContainer.selectChild(this.mainTab);
+	// ATTACH PANE
+	this.attachPane();
 
 	// SET DRAG SOURCE - LIST OF USERS
 	this.initialiseAws();
@@ -150,22 +149,26 @@ validateInputs : function () {
 verifyInput : function (input) {
 	console.log("Aws.verifyInput    input: ");
 	console.dir({this_input:this[input]});
-	var value = this[input].value;
+	var value = this.getWidgetValue(this[input]);
 	value = this.cleanEdges(value);
 	console.log("Aws.verifyInput    value: " + value);
 
 	var className = this.getClassName(this[input]);
 	console.log("Aws.verifyInput    className: " + className);
 	if ( className ) {
-		console.log("Aws.verifyInput    this[input].isValid(): " + this[input].isValid());
-		if ( ! value || ! this[input].isValid() ) {
+		if ( ! value || (this[input].isValid && ! this[input].isValid()) ) {
+			console.log("Aws.verifyInput    this[input].isValid(): " + this[input].isValid());
 			console.log("Aws.verifyInput    input " + input + " value is empty. Adding class 'invalid'");
-			dojo.addClass(this[input].domNode, 'invalid');
+			if ( this[input].domNode ) {
+				dojo.addClass(this[input].domNode, 'invalid');
+			}
 			this.isValid = false;
 		}
 		else {
 			console.log("Aws.verifyInput    value is NOT empty. Removing class 'invalid'");
-			dojo.removeClass(this[input].domNode, 'invalid');
+			if ( this[input].domNode ) {
+				dojo.removeClass(this[input].domNode, 'invalid');
+			}
 			return value;
 		}
 	}
@@ -204,6 +207,56 @@ verifyInput : function (input) {
 	
 	return null;
 },
+getWidgetValue : function (widget) {
+	var value;
+	////////console.log("Aws.getWidgetValue    (widget: " + widget);
+	////////console.log("Aws.getWidgetValue    widget: ");
+	//////console.dir({widget:widget});
+	if ( ! widget )	return;
+	
+	// NUMBER TEXT BOX
+	if ( widget.id != null && widget.id.match(/^dijit_form_NumberTextBox/) )
+	{
+		////////console.log("Aws.getWidgetValue    DOING NumberTextBox widget");
+		value = String(widget);
+		//value = String(widget.getValue());
+	}
+	// WIDGET COMBO BOX
+	else if ( widget.get && widget.get('value') )
+	{
+		////////console.log("Aws.getWidgetValue    DOING widget.get('value')");
+		value = widget.get('value');
+	}
+	else if ( widget.getValue )
+	{
+		value = widget.getValue();
+	}
+	// HTML TEXT INPUT OR HTML COMBO BOX
+	else if ( widget.value )
+	{
+		////////console.log("Aws.getWidgetValue    DOING widget.value");
+		value = String(widget.value.toString());
+	}
+	// HTML DIV	
+	else if ( widget.innerHTML )
+	{
+	    ////////console.log("Aws.getWidgetValue    DOING widget.innerHTML");
+
+	    // CHECKBOX
+		if ( widget.innerHTML == "<input type=\"checkbox\">" )
+	    {
+			////////console.log("Aws.getWidgetValue    CHECKBOX - GETTING VALUE");
+			value = widget.childNodes[0].checked;
+			////////console.log("Aws.getWidgetValue    value: " + value);
+	    }
+		else {
+			value = widget.innerHTML;
+		}
+	}
+	////////console.log("Aws.getWidgetValue    XXXX value: " + dojo.toJson(value));
+	if ( value == null )    value = '';
+	return value;
+},
 initialiseAws : function () {
 	// INITIALISE AWS SETTINGS
 	var aws = Agua.getAws();
@@ -218,6 +271,13 @@ initialiseAws : function () {
 },
 cleanEdges : function (string ) {
 // REMOVE WHITESPACE FROM EDGES OF TEXT
+	console.log("Aws.cleanEdges    caller: " + this.cleanEdges.caller.nom);
+
+	console.log("Aws.cleanEdges    string: " + string);
+	if ( ! string.toString ) {
+		return string;
+	}
+	
 	string = string.toString();
 	if ( string == null || ! string.replace)
 		return null;

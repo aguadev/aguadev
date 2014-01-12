@@ -46,7 +46,7 @@
 	color: black;
 	/* height: 20px !important; */
 	font-size: 20px !important;
-	width: 423px !important;
+	width: 345px !important;
 	text-align: center !important;	
 	text-indent: 2px !important;
 }
@@ -58,4 +58,48 @@
 .search .simpleSearch .dijitContentPane {
 	max-height: 50px;
 	overflow: hidden;
+}
+
+/* BUTTON */
+/* NB: THIS IS NEEDED FOR THE BUTTON CSS BELOW TO WORK! */
+.query table textarea {
+	font-family: Verdana;
+}
+.simpleSearch .saveButton {
+	-webkit-user-select: none;
+	height: 20px !important;
+	width: 60px !important;
+	position: relative;
+	left: 350px !important;
+	margin-right: 0px;
+
+	text-align: center;
+	vertical-align: middle;
+	-moz-user-select: none;
+	font-size: 14px;
+	font-family: Verdana;
+	font-weight: bolder;
+	color: #224;
+	background-color: #FEFEFE;
+	
+	border: 4px solid #BBB;
+	border-bottom-color: #888;	
+	border-left-color: #888;
+	display: inline-block;
+	top: -2px;
+}
+
+.simpleSearch .saveButton:hover {
+	border-color: #999;
+	border-bottom-color: #555;	
+	border-left-color: #555;
+	background-color : #FFF;
+	/*background-color : #FF8;*/
+}
+
+.simpleSearch .saveButton:active {
+	border-color: #999;
+	border-bottom-color: #555;	
+	border-left-color: #555;
+	background-color : #8F8;
 }

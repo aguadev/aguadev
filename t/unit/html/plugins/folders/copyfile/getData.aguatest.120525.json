@@ -17,23 +17,23 @@
          "notes" : "",
          "name" : "Project1",
          "description" : "",
-         "username" : "aguatest"
+         "username" : "testuser"
       },
       {
          "provenance" : "",
          "notes" : "",
          "name" : "Project2",
          "description" : "",
-         "username" : "aguatest"
+         "username" : "testuser"
       }
    ],
    "users" : [
       {
-         "email" : "aguatest@trash.com",
+         "email" : "testuser@trash.com",
          "firstname" : "test",
          "lastname" : "user",
          "description" : "",
-         "username" : "aguatest"
+         "username" : "testuser"
       }
    ],
    "stages" : [],
@@ -47,7 +47,7 @@
          "tracklist" : "vegaGene",
          "build" : "hg19",
          "datetime" : "2012-05-24 01:12:17",
-         "username" : "aguatest",
+         "username" : "testuser",
          "notes" : "",
          "view" : "View1",
          "chromosome" : "chr1",
@@ -55,7 +55,7 @@
       }
    ],
    "filecaches" : {
-      "aguatest" : {
+      "testuser" : {
          "Project1/Workflow1/test-array-sgeid.sh" : {
             "bytes" : "200",
             "name" : "test-array-sgeid.sh",
@@ -609,7 +609,7 @@
          "project" : "Project1",
          "species" : "human",
          "build" : "hg19",
-         "username" : "aguatest"
+         "username" : "testuser"
       }
    ],
    "workflows" : [
@@ -620,7 +620,7 @@
          "project" : "Project1",
          "name" : "Workflow1",
          "description" : "",
-         "username" : "aguatest"
+         "username" : "testuser"
       },
       {
          "number" : "2",
@@ -629,7 +629,7 @@
          "project" : "Project1",
          "name" : "Workflow2",
          "description" : "",
-         "username" : "aguatest"
+         "username" : "testuser"
       },
       {
          "number" : "1",
@@ -638,7 +638,7 @@
          "project" : "Project2",
          "name" : "Workflow1",
          "description" : "",
-         "username" : "aguatest"
+         "username" : "testuser"
       }
    ],
    "sharedprojects" : {},

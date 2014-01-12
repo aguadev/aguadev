@@ -1,0 +1,9 @@
+[
+    {
+        action      :   "AND",
+        avatarType  :   "parameters",
+        field       :   "filesize",
+        operator    :   ">=",
+        value       :   "88888888"
+    }
+]

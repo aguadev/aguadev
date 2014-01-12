@@ -1,0 +1,47 @@
+[
+    {
+		"username"    :   "testuser",
+		"query"       :   "Hodgkins Disease",
+		"ordinal"     :   1,
+		"action"      :   "AND",
+		"field"       :   "Disease",
+		"operator"    :   "CONTAINS",
+		"value"       :   "lymphoma"
+    },
+    {
+		"username"    :   "testuser",
+		"query"       :   "Hodgkins Disease",
+		"ordinal"     :   2,
+		"action"      :   "AND",
+		"field"       :   "Disease",
+		"operator"    :   "CONTAINS",
+		"value"       :   "leukemia"
+    },
+    {
+		"username"    :   "testuser",
+		"query"       :   "Hodgkins Disease",
+		"ordinal"     :   3,
+		"action"      :   "OR",
+		"field"       :   "Disease",
+		"operator"    :   "CONTAINS",
+		"value"       :   "early-onset"
+    },
+    {
+		"username"    :   "testuser",
+		"query"       :   "leukemiaANDlymphoma",
+		"ordinal"     :   1,
+		"action"      :   "AND",
+		"field"       :   "Disease",
+		"operator"    :   "CONTAINS",
+		"value"       :   "leukemia"
+    },
+    {
+		"username"    :   "testuser",
+		"query"       :   "leukemiaANDlymphoma",
+		"ordinal"     :   2,
+		"action"      :   "OR",
+		"field"       :   "Disease",
+		"operator"    :   "CONTAINS",
+		"value"       :   "lymphoma"
+    }
+]

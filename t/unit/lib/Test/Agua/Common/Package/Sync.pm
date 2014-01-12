@@ -178,7 +178,7 @@ method testSyncApps ($privacy) {
 	$self->ops()->setOpsInfo($opsfile);
 	
 	#### SET INSTALLDIR TO RETRIEVE ENTRY IN package TABLE
-	#### outputs/repos/public/apps/aguatest/apps
+	#### outputs/repos/public/apps/testuser/apps
 	my $installdir = "$Bin/outputs/repos/$privacy/apps/$username/apps";
 	$installdir =~ s/^\/mnt//;
 	$self->installdir($installdir);
@@ -518,7 +518,7 @@ method testLoadAppFiles {
 
 	#### SET PACKAGE AND INSTALLDIR
 	my $package		=	"bioapps";
-	my $installdir 	= 	"$Bin/outputs/$privacy/apps/aguatest/$package";
+	my $installdir 	= 	"$Bin/outputs/$privacy/apps/$username/$package";
 	$self->logDebug("installdir", $installdir);
 	
 	#### SET TEST DATABASEROW
@@ -581,11 +581,10 @@ method checkTsvLines ($table, $tsvfile) {
 
 method setInstallDir ($username, $owner, $package, $privacy) {
 #### RETURN LOCATION OF APPLICATION FILES - OVERRIDEN FOR TESTING
-	#### E.G., /agua/t/bin/Agua/Common/Package/Sync/outputs/private/apps/aguatest/apps
+	#### E.G., /agua/t/bin/Agua/Common/Package/Sync/outputs/private/apps/testuser/apps
 	
 	return $self->installdir();
 }
-
 
 method setOpsDir ($username, $repository, $privacy, $package) {
 #### example: /agua/repos/public/biorepository/syoung/bioapps

@@ -19,58 +19,11 @@ dojo.require("plugins.dijit.form.ValidationTextBox")
 // HAS A
 dojo.require("plugins.cloud.UserRow");
 
-//dojo.declare("plugins.cloud.ValidationTextBox",
-//	[ dijit.form.ValidationTextBox ], {
-//
-//validate: function(/*Boolean*/ isFocused){
-//	// summary:
-//	//		Called by oninit, onblur, and onkeypress.
-//	// description:
-//	//		Show missing or invalid messages if appropriate, and highlight textbox field.
-//	// tags:
-//	//		protected
-//
-//	console.log("plugins.cloud.ValidationTextBox.validate    plugins.cloud.ValidationTextBox.validate(isFocused)");
-//	console.log("plugins.cloud.ValidationTextBox.validate    this.target: " + this.target);
-//	// SKIP VALIDATE WHEN LOADING WIDGET
-//	if ( this.parentWidget == null )	return;
-//
-//	// IF this IS THE newPassword WIDGET, RUN VALIDATE ON
-//	// ITS TARGET: THE confirmPassword WIDGET
-//	if ( this.target != null ) {
-//		return this.target.validate(isFocused);
-//	}
-//	var message = "";
-//	var isValid = this.parentWidget.passwordsMatch();
-//	console.log("plugins.cloud.ValidationTextBox.validate    isValid: " + isValid);
-//
-//	if(isValid){ this._maskValidSubsetError = true; }
-//	var isEmpty = this._isEmpty(this.textbox.value);
-//	var isValidSubset = !isValid && !isEmpty && isFocused && this._isValidSubset();
-//	this.state = ((isValid || ((!this._hasBeenBlurred || isFocused) && isEmpty) || isValidSubset) && this._maskValidSubsetError) ? "" : "Error";
-//	console.log("plugins.cloud.ValidationTextBox.validate    this.state: " + this.state);
-//	if(this.state == "Error"){ this._maskValidSubsetError = isFocused; } // we want the error to show up afer a blur and refocus
-//	
-//	this._setStateClass();
-//	dijit.setWaiState(this.focusNode, "invalid", isValid ? "false" : "true");
-//	if(isFocused) {
-//		if(this.state == "Error"){
-//			message = this.getErrorMessage(true);
-//		}else{
-//			message = this.getPromptMessage(true); // show the prompt whever there's no error
-//		}
-//		this._maskValidSubsetError = true; // since we're focused, always mask warnings
-//	}
-//	this.displayMessage(message);
-//
-//	return isValid;
-//}	
-//
-//});
-//
 dojo.declare("plugins.cloud.Settings",
 	[ dijit._Widget, dijit._Templated, plugins.core.Common ], {
 
+////}}}}}
+	
 //Path to the template of this widget. 
 templatePath: dojo.moduleUrl("plugins", "cloud/templates/settings.html"),
 
@@ -89,8 +42,6 @@ cssFiles : [
 // PARENT WIDGET
 parentWidget : null,
 
-
-/////}}} 
 constructor : function(args)  {
 	console.log("Settings.constructor     plugins.cloud.Settings.constructor");			
 	// GET INFO FROM ARGS
@@ -113,10 +64,9 @@ startup : function () {
 	this.inherited(arguments);	 
 	console.log("Settings.startup    AFTER inherited(arguments)");
 
-	// ADD ADMIN TAB TO TAB CONTAINER		
-	this.tabContainer.addChild(this.mainTab);
-	this.tabContainer.selectChild(this.mainTab);
-
+	// ATTACH PANE
+	this.attachPane();
+	
 	// SET ADD SOURCE ONCLICK
 	console.log("Settings.startup    BEFORE dojo.connect");
 	dojo.connect(this.updateUserButton, "onClick", dojo.hitch(this, "updateUser"));
@@ -269,6 +219,12 @@ initialiseSettings : function () {
 	// INITIALISE USER INFO
 	var user = Agua.getUser(username);
 	console.log("Settings.initialiseSettings     user: " + dojo.toJson(user));
+	
+	if ( ! user ) {
+		console.log("Settings.initialiseSettings     user not defined. Returning");
+		return;
+	}
+	
 	this.firstname.value = user["firstname"] || '';
 	this.lastname.value = user["lastname"];
 	this.email.value = user["email"];
@@ -301,4 +257,54 @@ setTable : function () {
 
 }); // plugins.cloud.Settings
 
+
+//dojo.declare("plugins.cloud.ValidationTextBox",
+//	[ dijit.form.ValidationTextBox ], {
+//
+//validate: function(/*Boolean*/ isFocused){
+//	// summary:
+//	//		Called by oninit, onblur, and onkeypress.
+//	// description:
+//	//		Show missing or invalid messages if appropriate, and highlight textbox field.
+//	// tags:
+//	//		protected
+//
+//	console.log("plugins.cloud.ValidationTextBox.validate    plugins.cloud.ValidationTextBox.validate(isFocused)");
+//	console.log("plugins.cloud.ValidationTextBox.validate    this.target: " + this.target);
+//	// SKIP VALIDATE WHEN LOADING WIDGET
+//	if ( this.parentWidget == null )	return;
+//
+//	// IF this IS THE newPassword WIDGET, RUN VALIDATE ON
+//	// ITS TARGET: THE confirmPassword WIDGET
+//	if ( this.target != null ) {
+//		return this.target.validate(isFocused);
+//	}
+//	var message = "";
+//	var isValid = this.parentWidget.passwordsMatch();
+//	console.log("plugins.cloud.ValidationTextBox.validate    isValid: " + isValid);
+//
+//	if(isValid){ this._maskValidSubsetError = true; }
+//	var isEmpty = this._isEmpty(this.textbox.value);
+//	var isValidSubset = !isValid && !isEmpty && isFocused && this._isValidSubset();
+//	this.state = ((isValid || ((!this._hasBeenBlurred || isFocused) && isEmpty) || isValidSubset) && this._maskValidSubsetError) ? "" : "Error";
+//	console.log("plugins.cloud.ValidationTextBox.validate    this.state: " + this.state);
+//	if(this.state == "Error"){ this._maskValidSubsetError = isFocused; } // we want the error to show up afer a blur and refocus
+//	
+//	this._setStateClass();
+//	dijit.setWaiState(this.focusNode, "invalid", isValid ? "false" : "true");
+//	if(isFocused) {
+//		if(this.state == "Error"){
+//			message = this.getErrorMessage(true);
+//		}else{
+//			message = this.getPromptMessage(true); // show the prompt whever there's no error
+//		}
+//		this._maskValidSubsetError = true; // since we're focused, always mask warnings
+//	}
+//	this.displayMessage(message);
+//
+//	return isValid;
+//}	
+//
+//});
+//
 

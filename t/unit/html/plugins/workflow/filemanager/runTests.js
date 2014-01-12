@@ -33,7 +33,7 @@ Agua = new plugins.core.Agua({
 	, database	:	"aguatest"
 	, dataUrl: "getData-110711.json"
 });
-Agua.cookie('username', 'aguatest');
+Agua.cookie('username', 'testuser');
 Agua.cookie('sessionid', '9999999999.9999.999');
 
 Agua.loadPlugins([

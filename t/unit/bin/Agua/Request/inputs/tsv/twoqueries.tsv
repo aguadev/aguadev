@@ -1,0 +1,5 @@
+testuser	leukemiaANDlymphoma	1	AND	Disease	CONTAINS	leukemia
+testuser	leukemiaANDlymphoma	2	OR	Disease	CONTAINS	lymphoma
+testuser	Hodgkins Disease	3	OR	Disease	CONTAINS	early-onset
+testuser	Hodgkins Disease	2	AND	Disease	CONTAINS	leukemia
+testuser	Hodgkins Disease	1	AND	Disease	CONTAINS	lymphoma

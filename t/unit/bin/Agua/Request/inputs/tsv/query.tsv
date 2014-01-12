@@ -1,0 +1,2 @@
+testuser	leukemiaANDlymphoma	1	AND	Disease	CONTAINS	leukemia
+testuser	leukemiaANDlymphoma	2	OR	Disease	CONTAINS	lymphoma

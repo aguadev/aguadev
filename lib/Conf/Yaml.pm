@@ -49,7 +49,7 @@ method read ($inputfile) {
 		
 =cut
 
-	$self->logCaller();
+	#$self->logCaller();
 	$self->logNote("inputfile", $inputfile);
 	$self->logNote("self->memory()", $self->memory());
 	
@@ -80,7 +80,7 @@ method write ($file) {
 	#$self->logNote("FINAL file", $file);
 	
 	my $yaml 		=	$self->yaml();
-	$self->logNote("yaml", $yaml);
+	#$self->logNote("yaml", $yaml);
 
 	my $memory = $self->memory();
 	$self->logNote("memory", $memory);
@@ -91,7 +91,7 @@ method write ($file) {
 }
 
 method getKey ($key, $subkey) {
-	$self->logCaller();
+	#$self->logCaller();
 	$self->logNote("key", $key);
 	$self->logNote("subkey", $subkey) if defined $subkey;
 
@@ -190,7 +190,8 @@ method _removeKey ($key) {
 }
 
 method writeToMemory ($hash) {
-	$self->logNote("hash", $hash);
+	$self->logNote();
+	#$self->logNote("hash", $hash);
 	
 	$self->memorystore($hash);
 }

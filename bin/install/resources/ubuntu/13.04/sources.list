@@ -1,0 +1,24 @@
+#############################################################
+################### OFFICIAL UBUNTU REPOS ###################
+#############################################################
+
+###### Ubuntu Main Repos
+deb http://us.archive.ubuntu.com/ubuntu/ raring main restricted universe multiverse 
+deb-src http://us.archive.ubuntu.com/ubuntu/ raring main restricted universe multiverse 
+
+###### Ubuntu Update Repos
+deb http://us.archive.ubuntu.com/ubuntu/ raring-security main restricted universe multiverse 
+deb http://us.archive.ubuntu.com/ubuntu/ raring-updates main restricted universe multiverse 
+deb http://us.archive.ubuntu.com/ubuntu/ raring-proposed main restricted universe multiverse 
+deb-src http://us.archive.ubuntu.com/ubuntu/ raring-security main restricted universe multiverse 
+deb-src http://us.archive.ubuntu.com/ubuntu/ raring-updates main restricted universe multiverse 
+deb-src http://us.archive.ubuntu.com/ubuntu/ raring-proposed main restricted universe multiverse 
+
+###### Ubuntu Partner Repo
+deb http://archive.canonical.com/ubuntu raring partner
+deb-src http://archive.canonical.com/ubuntu raring partner
+
+###### Ubuntu Extras Repo
+deb http://extras.ubuntu.com/ubuntu raring main
+deb-src http://extras.ubuntu.com/ubuntu raring main
+

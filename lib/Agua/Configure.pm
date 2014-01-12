@@ -51,6 +51,7 @@ has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 1 );
 has 'validated'		=> ( isa => 'Int', is => 'rw', default => 0 );
 
 # Strings
+has 'arch'			=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'username'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'requestor'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'cluster'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
@@ -61,12 +62,12 @@ has 'dumpfile'		=> ( isa => 'Str|Undef', is => 'rw' );
 has 'database'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'user'			=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'password'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
+has 'guestuser'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'testdatabase'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'testuser'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'testpassword'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'rootuser'		=> ( isa => 'Str|Undef', is => 'ro', default => 'root' );
 has 'rootpassword'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
-
 
 # Objects
 has 'json'			=> ( isa => 'HashRef', is => 'rw', required => 0 );
@@ -156,7 +157,7 @@ method enableSsh {
 	my $isadmin = $self->_isAdminOrRoot();
 	$self->logDebug("isadmin", $isadmin);
 	
-	$self->logError("User is not root user") and exit if not $isadmin;
+	$self->logError("User is not admin user") and exit if not $isadmin;
 
 	#### SET KEY VALUE IN CONF FILE
 	$self->conf()->setKey("agua", "SSHPASSWORDLOGIN", "YES");
@@ -179,7 +180,7 @@ method disableSsh {
 	$self->logDebug("");
 
 	#### VERIFY ADMIN OR root USER
-	$self->logError("User is not root user") and exit if not $self->_isAdminOrRoot();
+	$self->logError("User is not admin user") and exit if not $self->_isAdminOrRoot();
 
 	#### SET KEY VALUE IN CONF FILE
 	$self->conf()->setKey("agua", "SSHPASSWORDLOGIN", "NO");
@@ -348,11 +349,10 @@ method testUser {
 
 print "\n\n\n";
 print "*********************************************************************\n";
-print "*************** CREATING AGUA TEST USER LINUX ACCOUNT ***************\n";
+print "***************** CREATING TEST USER LINUX ACCOUNT ******************\n";
 print "*********************************************************************\n";
 print "\n\n\n";
 
-    #### ADMIN USERNAME
 	my $username 	= $self->conf()->getKey("database", "TESTUSER");
 	my $firstname 	= "";
 	my $lastname 	= "";
@@ -372,12 +372,35 @@ print "\n\n\n";
 	### ADD NEW AGUA TEST LINUX ACCOUNT AND CREATE DIRECTORY IF NOT EXISTS
 	$self->_addLinuxUser($object);
 
+	#### SET TEST USER MYSQL ACCOUNT
+	$self->setTestUser();
+	
 print "\n\n\n";
 print "*********************************************************************\n";
-print "*********    AGUA TEST USER ACCOUNT SUCCESSFULLY CREATED    *********\n";
+print "************    TEST USER ACCOUNT SUCCESSFULLY CREATED    ***********\n";
 print "*********************************************************************\n";
 print "\n\n\n";
 
+}
+
+method _loadUserData ($username, $database) {
+    my $rootpassword   	=   $self->rootpassword();
+	$rootpassword 		=	$self->_inputRootPassword() if not defined $rootpassword;
+	$self->logDebug("rootpassword", $rootpassword);
+	
+	my $dumpfile		=	$self->_getDumpfile($username);
+	$self->logDebug("dumpfile", $dumpfile);
+	
+	my $command = "mysql -u root -p$rootpassword $database < $dumpfile";
+	$self->logDebug("command", $command);
+	print `$command`;
+	
+}
+method _getDumpfile ($username) {
+	
+	my $dumpfile	=	"$Bin/../sql/dump/$username.dump";
+	
+	return $dumpfile;
 }
 #### SET CRON JOB
 method cron {
@@ -522,7 +545,7 @@ PURPOSE
 Continuing with configuration. Please input values for the following items.
 (Or hit RETURN to accept the [default_value])
 
-}; 
+};
     #### SET DATABASE NAME
     my $database        =   $self->setDatabase();
 
@@ -540,7 +563,7 @@ Continuing with configuration. Please input values for the following items.
 
 	#### OPTIONALLY RESET TEST AGUA MYSQL USER AND PASSWORD    
 	my ($testuser, $testpassword) = $self->setTestUser();
-
+	
     #### PRINT CONFIRMATION THAT THE agua DATABASE HAS BEEN CREATED
 	$self->printMysqlConfirmation($database, $user, $password);
 }
@@ -616,7 +639,7 @@ method setDbObject ($database, $user, $password) {
 	$self->db($db);
 }
 
-method setAguaUser () {
+method setAguaUser {
 	my $database = $self->database();
 	$self->logDebug("database not defined") and exit if not defined $database;
 
@@ -660,7 +683,7 @@ method setAguaUser () {
 	return $user, $password;
 }
 
-method setDatabase () {
+method setDatabase {
 	my $database = $self->database() || $self->conf()->getKey("database", "DATABASE");
 	$database = $self->_inputValue("Agua MySQL database name", $database);
     $self->logError("database not defined") if not defined $database;
@@ -691,7 +714,7 @@ method setMysqlRoot {
 	}
 }
 
-method _inputRootPassword () {
+method _inputRootPassword {
 #### MASK TYPING FOR PASSWORD INPUT
     ReadMode 2;
 	print "\n";
@@ -721,7 +744,9 @@ method _setRootPassword ($rootpassword) {
 	$self->stopMysql();
 	$self->killMysql();
 
+	my $arch	=	$self->getArch();
 	my $start = "sudo mysqld --skip-grant-tables &";
+	$start = "sudo mysqld_safe --skip-grant-tables &" if $arch eq "centos";
 	print "$start\n";
 	system($start);
 	sleep(5);
@@ -787,7 +812,9 @@ method _getRootPassword {
 	
 	return $rootpassword;
 }
-method reloadDatabase () {
+
+#### RELOAD DATABASE
+method reloadDatabase {
 	my $database = $self->database() || $self->conf()->getKey("database", "DATABASE");
 	$self->logDebug("database", $database);
 	$self->logDebug("database not defined") and exit if not defined $database;
@@ -871,7 +898,8 @@ method _loadDumpfile ($database) {
 	print `$command`;
 }
 
-method setTestUser () {
+#### TEST USER
+method setTestUser {
 	my $testdatabase = $self->testdatabase() || $self->conf()->getKey("database", "TESTDATABASE");
 	$self->logDebug("testdatabase not defined") and exit if not defined $testdatabase;
 	
@@ -886,28 +914,53 @@ method setTestUser () {
 	my $length 		= 9;
 	$testpassword		=	$self->createRandomPassword($length) if not $testpassword;
 	
-    #### TEST USER NAME
-	print "\n";
-	$testuser = $self->_inputValue("Test MySQL username", $testuser);	
+#    #### TEST USER NAME
+#	print "\n";
+#	$testuser = $self->_inputValue("Test MySQL username", $testuser);	
     
     #### TEST USER PASSWORD
-	$testpassword = $self->_inputValue("Test MySQL user password", $testpassword);	
+	$testpassword = $self->_inputValue("User '$testuser' MySQL password", $testpassword);	
 
-	#### SET Agua USER AND PASSWORD
+	#### SET MYSQL USER AND PASSWORD
 	$self->_createDbUser($testdatabase, $testuser, $testpassword);
 
 	#### UPDATE CONF FILE
-	$self->conf()->setKey("database", "TESTUSER", $testuser);
+#	$self->conf()->setKey("database", "TESTUSER", $testuser);
 	$self->conf()->setKey("database", "TESTPASSWORD", $testpassword);
 
 	#### UPDATE SLOTS
     $self->testuser($testuser);
     $self->testpassword($testpassword);
 
+	#### SET DATABASE
+	$self->setDbh({	database	=>	$testdatabase	});
+
+	#### ALLOW ACCESS TO database
+	my $user		=	$self->conf()->getKey("database", "USER");
+	#my $password	=	$self->conf()->getKey("database", "PASSWORD");
+	$self->grantAccess($testdatabase, $user);
+	
+	#### UPDATE TESTUSER PASSWORD IN TEST DATABASE
+	if ( $self->db()->query("SELECT 1 FROM users WHERE username='$testuser'")) {
+		my $query	=	"UPDATE users SET password='$testpassword' WHERE username='$testuser'";
+		$self->db()->do($query);
+	}
+	else {
+		my $query	=	"INSERT INTO users VALUES('$testuser', '$testpassword', '','','','', NOW())";
+		$self->db()->do($query);
+	}
+	
+	#### LOAD TEST USER DATA INTO TEST DATABASE
+	$self->_loadUserData($testuser, $testdatabase);	
+
+	#### RESET DATABASE
+	my $database	=	$self->conf()->getKey("database", "DATABASE");
+	$self->setDbh({	database	=>	$database	});
+	
 	return $testuser, $testpassword;
 }
 
-method createTestDb () {
+method createTestDb {
 	my $testdatabase = $self->conf()->getKey("database", "TESTDATABASE");
 	$self->logDebug("testdatabase", $testdatabase);
 	$self->logDebug("testdatabase not defined") and exit if not defined $testdatabase;
@@ -967,6 +1020,13 @@ FLUSH PRIVILEGES;};
 	`rm -fr $sqlfile`;
 }
 
+method grantAccess ($database, $user) {
+	my $query = qq{GRANT ALL ON $database.* TO '$user'};
+	$self->logDebug("query", $query);
+	
+	$self->db()->do($query);
+}
+
 method _getTimestamp ($database, $user, $password) {
 	#### SET DB OBJECT
 	$self->setDbObject($database, $user, $password) if not defined $self->db();
@@ -999,7 +1059,162 @@ method _dumpDb ($database, $user, $password, $dumpfile) {
 	return $dumpfile;
 }
 
+#### GUEST USER
+method guestUser {
+
+print "\n\n\n";
+print "*********************************************************************\n";
+print "***************** CREATING TEST USER LINUX ACCOUNT ******************\n";
+print "*********************************************************************\n";
+print "\n\n\n";
+
+	my $username 	= $self->conf()->getKey("database", "GUESTUSER");
+	my $firstname 	= "";
+	my $lastname 	= "";
+	my $email 		= "guest\@trash.com";	
+	my $object 		= {
+		username	=>	$username,
+		password	=>	"",
+		email		=>	$email,
+		firstname	=>	$firstname,
+		lastname	=>	$lastname
+	};
+    $self->logDebug("object", $object);
+	
+	### REMOVE OLD AGUA TEST LINUX ACCOUNT
+	$self->_removeLinuxUser($object);
+	
+	### ADD NEW AGUA TEST LINUX ACCOUNT AND CREATE DIRECTORY IF NOT EXISTS
+	$self->_addLinuxUser($object);
+
+	#### SET TEST USER MYSQL ACCOUNT
+	$self->setGuestUser();
+	
+print "\n\n\n";
+print "*********************************************************************\n";
+print "************    TEST USER ACCOUNT SUCCESSFULLY CREATED    ***********\n";
+print "*********************************************************************\n";
+print "\n\n\n";
+
+}
+
+method setGuestUser {
+	my $database = $self->database() || $self->conf()->getKey("database", "DATABASE");
+	$self->logDebug("database not defined") and exit if not defined $database;
+	
+	#### SET DB OBJECT
+	my $rootpassword = $self->_getRootPassword();
+	$self->logError("rootpassword not defined") and return if not defined $rootpassword;
+	$self->setDbObject($database, "root", $rootpassword) if not defined $self->db();
+
+	#### GET CURRENT VALUES
+    my $guestuser       	=   $self->conf()->getKey("database", "GUESTUSER");
+    my $guestpassword   	=   $self->conf()->getKey("database", "GUESTPASSWORD");
+	my $length 		= 9;
+	$guestpassword		=	$self->createRandomPassword($length) if not $guestpassword;
+	
+    #### GUEST USER NAME
+	print "\n";
+	$guestuser = $self->_inputValue("Guest MySQL username", $guestuser);	
+    
+    #### GUEST USER PASSWORD
+	$guestpassword = $self->_inputValue("User '$guestuser' MySQL password", $guestpassword);	
+
+	#### SET MYSQL USER AND PASSWORD
+	$self->_createDbUser($database, $guestuser, $guestpassword);
+
+	#### UPDATE CONF FILE
+	$self->conf()->setKey("database", "GUESTUSER", $guestuser);
+	$self->conf()->setKey("database", "GUESTPASSWORD", $guestpassword);
+
+	#### LOAD GUEST USER DATA INTO GUEST DATABASE
+	$self->_loadUserData($guestuser, $database);	
+
+	#### CREATE FOLDERS FOR WORKFLOWS
+	$self->_createFileDirs($guestuser, $database);
+	
+	return $guestuser, $guestpassword;
+}
+
+method _createFileDirs ($username, $database) {
+	
+	$self->setDbh({
+		database	=>	$database
+	});
+
+	##### CREATE PROJECT DIRS
+	#$self->_createProjectDirs($username);
+
+	#### CREATE WORKFLOW DIRS
+	$self->_createWorkflowDirs($username);
+}
+
+method _createProjectDirs ($username) {
+	my $query	=	"SELECT * FROM project WHERE username='$username'";
+	my $projects = $self->db()->queryhasharray($query);
+	$self->logDebug("projects", $projects);
+
+	my $userdir 	= 	$self->conf()->getKey("agua", 'USERDIR');
+	my $homedir		=	"$userdir/$username";
+	my $aguadir 	= 	$self->conf()->getKey("agua", 'AGUADIR');
+
+	foreach my $entry ( @$projects ) {
+		my $project		=	$entry->{name};
+		$self->logDebug("project", $project);
+		my $filepath	=	"$homedir/$aguadir/$project";
+		$self->logDebug("filepath", $filepath);
+		$self->logDebug("DOING mkdir -p $filepath") if not -d $filepath;
+		`mkdir -p $filepath` if not -d $filepath;
+	}
+}
+
+method _createWorkflowDirs ($username) {
+	my $query	=	"SELECT * FROM workflow WHERE username='$username'";
+	my $workflows = $self->db()->queryhasharray($query);
+	$self->logDebug("workflows", $workflows);
+
+	my $userdir 	= 	$self->conf()->getKey("agua", 'USERDIR');
+	my $homedir		=	"$userdir/$username";
+	my $aguadir 	= 	$self->conf()->getKey("agua", 'AGUADIR');
+
+	foreach my $entry ( @$workflows ) {
+		my $project		=	$entry->{project};
+		my $workflow	=	$entry->{name};
+		$self->logDebug("project", $project);
+		$self->logDebug("workflow", $workflow);
+		my $filepath	=	"$homedir/$aguadir/$project/$workflow";
+		$self->logDebug("filepath", $filepath);
+		`mkdir -p $filepath` if not -d $filepath;
+	}
+}
+
 #### miscellaneous
+method getArch {    
+	my $arch = $self->arch();
+    $self->logDebug("STORED arch", $arch) if defined $arch;
+
+	return $arch if defined $arch;
+	
+	$arch 	= 	"linux";
+	my $command = "uname -a";
+    my $output = `$command`;
+	#$self->logDebug("output", $output);
+	
+    #### Linux ip-10-126-30-178 2.6.32-305-ec2 #9-Ubuntu SMP Thu Apr 15 08:05:38 UTC 2010 x86_64 GNU/Linux
+    $arch	=	 "ubuntu" if $output =~ /ubuntu/i;
+    #### Linux ip-10-127-158-202 2.6.21.7-2.fc8xen #1 SMP Fri Feb 15 12:34:28 EST 2008 x86_64 x86_64 x86_64 GNU/Linux
+    $arch	=	 "centos" if $output =~ /fc\d+/;
+    $arch	=	 "centos" if $output =~ /\.el\d+\./;
+	$arch	=	 "debian" if $output =~ /debian/i;
+	$arch	=	 "freebsd" if $output =~ /freebsd/i;
+	$arch	=	 "osx" if $output =~ /darwin/i;
+
+	$self->arch($arch);
+    $self->logDebug("FINAL arch", $arch);
+	
+	return $arch;
+}
+
 method _inputValue ($message, $default) {
 	$self->logError("message is not defined") if not defined $message;
 	$default = '' if not defined $default;

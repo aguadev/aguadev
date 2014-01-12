@@ -131,7 +131,7 @@ sub submitLogin {
 	my $username	=	$self->username();
 	my $password 	=	$self->password();
 	$self->logDebug("username", $username);
-	$self->logNote("password not defined or empty") if not defined $password or not $password;
+	$self->logError("password not defined or empty") if not defined $password or not $password;
     
     #### CHECK USERNAME AND PASSWORD DEFINED AND NOT EMPTY
     if ( not defined $username )    {   return; }
@@ -168,10 +168,10 @@ sub submitLogin {
 		my $stored_password = $self->db()->query($query);	
 	
 		#### CHECK FOR INPUT PASSWORD MATCHES STORED PASSWORD
-		$self->logDebug("Stored_password: ***$stored_password***");
-		$self->logDebug("Passed password: ***$password***");
+		$self->logDebug("Stored_password", $stored_password) ;
+		$self->logDebug("Passed password", $password);
 	
-		$match = $password =~ /^$stored_password$/; 
+		$match = $password =~ /^$stored_password$/ if defined $stored_password; 
 		$self->logDebug("Match", $match);
 	}
 	$self->logDebug("match", $match);

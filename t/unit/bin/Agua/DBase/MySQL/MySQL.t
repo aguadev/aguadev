@@ -46,7 +46,7 @@ my $configfile	=   "$installdir/conf/config.yaml";
 $Bin =~ s/^.+\/bin/$installdir\/t\/bin/;
 
 #### GET OPTIONS
-my $logfile 	= "/tmp/aguatest.dbase.mysql.log";
+my $logfile 	= "/tmp/testuser.dbase.mysql.log";
 my $SHOWLOG     =   2;
 my $PRINTLOG    =   5;
 my $help;

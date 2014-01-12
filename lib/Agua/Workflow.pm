@@ -63,7 +63,7 @@ use Agua::Monitor::SGE;
 
 # Integers
 has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 4 );
 has 'workflowpid'	=> ( isa => 'Int|Undef', is => 'rw', required => 0 );
 has 'workflownumber'=>  ( isa => 'Str|Undef', is => 'rw' );
 has 'start'     	=>  ( isa => 'Int|Undef', is => 'rw' );
@@ -760,9 +760,9 @@ method setFileDirs ($fileroot, $project, $workflow) {
 	my $stderrdir = $self->createDir("$fileroot/$project/$workflow/stdout");
 
 	#### CREATE DIRS	
-	File::Path::mkpath($scriptsdir) if not -d $scriptsdir;
-	File::Path::mkpath($stdoutdir) if not -d $stdoutdir;
-	File::Path::mkpath($stderrdir) if not -d $stderrdir;
+	`mkdir -p $scriptsdir` if not -d $scriptsdir;
+	`mkdir -p $stdoutdir` if not -d $stdoutdir;
+	`mkdir -p $stderrdir` if not -d $stderrdir;
 	$self->logError("Cannot create directory scriptsdir: $scriptsdir") and exit if not -d $scriptsdir;
 	$self->logError("Cannot create directory stdoutdir: $stdoutdir") and exit if not -d $stdoutdir;
 	$self->logError("Cannot create directory stderrdir: $stderrdir") and exit if not -d $stderrdir;		

@@ -369,8 +369,8 @@ method tests {
     my $basedir		= 	$self->conf()->getKey("agua", "INSTALLDIR");
 	my $installdir 	= 	"$basedir/t";
 	my $opsrepo 	= 	$self->conf()->getKey("agua", "OPSREPO");
-	my $repository	=	"aguatest";
-	my $package 	= 	"aguatest";
+	my $repository	=	"testuser";
+	my $package 	= 	"testuser";
 	my $owner		=	"agua";
 	my $privacy		=	"public";
 	my $username 	= 	$self->conf()->getKey("agua", "ADMINUSER");

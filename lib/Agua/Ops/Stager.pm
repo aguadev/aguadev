@@ -216,14 +216,14 @@ method runStager {
 	$self->logDebug("version", $version);
 	$self->version($version);
 
-	#### ADD SOURCE TAG
+	#### COMMIT SOURCE
 	$self->preSourceCommit($mode, $sourcerepo, $version, $message) if $self->can('preSourceCommit');
 	$self->sourceCommit($sourcerepo, "[$version] $message", $package);
-	
+
 	#### ADD SOURCE TAG
 	$self->preSourceTag($mode, $sourcerepo, $version, $message) if $self->can('preSourceTag');
 	$self->sourceTag($sourcerepo, $version, $message);
-	
+
 	########## CREATE SOURCE ARCHIVE
 	#####my $repofile = $self->archiveSource($package, $sourcerepo, $outputdir);	
 	#####$self->logDebug("repofile", $repofile);
@@ -238,13 +238,14 @@ method runStager {
 	#####$self->preTargetUpdate($mode, $targetrepo, $package) if $self->can('preTargetUpdate');	
 	#####$self->targetUpdate($targetrepo, $package);
 	####
-	##### CREATE TARGET VERSION
-	#$self->preTargetVersion($mode, $targetrepo, $package) if $self->can('preTargetVersion');	
-	#$self->targetVersion($targetrepo, $message, $package);
-
+	
+	
+	#### CREATE TARGET VERSION
+	$self->preTargetVersion($mode, $targetrepo, $package) if $self->can('preTargetVersion');	
+	$self->targetVersion($targetrepo, $message, $package);
 
 	##### EXPORT SOURCE TO TARGET
-	#$self->preSourceToTarget($mode, $sourcerepo, $version, $message) if $self->can('preSourceToTarget');
+	$self->preSourceToTarget($mode, $sourcerepo, $version, $message) if $self->can('preSourceToTarget');
 	$self->sourceToTarget($package, $sourcerepo, $targetrepo, $branch);
 	
 	#### COMMIT TARGET

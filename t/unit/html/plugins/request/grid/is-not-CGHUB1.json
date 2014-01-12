@@ -1,0 +1,9 @@
+[
+    {
+        action      :   "AND",
+        avatarType  :   "parameters",
+        field       :   "Source",
+        operator    :   "is not",
+        value       :   "CGHUB1"
+    }
+]

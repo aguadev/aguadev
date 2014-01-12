@@ -1,0 +1,6 @@
+#### INSERT TABLES 
+INSERT INTO package VALUES ('admin','admin','biorepository','','','installing','0.1.0','/aguadev/repos/public/admin/biorepository/admin/biorepository','/home/admin/repos/public/biorepository','','','','2013-12-15 22:37:29');
+INSERT INTO package VALUES ('admin','admin','private','','','ready','0.1.0','/aguadev/repos/private/admin/private/admin/private','/home/admin/repos/private/private','','','','2013-11-13 12:10:14');
+INSERT INTO project VALUES ('admin','Project1',0,'','','','');
+INSERT INTO users VALUES ('admin','12345678','qq','admin','admin','','2013-12-14 02:22:34');
+INSERT INTO workflow VALUES ('admin','Project1','Workflow1',1,'','','','');

@@ -153,7 +153,7 @@ method loadStarCluster ($testname) {
 
 	#### CREATE DUMMY KEYPAIR FILE
 	my $keyname = "id_rsa-$username-key";
-	my $outputdir = "$Bin/outputs/teststart/aguatest/.starcluster";
+	my $outputdir = "$Bin/outputs/teststart/testuser/.starcluster";
 	my $keypairfile = "$outputdir/$keyname";
 	`touch $keypairfile`;
 	

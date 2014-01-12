@@ -146,13 +146,23 @@ sub _addWorkflow {
 	#### ADD THE PROJECT DIRECTORY TO THE USER'S agua DIRECTORY
 	my $fileroot = $self->getFileroot($username);
 	$self->logDebug("fileroot", $fileroot);
-	my $filepath = "$fileroot/$data->{project}/$data->{name}";
-	$self->logDebug("Creating directory", $filepath);
-	File::Path::mkpath($filepath);
-	$self->logError("Could not create the fileroot directory: $fileroot") and exit if not -d $filepath;
+	my $directory = "$fileroot/$data->{project}/$data->{name}";
+	$self->logDebug("Creating directory", $directory);
+	
+	#### REPLACED THIS TO AVOID ERROR WHEN DIRECTORY ALREADY EXISTS:
+	#### mkdir /home/admin/aguadev: Permission denied at /aguadev/cgi-bin/lib/Agua/Common/Workflow.pm line 151.
+	# File::Path::mkpath($directory);
+
+	#### CREATE DIRECTORY IF NOT EXISTS	
+	`mkdir -p $directory` if not -d $directory;
+
+	#### REMOVED THIS CHECK TO AVOID ERROR:
+	##### mkdir: cannot create directory `/home/admin': Permission denied
+	####
+	# $self->logError("Could not create the fileroot directory: $fileroot") and exit if not -d $directory;
 	
 	#### SET PERMISSIONS
-	$self->setPermissions($username, $filepath);
+	$self->setPermissions($username, $directory);
 
 	return 1;
 }

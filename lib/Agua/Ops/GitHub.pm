@@ -189,6 +189,21 @@ method removeOAuthToken ($login, $password, $tokenid) {
 }
 
 #### CLONE/PULL FROM GITHUB REMOTE
+method setDefaultIdentity ($username, $email) {
+	$self->logDebug("username", $username);
+	$self->logDebug("email", $email);
+	
+	my $command	=	qq{git config --global user.email "$email"};
+	my ($output, $error) = $self->runCommand($command);
+	$self->logDebug("output", $output);
+	$self->logDebug("error", $error);
+
+	$command	=	qq{git config --global user.name "$username"};
+	($output, $error) = $self->runCommand($command);
+	$self->logDebug("output", $output);
+	$self->logDebug("error", $error);
+}
+
 method getPrefix ($login, $hubtype, $keyfile, $privacy) {
 	$self->logDebug("keyfile", $keyfile);
 	my $prefix = '';
@@ -249,14 +264,14 @@ method fetchResetRemoteRepo ($owner, $repository, $hubtype, $login, $privacy, $k
 	return $output;
 }
 
-method pullRemoteRepo ($owner, $repository, $hubtype, $login, $privacy, $keyfile) {
+method pullFromRemote ($owner, $repository, $hubtype, $login, $privacy, $keyfile) {
 	$self->logDebug("keyfile", $keyfile);
 	my $prefix = '';
 	if ( $privacy eq "private" ) {
 		$prefix = $self->getPrefix($login, $hubtype, $keyfile, $privacy);
 		$self->setGitSsh($login, $hubtype, $keyfile);
 	}
-	my $command = "git pull git://github.com/$owner/$repository.git 2> /dev/null ";
+	my $command = "git pull --commit --no-edit git://github.com/$owner/$repository.git 2> /dev/null ";
 	$command = "$prefix git pull git\@github.com/$owner/$repository.git 2> /dev/null " if $prefix;
 	$self->logDebug("command", $command);
 	my ($output, $error) = $self->runCommand($command);

@@ -7,7 +7,7 @@
         value       :   "CGHUB1"
     },
     {
-        action      :   "AND",
+        action      :   "OR",
         avatarType  :   "parameters",
         field       :   "Source",
         operator    :   "==",

@@ -29,14 +29,41 @@ var Data = {};
 var dojoConfig = {
 	isDebug: true,
 	locale: "en-us",
-	//extraLocale: ['ja-jp'],
-	modulePaths: {"plugins": "../../plugins", "t": "../../t"},
+	packages: [
+		{
+			name: "plugins",
+			location: "../../plugins"
+		}
+		,
+		{
+			name: "t",
+			location: "../../t"
+		}
+		,
+		{
+			name: "JBrowse",
+			location: "../../plugins/view/jbrowse/src/JBrowse"
+		}
+		,
+		{
+			name: 'lazyload',
+			main: 'lazyload',
+			location: "../../dojo/lazyload"
+		}
+		,
+		{
+			name: 'jDataView',
+			location: 'jDataView/src',
+			main: 'jdataview'
+		}
+	],
+
 	debugAtAllCosts: true,
 	useCommentedJson: true
 };
 </script>
 <script type="text/javascript"
-	src="../../../../dojo/dojo/dojo.js">
+	src="../../../../../dojo/dojo/dojo.js">
 </script>
 
 <script type="text/javascript" src="./runTests.js"></script>

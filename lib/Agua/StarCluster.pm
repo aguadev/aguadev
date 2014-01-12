@@ -246,8 +246,8 @@ method load ($args) {
 	$self->logDebug("");
 	#$self->logDebug("args", $args);
 
-	$self->logDebug("DOING self->clear()");
-	$self->clear();
+	#$self->logDebug("DOING self->clear()");
+	#$self->clear();
 	
 	$self->logDebug("DOING self->loadArgs()");
 	$self->loadArgs($args);

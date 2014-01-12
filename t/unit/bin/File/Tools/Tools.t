@@ -41,7 +41,7 @@ $Bin =~ s/^.+t\/bin/$installdir\/t\/bin/;
 use Test::File::Tools;
 use Conf::Yaml;
 
-my $logfile = "$Bin/outputs/aguatest.filetools.log";
+my $logfile = "$Bin/outputs/testuser.filetools.log";
 my $SHOWLOG = 2;
 my $PRINTLOG = 2;
 

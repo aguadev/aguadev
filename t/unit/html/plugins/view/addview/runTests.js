@@ -10,7 +10,7 @@ dojo.registerModulePath("t","../../t");
 dojo.require("doh.runner");
 
 // Agua TEST MODULES
-dojo.require("t.doh.util");
+dojo.require("t.unit.doh.util");
 
 // DEBUG LOADER
 //dojo.require("dojoc.util.loader");

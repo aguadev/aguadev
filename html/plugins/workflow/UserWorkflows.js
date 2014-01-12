@@ -251,11 +251,11 @@ enableSyncWorkflows : function () {
 },
 // SYNC WORKFLOWS
 syncWorkflows : function (inputs) {
-	console.log("Hub.syncWorkflows    inputs: ");
+	console.log("UserWorkflows.syncWorkflows    inputs: ");
 	console.dir({inputs:inputs});
 	
 	if ( this.syncingWorkflows == true ) {
-		console.log("Hub.syncWorkflows    this.syncingWorkflows: " + this.syncingWorkflows + ". Returning.");
+		console.log("UserWorkflows.syncWorkflows    this.syncingWorkflows: " + this.syncingWorkflows + ". Returning.");
 		return;
 	}
 	this.syncingWorkflows = true;
@@ -268,7 +268,7 @@ syncWorkflows : function (inputs) {
 	query.hubtype			= 	"github";
 	query.mode 				= 	"syncWorkflows";
 	query.module 		= 	"Agua::Workflow";
-	console.log("Hub.syncWorkflows    query: ");
+	console.log("UserWorkflows.syncWorkflows    query: ");
 	console.dir({query:query});
 	
 	// SEND TO SERVER

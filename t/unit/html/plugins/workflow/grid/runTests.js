@@ -39,7 +39,7 @@ dojo.addOnLoad(function(){
 		dataUrl: "../../../../t/json/getData.json"
 	});
 	
-	Agua.cookie('username', 'aguatest');
+	Agua.cookie('username', 'testuser');
 	Agua.cookie('sessionid', '9999999999.9999.999');
 	Agua.loadPlugins([
 	"plugins.data.Controller",

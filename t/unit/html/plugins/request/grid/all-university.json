@@ -1,0 +1,8 @@
+[
+    {
+        action      :   "OR",
+        field       :   "ALL",
+        operator    :   "contains",
+        value       :   "university"
+    }
+]

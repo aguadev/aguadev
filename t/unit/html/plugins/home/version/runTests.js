@@ -24,7 +24,7 @@ Agua = new plugins.core.Agua({
 	, dataUrl: dojo.moduleUrl("t", "json/getData-111127.json")
 });
 
-Agua.cookie('username', 'aguatest');
+Agua.cookie('username', 'testuser');
 Agua.cookie('sessionid', '9999999999.9999.999');
 Agua.loadPlugins([
 	"plugins.data.Controller",

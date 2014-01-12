@@ -17,8 +17,7 @@ getUser : function (username) {
 	console.log("Agua.User.getUser    users: " + dojo.toJson(users));
 	var index = this._getIndexInArray(users, {"username":username}, ["username"]);
 	console.log("Agua.User.getUser    index: " + index);
-	if ( index != null )
-	{
+	if ( index != null ) {
 		return users[index];
 	}
 	
@@ -26,7 +25,6 @@ getUser : function (username) {
 },
 getUsers : function () {
 // RETURN A SORTED COPY OF users
-	console.log("Agua.User.getUsers    plugins.core.Data.getUsers(userObject)");
 	this.sortData("users", "username");
 	return this.cloneData("users");
 },

@@ -59,7 +59,7 @@ method testSubmitLogin {
 		{
 			testname	=>	"login success",
 			tsvfile		=>	"$Bin/inputs/users-success.tsv",
-			username	=>	"aguatest",
+			username	=>	"testuser",
 			password	=>	12345678,
 			expected	=>	1
 		}
@@ -67,7 +67,7 @@ method testSubmitLogin {
 		{
 			testname	=>	"login failure",
 			tsvfile		=>	"$Bin/inputs/users-success.tsv",
-			username	=>	"aguatest",
+			username	=>	"testuser",
 			password	=>	"WRONGPASSWORD",
 			expected	=>	0
 		}

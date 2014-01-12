@@ -335,9 +335,6 @@ sub mountUserVolume {
 	
 	my $accesskeyid = $aws->{accesskeyid};
 	my $awssecretaccesskey = $aws->{awssecretaccesskey};
-
-	
-
 }
 
 sub addVolume {

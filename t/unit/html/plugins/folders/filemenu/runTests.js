@@ -50,7 +50,7 @@ dojo.addOnLoad(function() {
 		return 0;
 	};	
 	Agua.cgiUrl = "../../../../../../cgi-bin/agua/";
-	Agua.cookie('username', 'aguatest');
+	Agua.cookie('username', 'testuser');
 	Agua.cookie('sessionid', '9999999999.9999.999');
 	Agua.error = function () { return false };
 	Agua.warning = function () { return false };

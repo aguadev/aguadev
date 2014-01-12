@@ -29,7 +29,7 @@ my $configfile  =   "$installdir/conf/config.yaml";
 #### SET $Bin
 $Bin =~ s/^.+t\/bin/$installdir\/t\/bin/;
 
-my $logfile = "$Bin/outputs/aguatest.workflow.log";
+my $logfile = "$Bin/outputs/testuser.workflow.log";
 my $SHOWLOG     =   2;
 my $PRINTLOG    =   5;
 

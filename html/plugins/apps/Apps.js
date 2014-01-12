@@ -50,8 +50,8 @@ loadPanels : null,
 
 /////}}
 constructor : function(args) {
-	//console.log("apps.Apps.constructor    args:");
-	//console.dir({args:args});
+	console.log("apps.Apps.constructor    args:");
+	console.dir({args:args});
 
 	// SET LOAD PANELS
 	this.setLoadPanels(args);
@@ -60,12 +60,12 @@ constructor : function(args) {
 	this.loadCSS();		
 },
 postCreate : function() {
-	//////console.log("Apps.postCreate    plugins.apps.Controller.postCreate()");
+	////console.log("Apps.postCreate    plugins.apps.Controller.postCreate()");
 
 	this.startup();
 },
 startup : function () {
-	////console.log("Apps.startup    plugins.apps.Controller.startup()");
+	//console.log("Apps.startup    plugins.apps.Controller.startup()");
 
     // ADD THIS WIDGET TO Agua.widgets
     Agua.addWidget("apps", this);
@@ -75,8 +75,8 @@ startup : function () {
 
 	// LOAD HEADINGS FOR THIS USER
 	this.headings = Agua.getAppHeadings();
-	//console.log("Apps.startup    this.headings:");
-	//console.dir({this_headings:this.headings});
+	console.log("Apps.startup    this.headings:");
+	console.dir({this_headings:this.headings});
 
 	this.attachPane();
 	
@@ -84,10 +84,10 @@ startup : function () {
 	this.loadPanes();
 },
 attachPane : function () {
-	//console.log("Apps.attachPane    Agua.tabs:");
-	//console.dir({Agua_tabs:Agua.tabs});
-	//console.log("Apps.attachPane    this.mainTab:");
-	//console.dir({this_mainTab:this.mainTab});
+	console.log("Apps.attachPane    Agua.tabs:");
+	console.dir({Agua_tabs:Agua.tabs});
+	console.log("Apps.attachPane    this.mainTab:");
+	console.dir({this_mainTab:this.mainTab});
 
 	// ADD mainTab TO CONTAINER		
 	Agua.tabs.addChild(this.mainTab);
@@ -99,8 +99,8 @@ reload : function (target) {
 //	inputs:
 //		target	:	'aguaApplication' | 'adminApplications'
 
-	//console.log("Apps.reload     plugins.apps.Apps.reload(target)");
-	//console.log("Apps.reload     target: " + target);
+	console.log("Apps.reload     plugins.apps.Apps.reload(target)");
+	console.log("Apps.reload     target: " + target);
 
 	if ( target == "all" ) {
 		for ( var mainPane in this.headings )
@@ -132,7 +132,7 @@ reload : function (target) {
 },
 reloadWidget : function (paneName) {
 // REINSTANTIATE A PANE WIDGET
-	//////console.log("Apps.reloadWidget     Reloading pane: " + paneName);
+	////console.log("Apps.reloadWidget     Reloading pane: " + paneName);
 
 	delete this.paneWidgets[paneName];
 
@@ -152,31 +152,31 @@ loadPanes : function () {
 	}
 },
 loadPane : function(side) {
-	//console.log("Apps.loadPane     side: " + side);
-	//console.log("Apps.loadPane     this.loadPanels: ");
-	//console.dir({this_loadPanels:this.loadPanels});
+	console.log("Apps.loadPane     side: " + side);
+	console.log("Apps.loadPane     this.loadPanels: ");
+	console.dir({this_loadPanels:this.loadPanels});
 	
-	////console.log("Apps.loadPane     side: " + dojo.toJson(side));
+	//console.log("Apps.loadPane     side: " + dojo.toJson(side));
 	var pane = side + "Pane";
 	var tabContainer = side + "TabContainer";
 	if ( this.headings == null || this.headings[pane] == null )	return;
 	for ( var i = 0; i < this.headings[pane].length; i++ )
 	{
-		////console.log("Apps.loadLeftPane     LOADING PANE this.headings[pane][" + i + "]: " + this.headings[pane][i]);
+		//console.log("Apps.loadLeftPane     LOADING PANE this.headings[pane][" + i + "]: " + this.headings[pane][i]);
 
 		var tabPaneName = this.headings[pane][i];
-		//console.log("Apps.loadPane    dojo.require tabPaneName: " + tabPaneName);
+		console.log("Apps.loadPane    dojo.require tabPaneName: " + tabPaneName);
 
 		if ( this.loadPanels && ! this.loadPanels[tabPaneName.toLowerCase()] ) {
-			//console.log("Apps.loadPane    Skipping panel: " + tabPaneName);
+			console.log("Apps.loadPane    Skipping panel: " + tabPaneName);
 			continue;
 		}
 
 		var moduleName = "plugins.apps." + tabPaneName;
-		//console.log("Apps.loadPane    BEFORE dojo.require moduleName: " + moduleName);
+		console.log("Apps.loadPane    BEFORE dojo.require moduleName: " + moduleName);
 		
 		dojo["require"](moduleName);
-		//console.log("Apps.loadPane    AFTER dojo.require moduleName: " + moduleName);
+		console.log("Apps.loadPane    AFTER dojo.require moduleName: " + moduleName);
 		
 		var thisObject = this;
 		var tabPane = new plugins["apps"][tabPaneName](
@@ -193,8 +193,8 @@ loadPane : function(side) {
 	}
 },
 destroyRecursive : function () {
-	//console.log("Apps.destroyRecursive    this.mainTab: ");
-	//console.dir({this_mainTab:this.mainTab});
+	console.log("Apps.destroyRecursive    this.mainTab: ");
+	console.dir({this_mainTab:this.mainTab});
 
 	if ( Agua && Agua.tabs )
 		Agua.tabs.removeChild(this.mainTab);

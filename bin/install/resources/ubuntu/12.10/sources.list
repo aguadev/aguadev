@@ -1,0 +1,15 @@
+#############################################################
+################### OFFICIAL UBUNTU REPOS ###################
+#############################################################
+
+###### Ubuntu Main Repos
+deb http://us.archive.ubuntu.com/ubuntu/ quantal main restricted universe multiverse 
+deb-src http://us.archive.ubuntu.com/ubuntu/ quantal main restricted universe multiverse 
+
+###### Ubuntu Update Repos
+deb http://us.archive.ubuntu.com/ubuntu/ quantal-security main restricted universe multiverse 
+deb http://us.archive.ubuntu.com/ubuntu/ quantal-updates main restricted universe multiverse 
+deb http://us.archive.ubuntu.com/ubuntu/ quantal-proposed main restricted universe multiverse 
+deb-src http://us.archive.ubuntu.com/ubuntu/ quantal-security main restricted universe multiverse 
+deb-src http://us.archive.ubuntu.com/ubuntu/ quantal-updates main restricted universe multiverse 
+deb-src http://us.archive.ubuntu.com/ubuntu/ quantal-proposed main restricted universe multiverse 

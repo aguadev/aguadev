@@ -68,7 +68,9 @@ removeObjectsFromData : function (name, array, keys) {
 	return this._removeObjectsFromArray(this.data[name], array, keys);
 },
 sortData : function (name, key) {
-	this.sortHasharray(this.getData(name), key);
+	if ( this.getData(name) ) {
+		this.sortHasharray(this.getData(name), key);
+	}
 },
 loadData : function (data) {
 	////console.log("Data.loadData    Agua.loadData(data)");

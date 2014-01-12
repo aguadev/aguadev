@@ -131,6 +131,7 @@ method runInstall {
 	$self->logDebug("opsdir", $opsdir);
 	$self->logDebug("repository", $repository);
 	$self->logDebug("owner", $owner);
+	$self->logDebug("login", $login);
 	$self->logDebug("username", $username);
 	$self->logDebug("sessionid", $sessionid);
 
@@ -150,16 +151,21 @@ method runInstall {
 	$self->logCritical("owner not defined", $owner) and exit if not defined $owner;
 
 	#### VALIDATE VERSION IF SUPPLIED, OTHERWISE SET TO LATEST VERSION
-	my $version = $self->validateVersion($login, $repository, $privacy, $selectedversion);
+	my $version = $self->validateVersion($owner, $repository, $privacy, $selectedversion);
 	$self->logDebug("version not defined") and exit if not defined $version;
 	$self->logDebug("version", $version);
 	$self->version($version);
+	$self->logDebug("AFTER validateVersion login", $login);
 
 	#### SET DATABASE OBJECT
 	$self->setDbObject() if not defined $self->db();
 
+	$self->logDebug("BEFORE startHtmlLog login", $login);
+
 	##### START LOGGING TO HTML FILE
 	$self->startHtmlLog();
+
+	$self->logDebug("AFTER startHtmlLog login", $login);
 
 	#### STORE PWD
 	$self->pwd($Bin);
@@ -176,7 +182,8 @@ method runInstall {
 		$self->updateReport([$report]) if defined $report and $report;
 		$| = 1;
 	}	
-
+	$self->logDebug("AFTER preInstall login", $login);
+	
 	#### UPDATE PACKAGE STATUS
 	$self->updateStatus("installing");
 	$self->logger()->write("Updated status to 'installing'");
@@ -192,11 +199,15 @@ method runInstall {
 	#### ADD HUB TO /root/.ssh/authorized_hosts FILE	
 	$self->addHubToAuthorizedHosts($login, $hubtype, $keyfile, $privacy);
 	
+	$self->logDebug("login", $login);
+
 	#### CLONE REPO IF NOT EXISTS
+		my $loginpresent = $login;
+		$loginpresent = "" if not defined $login;
 	if ( $found == 0 ) {
-		$self->updateReport(["Cloning from remote repo: $repository (login: $login)"]);
+		$self->updateReport(["Cloning from remote repo: $repository (owner: $owner, login: $loginpresent)"]);
 		$self->logDebug("Cloning from remote repo");
-		$self->logDebug("installdir not found. Cloning repo $repository (login: $login)");
+		$self->logDebug("installdir not found. Cloning repo $repository (login: $loginpresent)");
 		
 		#### PREPARE DIRS
 		my ($basedir, $subdir) = $self->getParentChildDirs($installdir);
@@ -209,12 +220,12 @@ method runInstall {
 		$self->changeToRepo($basedir);
 		$self->logDebug("keyfile", $keyfile);
 		$self->logDebug("Doing self->cloneRemoteRepo()");
-		$self->logDebug("FAILED to clone repo") and return if not $self->cloneRemoteRepo($login, $repository, $hubtype, $login, $privacy, $keyfile, $subdir);
+		$self->logDebug("FAILED to clone repo") and return if not $self->cloneRemoteRepo($owner, $repository, $hubtype, $login, $privacy, $keyfile, $subdir);
 	}
 	
 	#### OTHERWISE, MOVE TO REPO AND PULL
 	else {
-		$self->updateReport(["Pulling from remote repo: $repository (login: $login)"]);
+		$self->updateReport(["Pulling from remote repo: $repository (owner: $owner, login: $loginpresent)"]);
 		$self->logDebug("Pulling from remote repo");
 	
 		#### PREPARE DIR
@@ -222,7 +233,7 @@ method runInstall {
 		$self->initRepo($installdir) if not $self->foundGitDir($installdir);
 	
 		#### fetch FROM REMOTE AND DO HARD RESET
-		$self->logDebug("FAILED to fetch repo") and return if not $self->fetchResetRemoteRepo($login, $repository, $hubtype, $login, $privacy, $keyfile);
+		$self->logDebug("FAILED to fetch repo") and return if not $self->fetchResetRemoteRepo($owner, $repository, $hubtype, $login, $privacy, $keyfile);
 	
 		#### SAVE ANY CHANGES IN A SEPARATE BRANCH
 		$self->saveChanges($installdir, $version);
@@ -317,7 +328,7 @@ method setLogFile ($package, $random) {
 	return $logfile;
 }
 
-method setHtmlLogFile () {
+method setHtmlLogFile {
 	my  $package 	= $self->package();
 	my  $random 	= $self->random();
 
@@ -340,7 +351,7 @@ method setHtmlLogFile () {
 	return $logfile;
 }
 
-method startHtmlLog () {
+method startHtmlLog {
 
 	my $logfile = $self->setHtmlLogFile();
 	$self->logDebug("logfile", $logfile);
@@ -409,6 +420,8 @@ method printLogUrl ($externalip, $aguaversion, $package, $version) {
 method loadOpsModule ($opsdir, $repository) {
 	$self->logDebug("opsdir", $opsdir);
 	$self->logDebug("repository", $repository);
+	return if not defined $opsdir;
+	
 	my $pmfile 	= 	"$opsdir/" . lc($repository) . ".pm";
 	my $location    = 	lc($repository) . ".pm";
 	$self->logDebug("pmfile: $pmfile");
@@ -433,6 +446,7 @@ method loadOpsModule ($opsdir, $repository) {
 method loadOpsInfo ($opsdir, $package) {
 	$self->logDebug("opsdir", $opsdir);
 	$self->logDebug("package", $package);
+	return if not defined $opsdir;
 	
 	return if not defined $opsdir or not $opsdir;
 	my $opsfile 	= 	"$opsdir/$package.ops";

@@ -42,6 +42,11 @@ constructor : function(args) {
 	if ( args.inputs )
 		this.inputs = args.inputs;
 	
+	if ( ! Agua.controllers ) {
+		Agua.controllers = {};
+	}
+	Agua.controllers["cloud"] = this;
+
 	// LOAD CSS FOR BUTTON
 	this.loadCSS();		
 },
@@ -61,6 +66,8 @@ startup : function () {
 	
 	// SET ADMIN BUTTON LISTENER
 	var listener = dojo.connect(this.menuButton, "onClick", this, "createTab");
+	
+	this.createTab();
 },
 createTab : function () {
 	
@@ -78,7 +85,12 @@ createTab : function () {
 	this.tabPanes.push(widget);
 
 	// ADD TO _supportingWidgets FOR INCLUSION IN DESTROY	
-	this._supportingWidgets.push(widget);
+	this._supportingWidgets.push(widget);		//// CREATE TAB
+		//console.log("admin.Controller.addOnLoad    BEFORE createTab");
+		//console.dir({Agua_controllers:Agua.controllers});
+		//Agua.controllers["cloud"].createTab();		
+		//console.log("admin.Controller.addOnLoad    AFTER createTab");
+
 },
 createMenu : function () {
 // ADD PROGRAMMATIC CONTEXT MENU
@@ -150,10 +162,6 @@ loadCSS : function() {
 
 dojo.addOnLoad(
 	function() {
-		//// CREATE TAB
-		////console.log("admin.Controller.addOnLoad    BEFORE createTab");
-		//Agua.controllers["admin"].createTab();		
-		////console.log("admin.Controller.addOnLoad    AFTER createTab");
 	}
 );
 

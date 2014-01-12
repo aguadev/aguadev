@@ -39,10 +39,11 @@ my $conf = Conf::Yaml->new(
     PRINTLOG    =>  4
 );
 
+
 #### LOAD MODULES
 my $modules = loadModules($conf);
 my @keys = keys %$modules;
-print "modules: @keys\n";
+#print "modules: @keys\n";
 
 # Response loop
 while (FCGI::accept >= 0) {
@@ -154,19 +155,19 @@ sub loadModules {
     my $installdir = $conf->getKey("agua", "INSTALLDIR");
     my $modulestring = $conf->getKey("agua", "MODULES");
 #    $modulestring = "Agua::Workflow";    
-    print "modulestring: $modulestring\n";
+#    print "modulestring: $modulestring\n";
     my @modulenames = split ",", $modulestring;
     foreach my $modulename ( @modulenames) {
     
         my $modulepath = $modulename;
         $modulepath =~ s/::/\//g;
-        print "modulepath: $modulepath\n";
+#        print "modulepath: $modulepath\n";
 
         my $location    = "$installdir/lib/$modulepath.pm";
-        print "location: $location\n";
+#        print "location: $location\n";
         #require $location;
         my $class       = "$modulename";
-        print "class: $class\n";
+#        print "class: $class\n";
         eval("use $class");
     
         my $object = $class->new({
@@ -174,7 +175,7 @@ sub loadModules {
             SHOWLOG     =>  $SHOWLOG,
             PRINTLOG    =>  $PRINTLOG
         });
-        print "object: $object\n";
+ #       print "object: $object\n";
         
         $modules->{$modulename} = $object;
     }

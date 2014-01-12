@@ -247,7 +247,7 @@ method testInstallTests {
 	$self->setUpDirs("$Bin/inputs/public", "$Bin/outputs/public");
 	
 	#### SET LOG
-	my $logfile = "$Bin/outputs/install-aguatest.log";
+	my $logfile = "$Bin/outputs/install-testuser.log";
 	$self->logfile($logfile);
 	$self->startLog($logfile);
 	
@@ -263,7 +263,7 @@ method testInstallTests {
 	my $privacy 	= $self->privacy("private");
 	my $username 	= $self->username($self->conf()->getKey("database", "TESTUSER"));
 	my $branch 		= $self->branch("master");
-	my $opsdir 		= $self->opsdir("$Bin/outputs/public/biorepository/syoung/aguatest");
+	my $opsdir 		= $self->opsdir("$Bin/outputs/public/biorepository/syoung/$username");
 	my $installdir 	= $self->installdir("$Bin/outputs/agua/t");	
 	
 	#### TEST INSTALL

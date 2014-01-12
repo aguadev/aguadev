@@ -111,6 +111,7 @@ method addLocalTag ($tag, $description) {
 	$self->logDebug("description", $description);
 	my $command = qq{git tag -a $tag};
 	$command .= qq{ -m "[$tag] $description"} if defined $description;
+
 	$self->repoCommand($command);
 }
 

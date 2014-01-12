@@ -110,7 +110,7 @@ core : {},
 /////}}}}}
 
 constructor : function(args) {
-	console.log("Saved.constructor    args: ");
+	console.log("SimpleSearch.constructor    args: ");
 	console.dir({args:args});
 
     // MIXIN ARGS
@@ -118,14 +118,14 @@ constructor : function(args) {
 },
 postCreate : function() {
 	// LOAD CSS
-	console.log("Saved.postCreate    DOING this.loadCSS()");
+	console.log("SimpleSearch.postCreate    DOING this.loadCSS()");
 	this.loadCSS();		
 
-	console.log("Saved.postCreate    DOING this.startup()");
+	console.log("SimpleSearch.postCreate    DOING this.startup()");
 	this.startup();
 },
 startup : function () {
-	console.group("Saved-" + this.id + "    startup");
+	console.group("SimpleSearch-" + this.id + "    startup");
 
 	// ATTACH PANE
 	this.attachPane();
@@ -133,141 +133,70 @@ startup : function () {
 	// SET LISTENERS
 	this.setListeners();
 
-	console.groupEnd("Saved-" + this.id + "    startup");
+	this.setFocus();
+	console.groupEnd("SimpleSearch-" + this.id + "    startup");
 },
 setListeners : function () {
-	console.log("Saved.setListeners");
+	console.log("SimpleSearch.setListeners    this.saveButton: ");
+	console.dir({this_saveButton:this.saveButton});
 
-	//var returnKey = 13;
-	//this.setOnkeyListener(this.simpleQuery, returnKey, "doSimpleQuery");	
+	// RETURN SEARCH
+	var returnKey = 13;
+	this.setOnkeyListener(this.searchInput, returnKey, dojo.hitch(this, "search"));
 
-	on(this.searchInput, "change", dojo.hitch(this, "updateQuery"));
+	// SUBMIT SAVE
+	on(this.saveButton, "click", dojo.hitch(this, "saveSearch"));
 },
-updateQuery : function () {
-	var query 	=	this.simplesearchSelect.value;
-	console.log("Saved.updateQuery    query: " + query);
-
-	var queries = Agua.getQueries();
-	console.log("Saved.updateQuery    queries: ");
-	console.dir({queries:queries});
+setFocus : function () {
+	this.searchInput.focus();
+},
+search : function () {
+	console.log("SimpleSearch.search    DOING this.getFilters()");
+	var filters = this.getFilters();
+	console.log("SimpleSearch.search    filters: " + JSON.stringify(filters));
+	this.core.grid.updateGrid(filters)
+},
+getFilters : function () {
+	var value 	=	this.searchInput.value;
+	console.log("SimpleSearch.getFilters    value: " + value);
+	value	=	value.replace(/\s+$/g, '');
+	value	=	value.replace(/^\s+/g, '');
 	
-	queries = this.filterByKeyValues(queries, ["query"], [query]);
-	console.log("Saved.updateQuery    FILTERED queries: ");
-	console.dir({queries:queries});
-
-	queries	=	this.sortHasharrayByKeys(queries, ["ordinal"]);
-	console.log("Saved.updateQuery    SORTED queries: ");
-	console.dir({queries:queries});
-	queries[0].action = " . ";
-
-	var ordinals = "";
-	for ( var i = 0; i < queries.length; i++ ) {
-		ordinals += queries[i].ordinal + ", ";
+	var values = value.split(" ");
+	console.log("SimpleSearch.getFilters    values: " + JSON.stringify(values));
+	
+	var filters = [];
+	for ( var i = 0; i < values.length; i++ ) {
+		var filter = {
+			action 	: 	"OR",
+			field 	: 	"ALL",
+			operator:	"contains",
+			value 	:	values[i],
+			query	:	value
+		};
+		filters.push(filter);
 	}
-	console.log("Saved.updateQuery    ordinals: " + ordinals);
+	console.log("SimpleSearch.getFilters    filters: " + JSON.stringify(filters));
 	
-	this.clearDragSource();
-	
-	this.loadDragItems(queries);
+	return filters;
 },
-_onKey : function(key, callback, event){
-	//console.log("Saved._onKey    key: " + key);
-	//console.log("Saved._onKey    callback: " + callback);
+saveSearch : function () {
+	console.log("SimpleSearch.saveSearch");
+	var filters = this.getFilters();
+	console.log("SimpleSearch.saveSearch    filters.length: " + filters.length);
+	console.dir({filters:filters});
 	
-	var eventKey = event.keyCode;			
-	//console.log("Saved._onKey    eventKey: " + eventKey);
-	if ( eventKey == key ) {
-		this[callback]();
-	}
+	Agua.addQuery(filters);
 },
-addFilter : function () {
-	console.log("Saved.addFilter   DOING this.getFormInputs()");
-	var inputs = this.getFormInputs(this);
-	console.log("Saved.addFilter   inputs: " + inputs);
-	console.dir({inputs:inputs});
-	
-	this.addSavedRow(inputs);
-},
-setSavedSelect : function () {
-	var queries = this.getQueryNames();
-	console.log("Saved.setSelects    queries:");
-	console.dir({queries:queries});
-	
-	this.setSelect(this.simplesearchSelect, queries);
-},
-getQueryNames : function () {
-	var queries = Agua.getQueries();
-	
-	queries = this.hashArrayKeyToArray(queries, "query");
-	
-	return this.uniqueValues(queries);
-},
-toggleSaved : function () {
-	console.log("Saved.toggleSaved");
+toggleDisplay : function () {
+	console.log("SimpleSearch.toggleSaved");
 	this.toggle(this.togglePoint);
-},
-toggle : function (togglePoint) {
-	console.log("Saved.toggle    togglePoint: " + togglePoint);
-	console.dir({togglePoint:togglePoint});
-	
-	if ( togglePoint.style.display == 'inline-block' )	{
-		togglePoint.style.display='none';
-		dojo.removeClass(this.toggler, "open");
-		dojo.addClass(this.toggler, "closed");
-	}
-	else {
-		togglePoint.style.display = 'inline-block';
-		dojo.removeClass(this.toggler, "closed");
-		dojo.addClass(this.toggler, "open");
-	}
-},
-getItemArray : function () {
-	console.log("Saved.getItemArray    this.dragSource: " + this.dragSource);
-	console.dir({this_dragSource:this.dragSource});
-
-	var childNodes	=	this.dragSource.getAllNodes();
-	console.log("Saved.getItemArray    childNodes: " + childNodes);
-	console.dir(childNodes);
-
-	console.log("DndSource.loadDragItems     childNodes.length: " + childNodes.length);
-	var itemArray	=	[];
-	for ( var i = 0; i < childNodes.length; i++ )
-	{
-		var widget = dijit.getEnclosingWidget(childNodes[i].firstChild);
-		
-		console.log("Saved.getItemArray    childNodes: " + childNodes);
-		console.dir(childNodes);
-	
-		var hash = {};	
-		for ( key in this.formInputs ) {
-			console.log("Saved.getItemArray    widget[" + key + "]: " + widget[key]);
-			hash[key]	=	widget[key];
-		}
-		itemArray.push(hash);
-	}
-	
-	return itemArray;
-},
-getFormInputs : function (widget) {
-	console.log("Saved.getFormInputs    widget: " + widget);
-	//console.dir(widget);
-	
-	var inputs = new Object;	
-	for ( var name in this.formInputs )
-	{
-		console.log("Saved.getFormInputs    name: " + name);
-		
-		var value = this.getWidgetValue(widget[name]);			
-		console.log("Saved.getFormInputs    " + name + ": " + value);
-		inputs[name] = value;
-	}
-	
-	return inputs;
 }
-
 
 }); //	end declare
 
 });	//	end define
+
+
 
 

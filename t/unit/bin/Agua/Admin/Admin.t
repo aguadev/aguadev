@@ -25,7 +25,7 @@ my $configfile  =   "$installdir/conf/config.yaml";
 #### SET $Bin
 $Bin =~ s/^.+t\/bin/$installdir\/t\/bin/;
 
-my $logfile = "$Bin/outputs/aguatest.admin.log";
+my $logfile = "$Bin/outputs/testuser.admin.log";
 
 #### GET OPTIONS
 my $SHOWLOG = 3;
@@ -53,14 +53,14 @@ my $conf = Conf::Yaml->new(
 my $dumpfile    =   "$Bin/../../../dump/create.dump";
 
 my $object = new Test::Agua::Common::Admin (
-    database    =>  "aguatest",
+    database    =>  "testuser",
     dumpfile    =>  $dumpfile,
     conf        =>  $conf,
     json        =>  {
         username    =>  'syoung',
     	sessionId	=>	"1234567890.1234.123"
     },
-    username    =>  "aguatest",
+    username    =>  "testuser",
     project     =>  "Project1",
     workflow    =>  "Workflow1",
     logfile     =>  $logfile,
@@ -69,7 +69,7 @@ my $object = new Test::Agua::Common::Admin (
 );
 
 my $json = {
-    owner		=>	'aguatest',
+    owner		=>	'testuser',
     groupname	=>	'analysis',
     groupwrite	=>	0,
     groupcopy	=>	1,
@@ -81,7 +81,7 @@ my $json = {
 $object->testAddRemoveAccess($json);
 
 $json = {
-    username	=>	"aguatest",
+    username	=>	"testuser",
     groupname	=>	"analysis",
     description	=>	"Analysis group",
     notes		=>	"Analysts and PIs only"

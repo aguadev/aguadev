@@ -81,10 +81,10 @@ method setUpStarCluster ($username, $cluster) {
     });
 
     #### SET OUTPUT DIR    
-    $self->outputdir("$Bin/outputs/aguatest/.starcluster");    
+    $self->outputdir("$Bin/outputs/testuser/.starcluster");    
 
     #### SET CONFIG FILE
-    $self->configfile("$Bin/outputs/aguatest/.starcluster/aguatest-testcluster.config");
+    $self->configfile("$Bin/outputs/testuser/.starcluster/testuser-testcluster.config");
     
     #### SET INSTALL DIR FOR EC2 KEY FILE
     $self->conf()->setKey("agua", 'INSTALLDIR', "$Bin/outputs");
@@ -134,7 +134,7 @@ method testExecuteWorkflow {
 	
 	my $username 	=  	$self->conf()->getKey("database", "TESTUSER");
 	my $sessionid	=	"0000000000.0000.000";
- 	my $cluster 	=  	"aguatest-testcluster";
+ 	my $cluster 	=  	"$username-testcluster";
 	my $project 	=  	"Project1";
 	my $workflow 	=  	"Workflow1";
 	my $workflownumber 	=  1;

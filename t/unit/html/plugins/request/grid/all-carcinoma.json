@@ -1,0 +1,8 @@
+[
+    {
+        action      :   "AND",
+        field       :   "ALL",
+        operator    :   "contains",
+        value       :   "carcinoma"
+    }
+]

@@ -44,9 +44,9 @@ Agua = new plugins.core.Agua({
 	, dataUrl	:	"getData.aguatest.120525.json"	
 	//dataUrl    :dojo.moduleUrl("t", "json/getData.aguatest.120514.json")
 });
-Agua.cookie('username', 'aguatest');
+Agua.cookie('username', 'testuser');
 Agua.cookie('sessionid', '9999999999.9999.999');
-Agua.database = "aguatest";
+Agua.database = "testuser";
 Agua.loadPlugins([
 	"plugins.data.Controller",
 	"plugins.folders.Controller"
@@ -67,7 +67,7 @@ var deferred = new doh.Deferred();
 var file 		= 	"Project2/test/test.out";
 var filedir		=	"Project2/test";
 var destination = 	"Project1/Workflow1";
-var username 	= 	"aguatest";
+var username 	= 	"testuser";
 var projectName = 	"Project1";
 var fileName;
 var destinationfile	=	"Project/Workflow1/test.sh";
@@ -121,7 +121,7 @@ setTimeout(function() {
 			mode        :   "copyFile",    
 			sessionid   :   "9999999999.9999.999",
 			url         :   "../cgi-bin/agua/folders.cgi?",
-			username    :   "aguatest",
+			username    :   "testuser",
 			file        :   file,
 			destination :   destination
 		};    

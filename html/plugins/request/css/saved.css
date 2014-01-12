@@ -149,7 +149,7 @@
 .saved .dragSource .queryRow .deleteButton {
 	display: none !important;
 	visibility: hidden !important;
-	width: 0px !important;
+	width: 20px !important;
 }
 
 .saved .dragSource .queryRow {

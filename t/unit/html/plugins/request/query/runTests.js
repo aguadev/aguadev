@@ -34,16 +34,17 @@ doh.register("plugins.request.Query", [
 	},
 	runTest : function(){
 		console.log("# new");
+		var fields = util.fetchJson("fields.json");
+		var fieldOperators = util.fetchJson("fieldoperators.json");
+		var fieldTypes = util.fetchJson("fieldtypes.json");
 		
 		var query	=	new Query({
-			attachPoint : dom.byId("attachPoint")
+			attachPoint 	: 	dom.byId("attachPoint"),
+			fields			:	fields,
+			fieldOperators	:	fieldOperators,
+			fieldTypes		:	fieldTypes
 		});
 
-		//query.value.click();
-
-		//console.log("new    node: " + node);
-		//console.dir({node:node});
-		//
 		//var itemArray = util.fetchJson("./rows.json");
 		//console.log("new    itemArray:");
 		//console.dir({itemArray:itemArray});

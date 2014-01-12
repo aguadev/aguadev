@@ -94,10 +94,6 @@ method BUILD ($hash) {
 }
 
 method initialise {
-	#### OPEN LOGFILE
-	my $logfile = $self->logfile() || "/tmp/upload.log";
-	$self->logfile($logfile);
-	$self->logDebug("");
 }
 
 method setExchange () {
@@ -115,6 +111,11 @@ method setExchange () {
 }
 
 method upload {
+	#### OPEN LOGFILE
+	my $logfile = $self->logfile();
+	$self->logfile($logfile);
+	$self->logDebug("");
+
 	#### GET DATA FROM STDIN IN STREAM OR ARRAY
 	$self->setData();
 	

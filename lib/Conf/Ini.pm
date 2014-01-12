@@ -7,6 +7,7 @@ has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 2 );
 has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings
+has 'valueoffset'		=>  ( isa => 'Int', is => 'rw', default => 24 );  
 has 'outputfile'	=>	(	isa	=> 	'Str',	is	=>	'rw'	);
 has 'username'  	=>  ( 	isa	=> 	'Str',	is	=>	'rw'	);
 has 'separator'		=>	(	isa	=> 	'Str',	is	=>	'rw'	);
@@ -78,7 +79,7 @@ sub read {
 	
 	$file = $self->inputfile() if not defined $file;
 	$self->inputfile($file) if defined $file;
-	#$self->logNote("file after inputfile()", $file);
+	$self->logNote("file after inputfile()", $file);
 	
 	$file = $self->outputfile() if not defined $file;
 	#$self->logNote("file after outputfile()", $file);
@@ -377,6 +378,7 @@ sub _getSections {
 	$self->logNote("sections not defined. Doing read()");
 	my $sections = $self->read();
 	$self->sections($sections);
+	$self->logNote("sections", $sections);
 
 	return $sections;
 }
@@ -637,7 +639,7 @@ sub setKey {
 
 	#### SEARCH FOR SECTION AND ADD KEY-VALUE PAIR IF FOUND	
 	my $sections = $self->_getSections();
-	#$self->logNote("sections", $sections);
+	$self->logNote("sections", $sections);
 	$self->logDebug("sections length", scalar(@$sections)) if defined $sections;
 
 	my $matched = 0;
@@ -667,9 +669,6 @@ sub setKey {
 
 	$self->write($sections);
 }
-
-
-
 
 sub _setKey {
 =head2

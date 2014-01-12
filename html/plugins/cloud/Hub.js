@@ -1,24 +1,28 @@
-dojo.provide("plugins.cloud.Hub");
+define([
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"dijit/_Widget",
+	"dijit/_TemplatedMixin",
+	"dijit/_WidgetsInTemplateMixin",
+	"plugins/core/Common",
+	"dijit/form/Button",
+	"dijit/form/ValidationTextBox",
+	"dijit/layout/ContentPane",
+	"dijit/form/TextBox",
+	"dijit/form/NumberTextBox",
+	"dijit/form/Textarea",
+	"dojo/dnd/Source",
+],
+	
+function (declare, lang, _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, Common) {
 
-// ALLOW USER TO MANAGE HUB ACCESS
+return declare("plugins/cloud/Hub",
+	[ _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, Common ], {
 
-dojo.require("dijit.form.Button");
-//dojo.require("dijit.form.TextBox");
-//dojo.require("dijit.form.NumberTextBox");
-//dojo.require("dijit.form.Textarea");
-//dojo.require("dojo.parser");
-//dojo.require("dojo.dnd.Source");
-dojo.require("dijit.form.ValidationTextBox");
-dojo.require("plugins.core.Common");
+/////}}}}}
 
-dojo.declare("plugins.cloud.Hub",
-	[ dijit._Widget, dijit._Templated, plugins.core.Common ], {
-
-//Path to the template of this widget. 
-templatePath: dojo.moduleUrl("plugins", "cloud/templates/hub.html"),
-
-// Calls dijit._Templated.widgetsInTemplate
-widgetsInTemplate : true,
+// Template of this widget. 
+templateString: dojo.cache("plugins", "cloud/templates/hub.html"),
 
 //addingUser STATE
 addingUser : false,
@@ -26,17 +30,16 @@ addingUser : false,
 // OR USE @import IN HTML TEMPLATE
 cssFiles : [
 	dojo.moduleUrl("plugins", "cloud/css/hub.css"),
-	//dojo.moduleUrl("dojo", "/tests/dnd/dndDefault.css")
 ],
 
 // PARENT WIDGET
 parentWidget : null,
 
-/////}}} 
+/////}}}}}
 constructor : function(args)  {
-	// GET INFO FROM ARGS
-	this.parentWidget = args.parentWidget;
-	this.core = args.parentWidget.core;
+	
+	// MIXIN ARGS
+	lang.mixin(args);
 
 	// LOAD CSS
 	this.loadCSS();		
@@ -47,16 +50,23 @@ postCreate : function() {
 startup : function () {
 	//console.log("Hub.startup    plugins.cloud.GroupHub.startup()");
 
-	// COMPLETE CONSTRUCTION OF OBJECT
-	this.inherited(arguments);	 
+	// ATTACH PANE
+	var thisObj = this;
+	setTimeout(function(){
+		thisObj.attachPane();
+	},
+	2000,
+	this)
 
-	// ADD ADMIN TAB TO TAB CONTAINER		
-	this.tabContainer.addChild(this.mainTab);
-	this.tabContainer.selectChild(this.mainTab);
+	//// ADD ADMIN TAB TO TAB CONTAINER		
+	//this.tabContainer.addChild(this.mainTab);
+	//this.tabContainer.selectChild(this.mainTab);
 
 	// SUBSCRIBE TO UPDATES
-	Agua.updater.subscribe(this, "updateSyncWorkflows");
-	Agua.updater.subscribe(this, "updateSyncApps");
+	if ( Agua.updater ) {
+		Agua.updater.subscribe(this, "updateSyncWorkflows");
+		Agua.updater.subscribe(this, "updateSyncApps");
+	}
 
 	// SET DRAG SOURCE - LIST OF USERS
 	this.initialise();
@@ -78,13 +88,15 @@ initialise : function () {
 	var hub = Agua.getHub();
 	console.log("Hub.initialiseHub     hub: ");
 	console.dir({hub:hub});
-
-	hub.login = hub.login || "";
-	this.login.set('value', hub.login);
-	hub.token = hub.token || "";
-	this.token.set('value', hub.token);
-	hub.publiccert = hub.publiccert || "";
-	this.publiccert.innerHTML = hub.publiccert;
+	console.log("Hub.initialiseHub     this.login: ");
+	console.dir({this_login:this.login});
+	
+	//hub.login = hub.login || "";
+	//this.login.set('value', hub.login);
+	//hub.token = hub.token || "";
+	//this.token.set('value', hub.token);
+	//hub.publiccert = hub.publiccert || "";
+	//this.publiccert.innerHTML = hub.publiccert;
 },
 // SAVE TO REMOTE
 addHub : function (event) {
@@ -109,6 +121,9 @@ addHub : function (event) {
 		hubtype: "github"
 	};
 	
+	console.log("Hub.addHub    Agua:");
+	console.dir({Agua:Agua});
+
 	var query = inputs;
 	query.username 			= 	Agua.cookie('username');
 	query.sessionid 		= 	Agua.cookie('sessionid');
@@ -167,8 +182,8 @@ addHubCertificate : function () {
 	console.log("Hub.addHubCertificate    aws:");
 	console.dir({aws:aws});
 	if ( ! aws || ! aws.ec2privatekey ) {
-		Agua.toastError("Please input EC2 Private Key in 'AWS' panel and press 'Save'");
 		this.creatingToken = false;
+		Agua.toastError("Please input EC2 Private Key in 'AWS' panel and press 'Save'");
 		return;
 	}
 
@@ -339,9 +354,11 @@ verifyInput : function (input) {
 	console.log("Hub.verifyInput    className: " + className);
 	if ( className ) {
 		console.log("Hub.verifyInput    this[input].isValid(): " + this[input].isValid());
-		if ( ! value || ! this[input].isValid() ) {
+		if ( ! value || (this[input].isValid && ! this[input].isValid()) ) {
 			console.log("Hub.verifyInput    input " + input + " value is empty. Adding class 'invalid'");
-			dojo.addClass(this[input].domNode, 'invalid');
+			if ( this[input].domNode ) {
+				dojo.addClass(this[input].domNode, 'invalid');
+			}
 			this.isValid = false;
 		}
 		else {
@@ -353,7 +370,9 @@ verifyInput : function (input) {
 	else {
 		if ( ! value ) {
 			console.log("Hub.verifyInput    input " + input + " value is empty. Adding class 'invalid'");
-			dojo.addClass(this[input], 'invalid');
+			if ( this[input].domNode ) {
+				dojo.addClass(this[input].domNode, 'invalid');
+			}
 			this.isValid = false;
 			return null;
 		}
@@ -377,22 +396,26 @@ clearInvalid : function () {
 	var className = this.getClassName(this[input]);
 	console.log("Hub.clearInvalid    className: " + className);
 	if ( className ) {
-		console.log("Hub.clearInvalid    this[input].isValid(): " + this[input].isValid());
-		if ( ! value || ! this[input].isValid() ) {
+		if ( ! value || (this[input].isValid && ! this[input].isValid()) ) {
+			console.log("Hub.clearInvalid    this[input].isValid(): " + this[input].isValid());
 			console.log("Hub.clearInvalid    input " + input + " value is empty. Adding class 'invalid'");
-			dojo.addClass(this[input].domNode, 'invalid');
+			if ( this[input].domNode ) {
+				dojo.addClass(this[input].domNode, 'invalid');
+			}
 			this.isValid = false;
 		}
 		else {
 			console.log("Hub.clearInvalid    value is NOT empty. Removing class 'invalid'");
-			dojo.removeClass(this[input].domNode, 'invalid');
+			if ( this[input].domNode ) {
+				dojo.removeClass(this[input].domNode, 'invalid');
+			}
 			return value;
 		}
 	}
 	else {
 		if ( ! value ) {
 			console.log("Hub.clearInvalid    input " + input + " value is empty. Adding class 'invalid'");
-			dojo.addClass(this[input], 'invalid');
+			dojo.addClass(this[input].domNode, 'invalid');
 			this.isValid = false;
 			return null;
 		}
@@ -415,5 +438,7 @@ cleanEdges : function (string ) {
 
 	return string;
 }
+
 }); // plugins.cloud.Hub
 
+});

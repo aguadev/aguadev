@@ -31,16 +31,16 @@ return declare("plugins/request/Controller",
 	Common	
 ], {
 
-	
-//Path to the template of this widget. 
-templatePath: dojo.moduleUrl("plugins", "request/templates/controller.html"),
+// templateString : String
+//		The template of this widget
+templateString: dojo.cache("plugins/request/templates/controller.html"),
 
 // Calls dijit._Templated.widgetsInTemplate
 widgetsInTemplate : true,
 
 // CSS FILE FOR BUTTON STYLING
 cssFiles : [
-	dojo.moduleUrl("plugins") + "request/css/controller.css"
+	require.toUrl("plugins/request/css/controller.css")
 ],
 
 // ARRAY OF TAB PANES

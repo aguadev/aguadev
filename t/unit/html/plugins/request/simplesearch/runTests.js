@@ -23,11 +23,7 @@ doh.register("plugins.request.SimpleSearch", [
 
 ////}}}}}
 
-{
-
-////}}}}}
-
-	name: "new",
+{	name: "new",
 	setUp: function(){
 	
 		Agua.data = {};
@@ -36,26 +32,42 @@ doh.register("plugins.request.SimpleSearch", [
 	runTest : function(){
 		console.log("# new");
 		
-		var search	=	new SimpleSearch({
+		var object	=	new SimpleSearch({
 			attachPoint : dom.byId("attachPoint")
 		});
 	
-
-		//console.log("new    node: " + node);
-		//console.dir({node:node});
-		//
-		//var itemArray = util.fetchJson("./rows.json");
-		//console.log("new    itemArray:");
-		//console.dir({itemArray:itemArray});
-		//
-		//query.dragSourceNode.loadDragItems(itemArray);
-		//
-		//
-		//console.log("new    instantiated");
-		////doh.assertTrue(true);
+		console.log("new    instantiated");
+		doh.assertTrue(true);
+	},
+	tearDown: function () {}
+},
+{	name: "getFilters",
+	setUp: function(){
+	
+		Agua.data = {};
+		Agua.data.queries = util.fetchJson("./queries.json");
+	},
+	runTest : function(){
+		console.log("# new");
+		
+		var object	=	new SimpleSearch({
+			attachPoint : dom.byId("attachPoint")
+		});
+	
+		object.searchInput.value = "    these three values    ";
+		var actual = object.getFilters();
+		var expected = [
+			{"action":"OR","field":"ALL","operator":"contains","value":"these"},
+			{"action":"OR","field":"ALL","operator":"contains","value":"three"},
+			{"action":"OR","field":"ALL","operator":"contains","value":"values"}
+		];
+		
+		console.log("getFilters    'these three values'");
+		doh.assertTrue(util.identicalObjectArrays(expected, actual));
 	},
 	tearDown: function () {}
 }
+
 
 
 ]);

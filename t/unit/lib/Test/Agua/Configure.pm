@@ -261,11 +261,11 @@ method testDisableSsh {
 
 
 method config {
-	### ADD aguatest USER AND DIRECTORY
+	### ADD testuser USER AND DIRECTORY
 	$self->_addUser($self->json()->{data});
 	
 	#### COPY TEST PROJECTS AND WORKFLOWS TO agua USER
-	$self->copyTestdirs("aguatest", "$Bin/../../nethome/aguatest/agua");
+	$self->copyTestdirs("testuser", "$Bin/../../nethome/testuser/agua");
 }
 
 method copyTestdirs($username, $sourcedir) {

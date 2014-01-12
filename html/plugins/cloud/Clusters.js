@@ -124,9 +124,8 @@ startup : function () {
 	// COMPLETE CONSTRUCTION OF OBJECT
 	this.inherited(arguments);	 
 
-	// ADD ADMIN TAB TO TAB CONTAINER		
-	this.tabContainer.addChild(this.clustersTab);
-	this.tabContainer.selectChild(this.clustersTab);
+	// ATTACH PANE
+	this.attachPane();
 
 	// SET NEW PARAMETER FORM
 	this.setForm();

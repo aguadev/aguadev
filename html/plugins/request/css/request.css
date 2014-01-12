@@ -15,44 +15,47 @@
 	height: 100% !important; 
 }
 
-.applications .subPane {
+.request .subPane {
 	-moz-background-clip:border;
 	-moz-background-inline-policy:continuous;
 	-moz-background-origin:padding;
 	border-radius: 10pt;
 }
 
-.applications .dragSource table {
+.request .dragSource table {
 	border-collapse: collapse !important;	
 }
 
-.applications .dragSource table td:hover {
+.request .dragSource table td:hover {
 	background-color: #FF8 !important;
 }
 
-.applications textarea {
+.request textarea {
 	font-size: 10px !important;
 	white-space: pre-wrap !important;
 }
 
-.applications textarea,
-.applications td {
+.request textarea,
+.request td {
 	word-wrap: break-word !important;
 	z-index: 900 !important;
 	min-height: 25px !important;
 }
 
-.applications .dragSource textarea, .applications .dragSource td {
+.request .dragSource textarea, .request .dragSource td {
 	min-height: 20px !important;
 }
 
 /* MAIN PANES */
-.applications .rightPane {
-	left: 780px !important;	
+.request .rightPane {
+	left: 430px !important;	
+	top: 0px !important;
+	position: absolute;
+	height: 100% !important;
 }
 
 /* DRAG SOURCE */
-.applications .dragSource {
+.request .dragSource {
 	-moz-background-clip:border;
 	-moz-background-inline-policy:continuous;
 	-moz-background-origin:padding;
@@ -82,34 +85,34 @@
 }
 
 .dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient,
-.applications .dijitTabPaneWrapper,
-.applications .tundra .dijitTabPaneWrapper,
-.tundra .applications .dijitTabPaneWrapper {
+.request .dijitTabPaneWrapper,
+.request .tundra .dijitTabPaneWrapper,
+.tundra .request .dijitTabPaneWrapper {
 	height: 100% !important;
 }
 
-.applications .dragSource table td:hover {
+.request .dragSource table td:hover {
 	background-color: #FF8 !important;
 }
 
-.applications .dojoDndItem .dojoDndItemOver {
+.request .dojoDndItem .dojoDndItemOver {
 	background-color: #FF8 !important;
 }
 
-.applications .dojoDndItem {
+.request .dojoDndItem {
     min-height: 24px !important;
 	padding-bottom: 2px !important;
 }
 
 /* SHOW LOCKED/UNLOCKED */
-.applications .dragSource td {
+.request .dragSource td {
 	/*background: none repeat scroll 0 0 #FFF !important; */
 	background-color: #FFF !important;
 }
 
-.applications .dragSource .dojoDndItem,
-.applications .dragSource .dojoDndItemOver,
-.applications .dragSource .dojoDndItemAnchor {
+.request .dragSource .dojoDndItem,
+.request .dragSource .dojoDndItemOver,
+.request .dragSource .dojoDndItemAnchor {
 	/*background-color: #CCFFCC !important;*/
 	background-color: #DAF0F2 !important;
 	-moz-background-clip:border;
@@ -118,31 +121,31 @@
 }
 
 
-.applications .dragSource .dojoDndContainerOver {
+.request .dragSource .dojoDndContainerOver {
 	border : inherit !important;
 }
 
 
-.applications .dragSource .dojoDndItemOver,
-.applications .dragSource .dojoDndItemAnchor {
+.request .dragSource .dojoDndItemOver,
+.request .dragSource .dojoDndItemAnchor {
 	background-color: #88FF88 !important;
 	/*background-color: #DAF0F2 !important;*/
 }
 
 /* EDITING ROW */
-.applications .editRow {
+.request .editRow {
 	width: 100% !important;
 	height: auto !important;
 	white-space: pre !important;
 }
 
 /* TAB BACKGROUND COLOUR */
-.applications .dijitTabContent {
+.request .dijitTabContent {
 	/*background-color: #EEE;*/
 }
 
 /* TAB LABEL SIZE */
-.applications .dijitTabInnerDiv .dijitTabContent {
+.request .dijitTabInnerDiv .dijitTabContent {
 	-moz-background-clip: border;
 	-moz-background-inline-policy: continuous;
 	-moz-background-origin: padding;
@@ -158,12 +161,12 @@
 }
 
 /* DECREASE TABLE LABEL SIZE */
-.applications .dijitTabInnerDiv {
+.request .dijitTabInnerDiv {
 	/*padding: 0px 0px 0px 0px !important;*/
 }
 
 /* TAB LABELS */
-.applications .tabLabel {
+.request .tabLabel {
 	color: #243C5F !important;
 	padding: 3px;
 	border: solid 2px transparent;
@@ -171,13 +174,13 @@
 	font-weight: bold;
 }
 
-.applications .dijitTabChecked .tabLabel {
+.request .dijitTabChecked .tabLabel {
 	color: darkred !important;
 	/*color: #055817;*/ /* dark green */
 	font-weight: bold;
 }
 
-.applications .dijitFocused .tabLabel {
+.request .dijitFocused .tabLabel {
 	padding: 3px;
 	-moz-background-clip:border;
 	-moz-background-inline-policy:continuous;
@@ -186,7 +189,7 @@
 	-moz-outline-style: none;
 }
 
-.applications .tabTitle {
+.request .tabTitle {
 	color: white;
 	background-color: #264eea;
 	text-align: center;
@@ -199,28 +202,28 @@
 
 /* PANES & CONTAINERS */
 
-.applications .middlePane {
+.request .middlePane {
 	left: 390px !important;
 }
 
-.applications .dijitTabContainer .tabStripButton {
+.request .dijitTabContainer .tabStripButton {
     display: none;
     visibility: hidden;
     z-index: 12;
 }
 
 /* NO SCROLLBARS IN LEFT, MIDDLE AND RIGHT PANES */
-.applications .dijitContentPane {
+.request .dijitContentPane {
 	overflow: hidden !important;
 }
 
 /* CONTAINERS HAVE WHITE BACKGROUND AND NO PADDING */
-.applications .dijitBorderContainer {
+.request .dijitBorderContainer {
 	background-color: #FFF;
 	padding: 0;
 }
 
-.applications .inputsTitlePane {
+.request .inputsTitlePane {
 	background-color: #000;
 }
 
@@ -229,22 +232,22 @@
 	height:	900px;
 }
 
-.applications .dijitLayoutContainer {
+.request .dijitLayoutContainer {
 	top: 0px;
 	left: 0px;
 }
 
-.applications .dijitTabPaneWrapper {
+.request .dijitTabPaneWrapper {
 	width: auto !important;
 	/*top: 20px !important;*/
 	/*border: none;*/
 }
 
-.applications .dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient{
+.request .dijitTabPaneWrapper .dijitTabContainerTop-container .dijitAlignClient{
 	height: auto;
 }
 
-.applications .groups .dijitContentPane .dijitTabPane .dijitTabContainerTop-dijitContentPane {
+.request .groups .dijitContentPane .dijitTabPane .dijitTabContainerTop-dijitContentPane {
 	width: auto !important;
 }
 

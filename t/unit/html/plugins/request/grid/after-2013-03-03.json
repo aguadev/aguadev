@@ -1,0 +1,9 @@
+[
+    {
+        action      :   "AND",
+        avatarType  :   "parameters",
+        field       :   "Published Date",
+        operator    :   "after",
+        value       :   "2013-03-03"
+    }
+]

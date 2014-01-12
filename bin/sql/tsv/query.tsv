@@ -1,2 +1,10 @@
-testuser	leukemiaANDlymphoma	1	AND	Disease	CONTAINS	leukemia
-testuser	leukemiaANDlymphoma	2	OR	Disease	CONTAINS	lymphoma
+admin	lymphoma and leukemia	1	AND	Disease	contains	leukemia
+admin	lymphoma and leukemia	2	OR	Disease	contains	lymphoma
+admin	filesize < 8GB	1	AND	filesize	<	8000000000
+admin	Hodgkins Disease	3	OR	Disease	contains	early-onset
+admin	Hodgkins Disease	2	AND	Disease	contains	leukemia
+admin	Hodgkins Disease	1	AND	Disease	contains	lymphoma
+admin	Hodgkins (non-mononucleosis)	1	AND	Disease	contains	leukemia
+admin	Hodgkins (non-mononucleosis)	2	AND	Disease	contains	early-onset
+admin	Hodgkins (non-mononucleosis)	3	OR	Disease	contains	lymphoma
+admin	Hodgkins (non-mononucleosis)	4	AND	Disease	NOT contains	mononucleosis

@@ -67,7 +67,7 @@ usage() if defined $help;
 
 my $inputfile = "$Bin/inputs/trackData.json";
 my $outputfile = "$Bin/outputs/trackData.json";
-my $logfile = "$Bin/outputs/aguatest.json.log";
+my $logfile = "$Bin/outputs/testuser.json.log";
 
 my $object = Test::Conf::Json->new({
     logfile		=> $logfile,

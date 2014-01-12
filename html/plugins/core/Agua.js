@@ -166,7 +166,7 @@ pluginsList : [
 	, "plugins.workflow.Controller"
 	, "plugins.view.Controller"
 	, "plugins.cloud.Controller"
-	, "plugins.request.Controller"
+	//, "plugins.request.Controller"
 	, "plugins.home.Controller"
 ],
 

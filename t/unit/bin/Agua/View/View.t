@@ -47,7 +47,7 @@ $Bin =~ s/^.+bin/$installdir\/t\/bin/;
 
 #### SET DUMPFILE
 #my $dumpfile    =   "$Bin/../../../dump/create.dump";
-my $dumpfile            =   "$Bin/inputs/aguatest.view.110610.dump";
+my $dumpfile            =   "$Bin/inputs/testuser.view.110610.dump";
 
 my $sourcedir			=	"$Bin/inputs";
 my $targetdir			=	"$Bin/outputs";
@@ -96,7 +96,7 @@ my $object = Test::Agua::View->new({
     conf        =>  $conf,
 	SHOWLOG     =>  $SHOWLOG,
 	PRINTLOG    =>  $PRINTLOG,
-    #database    =>  "aguatest",
+    #database    =>  "testuser",
     dumpfile    =>  $dumpfile,
     logfile     =>  $logfile,
     htmlroot    =>  $htmlroot,

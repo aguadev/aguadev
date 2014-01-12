@@ -31,7 +31,9 @@ setToaster : function () {
 	}
 	
 	// SET WIDTH TO 100%
-	this.containerNode.style.width = "100%";
+	if ( this.containerNode ) {
+		this.containerNode.style.width = "100%";
+	}
 	
 },
 toastMessage : function (args) {

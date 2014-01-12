@@ -129,15 +129,20 @@ verifyInput : function (input) {
 	var className = this.getClassName(this[input]);
 	console.log("Aws.verifyInput    className: " + className);
 	if ( className ) {
-		console.log("Aws.verifyInput    this[input].isValid(): " + this[input].isValid());
-		if ( ! value || ! this[input].isValid() ) {
+		if ( ! value || (this[input].isValid && ! this[input].isValid()) ) {
+			console.log("Aws.verifyInput    this[input].isValid: " + this[input].isValid);
+
 			console.log("Aws.verifyInput    input " + input + " value is empty. Adding class 'invalid'");
-			dojo.addClass(this[input].domNode, 'invalid');
+			if ( this[input].domNode ) {
+				dojo.addClass(this[input].domNode, 'invalid');
+			}
 			this.isValid = false;
 		}
 		else {
 			console.log("SyncDialog.verifyInput    value is NOT empty. Removing class 'invalid'");
-			dojo.removeClass(this[input].domNode, 'invalid');
+			if ( this[input].domNode ) {
+				dojo.removeClass(this[input].domNode, 'invalid');
+			}
 			return value;
 		}
 	}

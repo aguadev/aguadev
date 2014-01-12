@@ -1,5 +1,5 @@
 {
-   "owner" : "aguatest",
+   "owner" : "testuser",
    "status" : "",
    "project" : "Project2",
    "apps" : [
@@ -7,7 +7,7 @@
          "status" : "",
          "submit" : "0",
          "ordinal" : 1,
-         "owner" : "aguatest",
+         "owner" : "testuser",
          "locked" : 0,
          "location" : "/agua/0.6/bioapps/bin/aligners/TOPHAT.pl",
          "version" : "0.6.0",

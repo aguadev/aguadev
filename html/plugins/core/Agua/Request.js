@@ -16,21 +16,19 @@ getQueries : function () {
 },
 isQuery : function (queryObject) {
 // RETURN TRUE IF SOURCE NAME ALREADY EXISTS
-
-	console.log("Agua.Request.isQuery    plugins.core.Data.isQuery(queryObject)");
 	console.log("Agua.Request.isQuery    queryObject: " + dojo.toJson(queryObject));
 	
-	var downloads = this.getQueries();
-	if ( downloads == null )	return false;
+	var queries = this.getQueries();
+	if ( queries == null )	return false;
 	
-	return this._objectInArray(downloads, queryObject, [ "query" ]);
+	return this._objectInArray(queries, queryObject[0], [ "query" ]);
 },
 addQuery : function (queryObject) {
-// ADD A QUERY OBJECT TO downloads
-	console.log("Agua.Request.addQuery    plugins.core.Data.addQuery(queryObject)");
+// ADD A QUERY OBJECT TO queries
 	console.log("Agua.Request.addQuery    queryObject: " + dojo.toJson(queryObject));	
 
 	this._removeQuery(queryObject);
+	
 	if ( ! this._addQuery(queryObject) )	return false;
 	
 	var url = Agua.cgiUrl + "agua.cgi?";
@@ -46,14 +44,14 @@ addQuery : function (queryObject) {
 	return null;
 },
 _addQuery : function (queryObject) {
-// ADD A QUERY OBJECT TO downloads
+// ADD A QUERY OBJECT TO queries
 	console.log("Agua.Request._addQuery    plugins.core.Data._addQuery(queryObject)");
 	console.log("Agua.Request._addQuery    queryObject: " + dojo.toJson(queryObject));
 
 	return this.addData("queries", queryObject, [ "query" ]);
 },
 removeQuery : function (queryObject) {
-// REMOVE A SOURCE OBJECT FROM downloads AND groupmembers
+// REMOVE A SOURCE OBJECT FROM queries AND groupmembers
 	console.log("Agua.Request.removeQuery    plugins.core.Data.removeQuery(queryObject)");
 	console.log("Agua.Request.removeQuery    queryObject: " + dojo.toJson(queryObject));	
 	if ( ! this._removeQuery(queryObject) ) {
@@ -74,7 +72,7 @@ removeQuery : function (queryObject) {
 	this.doPut({ url: url, query: query, sync: false });
 },
 _removeQuery : function (queryObject) {
-// _remove A QUERY OBJECT FROM downloads
+// _remove A QUERY OBJECT FROM queries
 	console.log("Agua.Request._removeQuery    plugins.core.Data._removeQuery(queryObject)");
 	console.log("Agua.Request._removeQuery    queryObject: " + dojo.toJson(queryObject));
 	return this.removeData("queries", queryObject, ["filename"]);

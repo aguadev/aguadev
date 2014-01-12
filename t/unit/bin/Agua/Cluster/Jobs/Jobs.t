@@ -43,7 +43,7 @@ GetOptions (
 usage() if defined $help;
 
 
-my $logfile = "$Bin/outputs/aguatest.cluster-jobs.log";
+my $logfile = "$Bin/outputs/testuser.cluster-jobs.log";
 
 my $conf = Conf::Yaml->new(
 	inputfile	=>	$configfile,
@@ -63,7 +63,7 @@ my $object = Test::Agua::Cluster::Jobs->new({
     cluster     =>  "SGE",
     dumpfile    =>  $dumpfile,
     conf        =>  $conf,
-    username    =>  "aguatest",
+    username    =>  "testuser",
     logfile     =>  $logfile,
     SHOWLOG     =>  $SHOWLOG,
     PRINTLOG    =>  $PRINTLOG
