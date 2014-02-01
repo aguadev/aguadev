@@ -59,10 +59,10 @@ startup : function () {
 	this.inherited(arguments);	 
 
 	//////console.log("History.startup    this.application: " + this.application);
-	//////console.log("History.startup    this.attachNode: " + this.attachNode);
+	//////console.log("History.startup    this.attachPoint: " + this.attachPoint);
 
 	// ADD TO TAB CONTAINER		
-	this.attachNode.addChild(this.mainTab);
+	this.attachPoint.addChild(this.mainTab);
 	
 	// GET WORKFLOW HISTORY AND DISPLAY IN HISTORY TAB
 	this.showHistory();

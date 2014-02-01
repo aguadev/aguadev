@@ -13,7 +13,9 @@ function (
 return declare("plugins.core.Common.Util",
 	[], {
 
+/////}}}}}
 cookie : function (name, value) {
+
 // SET OR GET COOKIE-CONTAINED USER ID AND SESSION ID
 
 	//console.log("Util.core.Common.Util.cookie     plugins.core.Agua.cookie(name, value)");
@@ -124,6 +126,7 @@ doXhr : function (inputs, xhrType) {
 		}
 	);	
 },
+// CLASS NAME
 getClassName : function (object) {
 	console.log("    Common.Util.getClassName    object: " + object);
 	console.dir({object:object});
@@ -144,15 +147,17 @@ getClassName : function (object) {
 			return object.tagName
 		}
 		else {
-			return "unknown"
+			return ""
 		}
 	}
 
 	return "";
-},	
+},
+// MESSAGE
 showMessage : function (message, putData) {
 	console.log("    Common.Util.showMessage    Polling message: " + message)	
 },
+// DOWNLOAD
 downloadFile : function (filepath, username) {
 	//console.log("ParameterRow.downloadFile     plugins.workflow.ParameterRow.downloadFile(filepath, shared)");
 	//console.log("ParameterRow.downloadFile     filepath: " + filepath);
@@ -194,6 +199,8 @@ attachPane : function (childNode) {
 		childNode = this.mainTab;
 	}
 
+	console.log("Common.Util.attachPane    this: " + this);
+	console.dir({this:this});
 	console.log("Common.Util.attachPane    this.mainTab: " + this.mainTab);
 	console.dir({this_mainTab:this.mainTab});
 	console.log("Common.Util.attachPane    childNode: " + childNode);
@@ -380,21 +387,6 @@ setOptions : function (array) {
 	
 	return options;
 },
-
-// TOGGLE
-//toggle : function (togglePoint) {
-//	if ( togglePoint.style.display == 'inline-block' )	{
-//		togglePoint.style.display='none';
-//		dojo.removeClass(this.toggler, "open");
-//		dojo.addClass(this.toggler, "closed");
-//	}
-//	else {
-//		togglePoint.style.display = 'inline-block';
-//		dojo.removeClass(this.toggler, "closed");
-//		dojo.addClass(this.toggler, "open");
-//	}
-//},
-
 // LISTENERS
 setOnkeyListener : function (object, key, callback) {
 	console.log("Common.Util.setOnKeyListener    object: " + object);
@@ -416,4 +408,18 @@ _onKey : function(key, callback, event){
 }); //	end declare
 
 });	//	end define
+
+// TOGGLE
+//toggle : function (togglePoint) {
+//	if ( togglePoint.style.display == 'inline-block' )	{
+//		togglePoint.style.display='none';
+//		dojo.removeClass(this.toggler, "open");
+//		dojo.addClass(this.toggler, "closed");
+//	}
+//	else {
+//		togglePoint.style.display = 'inline-block';
+//		dojo.removeClass(this.toggler, "closed");
+//		dojo.addClass(this.toggler, "open");
+//	}
+//},
 

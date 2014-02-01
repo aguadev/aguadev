@@ -10,9 +10,23 @@ class install {
     }
 
     notice("install-apache    Installing mod::ssl")
-    class { 'apache::mod::ssl': }
-    notice("install-apache    Installing mod::fcgid")
-    class { 'apache::mod::fcgid': }
+#    class { 'apache::mod::ssl': }
+    include apache::mod::ssl
+
+    if $operatingsystem == "centos" {
+        notice("install-apache    Installing mod::fcgid")
+        class { 'apache::mod::fcgid': }
+    }
+    else {
+        notice("install-apache    Installing mod::fastcgi")
+        class { 'apache::mod::fastcgi': }
+    }
+
+    if $ssl and $ensure == 'present' {
+        include apache::mod::ssl
+        # Required for the AddType lines.
+        include apache::mod::mime
+    }
 
     notice("install-apache    Installing apache::vhost")
     case $operatingsystem {
@@ -36,7 +50,7 @@ class install {
     notice("install-apache    certfile: $certfile")
     notice("install-apache    keyfile: $keyfile")
 
-    apache::vhost { 'ssl.example.com':
+    apache::vhost { 'ssl':
         port     => '443',
         docroot  => '/var/www/html',
         ssl      => true,
@@ -44,6 +58,15 @@ class install {
         ssl_key  => $keyfile,
     }
     notice("install-apache    COMPLETED install apache::vhost")
+
+#    file { '/etc/apache2/sites-available/default-ssl':
+#        ensure  => present,
+#        source  => 'puppet:///modules/appliance_components/redirect-ssl.conf',
+#        require => [
+#            Package['apache'],
+#        ],
+#        notify  => Service['apache'],
+#    }
 
 }
 

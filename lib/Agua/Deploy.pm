@@ -247,7 +247,7 @@ method sortVersions ($versions) {
 
 			if ( $aObject->{string} ne $bObject->{string} ) {
 				my $compare = lc($a) cmp lc($b);
-				return $compare;
+				return (-1 * $compare);
 			}
 			else {
 				#print "comparing numbers\n";	
@@ -406,6 +406,32 @@ method bioapps {
 	my $username 	= 	$self->conf()->getKey("agua", "ADMINUSER");
 	my $opsdir 		=	"$installdir/repos/$privacy/$owner/$opsrepo/$owner/$package";
 	my $pmfile		=	"$opsdir/bioapps.pm";
+
+	$self->logDebug("installdir", $installdir);
+	$self->logDebug("repository", $repository);
+	$self->logDebug("package", $package);
+	$self->logDebug("owner", $owner);
+	$self->logDebug("username", $username);
+	$self->logDebug("privacy", $privacy);
+	$self->logDebug("opsdir", $opsdir);
+	$self->logDebug("pmfile", $pmfile);
+
+	return $self->installApplication($owner, $login, $username, $repository, $package, $privacy, "$installdir/$appsdir/$package", $pmfile, $opsdir);	
+}
+
+#### EMBOSS
+method emboss {
+	my $repository	=	"emboss";
+	my $package 	= 	"emboss";
+	my $login		=	$self->login();
+	my $owner		=	"agua";
+	my $privacy		=	"public";
+    my $installdir	= 	$self->conf()->getKey("agua", "INSTALLDIR");
+	my $opsrepo 	= 	$self->conf()->getKey("agua", "OPSREPO");
+	my $appsdir		= 	$self->conf()->getKey("agua", "APPSDIR");
+	my $username 	= 	$self->conf()->getKey("agua", "ADMINUSER");
+	my $opsdir 		=	"$installdir/repos/$privacy/$owner/$opsrepo/$owner/$package";
+	my $pmfile		=	"$opsdir/emboss.pm";
 
 	$self->logDebug("installdir", $installdir);
 	$self->logDebug("repository", $repository);

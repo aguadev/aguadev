@@ -1,27 +1,31 @@
 define(
 	[
 		"dojo/_base/declare"
+		,"plugins/core/Agua/App"
 		,"plugins/core/Agua/Aws"
 		,"plugins/core/Agua/Data"
 		,"plugins/core/Agua/Feature"
+		,"plugins/core/Agua/Group"
 		,"plugins/core/Agua/Hub"
 		,"plugins/core/Agua/Parameter"
 		,"plugins/core/Agua/Project"
 		,"plugins/core/Agua/Request"
+		
 		,"plugins/core/Common/Array"
 		,"plugins/core/Common/Sort"
 		,"plugins/core/Common/Toast"
 		,"plugins/core/Common/Util"
+		
+		,"plugins/core/Updater"
+		,"plugins/core/Conf"
 	],
 
-//function(declare, Data, Feature, Parameter, Project, Request, Array, Sort, Util){	
-//	var Agua = new declare("t.doh.Agua", [Data, Feature, Parameter, Project, Request, Array, Sort, Util], {
-
-
 function(declare,
+	App,
 	Aws,
 	Data,
 	Feature,
+	Group,
 	Hub,
 	Parameter,
 	Project,
@@ -30,12 +34,17 @@ function(declare,
 	Array,
 	Sort,
 	Toast,
-	Util
+	Util,
+	
+	Updater,
+	Conf
 ){	
 	var Agua = new declare("t.doh.Agua", [
+		App,
 		Aws, 
 		Data,
 		Feature,
+		Group,
 		Hub,
 		Parameter,
 		Project,
@@ -44,12 +53,34 @@ function(declare,
 		Array,
 		Sort,
 		Toast,
-		Util
+		Util,
+		
+		Updater,
+		Conf
 	], {
 	
-		cookies : []
-	});
+		cookies : 	[],
+		
+		conf	:	new Conf({}),
+	
+		updater	:	new Updater({}),
 
+		doPut	:	function (args) {
+			console.log("t.unit.doh.Agua.doPut    args: ");
+			console.dir({args:args});
+			
+			if ( args.callback ) {
+				console.log("t.unit.doh.Agua.doPut    DOING callback()");
+				args.callback();
+			}
+			
+			return args;
+		},
+		constructor : function (args) {
+			this.conf.parent	=	this;
+		}
+	});
+	
 	return new Agua({});
 }
 

@@ -1,20 +1,26 @@
 require([
 	"dojo/_base/declare",
 	"dijit/registry",
+	"dojo/dom",
 	"dojo/parser",
 	"doh/runner",
-	"t/doh/util",
-	"t/doh/Agua",
+	"t/unit/doh/util",
+	"t/unit/doh/Agua",
 	"plugins/sharing/Access",
 	"dojo/ready",
 	"dojo/domReady!",
 	"dijit/layout/TabContainer"
 ],
 
-function (declare, registry, parser, doh, util, Agua, Access, ready) {
+function (declare, registry, dom, parser, doh, util, Agua, Access, ready) {
 
 window.Agua = Agua;
 console.dir({Agua:Agua});
+
+var test = "t.unit.plugins.sharing.access.test";
+console.log("# test: " + test);
+dom.byId("pagetitle").innerHTML = test;
+dom.byId("pageheader").innerHTML = test;
 
 ////}}}}}
 

@@ -25,7 +25,7 @@ core : null,
 parentWidget : null,
 
 // ATTACH NODE
-attachNode : null,
+attachPoint : null,
 
 // ARRAY OF plugins.workflow.Apps.Apps OBJECT
 packageApps : [],

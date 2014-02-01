@@ -1,34 +1,84 @@
-dojo.provide("plugins.workflow.Apps.AppMenu");
+//
+//dojo.provide("plugins.workflow.Apps.AppMenu");
+//
+//// ALLOW THE USER TO ADD, REMOVE AND MODIFY APPS
+//
+////dojo.require("dijit.dijit"); // optimize: load dijit layer
+//dojo.require("dojo.parser");
+//
+//// HAS A
+//dojo.require("dijit.Menu");
+//dojo.require("plugins.menu.Menu");
+//
+//// INHERITS
+//dojo.require("plugins.core.Common");
+//
+//
+//dojo.declare("plugins.workflow.Apps.AppMenu",
+//	[ dijit._Widget, dijit._Templated, plugins.core.Common ],
+//{
 
-// ALLOW THE USER TO ADD, REMOVE AND MODIFY APPS
+define([
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/json",
+	"dojo/on",
+	"dojo/_base/lang",
+	"dojo/parser",
+	"dojo/dom-attr",
+	"dojo/dom-class",
+	"dijit/_Widget",
+	"dijit/_TemplatedMixin",
+	"dijit/_WidgetsInTemplateMixin",
+	"plugins/core/Common/Util",
+	"dojo/domReady!",
 
-//dojo.require("dijit.dijit"); // optimize: load dijit layer
-dojo.require("dojo.parser");
+	"dijit/Menu",
+	"dijit/MenuItem",
+	"plugins/menu/Menu"
+],
 
-// HAS A
-dojo.require("dijit.Menu");
-dojo.require("plugins.menu.Menu");
+function (
+	declare,
+	arrayUtil,
+	JSON,
+	on,
+	lang,
+	parser,
+	domAttr,
+	domClass,
+	_Widget,
+	_TemplatedMixin,
+	_WidgetsInTemplate,
+	CommonUtil
+) {
 
-// INHERITS
-dojo.require("plugins.core.Common");
+/////}}}}}
 
+return declare("plugins.workflow.Apps.AppMenu",
+	[
+	_Widget,
+	_TemplatedMixin,
+	_WidgetsInTemplate,
+	CommonUtil
+], {
 
-dojo.declare("plugins.workflow.Apps.AppMenu",
-	[ dijit._Widget, dijit._Templated, plugins.core.Common ],
-{
+// templateString : String
+//		The template of this widget. 
+templateString: dojo.cache("plugins", "workflow/Apps/templates/appmenu.html"),
 
-//Path to the template of this widget. 
-templatePath: dojo.moduleUrl("plugins", "workflow/Apps/templates/appsmenu.html"),
+////Path to the template of this widget. 
+//templatePath: dojo.moduleUrl("plugins", "workflow/Apps/templates/appmenu.html"),
 
-// Calls dijit._Templated.widgetsInTemplate
-widgetsInTemplate : true,
+//// Calls dijit._Templated.widgetsInTemplate
+//widgetsInTemplate : true,
 
-//addingApp STATE
+// addingApp :	Boolean
+//		Whether or not currently adding app
 addingApp : false,
 
 // OR USE @import IN HTML TEMPLATE
 cssFiles : [ dojo.moduleUrl("plugins") + "/workflow/Apps/css/appsmenu.css" ],
-
 
 // PARENT WIDGET
 parentWidget : null,
@@ -128,5 +178,8 @@ setMenu : function () {
 
 }
 	
-}); // plugins.workflow.AppMenu
+
+}); //	end declare
+
+});	//	end define
 

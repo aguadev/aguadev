@@ -328,6 +328,7 @@
 	display: block !important;
 	width: 390px !important; */
 	width: 3;
+	min-height: 25px;
 }
 
 .applications .parameters .dragSource .editParameterRow {
@@ -393,7 +394,10 @@
 	width: 173px !important;
 }
 .applications .parameters .dragSource .inputParams {
-	width: 222px !important;
+	width: 212px !important;
+	margin-left: 2px !important;
+	margin-top: 1px !important;
+	min-height: 22px !important;
 }
 .applications .parameters .dragSource .category {
 	width: 110px !important;
@@ -434,7 +438,7 @@
 	width: 140px !important;
 }
 .applications .parameters .dragSource .lockedValueTypeContainer {
-	width: 138px !important;
+	width: 130px !important;
 }    
 
 .applications .parameters .dragSource .argument,
@@ -501,8 +505,8 @@
 }
 .applications .parameters .dragSource .paramtype {
 	color: darkred;
-	width: 50px !important;
-	min-height: 22px !important;
+	width: 80px !important;
+	min-height: 20px !important;
 }
 
 .applications .parameters .dragSource .description {
@@ -535,12 +539,12 @@
 
 .applications .parameters .dragSource .args,
 .applications .parameters .dragSource .inputParams {
-	max-width: 49% !important;
+	/* max-width: 49% !important; */
 }
 
 .applications .parameters .dragSource .args,
 .applications .parameters .dragSource .paramFunction {
-	margin-left: 5px !important;
+	/* margin-left: 5px !important; */
 }
 
 .applications .parameters .dragSource .format {
@@ -579,8 +583,8 @@
 
 /* SELECT BOXES */
 .applications .parameters .dragSource .dijitReset.dijitInputField.dijitArrowButtonInner {
-    width: 14px !important;
-    height: 15px !important;
+    width: 8px !important;
+    height: 20px !important;
 }
 
 .applications .parameters .dragSource .dijitReset.dijitValidationContainer {
@@ -588,7 +592,7 @@
 }
 
 .applications .parameters .dragSource .dijitReset.dijitInline.dijitSelectLabel.dijitValidationTextBoxLabel  {
-    width: 80px !important;
+    width: 90px !important;
 }
 
 .applications .parameters .dragSource .ordinal .dijitReset.dijitInline.dijitSelectLabel.dijitValidationTextBoxLabel  {
@@ -626,7 +630,7 @@
 .applications .parameters .dragSource .paramtype
  {
     border: 1px grey solid;
-    min-height: 20px !important;
+    min-height: 20px;
 	font-size: 14px !important;
 }
 

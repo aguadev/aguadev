@@ -18,6 +18,11 @@ function (declare, registry, dom, parser, doh, util, Agua, ParameterRow, DndSour
 window.Agua = Agua;
 console.dir({Agua:Agua});
 
+var test = "t.unit.plugins.apps.parameterrow.test";
+console.log("# test: " + test);
+dom.byId("pagetitle").innerHTML = test;
+dom.byId("pageheader").innerHTML = test;
+
 ////}}}}}
 
 doh.register("plugins.apps.ParameterRow", [
@@ -71,8 +76,9 @@ doh.register("plugins.apps.ParameterRow", [
 		console.log("new    itemArray:");
 		console.dir({itemArray:itemArray});
 
+		console.log("new    BEFORE dndSource.loadDragItems(itemArray)");
 		dndSource.loadDragItems(itemArray);
-	
+		console.log("new    AFTER dndSource.loadDragItems(itemArray)");
 
 		console.log("new    instantiated");
 		//doh.assertTrue(true);

@@ -1,0 +1,15 @@
+[
+   {
+	  "groupname" : "Group1",
+	  "notes" : "Phase I",
+	  "description" : "Cancer clinical trials",
+	  "username" : "admin"
+   },
+   {
+	  "groupname" : "Group2",
+	  "notes" : "notes for group 2",
+	  "description" : "test group 2",
+	  "username" : "admin"
+   }
+]
+

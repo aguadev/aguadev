@@ -13,10 +13,18 @@ widgetsInTemplate : true,
 // PARENT plugins.sharing.Sources WIDGET
 parentWidget : null,
 
+// USER DATA
+username: "",
+email: "",
+firstname: "",
+lastname: "",
+description: "",
+
 ////}}}
 
 constructor : function(args) {
-	////////console.log("GroupUserRow.constructor    plugins.workflow.GroupUserRow.constructor()");
+	console.log("GroupUserRow.constructor    args:");
+	console.dir({args:args});
 	this.parentWidget = args.parentWidget;
 },
 
@@ -25,7 +33,7 @@ postCreate : function() {
 },
 
 startup : function () {
-	////////console.log("GroupUserRow.startup    plugins.workflow.GroupUserRow.startup()");
+	console.log("GroupUserRow.startup    plugins.workflow.GroupUserRow.startup()");
 	this.inherited(arguments);
 	
 	var groupUserRowObject = this;

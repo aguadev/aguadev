@@ -143,7 +143,7 @@ constructor : function (args) {
 	this.core 						= args.core;
 	this.core[this.workflowType]	= this;
 	this.parentWidget 				= args.parentWidget;
-	this.attachNode 				= args.attachNode;
+	this.attachPoint 				= args.attachPoint;
 
 	// LOAD CSS
 	this.loadCSS();		

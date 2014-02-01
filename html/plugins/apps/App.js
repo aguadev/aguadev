@@ -43,7 +43,9 @@ templateString: dojo.cache("plugins", "apps/templates/app.html"),
 addingApp : false,
 
 // OR USE @import IN HTML TEMPLATE
-cssFiles : [ require.toUrl("plugins/apps/css/app.css") ],
+cssFiles : [
+	require.toUrl("plugins/apps/css/app.css")
+],
 
 formInputs : {
 	"name"		: "word",

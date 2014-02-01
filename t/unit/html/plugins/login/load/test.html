@@ -16,13 +16,38 @@
 
 </style>
 
-<link rel="stylesheet" href="plugins/core/css/toolbar.css">
+<title> t.unit.plugins.login.load</title>
 
-<title>t.plugins.home.version.test</title>
+<script type="text/javascript">
+
+// GLOBAL VARIABLES
+var Agua = {};
+var Data = {};
+var dojoConfig = {
+	isDebug: true,
+	locale: "en-us",
+	packages: [
+		{
+		  name: "plugins",
+		  location: "../../plugins"
+		},
+		{
+		  name: "t",
+		  location: "../../t"
+		},
+		{
+		  name: "doh",
+		  location: "../../dojo/util/doh"
+		}
+	],
+	debugAtAllCosts: true,
+	useCommentedJson: true
+};
+</script>
 
 <script type="text/javascript"
-	src="../../../../dojo/dojo/dojo.js"
-	djConfig="parseOnLoad: true, isDebug: false, locale: ''"></script>	
+	src="../../../../dojo/dojo/dojo.js">
+</script>
 	
 <script type="text/javascript" src="./runTests.js"></script>
 
@@ -30,7 +55,7 @@
 <body class="agua tundra claro">
 
 <center>
-	<h3>t.unit.plugins.home.version.test</h3>
+	<h3> t.unit.plugins.login.load</h3>
 </center>
 
 	<div id="loginHolder"></div>

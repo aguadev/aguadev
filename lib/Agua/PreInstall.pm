@@ -163,7 +163,9 @@ sub installPuppet {
 	}
 	
 	print "Agua::PreInstall::installPuppet    Installing the latest version of puppet\n";
+	`chmod 755 $bootstrap`;
 	print `$bootstrap`;
+	
 	return;
 }
 

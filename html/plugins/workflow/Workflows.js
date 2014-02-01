@@ -138,7 +138,7 @@ cssFiles : [ dojo.moduleUrl("plugins", "workflow/css/workflows.css") ],
 parentWidget : null,
 
 // TAB CONTAINER
-attachNode : null,
+attachPoint : null,
 
 // CONTEXT MENU
 contextMenu : null,
@@ -168,7 +168,7 @@ constructor : function (args) {
 	this.core 						= args.core;
 	this.core[this.workflowType]	= this;
 	this.parentWidget 				= args.parentWidget;
-	this.attachNode 				= args.attachNode;
+	this.attachPoint 				= args.attachPoint;
 	console.log("Workflows.constructor     core.userWorkflows: " + this.core.userWorkflows);			
 	console.log("Workflows.constructor     core.sharedWorkflows: " + this.core.sharedWorkflows);			
 
@@ -197,8 +197,8 @@ startup : function () {
 	this.inherited(arguments);	 
 
 	// ADD TO TAB CONTAINER		
-	this.attachNode.addChild(this.mainTab);
-	this.attachNode.selectChild(this.mainTab);
+	this.attachPoint.addChild(this.mainTab);
+	this.attachPoint.selectChild(this.mainTab);
 
 	// SET INPUT/OUTPUT CHAINER
 	this.setWorkflowIO();
@@ -950,8 +950,7 @@ saveClusterWorkflow : function (event) {
 	clusterObject.workflow = workflow;
 	////console.log("Workflows.saveClusterWorkflow    clusterObject: " + dojo.toJson(clusterObject));
 
-	if ( Agua.isClusterWorkflow(clusterObject) )
-	{
+	if ( Agua.isClusterWorkflow(clusterObject) ) {
 		this.savingCluster = false;
 		return;
 	}

@@ -1,17 +1,33 @@
-dojo.provide("plugins.workflow.Apps.Packages");
+define([
+	"dojo/_base/declare",
+	"dojo/_base/lang",
+	"plugins/core/Common"
+],
 
-/* SUMMARY: DISPLAY ONE OR MORE PACKAGES SHARED BY THE ADMIN USER
+function (
+	declare,
+	lang,
+	Common
+) {
 
-	-	EACH PACKAGE IS DISPLAYED IN ITS OWN apps OBJECT
-	
-	-	ADMIN USER CREATES AND ADMINISTERS PACKAGE/APPS IN Apps PANE
-*/
+return declare("plugins.workflow.Apps.Packages",
+	[ Common ], {
 
-// INTERNAL MODULES
-dojo.require("plugins.core.Common");
-dojo.require("plugins.workflow.Apps.Apps");
 
-dojo.declare("plugins.workflow.Apps.Packages", [ plugins.core.Common ], {
+//dojo.provide("plugins.workflow.Apps.Packages");
+//
+///* SUMMARY: DISPLAY ONE OR MORE PACKAGES SHARED BY THE ADMIN USER
+//
+//	-	EACH PACKAGE IS DISPLAYED IN ITS OWN apps OBJECT
+//	
+//	-	ADMIN USER CREATES AND ADMINISTERS PACKAGE/APPS IN Apps PANE
+//*/
+//
+//// INTERNAL MODULES
+//dojo.require("plugins.core.Common");
+//dojo.require("plugins.workflow.Apps.Apps");
+//
+//dojo.declare("plugins.workflow.Apps.Packages", [ plugins.core.Common ], {
 
 /////}}}}}
 
@@ -26,7 +42,7 @@ className : "plugins_workflow_Apps_Packages",
 parentWidget : null,
 
 // ATTACH NODE
-attachNode : null,
+attachPoint : null,
 
 // ARRAY OF plugins.workflow.Apps.Apps OBJECTS
 packageApps : [],
@@ -37,10 +53,11 @@ constructor : function (args) {
 	console.log("Packages.constructor    args: ");
 	console.dir({args:args});
 
-	// GET INFO FROM ARGS
+	// MIXIN ARGS
+	lang.mixin(this, args);
 	this.core = args.core;
 	this.parentWidget = args.parentWidget;
-	this.attachNode = args.attachNode;
+	this.attachPoint = args.attachPoint;
 	
 	this.startup();
 	console.groupEnd("Packages    " + this.id + "    constructor");
@@ -118,7 +135,7 @@ createAppsObject : function (applications) {
 		apps: applications,
 		core: this.core,
 		parentWidget: this.parentWidget,
-		attachNode: this.attachNode
+		attachPoint: this.attachPoint
 	});
 },
 getAppsArray : function () {
@@ -126,6 +143,6 @@ getAppsArray : function () {
 }
 
 
-	
-}); // plugins.workflow.Apps.Packages
+}); 	//	end declare
 
+});	//	end define

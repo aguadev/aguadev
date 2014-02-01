@@ -83,13 +83,6 @@ method generateCACert {
 	`mkdir -p $configdir` if not -d $configdir;
 	$self->logDebug("Could not create https configdir", $configdir) and return if not -d $configdir;
 	
-###	#### INSTALL APACHE SSL MODULE
-###    #### $self->installPackage("libapache2-mod-ssl");
-###    #### DEPRECATED: mod_ssl ALREADY INSTALLED IN APACHE2-COMMON PACKAGE
-###	#### ENABLE THE MODULE IN APACHE SERVER
-###    my $a2enmod = "a2enmod ssl";
-###    $self->runCommands([$a2enmod]);
-	
 	#### 1. CREATE A PRIVATE KEY
 	my $remove = "rm -fr $privatekey*";
 	$self->logDebug("remove", $remove);
@@ -208,8 +201,6 @@ method enableApacheSsl {
 		$self->logDebug("commands", $commands);
 		$self->runCommands($commands);
 	}
-
-$self->logDebug("DEBUG EXIT") and exit;
 
 	return $configpairs;
 }

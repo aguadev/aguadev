@@ -55,6 +55,8 @@ var Container = declare("dojo.dnd.Container", Evented, {
 	=====*/
 
 	constructor: function(node, params){
+		console.log("dojo.dojo.dnd.Container.constructor XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+
 		// summary:
 		//		a constructor of the Container
 		// node: Node
@@ -286,6 +288,7 @@ var Container = declare("dojo.dnd.Container", Evented, {
 
 	// utilities
 	onOverEvent: function(){
+	
 		// summary:
 		//		this function is called once, when mouse is over our container
 	},

@@ -17,7 +17,11 @@ getApps : function () {
 	return this.cloneData("apps");
 },
 getAguaApps : function () {
+	console.log("Agua.App.getAguaApps");
 	var apps = this.cloneData("apps");
+	
+	console.log("Agua.App.getAguaApps    Agua.conf:");
+	console.dir({Agua_conf:Agua.conf});
 	var aguauser =	Agua.conf.getKey("agua", "aguauser");
 	console.log("Agua.App.getAguaApps    aguauser: " + aguauser);
 	

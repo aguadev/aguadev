@@ -48,7 +48,7 @@ parentWidget : null,
 childWidgets : null,
 
 // TAB CONTAINER
-attachNode : null,
+attachPoint : null,
 
 // CONTEXT MENU
 contextMenu : null,

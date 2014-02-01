@@ -64,8 +64,8 @@ startup : function () {
 	this.ready = false;
 
 	// ADD TO TAB CONTAINER		
-	this.attachNode.addChild(this.mainTab);
-	//this.attachNode.selectChild(this.mainTab);
+	this.attachPoint.addChild(this.mainTab);
+	//this.attachPoint.selectChild(this.mainTab);
 
 	// SET SELECTIVE DIALOG FOR copyWorkflow	
 	this.setSelectiveDialog();

@@ -26,26 +26,26 @@ method installExchange {
 	$self->puppetInstallRabbitMq();
 	$self->puppetInstallNodeJs();
 	
-	##### INSTALL rabbitmq
-	#$self->installRabbitMq();
-	#
-	##### INSTALL rabbitmq
-	#$self->startRabbitMq();
+	#### INSTALL rabbitmq
+	$self->installRabbitMq();
 	
-	##### INSTALL node AND PLUGINS rabbit.js, forever
-	#$self->installNode($nodeurl, $installdir);
+	#### INSTALL rabbitmq
+	$self->startRabbitMq();
 	
-	##### 1. INSTALL node-amqp (A CLIENT FOR RABBITMQ)
-	#$self->runCommands(["npm install amqp\@$amqpversion -g"]);
-	#	
-	######## 2. INSTALL rabbit.js
-	####$self->runCommands(["npm install rabbit.js\@$rabbitversion -g"]);
-	####
-	######## 3. INSTALL SOCKET.IO
-	####$self->runCommands(["npm install socket.io\@$socketversion -g"]);
-	####
-	######## 4. INSTALL FOREVER
-	####$self->runCommands(["npm install forever -g"]);
+	#### INSTALL node AND PLUGINS rabbit.js, forever
+	$self->installNode($nodeurl, $installdir);
+	
+	#### 1. INSTALL node-amqp (A CLIENT FOR RABBITMQ)
+	$self->runCommands(["npm install amqp\@$amqpversion -g"]);
+	
+	####### 2. INSTALL rabbit.js
+	###$self->runCommands(["npm install rabbit.js\@$rabbitversion -g"]);
+	###
+	####### 3. INSTALL SOCKET.IO
+	###$self->runCommands(["npm install socket.io\@$socketversion -g"]);
+	###
+	####### 4. INSTALL FOREVER
+	###$self->runCommands(["npm install forever -g"]);
 	
 
 	#### 5. SET EXCHANGE TO RUN AS A DAEMON
@@ -107,7 +107,7 @@ method puppetInstallRabbitMq {
 }
 
 method puppetInstallNodeJs {
-	#### INSTALL PUPPET AND MODULES express, rabbit.js, forever
+	#### INSTALL node AND MODULES express, rabbit.js, forever
 	#### NB: librarian-puppet HAS ALREADY INSTALLED apache AND stdlib
 
 	#### LINK *.pp FILE

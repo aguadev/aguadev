@@ -40,7 +40,7 @@ addSource : function (sourceObject) {
 	query.username 		= 	this.cookie("username");
 	query.sessionid 	= 	this.cookie("sessionid");
 	query.mode 			= 	"addSource";
-	query.module = "Agua::Sharing";
+	query.module = "Agua::Workflow";
 	query.data 			= 	sourceObject;
 	////console.log("Sources.addItem    query: " + dojo.toJson(query));
 	this.doPut({ url: url, query: query, sync: false });
@@ -73,7 +73,7 @@ removeSource : function (sourceObject) {
 	query.username 		= 	this.cookie("username");
 	query.sessionid 	= 	this.cookie("sessionid");
 	query.mode 			= 	"removeSource";
-	query.module = "Agua::Sharing";
+	query.module = "Agua::Workflow";
 	query.data 			= 	sourceObject;
 	
 	////console.log("Sources.deleteItem    sourceObject: " + dojo.toJson(sourceObject));

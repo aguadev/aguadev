@@ -28,11 +28,12 @@ class Agua::Sharing with (Agua::Common) {
 use Agua::Instance;
 
 # Ints
-has 'SHOWLOG'	=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'SHOWLOG'	=>  ( isa => 'Int', is => 'rw', default => 4 );  
 has 'PRINTLOG'	=>  ( isa => 'Int', is => 'rw', default => 1 );
 has 'validated'	=> ( isa => 'Int', is => 'rw', default => 0 );
 
 # Strings
+has 'logfile'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'installdir'=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 #has 'sessionid'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'queue'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
@@ -71,9 +72,14 @@ has 'head' 	=> (
 ### /////}
 
 method BUILD ($hash) {
+
 }
 
 method initialise ($json) {
+	print "JSON: \n";
+	print Dumper $json;
+	exit;
+	
 	#### IF JSON IS DEFINED, ADD VALUES TO SLOTS
 	$self->json($json);
 	if ( $json )
@@ -98,6 +104,7 @@ method initialise ($json) {
 	}
 	
 	#### SET HEADNODE OPS LOG
+	$self->logDebug("HERE");
 	if ( defined $self->logfile() ) {
 		$self->head()->ops()->logfile($self->logfile());
 		$self->head()->ops()->SHOWLOG($self->SHOWLOG());

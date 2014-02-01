@@ -1,14 +1,35 @@
-dojo.provide("plugins.sharing.GroupRow");
+define([
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/json",
+	"dojo/on",
+	"dojo/_base/lang",
+	"dojo/dom-attr",
+	"dojo/dom-class",
+	"dijit/_Widget",
+	"dijit/_TemplatedMixin",
+	"dojo/domReady!"
+],
 
+function (declare,
+	arrayUtil,
+	JSON,
+	on,
+	lang,
+	domAttr,
+	domClass,
+	_Widget,
+	_TemplatedMixin
+) {
 
-dojo.declare( "plugins.sharing.GroupRow",
-	[ dijit._Widget, dijit._Templated ],
-{
-//Path to the template of this widget. 
-templatePath: dojo.moduleUrl("plugins", "sharing/templates/grouprow.html"),
+/////}}}}}
 
-// Calls dijit._Templated.widgetsInTemplate
-widgetsInTemplate : true,
+return declare("plugins.sharing.GroupRow",
+	[ _Widget, _TemplatedMixin ], {
+
+// templateString : String	
+//		Path to the template of this widget. 
+templateString: dojo.cache("plugins", "sharing/templates/grouprow.html"),
 
 // PARENT plugins.sharing.Groups WIDGET
 parentWidget : null,
@@ -63,5 +84,8 @@ toggle : function () {
 	else this.notes.style.display = 'block';
 }
 
-});
-	
+
+}); //	end declare
+
+});	//	end define
+

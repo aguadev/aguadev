@@ -38,6 +38,7 @@ var constrainedMoveable = declare("dojo.dnd.move.constrainedMoveable", Moveable,
 		this.within = params.within;
 	},
 	onFirstMove: function(/*Mover*/ mover){
+		console.log("dojo.dnd.onFirstMove    mover: " + mover);
 		// summary:
 		//		called during the very first move notification;
 		//		can be used to initialize coordinates, can be overwritten.
@@ -51,6 +52,7 @@ var constrainedMoveable = declare("dojo.dnd.move.constrainedMoveable", Moveable,
 		}
 	},
 	onMove: function(/*Mover*/ mover, /*Object*/ leftTop){
+		console.log("dojo.dnd.onMove    mover: " + mover);
 		// summary:
 		//		called during every move notification;
 		//		should actually move the node; can be overwritten.

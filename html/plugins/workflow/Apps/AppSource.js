@@ -14,8 +14,12 @@ function (declare,
 	_WidgetsInTemplateMixin,
 	DndSource) {
 
-return declare("plugins.workflow.Apps.AppSource",
-	[ _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, DndSource ], {
+return declare("plugins.workflow.Apps.AppSource", [
+		_Widget,
+		_TemplatedMixin,
+		_WidgetsInTemplateMixin,
+		DndSource
+	], {
 	
 templateString: dojo.cache("plugins", "workflow/Apps/templates/appsource.html"),
 

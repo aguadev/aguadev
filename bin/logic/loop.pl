@@ -90,16 +90,19 @@ use lib "$Bin/../../lib";
 use lib "$Bin/../../lib/external";	
 
 #### INTERNAL MODULES
-use Agua::Logic::Loop;
 use Timer;
 use Util;
 use Conf::Yaml;
+
+package Object;
+use Moose;
+with 'Agua::Cluster::Loop';
 
 ##### STORE ARGUMENTS TO PRINT TO FILE LATER
 my $arguments;
 @$arguments = @ARGV;
 
-my $loop = Agua::Logic::Loop->new(
+my $loop = Object->new(
 	{
 		arguments	=>	$arguments
 	}
@@ -121,9 +124,7 @@ exit;
 
 sub usage
 {
-	print GREEN;
 	print `perldoc $0`;
-	print RESET;
 	exit;
 }
 

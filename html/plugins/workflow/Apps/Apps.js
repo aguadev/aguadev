@@ -56,7 +56,7 @@ apps : [],
 parentWidget : null,
 
 // ATTACH NODE
-attachNode : null,
+attachPoint : null,
 
 // TAB CONTAINER
 tabContainer : null,
@@ -72,7 +72,7 @@ constructor : function (args) {
 	this.core = args.core;
     this.apps = args.apps;
 	this.parentWidget = args.parentWidget;
-	this.attachNode = args.attachNode;
+	this.attachPoint = args.attachPoint;
     
     // LOAD CSS
 	this.loadCSS();		
@@ -99,20 +99,6 @@ startup : function () {
 	console.log("Apps.Apps.startup    DOING this.loadAppSources()");
 	this.loadAppSources();	
 },
-// ATTACH PANE
-attachPane : function () {
-	// ADD TO TAB CONTAINER		
-	console.log("Apps.Apps.attachPane    DOING this.attachNode.addChild(this.mainTab)");
-	console.log("Apps.Apps.attachPane    this.mainTab: ");
-	console.dir({this_mainTab:this.mainTab});
-	console.log("Apps.Apps.attachPane    this.attachNode: ");
-	console.dir({this_attachNode:this.attachNode});
-	
-	this.attachNode.addChild(this.mainTab);
-
-	console.log("Apps.Apps.attachPane    DOING this.attachNode.selectChild(this.mainTab)");
-	this.attachNode.selectChild(this.mainTab);
-},
 setSubscriptions : function () {
 	// SUBSCRIBE TO UPDATES
 	Agua.updater.subscribe(this, "updateApps");
@@ -121,8 +107,8 @@ setSubscriptions : function () {
 	//Agua.updater.subscribe(this, "updatePackages");
 },
 removePane : function () {
-	console.log("Apps.Apps.removePane    DOING this.attachNode.removeChild(this.mainTab)");
-	this.attachNode.removeChild(this.mainTab);
+	console.log("Apps.Apps.removePane    DOING this.attachPoint.removeChild(this.mainTab)");
+	this.attachPoint.removeChild(this.mainTab);
 },
 destroy : function () {
 	console.log("Apps.Apps.destroy    DOING this.destroy()");
@@ -248,7 +234,11 @@ loadAppSources : function () {
 		});
 		//console.log("Apps.loadAppSources     appSource: ");
 		//console.dir({appSource:appSource});
-
+		
+		if ( apps.length > 20 ) {
+			appSource.titlePane.open = false;
+		}
+		
 		this.appSources.push(appSource);
 		this.appSourcesContainer.appendChild(appSource.domNode);
 

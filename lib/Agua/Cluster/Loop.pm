@@ -66,8 +66,7 @@ sub runLoop {
 	
 	#### EXTRACT CLUSTER-RELATED ARGUMENTS IF loop IS distributed
 	my ($cluster, $outdir, $maxjobs, $queue);
-	if ( $loop eq "distributed" )
-	{
+	if ( $loop eq "distributed" ) {
 		$cluster=	$self->loop_value("cluster");
 		$outdir =	$self->loop_value("outdir");
 		$maxjobs=	$self->loop_value("maxjobs");
@@ -83,8 +82,7 @@ sub runLoop {
 	}
 
 	my $oldout;
-	if ( defined $loopout )
-	{
+	if ( defined $loopout ) {
 		$self->logDebug("Printing STDOUT to loopout:\n\n$loopout\n");
 
 		open $oldout, ">&STDOUT" or die "Can't open old STDOUT\n";
@@ -108,8 +106,7 @@ sub runLoop {
 
 	#### CHECK loop IS DEFINED AND CORRECT VALUE
 	$self->logCritical("loop not defined. Exiting") and exit if not defined $loop;
-	if ( $loop eq "distributed" )
-	{
+	if ( $loop eq "distributed" ) {
 		$self->logCritical("cluster not defined. Exiting") and exit if not defined $cluster;
 		$self->logCritical("label not defined. Exiting") and exit if not defined $label;
 		$self->logCritical("outdir not defined. Exiting") and exit if not defined $outdir;
@@ -139,13 +136,11 @@ sub runLoop {
 	my $sublabels = '';
 
 	#### RUN COMMANDS ON CLUSTER
-	if ( $loop eq "distributed" )
-	{
+	if ( $loop eq "distributed" ) {
 		$self->logDebug("Running loop in $loop mode");
 		
 		my $jobs = [];
-		for ( my $i = 0; $i < @$commands; $i++ )
-		{
+		for ( my $i = 0; $i < @$commands; $i++ ) {
 			my $replicate_number = $$replicates_array[$i];
 			my $command = $$commands[$i];
 			my $joblabel = "$label-$replicate_number";
@@ -161,23 +156,19 @@ sub runLoop {
 		#### USE LIB FOR CLUSTER MONITOR
 		$self->logDebug("cluster: **$cluster**");
 
-		if ( $cluster =~ /^PBS$/ )
-		{
+		if ( $cluster =~ /^PBS$/ ) {
 			$self->logDebug("DOING require Monitor::PBS");
 			eval "require Monitor::PBS";
 		}
-		elsif ( $cluster =~ /^LSF$/ )
-		{
+		elsif ( $cluster =~ /^LSF$/ ) {
 			$self->logDebug("DOING require Monitor::LSF");
 			eval "require Monitor::LSF";
 		}
-		elsif ( $cluster =~ /^SGE$/ )
-		{
+		elsif ( $cluster =~ /^SGE$/ ) {
 			$self->logDebug("DOING require Monitor::LSF");
 			eval "require Monitor::SGE";
 		}
-		else
-		{
+		else {
 			$self->logDebug("cluster $cluster did not match LSF or PBS");
 		}
 
@@ -194,12 +185,10 @@ sub runLoop {
 	}
 	
 	#### RUN COMMANDS IN PARALLEL LOCALLY
-	elsif ( $loop eq "parallel" )
-	{
+	elsif ( $loop eq "parallel" ) {
 		$self->logDebug("DOING CONCURRENT JOBS");
 		my $threads = [];
-		for my $command ( @$commands )
-		{
+		for my $command ( @$commands ) {
 			$self->logDebug("CONCURRENT", $command);
 			my $thread = threads->new(
 				sub {
@@ -211,8 +200,7 @@ sub runLoop {
 		}
 
 		my $outputs = [];
-		foreach my $thread ( @$threads )
-		{
+		foreach my $thread ( @$threads ) {
 			my $output = $thread->join;
 			$self->logDebug("OUTPUT", $output);
 			push @$outputs, $output;
@@ -348,7 +336,6 @@ sub completionStatus {
 =cut
 
 sub loop {
-
 	my $self		=	shift;
 	my $executable	=	shift;
 	my $arguments	=	shift;
@@ -377,13 +364,9 @@ sub loop {
 				
 				my $value = $$values[$i];
 		
-				#### SUBSTITUTE replicate FOR ONE OR MORE '%REPLICATE%' STRINGS IN ALL ARGUMENTS
+				#### SUBSTITUTE value FOR ONE OR MORE '%VALUE%' STRINGS
 				$instance_args = $self->fill_in($instance_args, "%REPLICATE%", $replicate);
-		
-				#### SUBSTITUTE value FOR ONE OR MORE '%VALUE%' STRINGS IN ALL ARGUMENTS
 				$instance_args = $self->fill_in($instance_args, "%VALUE%", $value);
-		
-				#### SUBSTITUTE parameter FOR ONE OR MORE '%PARAMETER%' STRINGS IN ALL ARGUMENTS
 				$instance_args = $self->fill_in($instance_args, "%PARAMETER%", $parameter);
 		
 				#### ADD parameter ARGUMENT TO FRONT OF ARGS

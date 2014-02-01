@@ -56,13 +56,13 @@ startup : function () {
 	this.inherited(arguments);	 
 
 	////////console.log("Parameters.startup    this.application: " + this.application);
-	////////console.log("Parameters.startup    this.attachNode: " + this.attachNode);
+	////////console.log("Parameters.startup    this.attachPoint: " + this.attachPoint);
 
 	this.setUploader();
 
 	// ADD TO TAB CONTAINER		
-	this.attachNode.addChild(this.mainTab);
-	this.attachNode.selectChild(this.mainTab);
+	this.attachPoint.addChild(this.mainTab);
+	this.attachPoint.selectChild(this.mainTab);
 },
 setUploader : function () {
 
@@ -206,7 +206,7 @@ load : function (node, shared, force) {
 	this.loadTitlePane("output");
 
 	// SELECT THIS TAB PANE
-	this.attachNode.selectChild(this.mainTab);
+	this.attachPoint.selectChild(this.mainTab);
 
 	// CALL StageRow.checkValidParameters TO CHECK THAT ALL
 	// REQUIRED PARAMETER INPUTS ARE SATISFIED

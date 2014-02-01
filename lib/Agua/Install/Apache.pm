@@ -18,9 +18,11 @@ method installApache {
 	$self->copyFavicon();
     
 	##### INSTALL PACKAGES
-	#$self->installApachePackages();	
 	$self->puppetInstallApache();
     
+	#### REPLACE apache2.conf, sites-available/default AND envvars
+	$self->installApachePackages();	
+
 	#### ENABLE APACHE AUTO RESTART ON BOOT
     $self->setApacheAutoStart();
 }
@@ -51,23 +53,23 @@ method installApachePackages {
 }
 
 method apacheUbuntu {
-    #### INSTALL APACHE2
-    $self->logDebug("Installing apache");	
-	$self->installPackage("apache2=2.2.22");
-    $self->logDebug("Completed installing apache");	
-    
-    #### REPLACE mpm-worker WITH mpm-prefork (Non-threaded) CGI DAEMON
-    #### TO AVOID THIS ERROR: 'unable to connect to cgi daemon'
-    $self->removePackage("apache2-mpm-prefork");
-    $self->installPackage("apache2-prefork-dev");	
-	
-	# IN ORDER TO INSTALL libapache2-mod-fastcgi
-	# EDIT /etc/apt/sources.list
-	# ADD LINE
-	# deb http://us.archive.ubuntu.com/ubuntu/ saucy multiverse
-	$self->replaceSourcesList();
-	$self->updateAptGet();
-
+#    #### INSTALL APACHE2
+#    $self->logDebug("Installing apache");	
+#	$self->installPackage("apache2=2.2.22");
+#    $self->logDebug("Completed installing apache");	
+#    
+#    #### REPLACE mpm-worker WITH mpm-prefork (Non-threaded) CGI DAEMON
+#    #### TO AVOID THIS ERROR: 'unable to connect to cgi daemon'
+#    $self->removePackage("apache2-mpm-prefork");
+#    $self->installPackage("apache2-prefork-dev");	
+#	
+#	# IN ORDER TO INSTALL libapache2-mod-fastcgi
+#	# EDIT /etc/apt/sources.list
+#	# ADD LINE
+#	# deb http://us.archive.ubuntu.com/ubuntu/ saucy multiverse
+#	$self->replaceSourcesList();
+#	$self->updateAptGet();
+#
 	# INSTALL libapache2-mod-fastcgi
     $self->installPackage("libapache2-mod-fastcgi");
     my $command = "a2enmod cgid actions";
@@ -78,15 +80,15 @@ method apacheUbuntu {
 }
 
 method apacheCentos {
-	#### INSTALL APACHE
-    $self->logDebug("installing httpd");	
-	$self->installPackage("httpd");
-
-	#### INSTALL FASTCGI DEPENDENCIES
-    $self->installPackage("httpd-devel apr apr-devel libtool");	
-	
-	#### INSTALL FASTCGI
-	$self->installPackage("mod_fcgid");
+#	#### INSTALL APACHE
+#    $self->logDebug("installing httpd");	
+#	$self->installPackage("httpd");
+#
+#	#### INSTALL FASTCGI DEPENDENCIES
+#    $self->installPackage("httpd-devel apr apr-devel libtool");	
+#	
+#	#### INSTALL FASTCGI
+#	$self->installPackage("mod_fcgid");
 	
 	#"wget http://mirror.tcpdiag.net/apache//httpd/mod_fcgid/mod_fcgid-2.3.9.tar.gz";
 	
@@ -188,7 +190,7 @@ method replaceApacheConfs {
 	my ($majorminor) = $apacheversion =~ /^(\d+\.\d+)/;
 	$self->logDebug("majorminor", $majorminor);
 
-	my $apacheconf = "$Bin/resources/apache2/ubuntu/2.2.2/apache2.conf";
+	my $apacheconf = "$Bin/resources/apache2/ubuntu/2.2.22/apache2.conf";
 	if ( $majorminor >= 2.4 ) {
 		$self->logDebug("USING VERSION 2.4.6 apache2.conf");
 		$apacheconf = "$Bin/resources/apache2/ubuntu/2.4.6/apache2.conf";
@@ -213,6 +215,11 @@ method replaceApacheConfs {
     $self->backupFile("/etc/apache2/sites-available/000-default.conf", "/etc/apache2/sites-available/000-default.conf.ORIGINAL", 0);
     $self->replaceFile("/etc/apache2/sites-available/000-default.conf", "$Bin/resources/apache2/ubuntu/sites-available/default", 1);
 
+    #### REPLACE /etc/apache2/sites-available/default-ssl TO:
+    #### 1. ENABLE SSL
+    $self->backupFile("/etc/apache2/sites-available/default-ssl", "/etc/apache2/sites-available/default-ssl.ORIGINAL", 0);
+    $self->replaceFile("/etc/apache2/sites-available/default-ssl", "$Bin/resources/apache2/ubuntu/sites-available/default-ssl", 1);
+
     #### REPLACE /etc/apache2/envvars TO:
     #### 1. SET UMASK (DEFAULT 775/664 FOR NEW FILES/DIRS)
     #### 2. SET SGE ENVIRONMENT VARIABLES
@@ -227,6 +234,9 @@ method replaceApacheConfs {
 	my $insert = "/var/www/cgi-bin/$urlprefix/agua.cgi";
 
 	$self->replaceInFile("/etc/apache2/apache2.conf", $remove, $insert);	
+
+	#### LINK sites-enabled/000-default.conf
+	$self->runCommands(["ln -s /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-enabled/000-default.conf"]);
 }
 
 method replaceInFile ($file, $remove, $insert) {

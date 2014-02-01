@@ -1,35 +1,83 @@
-dojo.provide("plugins.sharing.Groups");
+//dojo.provide("plugins.sharing.Groups");
+//
+//// ALLOW THE USER TO ADD, REMOVE AND MODIFY GROUPS
+//
+//// EXTERNAL MODULES
+//dojo.require("dijit.form.Button");
+//dojo.require("dijit.form.TextBox");
+//dojo.require("dijit.form.Textarea");
+//dojo.require("dojo.parser");
+//
+//// INTERNAL MODULES
+//dojo.require("plugins.core.Common");
+//dojo.require("plugins.form.EditForm");
+//dojo.require("plugins.form.DndSource");
+//
+//// HAS A
+//dojo.require("plugins.sharing.GroupRow");
+//
+//dojo.declare("plugins.sharing.Groups",
+//	[ dijit._Widget, dijit._Templated, plugins.core.Common, plugins.form.EditForm, plugins.form.DndSource ],
+//{
 
-// ALLOW THE USER TO ADD, REMOVE AND MODIFY GROUPS
+define([
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/json",
+	"dojo/on",
+	"dojo/_base/lang",
+	"dojo/dom-attr",
+	"dojo/dom-class",
+	"dijit/_Widget",
+	"dijit/_TemplatedMixin",
+	"dijit/_WidgetsInTemplateMixin",
 
-// EXTERNAL MODULES
-dojo.require("dijit.form.Button");
-dojo.require("dijit.form.TextBox");
-dojo.require("dijit.form.Textarea");
-dojo.require("dojo.parser");
-dojo.require("dojo.dnd.Source");
+	"plugins/core/Common",
+	"plugins/form/EditForm",
+	"plugins/form/DndSource",
+	"plugins/sharing/GroupRow",
+	
+	"dojo/domReady!",
 
-// INTERNAL MODULES
-dojo.require("plugins.core.Common");
-dojo.require("plugins.form.EditForm");
+	"dijit/layout/ContentPane",
+	"dijit/form/Button",
+	"dijit/form/TextBox",
+	"dijit/form/Textarea"
+],
 
-// HAS A
-dojo.require("plugins.sharing.GroupRow");
+function (declare,
+	arrayUtil,
+	JSON,
+	on,
+	lang,
+	domAttr,
+	domClass,
+	_Widget,
+	_TemplatedMixin,
+	_WidgetsInTemplateMixin,
+	
+	Common,
+	EditForm,
+	DndSource,
+	GroupRow
+) {
 
-dojo.declare("plugins.sharing.Groups",
-	[ dijit._Widget, dijit._Templated, plugins.core.Common, plugins.form.EditForm ],
-{
-//Path to the template of this widget. 
-templatePath: dojo.moduleUrl("plugins", "sharing/templates/groups.html"),
+/////}}}}}
 
-// Calls dijit._Templated.widgetsInTemplate
-widgetsInTemplate : true,
+return declare("plugins.sharing.Groups",
+	[ _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, Common, EditForm, DndSource ], {
+
+// templateString : String	
+//		Path to the template of this widget. 
+templateString: dojo.cache("plugins", "sharing/templates/groups.html"),
 
 //addingGroup STATE
 addingGroup : false,
 
 // OR USE @import IN HTML TEMPLATE
-cssFiles : [ "plugins/sharing/css/groups.css" ],
+cssFiles : [
+	require.toUrl("plugins/sharing/css/groups.css")
+],
 
 // PARENT WIDGET
 parentWidget : null,
@@ -40,31 +88,26 @@ formInputs : {
 	description	:	"phrase",
 	notes		:	"phrase"
 },
-
 defaultInputs : {
 // DEFAULT INPUTS
 	groupname	:	"Groupname",
 	description	:	"Description",
 	notes		:	"Notes"
 },
-
 requiredInputs : {
 // REQUIRED INPUTS CANNOT BE ''
 // combo INPUTS ARE AUTOMATICALLY NOT ''
 	groupname 	: 1
 },
-
 invalidInputs : {
 // THESE INPUTS ARE INVALID
 	groupname	:	"Groupname",
 	description	:	"Description",
 	notes		:	"Notes"
 },
-
 dataFields : [
 	"groupname"
 ],
-
 avatarItems : [
 	"groupname",
 	"description"
@@ -78,19 +121,18 @@ constructor : function(args) {
 	////console.log("Groups.constructor     plugins.sharing.Groups.constructor");			
 	// GET INFO FROM ARGS
 	this.parentWidget = args.parentWidget;
-	this.groups = args.parentWidget.groups;
--
+	if ( args.parentWidget ) {
+		this.groups = args.parentWidget.groups;
+	}
+
 	// LOAD CSS
 	this.loadCSS();		
 },
-
 postCreate : function() {
 	////console.log("Controller.postCreate    plugins.sharing.Controller.postCreate()");
 
 	this.startup();
 },
-
-
 startup : function () {
 	////console.log("Groups.startup    plugins.sharing.Groups.startup()");
 
@@ -98,8 +140,7 @@ startup : function () {
 	this.inherited(arguments);	 
 
 	// ADD TO TAB CONTAINER		
-	this.attachPoint.addChild(this.groupsTab);
-	this.attachPoint.selectChild(this.groupsTab);
+	this.attachPane();
 
 	// SET DRAG GROUP - LIST OF GROUPS
 	this.setDragSource();
@@ -113,7 +154,6 @@ startup : function () {
 	// SET TRASH
 	this.setTrash(this.dataFields);	
 },
-
 updateGroups : function (args) {
 // RELOAD THE COMBO AND DRAG SOURCE AFTER CHANGES
 // TO DATA IN OTHER TABS
@@ -128,7 +168,6 @@ updateGroups : function (args) {
 		this.setDragSource();
 	}
 },
-
 setForm : function () {
 // SET 'ADD NEW GROUP' FORM
 	////console.log("Groups.setForm    plugins.sharing.Groups.setForm()");
@@ -142,13 +181,11 @@ setForm : function () {
 	// CHAIN TOGETHER INPUTS ON 'RETURN' KEYPRESS
 	this.chainInputs(["groupname", "description", "notes", "addGroupButton"]);
 },
-
 getItemArray : function () {
 	var itemArray = Agua.getGroups();
 	//console.log("Groups.getItemArray    itemArray: " + dojo.toJson(itemArray));
 	return this.sortHasharray(itemArray, 'groupname');
 },
-
 deleteItem : function (groupObject) {
 	////console.log("Groups.deleteItem    plugins.sharing.Groups.deleteItem(groupname)");
 	////console.log("Groups.deleteItem    groupname: " + groupname);
@@ -160,12 +197,10 @@ deleteItem : function (groupObject) {
 	Agua.updater.update("updateGroups");
 
 }, // Groups.deleteItem
-
-
 addItem : function (groupObject, formAdd) {
-	//console.log("Groups.addItem    plugins.sharing.Groups.addItem(groupObject)");
-	//console.log("Groups.addItem    groupObject:");
-	//console.dir(groupObject);
+	console.log("Groups.addItem    groupObject:");
+	console.dir(groupObject);
+	console.log("Groups.addItem    formAdd: " + formAdd);
 
 	if ( this.savingGroup == true )	return;
 	this.savingGroup = true;
@@ -180,5 +215,8 @@ addItem : function (groupObject, formAdd) {
 } // Groups.addItem
 
 
-}); // plugins.sharing.Groups
+}); //	end declare
+
+});	//	end define
+
 

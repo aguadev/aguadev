@@ -37,7 +37,7 @@ addGroup : function (groupObject) {
 	query.username 		= 	this.cookie("username");
 	query.sessionid 	= 	this.cookie("sessionid");
 	query.mode 			= 	"addGroup";
-	query.module = "Agua::Sharing";
+	query.module = "Agua::Workflow";
 	query.data 			= 	groupObject;
 	////console.log("Groups.addItem    query: " + dojo.toJson(query));
 	
@@ -82,7 +82,7 @@ removeGroup : function (groupObject) {
 	query.username 		= 	this.cookie("username");
 	query.sessionid 	= 	this.cookie("sessionid");
 	query.mode 			= 	"removeGroup";
-	query.module = "Agua::Sharing";
+	query.module = "Agua::Workflow";
 	query.data 			= 	groupObject;
 	//console.log("Groups.deleteItem    query: " + dojo.toJson(query));
 	

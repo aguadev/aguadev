@@ -1,49 +1,60 @@
-dojo.provide("plugins.sharing.GroupProjects");
+define([
+	"dojo/_base/declare",
+	"dojo/_base/array",
+	"dojo/json",
+	"dojo/on",
+	"dojo/_base/lang",
+	"dojo/dom-attr",
+	"dojo/dom-class",
+	"dijit/_Widget",
+	"dijit/_TemplatedMixin",
+	"dijit/_WidgetsInTemplateMixin",
 
+	"plugins/core/Common",
+	"dojo/dnd/Source",
+	"plugins/sharing/GroupProjectRow",
+	
+	"dojo/domReady!",
 
-dojo.require("dijit.dijit"); // optimize: load dijit layer
+	"dijit/form/Button",
+	"dijit/form/ComboBox",
+	"dijit/form/ComboBox",
+	"dijit/Tooltip",
+	"dijit/form/Slider",
+	"dojo/parser"
+],
 
+function (declare,
+	arrayUtil,
+	JSON,
+	on,
+	lang,
+	domAttr,
+	domClass,
+	_Widget,
+	_TemplatedMixin,
+	_WidgetsInTemplateMixin,
+	Common,
+	Source,
+	GroupProjectRow
+) {
 
-// GENERAL FORM MODULES
-dojo.require("dijit.form.Button");
-dojo.require("dijit.form.ComboBox");
-dojo.require("dijit.form.ComboBox");
-dojo.require("dojo.store.Memory");
+/////}}}}}
 
-// DRAG N DROP
-dojo.require("dojo.dnd.Source");
+return declare("plugins.sharing.GroupProjects",
+	[ _Widget, _TemplatedMixin, _WidgetsInTemplateMixin, Common ], {
 
-// TOOLTIP
-//dojo.require("dijit.Tooltip");
-
-// SLIDER
-dojo.require("dijit.form.Slider");
-
-// PARSE
-dojo.require("dojo.parser");
-
-// INHERITS
-dojo.require("plugins.core.Common");
-
-// HAS A
-dojo.require("plugins.sharing.GroupProjectRow");
-
-
-dojo.declare("plugins.sharing.GroupProjects",
-
-	[ dijit._Widget, dijit._Templated, plugins.core.Common ],
-{
-//Path to the template of this widget. 
-templatePath: dojo.moduleUrl("plugins", "sharing/templates/groupprojects.html"),
-
-// Calls dijit._Templated.widgetsInTemplate
-widgetsInTemplate : true,
+// templateString : String	
+//		Path to the template of this widget. 
+templateString: dojo.cache("plugins", "sharing/templates/groupprojects.html"),
 	
 //addingSource STATE
 addingSource : false,
 
 // OR USE @import IN HTML TEMPLATE
-cssFiles : [ "plugins/sharing/css/groupprojects.css" ],
+cssFiles : [
+	require.toUrl("plugins/sharing/css/groupprojects.css")
+],
 
 // PARENT WIDGET
 parentWidget : null,
@@ -65,8 +76,7 @@ startup : function () {
 	this.inherited(arguments);	 
 
 	// ADD ADMIN TAB TO TAB CONTAINER		
-	this.attachPoint.addChild(this.groupprojectsTab);
-	this.attachPoint.selectChild(this.groupprojectsTab);
+	this.attachPane();
 
 	// SET GROUP COMBO
 	this.setGroupCombo();
@@ -139,8 +149,8 @@ setGroupCombo : function () {
 	});
 },
 setDragSource : function (position) {
-	//////console.log("GroupProjects.setDragSource     plugins.sharing.GroupProjects.setDragSource(position)");
-	////////console.log("GroupProjects.setDragSource     position: " + position);
+	console .log("GroupProjects.setDragSource     plugins.sharing.GroupProjects.setDragSource(position)");
+	console .log("GroupProjects.setDragSource     position: " + position);
 
 	// REMOVE ALL EXISTING CONTENT
 	while ( this.dragSourceContainer.firstChild )
@@ -159,13 +169,13 @@ setDragSource : function (position) {
 	// RETURN IF USER ARRAY IS NULL OR EMPTY
 	if ( Agua.getProjects() == null || Agua.getProjects().length == 0 )
 	{
-		//////console.log("GroupProjects.setDragSource     Agua.getProjects() is null or empty. Returning.");
+		console .log("GroupProjects.setDragSource     Agua.getProjects() is null or empty. Returning.");
 		return;
 	}
 
 	var projectArray = Agua.getProjects();
-	//////console.log("GroupProjects.setDragSource     projectArray: " + dojo.toJson(projectArray));
-	//////console.log("GroupProjects.setDragSource     projectArray.length: " + projectArray.length);
+	console .log("GroupProjects.setDragSource     projectArray: " + dojo.toJson(projectArray));
+	console .log("GroupProjects.setDragSource     projectArray.length: " + projectArray.length);
 
 	// GENERATE USER DATA TO INSERT INTO DND USER TABLE
 	var MAXUSERS = this.maxDisplayedProjects;
@@ -176,8 +186,8 @@ setDragSource : function (position) {
 	var end = parseInt( (position * MULTIPLE) + MAXUSERS );
 	if ( ! end || end > projectArray.length )	end = projectArray.length;
 
-	//////console.log("GroupProjects.setDragSource     start: " + start);
-	//////console.log("GroupProjects.setDragSource     end: " + end);
+	console .log("GroupProjects.setDragSource     start: " + start);
+	console .log("GroupProjects.setDragSource     end: " + end);
 
 	// SORT PROJECT ARRAY
 
@@ -207,7 +217,7 @@ setDragSource : function (position) {
 	var allNodes = dragSource.getAllNodes();
 	for ( var k = 0; k < allNodes.length; k++ )
 	{
-		//////console.log("GroupProjects.setDragSource     Setting node " + k + " with data: " + dojo.toJson(dataArray[k].data));
+		console .log("GroupProjects.setDragSource     Setting node " + k + " with data: " + dojo.toJson(dataArray[k].data));
 
 		// ADD CLASS FROM type TO NODE
 		var node = allNodes[k];
@@ -221,29 +231,27 @@ setDragSource : function (position) {
 		if ( node.description == null )
 			node.description = '';
 
-		if ( node.name != null && node.name != '' )
-		{
+		if ( node.name != null && node.name != '' ) {
 			var project = {
 				name : node.name,
 				description : node.description
 			};
-			//////console.log("GroupProjects.setDragSource     project: " + dojo.toJson(project));
+			console .log("GroupProjects.setDragSource     project: " + dojo.toJson(project));
 			project.parentWidget = this;			
 
-			var groupProjectRow = new plugins.sharing.GroupProjectRow(project);
+			var groupProjectRow = new GroupProjectRow(project);
 			//groupProjectRow.toggle();
-			////////console.log("GroupProjects.setDragSource     groupProjectRow: " + groupProjectRow);
+			console .log("GroupProjects.setDragSource     groupProjectRow: " + groupProjectRow);
 			node.innerHTML = '';
 			node.appendChild(groupProjectRow.domNode);
 		}
 	}
 
 	var sourceObject = this;
-	dragSource.creator = function (item, hint)
-	{
-		//////console.log("GroupProjects.setDragSource dragSource.creator         item: " + dojo.toJson(item));
-		//////console.log("GroupProjects.setDragSource dragSource.creator         item: " + dojo.toJson(item));
-		////////console.log("GroupProjects.setDragSource dragSource.creator         hint: " + hint);
+	dragSource.creator = function (item, hint) {
+		console .log("GroupProjects.setDragSource dragSource.creator         item: " + dojo.toJson(item));
+		console .log("GroupProjects.setDragSource dragSource.creator         item: " + dojo.toJson(item));
+		console .log("GroupProjects.setDragSource dragSource.creator         hint: " + hint);
 
 		var node = dojo.doc.createElement("div");
 		node.name = item.name;
@@ -252,11 +260,12 @@ setDragSource : function (position) {
 		node.id = dojo.dnd.getUniqueId();
 		node.className = "dojoDndItem";
 
-		//////console.log("GroupProjects.setDragSource dragSource.creator         node.name: " + node.name);
-		//////console.log("GroupProjects.setDragSource dragSource.creator         node.description: " + node.description);
+		console .log("GroupProjects.setDragSource dragSource.creator         node.name: " + node.name);
+		console .log("GroupProjects.setDragSource dragSource.creator         node.description: " + node.description);
 
 		// SET FANCY FORMAT IN NODE INNERHTML
-		node.innerHTML = "<table> <tr><td> <img src='http://localhost/agua/plugins/sharing/images/users-18.png' <strong style='color: darkred'>" + node.name + "</strong></td></tr><tr><td> " + node.description + "</td></tr></table>";
+		var icon = 	require.toUrl("plugins/sharing/images/project-18.png");
+		node.innerHTML = "<table> <tr><td> <img src='" + icon + "' <strong style='color: darkred'>" + node.name + "</strong></td></tr><tr><td> " + node.description + "</td></tr></table>";
 		////////console.log("GroupProjects.setDragSource dragSource.creator         node: " + node);
 
 		return {node: node, data: item, type: ["text"]};
@@ -342,7 +351,7 @@ setDropTarget : function () {
 		//////console.log("GroupProjects.setDropTarget     project: " + dojo.toJson(project));
 		project.parentWidget = this;			
 
-		var groupProjectRow = new plugins.sharing.GroupProjectRow(project);
+		var groupProjectRow = new GroupProjectRow(project);
 		//////console.log("GroupProjects.setDropTarget     groupProjectRow: " + groupProjectRow);
 		node.innerHTML = '';
 		node.appendChild(groupProjectRow.domNode);
@@ -382,7 +391,7 @@ setDropTarget : function () {
 		//////console.log("GroupProjects.setDropTarget    dropTarget.creator    project: " + dojo.toJson(project));
 		project.parentWidget = this;			
 
-		var groupProjectRow = new plugins.sharing.GroupProjectRow(project);
+		var groupProjectRow = new GroupProjectRow(project);
 		//////console.log("GroupProjects.setDropTarget    dropTarget.creator    groupProjectRow: " + groupProjectRow);
 		node.innerHTML = '';
 		node.appendChild(groupProjectRow.domNode);
@@ -398,27 +407,23 @@ setDropTarget : function () {
 	
 
 	// ADD NODE IF DROPPED FROM OTHER SOURCE, DELETE IF DROPPED FROM SELF
-	dojo.connect(dropTarget, "onDndDrop", function(source, nodes, copy, target)
-	{
+	dojo.connect(dropTarget, "onDndDrop", function(source, nodes, copy, target) {
 		// NODE DROPPED FROM SELF --> DELETE NODE
-		if ( source == this && target != this )
-		{
+		if ( source == this && target != this ) {
 			for ( var i = 0; i < nodes.length; i++ )
 			{
 				var node = nodes[i];
 				groupProjectsObject.removeFromGroup(node.name, node.description, node.location);
 			}
 		}			
-		else
-		{
+		else {
 			// DO NOTHING IF NODE WAS DROPPED FROM DRAG SOURCE
 			// ( IT HAS ALREADY BEEN GENERATED BY dropTarget.creator() )
 		}			
 		
 		// REMOVE DUPLICATE NODES
 		var currentNodes = dropTarget.getAllNodes();
-		if ( currentNodes == null || ! currentNodes )
-		{
+		if ( currentNodes == null || ! currentNodes ) {
 			console.log("GroupProjects.setDropTarget dojo.connect onDndDrop    currentNodes is null or empty. Returning");
 			return;
 		}
@@ -426,15 +431,12 @@ setDropTarget : function () {
 		// DELETE DUPLICATE NODES
 		var names = new Object;
 		console.log("GroupProjects.setDropTarget dojo.connect onDndDrop    Checking for duplicate nodes");
-		for ( var i = 0; i < currentNodes.length; i++ )
-		{
+		for ( var i = 0; i < currentNodes.length; i++ ) {
 			var node = currentNodes[i];
-			if ( ! names[node.name] )
-			{
+			if ( ! names[node.name] ) {
 				names[node.name] = 1;
 			}
-			else
-			{
+			else {
 				// HACK TO AVOID THIS ERROR: node.parentNode is null
 				try {
 					console.log("GroupProjects.setDropTarget dojo.connect onDndDrop    Removing duplicate node: " + node.name );
@@ -449,10 +451,9 @@ setDropTarget : function () {
 	});
 },
 addToGroup : function (name, description, location ) {
-	//////console.log("GroupProjects.addToGroup    plugins.sharing.GroupProjects.addToGroup(name, description, location)");
-	//////console.log("GroupProjects.addToGroup    name: " + name);
-	//////console.log("GroupProjects.addToGroup    description: " + description);
-	//////console.log("GroupProjects.addToGroup    location: " + location);
+	console.log("GroupProjects.addToGroup    name: " + name);
+	console.log("GroupProjects.addToGroup    description: " + description);
+	console.log("GroupProjects.addToGroup    location: " + location);
 	
 	var groupObject = new Object;
 	groupObject.username = Agua.cookie('username');
@@ -463,16 +464,12 @@ addToGroup : function (name, description, location ) {
 	
 	// ADD SOURCE OBJECT TO THE SOURCES IN THIS GROUP
 	var groupName = this.groupCombo.getValue();
-	//////console.log("GroupProjects.addToGroup     groupName: " + groupName);
+	console.log("GroupProjects.addToGroup     groupName: " + groupName);
 
-	var success = Agua.addProjectToGroup(groupName, groupObject);
-	//////console.log("GroupProjects.addToGroup     Agua.addProjectToGroup success: " + success);
-	if ( success == false )
-	{
-		//////console.log("GroupProjects.addToGroup     Failed to add project to group: " + groupObject.name + ". Returning.");
-		return;
-	}
-
+	var callback = function() {
+		Agua.addProjectToGroup(groupName, groupObject);
+	};
+	
 	// ADD THE SOURCE INTO THE groupprojects TABLE ON THE SERVER
 	var data = new Object;
 	data.name = name;
@@ -490,28 +487,37 @@ addToGroup : function (name, description, location ) {
 	query.module = "Agua::Sharing";
 
 	var queryString = dojo.toJson(query).replace(/undefined/g, '""');
-	////////console.log("GroupProjects.addToGroup    queryString: " + queryString);
+	query = dojo.fromJson(queryString);
+	console.log("GroupProjects.addToGroup    query: " + queryString);
 
-	// SEND TO SERVER
-	dojo.xhrPut(
-		{
-			url: url,
-			contentType: "text",
-			sync : false,
-			handleAs: "json",
-			putData: queryString,
-			timeout: 15000,
-			load: function(data)
-			{
-				//////console.log("GroupProjects.addToGroup    JSON loaded okay");
-				//////console.log("GroupProjects.addToGroup    data: " + dojo.toJson(data));		
-			},
-			error: function(response, ioArgs) {
-				//////console.log("GroupProjects.addToGroup    Error with JSON Post, response: " + response + ", ioArgs: " + ioArgs);
-				return response;
-			}
-		}
-	);
+	Agua.doPut({
+		url: url,
+		sync: false,
+		query: query,
+		callback: callback
+	})
+
+	//// SEND TO SERVER
+	//dojo.xhrPut(
+	//	{
+	//		url: url,
+	//		contentType: "text",
+	//		sync : false,
+	//		handleAs: "json",
+	//		putData: queryString,
+	//		timeout: 15000,
+	//		load: function(data)
+	//		{
+	//			//////console.log("GroupProjects.addToGroup    JSON loaded okay");
+	//			//////console.log("GroupProjects.addToGroup    data: " + dojo.toJson(data));		
+	//		},
+	//		error: function(response, ioArgs) {
+	//			//////console.log("GroupProjects.addToGroup    Error with JSON Post, response: " + response + ", ioArgs: " + ioArgs);
+	//			return response;
+	//		}
+	//	}
+	//);
+
 },
 removeFromGroup : function (name, description, location ) {
 	//////console.log("GroupProjects.removeFromGroup    plugins.sharing.GroupProjects.removeFromGroup(name, description, location)");
@@ -619,4 +625,8 @@ setTrash : function () {
 	});
 }
 
-}); // plugins.sharing.GroupProjects
+
+}); //	end declare
+
+});	//	end define
+

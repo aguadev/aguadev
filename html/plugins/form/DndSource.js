@@ -31,26 +31,26 @@ childWidgets : [],
 
 ////}}}
 constructor : function(args) {
-	//console.log("DndSource.constructor     plugins.form.DndSource.constructor");	
+	console.log("DndSource.constructor     plugins.form.DndSource.constructor");	
 },
 postCreate : function() {
-	//console.log("DndSource.postCreate    plugins.form.DndSource.postCreate()");
+	console.log("DndSource.postCreate    plugins.form.DndSource.postCreate()");
 	this.startup();
 },
 startup : function () {
-	//console.group("DndSource-" + this.id + "    startup");
+	console.group("DndSource-" + this.id + "    startup");
 	
-	//console.log("DndSource.startup    DOING this.initialiseDragSource()");
+	console.log("DndSource.startup    DOING this.initialiseDragSource()");
 	this.initialiseDragSource();
 
-	//console.log("DndSource.startup    DOING this.setDragSourceCreator()");
+	console.log("DndSource.startup    DOING this.setDragSourceCreator()");
 	this.setDragSourceCreator();
 
-	//console.groupEnd("DndSource-" + this.id + "    startup");	
+	console.groupEnd("DndSource-" + this.id + "    startup");	
 },
 initialiseDragSource : function (node) {
-	//console.group("DndSource-" + this.id + "    initialiseDragSource");
-	//console.log("DndSource.initialiseDragSource    this.dragSourceNode: " + this.dragSourceNode);
+	console.group("DndSource-" + this.id + "    initialiseDragSource");
+	console.log("DndSource.initialiseDragSource    this.dragSourceNode: " + this.dragSourceNode);
 	
 	if ( node == null )
 		node = this.dragSourceNode; 
@@ -63,24 +63,24 @@ initialiseDragSource : function (node) {
 			accept : [ "none" ]
 		}
 	);
-	//console.log("DndSource.initialiseDragSource    AFTER this.dragSource = new dojo.dnd.Source");
-	//console.log("DndSource.initialiseDragSource    this.dragSource");
-	//console.dir({this_dragSource:this.dragSource});
+	console.log("DndSource.initialiseDragSource    AFTER this.dragSource = new dojo.dnd.Source");
+	console.log("DndSource.initialiseDragSource    this.dragSource");
+	console.dir({this_dragSource:this.dragSource});
 	
-	//console.groupEnd("DndSource-" + this.id + "    initialiseDragSource");
+	console.groupEnd("DndSource-" + this.id + "    initialiseDragSource");
 },
 setDragSourceCreator : function () {
 // AVATAR CREATOR
-	//console.group("DndSource-" + this.id + "    setDragSourceCreator");
+	console.group("DndSource-" + this.id + "    setDragSourceCreator");
 
 	var thisObject = this;
 	this.dragSource.creator = dojo.hitch(this.dragSource, function (item, hint) {
-		//console.log("DndSource.setDragSourceCreator     this: " + this);
-		//console.log("DndSource.setDragSourceCreator     this.dragSourceWidget.creator    item: " + dojo.toJson(item, true));
-		//console.log("DndSource.setDragSourceCreator     this.dragSourceWidget.creator    thisObject.formInputs: ");
-		//console.dir({this_formInputs:thisObject.formInputs});
-		//console.log("DndSource.setDragSourceCreator     this.dragSourceWidget.creator    thisObject.avatarItems: ");
-		//console.dir({this_avatarItems:thisObject.avatarItems});
+		console.log("DndSource.setDragSourceCreator     this: " + this);
+		console.log("DndSource.setDragSourceCreator     this.dragSourceWidget.creator    item: " + dojo.toJson(item, true));
+		console.log("DndSource.setDragSourceCreator     this.dragSourceWidget.creator    thisObject.formInputs: ");
+		console.dir({this_formInputs:thisObject.formInputs});
+		console.log("DndSource.setDragSourceCreator     this.dragSourceWidget.creator    thisObject.avatarItems: ");
+		console.dir({this_avatarItems:thisObject.avatarItems});
 
 		var data = item.data;
 
@@ -99,7 +99,7 @@ setDragSourceCreator : function () {
 		{
 		//dojo.forEach(thisObject.avatarItems, function (name) {
 			var name = thisObject.avatarItems[i];
-			//console.log("DndSource.setDragSourceCreator     this.dragSourceWidget.creator    name: " + name);
+			console.log("DndSource.setDragSourceCreator     this.dragSourceWidget.creator    name: " + name);
 			if ( i == 0 )
 			{
 				avatarHtml += "<tr><td class='dojoDndAvatarHeader'><strong style='color: darkred'>";
@@ -113,13 +113,13 @@ setDragSourceCreator : function () {
 		}
 		//});
 		avatarHtml += "</table>";
-		//console.log("DndSource.setDragSourceCreator     this.dragSourceWidget.creator    avatarHtml: " + avatarHtml);
+		console.log("DndSource.setDragSourceCreator     this.dragSourceWidget.creator    avatarHtml: " + avatarHtml);
 		node.innerHTML = avatarHtml;
 
 		return {node: node, data: item, type: ["draggableItem"]};
 	});	
 
-	//console.groupEnd("DndSource-" + this.id + "    setDragSourceCreator");
+	console.groupEnd("DndSource-" + this.id + "    setDragSourceCreator");
 },
 // DATA ITEMS FOR ROWS - INHERITING CLASS MUST OVERRIDE
 getItemArray : function () {
@@ -128,18 +128,18 @@ getItemArray : function () {
 clearDragSource : function () {
 // DELETE EXISTING TABLE CONTENT
 
-	//console.log("DndSource.clearDragSource     DndSource.clearDragSource()");
-	//console.log("DndSource.clearDragSource     this.dragSource: " + this.dragSource);
+	console.log("DndSource.clearDragSource     DndSource.clearDragSource()");
+	console.log("DndSource.clearDragSource     this.dragSource: " + this.dragSource);
 	var nodes = this.dragSource.getAllNodes();
-	//console.log("DndSource.clearDragSource     TO DELETE nodes: " + nodes);
+	console.log("DndSource.clearDragSource     TO DELETE nodes: " + nodes);
 	if ( nodes != null ) {
-		//console.log("DndSource.clearDragSource     TO DELETE nodes.length: " + nodes.length);
+		console.log("DndSource.clearDragSource     TO DELETE nodes.length: " + nodes.length);
 		for ( var i = 0; i < nodes.length; i++ )
 		{
 			var node = nodes[i];
-			//console.log("DndSource.clearDragSource     DELETING node.id: " + node.id);
+			console.log("DndSource.clearDragSource     DELETING node.id: " + node.id);
 			var item = this.dragSource.getItem(node.id);
-			//console.log("DndSource.clearDragSource     DELETING node.id: " + node.id);
+			console.log("DndSource.clearDragSource     DELETING node.id: " + node.id);
 			this.dragSource.delItem(item);
 			dojo.destroy(node);
 		}
@@ -154,7 +154,7 @@ clearDragSource : function () {
 },
 // NB: INHERITING CLASS MUST HAVE this.dragSource
 setDragSource : function () {
-	//console.log("DndSource.setDragSource     plugins.form.DndSource.setDragSource()");
+	console.log("DndSource.setDragSource     plugins.form.DndSource.setDragSource()");
 
 	// GENERATE DND GROUP
 	if ( this.dragSource == null ) {
@@ -166,16 +166,16 @@ setDragSource : function () {
 	this.clearDragSource();
 	
 	var itemArray = this.getItemArray();
-	//console.log("DndSource.setDragSource     itemArray.length: " + dojo.toJson(itemArray.length));
-	//console.log("DndSource.setDragSource     itemArray: ");
-	//console.dir({itemArray:itemArray});
+	console.log("DndSource.setDragSource     itemArray.length: " + dojo.toJson(itemArray.length));
+	console.log("DndSource.setDragSource     itemArray: ");
+	console.dir({itemArray:itemArray});
 	
 	this.loadDragItems(itemArray);
 },
 loadDragItems : function (itemArray) {
-	//console.log("DndSource.loadDragItems     itemArray: ");
-	//console.dir({itemArray:itemArray});
-	//console.log("DndSource.loadDragItems     itemArray.length: " + itemArray.length);
+	console.log("DndSource.loadDragItems     itemArray: ");
+	console.dir({itemArray:itemArray});
+	console.log("DndSource.loadDragItems     itemArray.length: " + itemArray.length);
 
 	// SET FLAG TO ABSORB EXTRANEOUS ONCHANGE FIRE
 	this.dragSourceOnchange = false;
@@ -190,25 +190,25 @@ loadDragItems : function (itemArray) {
 		var data = itemArray[j];				
 		dataArray.push( { data: data, type: ["draggableItem"] } );
 	}
-	//console.log("DndSource.loadDragItems     dataArray.length: " + dataArray.length);	
+	console.log("DndSource.loadDragItems     dataArray.length: " + dataArray.length);	
 
-	//console.log("DndSource.loadDragItems     this.formInputs: ");
-	//console.dir({this_formInputs: this.formInputs});
+	console.log("DndSource.loadDragItems     this.formInputs: ");
+	console.dir({this_formInputs: this.formInputs});
 
 	
 	// INSERT NODES
-	//console.log("DndSource.loadDragItems     this.dragSource: ");
-	//console.dir({this_dragSource: this.dragSource});
+	console.log("DndSource.loadDragItems     this.dragSource: ");
+	console.dir({this_dragSource: this.dragSource});
 	this.dragSource.insertNodes(false, dataArray);
-	
+		
 	// SET TABLE ROW STYLE IN dojDndItems
 	var allNodes = this.dragSource.getAllNodes();
-	//console.log("DndSource.loadDragItems     allNodes.length: " + allNodes.length);
+	console.log("DndSource.loadDragItems     allNodes.length: " + allNodes.length);
 	for ( var k = 0; k < allNodes.length; k++ ) {
 		// SET NODE DATA
 		var node = allNodes[k];
 		node.data = dataArray[k].data;
-		//console.log("DndSource.loadDragItems     dataArray[" + k + "].data: " + dojo.toJson( dataArray[k].data));
+		console.log("DndSource.loadDragItems     dataArray[" + k + "].data: " + dojo.toJson( dataArray[k].data));
 	
 		// SET AVATAR TYPE
 		if ( this.avatarType !== null ) {
@@ -217,29 +217,32 @@ loadDragItems : function (itemArray) {
 		// SET ITEM OBJECT
 		var itemObject = new Object;
 		for ( name in this.formInputs ) {
-			//console.log("DndSource.loadDragItems     itemObject[" + name + "] = " + dataArray[k].data[name]);
+			console.log("DndSource.loadDragItems     itemObject[" + name + "] = " + dataArray[k].data[name]);
 			itemObject[name] = dataArray[k].data[name];
 		}
-		//console.log("DndSource.loadDragItems     itemObject: ");
-		//console.dir({itemObject:itemObject});
+		console.log("DndSource.loadDragItems     itemObject: ");
+		console.dir({itemObject:itemObject});
 		itemObject.parentWidget = this;
 
 		// CREATE ROW
 		var rowClass = this.rowClass;
-		//console.log("DndSource.loadDragItems     rowClass: " + rowClass);
+		console.log("DndSource.loadDragItems     rowClass: " + rowClass);
 		
-		//dojo.require("plugins.workflow.Apps.AppRow");
 		dojo.require(rowClass);
-		var module = dojo.getObject(rowClass);
-		//console.log("DndSource.loadDragItems     module: ");
-		//console.dir({module:module});
 		
-		var itemObjectRow = new module(itemObject);
-		//console.log("DndSource.loadDragItems     itemObjectRow: ");
-		//console.dir({itemObjectRow:itemObjectRow});
+		
+		var module = dojo.getObject(rowClass);
+		console.log("DndSource.loadDragItems     module: ");
+		console.dir({module:module});
 
-		//console.log("DndSource.loadDragItems     node: ");
-		//console.dir({node:node});
+		var itemObjectRow = new module(itemObject);
+
+		console.log("DndSource.loadDragItems     itemObjectRow: " + itemObjectRow);
+		console.dir({itemObjectRow:itemObjectRow});
+		
+
+		console.log("DndSource.loadDragItems     node: ");
+		console.dir({node:node});
 
 		this.childWidgets.push(itemObjectRow);
 		node.innerHTML = '';

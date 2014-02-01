@@ -117,6 +117,9 @@ method config {
 	#### CONFIGURE CRON JOB TO MONITOR StarCluster LOAD BALANCER
 	$self->cron();
 	
+	#### CREATE guest USER ACCOUNT ON FILESYSTEM AND IN Agua DATABASE
+	$self->guestUser();
+
 	#### CREATE admin USER ACCOUNT ON FILESYSTEM AND IN Agua DATABASE
 	$self->adminUser();
 	
@@ -269,8 +272,7 @@ PURPOSE
 
 print "\n\n\n";
 print "****************************************************************\n";
-print "********      CREATE admin USER ACCOUNT ON SERVER      *********\n";
-print "****************************************************************\n";
+print "**********      CREATE admin LINUX USER ACCOUNT      ***********\n";
 print "\n\n\n";
 
     #### ADMIN USERNAME
@@ -317,7 +319,6 @@ print "\n\n\n";
 	$self->_addLinuxUser($object);
 
 print "\n\n\n";
-print "****************************************************************\n";
 print "*********    admin USER ACCOUNT SUCCESSFULLY CREATED   *********\n";
 print "****************************************************************\n";
 print "\n\n\n";
@@ -380,15 +381,14 @@ print "*********************************************************************\n";
 print "************    TEST USER ACCOUNT SUCCESSFULLY CREATED    ***********\n";
 print "*********************************************************************\n";
 print "\n\n\n";
-
 }
 
-method _loadUserData ($username, $database) {
+method _loadUserData ($username, $database, $subdir) {
     my $rootpassword   	=   $self->rootpassword();
 	$rootpassword 		=	$self->_inputRootPassword() if not defined $rootpassword;
 	$self->logDebug("rootpassword", $rootpassword);
 	
-	my $dumpfile		=	$self->_getDumpfile($username);
+	my $dumpfile		=	$self->_getDumpfile($username, $subdir);
 	$self->logDebug("dumpfile", $dumpfile);
 	
 	my $command = "mysql -u root -p$rootpassword $database < $dumpfile";
@@ -396,9 +396,9 @@ method _loadUserData ($username, $database) {
 	print `$command`;
 	
 }
-method _getDumpfile ($username) {
+method _getDumpfile ($username, $subdir) {
 	
-	my $dumpfile	=	"$Bin/../sql/dump/$username.dump";
+	my $dumpfile	=	"$Bin/../sql/dump/$subdir/$username.dump";
 	
 	return $dumpfile;
 }
@@ -542,26 +542,31 @@ PURPOSE
 	$self->printMysqlWelcome();
 	
     print qq{\n
-Continuing with configuration. Please input values for the following items.
-(Or hit RETURN to accept the [default_value])
+Configuring MySQL. Please input values or accept the [default_value])
 
 };
-    #### SET DATABASE NAME
-    my $database        =   $self->setDatabase();
 
 	#### CHECK TO RESET ROOTPASSWORD, OTHERWISE GET FROM CONF FILE
+	print "\n**** SET MYSQL ROOT PASSWORD\n\n";
 	$self->setMysqlRoot();
+
+    #### SET DATABASE NAME
+	print "\n**** SET DATABASE NAME\n\n";
+    my $database        =   $self->setDatabase();
 
 	#### RELOAD DATABASE
 	return if not defined $self->reloadDatabase();
 	
 	#### OPTIONALLY RESET AGUA MYSQL USER AND PASSWORD    
+	print "\n**** SET AGUA LINUX USER\n\n";
 	my ($user, $password) = $self->setAguaUser();
 	
 	#### CREATE TEST DATABASE
+	print "\n**** CREATE TEST DATABASE\n\n";
 	$self->createTestDb();
 
 	#### OPTIONALLY RESET TEST AGUA MYSQL USER AND PASSWORD    
+	print "\n**** SET TEST USER\n\n";
 	my ($testuser, $testpassword) = $self->setTestUser();
 	
     #### PRINT CONFIRMATION THAT THE agua DATABASE HAS BEEN CREATED
@@ -571,10 +576,8 @@ Continuing with configuration. Please input values for the following items.
 method printMysqlWelcome {
 		#### PRINT INFO
     print qq{\n
-	Welcome to the Agua configuration utility (config.pl)
+	The Agua configuration utility does the following:
 	
-	You can use this application to:
-
 	1. Set the root MySQL password (if not already set)
 
 	2. Create a new Agua database (backs up existing data, loads data from dump file)
@@ -657,7 +660,6 @@ method setAguaUser {
 	$password		=	$self->createRandomPassword($length) if not $password;
 
 	#### Agua USER NAME
-	print "\n";
 	$user = $self->_inputValue("Agua MySQL user name", $user);	
     $self->logError("user not defined") if not defined $user;
         
@@ -684,6 +686,7 @@ method setAguaUser {
 }
 
 method setDatabase {
+	print "\n";
 	my $database = $self->database() || $self->conf()->getKey("database", "DATABASE");
 	$database = $self->_inputValue("Agua MySQL database name", $database);
     $self->logError("database not defined") if not defined $database;
@@ -718,7 +721,7 @@ method _inputRootPassword {
 #### MASK TYPING FOR PASSWORD INPUT
     ReadMode 2;
 	print "\n";
-	my $rootpassword = $self->_inputValue("Please input the current MySQL root password\n(Will not appear on screen)", undef);	
+	my $rootpassword = $self->_inputValue("Please input the current MySQL root password (Will not appear on screen)", undef);	
 
     #### UNMASK TYPING
     ReadMode 0;
@@ -804,7 +807,6 @@ method killMysql {
 
 method _getRootPassword {
 	my $rootpassword = $self->rootpassword();
-	$self->logError("rootpassword not defined") and return if not defined $rootpassword;
 	if ( not $rootpassword ) {
 		$rootpassword = $self->_inputRootPassword();
 		$self->rootpassword($rootpassword);
@@ -826,6 +828,7 @@ method reloadDatabase {
 	#### SET DB OBJECT
 	$self->setDbObject("mysql", "root", $rootpassword);
 	
+	#### CHECK OVERWRITE
 	my $overwrite = 1;
 	if ( $self->db()->isDatabase($database) ) {
 		$overwrite = $self->_checkOverwrite($database);
@@ -835,7 +838,8 @@ method reloadDatabase {
 	$self->_createDb($database) if $overwrite;
 
 	#### POPULATE DATABASE WITH DUMP FILE
-	$self->_loadDumpfile($database) if $overwrite;
+	my $dumpfile	=	$self->_getDumpfile("agua", "agua");
+	$self->_loadDumpfile($database, $dumpfile) if $overwrite;
 }
 
 method _checkOverwrite ($database) {
@@ -875,7 +879,7 @@ This transaction has been recorded in the log:
 \t$logfile
 
 $timestamp
-*******************************************************\n};
+*******************************************************\n\n\n};
 	print  $report;
 	$self->logDebug("report: ", $report);
 }
@@ -888,16 +892,48 @@ method _dropDatabase ($database) {
 	$self->logDebug("Drop database success", $success);
 }
 
-method _loadDumpfile ($database) {
+method _loadDumpfile ($database, $dumpfile) {
 	$self->logDebug("database", $database);
-    my $rootpassword   	=   $self->rootpassword();
-	my $dumpfile		=	$self->dumpfile();
 	$self->logDebug("dumpfile", $dumpfile);
+
+    my $rootpassword   	=   $self->rootpassword();
 	my $command = "mysql -u root -p$rootpassword $database < $dumpfile";
 	$self->logDebug("command", $command);
 	print `$command`;
 }
 
+#### TEST DATABASE
+method createTestDb {
+	my $testdatabase = $self->conf()->getKey("database", "TESTDATABASE");
+	$self->logDebug("testdatabase", $testdatabase);
+	$self->logDebug("testdatabase not defined") and exit if not defined $testdatabase;
+
+	#### SET DB OBJECT
+	my $rootpassword = $self->_getRootPassword();
+	$self->logError("rootpassword not defined") and return if not defined $rootpassword;
+
+	#### SET DB OBJECT
+	$self->setDbObject("mysql", "root", $rootpassword);
+	
+	#print "\nChecking to see if test database already exists\n";
+	#print "\nTest database found\n" and return 1 if $self->db()->isDatabase($testdatabase);
+	#print "\nTest database not found. Creating test database\n";
+
+	#### CHECK OVERWRITE
+	my $overwrite = 1;
+	if ( $self->db()->isDatabase($testdatabase) ) {
+		$overwrite = $self->_checkOverwrite($testdatabase);
+	}
+
+	if ( $overwrite ) {
+		#### CREATE DATABASE 
+		$self->_createDb($testdatabase);
+	
+		#### POPULATE DATABASE WITH DUMP FILE
+		my $dumpfile	=	$self->_getDumpfile("agua", "test");
+		$self->_loadDumpfile($testdatabase, $dumpfile);
+	}
+}
 #### TEST USER
 method setTestUser {
 	my $testdatabase = $self->testdatabase() || $self->conf()->getKey("database", "TESTDATABASE");
@@ -932,13 +968,12 @@ method setTestUser {
     $self->testuser($testuser);
     $self->testpassword($testpassword);
 
-	#### SET DATABASE
-	$self->setDbh({	database	=>	$testdatabase	});
-
-	#### ALLOW ACCESS TO database
+	#### ALLOW agua USER ACCESS TO TEST DATABASE
 	my $user		=	$self->conf()->getKey("database", "USER");
-	#my $password	=	$self->conf()->getKey("database", "PASSWORD");
 	$self->grantAccess($testdatabase, $user);
+	
+	#### SET TEST DATABASE HANDLE
+	$self->setDbh({	database	=>	$testdatabase	});
 	
 	#### UPDATE TESTUSER PASSWORD IN TEST DATABASE
 	if ( $self->db()->query("SELECT 1 FROM users WHERE username='$testuser'")) {
@@ -951,7 +986,7 @@ method setTestUser {
 	}
 	
 	#### LOAD TEST USER DATA INTO TEST DATABASE
-	$self->_loadUserData($testuser, $testdatabase);	
+	$self->_loadUserData($testuser, $testdatabase, "test");	
 
 	#### RESET DATABASE
 	my $database	=	$self->conf()->getKey("database", "DATABASE");
@@ -960,26 +995,7 @@ method setTestUser {
 	return $testuser, $testpassword;
 }
 
-method createTestDb {
-	my $testdatabase = $self->conf()->getKey("database", "TESTDATABASE");
-	$self->logDebug("testdatabase", $testdatabase);
-	$self->logDebug("testdatabase not defined") and exit if not defined $testdatabase;
-
-	#### SET DB OBJECT
-	my $rootpassword = $self->_getRootPassword();
-	$self->logError("rootpassword not defined") and return if not defined $rootpassword;
-
-	#### SET DB OBJECT
-	$self->setDbObject("mysql", "root", $rootpassword);
-	
-	print "\nChecking to see if test database already exists\n";
-	print "\nTest database found\n" and return 1 if $self->db()->isDatabase($testdatabase);
-	print "\nTest database not found. Creating test database\n";
-
-	#### CREATE DATABASE 
-	$self->_createDb($testdatabase);
-}
-
+#### DATABASE UTILS
 method _createDb ($database) {
     my $rootpassword   	=   $self->rootpassword();
     my $user       		=   $self->user();
@@ -1041,14 +1057,20 @@ method _dumpDb ($database, $user, $password, $dumpfile) {
 
 	#### PRINT DUMP COMMAND FILE
 	my $timestamp = $self->_getTimestamp($database, $user, $password);
+	$timestamp	=~ s/::/-/g;
 	
-	$dumpfile = FindBin::Real::Bin() . "/../sql/dump/$user.$timestamp.dump" if not defined $dumpfile;
+	#### SET DEFAULT dumpfile
+	$dumpfile = FindBin::Real::Bin() . "/../sql/dump/agua/$user.$timestamp.dump" if not defined $dumpfile;
+	$self->logDebug("dumpfile", $dumpfile);
+
+	#### CREATE DUMP DIR
 	my ($dumpdir) = $dumpfile =~ /^(.+)\/[^\/]+$/;
 	$self->logDebug("dumpdir", $dumpdir);
 	`mkdir -p $dumpdir` if not -d $dumpdir;
 	print "Agua::Configure::_dumpDb    Can't create dumpdir: $dumpdir\n" if not -d $dumpdir;
 	
-	my $cmdfile = FindBin::Real::Bin() . "/../sql/dump/$user.$timestamp.cmd";
+	#### SET DUMP COMMAND FILE
+	my $cmdfile = "$dumpdir/$user.$timestamp.cmd";
 	$self->printToFile($cmdfile, "#!/bin/sh\n\nmysqldump -u $user -p$password $database > $dumpfile\n");
 
 	#### DUMP CONTENTS OF Agua DATABASE TO FILE
@@ -1064,9 +1086,8 @@ method guestUser {
 
 print "\n\n\n";
 print "*********************************************************************\n";
-print "***************** CREATING TEST USER LINUX ACCOUNT ******************\n";
-print "*********************************************************************\n";
-print "\n\n\n";
+print "***************** CREATING guest USER LINUX ACCOUNT ******************\n";
+print "\n\n";
 
 	my $username 	= $self->conf()->getKey("database", "GUESTUSER");
 	my $firstname 	= "";
@@ -1081,18 +1102,18 @@ print "\n\n\n";
 	};
     $self->logDebug("object", $object);
 	
-	### REMOVE OLD AGUA TEST LINUX ACCOUNT
+	#### REMOVE OLD AGUA guest LINUX ACCOUNT
 	$self->_removeLinuxUser($object);
 	
-	### ADD NEW AGUA TEST LINUX ACCOUNT AND CREATE DIRECTORY IF NOT EXISTS
+	#### ADD NEW AGUA guest LINUX ACCOUNT
+	#### AND CREATE DIRECTORY IF NOT EXISTS
 	$self->_addLinuxUser($object);
 
-	#### SET TEST USER MYSQL ACCOUNT
+	#### SET guest USER MYSQL ACCOUNT
 	$self->setGuestUser();
 	
-print "\n\n\n";
-print "*********************************************************************\n";
-print "************    TEST USER ACCOUNT SUCCESSFULLY CREATED    ***********\n";
+print "\n\n";
+print "************    guest USER ACCOUNT SUCCESSFULLY CREATED    ***********\n";
 print "*********************************************************************\n";
 print "\n\n\n";
 
@@ -1128,7 +1149,7 @@ method setGuestUser {
 	$self->conf()->setKey("database", "GUESTPASSWORD", $guestpassword);
 
 	#### LOAD GUEST USER DATA INTO GUEST DATABASE
-	$self->_loadUserData($guestuser, $database);	
+	$self->_loadUserData($guestuser, $database, "agua");	
 
 	#### CREATE FOLDERS FOR WORKFLOWS
 	$self->_createFileDirs($guestuser, $database);
@@ -1188,7 +1209,7 @@ method _createWorkflowDirs ($username) {
 	}
 }
 
-#### miscellaneous
+#### MISC UTILS
 method getArch {    
 	my $arch = $self->arch();
     $self->logDebug("STORED arch", $arch) if defined $arch;
@@ -1298,7 +1319,7 @@ method printToFile ($file, $text) {
 	close(OUT) or $self->logCaller() and $self->logCritical("Can't close file: $file") and exit;	
 }
 
-=head2 apps
+=head2 APPS
 
     SUBROUTINE      apps
     

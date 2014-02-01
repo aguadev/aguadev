@@ -301,7 +301,7 @@ setCoreWidget : function (moduleName, name, pane) {
 	
 	this[name] = new module(
 	{
-		attachNode : pane,
+		attachPoint : pane,
 		parentWidget: this,
 		core: this.core
 	});
@@ -313,7 +313,7 @@ setParameters : function () {
 // SET DATA TAB IN INFO PANE BY INSTANTIATING Parameters OBJECT
 	////console.log("Workflow.setParameters    plugins.workflow.Stages.setParameters()");
 	this.core.parameters = new plugins.workflow.Parameters({
-		attachNode : this.rightPane,
+		attachPoint : this.rightPane,
 		parentWidget: this,
 		core: this.core
 	});

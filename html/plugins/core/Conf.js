@@ -1,4 +1,5 @@
 dojo.provide("plugins.core.Conf");
+console.log("plugins.core.Conf    HERE");
 
 /* SUMMARY: STORE conf FILE KEYPAIRS */
 
@@ -33,12 +34,12 @@ setData : function () {
 	//console.dir({this_data:this.data});
 },
 getKey : function (sectionName, key) {	
-    //console.log("Conf.getKey    sectionName: " + sectionName);
-    //console.log("Conf.getKey    key: " + key);
+    console.log("Conf.getKey    sectionName: " + sectionName);
+    console.log("Conf.getKey    key: " + key);
 	if ( ! this.data ) 	this.setData(); 
 	
-//    //console.log("Conf.getKey    this.data:");
-//    //console.dir({this_data:this.data});    
+    console.log("Conf.getKey    this.data:");
+    console.dir({this_data:this.data});    
 
 	if ( ! this.data ) return "";
 	if ( ! this.data[sectionName] ) return "";

@@ -15,7 +15,7 @@ console.log("# plugins.graph.Graph");
 // SET window.Agua GLOBAL VARIABLE
 window.Agua = Agua;
 
-	
+
 // DATA URL
 var url 	= "./getData.json";	
 

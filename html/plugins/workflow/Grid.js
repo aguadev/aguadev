@@ -59,16 +59,16 @@ startup : function () {
 	this.inherited(arguments);	 
 
 //	console.log("Grid.startup    this.mainTab: " + this.mainTab);
-//	console.log("Grid.startup    this.attachNode: " + this.attachNode);
+//	console.log("Grid.startup    this.attachPoint: " + this.attachPoint);
 //	console.dir({mainTab: this.mainTab});
-// 	console.dir({attachNode: this.attachNode});
+// 	console.dir({attachPoint: this.attachPoint});
 
 	// ADD TO TAB CONTAINER
-	console.log("Grid.startup    Doing this.attachNode.addChild(this.mainTab)");
-	this.attachNode.addChild(this.mainTab);
+	console.log("Grid.startup    Doing this.attachPoint.addChild(this.mainTab)");
+	this.attachPoint.addChild(this.mainTab);
 
-	console.log("Grid.startup    Doing this.attachNode.selectChild(this.mainTab)");
-	this.attachNode.selectChild(this.mainTab);
+	console.log("Grid.startup    Doing this.attachPoint.selectChild(this.mainTab)");
+	this.attachPoint.selectChild(this.mainTab);
 	
 	// SET CHILD WIDGETS
 	this.childWidgets = new Array;

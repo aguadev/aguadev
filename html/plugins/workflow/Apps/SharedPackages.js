@@ -21,7 +21,7 @@ core : null,
 parentWidget : null,
 
 // ATTACH NODE
-attachNode : null,
+attachPoint : null,
 
 // ARRAY OF plugins.workflow.Apps.Apps OBJECT
 packageApps : [],
@@ -32,7 +32,7 @@ constructor : function (args) {
 	// GET INFO FROM ARGS
 	this.core = args.core;
 	this.parentWidget	= args.parentWidget;
-	this.attachNode 	= args.attachNode;	
+	this.attachPoint 	= args.attachPoint;	
 },
 startup : function() {
 	console.log("SharedPackages.startup    workflow.Apps.SharedPackages.startup()");

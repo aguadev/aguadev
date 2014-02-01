@@ -1,3 +1,15 @@
+require([
+	"dojo/_base/declare",
+	"dojo/dom",
+	"doh/runner",
+	"t/doh/util",
+	"plugins/core/Util/ViewSize",
+	"dojo/domReady!"
+],
+
+function (declare, dom, doh, util, ViewSize) {
+
+
 // REGISTER module path FOR PLUGINS
 dojo.registerModulePath("plugins","../../plugins");	
 dojo.registerModulePath("t","../../t/unit");	

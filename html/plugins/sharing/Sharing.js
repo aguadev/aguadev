@@ -59,15 +59,11 @@ cssFiles : [
 
 modules : {
 // LEFT PANE
-	"Apps"		: "plugins.sharing.Apps",
 	"GroupProjects"	:	"plugins.sharing.GroupProjects",
 	"Settings"	:	"plugins.sharing.Settings",
 	"Clusters"	:	"plugins.sharing.Clusters",
 	
 	// MIDDLE PANE
-	"Amis"		:	"plugins.sharing.Amis",
-	"Parameters":	"plugins.sharing.Parameters",
-	"Packages"	:	"plugins.sharing.Packages",
 	"Groups"	:	"plugins.sharing.Groups",
 	"Projects"	:	"plugins.sharing.Projects",
 	"Access"	:	"plugins.sharing.Access",
@@ -102,7 +98,15 @@ startup : function () {
 	this.paneWidgets = new Object;
 
 	// LOAD HEADINGS FOR THIS USER
-	this.headings = Agua.getSharingHeadings();
+	//this.headings = Agua.getSharingHeadings();
+	this.headings = {
+		leftPane: [
+			"Groups"
+		],
+		middlePane	:[
+			"GroupProjects"
+		]
+	};
 	
 	// LOAD PANES
 	this.loadPanes();

@@ -103,44 +103,44 @@ method install {
 	#### SET CONF
 	$self->setConf();
 
-#	#### SET PUPPET DIRS
-#	$self->setPuppetDirs();
-#	
-#    #### INSTALL APACHE
-#    $self->installApache();
+	#### SET PUPPET DIRS
+	$self->setPuppetDirs();
+	
+    #### INSTALL APACHE
+    $self->installApache();
 
     #### GENERATE NEW PUBLIC CERTIFICATE (HTTPS)
     $self->enableHttps();
     
-    ##### INSTALL NODE, RABBIT AND AMQP EXCHANGE
-    #$self->installExchange();
-    #
-    ##### FIX /etc/fstab SO MICRO INSTANCE CAN REBOOT
-    #$self->enableReboot();
-    #
-    ##### INSTALL MYSQL
-    #$self->installMysql();
+    #### INSTALL NODE, RABBIT AND AMQP EXCHANGE
+    $self->installExchange();
     
-    ##### INSTALL EC2-API-TOOLS
-    #$self->installEc2();
+    #### FIX /etc/fstab SO MICRO INSTANCE CAN REBOOT
+    $self->enableReboot();
+    
+    #### INSTALL MYSQL
+    $self->installMysql();
+    
+    #### INSTALL EC2-API-TOOLS
+    $self->installEc2();
 
-    ##### LINK INSTALLATION DIRECTORIES TO WEB DIRECTORIES
-    #$self->linkDirectories();
+    #### LINK INSTALLATION DIRECTORIES TO WEB DIRECTORIES
+    $self->linkDirectories();
     
-    ##### SET PERMISSIONS TO ALLOW ACCESS BY www-data USER
-    #$self->setPermissions();
+    #### SET PERMISSIONS TO ALLOW ACCESS BY www-data USER
+    $self->setPermissions();
     
-    ##### SET COMMANDS IN STARTUP SCRIPT
-    #$self->setStartupScript();
+    #### SET COMMANDS IN STARTUP SCRIPT
+    $self->setStartupScript();
     
-    ####### INSTALL R STATISTICAL SOFTWARE PACKAGE
-    ###$self->installR();
+    ######## INSTALL R STATISTICAL SOFTWARE PACKAGE
+    ####$self->installR();
     
-    ###### INSTALL Bio::Db::Sam
-    ##$self->installBioDbSam();
-    #
-    ##### CONFIRM INSTALLATION AND PRINT INFO
-    #$self->installConfirmation();
+    ######## INSTALL Bio::Db::Sam
+    ####$self->installBioDbSam();
+
+    #### CONFIRM INSTALLATION AND PRINT INFO
+    $self->installConfirmation();
 }
 
 ##### CONFIG
@@ -231,13 +231,16 @@ method updateAptGet {
     ])
 }
 #### STARTUP SCRIPT
-method setStartupScript ($startupfile) {
+method setStartupScript {
 	#### SET COMMANDS TO BE RUN AT STARTUP FROM STARTUP SCRIPT
 	my $apachedir  	= $self->apachedir();
 	my $installdir  = $self->installdir();
 	my $domainname  = $self->domainname();
 
-	$startupfile = "/etc/rc.local" if not defined $startupfile;
+	#### SET STARTUPFILE
+	my $arch	=	$self->getArch();
+    my $startupfile = "/etc/init.d/rc.local";
+	$startupfile = "/etc/rc.local" if $arch eq "centos";
 	$self->logDebug("startupfile", $startupfile) if defined $startupfile;
 	
 	my $executable = "$installdir/bin/scripts/createCert.pl";

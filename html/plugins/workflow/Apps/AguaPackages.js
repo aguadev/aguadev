@@ -1,18 +1,40 @@
-dojo.provide("plugins.workflow.Apps.AguaPackages");
+define([
+	"dojo/_base/declare",
+	"plugins/core/Common",
+	"plugins/workflow/Apps/Packages",
 
-/* SUMMARY: DISPLAY ONE OR MORE PACKAGES SHARED BY THE AGUA USER
+	"plugins/workflow/Apps/Apps",
 
-	-	EACH PACKAGE IS DISPLAYED IN ITS OWN apps OBJECT
+	"dojo/ready"
+	//"dojo/domReady!"
+],
+
+function (declare,
+	Common,
+	Packages,
+	Apps,
+	ready) {
+
+return declare("plugins.workflow.Apps.AguaPackages",
+	[ Common, Packages ], {
+
+////}}}}}
 	
-	-	PACKAGES ARE LOADED WHEN INSTALLING/UPDATING bioapps PACKAGE
-*/
-
-// INTERNAL MODULES
-dojo.require("plugins.core.Common");
-dojo.require("plugins.workflow.Apps.Apps");
-dojo.require("plugins.workflow.Apps.Packages");
-
-dojo.declare("plugins.workflow.Apps.AguaPackages", [ plugins.core.Common, plugins.workflow.Apps.Packages ], {
+//dojo.provide("plugins.workflow.Apps.AguaPackages");
+//
+///* SUMMARY: DISPLAY ONE OR MORE PACKAGES SHARED BY THE AGUA USER
+//
+//	-	EACH PACKAGE IS DISPLAYED IN ITS OWN apps OBJECT
+//	
+//	-	PACKAGES ARE LOADED WHEN INSTALLING/UPDATING bioapps PACKAGE
+//*/
+//
+//// INTERNAL MODULES
+//dojo.require("plugins.core.Common");
+//dojo.require("plugins.workflow.Apps.Apps");
+//dojo.require("plugins.workflow.Apps.Packages");
+//
+//dojo.declare("plugins.workflow.Apps.AguaPackages", [ plugins.core.Common, plugins.workflow.Apps.Packages ], {
 
 /////}}}
 
@@ -27,7 +49,7 @@ className : "plugins_workflow_Apps_AguaPackages",
 parentWidget : null,
 
 // ATTACH NODE
-attachNode : null,
+attachPoint : null,
 
 // ARRAY OF plugins.workflow.Apps.Apps OBJECT
 packageApps : [],
@@ -76,14 +98,14 @@ setPackages : function () {
 	console.groupEnd("Packages    " + this.id + "    constructor");
 },
 createAppsObject : function (applications) {
-	console.log("AguaPackages.createAppsObject    this.attachNode: ");
-	console.dir({this_attachNode:this.attachNode});
+	console.log("AguaPackages.createAppsObject    this.attachPoint: ");
+	console.dir({this_attachPoint:this.attachPoint});
 	
 	return new plugins.workflow.Apps.Apps({
 		apps: applications,
 		core: this.core,
 		parentWidget: this.parentWidget,
-		attachNode: this.attachNode
+		attachPoint: this.attachPoint
 	});
 },
 // UPDATE AFTER SUBSCRIPTIONS
@@ -117,6 +139,8 @@ getAppsArray : function () {
 	return Agua.getAguaApps();
 }
 
-	
-}); // plugins.workflow.Apps.Packages
+
+}); 	//	end declare
+
+});	//	end define
 

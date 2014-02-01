@@ -8,7 +8,6 @@ define([
 	"dojo/dom-class",
 	"plugins/sharing/AccessRow",
 	"dijit/_Widget",
-	//"dijit/_Templated",
 	"dijit/_TemplatedMixin",
 	"dijit/_WidgetsInTemplateMixin",
 	"plugins/core/Common",

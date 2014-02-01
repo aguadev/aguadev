@@ -25,17 +25,17 @@ startup : function () {
 
 	this.inherited(arguments);
 
-	// ATTACH stageTable TO attachNode
+	// ATTACH stageTable TO attachPoint
 	this.attachTable();
 
 	console.groupEnd("StageStatus-" + this.id + "    startup");	
 },
 attachTable : function () {
-	console.log("StageStatus.attachTable    this.attachNode: ");
-	console.dir({attachNode:this.attachNode});
+	console.log("StageStatus.attachTable    this.attachPoint: ");
+	console.dir({attachPoint:this.attachPoint});
 	
-	this.attachNode.appendChild(this.stageTable);
-	console.log("StageStatus.attachTable    AFTER this.attachNode.appendChild(this.stageTable)");	
+	this.attachPoint.appendChild(this.stageTable);
+	console.log("StageStatus.attachTable    AFTER this.attachPoint.appendChild(this.stageTable)");	
 },
 displayStatus : function (stagestatus) {
 	console.group("StageStatus-" + this.id + "    displayStatus");
@@ -80,7 +80,7 @@ clearStatus : function () {
 displayStagesStatus : function (stages) {
 	console.group("StageStatus-" + this.id + "    displayStagesStatus");
 
-	// ATTACH stageTable TO attachNode IF NOT ALREADY ATTACHED
+	// ATTACH stageTable TO attachPoint IF NOT ALREADY ATTACHED
 	if ( this.stageTable.parentNode == null )
 		this.attachTable();
 	

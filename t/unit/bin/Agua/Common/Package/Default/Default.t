@@ -1,9 +1,10 @@
 #!/usr/bin/perl -w
 
-use Test::More  tests => 6;
+use Test::More;
 
 use FindBin qw($Bin);
 use lib "$Bin/../../../../../lib";
+use lib "$Bin/../../../../../../common/lib";
 BEGIN
 {
     my $installdir = $ENV{'installdir'} || "/agua";
@@ -55,6 +56,9 @@ $keyfile    = $ENV{'keyfile'} if not defined $keyfile;
 if ( not defined $login or not defined $token
     or not defined $keyfile ) {
     plan 'skip_all' => "Missing login, token or keyfile. Run this script manually and provide GitHub login and token credentials and SSH private keyfile";
+}
+else {
+    plan tests => 6;
 }
 
 my $whoami = `whoami`;

@@ -60,7 +60,7 @@ dojo.declare("plugins.dnd.Manager", null, {
 		//		the reporter
 		if(this.avatar){
 			
-			//console.log("plugins.dnd.Manager.oversource");
+			console.log("plugins.dnd.Manager.oversource");
 			
 			this.target = (source && source.targetState != "Disabled") ? source : null;
 			this.canDropFlag = Boolean(this.target);
@@ -85,6 +85,8 @@ dojo.declare("plugins.dnd.Manager", null, {
 		}
 	},
 	startDrag: function(source, nodes, copy){
+		console.log("dnd.Manager.startDrag");
+
 		// summary:
 		//		called to initiate the DnD operation
 		// source: Object
@@ -135,9 +137,9 @@ dojo.declare("plugins.dnd.Manager", null, {
 		// summary:
 		//		makes the avatar; it is separate to be overwritten dynamically, if needed
 
-		//console.log("plugins.dnd.Manager.makeAvatar()");
-		//console.log("plugins.dnd.Manager.makeAvatar this:");
-		//console.dir(this);
+		console.log("plugins.dnd.Manager.makeAvatar()");
+		console.log("plugins.dnd.Manager.makeAvatar this:");
+		console.dir(this);
 		
 		return new plugins.dnd.Avatar(this);
 	},
@@ -149,6 +151,8 @@ dojo.declare("plugins.dnd.Manager", null, {
 	
 	// mouse event processors
 	onMouseMove: function(e){
+		console.log("dnd.Manager.onMouseMove");
+		
 		// summary:
 		//		event processor for onmousemove
 		// e: Event

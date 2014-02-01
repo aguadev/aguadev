@@ -81,10 +81,10 @@ constructor : function(args) {
 	this.core = args.core || {};
 	this.core.runStatus = this;
 	console.log("Status.constructor    args.parentWidget: " + args.parentWidget);
-	console.log("Status.constructor    args.attachNode: " + args.attachNode);
+	console.log("Status.constructor    args.attachPoint: " + args.attachPoint);
 
 	if ( args.parentWidget	)	this.parentWidget = args.parentWidget;
-	if ( args.attachNode	)	this.attachNode = args.attachNode;
+	if ( args.attachPoint	)	this.attachPoint = args.attachPoint;
 
 	if ( args.cgiUrl != null )
 		this.cgiUrl = args.cgiUrl;
@@ -110,15 +110,15 @@ startup : function () {
 	// SET UP THE ELEMENT OBJECTS AND THEIR VALUE FUNCTIONS
 	this.inherited(arguments);
 	
-	console.log("Status.startup    this.attachNode: " + this.attachNode);
+	console.log("Status.startup    this.attachPoint: " + this.attachPoint);
 	console.log("Status.startup    this.stagesTab: " + this.stagesTab);
 	//console.log("Status.startup    this.clusterTab: " + this.clusterTab);
 	//console.log("Status.startup    this.queueTab: " + this.queueTab);
 	
 	// ADD TO TAB CONTAINER		
-	if ( this.attachNode.addChild != null ) {
-		this.attachNode.addChild(this.stagesTab);
-		//this.attachNode.addChild(this.queueTab);
+	if ( this.attachPoint.addChild != null ) {
+		this.attachPoint.addChild(this.stagesTab);
+		//this.attachPoint.addChild(this.queueTab);
 	}
     // OTHERWISE, WE ARE TESTING SO APPEND TO DOC BODY
 	else {
@@ -127,7 +127,7 @@ startup : function () {
 		div.appendChild(this.stagesTab.domNode);
 		//div.appendChild(this.queueTab.domNode);
 	}
-	//this.attachNode.selectChild(this.mainTab);	
+	//this.attachPoint.selectChild(this.mainTab);	
 	
 	// START UP CONFIRM DIALOGUE
 	this.setConfirmDialog();
@@ -145,7 +145,7 @@ startup : function () {
 	this.setQueueStatus();
 
 	// SET INPUTS AS SELECTED
-	this.attachNode.selectChild(this.core.parameters);
+	this.attachPoint.selectChild(this.core.parameters);
 },
 
 // RUN WORKFLOW
@@ -156,7 +156,7 @@ runWorkflow : function (runner) {
 	console.dir(runner);
 
 	// SELECT THIS TAB NODE
-	this.attachNode.selectChild(this.stagesTab);
+	this.attachPoint.selectChild(this.stagesTab);
 
 	// SET this.runner AS RUNNER IF PROVIDED
 	if ( runner != null ) {
@@ -794,7 +794,7 @@ selectTab : function (response) {
 
 	if ( ! response || ! response.clusterstatus ) {
 		console.log("Status.selectTab      response or response.clusterstatus is null. SELECTING 'STAGE' TAB");
-		this.attachNode.selectChild(this.stagesTab);
+		this.attachPoint.selectChild(this.stagesTab);
 		return;
 	}
 
@@ -803,36 +803,36 @@ selectTab : function (response) {
 	
 	if ( status == null ) {
 		console.log("Status.selectTab      clusterstatus.status is null. SELECTING 'STAGE' TAB");
-		this.attachNode.selectChild(this.stagesTab);	
+		this.attachPoint.selectChild(this.stagesTab);	
 	}
 	else if ( status.match(/^cluster/)
 		|| status.match(/^balancer/) ) {
 		console.log("Status.selectTab      SELECTING 'CLUSTER' TAB");
-		this.attachNode.selectChild(this.clusterStatus.mainTab);	
+		this.attachPoint.selectChild(this.clusterStatus.mainTab);	
 	}
 	else if ( status.match(/sge/ ) ) {
 		console.log("Status.selectTab      SELECTING 'QUEUE' TAB");
-		this.attachNode.selectChild(this.queueStatus.mainTab);	
+		this.attachPoint.selectChild(this.queueStatus.mainTab);	
 	}
 	else {
 		console.log("Status.selectTab      SELECTING 'STAGE' TAB");
-		this.attachNode.selectChild(this.stagesTab);	
+		this.attachPoint.selectChild(this.stagesTab);	
 	}
 },
 getSelectedTab : function () {
-	console.log("Status.getSelectedTab    this.attachNode: " + this.attachNode);
-	console.dir({this_attachNode:this.attachNode});
+	console.log("Status.getSelectedTab    this.attachPoint: " + this.attachPoint);
+	console.dir({this_attachPoint:this.attachPoint});
 
 	console.log("Status.getSelectedTab    this.stageTab: " + this.stagesTab);
 	
-	console.log("Status.getSelectedTab    this.attachNode.selectedChildWidget: " + this.attachNode.selectedChildWidget);
-	console.dir({selectedChildWidget:this.attachNode.selectedChildWidget});
+	console.log("Status.getSelectedTab    this.attachPoint.selectedChildWidget: " + this.attachPoint.selectedChildWidget);
+	console.dir({selectedChildWidget:this.attachPoint.selectedChildWidget});
 	
-	if ( this.attachNode.selectedChildWidget == this.stagesTab )
+	if ( this.attachPoint.selectedChildWidget == this.stagesTab )
 		return "stageStatus";
-	if ( this.attachNode.selectedChildWidget == this.clusterStatus.mainTab)
+	if ( this.attachPoint.selectedChildWidget == this.clusterStatus.mainTab)
 		return "clusterStatus";
-	if ( this.attachNode.selectedChildWidget == this.queueStatus.mainTab)
+	if ( this.attachPoint.selectedChildWidget == this.queueStatus.mainTab)
 		return "queueStatus";
 	
 	return null;
@@ -1167,21 +1167,21 @@ setStageStatus : function () {
 	console.log("Status.setStageStatus    DOING new plugins.workflow.RunStatus.StageStatus()");
 	this.stageStatus = new plugins.workflow.RunStatus.StageStatus({
 		core		: this.core,
-		attachNode	: this.stagesStatusContainer
+		attachPoint	: this.stagesStatusContainer
 	});	
 },
 setClusterStatus : function () {
 	console.log("Status.setClusterStatus    DOING new plugins.workflow.RunStatus.ClusterStatus()");
 	this.clusterStatus = new plugins.workflow.RunStatus.ClusterStatus({
 		core: this.core,
-		attachNode	: this.attachNode
+		attachPoint	: this.attachPoint
 	});	
 },
 setQueueStatus : function () {
 	console.log("Status.setQueueStatus    DOING new plugins.workflow.RunStatus.QueueStatus()");
 	this.queueStatus = new plugins.workflow.RunStatus.QueueStatus({
 		core: this.core,
-		attachNode	: this.attachNode
+		attachPoint	: this.attachPoint
 	});	
 }
 

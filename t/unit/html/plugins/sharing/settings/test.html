@@ -5,13 +5,13 @@ print Dumper ;<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
 <style type="text/css">
-	@import "../../../../dojo/dojo/resources/dojo.css";
-	@import "../../../../dojo/dijit/themes/dijit.css";
-	@import "../../../../dojo/dijit/themes/soria/soria.css";
-	@import "../../../../dojo/dijit/themes/tundra/tundra.css";
+	@import "../../../../../dojo/dojo/resources/dojo.css";
+	@import "../../../../../dojo/dijit/themes/dijit.css";
+	@import "../../../../../dojo/dijit/themes/soria/soria.css";
+	@import "../../../../../dojo/dijit/themes/tundra/tundra.css";
 </style>
 
-<title> t.plugins.admin.settings.test</title>
+<title id="pagetitle"></title>
 
 <script type="text/javascript">
 
@@ -21,14 +21,27 @@ var Data = {};
 var dojoConfig = {
 	isDebug: true,
 	locale: "en-us",
-	//extraLocale: ['ja-jp'],
-	modulePaths: {"plugins": "../../plugins", "t": "../../t"},
+	packages: [
+		{
+		  name: "plugins",
+		  location: "../../plugins"
+		},
+		{
+		  name: "t",
+		  location: "../../t"
+		},
+		{
+		  name: "doh",
+		  location: "../../dojo/util/doh"
+		}
+	],
 	debugAtAllCosts: true,
 	useCommentedJson: true
 };
+
 </script>
 <script type="text/javascript"
-	src="../../../../dojo/dojo/dojo.js">
+	src="../../../../../dojo/dojo/dojo.js">
 </script>
 
 <script type="text/javascript" src="./runTests.js"></script>
@@ -37,7 +50,7 @@ var dojoConfig = {
 <body class="agua tundra claro">
 	
 <center>
-	<h3>t.unit.plugins.admin.settings.test</h3>
+	<h3 id="pageheader"></h3>
 </center>
 
 	<div id="attachPoint"></div>

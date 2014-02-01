@@ -39,7 +39,7 @@ constructor : function(args) {
 
 	// GET ARGS
 	this.core = args.core;
-	this.attachNode = args.attachNode;
+	this.attachPoint = args.attachPoint;
 
 	if ( args.cgiUrl != null )
 		this.cgiUrl = args.cgiUrl;
@@ -60,13 +60,13 @@ startup : function () {
 	// SET UP THE ELEMENT OBJECTS AND THEIR VALUE FUNCTIONS
 	this.inherited(arguments);
 	
-	console.log("QueueStatus.startup    this.attachNode: " + this.attachNode);
+	console.log("QueueStatus.startup    this.attachPoint: " + this.attachPoint);
 	//console.log("QueueStatus.startup    this.stagesTab: " + this.stagesTab);
 	//console.log("QueueStatus.startup    this.queueTab: " + this.queueTab);
 	
 	// ADD TO TAB CONTAINER		
-	if ( this.attachNode.addChild != null )
-		this.attachNode.addChild(this.mainTab);
+	if ( this.attachPoint.addChild != null )
+		this.attachPoint.addChild(this.mainTab);
 
     // OTHERWISE, WE ARE TESTING SO APPEND TO DOC BODY
 	else {
@@ -74,7 +74,7 @@ startup : function () {
 		document.body.appendChild(div);
 		div.appendChild(this.mainTab.domNode);
 	}
-	this.attachNode.selectChild(this.mainTab);	
+	this.attachPoint.selectChild(this.mainTab);	
 },
 displayStatus : function (queuestatus) {
 	console.log("QueueStatus.displayStatus      queuestatus:");
