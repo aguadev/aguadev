@@ -70,15 +70,23 @@
 	max-width: 300px !important;
 	white-space: pre-wrap !important;
 	font-size: 14px !important;
-}
+	text-indent: 10px;
 	
+}
+
+.dojoDndAvatar tr td {
+	padding-left: 0px;
+	padding-right: 20px;
+}
+
 .dojoDndAvatarHeader,
 .tundra.dojoDndCopy .dojoDndAvatarHeader,
 .tundra.dojoDndMove .dojoDndAvatarHeader {
 	height: 20px !important;
 	background: #CCC;	
-	text-indent: 25px !important;
-	/*background-image: url(../../../plugins/admin/images/locked-24.png);*/
+	text-indent: 20px !important;
+	background-image: url(../../../plugins/admin/images/locked-24.png);
+	background-position: 2px 2px !important;
 	background-repeat: no-repeat !important;
 	font-size: 18px !important;
 }

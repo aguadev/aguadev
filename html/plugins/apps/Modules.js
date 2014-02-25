@@ -39,9 +39,9 @@ cssFiles : [ dojo.moduleUrl("plugins", "apps/css/modules.css") ],
 // PARENT WIDGET
 parentWidget : null,
 
-// attachNode : Dijit Tab Container
+// attachPoint : Dijit Tab Container
 //		Add this widget as a tab to this tab container
-attachNode : null,
+attachPoint : null,
 
 
 formInputs : {
@@ -99,7 +99,7 @@ constructor : function(args) {
 	// GET INFO FROM ARGS
 	this.parentWidget = args.parentWidget;
 	this.packages = args.parentWidget.packages;
-	this.attachNode	=	args.attachNode;
+	this.attachPoint	=	args.attachPoint;
 },
 postCreate : function() {
 	////////////console.log("Controller.postCreate    plugins.apps.Controller.postCreate()");
@@ -129,8 +129,8 @@ startup : function () {
 	console.groupEnd("App-" + this.id + "    startup");
 },
 attachPane : function () {
-	this.attachNode.addChild(this.mainTab);
-	this.attachNode.selectChild(this.mainTab);	
+	this.attachPoint.addChild(this.mainTab);
+	this.attachPoint.selectChild(this.mainTab);	
 },
 updatePackages : function (args) {
 // RELOAD GROUP COMBO AND DRAG SOURCE AFTER CHANGES

@@ -140,7 +140,7 @@ reloadWidget : function (paneName) {
 	this.paneWidgets[paneName] = new plugins.apps[paneName](
 		{
 			parentWidget	:	thisObject,
-			attachNode 	:	thisObject.leftTabContainer
+			attachPoint 	:	thisObject.leftTabContainer
 		}
 	);
 },
@@ -181,8 +181,8 @@ loadPane : function(side) {
 		var thisObject = this;
 		var tabPane = new plugins["apps"][tabPaneName](
 			{
-				parentWidget	:	thisObject,
-				attachNode 	:	thisObject[tabContainer]
+				parentWidget:	thisObject,
+				attachPoint 	:	thisObject[tabContainer]
 			}
 		);
 		

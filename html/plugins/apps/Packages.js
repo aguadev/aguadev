@@ -107,9 +107,9 @@ rowClass : "plugins.apps.PackageRow",
 //		Widget that created this widget
 parentWidget : null,
 
-// attachNode : DOM node
+// attachPoint : DOM node
 //		Node to attach widget's mainTab
-attachNode : null,
+attachPoint : null,
 
 /////}}}
 
@@ -117,7 +117,7 @@ constructor : function(args) {
 	console.log("Packages.constructor     plugins.apps.Packages.constructor");
 
 	lang.mixin(this, args);
-	console.log("Packages.constructor     this.attachNode: " + this.attachNode);
+	console.log("Packages.constructor     this.attachPoint: " + this.attachPoint);
 	
 	// SET this.packages
 	if ( this.parentWidget ) {
@@ -155,8 +155,8 @@ startup : function () {
 	console.groupEnd("App-" + this.id + "    startup");
 },
 attachPane : function () {
-	this.attachNode.addChild(this.mainTab);
-	this.attachNode.selectChild(this.mainTab);	
+	this.attachPoint.addChild(this.mainTab);
+	this.attachPoint.selectChild(this.mainTab);	
 },
 updatePackages : function (args) {
 // RELOAD GROUP COMBO AND DRAG SOURCE AFTER CHANGES

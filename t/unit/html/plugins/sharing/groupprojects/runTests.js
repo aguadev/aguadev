@@ -16,6 +16,7 @@ Agua.cookie('username', "admin");
 
 // TESTED OBJECT
 var object;
+window.object = object;
 
 // TEST NAME
 var test = "unit.plugins.sharing.groupprojects";

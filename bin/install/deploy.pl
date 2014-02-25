@@ -51,6 +51,7 @@ sudo ./deploy.pl \
 
 The 'mode' options are as follows:
 
+package		Install a package (must specify with --package option)
 aguatest    Install the Agua tests package
 bioapps     Install the Bioapps package
 biorepo     Install the Biorepository package
@@ -101,6 +102,8 @@ my $opsrepo;
 my $opsfile;
 my $pmfile;
 my $s3bucket;
+my $package;
+my $version;
 my $repository;
 my $login;
 my $token;
@@ -116,6 +119,8 @@ GetOptions (
     'opsrepo=s'  	=> \$opsrepo,
     'opsfile=s'  	=> \$opsfile,
     'pmfile=s'  	=> \$pmfile,
+    'package=s'  	=> \$package,
+    'version=s'  	=> \$version,
     'repository=s'  => \$repository,
     'logfile=s'     => \$logfile,
     'SHOWLOG=i'     => \$SHOWLOG,
@@ -149,6 +154,8 @@ my $object = Agua::Deploy->new({
     opsrepo  	=>  $opsrepo,
     opsfile  	=>  $opsfile,
     pmfile  	=>  $pmfile,
+    package  	=>  $package,
+    version  	=>  $version,
     repository  =>  $repository,
     login  		=>  $login,
     token  		=>  $token,

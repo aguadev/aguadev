@@ -116,10 +116,14 @@ loadPlugins : function ()   {
 		//console.log("PluginManager.loadPlugins    verified: " + verified);
 		
 		var number = parseInt( (i * 2) + 2);
-		//console.log("PluginManager.loadPlugins    ooooooooooooooooo plugin number" + number);
+		console.log("PluginManager.loadPlugins    ooooooooooooooooo plugin number" + number);
 
 		// REPORT PROGRESS
-		this.percentProgress(doubleLength, number, "Completed loading: " + moduleName);
+		var thisObj = this;
+		setTimeout(function() {
+			thisObj.percentProgress(doubleLength, number, "Completed loading: " + moduleName);
+		},
+		10);
 	}
 
 	console.log("PluginManager.loadPlugins    	FINAL Agua.data: ");
@@ -127,11 +131,13 @@ loadPlugins : function ()   {
     console.groupEnd("PluginManager.loadPlugins    this.pluginsList: ");
 },
 percentProgress : function (total, current, message) {
+	console.log("PluginManager.totalProgress    ooooooooooooooooo plugin total" + total);
+	console.log("PluginManager.currentProgress    ooooooooooooooooo plugin current" + current);
+
 	// DEFAULT MESSAGE IS EMPTY
 	if ( ! message )	message = '';
 	console.log("PluginManager.percentProgress    	" + current + " out of " + total +", message:" + message);
 
-	
 	var percent = 0;
 	if ( total == current )
 		percent = 100;
@@ -141,7 +147,9 @@ percentProgress : function (total, current, message) {
 	console.log("PluginManager.percentProgress    percent: " + percent);
 	if ( ! Agua.login )	return;
 	
+	console.log("PluginManager.percentProgress    DOING Agua.login.progressBar.set()");
 	Agua.login.progressBar.set({value:percent, progress:percent});
+	console.log("PluginManager.percentProgress    AFTER Agua.login.progressBar.set()");
 	
 	Agua.login.progressMessage.innerHTML = message;
 },

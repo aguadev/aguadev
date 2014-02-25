@@ -40,6 +40,9 @@ has 's3bucket'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'configfile'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'opsfile'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'pmfile'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
+has 'package'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
+has 'version'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
+has 'privacy'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'repository'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'keyfile'		=> ( isa => 'Str|Undef', is => 'rw' );
 has 'logfile'		=> ( isa => 'Str|Undef', is => 'rw' );
@@ -64,8 +67,8 @@ has 'ops' 	=> (
 ####/////}
 
 method BUILD ($hash) {
-	#$self->logDebug("Agua::Deploy::BUILD()");
-	$self->logDebug("self", $self);
+	$self->logDebug("Agua::Deploy::BUILD()");
+	#$self->logDebug("self", $self);
 	$self->initialise();
 }
 
@@ -115,32 +118,41 @@ method biorepo {
     my $installdir 	= 	"$basedir/repos/public/$owner/$opsrepo";
 
 	print "Installing opsrepo: $opsrepo\n";
-	
     $self->logDebug("opsrepo", $opsrepo);
     $self->logDebug("owner", $owner);
     $self->logDebug("username", $username);
     $self->logDebug("installdir", $installdir);
     $self->logDebug("privacy", $privacy);
 
+	#### SET VERSION
+	my $version		=	$self->version();
+	$self->logDebug("version", $version);
+
     #### CREATE PARENT DIR
     my $parentdir 	= 	"$basedir/repos/public";
     `mkdir -p $parentdir` if not -d $parentdir;
     print "Can't create parentdir: $parentdir" and exit if not -d $parentdir;
 
-    return $self->installApplication($owner, $login, $username, $opsrepo, $opspackage, $privacy, $installdir, undef, undef);
+	my $pmfile	=	undef;
+	my $opsdir	=	undef;
+
+    return $self->installApplication($owner, $login, $username, $opsrepo, $opspackage, $privacy, $installdir, $pmfile, $opsdir, $version);
 }
 
-method installApplication ($owner, $login, $username, $repository, $package, $privacy, $installdir, $pmfile, $opsdir) {
+method installApplication ($owner, $login, $username, $repository, $package, $privacy, $installdir, $pmfile, $opsdir, $version) {
 	$self->logDebug("owner", $owner);
 	$self->logDebug("login", $login);
+	$self->logDebug("repository", $repository);
 	$self->logDebug("package", $package);
 	$self->logDebug("privacy", $privacy);
 	$self->logDebug("pmfile", $pmfile);
 
-	#### GET VERSION
-	my $versions 	=	$self->getVersions($owner, $repository, $privacy);
-	my $version = shift @$versions;
-
+	#### GET LATEST VERSION IF NOT DEFINED AND IS REPO
+	if ( not defined $version ) {
+		my $versions 	=	$self->getVersions($owner, $repository, $privacy);
+		$version = shift @$versions if not defined $version;
+	}
+	
 	my $opsmodloaded = 0;
 	if ( defined $pmfile ) {
 		my ($class)	= 	$pmfile =~ /^.+\/([^\/]+)\.pm$/;
@@ -353,7 +365,7 @@ $repository install \\
 }
 
 #### GENERIC PACKAGE (E.G., EMBOSS)
-method installPackage {
+method install {
     my $installdir	= 	$self->conf()->getKey("agua", "INSTALLDIR");
 	my $opsrepo 	= 	$self->opsrepo() || $self->conf()->getKey("agua", "OPSREPO");
 	my $appsdir		= 	$self->conf()->getKey("agua", "APPSDIR");
@@ -365,22 +377,31 @@ method installPackage {
 	my $pmfile		=	$self->pmfile();
 	$self->logDebug("pmfile", $pmfile);
 	
-	#### LOAD OPS INFO
-	my $opsinfo = $self->ops()->setOpsInfo($opsfile);
-	$self->logDebug("opsinfo", $opsinfo);
-
 	#### SET VARIABLES FROM OPS INFO
 	my $login 		=	$self->login();
-	my $owner 		=	$username;
+	my $owner 		=	$self->owner();
 	my $repository 	=	$self->repository();
-	$repository		=	$opsinfo->repository() if not defined $repository;
 	$self->logDebug("login", $login);
 	$self->logDebug("owner", $owner);
 	$self->logDebug("repository", $repository);
+
+	#### SET PACKAGE DETAILS
+	my $package		=	$self->package();
+	print "Deploy::install    package not defined. Exiting\n" and return if not defined $package;
+	my $privacy		=	$self->privacy() || "public";
 	
-	my $package		=	$opsinfo->package();
-	my $privacy		=	$opsinfo->privacy();
-	my $opsdir 		=	"$installdir/repos/$privacy/$login/$opsrepo/$login/$package";
+	#### SET OPSDIR
+	my $opsdir;
+	$opsdir			=	"$installdir/repos/$privacy/$login/$opsrepo/$login/$package" if defined $privacy and defined $login;
+	#### SET OPSDIR FROM OPSFILE IF DEFINED
+	if ( defined $opsfile ) {
+		($opsdir) =	$opsfile =~ /^(.+?)\/[^\/]+$/;
+	}
+	$self->logDebug("opsdir", $opsdir);	
+
+	#### SET VERSION
+	my $version		=	$self->version();
+	$self->logDebug("version", $version);
 
 	$self->logDebug("installdir", $installdir);
 	$self->logDebug("repository", $repository);
@@ -390,7 +411,10 @@ method installPackage {
 	$self->logDebug("privacy", $privacy);
 	$self->logDebug("opsdir", $opsdir);
 
-	return $self->installApplication($owner, $login, $username, $repository, $package, $privacy, "$installdir/$appsdir/$package", $pmfile, $opsdir);	
+	#### RESET INSTALLDIR
+	$installdir = "$installdir/$appsdir/$package";
+	
+	return $self->installApplication($owner, $login, $username, $repository, $package, $privacy, $installdir, $pmfile, $opsdir, $version);	
 }
 
 #### BIOAPPS
@@ -407,6 +431,10 @@ method bioapps {
 	my $opsdir 		=	"$installdir/repos/$privacy/$owner/$opsrepo/$owner/$package";
 	my $pmfile		=	"$opsdir/bioapps.pm";
 
+	#### SET VERSION
+	my $version		=	$self->version();
+	$self->logDebug("version", $version);
+
 	$self->logDebug("installdir", $installdir);
 	$self->logDebug("repository", $repository);
 	$self->logDebug("package", $package);
@@ -416,7 +444,7 @@ method bioapps {
 	$self->logDebug("opsdir", $opsdir);
 	$self->logDebug("pmfile", $pmfile);
 
-	return $self->installApplication($owner, $login, $username, $repository, $package, $privacy, "$installdir/$appsdir/$package", $pmfile, $opsdir);	
+	return $self->installApplication($owner, $login, $username, $repository, $package, $privacy, "$installdir/$appsdir/$package", $pmfile, $opsdir, $version);	
 }
 
 #### EMBOSS
@@ -433,6 +461,10 @@ method emboss {
 	my $opsdir 		=	"$installdir/repos/$privacy/$owner/$opsrepo/$owner/$package";
 	my $pmfile		=	"$opsdir/emboss.pm";
 
+	#### SET VERSION
+	my $version		=	$self->version();
+	$self->logDebug("version", $version);
+
 	$self->logDebug("installdir", $installdir);
 	$self->logDebug("repository", $repository);
 	$self->logDebug("package", $package);
@@ -442,7 +474,7 @@ method emboss {
 	$self->logDebug("opsdir", $opsdir);
 	$self->logDebug("pmfile", $pmfile);
 
-	return $self->installApplication($owner, $login, $username, $repository, $package, $privacy, "$installdir/$appsdir/$package", $pmfile, $opsdir);	
+	return $self->installApplication($owner, $login, $username, $repository, $package, $privacy, "$installdir/$appsdir/$package", $pmfile, $opsdir, $version);	
 }
 
 #### STARCLUSTER
@@ -461,6 +493,11 @@ method starcluster {
 	my $username 	= 	$self->conf()->getKey("agua", "ADMINUSER");
 	my $opsdir 		=	"$installdir/repos/public/$owner/$opsrepo/$owner/$package";
 	my $pmfile		=	"$opsdir/bioapps.pm";
+
+	#### SET VERSION
+	my $version		=	$self->version();
+	$self->logDebug("version", $version);
+
 	$self->logDebug("repository", $repository);
 	$self->logDebug("package", $package);
 	$self->logDebug("owner", $owner);
@@ -469,7 +506,7 @@ method starcluster {
 	$self->logDebug("opsdir", $opsdir);
 	$self->logDebug("pmfile", $pmfile);
 
-	return $self->installApplication($owner, $login, $username, $repository, $package, $privacy, "$installdir/apps/starcluster", $pmfile, $opsdir);	
+	return $self->installApplication($owner, $login, $username, $repository, $package, $privacy, "$installdir/apps/starcluster", $pmfile, $opsdir, $version);	
 }
 
 

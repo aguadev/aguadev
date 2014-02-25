@@ -1212,7 +1212,7 @@ method _createWorkflowDirs ($username) {
 #### MISC UTILS
 method getArch {    
 	my $arch = $self->arch();
-    $self->logDebug("STORED arch", $arch) if defined $arch;
+    $self->logDebug("STORED arch", $arch) if defined $arch and $arch ne "";
 
 	return $arch if defined $arch;
 	

@@ -89,7 +89,7 @@ startup : function () {
 
 	// ADD TO TAB CONTAINER		
 	console.log("Scrape.startup    BEFORE appendChild(this.mainTab.domNode)");
-	dojo.byId("attachNode").appendChild(this.mainTab.domNode);
+	dojo.byId("attachPoint").appendChild(this.mainTab.domNode);
 	console.log("Scrape.startup    AFTER appendChild(this.mainTab.domNode)");
 	
 	// SET SAVE BUTTON

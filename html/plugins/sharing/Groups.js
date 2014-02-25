@@ -1,25 +1,3 @@
-//dojo.provide("plugins.sharing.Groups");
-//
-//// ALLOW THE USER TO ADD, REMOVE AND MODIFY GROUPS
-//
-//// EXTERNAL MODULES
-//dojo.require("dijit.form.Button");
-//dojo.require("dijit.form.TextBox");
-//dojo.require("dijit.form.Textarea");
-//dojo.require("dojo.parser");
-//
-//// INTERNAL MODULES
-//dojo.require("plugins.core.Common");
-//dojo.require("plugins.form.EditForm");
-//dojo.require("plugins.form.DndSource");
-//
-//// HAS A
-//dojo.require("plugins.sharing.GroupRow");
-//
-//dojo.declare("plugins.sharing.Groups",
-//	[ dijit._Widget, dijit._Templated, plugins.core.Common, plugins.form.EditForm, plugins.form.DndSource ],
-//{
-
 define([
 	"dojo/_base/declare",
 	"dojo/_base/array",

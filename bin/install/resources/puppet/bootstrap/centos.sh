@@ -12,6 +12,10 @@ if [ "$EUID" -ne "0" ]; then
   exit 1
 fi
 
+# Install gem
+echo "Installing gem..."
+yum install -y rubygems >/dev/null
+
 if which puppet > /dev/null 2>&1; then
   echo "Puppet is already installed."
 else
@@ -28,7 +32,10 @@ else
     echo "Completed puppet installation"
 fi
 
-#echo "Installing librarian-puppet"
+echo "Installing epel"
+puppet module install stahnma/epel
+
+echo "Installing librarian-puppet"
 PUPPET_DIR='/etc/puppet'
 if [ `gem query --local | grep librarian-puppet | wc -l` -eq 0 ]; then
   gem install librarian-puppet

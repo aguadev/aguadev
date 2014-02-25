@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 #### TEST MODULES
-use Test::More  tests => 230; #qw(no_plan);
+use Test::More  tests => 34; #qw(no_plan);
 
 #### EXTERNAL MODULES
 use FindBin qw($Bin);
@@ -49,6 +49,8 @@ my $object = new Test::Agua::Ops::Version(
 $object->testHigherSemVer();
 $object->testVersionSort();
 $object->testParseSemVer();
+$object->testSameHigherVersion();
+
 
 sub usage {
     print qq{

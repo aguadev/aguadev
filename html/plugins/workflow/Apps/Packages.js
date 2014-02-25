@@ -1,13 +1,15 @@
 define([
 	"dojo/_base/declare",
 	"dojo/_base/lang",
-	"plugins/core/Common"
+	"plugins/core/Common",
+	"plugins/workflow/Apps/Apps"
 ],
 
 function (
 	declare,
 	lang,
-	Common
+	Common,
+	Apps
 ) {
 
 return declare("plugins.workflow.Apps.Packages",
@@ -131,7 +133,7 @@ setPackages : function () {
 	}
 },
 createAppsObject : function (applications) {
-	return new plugins.workflow.Apps.Apps({
+	return new Apps({
 		apps: applications,
 		core: this.core,
 		parentWidget: this.parentWidget,

@@ -305,9 +305,13 @@ copyParams : function (params) {
     
     var copy = {};
     for ( var key in params ) {
+
         //console.log("Browser.copyParams    typeof params[" + key + "]: " + typeof params[key]);
+
         if ( params[key] && params[key].toString().match(/^\[Widget/) ) {
+
             //console.log("Browser.copyParams    Skipping key '" + key + "': " + params[key].toString());
+
             continue;
         }
         copy[key]   =   params[key];
@@ -315,6 +319,7 @@ copyParams : function (params) {
     
     return copy;
 },
+
 _initialLocation : function() {
     var oldLocMap = dojo.fromJson( this.cookie('location') ) || {};
     if( this.config.location ) {
@@ -331,6 +336,7 @@ _initialLocation : function() {
                                       });
     }
 },
+
 // CHANGED
 /* version : function () {
      when a build is put together, the build system assigns a string
@@ -346,6 +352,7 @@ getVersion : function() {
     var BUILD_SYSTEM_JBROWSE_VERSION = "1.9.8";
     return BUILD_SYSTEM_JBROWSE_VERSION || 'development';
 },
+
 /**
  * Get a plugin, if it is present.  Note that, if plugin
  * initialization is not yet complete, it may be a while before the
@@ -354,14 +361,17 @@ getVersion : function() {
  * Callback is called with one parameter, the desired plugin object,
  * or undefined if it does not exist.
  */
+
 getPlugin : function( name, callback ) {
     this.afterMilestone( 'initPlugins', dojo.hitch( this, function() {
         callback( this.plugins[name] );
     }));
 },
+
 /**
  * Load and instantiate any plugins defined in the configuration.
  */
+
 initPlugins : function() {
     console.log("Browser.initPlugins");
 
@@ -1461,7 +1471,7 @@ reachedMilestone : function( name ) {
     return this._getDeferred(name).fired >= 0;
 },
 /**
- *  Load our configuration file(s) based on the parameters thex
+ *  Load our configuration file(s) based on the parameters the
  *  constructor was passed.  Does not return until all files are
  *  loaded and merged in.
  *  @returns nothing meaningful

@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS package
  
     description     TEXT,
     notes           TEXT,
-    url             TEXT,
+    website         TEXT,
     datetime        DATETIME NOT NULL,
     
-    PRIMARY KEY  (username, package)
+    PRIMARY KEY  (username, package, version)
 );

@@ -333,6 +333,8 @@ hideProgressBar : function () {
 	console.log("Login.hideProgess    Doing progress bar addClass 'inactive'");
     dojo.addClass(this.progressBar.domNode, "inactive");
 	this.progressMessage.innerHTML = '';
+
+	console.log("Login.hideProgess    END");
 },
 showInputs : function () {	
 	console.log("Login.showInputs    DOING dojo.addClass(this.xxxRow, 'hidden')");
@@ -432,7 +434,12 @@ handleLogin : function (data, username) {
 
 			console.log("Login.handleLogin    AFTER Agua.startPlugins(). DOING this.hideProgressBar()");
 			thisObj.hideProgressBar();
+			
+			console.log("Login.handleLogin    AFTER Agua.startPlugins(). AFTER this.hideProgressBar()");
+			
 		}, 100, this);
+
+
 
 		console.log("Login.login    Setting this.logging to FALSE");
 		this.logging = false;

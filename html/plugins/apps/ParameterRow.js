@@ -8,17 +8,22 @@ define([
 	"dijit/_TemplatedMixin",
 	"dijit/_WidgetsInTemplateMixin",
 	"plugins/core/Common/Util",
+	"plugins/core/Common/Logger",
 	"dojo/domReady!",
 	"dijit/layout/TabContainer",
 	"dijit/form/Select"
 ],
 
-function (declare, on, lang, domAttr, domClass, _Widget, _TemplatedMixin, _WidgetsInTemplate, commonUtil) {
+function (declare, on, lang, domAttr, domClass, _Widget, _TemplatedMixin, _WidgetsInTemplate, commonUtil, commonLogger) {
 
 /////}}}}}
 
 return declare("plugins.apps.ParameterRow",
-	[_Widget, _TemplatedMixin, _WidgetsInTemplate, commonUtil], {
+	[_Widget, _TemplatedMixin, _WidgetsInTemplate, commonUtil, commonLogger], {
+
+// DEBUG : Boolean
+//		Print debug output if true
+DEBUG : true,
 
 //Path to the template of this widget. 
 templateString: dojo.cache("plugins", "apps/templates/parameterrow.html"),
@@ -56,7 +61,7 @@ cssFiles : [
 ],
 /////}}}}}
 constructor : function(args) {
-	console.log("ParameterRow.constructor    args: ");
+	this.logDebug("args: ");
 	console.dir({args:args});
 
     // MIXIN ARGS
@@ -67,19 +72,19 @@ constructor : function(args) {
 	
 	this.lockedValue = args.locked;
 
-	console.log("ParameterRow.constructor    END");
+	this.logDebug("END");
 },
 postCreate : function(args) {
-	console.log("ParameterRow.postCreate    plugins.workflow.ParameterRow.postCreate(args)");
+	this.logDebug("plugins.workflow.ParameterRow.postCreate(args)");
 	//this.formInputs = this.parentWidget.formInputs;
 
 	this.startup();
 },
 startup : function () {
-	console.log("ParameterRow.startup    plugins.workflow.ParameterRow.startup()");
+	this.logDebug("plugins.workflow.ParameterRow.startup()");
 	this.inherited(arguments);
 	
-	console.log("ParameterRow.startup    AFTER this.inherited(arguments)");
+	this.logDebug("AFTER this.inherited(arguments)");
 
 	// CONNECT TOGGLE EVENT
 	var thisObject = this;
@@ -96,7 +101,7 @@ startup : function () {
 	//this.toggleNode(this.args);
 	//this.toggleNode(this.inputParams);
 	
-	console.log("ParameterRow.startup    this.lockedValue: " + this.lockedValue);
+	this.logDebug("this.lockedValue: " + this.lockedValue);
 	// SET LOCKED CLASS
 	if ( this.lockedValue == 1 )	{
 		domClass.remove(this.locked,'unlocked');
@@ -114,7 +119,7 @@ startup : function () {
 	{
 		on(this[onclickArray[i]], "click", function(event)
 			{
-				console.log("ParameterRow.startup    onclick listener fired: " + onclickArray[i]);
+				this.logDebug("onclick listener fired: " + onclickArray[i]);
 				if ( ! thisObject.parentWidget ) {
 					return;
 				}
@@ -129,7 +134,7 @@ startup : function () {
 	var onchangeArray = [ "valuetype", "ordinal", "discretion", "paramtype" ];
 	for ( var i in onchangeArray ) {
 		on(this[onchangeArray[i]], "change", function(event) {
-				console.log("ParameterRow.startup    onchange listener fired: " + onchangeArray[i]);
+				this.logDebug("onchange listener fired: " + onchangeArray[i]);
 				if ( ! thisObject.parentWidget ) {
 					return;
 				}
@@ -144,17 +149,17 @@ setRowHeightListeners : function () {
 
 	var thisObject = this;
 	on(this.args, 'change', dojo.hitch(function (event) {
-		//console.log("ParameterRow.setRowHeightListeners    args    this: " + this);
-		//console.log("ParameterRow.setRowHeightListeners    args    thisObject: " + thisObject);
-		//console.log("ParameterRow.setRowHeightListeners    args.onchange");
+		//this.logDebug("args    this: " + this);
+		//this.logDebug("args    thisObject: " + thisObject);
+		//this.logDebug("args.onchange");
 		//thisObject.levelRowHeight(thisObject);
 		setTimeout(function(thisObj){ thisObj.levelRowHeight(thisObj)}, 100, thisObject);
 		event.stopPropagation();
 	}));
 	on(this.inputParams, 'change', dojo.hitch(function (event) {
-		//console.log("ParameterRow.setRowHeightListeners    inputParams    this: " + this);
-		//console.log("ParameterRow.setRowHeightListeners    inputParams    thisObject: " + thisObject);
-		//console.log("ParameterRow.setRowHeightListeners    inputParams.onchange");
+		//this.logDebug("inputParams    this: " + this);
+		//this.logDebug("inputParams    thisObject: " + thisObject);
+		//this.logDebug("inputParams.onchange");
 		setTimeout(function(thisObj){ thisObj.levelRowHeight(thisObj)}, 100, thisObject);
 		event.stopPropagation();
 	}));
@@ -162,10 +167,10 @@ setRowHeightListeners : function () {
 },
 levelRowHeight : function (paramRow) {
 	console.log("XXXX ParameterRow.levelRowHeight    plugins.workflow.ParameterRow.levelRowHeight()");
-	console.log("ParameterRow.levelRowHeight    BEFORE paramRow.args.clientHeight: " + paramRow.args.clientHeight);
-	console.log("ParameterRow.levelRowHeight    BEFORE this.inputParams.clientHeight: " + paramRow.inputParams.clientHeight);
-	console.log("ParameterRow.levelRowHeight    BEFORE paramRow.args.offsetHeight: " + paramRow.args.offsetHeight);
-	console.log("ParameterRow.levelRowHeight    BEFORE this.inputParams.offsetHeight: " + paramRow.inputParams.offsetHeight);
+	this.logDebug("BEFORE paramRow.args.clientHeight: " + paramRow.args.clientHeight);
+	this.logDebug("BEFORE this.inputParams.clientHeight: " + paramRow.inputParams.clientHeight);
+	this.logDebug("BEFORE paramRow.args.offsetHeight: " + paramRow.args.offsetHeight);
+	this.logDebug("BEFORE this.inputParams.offsetHeight: " + paramRow.inputParams.offsetHeight);
 
 	// VIEW CURRENT STYLES
 	console.log("paramRow.args.style : " + domAttr.get(paramRow.args, 'style'));
@@ -176,8 +181,8 @@ levelRowHeight : function (paramRow) {
 	domAttr.set(paramRow.args, 'style', 'display: inline-block; max-height: ' + paramRow.args.clientHeight + 'px !important');
 	domAttr.set(paramRow.inputParams, 'style', { display: "inline-block", "min-height": "20px !important" });
 	domAttr.set(paramRow.args, 'style', {	display: "inline-block", "min-height": "20px !important" });
-	console.log("ParameterRow.levelRowHeight    AFTER max-height this.args.clientHeight       : " + paramRow.args.clientHeight);
-	console.log("ParameterRow.levelRowHeight    AFTER max-height this.inputParams.clientHeight: " + paramRow.inputParams.clientHeight);
+	this.logDebug("AFTER max-height this.args.clientHeight       : " + paramRow.args.clientHeight);
+	this.logDebug("AFTER max-height this.inputParams.clientHeight: " + paramRow.inputParams.clientHeight);
 
 	console.log("AFTER max-height    paramRow.args        : " + domAttr.get(paramRow.args, 'style'));
 	console.log("AFTER max-height    paramRow.inputParams : " + domAttr.get(paramRow.inputParams, 'style'));
@@ -199,29 +204,29 @@ levelRowHeight : function (paramRow) {
 		domAttr.set(paramRow.args, 'style', 'display: inline-block; min-height: ' + paramRow.inputParams.offsetHeight + 'px !important');
 	}
 
-	console.log("ParameterRow.levelRowHeight    AFTER paramRow.args.clientHeight   : " + paramRow.args.clientHeight);
-	console.log("ParameterRow.levelRowHeight    AFTER this.inputParams.clientHeight: " + paramRow.inputParams.clientHeight);
-	console.log("ParameterRow.levelRowHeight    AFTER paramRow.args.offsetHeight   : " + paramRow.args.offsetHeight);
-	console.log("ParameterRow.levelRowHeight    AFTER this.inputParams.offsetHeight: " + paramRow.inputParams.offsetHeight);
+	this.logDebug("AFTER paramRow.args.clientHeight   : " + paramRow.args.clientHeight);
+	this.logDebug("AFTER this.inputParams.clientHeight: " + paramRow.inputParams.clientHeight);
+	this.logDebug("AFTER paramRow.args.offsetHeight   : " + paramRow.args.offsetHeight);
+	this.logDebug("AFTER this.inputParams.offsetHeight: " + paramRow.inputParams.offsetHeight);
 
 	console.log("FINAL paramRow.args.style : " + domAttr.get(paramRow.args, 'style'));
 	console.log("FINAL paramRow.inputParams.style : " + domAttr.get(paramRow.inputParams, 'style'));
 },
 toggle : function () {
 // TOGGLE HIDDEN NODES
-	////console.log("ParameterRow.toggle    plugins.workflow.ParameterRow.toggle()");
-	////console.log("ParameterRow.toggle    this.description: " + this.description);
+	////this.logDebug("plugins.workflow.ParameterRow.toggle()");
+	////this.logDebug("this.description: " + this.description);
 
 	var array = [ "argument", "valuetype", "valuetypeToggle", "category", "value", "ordinal", "ordinalToggle", "description", "format", "args", "inputParams", "paramFunction" ];
 	for ( var i in array ) {
 		this.toggleNode(this[array[i]]);
 	}
 
-	console.log("ParameterRow.toggle    this.args: " + this.args);
+	this.logDebug("this.args: " + this.args);
 	console.dir({this_args:this.args});
 	
 	var style = domAttr.get(this.args, 'style');
-	console.log("ParameterRow.toggle    style: " + style);
+	this.logDebug("style: " + style);
 	
 	var display = style.match(/display:\s*([^;]+)/)[1];
 	if ( display == "inline-block" )
@@ -233,7 +238,7 @@ toggleNode : function(node) {
 	
 },
 toggleLock : function (event) {
-	console.log("ParameterRow.toggleLock    plugins.apps.Parameter.toggleLock(name)");
+	this.logDebug("plugins.apps.Parameter.toggleLock(name)");
 	
 	if ( dojo.hasClass(this.locked, 'locked')	){
 		domClass.remove(this.locked, 'locked');

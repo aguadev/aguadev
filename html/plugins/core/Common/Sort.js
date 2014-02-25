@@ -108,7 +108,8 @@ sortHasharray : function (hashArray, key) {
 // NB: IF THE FIELD IS NULL OR EMPTY IN AN ARRAY ENTRY
 // IT WILL BE DISCARDED.
 
-	console.log("  Common.Sort.sortHasharray    hashArray: " + dojo.toJson(hashArray));
+	//console.log("  Common.Sort.sortHasharray    hashArray: " + dojo.toJson(hashArray));
+	console.log("  Common.Sort.sortHasharray    hashArray.length: " + hashArray.length);
 	console.log("  Common.Sort.sortHasharray    typeof hashArray: " + typeof hashArray);
 	console.log("  Common.Sort.sortHasharray    key: " + key);
 	if ( hashArray == null )	return;

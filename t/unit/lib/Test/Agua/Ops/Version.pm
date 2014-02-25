@@ -250,6 +250,48 @@ method testParseSemVer {
 	}
 }
 
+method testSameHigherVersion {
+	
+
+	my $versions = [
+		#### SIMPLE
+		["2.8.12.1", "2.8.12.0"],
+		["2.8.12.1", "2.8.12.1"],
+		["2.8.12.1", "2.8.12.3"],
+	
+		#### MIXED VERSIONS
+		["2.8.12", "2.8.1.13"],
+		["2.8.12", "2.8.12.13"],
+		["2.8.12.build24", "2.8.12.build37"],
+		["2.8.12.build24", "2.8.12.build3"],
+		["2.8.12.build24", "2.8.12"],
+	];
+	
+	my $expecteds = [
+		0,
+		1,
+		1,
+		0,
+		1,
+		1,
+		0,
+		0
+	];
+
+	for ( my $i = 0; $i < @$versions; $i++ ) {
+		my $version1= $$versions[$i][0];
+		my $version2= $$versions[$i][1];
+		
+		my $expected = $$expecteds[$i];
+		my $actual	=	$self->sameHigherVersion($version1, $version2);
+		$self->logDebug("expected", $expected);
+		$self->logDebug("actual", $actual);
+		
+		ok ($expected == $actual, "sameHigherVersion    $version1: $version2 ($expected)");
+	}
+
+}
+
 #### INTEGRATION TESTS
 method testSetVersion () {
 	my $inputdir 	= 	"$Bin/inputs";

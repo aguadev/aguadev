@@ -11,6 +11,7 @@ dojo.require("plugins.core.Common.Array");
 dojo.require("plugins.core.Common.BrowserDetect");
 dojo.require("plugins.core.Common.ComboBox");
 dojo.require("plugins.core.Common.Date");
+dojo.require("plugins.core.Common.Logger");
 dojo.require("plugins.core.Common.Sort");
 dojo.require("plugins.core.Common.Text");
 dojo.require("plugins.core.Common.Toast");
@@ -20,6 +21,7 @@ dojo.declare( "plugins.core.Common", [
 	plugins.core.Common.Array,
 	plugins.core.Common.ComboBox,
 	plugins.core.Common.Date,
+	plugins.core.Common.Logger,
 	plugins.core.Common.Sort,
 	plugins.core.Common.Text,
 	plugins.core.Common.Toast,

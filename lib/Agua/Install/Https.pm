@@ -248,8 +248,7 @@ method getSslConfigFiles {
 
 method getDomainName {	
 	my $domainname = $self->domainname();
-	$domainname = `curl -s http://169.254.169.254/latest/meta-data/public-hostname` if not defined $domainname or not $domainname;
-	$domainname = `hostname` if not defined $domainname or not $domainname;
+	$domainname = `facter domain` if not defined $domainname or not $domainname;
 	chomp($domainname);
 
 	return $domainname;

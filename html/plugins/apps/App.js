@@ -107,16 +107,16 @@ dragTypes : ["app"],
 //		Widget that created this widget
 parentWidget : null,
 
-// attachNode : DOM node
+// attachPoint : DOM node
 //		Node to attach widget's mainTab
-attachNode : null,
+attachPoint : null,
 
 /////}}}
 constructor : function(args) {
 	//console.log("App.constructor     plugins.apps.App.constructor");			
 
 	lang.mixin(this, args);
-	//console.log("App.constructor     this.attachNode: " + this.attachNode);			
+	//console.log("App.constructor     this.attachPoint: " + this.attachPoint);			
 
 	// SET this.apps
 	if ( this.parentWidget ) {
@@ -166,10 +166,10 @@ startup : function () {
 	//console.groupEnd("App-" + this.id + "    startup");
 },
 attachPane : function () {
-	//console.log("Controller.attachPane    this.attachNode: " + this.attachNode);
+	//console.log("Controller.attachPane    this.attachPoint: " + this.attachPoint);
 	
-	this.attachNode.addChild(this.mainTab);
-	this.attachNode.selectChild(this.mainTab);	
+	this.attachPoint.addChild(this.mainTab);
+	this.attachPoint.selectChild(this.mainTab);	
 },
 setSubscriptions : function () {
 	// SUBSCRIBE TO UPDATES

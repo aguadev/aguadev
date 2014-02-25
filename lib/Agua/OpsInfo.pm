@@ -29,7 +29,7 @@ email          		author's email address
 keywords       		array of keywords relating to the package
 description    		description of the package
 website        		URL of website for package
-publications    	array of paper/abstract/etc. objects
+publication    	array of paper/abstract/etc. objects
 organisations   	array of organisation objects
 ISA            		hash of experiment information conforming to ISA standard
 acknowledgements 	array of organisation objects
@@ -79,7 +79,7 @@ em /agua/0.6/repos/biorepository/syoung/fastqc.ops
         }
     ],
     "installtype":    "ops",
-    "author":         [],
+    "authors":        [],
     "publication":    [],
     "organisation":   [],
     "ISA":            {},
@@ -106,6 +106,7 @@ has 'PRINTLOG'		=> ( isa => 'Int', is => 'rw', default 	=> 	5 	);
 # Strings
 has 'download'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'owner'			=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
+has 'login'			=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'repository'	=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'privacy'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'package'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
@@ -113,6 +114,9 @@ has 'type'			=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'version'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'history'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'url'			=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
+has 'checkurl'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0, default	=> "true"	);
+has 'unzipped'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
+has 'downloaded'	=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'linkurl'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 
 has 'installtype'	=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0, default	=>	'ops'	);
@@ -125,8 +129,9 @@ has 'description'	=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'website'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 
 # Objects
+has 'dependencies'	=> ( isa => 'ArrayRef|Undef', is => 'rw', required	=> 	0	);
 has 'authors'		=> ( isa => 'ArrayRef|Undef', is => 'rw', required	=> 	0	);
-has 'publications'	=> ( isa => 'ArrayRef|Undef', is => 'rw', required	=> 	0	);
+has 'publication'	=> ( isa => 'HashRef|Undef', is => 'rw', required	=> 	0	);
 has 'organisations'	=> ( isa => 'ArrayRef|Undef', is => 'rw', required	=> 	0	);
 has 'ISA'			=> ( isa => 'HashRef|Undef', is => 'rw', required	=> 	0	);
 has 'acknowledgements'=> ( isa => 'ArrayRef|Undef', is => 'rw', required	=> 	0	);
@@ -134,7 +139,7 @@ has 'citations'		=> ( isa => 'ArrayRef|Undef', is => 'rw', required	=> 	0	);
 has 'resources'		=> ( isa => 'HashRef|Undef', is => 'rw', required	=> 	0	);
 has 'keywords'		=> ( isa => 'ArrayRef|Undef', is => 'rw', required	=> 	0	);
 
-has 'savefields'	=> ( isa => 'ArrayRef|Undef', is => 'rw', default => sub { ['package', 'version', 'type', 'version', 'history', 'installtype', 'opsfile', 'installfile', 'licensefile', 'readmefile', 'description', 'website', 'authors', 'publications', 'organisations', 'ISA', 'acknowledgements', 'citations']	});
+has 'savefields'	=> ( isa => 'ArrayRef|Undef', is => 'rw', default => sub { ['package', 'version', 'type', 'version', 'history', 'installtype', 'opsfile', 'installfile', 'licensefile', 'readmefile', 'description', 'website', 'authors', 'publication', 'organisations', 'ISA', 'acknowledgements', 'citations']	});
 
 ####/////}}}}
 

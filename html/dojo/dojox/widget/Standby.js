@@ -196,35 +196,35 @@ return declare("dojox.widget.Standby", [_Widget, _TemplatedMixin],{
 		//		Function to display the blocking overlay and busy/status icon or text.
 
 
-		console.log("dojox.widget.Standby.show    START");
-		console.log("dojox.widget.Standby.show    this.displayed: " + this.displayed);
-		console.log("dojox.widget.Standby.show    this.target: " + this.target);
+		//console.log("dojox.widget.Standby.show    START");
+		//console.log("dojox.widget.Standby.show    this.displayed: " + this.displayed);
+		//console.log("dojox.widget.Standby.show    this.target: " + this.target);
 		console.dir({this_target:this.target});
 		if(!this._displayed){
 
-			console.log("dojox.widget.Standby.show    HERE 1")
+			//console.log("dojox.widget.Standby.show    HERE 1")
 
 			if(this._anim){
 				this._anim.stop();
 				delete this._anim;
 			}
 
-			console.log("dojox.widget.Standby.show    HERE 2")
+			//console.log("dojox.widget.Standby.show    HERE 2")
 
 			this._displayed = true;
 
-			console.log("dojox.widget.Standby.show    HERE 3")
+			//console.log("dojox.widget.Standby.show    HERE 3")
 			this._size();
 
-			console.log("dojox.widget.Standby.show    HERE 4")
+			//console.log("dojox.widget.Standby.show    HERE 4")
 			this._disableOverflow();
 
-			console.log("dojox.widget.Standby.show    HERE 5")
+			//console.log("dojox.widget.Standby.show    HERE 5")
 			this._fadeIn();
 
-			console.log("dojox.widget.Standby.show    HERE 6")
+			//console.log("dojox.widget.Standby.show    HERE 6")
 		}
-		console.log("dojox.widget.Standby.show    END")
+		//console.log("dojox.widget.Standby.show    END")
 
 	},
 

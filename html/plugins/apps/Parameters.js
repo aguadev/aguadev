@@ -33,6 +33,10 @@ function (declare, arrayUtil, JSON, on, lang, domAttr, domClass, _Widget, _Templ
 return declare("plugins.apps.Parameters",
 	[ _Widget, _TemplatedMixin, _WidgetsInTemplate, DndSource, Inputs, EditRow, DndTrash, Common ], {
 
+// DEBUG : Boolean
+//		Print debug output if true
+DEBUG : true,
+
 // templateString : String
 //		The template of this widget. 
 templateString: dojo.cache("plugins", "apps/templates/parameters.html"),
@@ -124,16 +128,18 @@ avatarType : "parameters",
 // LOADED DND WIDGETS
 childWidgets : [],
 
-// attachNode : DomNode or widget
+// attachPoint : DomNode or widget
 // 		Attach this.mainTab using appendChild (domNode) or addChild (tab widget)
 //		(OVERRIDE IN args FOR TESTING)
-attachNode : null,
+attachPoint : null,
 
 /////}}}}}
 
 constructor : function(args) {
-	console.log("Parameters.constructor    args: ");
+	console.log("******************************HERE");
+	this.logDebug("args: ");
 	console.dir({args:args});
+	console.log("******************************AFTER");
 
     // MIXIN ARGS
     lang.mixin(this, args);
@@ -145,33 +151,40 @@ postCreate : function() {
 	this.loadCSS();		
 
 	// COMPLETE CONSTRUCTION OF OBJECT
-	////console.log("Parameters.postCreate    DOING this.inherited(arguments)");
+	////this.logDebug("DOING this.inherited(arguments)");
 	this.inherited(arguments);	 
-	////console.log("Parameters.postCreate    AFTER this.inherited(arguments)");
+	////this.logDebug("AFTER this.inherited(arguments)");
 
 	//this.startup();
 },
 startup : function () {
 	console.group("App-" + this.id + "    startup");
 
-	// COMPLETE CONSTRUCTION OF OBJECT
-	////console.log("Parameters.startup    DOING this.inherited(arguments)");
-	this.inherited(arguments);	 
-	////console.log("Parameters.startup    AFTER this.inherited(arguments)");
+	this.logDebug("this", this);
+	var variable = "someValue";
+	this.logDebug("variable", variable);
 
-	// ATTACH PANEprint Dumper ;
+	// COMPLETE CONSTRUCTION OF OBJECT
+	////this.logDebug("DOING this.inherited(arguments)");
+	this.inherited(arguments);	 
+	////this.logDebug("AFTER this.inherited(arguments)");
+
+	// ATTACH PANE
 	this.attachPane();
 
 	// SET PARAMETERS COMBO
-	console.log("Parameters.startup    DOING this.setAppTypesCombo()");
+	this.logDebug("DOING this.setAppTypesCombo()");
 	this.setAppTypesCombo();
 
+	
+	
 	// SET NEW PARAMETER FORM
-	console.log("Parameters.startup    DOING this.setForm()");
+	this.logDebug("DOING this.setForm()");
 	this.setForm();
 
 	// SET TRASH
-	console.log("Parameters.startup    DOING this.setTrash()");
+	this.logDebug("DOING this.setTrash()");
+
 	this.setTrash(this.dataFields);	
 
 	// SET COMBOBOX onChange LISTENERS
@@ -186,7 +199,7 @@ startup : function () {
 	console.groupEnd("App-" + this.id + "    startup");
 },
 attachPane : function () {
-	console.log("Parameters.attachPane    this.attachNode: " + this.attachNode);
+	this.logDebug("this.attachPoint: " + this.attachPoint);
 	if ( this.attachPoint.addChild ) {
 		this.attachPoint.addChild(this.mainTab);
 		this.attachPoint.selectChild(this.mainTab);
@@ -200,20 +213,20 @@ updateApps : function (args) {
 	console.group("apps.Parameters    " + this.id + "    updateApps");
 	console.log("apps.Parameters.updateApps    args:");
 	console.dir(args);
-	////console.log("Parameters.updateApps    admin.Parameter.updateApps(args)");
-	////console.log("Parameters.updateApps    args: ");
+	////this.logDebug("admin.Parameter.updateApps(args)");
+	////this.logDebug("args: ");
 	////console.dir(args);
 
 	// SET PARAMTYPES COMBO
-	////console.log("Parameters.updateApps    Calling setAppNamesCombo()");
+	////this.logDebug("Calling setAppNamesCombo()");
 	this.setAppNamesCombo();
 	
 	// SET APPS COMBO
-	////console.log("Parameters.updateApps    Calling setAppTypesCombo()");
+	////this.logDebug("Calling setAppTypesCombo()");
 	this.setAppTypesCombo();
 	
 	// SET DRAG SOURCE
-	////console.log("Parameters.updateApps    Calling setDragSource()");
+	////this.logDebug("Calling setDragSource()");
 	this.setDragSource();
 
 	console.groupEnd("apps.Parameters    " + this.id + "    updateApps");
@@ -244,15 +257,15 @@ toggleDescription : function () {
 },
 setAppTypesCombo : function (type) {
 // SET PARAMETERS COMBO BOX
-	console.log("Parameters.setAppTypesCombo     plugins.apps.Parameters.setAppTypesCombo()");
+	this.logDebug(" plugins.apps.Parameters.setAppTypesCombo()");
 
 	// GET PARAMETERS NAMES		
 	var apps = Agua.getApps();
-	console.log("Parameters.setAppTypesCombo     plugins.apps.Parameters.setAppTypesCombo()");
+	this.logDebug(" plugins.apps.Parameters.setAppTypesCombo()");
 
 	var itemsArray = this.hashArrayKeyToArray(apps, "type");
 	itemsArray = this.uniqueValues(itemsArray);
-	console.log("Parameters.setAppTypesCombo     itemsArray: " + dojo.toJson(itemsArray));
+	this.logDebug(" itemsArray: " + dojo.toJson(itemsArray));
 	itemsArray = this.sortNoCase(itemsArray);
 	itemsArray.splice(0,0, 'Order by Type');
 	itemsArray.splice(0,0, 'Order by Name');
@@ -261,18 +274,18 @@ setAppTypesCombo : function (type) {
 	for ( var i = 0; i < itemsArray.length; i++ ) {
 		data.push({ name: itemsArray[i]	});
 	}
-	console.log("Parameters.setAppTypesCombo     data: " + dojo.toJson(data));
+	this.logDebug(" data: " + dojo.toJson(data));
 	var store = new Memory({	idProperty: "name", data: data	});
 	
 	// SET COMBO
 	this.appsCombo.store = store;
 	this.appsCombo.startup();
-	console.log("Parameters.setAppTypesCombo::setCombo     AFTER this.appsCombo.startup()");
+	this.logDebug(" AFTER this.appsCombo.startup()");
 
 	// SET COMBO VALUE
 	var firstValue = itemsArray[0];
 	this.appsCombo.set('value', firstValue);
-	console.log("Parameters.setAppTypesCombo::setCombo     AFTER this.appsCombo.setValue(firstValue)");
+	this.logDebug(" AFTER this.appsCombo.setValue(firstValue)");
 
 	// SET PARAMETER NAMES COMBO
 	this.setAppNamesCombo();
@@ -281,17 +294,17 @@ setAppNamesCombo : function () {
 /* SET APP NAMES COMBO DEPENDENT ON THE CURRENT SELECTION
 	IN THE APP COMBO
 */
-	console.log("Parameters.setAppNamesCombo     plugins.apps.Parameters.setAppNamesCombo()");
+	this.logDebug(" plugins.apps.Parameters.setAppNamesCombo()");
 
 	// GET SOURCE ARRAY AND FILTER BY PARAMETER NAME
 	var type = this.appsCombo.get('value');
-	console.log("Parameters.setAppNamesCombo     type: " + type);
+	this.logDebug(" type: " + type);
 	var itemArray = Agua.getApps();
-	console.log("Parameters.setAppNamesCombo     BEFORE itemArray.length: " + itemArray.length);
-	console.log("Parameters.setAppNamesCombo     BEFORE itemArray[0]: " + dojo.toJson(itemArray[0]));
+	this.logDebug(" BEFORE itemArray.length: " + itemArray.length);
+	this.logDebug(" BEFORE itemArray[0]: " + dojo.toJson(itemArray[0]));
 	var keyArray = ["type"];
 	var valueArray = [type];
-	console.log("Parameters.setAppNamesCombo     valueArray: " + dojo.toJson(valueArray));
+	this.logDebug(" valueArray: " + dojo.toJson(valueArray));
 	if ( type == "Order by Name" )
 		itemArray = this.sortHasharray(itemArray, 'name');
 	else if ( type == "Order by Type" ) {
@@ -299,7 +312,7 @@ setAppNamesCombo : function () {
 	}
 	else
 		itemArray = this.filterByKeyValues(itemArray, keyArray, valueArray);
-	console.log("Parameters.setAppNamesCombo     AFTER itemArray.length: " + itemArray.length);
+	this.logDebug(" AFTER itemArray.length: " + itemArray.length);
 	
 	// CHECK itemArray IS NOT NULL OR EMPTY
 	if ( itemArray == null || itemArray.length == 0 )	return;
@@ -309,7 +322,7 @@ setAppNamesCombo : function () {
 	for ( var i = 0; i < itemArray.length; i++ ) {
 		data.push({ name: itemArray[i]	});
 	}
-	console.log("Parameters.setAppNamesCombo     data: ");
+	this.logDebug(" data: ");
 	console.dir({data:data});
 	var store = new Memory({	idProperty: "name", data: data	});
 
@@ -322,11 +335,11 @@ setAppNamesCombo : function () {
 	this.appNamesCombo.set('value', firstValue);
 
 	// SET PARAMETERS COMBO
-	console.log("Parameters.setAppNamesCombo    Completed. Now calling setDragSource");
+	this.logDebug("Completed. Now calling setDragSource");
 	this.setDragSource();
 },
 setComboListeners : function () {
-	////console.log("Parameters.setComboListeners    Parameter.setComboListeners()");
+	////this.logDebug("Parameter.setComboListeners()");
 
 	// SET LISTENER FOR PARAM ORDER COMBO
 	dojo.connect(this.paramOrderCombo, "onchange", this, "setDragSource");
@@ -335,24 +348,24 @@ setComboListeners : function () {
 	dojo.connect(this.paramFilterCombo, "onchange", this, "setDragSource");
 
 	dojo.connect(this.appsCombo, "onChange", dojo.hitch(this, function(){
-		////console.log("Parameters.setComboListeners    **** appsCombo.onChange fired");
-		////console.log("Parameters.setComboListeners    this: " + this);
-		////console.log("Parameters.setComboListeners    Doing this.setAppNamesCombo()");
+		////this.logDebug("**** appsCombo.onChange fired");
+		////this.logDebug("this: " + this);
+		////this.logDebug("Doing this.setAppNamesCombo()");
 		this.setAppNamesCombo();
 	}));
 	
 	var thisObject = this;
 	dojo.connect(this.appNamesCombo, "onChange", dojo.hitch(this, function(){
-		////console.log("Parameters.setComboListeners    **** appNamesCombo.onChange fired");
-		////console.log("Parameters.setComboListeners    this: " + this);
-		////console.log("Parameters.setComboListeners    thisObject: " + thisObject);
-		////console.log("Parameters.setComboListeners    Doing this.setDragSource()");
+		////this.logDebug("**** appNamesCombo.onChange fired");
+		////this.logDebug("this: " + this);
+		////this.logDebug("thisObject: " + thisObject);
+		////this.logDebug("Doing this.setDragSource()");
 		thisObject.setDragSource();
 	}));
 
 },
 toggleLock : function () {
-	////console.log("Parameters.toggleLock    plugins.apps.Parameters.toggleLock(name)");	
+	////this.logDebug("plugins.apps.Parameters.toggleLock(name)");	
 	if ( dojo.hasClass(this.locked, 'locked') ) {
 		dojo.removeClass(this.locked, 'locked');
 		dojo.addClass(this.locked, 'unlocked');
@@ -367,7 +380,7 @@ toggleLock : function () {
 setForm : function () {
 // SET LISTENERS TO ACTIVATED SAVE BUTTON AND TO CLEAR DEFAULT TEXT
 // WHEN INPUTS ARE CLICKED ON
-	////console.log("Parameters.setForm    plugins.apps.Parameters.setForm()");
+	////this.logDebug("plugins.apps.Parameters.setForm()");
 
 	// SET ADD PARAMETER ONCLICK
 	dojo.connect(this.addParameterButton, "onclick", dojo.hitch(this, "saveInputs", null, {originator: this, reload: true}));
@@ -381,14 +394,14 @@ setForm : function () {
 getItemArray : function () {
 	// FILTER SOURCE ARRAY BY type
 	var appName = this.appNamesCombo.get('value');
-	////console.log("Parameters.getItemArray    appName: " + appName);
+	////this.logDebug("appName: " + appName);
 
 	var itemArray = Agua.getParametersByAppname(appName);
-	////console.log("Parameters.getItemArray    BEFORE SORT itemArray.length: " + itemArray.length);
+	////this.logDebug("BEFORE SORT itemArray.length: " + itemArray.length);
 
 	// ORDER APPS 
 	var paramOrder = this.paramOrderCombo.value;
-	////console.log("Parameters.getItemArray    paramOrder: " + paramOrder);
+	////this.logDebug("paramOrder: " + paramOrder);
 	if ( paramOrder == "Order by Name" )
 		itemArray = this.sortHasharray(itemArray, 'name');
 	else if ( paramOrder == "Order by Type" )
@@ -398,28 +411,28 @@ getItemArray : function () {
 	else
 		itemArray = this.sortHasharray(itemArray, 'name');
 
-	////console.log("Parameters.getItemArray    AFTER SORT itemArray.length: " + itemArray.length);
+	////this.logDebug("AFTER SORT itemArray.length: " + itemArray.length);
 
-	//////console.log("Parameters.getItemArray    AFTER SORT itemArray: " + dojo.toJson(itemArray, true));
+	//////this.logDebug("AFTER SORT itemArray: " + dojo.toJson(itemArray, true));
 
 	// FILTER APPS 
 	var paramFilter = this.paramFilterCombo.value;
-	////console.log("Parameters.getItemArray    paramFilter: " + paramFilter);
+	////this.logDebug("paramFilter: " + paramFilter);
 	var keyArray = ["paramtype"];
 	var valueArray = [paramFilter];
 	if ( paramFilter == "All" ){
-		////console.log("Parameters.getItemArray    No filter with paramfilter: " + paramFilter);			// do NOTHING
+		////this.logDebug("No filter with paramfilter: " + paramFilter);			// do NOTHING
 	}
 	else
 		itemArray = this.filterByKeyValues(itemArray, keyArray, valueArray);
 
-	////console.log("Parameters.getItemArray    itemArray.length: " + itemArray.length);	
+	////this.logDebug("itemArray.length: " + itemArray.length);	
 	return itemArray;
 },
 deleteItem : function (itemObject) {
 // DELETE PARAMETER FROM Agua.parameters OBJECT AND IN REMOTE DATABASE
-	////console.log("Parameters.deleteItem    plugins.apps.Parameters.deleteItem(name)");
-	////console.log("Parameters.deleteItem    itemObject: " + dojo.toJson(itemObject));
+	////this.logDebug("plugins.apps.Parameters.deleteItem(name)");
+	////this.logDebug("itemObject: " + dojo.toJson(itemObject));
 	if ( itemObject.name == null ) 	return;
 	if ( itemObject.appname == null ) 	return;
 
@@ -434,8 +447,8 @@ deleteItem : function (itemObject) {
 }, // Parameter.deleteItem
 saveInputs : function (inputs, updateArgs) {
 	//	SAVE A PARAMETER TO Agua.parameters AND TO REMOTE DATABASE
-	////console.log("Parameters.saveInputs    plugins.apps.Parameters.saveInputs(inputs, updateArgs)");
-	////console.log("Parameters.saveInputs    inputs: " + dojo.toJson(inputs));	
+	////this.logDebug("plugins.apps.Parameters.saveInputs(inputs, updateArgs)");
+	////this.logDebug("inputs: " + dojo.toJson(inputs));	
 
 	if ( this.savingInputs == true )	return;
 	this.savingInputs = true;
@@ -443,7 +456,7 @@ saveInputs : function (inputs, updateArgs) {
 	if ( inputs == null )
 	{
 		inputs = this.getFormInputs(this);
-		//console.log("Parameters.saveInputs    this.allValid: " + this.allValid);	
+		//this.logDebug("this.allValid: " + this.allValid);	
 
 		// RETURN IF INPUTS ARE NULL OR INVALID
 		if ( inputs == null || this.allValid == false )
@@ -458,10 +471,10 @@ saveInputs : function (inputs, updateArgs) {
 	// SET inputs APPLICATION NAME AND TYPE
 	var appName = this.appNamesCombo.get('value');
 	inputs.appname = appName;
-	////console.log("Parameters.saveInputs    appName: " + appName);
+	////this.logDebug("appName: " + appName);
 	var appType = Agua.getAppType(appName);
 	inputs.apptype = appType;
-	////console.log("Parameters.saveInputs    appType: " + appType);
+	////this.logDebug("appType: " + appType);
 
 	// ADD NEW PARAMETER OBJECT TO Agua.parameters ARRAY
 	Agua.addParameter(inputs);
@@ -469,12 +482,12 @@ saveInputs : function (inputs, updateArgs) {
 	// REMOVE INVALID VALUES
 	for ( var name in this.invalidInputs )
 	{
-		////console.log("Parameters.saveInputs    name: " + name);
+		////this.logDebug("name: " + name);
 		if ( inputs[name] == null ) inputs[name] = '';
 		if ( inputs[name] == this.invalidInputs[name] )	inputs[name] = '';		
 		inputs[name] = inputs[name].replace(/'/g, '"');
 	}
-	//////console.log("Parameters.saveInputs    AFTER replace DEFAULTS inputs: " + dojo.toJson(inputs));
+	//////this.logDebug("AFTER replace DEFAULTS inputs: " + dojo.toJson(inputs));
 
 	// DOUBLE-UP BACKSLASHES
 	for ( var i = 0; i < inputs.length; i++ )
@@ -492,7 +505,7 @@ saveInputs : function (inputs, updateArgs) {
 	query.mode 			= 	"saveParameter";
 	query.module 		= 	"Agua::Workflow";
 	query.data 			= 	inputs;
-	//////console.log("Parameters.saveInputs    query: " + dojo.toJson(query));
+	//////this.logDebug("query: " + dojo.toJson(query));
 	this.doPut({ url: url, query: query, sync: false });
 
 	this.savingInputs = false;
@@ -502,8 +515,8 @@ saveInputs : function (inputs, updateArgs) {
 
 }, // Parameter.saveInputs
 getFormInputs : function (widget) {
-	////console.log("Parameters.getFormInputs    plugins.apps.Parameterss.getFormInputs(widget)");
-	////console.log("Parameters.getFormInputs    widget: " + widget);
+	////this.logDebug("plugins.apps.Parameterss.getFormInputs(widget)");
+	////this.logDebug("widget: " + widget);
 	//////console.dir(widget);
 	
 	var inputs = new Object;	
@@ -516,11 +529,11 @@ getFormInputs : function (widget) {
 		else if (dojo.hasClass(widget[name], 'unlocked'))
 			value = "0";
 		else value = this.getWidgetValue(widget[name]);			
-		////console.log("Parameters.getFormInputs    " + name + ": " + value);
+		////this.logDebug("" + name + ": " + value);
 		inputs[name] = value;
-		//////console.log("Parameters.getFormInputs    node " + name + " value: " + value);
+		//////this.logDebug("node " + name + " value: " + value);
 	}
-	////////console.log("Parameters.getFormInputs    inputs: " + dojo.toJson(inputs));
+	////////this.logDebug("inputs: " + dojo.toJson(inputs));
 	
 	inputs = this.checkInputs(widget, inputs);
 	
@@ -530,11 +543,11 @@ checkInputs : function (widget, inputs) {
 	// SET INPUT FLAG SO THESE INPUTS ARE IGNORED:
 	// 	argument AND discretion
 	var inputFlag = false;
-	//console.log("Parameters.checkInputs    this.paramtype: " + this.paramtype);
+	//this.logDebug("this.paramtype: " + this.paramtype);
 	var paramType = this.paramtype.value;
-	//console.log("Parameters.checkInputs    paramType: " + paramType);
+	//this.logDebug("paramType: " + paramType);
 	if ( paramType == 'input' )	inputFlag = true;
-	//console.log("Parameters.checkInputs    inputFlag: " + inputFlag);
+	//this.logDebug("inputFlag: " + inputFlag);
 	
 	// CHECK INPUTS ARE VALID AND REQUIRED INPUTS ARE NOT EMPTY
 	this.allValid = true;	
@@ -549,17 +562,17 @@ checkInputs : function (widget, inputs) {
 			continue;
 		}
 
-		//console.log("Parameters.checkInputs    BEFORE inputs[key]: " + dojo.toJson(inputs[key]));
+		//this.logDebug("BEFORE inputs[key]: " + dojo.toJson(inputs[key]));
 		inputs[key] = this.convertString(inputs[key], "htmlToText");
 		inputs[key] = this.convertBackslash(inputs[key], "expand");
-		////console.log("Parameters.checkInputs    AFTER inputs[key]: " + dojo.toJson(inputs[key]));
+		////this.logDebug("AFTER inputs[key]: " + dojo.toJson(inputs[key]));
 		
 		if ( (this.isValidInput(key, inputs[key]) == false
 				&& this.requiredInputs[key] != null)
 			|| (this.requiredInputs[key] != null
 				&& (inputs[key] == null || inputs[key] == '') ) )
 		{
-			////console.log("Parameters.this.allValid    invalid input " + key + ": " + inputs[key]);
+			////this.logDebug("invalid input " + key + ": " + inputs[key]);
 			this.addClass(widget[key], 'invalid');
 			this.allValid = false;
 		}
@@ -576,21 +589,21 @@ checkInputs : function (widget, inputs) {
 	return inputs;
 },
 checkArgsBalance : function(widget) {
-	console.log("Parameters.checkArgsBalance    plugins.apps.Parameters.checkArgsBalance(widget)");
-	console.log("Parameters.checkArgsBalance    console.dir(widget):");
+	this.logDebug("plugins.apps.Parameters.checkArgsBalance(widget)");
+	this.logDebug("console.dir(widget):");
 	console.dir({widget: widget});
 	
 	var args = widget.args.innerHTML;
 	var inputParams = widget.inputParams.innerHTML;
 
-	console.log("Parameters.checkArgsBalance    args: " + args);
-	console.log("Parameters.checkArgsBalance    inputParams: " + inputParams);
+	this.logDebug("args: " + args);
+	this.logDebug("inputParams: " + inputParams);
 	
 	var argsArray = args.split(/,/);
-	console.log("Parameters.checkArgsBalance    argsArray.length: " + argsArray.length);
+	this.logDebug("argsArray.length: " + argsArray.length);
 	
 	var paramsArray = inputParams.split(/,/);
-	console.log("Parameters.checkArgsBalance    paramsArray.length: " + paramsArray.length);
+	this.logDebug("paramsArray.length: " + paramsArray.length);
 	if ( paramsArray == null )	return;
 	if ( paramsArray.length == null || paramsArray.length == 0 )	return;
 	
@@ -606,24 +619,24 @@ checkArgsBalance : function(widget) {
 		this.setValid(widget.inputParams);
 	}
 	
-	console.log("Parameters.checkArgsBalance    FINAL this.allValid: " + this.allValid);
+	this.logDebug("FINAL this.allValid: " + this.allValid);
 },
 checkSyntax : function(widget) {
-	console.log("Parameters.checkSyntax    plugins.apps.Parameterss.checkSyntax(widget)");
-	console.log("Parameters.checkSyntax    console.dir(widget):");
+	this.logDebug("plugins.apps.Parameterss.checkSyntax(widget)");
+	this.logDebug("console.dir(widget):");
 	console.dir({widget: widget});
 
 	var inputParams = widget.inputParams.innerHTML;
 	var paramFunction = widget.paramFunction.innerHTML;
 
-	console.log("Parameters.checkSyntax    inputParams: " + inputParams);
-	console.log("Parameters.checkSyntax    paramFunction: " + paramFunction);
+	this.logDebug("inputParams: " + inputParams);
+	this.logDebug("paramFunction: " + paramFunction);
 
 	try {
 		var funcString = "var func = function(" + inputParams + ") {" + paramFunction + "}";
-		console.log("Parameters.checkSyntax    funcString: " + funcString);
+		this.logDebug("funcString: " + funcString);
 		eval(funcString);
-		console.log("Parameters.checkSyntax    eval OK");
+		this.logDebug("eval OK");
 		this.setValid(widget.paramFunction);
 	}
 	catch (error) {
@@ -632,7 +645,7 @@ checkSyntax : function(widget) {
 		this.setInvalid(widget.paramFunction);
 	}
 
-	console.log("Parameters.checkArgsBalance    FINAL this.allValid: " + this.allValid);
+	this.logDebug("FINAL this.allValid: " + this.allValid);
 }
 
 

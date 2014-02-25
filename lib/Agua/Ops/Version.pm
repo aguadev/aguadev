@@ -213,6 +213,31 @@ method higherVersion ($version1, $version2) {
 	return 0;
 }
 
+method sameHigherVersion ($version1, $version2) {
+#### COMPARISON OF X.X.XX.X VERSION DIGITS IN version1 AND version2
+#### RETURNS 1 IF version2 IS SAME OR HIGHER
+
+	$self->logDebug("PASSED version1", $version1);
+	$self->logDebug("PASSED version2", $version2);
+	my ($array1, $array2);
+	@$array1 = split "\\.", $version1;
+	$self->logDebug("array1", $array1);
+	@$array2 = split "\\.", $version2;
+	$self->logDebug("array2", $array2);
+	
+	for ( my $i = 0; $i < @$array1; $i++ ) {
+		return 0 if not defined $$array2[$i];
+		return 0 if $$array2[$i] eq "" and $$array1[$i] ne "";
+		my ($value1) = $$array1[$i]	=~	/(\d+)/;
+		my ($value2) = $$array2[$i]	=~	/(\d+)/;
+		$self->logDebug("Comparing value1 $value1 to value2 $value2");
+		
+		return 0 if $value2 < $value1;
+	}
+	
+	return 1;
+}
+
 method higherSemVer ($version1, $version2) {
 	$self->logDebug("PASSED version1", $version1);
 	$self->logDebug("PASSED version2", $version2);
