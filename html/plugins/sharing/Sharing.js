@@ -17,7 +17,6 @@ dojo.require("dijit.layout.ContentPane");
 // rightPane buttons
 dojo.require("dijit.form.Button");
 
-/*
 // TEMPLATE MODULES
 //LEFT PANE
 dojo.require("plugins.sharing.Apps");
@@ -36,7 +35,6 @@ dojo.require("plugins.sharing.GroupSources");
 dojo.require("plugins.sharing.GroupUsers");
 dojo.require("plugins.sharing.Sources");
 dojo.require("plugins.sharing.Users");
-*/
 
 dojo.declare( "plugins.sharing.Sharing", 
 	[ dijit._Widget, dijit._Templated, plugins.core.Common ],
@@ -189,6 +187,17 @@ loadPane : function(side) {
 		console.log("Sharing.loadPane    BEFORE dojo.require moduleName: " + moduleName);
 		dojo["require"](moduleName);
 		console.log("Sharing.loadPane    AFTER dojo.require moduleName: " + moduleName);
+		
+		//var module = dojo.getObject(moduleName);
+		//console.log("Workflow.setCoreWidget    module: ");
+		//console.dir({module:module});
+		//
+		//var thisObject = this;
+		//var tabPane = new module({
+		//	parentWidget: thisObject,
+		//	attachPoint : thisObject[tabContainer]
+		//});
+
 		
 		var thisObject = this;
 		var tabPane = new plugins["sharing"][tabPaneName](

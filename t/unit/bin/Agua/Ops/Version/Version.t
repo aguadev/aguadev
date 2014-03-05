@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 #### TEST MODULES
-use Test::More  tests => 34; #qw(no_plan);
+use Test::More  tests => 35; #qw(no_plan);
 
 #### EXTERNAL MODULES
 use FindBin qw($Bin);

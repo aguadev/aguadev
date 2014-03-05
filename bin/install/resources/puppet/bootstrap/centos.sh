@@ -32,17 +32,19 @@ else
     echo "Completed puppet installation"
 fi
 
-echo "Installing epel"
-puppet module install stahnma/epel
+#### INSTALL MODULES
+echo "Installing stahnma-epel"
+puppet module install stahnma/epel --force
+echo "Installing puppetlabs-stdlib"
+puppet module install puppetlabs-stdlib --force
+echo "Installing puppetlabs-mysql"
+puppet module install puppetlabs-mysql --force
+echo "Installing puppetlabs-apache"
+puppet module install puppetlabs-apache --force
+echo "Installing puppetlabs-rabbitmq"
+puppet module install puppetlabs-rabbitmq --force
+echo "Installing puppetlabs-nodejs"
+puppet module install puppetlabs-nodejs --force
+echo "Installing puppetlabs-java"
+puppet module install puppetlabs-java --force
 
-echo "Installing librarian-puppet"
-PUPPET_DIR='/etc/puppet'
-if [ `gem query --local | grep librarian-puppet | wc -l` -eq 0 ]; then
-  gem install librarian-puppet
-	echo "DOING librarian-puppet install --clean"
-  cd $PUPPET_DIR && librarian-puppet install --clean
-else
-	echo "DOING librarian-puppet update"
-  cd $PUPPET_DIR && librarian-puppet update
-fi
-echo "Completed librarian-puppet installation"

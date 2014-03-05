@@ -1214,7 +1214,10 @@ method getArch {
 	my $arch = $self->arch();
     $self->logDebug("STORED arch", $arch) if defined $arch and $arch ne "";
 
-	return $arch if defined $arch;
+	return $arch if defined $arch and $arch ne "";
+
+	my $releasefile = "/etc/centos-release";
+	return "centos" if -f $releasefile;
 	
 	$arch 	= 	"linux";
 	my $command = "uname -a";

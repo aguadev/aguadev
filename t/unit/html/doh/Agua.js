@@ -7,6 +7,7 @@ define(
 		,"plugins/core/Agua/Feature"
 		,"plugins/core/Agua/Group"
 		,"plugins/core/Agua/Hub"
+		,"plugins/core/Agua/Package"
 		,"plugins/core/Agua/Parameter"
 		,"plugins/core/Agua/Project"
 		,"plugins/core/Agua/Request"

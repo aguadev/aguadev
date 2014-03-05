@@ -1,9 +1,15 @@
-dojo.provide("plugins.core.Conf");
-console.log("plugins.core.Conf    HERE");
-
 /* SUMMARY: STORE conf FILE KEYPAIRS */
 
-dojo.declare( "plugins.core.Conf", null, {    
+define([
+	"dojo/_base/declare"
+],
+
+function (declare) {
+
+/////}}}}}
+
+return declare("plugins.core.Conf",
+	[], {
 
 // conf HASH
 data : null,
@@ -16,22 +22,14 @@ constructor : function (args) {
 },
 
 postCreate : function () {
-
 },
 
 startup : function () {
     //console.log("core.Conf.startup    caller: " + this.startup.caller.nom);
-	//console.log("core.Conf.startup    parent:");
-	//console.dir({parent:parent});
 },
 
 setData : function () {
-	//console.log("core.Conf.setData    Agua:");
-	//console.dir({Agua:Agua});
-
 	this.data = this.parent.getData("conf");
-	//console.log("core.Conf.setData    this.data:");
-	//console.dir({this_data:this.data});
 },
 getKey : function (sectionName, key) {	
     console.log("Conf.getKey    sectionName: " + sectionName);
@@ -43,8 +41,6 @@ getKey : function (sectionName, key) {
 
 	if ( ! this.data ) return "";
 	if ( ! this.data[sectionName] ) return "";
-
-    //console.log("Conf.getKey    RETURNING :" + this.data[sectionName][key]);
 	
 	return this.data[sectionName][key];
 },
@@ -54,5 +50,8 @@ setKey : function (sectionName, key, value) {
 }
 
 
-});
+}); //	end declare
+
+});	//	end define
+
 

@@ -57,19 +57,23 @@ method install {
 	$self->logDebug("DOING setUpInstall");
 	$self->setUpInstall();
 
-	#### SET VARIABLES
+	#### SET INSTALLDIR
 	my $installdir		=	$self->installdir();
 	$installdir = $self->installdir($self->collapsePath($installdir));
+
+	#### SET OPSDIR
 	my $opsdir			=	$self->opsdir();
 	$opsdir = $self->opsdir($self->collapsePath($opsdir));
-	my $package		=	$self->package();
-	my $selectedversion	=	$self->version();
 
+	my $package		=	$self->package();
+	my $version		=	$self->version();
+	$self->logDebug("version", $version);
+	
 	#### RUN INSTALL
 	$self->logDebug("installdir", $installdir);
 	$self->logDebug("DOING runInstall");
 	
-	return $self->runInstall($opsdir, $installdir, $package, $selectedversion);
+	return $self->runInstall($opsdir, $installdir, $package, $version);
 }
 
 method checkInputs {
@@ -107,8 +111,9 @@ method checkInputs {
 }
 
 method setUpInstall {
+	
 	my $opsdir		=	$self->opsdir();
-	my $installdir		=	$self->installdir();
+	my $installdir	=	$self->installdir();
 	my $package		=	$self->package();
 	$self->logDebug("opsdir", $opsdir);
 	$self->logDebug("package", $package);
@@ -138,8 +143,14 @@ method setUpInstall {
 }
 
 method installDependencies ($opsdir, $installdir) {
+	$self->logDebug("opsdir", $opsdir);
+	$self->logDebug("installdir", $installdir);
+
+	return if not defined $self->opsinfo();
+	
 	my $dependencies	=	$self->opsinfo()->dependencies();
 	$self->logDebug("dependencies", $dependencies);
+	$dependencies = [] if not defined $dependencies;
 	
 	my $missing	=	[];
 	foreach my $dependency ( @$dependencies ) {
@@ -157,28 +168,38 @@ method installDependencies ($opsdir, $installdir) {
 		my $version	=	$missed->{version};
 		$self->logDebug("package", $package);
 		$self->logDebug("version", $version);
-		
-		my $opsdir =	$self->opsdir();
-		($opsdir)	=	$opsdir	=~ /^(.+)\/[^\/]+$/;
+		if ( $missed->{installdir} ) {
+			my $targetdir	=	"$missed->{installdir}/$package";
+			$targetdir =~ s/%INSTALLDIR%/$installdir/g;
+			$installdir	=	$targetdir;
+		}
+
+		my $opsdir 	=	$self->opsdir();
+		($opsdir)	=	$opsdir	=~ /^(.+?)\/[^\/]+$/;
+		$opsdir 	.= "/$package";
 		$self->logDebug("opsdir", $opsdir);
-		
-		my $opsfile	=	"$opsdir/$package/$package.ops";
-		my $pmfile	=	"$opsdir/$package/$package.pm";
+
+		my $packagename	=	$package;
+		$packagename	=~ s/\-//g;
+		my $opsfile	=	"$opsdir/$package/$packagename.ops";
+		my $pmfile	=	"$opsdir/$package/$packagename.pm";
 		$self->logDebug("opsfile", $opsfile);
 		$self->logDebug("pmfile", $pmfile);
 		
 		$self->logDebug("DOING object = Agua::Deploy->new()");
-		my $object = Agua::Deploy->new({
+		my $object = Agua::Ops->new({
 			conf        =>  $self->conf(),
 			opsrepo  	=>  $self->opsrepo(),
+			opsdir  	=>  $opsdir,
 			installdir	=>	$installdir,
 			package  	=>  $package,
 			version  	=>  $version,
 			opsfile  	=>  $opsfile,
 			pmfile  	=>  $pmfile,
 			dependents	=>	$dependents,
-			repository  =>  $self->repository(),
-			owner  		=>  $self->owner(),
+			repository  =>  $missed->{repository},
+			owner  		=>  $missed->{owner},
+
 			login  		=>  $self->login(),
 			token  		=>  $self->token(),
 			keyfile  	=>  $self->keyfile(),
@@ -238,13 +259,13 @@ method runInstall ($opsdir, $installdir, $package, $version) {
 	#### SET DATABASE OBJECT
 	$self->setDbObject() if not defined $self->db();
 
-	##### START LOGGING TO HTML FILE
-	$self->logDebug("BEFORE startHtmlLog login", $login);
-	$self->startHtmlLog();
-	$self->logDebug("AFTER startHtmlLog login", $login);
+	###### START LOGGING TO HTML FILE
+	#$self->logDebug("BEFORE startHtmlLog login", $login);
+	#$self->startHtmlLog();
+	#$self->logDebug("AFTER startHtmlLog login", $login);
 	
-	#### LOG STATUS
-	$self->logger()->write("Installing package: $package to installation directory: $installdir");
+	##### LOG STATUS
+	#$self->logger()->write("Installing package: $package to installation directory: $installdir");
 	
 	#### DO INSTALL
 	$self->logDebug("DOING self->doInstall");
@@ -257,7 +278,7 @@ method runInstall ($opsdir, $installdir, $package, $version) {
 	$self->updateReport([$report]) if defined $report;
 	
 	#### UPDATE PACKAGE IN DATABASE
-	$self->logger()->write("Updating 'package' table");
+	#$self->logger()->write("Updating 'package' table");
 	$self->updatePackage($owner, $username, $package, $version);
 	
 	#### SET CONF
@@ -265,15 +286,15 @@ method runInstall ($opsdir, $installdir, $package, $version) {
 	$self->setConfKey($package, $version, $installdir, $self->opsinfo());
 
 	#### REPORT VERSION
-	$self->logger()->write("Completed installation, version: $version");
+	#$self->logger()->write("Completed installation, version: $version");
 
 	#### TERMINAL INSTALL
-	$self->logger()->write("BEFORE terminalInstall method");
+	#$self->logger()->write("BEFORE terminalInstall method");
 	$report = $self->terminalInstall($installdir, $version);
 	$self->updateReport([$report]) if defined $report and $report;
 	
 	#### E.G., DEBUG/TESTING
-	return $self->logger->report();
+	#return $self->logger->report();
 }
 method setConfKey ($package, $version, $installdir, $opsinfo) {
 	$self->logDebug("package", $package);
@@ -292,12 +313,12 @@ method setConfKey ($package, $version, $installdir, $opsinfo) {
 }
 
 #### INSTALL TYPES
-method gitInstall ($installdir, $selectedversion) {
+method gitInstall ($installdir, $version) {
 
 	my $repository		=	$self->repository();
 	my $owner 			= 	$self->owner();
-	my $login			=	$self->login();
-	my $keyfile			=	$self->keyfile();
+	my $login			=	$self->login() || "";
+	my $keyfile			=	$self->keyfile() || "";
 	my $privacy 		= 	$self->privacy();
 	my $credentials 	= 	$self->credentials();
 	my $username		=	$self->username();
@@ -309,27 +330,28 @@ method gitInstall ($installdir, $selectedversion) {
 	$self->logCritical("hubtype not defined") and exit if not defined $hubtype;
 
 	$self->logDebug("login", $login);
-	$self->logDebug("selectedversion", $selectedversion);
+	$self->logDebug("version", $version);
 	$self->logDebug("installdir", $installdir);
 	$self->logDebug("repository", $repository);
 	$self->logDebug("owner", $owner);
 	$self->logDebug("login", $login);
 	$self->logDebug("username", $username);
 	$self->logDebug("hubtype", $hubtype);
+ 	$self->logDebug("privacy", $privacy);
+	$self->logDebug("keyfile", $keyfile);
+
+	if ( not defined $version ) {
+		$version	=	$self->latestVersion($owner, $repository, $privacy, $hubtype);
+		$self->logDebug("version", $version);
+		$self->version($version);
+	}	
 
 	#### MAKE INSTALL DIRECTORY
 	$self->makeDir($installdir) if not -d $installdir;	
 	$self->logCritical("Can't create installdir", $installdir) if not -d $installdir;
 
 	#### SET DEFAULT KEYFILE
-	$keyfile = $self->setKeyfile($username, $hubtype) if not defined $keyfile or not $keyfile;
-	
-	#### VALIDATE VERSION IF SUPPLIED
-	#### OTHERWISE SET TO LATEST VERSION
-	my $version = $self->validateVersion($login, $repository, $privacy, $selectedversion);
-	$self->version($version);
-	$self->logDebug("version not defined") and return if not defined $version;
-	$self->logDebug("AFTER validateVersion login", $login);
+	$keyfile = $self->setKeyfile($username, $hubtype) if $privacy ne "public" and $keyfile eq "";
 	
 	#### DELETE DIRECTORY IF EXISTS
 	my $targetdir = "$installdir/$version";
@@ -356,7 +378,7 @@ method gitInstall ($installdir, $selectedversion) {
 	my $change = $self->changeToRepo("$targetdir");
 	$self->logDebug("change", $change);
 	$self->checkoutTag("$targetdir", $version);
-	$self->logger()->write("Checked out version: $version");
+	#$self->logger()->write("Checked out version: $version");
 	$self->logDebug("checked out version", $version);
 	
 	#### VERIFY CHECKED OUT VERSION == DESIRED VERSION
@@ -455,7 +477,7 @@ method gitUpdate ($installdir, $selectedversion) {
 	$self->logDebug("change", $change);
 	
 	$self->checkoutTag($installdir, $version);
-	$self->logger()->write("Checked out version: $version");
+	#$self->logger()->write("Checked out version: $version");
 	$self->logDebug("checked out version", $version);
 	
 	#### VERIFY CHECKED OUT VERSION = DESIRED VERSION
@@ -486,10 +508,10 @@ method zipInstall ($installdir, $version) {
 	#### MAKE INSTALL DIRECTORY
 	$self->makeDir($installdir) if not -d $installdir;	
 
-	$self->logger()->write("Changing to installdir: $installdir");
+	#$self->logger()->write("Changing to installdir: $installdir");
     $self->changeDir($installdir);
 
-	$self->logger()->write("Downloading file: $filename");
+	#$self->logger()->write("Downloading file: $filename");
 	$self->runCommand("wget -c $fileurl --output-document=$filename");
 	
 	#### GET ZIPTYPE
@@ -527,7 +549,7 @@ method zipInstall ($installdir, $version) {
 	
 	my $package	=	$self->opsinfo()->package();
 	
-	$self->logger()->write("Completed installation of $package, version $version");
+	#$self->logger()->write("Completed installation of $package, version $version");
 	
 	return $version;	
 }
@@ -553,10 +575,10 @@ method downloadInstall ($installdir, $version) {
 	my $targetdir	=	"$installdir/$version";
 	$self->makeDir($targetdir) if not -d $targetdir;	
 
-	$self->logger()->write("Changing to targetdir: $targetdir");
+	#$self->logger()->write("Changing to targetdir: $targetdir");
     $self->changeDir($targetdir);
 
-	$self->logger()->write("Downloading file: $filename");
+	#$self->logger()->write("Downloading file: $filename");
 	$self->runCommand("wget -c $fileurl --output-document=$filename");
 	
 	#### CHANGE NAME IF downloaded DEFINED
@@ -570,7 +592,7 @@ method downloadInstall ($installdir, $version) {
 
 	my $package	=	$self->opsinfo()->package();
 	
-	$self->logger()->write("Completed installation of $package, version $version");
+	#$self->logger()->write("Completed installation of $package, version $version");
 	
 	return $version;	
 }
@@ -713,7 +735,7 @@ method saveChanges ($installdir, $version) {
 	my $stash = $self->stashSave("before upgrade to $version");
 	$self->logDebug("stash", $stash);
 	if ( $stash ) {
-		$self->logger()->write("Stashed changes before checkout version: $version");
+		#$self->logger()->write("Stashed changes before checkout version: $version");
 	}	
 }
 
@@ -871,11 +893,15 @@ method printLogUrl ($externalip, $aguaversion, $package, $version) {
 method loadOpsModule ($opsdir, $repository) {
 	$self->logDebug("opsdir", $opsdir);
 	$self->logDebug("repository", $repository);
+
 	return if not defined $opsdir;
 	
-	my $pmfile 	= 	"$opsdir/" . lc($repository) . ".pm";
-	$self->logDebug("pmfile: $pmfile");
 	my $modulename = lc($repository);
+	$modulename =~ s/[\-]+//g;
+	$self->logDebug("modulename", $modulename);
+
+	my $pmfile 	= 	"$opsdir/$modulename.pm";
+	$self->logDebug("pmfile: $pmfile");
 	
 	if ( -f $pmfile ) {
 		$self->logDebug("\nFound modulefile: $pmfile\nDoing require $modulename");
@@ -889,6 +915,8 @@ method loadOpsModule ($opsdir, $repository) {
 	}
 	else {
 		$self->logDebug("\nCan't find modulefile: $pmfile\n");
+		print "Deploy::setOps    Can't find pmfile: $pmfile\n";
+		exit;
 	}
 	$self->opsmodloaded(1);
 }
@@ -899,6 +927,11 @@ method loadOpsInfo ($opsdir, $package) {
 	return if not defined $opsdir or not $opsdir;
 	
 	return if not defined $opsdir or not $opsdir;
+
+	#### REMOVE -
+	$package =~ s/[\-]+//g;
+	$self->logDebug("package", $package);
+
 	my $opsfile 	= 	"$opsdir/" . lc($package) . ".ops";
 	$self->logDebug("opsfile: $opsfile");
 	
@@ -922,7 +955,13 @@ method loadOpsInfo ($opsdir, $package) {
 				and $self->opsinfo()->can($param)
 				and defined $self->opsinfo()->$param();
 		}
-	}	
+	}
+	else {
+		
+		$self->logDebug("Can't find opsfile", $opsfile);
+		
+		print "Opsfile not found: $opsfile\n";
+	}
 }
 
 method loadConfig ($configfile, $mountpoint, $installdir) {
@@ -1048,19 +1087,24 @@ method updatePackage ($owner, $username, $package, $version) {
 	$self->logDebug("version", $version);
 	#$self->logDebug("self->opsinfo()", $self->opsinfo());
 
-	#### UPDATE DATABASE
+	my $description = "";
+	$description = $self->opsinfo()->description() if defined $self->opsinfo();
+	my $website = "";
+	$website = $self->opsinfo()->website() if defined $self->opsinfo();
+
+	#### UPDATE DATABASE        
 	my $object = {
-		owner		=>	$owner,
-		username	=>	$username,
-		package		=>	$package,
-		repository	=>	$self->repository() || "",
-		status		=>	"ready",
-		version		=>	$version,
-		opsdir		=>	$self->opsdir() || '',
-		installdir	=>	$self->installdir(),
-		privacy		=>	$self->privacy() || $self->opsinfo()->privacy(),
-		description	=>	$self->opsinfo()->description(),
-		website		=>	$self->opsinfo()->website()
+		owner           =>      $owner,
+			username        =>      $username,
+			package         =>      $package,
+			repository      =>      $self->repository() || "",
+			status          =>      "ready",
+			version         =>      $version,
+			opsdir          =>      $self->opsdir() || '',
+			installdir      =>      $self->installdir(),
+			privacy         =>      $self->privacy() || $self->opsinfo()->privacy(),
+			description     =>      $description,
+			website         =>      $website
 	};
 	$self->logDebug("object", $object);
 
@@ -1160,6 +1204,9 @@ method validateVersion ($login, $repository, $privacy, $selectedversion) {
 
 	$tagarray = $self->sortVersions($tagarray);
 	$self->logDebug("tagarray", $tagarray);
+
+	#### ORDER: FIRST TO LAST
+	@$tagarray = reverse(@$tagarray);
 	
 	return $$tagarray[scalar(@$tagarray) - 1];
 }

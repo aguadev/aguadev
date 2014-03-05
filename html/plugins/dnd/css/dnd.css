@@ -85,8 +85,8 @@
 	height: 20px !important;
 	background: #CCC;	
 	text-indent: 20px !important;
-	background-image: url(../../../plugins/admin/images/locked-24.png);
-	background-position: 2px 2px !important;
+/*	background-image: url(../../../plugins/dnd/images/locked-24.png);
+*/	background-position: 2px 2px !important;
 	background-repeat: no-repeat !important;
 	font-size: 18px !important;
 }

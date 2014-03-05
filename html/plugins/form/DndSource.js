@@ -1,22 +1,3 @@
-//dojo.provide("plugins.form.DndSource");
-//
-//// PROVIDES FORM INPUT AND ROW EDITING WITH VALIDATION
-//// INHERITING CLASSES MUST IMPLEMENT saveInputs AND deleteItem METHODS
-//// THE dnd DRAG SOURCE MUST BE this.dragSourceWidget IF PRESENT
-//
-//// EXTERNAL MODULES
-////dojo.require("dojo.dnd.Source");
-//
-//// INTERNAL MODULES
-//dojo.require("plugins.core.Common.Logger");
-//dojo.require(".Source");
-//dojo.require(".Avatar");
-//
-//dojo.declare("plugins.form.DndSource",
-//	[ plugins.core.Common.Logger ],
-//{
-
-
 define([
 	"dojo/_base/declare",
 	"plugins/core/Common/Logger",
@@ -267,6 +248,4 @@ loadDragItems : function (itemArray) {
 
 });	//	end define
 
-
-//}); // plugins.form.DndSource
 

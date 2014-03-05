@@ -1,0 +1,15 @@
+{
+    "package"           :   "biorepository",
+    "privacy"           :   "public",
+    "description"       :   "A Bioinformatics workflow platform",
+    "type"              :   "application",
+    "source"            :   "git",
+    "keywords"          :   ["bioinformatics", "workflows", "cloud", "next-generation", "sequencing", "analysis", "alignment", "variation", "RNA-Seq"],
+    "website"           :   "http://www.aguadev.org",
+    "installtype"       :   "ops",
+    "licensefile"       :   "LICENSE",
+    "readmefile"        :   "README",
+    "installtype"       :   "ops",
+    "authors"           :   ["Young Stuart"],
+    "publication"       :   {}
+}

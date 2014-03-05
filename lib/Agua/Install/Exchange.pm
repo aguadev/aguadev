@@ -23,8 +23,8 @@ method installExchange {
 	$self->logDebug("rabbitversion", $rabbitversion);
 	$self->logDebug("socketversion", $socketversion);
 	
-	$self->puppetInstallRabbitMq();
-	$self->puppetInstallNodeJs();
+	#### INSTALL node AND PLUGINS rabbit.js, forever
+	$self->installNode($nodeurl, $installdir);
 	
 	#### INSTALL rabbitmq
 	$self->installRabbitMq();
@@ -32,20 +32,20 @@ method installExchange {
 	#### INSTALL rabbitmq
 	$self->startRabbitMq();
 	
-	#### INSTALL node AND PLUGINS rabbit.js, forever
-	$self->installNode($nodeurl, $installdir);
+	#$self->puppetInstallRabbitMq();
+	#$self->puppetInstallNodeJs();
 	
 	#### 1. INSTALL node-amqp (A CLIENT FOR RABBITMQ)
 	$self->runCommands(["npm install amqp\@$amqpversion -g"]);
 	
-	####### 2. INSTALL rabbit.js
-	###$self->runCommands(["npm install rabbit.js\@$rabbitversion -g"]);
-	###
-	####### 3. INSTALL SOCKET.IO
-	###$self->runCommands(["npm install socket.io\@$socketversion -g"]);
-	###
-	####### 4. INSTALL FOREVER
-	###$self->runCommands(["npm install forever -g"]);
+	#### 2. INSTALL rabbit.js
+	$self->runCommands(["npm install rabbit.js\@$rabbitversion -g"]);
+	
+	#### 3. INSTALL SOCKET.IO
+	$self->runCommands(["npm install socket.io\@$socketversion -g"]);
+	
+	#### 4. INSTALL FOREVER
+	$self->runCommands(["npm install forever -g"]);
 	
 
 	#### 5. SET EXCHANGE TO RUN AS A DAEMON
@@ -221,8 +221,17 @@ method installNode ($nodeurl, $installdir) {
 	print "Installer::installNode    nodeurl: $nodeurl\n";	
 
 	# INSTALL BUILD TOOLS
-	#$self->installPackage("build-essential g++");
-
+	my $arch	=	$self->getArch();
+	if ( $arch eq "ubuntu" ) {
+		$self->runCommand("apt-get install libssl-dev");
+		$self->installPackage("build-essential g++");
+	}
+	elsif ( $arch eq "centos" ) {
+		$self->runCommand("yum install gcc gcc-c++ kernel-devel");
+		$self->runCommand("yum groupinstall \"Development Tools\" -y");
+		$self->runCommand("yum install kernel-devel -y");
+	}
+	
 	#### CREATE BASEDIR
 	my $basedir	=	"$installdir/apps/node";
 	`mkdir -p $basedir` if not -d $basedir;
@@ -231,9 +240,15 @@ method installNode ($nodeurl, $installdir) {
 	$self->runCommands([	
 		"cd $basedir; wget $nodeurl"
 		,"cd $basedir; tar xvfz node-*"
-		, "cd $basedir/node-*; ./configure"
+		, "cd $basedir/node-*; ./configure --prefix=/usr"
 		, "cd $basedir/node-*; make"
 		, "cd $basedir/node-*; make install"
+	]);
+
+	$self->runCommands([
+		"cd /usr; wget http://www.npmjs.org/install.sh --no-check-certificate",
+		"cd /usr; chmod 755 install.sh",
+		"cd /usr; ./install.sh"
 	]);
 }
 

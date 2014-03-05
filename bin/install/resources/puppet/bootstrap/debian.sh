@@ -38,5 +38,5 @@ apt-get update >/dev/null
 # Install Puppet
 echo "Installing Puppet..."
 apt-get install -y puppet >/dev/null
-
 echo "Puppet installed!"
+

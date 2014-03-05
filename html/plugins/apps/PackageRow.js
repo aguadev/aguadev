@@ -1,13 +1,25 @@
-dojo.provide("plugins.apps.PackageRow");
+define([
+	"dojo/_base/declare",
+	"dijit/_Widget",
+	"dijit/_TemplatedMixin",
+	"dijit/_WidgetsInTemplateMixin",
+	"dojo/domReady!"
+],
 
-dojo.declare( "plugins.apps.PackageRow",
-	[ dijit._Widget, dijit._Templated ],
-{
-//Path to the template of this widget. 
-templatePath: dojo.moduleUrl("plugins", "apps/templates/packagerow.html"),
+function (declare,
+	_Widget,
+	_TemplatedMixin,
+	_WidgetsInTemplateMixin
+) {
 
-// Calls dijit._Templated.widgetsInTemplate
-widgetsInTemplate : true,
+/////}}}}}
+
+return declare("plugins.apps.Packages",
+	[ _Widget, _TemplatedMixin, _WidgetsInTemplateMixin ], {
+
+// templateString : String	
+//		Path to the template of this widget. 
+templateString: dojo.cache("plugins", "apps/templates/packagerow.html"),
 
 // PARENT plugins.apps.Packages WIDGET
 parentWidget : null,
@@ -53,7 +65,7 @@ setToggle : function () {
 setEdit : function () {
 // ADD 'EDIT' ONCLICKS
 	var thisObject = this;
-	var array = [ "opsdir", "description", "notes", "url" ];
+	var array = [ "opsdir", "description", "notes", "website" ];
 	for ( var i in array )
 	{
 		dojo.connect(this[array[i]], "onclick", function(event)
@@ -70,7 +82,7 @@ setEdit : function () {
 toggle : function () {
 	////console.log("PackageRow.toggle    plugins.workflow.PackageRow.toggle()");
 	//////console.log("PackageRow.toggle    this.description: " + this.description);
-	var array = [ "opsdir", "installdir", "description", "notes", "url" ];
+	var array = [ "opsdir", "installdir", "description", "notes", "website" ];
 	for ( var i in array )
 	{
 		//console.log("PackageRow.toggle    this[" + array[i] + "] :" + this[array[i]]);
@@ -81,5 +93,8 @@ toggle : function () {
 	}
 }
 
-});
+}); //	end declare
+
+});	//	end define
+
 	

@@ -92,6 +92,7 @@ method testHigherSemVer () {
 
 method testVersionSort {
 	diag("Test versionSort");
+	$self->versionSort_build();
 	$self->versionSort_versions1();
 	$self->versionSort_versions2();
 	$self->versionSort_versions3();
@@ -99,6 +100,34 @@ method testVersionSort {
 	$self->versionSort_build_vs_release();
 	$self->versionSort_composite_permutations();
 	$self->versionSort_alpha_vs_build();
+}
+
+method versionSort_build {
+	my $versions = [
+		"0.8.0-alpha.1+build2",
+		"0.8.0-alpha.1+build.7",
+		"0.8.0-beta.1+build.10",
+		"0.8.0-beta.1+build.11",
+		"0.8.0-beta.1+build.12",
+		"0.7.6+build3",
+		"0.7.6+build1",
+		"0.7.5+build5"
+	];
+
+	my $correct = [
+		"0.7.5+build5",
+		"0.7.6+build1",
+		"0.7.6+build3",
+		"0.8.0-alpha.1+build2",
+		"0.8.0-alpha.1+build.7",
+		"0.8.0-beta.1+build.10",
+		"0.8.0-beta.1+build.11",
+		"0.8.0-beta.1+build.12"
+	];
+	my $output = $self->sortVersions($versions);
+	#$self->logDebug("output", $output);
+	#$self->logDebug("correct", $correct);
+	ok($self->arraysHaveSameOrder($output, $correct), "versionSort    versions 1: @$versions");
 }
 
 method versionSort_versions1 {

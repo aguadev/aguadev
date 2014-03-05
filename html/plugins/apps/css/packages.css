@@ -101,7 +101,7 @@
 .applications .packages .installdir,
 .applications .packages .description,
 .applications .packages .notes,
-.applications .packages .url {
+.applications .packages .website {
 	display: inline-block;
 	vertical-align: middle !important;
     min-height: 20px !important;
@@ -139,7 +139,7 @@
 .applications .packages .installdir,
 .applications .packages .description,
 .applications .packages .notes,
-.applications .packages .url {
+.applications .packages .website {
 	min-height: 30px !important;	
 	font-weight: bolder;
 	float: right;
@@ -156,7 +156,7 @@
 
 .applications .packages .description,
 .applications .packages .notes,
-.applications .packages .url {
+.applications .packages .website {
 	height: 30px;	
 	width: 100%;
 	font-weight: bolder;
@@ -189,6 +189,7 @@
 /****** DRAG SOURCE ******/
 .applications .packages .dragSource table {
 	background-color: #AFA;
+	border-collapse: collapse;
 }
 
 .applications .packages .dragSource,
@@ -231,7 +232,7 @@
 .applications .packages .dragSource .installdir,
 .applications .packages .dragSource .description,
 .applications .packages .dragSource .notes,
-.applications .packages .dragSource .url {
+.applications .packages .dragSource .website {
 	display: none;
 	/*min-height: 25px !important;*/
 	height: auto !important;
@@ -251,7 +252,7 @@
 .applications .packages .dragSource .installdir,
 .applications .packages .dragSource .description,
 .applications .packages .dragSource .notes,
-.applications .packages .dragSource .url {
+.applications .packages .dragSource .website {
 	width: 35
 	8px !important;	
 }
@@ -262,7 +263,7 @@
 .applications .packages .dragSource .installdir,
 .applications .packages .dragSource .description,
 .applications .packages .dragSource .notes,
-.applications .packages .dragSource .url {
+.applications .packages .dragSource .website {
 	margin-left: 5px !important;
 }
 
@@ -275,7 +276,7 @@
 .applications .packages .dragSource .installdir,
 .applications .packages .dragSource .description,
 .applications .packages .dragSource .notes,
-.applications .packages .dragSource .url {
+.applications .packages .dragSource .website {
 	margin-top: 1px !important;
 }
 
@@ -312,7 +313,7 @@
 }
 
 .applications .packages .dragSource .notes,
-.applications .packages .dragSource .url {
+.applications .packages .dragSource .website {
 	color: #000;
 	font-weight: normal;
 	font-size: 12px;
@@ -321,8 +322,13 @@
 	background: #EFEFEF;
 }
 
-.applications .packages .dragSource .url {
+.applications .packages .dragSource .website {
 	font-style: normal !important;
+}
+
+.applications .packages .dragSource textarea {
+	width: 100% !important;
+	border: 3px solid red;
 }
 
 /****** TRASH ******/
@@ -365,7 +371,7 @@
 
 .applications .packages .privacy {
 	font-size: 14px !important;
-	background-color: #FFF !important;
+	/* background-color: #FFF !important; */
 	text-indent: 0px !important;
 	width: 165px !important;
 	display: table-cell !important;

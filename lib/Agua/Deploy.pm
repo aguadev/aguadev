@@ -133,13 +133,23 @@ method biorepo {
     `mkdir -p $parentdir` if not -d $parentdir;
     print "Can't create parentdir: $parentdir" and exit if not -d $parentdir;
 
-	my $pmfile	=	undef;
-	my $opsdir	=	undef;
+	my $pmfile	=	"$basedir/bin/install/resources/agua/$opsrepo.pm";
+	my $opsdir	=	$self->opsdir();
 
-    return $self->installApplication($owner, $login, $username, $opsrepo, $opspackage, $privacy, $installdir, $pmfile, $opsdir, $version);
+	my $ops	=	$self->setOps($owner, $login, $username, $opsrepo, $opspackage, $privacy, $installdir, $pmfile, $opsdir, $version);
+	
+	$ops->install();
 }
 
 method installApplication ($owner, $login, $username, $repository, $package, $privacy, $installdir, $pmfile, $opsdir, $version) {
+	$self->logDebug("opsdir", $opsdir);
+
+	my $ops	=	$self->setOps($owner, $login, $username, $repository, $package, $privacy, $installdir, $pmfile, $opsdir, $version);
+
+	$ops->install();
+}
+
+method setOps ($owner, $login, $username, $repository, $package, $privacy, $installdir, $pmfile, $opsdir, $version) {
 	$self->logDebug("owner", $owner);
 	$self->logDebug("login", $login);
 	$self->logDebug("repository", $repository);
@@ -147,33 +157,31 @@ method installApplication ($owner, $login, $username, $repository, $package, $pr
 	$self->logDebug("privacy", $privacy);
 	$self->logDebug("pmfile", $pmfile);
 
-	#### GET LATEST VERSION IF NOT DEFINED AND IS REPO
-	if ( not defined $version ) {
-		my $versions 	=	$self->getVersions($owner, $repository, $privacy);
-		$version = shift @$versions if not defined $version;
-	}
-	
-	my $opsmodloaded = 0;
-	if ( defined $pmfile ) {
-		my ($class)	= 	$pmfile =~ /^.+\/([^\/]+)\.pm$/;
-		my ($location)	= 	$pmfile =~ /^.+\/([^\/]+)$/;
-		my ($opsdir)	= 	$pmfile =~ /^(.+)\/[^\/]+$/;
-		$self->logDebug("class", $class);
-		$self->logDebug("location", $location);
-		$self->logDebug("opsdir", $opsdir);
-
-		if ( -f $pmfile ) {
-			print "\nLoading class: $class.pm\n\n";
-			unshift @INC, $opsdir;
-		
-			my $klass = 'Agua::Ops';
-			$klass->meta->make_mutable;
-			Moose::Util::apply_all_roles($klass->meta, ($class));
-			$klass->meta->make_immutable;
-			
-			$opsmodloaded = 1;
-		}
-	}
+	#my $opsmodloaded = 0;
+	#if ( defined $pmfile ) {
+	#	my ($class)	= 	$pmfile =~ /^.+\/([^\/]+)\.pm$/;
+	#	my ($location)	= 	$pmfile =~ /^.+\/([^\/]+)$/;
+	#	$class =~ s/[\-]+//g;
+	#	$self->logDebug("class", $class);
+	#	
+	#	($opsdir)	= 	$pmfile =~ /^(.+)\/[^\/]+$/;
+	#	$self->logDebug("opsdir", $opsdir);
+	#
+	#	if ( -f $pmfile ) {
+	#		print "\nLoading class: $class.pm\n\n";
+	#		unshift @INC, $opsdir;
+	#	
+	#		my $klass = 'Agua::Ops';
+	#		$klass->meta->make_mutable;
+	#		Moose::Util::apply_all_roles($klass->meta, ($class));
+	#		$klass->meta->make_immutable;
+	#		
+	#		$opsmodloaded = 1;
+	#	}
+	#	else {
+	#		print "Deploy::setOps    Can't find pmfile: $pmfile\n" and exit;
+	#	}
+	#}
 
 	my $args	=	{
 		owner		=>	$owner,
@@ -190,14 +198,16 @@ method installApplication ($owner, $login, $username, $repository, $package, $pr
 		installdir	=>	$installdir,
 		logfile 	=>	$self->logfile(),
 		SHOWLOG		=>	$self->SHOWLOG(),
-		PRINTLOG	=>	$self->PRINTLOG(),
+		PRINTLOG	=>	$self->PRINTLOG()
+		,
 		conf		=>	$self->conf()
 	};
 	#$self->logDebug("args", $args);
 	
 	my $ops	=	Agua::Ops->new($args);
+	$self->logDebug("ops: $ops");
 
-	$ops->install();
+	return $ops;
 }
 
 method getVersions ($owner, $repository, $privacy) {
@@ -212,19 +222,22 @@ $repository getRemoteTags $owner $repository $privacy
 };
 	$self->logDebug("command", $command);
 	my $result = `$command`;	
-	$self->logDebug("result", $result);
+	#$self->logDebug("result", $result);
 
 	my $parser = JSON->new();
 	my $tags = $parser->allow_nonref->decode($result);
-	$self->logDebug("tags", $tags);
+	#$self->logDebug("tags", $tags);
 
 	my $versions = [];
 	foreach my $tag ( @$tags ) {
 		push @$versions, $tag->{name};
 	}
-	$self->logDebug("versions", $versions);
 	$versions = $self->sortVersions($versions);
-	$self->logDebug("POST-sortVersions    versions", $versions);
+	#$self->logDebug("versions", $versions);
+
+	#### SORT: FIRST TO LAST
+	@$versions = reverse(@$versions);
+	$self->logDebug("versions", $versions);
 	
 	return $versions;	
 }
@@ -301,7 +314,7 @@ method sortVersions ($versions) {
 		$object->{build}  	= $5;
 		$object->{build} =~ s/\.+//g if defined $object->{build};
 		$object->{release} =~ s/\.+//g if defined $object->{release};
-		$object->{build} =~ s/^\+// if defined $object->{build};
+		$object->{build} =~ s/^[\+\.]// if defined $object->{build};
 		$object->{release} =~ s/^\-// if defined $object->{release};
 	
 		return $object;
@@ -364,9 +377,9 @@ $repository install \\
 	return $command;
 }
 
-#### GENERIC PACKAGE (E.G., EMBOSS)
+#### GENERIC PACKAGE
 method install {
-    my $installdir	= 	$self->conf()->getKey("agua", "INSTALLDIR");
+    my $installdir	= 	$self->installdir() || $self->conf()->getKey("agua", "INSTALLDIR");
 	my $opsrepo 	= 	$self->opsrepo() || $self->conf()->getKey("agua", "OPSREPO");
 	my $appsdir		= 	$self->conf()->getKey("agua", "APPSDIR");
 	my $username 	= 	$self->conf()->getKey("agua", "ADMINUSER");

@@ -65,9 +65,6 @@ setHost : function () {
 connect : function () {
 	console.log("Exchange.connect    io: " + io);
 	console.dir({io:io});
-
-	console.log("Exchange.connect    DEBUG RETURN");
-	return;
 	
 	// CONNECT WITH SOCKET.IO VERSION 0.9.11
 	this.conn = io.connect(this.host, { port: this.port} );

@@ -8,8 +8,8 @@ respawn
 
 script
 
-    cd INSTALLDIR/apps/node-amqp//node_modules/rabbit.js/example/socketio
-    # exec /usr/local/bin/node test-mysql.js 2>&1 >> /var/log/test-mysql.log
-    /usr/local/bin/forever server.js 2>&1 >> /var/log/rabbitjs-server.log
+    cd INSTALLDIR/apps/node-amqp/node_modules/rabbit.js/example/socketio
+    # exec /usr/bin/node test-mysql.js 2>&1 >> /var/log/test-mysql.log
+    /usr/bin/forever server.js 2>&1 >> /var/log/rabbitjs-server.log
 
 end script

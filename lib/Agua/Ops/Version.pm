@@ -121,11 +121,11 @@ method sortVersions ($versions) {
 					return -1;
 				}
 				elsif ( $aObject->{number} > $bObject->{number} ) {
-					#print "a is larger than a\n";
+					#print "$aObject->{number} is larger than $bObject->{number}\n";
 					return 1;
 				}
 				elsif ( $bObject->{number} > $aObject->{number} ) {
-					#print "b is larger than a\n";
+					#print "$bObject->{number} is larger than $aObject->{number}\n";
 					return -1;
 				}
 				else {
@@ -149,7 +149,7 @@ method sortVersions ($versions) {
 		$object->{build}  	= $5;
 		$object->{build} =~ s/\.+//g if defined $object->{build};
 		$object->{release} =~ s/\.+//g if defined $object->{release};
-		$object->{build} =~ s/^\+// if defined $object->{build};
+		$object->{build} =~ s/^[\+\.]// if defined $object->{build};
 		$object->{release} =~ s/^\-// if defined $object->{release};
 		$object->{release} 	= '' if not defined $object->{release};
 		$object->{build}  	= '' if not defined $object->{build};
@@ -193,6 +193,28 @@ method sortVersions ($versions) {
 	$self->logNote("AFTER versions @$versions");
 	
 	return $versions;
+}
+
+method latestVersion ($owner, $repository, $privacy) {
+	$self->logDebug("owner", $owner);
+	$self->logDebug("repository", $repository);
+	$self->logDebug("privacy", $privacy);
+	
+	my $tags 	=	$self->getRemoteTags($owner, $repository, $privacy);
+	$self->logDebug("tags", $tags);
+
+	my $versions = [];
+	foreach my $tag ( @$tags ) {
+		push @$versions, $tag->{name};
+	}
+	$versions = $self->sortVersions($versions);
+	$self->logDebug("versions", $versions);
+
+	#### SORT: FIRST TO LAST
+	@$versions = reverse(@$versions);
+	$self->logDebug("versions", $versions);
+
+	return shift @$versions;
 }
 
 method higherVersion ($version1, $version2) {

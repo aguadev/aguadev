@@ -33,43 +33,27 @@ apt-get install -y rubygems >/dev/null
 if which puppet > /dev/null 2>&1; then
   echo "Puppet is already installed."
 else
-
 	# Install puppet
 	echo "Installing puppet-module..."
 	gem install puppet
-
-	## Install the PuppetLabs repo
-	#echo "Configuring PuppetLabs repo..."
-	#repo_deb_path=$(mktemp)
-	#wget --output-document="${repo_deb_path}" "${REPO_DEB_URL}" 2>/dev/null
-	#dpkg -i "${repo_deb_path}" >/dev/null
-	#apt-get update >/dev/null
-	#
-	## Install Puppet
-	#echo "Installing Puppet..."
-	#apt-get install -y puppet >/dev/null
-	#echo "Completed puppet installation"
 fi
 
 # Install puppet-module
 echo "Installing puppet-module..."
 gem install puppet-module
 
-echo "Installing librarian-puppet"
-PUPPET_DIR='/etc/puppet'
-if [ `gem query --local | grep librarian-puppet | wc -l` -eq 0 ]; then
-	echo "gem install librarian-puppet"
-	gem install librarian-puppet
-	echo "cd $PUPPET_DIR; librarian-puppet install --clean"
-	cd $PUPPET_DIR && librarian-puppet install --clean
-else
-	echo "cd $PUPPET_DIR; librarian-puppet update"
-	cd $PUPPET_DIR && librarian-puppet update
-fi
-echo "Completed librarian-puppet installation"
-
-# Install RubyGems for the provider
-echo "Installing RubyGems..."
-apt-get install -y rubygems >/dev/null
-gem install --no-ri --no-rdoc rubygems-update
-update_rubygems >/dev/null
+#### INSTALL MODULES
+echo "Installing stahnma-epel"
+puppet module install stahnma/epel --force
+echo "Installing puppetlabs-stdlib"
+puppet module install puppetlabs-stdlib --force
+echo "Installing puppetlabs-mysql"
+puppet module install puppetlabs-mysql --force
+echo "Installing puppetlabs-apache"
+puppet module install puppetlabs-apache --force
+echo "Installing puppetlabs-rabbitmq"
+puppet module install puppetlabs-rabbitmq --force
+echo "Installing puppetlabs-nodejs"
+puppet module install puppetlabs-nodejs --force
+echo "Installing puppetlabs-java"
+puppet module install puppetlabs-java --force

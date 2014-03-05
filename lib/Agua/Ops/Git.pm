@@ -152,7 +152,8 @@ method checkoutTag($repodir, $tag) {
 	my $command = "git checkout $tag --force";
 	$self->logDebug("command", $command);
 	my ($output) = $self->repoCommand($command);
-	$self->logDebug("output", $output);
+	$output = "" if not defined $output;
+	#$self->logDebug("output", $output);
 	my @tags = split "\n", $output;
 	return \@tags;
 }

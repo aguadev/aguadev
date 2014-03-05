@@ -62,7 +62,7 @@ formInputs : {
 	"installdir"	:	"word",
 	"description"	:	"phrase",
 	"notes"			:	"phrase",
-	"url"			:	"word"
+	"website"			:	"word"
 },
 
 requiredInputs : {
@@ -82,7 +82,7 @@ invalidInputs : {
 	installdir	: 	"Installdir",
 	description	: 	"Description",
 	notes		: 	"Notes",
-	url			: 	"URL"
+	website			: 	"URL"
 },
 
 defaultInputs : {
@@ -94,7 +94,7 @@ defaultInputs : {
 	installdir	: 	"Installdir",
 	description	: 	"Description",
 	notes		: 	"Notes",
-	url			: 	"URL"
+	website			: 	"URL"
 },
 
 dataFields : ["package", "owner", "username", "version", "privacy", "opsdir"],
@@ -154,10 +154,6 @@ startup : function () {
 
 	console.groupEnd("App-" + this.id + "    startup");
 },
-attachPane : function () {
-	this.attachPoint.addChild(this.mainTab);
-	this.attachPoint.selectChild(this.mainTab);	
-},
 updatePackages : function (args) {
 // RELOAD GROUP COMBO AND DRAG SOURCE AFTER CHANGES
 // TO SOURCES OR GROUPS DATA IN OTHER TABS
@@ -194,7 +190,7 @@ setForm : function () {
 	this.setClearValues();
 
 	// CHAIN TOGETHER INPUTS ON 'RETURN' KEYPRESS
-	this.chainInputs(["package", "type", "executor", "version", "location", "description", "notes", "url", "addPackageButton"]);	
+	this.chainInputs(["package", "type", "executor", "version", "location", "description", "notes", "website", "addPackageButton"]);	
 },
 getItemArray : function () {
 	//console.log("Packages.getItemArray     plugins.apps.Packages.getItemArray()");
@@ -205,6 +201,7 @@ getItemArray : function () {
 	// FILTER PACKAGES NOT BELONGING TO THIS USER (E.G., 'admin')
 	var username = Agua.cookie("username");
 	itemArray = this.filterByKeyValues(itemArray, ["owner"], [username]);
+	console.log("Packages.getItemArray    FILTERED itemArray.length: " + itemArray.length);
 	
 	itemArray = itemArray.sort();
 	return itemArray;
@@ -281,8 +278,8 @@ deleteItem : function (packageObject) {
 	// REMOVING APP FROM Agua.packages
 	Agua.removePackage(packageObject, "custom");
 	
-	var url = Agua.cgiUrl + "agua.cgi?";
-	////console.log("Packages.deleteStore     url: " + url);		
+	var website = Agua.cgiUrl + "agua.cgi?";
+	////console.log("Packages.deleteStore     website: " + website);		
 
 	// CREATE JSON QUERY
 	var query 			= 	new Object;
@@ -293,7 +290,7 @@ deleteItem : function (packageObject) {
 	query.data 			= 	packageObject;
 	console.log("Packages.deleteItem    query: " + dojo.toJson(query));
 
-	this.doPut({url: url, query: query, doToast: false});
+	this.doPut({website: website, query: query, doToast: false});
 	
 	// RELOAD RELEVANT DISPLAYS
 	Agua.updater.update("updatePackages", { originator: this });
@@ -356,13 +353,13 @@ saveInputs : function (inputs, updateArgs) {
 	query.mode 			= 	"addPackage";
 	query.module = "Agua::Admin";
 	query.data 			= 	inputs;
-	var url = Agua.cgiUrl + "agua.cgi?";
+	var website = Agua.cgiUrl + "agua.cgi?";
 	////////////console.log("Packages.saveInputs    query: " + dojo.toJson(query));
 	
 	// SEND TO SERVER
 	dojo.xhrPut(
 		{
-			url: url,
+			website: website,
 			contentType: "text",
 			putData: dojo.toJson(query),
 			//timeout: 15000,
@@ -388,7 +385,7 @@ toggle : function () {
 // TOGGLE HIDDEN DETAILS	
 	////console.log("Packages.toggle    plugins.workflow.Packages.toggle()");
 	//////console.log("Packages.toggle    this.description: " + this.description);
-	var array = [ "descriptionTitle", "description", "notesTitle", "notes", "urlTitle" , "url" ];
+	var array = [ "descriptionTitle", "description", "notesTitle", "notes", "websiteTitle" , "website" ];
 	
 	for ( var i in array )
 	{
@@ -415,9 +412,6 @@ getFormInputs : function (widget) {
 
 	return inputs;
 }
-
-//}); // plugins.apps.Packages
-
 
 }); //	end declare
 

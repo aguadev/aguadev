@@ -106,10 +106,15 @@ method getCurrentVersions ($username, $owner, $repository, $hubtype, $privacy) {
 
 #### GET/SETTERS
 method getPackage ($owner, $package) {
-	$self->logCaller("");
+	$self->logCaller();
+	$self->logDebug("owner", $owner);
+	$self->logDebug("package", $package);
+	
+	
 	my $query = qq{SELECT * FROM package
 WHERE owner='$owner'
-AND package='$package'};
+AND package='$package'
+ORDER BY owner, package, version};
 	$self->logDebug("query", $query);
 	
 	return $self->db()->queryhash($query);

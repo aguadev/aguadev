@@ -16,7 +16,7 @@ use Data::Dumper;
 sub getAppHeadings {
 	my $self		=	shift;
 
-    	my $json			=	$self->json();
+   	my $json			=	$self->json();
 
 	$self->logDebug("");
 
@@ -28,9 +28,9 @@ sub getAppHeadings {
 	print qq{ error: 'Agua::Common::App::getHeadings    Access denied to requestor: $json->{requestor}' } if defined $json->{requestor};
 	
 	my $headings = {
-		leftPane => ["Parameters", "Packages"],
-		middlePane => ["Parameters", "Modules", "App"],
-		rightPane => ["App", "Packages", "Parameters"]
+		leftPane 	=>	["Parameters", "App", "Packages"],
+		middlePane 	=>	["Packages", "Parameters", "App"],
+		rightPane 	=>	["App", "Packages", "Parameters"]
 	};
 	$self->logDebug("headings", $headings);
 	

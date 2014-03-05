@@ -57,9 +57,9 @@ has 'upgradesleep'	=> ( is  => 'rw', 'isa' => 'Int', default	=>	600	);
 
 # Strings
 has 'opsrepo'	=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
-has 'installdir'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'database'	=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
-has 'user'	=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
+has 'user'
+=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'password'	=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'conffile'	=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 

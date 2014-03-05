@@ -299,8 +299,7 @@ setCoreWidget : function (moduleName, name, pane) {
 	console.log("Workflow.setCoreWidget    module: ");
 	console.dir({module:module});
 	
-	this[name] = new module(
-	{
+	this[name] = new module({
 		attachPoint : pane,
 		parentWidget: this,
 		core: this.core
