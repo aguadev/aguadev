@@ -167,7 +167,7 @@ pluginsList : [
 	, "plugins.view.Controller"
 	, "plugins.cloud.Controller"
 	//, "plugins.request.Controller"
-	, "plugins.home.Controller"
+	//, "plugins.home.Controller"
 ],
 
 //Path to the template of this widget. 

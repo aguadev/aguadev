@@ -1046,6 +1046,9 @@ method updateConfig ($sourcefile, $targetfile) {
 method updateTable ($object, $table, $required, $updates) {
 	$self->logCaller("object", $object);
 	
+	#### SET DEFAULT OBJECT
+	$object->{owner} = $object->{username} if not defined $object->{owner};
+	
 	my $where = $self->db()->where($object, $required);
 	my $query = qq{SELECT 1 FROM $table $where};
 	$self->logDebug("query", $query);

@@ -19,13 +19,10 @@ dojo.require("dijit.form.Button");
 
 // TEMPLATE MODULES
 //LEFT PANE
-dojo.require("plugins.sharing.Apps");
 dojo.require("plugins.sharing.GroupProjects");
-dojo.require("plugins.sharing.Settings");
-dojo.require("plugins.sharing.Clusters");
+//dojo.require("plugins.sharing.Settings");
 
 // MIDDLE PANE
-dojo.require("plugins.sharing.Parameter");
 dojo.require("plugins.sharing.Groups");
 dojo.require("plugins.sharing.Projects");
 dojo.require("plugins.sharing.Access");
@@ -96,15 +93,15 @@ startup : function () {
 	this.paneWidgets = new Object;
 
 	// LOAD HEADINGS FOR THIS USER
-	//this.headings = Agua.getSharingHeadings();
-	this.headings = {
-		leftPane: [
-			"Groups"
-		],
-		middlePane	:[
-			"GroupProjects"
-		]
-	};
+	this.headings = Agua.getSharingHeadings();
+	//this.headings = {
+	//	leftPane: [
+	//		"Groups"
+	//	],
+	//	middlePane	:[
+	//		"GroupProjects"
+	//	]
+	//};
 	
 	// LOAD PANES
 	this.loadPanes();
