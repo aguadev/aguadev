@@ -151,7 +151,6 @@ method installRabbitMq {
 			"sudo yum install -y rabbitmq-server"
 		]);
 	}
-	
 
 	#### SET RABBITMQ MAX OPEN FILE HANDLES
 	$self->setRabbitMqFileHandles();
@@ -223,15 +222,16 @@ method installNode ($nodeurl, $installdir) {
 	# INSTALL BUILD TOOLS
 	my $arch	=	$self->getArch();
 	if ( $arch eq "ubuntu" ) {
-		$self->runCommand("apt-get install libssl-dev");
+		$self->runCommands(["apt-get install libssl-dev"]);
 		$self->installPackage("build-essential g++");
 	}
 	elsif ( $arch eq "centos" ) {
-		$self->runCommand("yum install gcc gcc-c++ kernel-devel");
-		$self->runCommand("yum groupinstall \"Development Tools\" -y");
-		$self->runCommand("yum install kernel-devel -y");
+		$self->runCommands(["yum install gcc gcc-c++ kernel-devel"]);
+		$self->runCommands(["yum groupinstall \"Development Tools\" -y"]);
+		$self->runCommands(["yum install kernel-devel -y"]);
 	}
 	
+
 	#### CREATE BASEDIR
 	my $basedir	=	"$installdir/apps/node";
 	`mkdir -p $basedir` if not -d $basedir;
