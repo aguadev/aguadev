@@ -84,7 +84,7 @@ method upgrade {
 	my $password 	=	$self->db()->password();
 	my $user		=	$self->db()->user();
 	$self->logDebug("database", $database);
-	$self->logDebug("password", $password);
+	#$self->logDebug("password", $password);
 	$self->logDebug("user", $user);
 	
 	#my $sleep = $self->upgradesleep();

@@ -412,7 +412,7 @@ method setDbObject () {
 	my $password	= $self->password() || $self->conf()->getKey("database", "PASSWORD");
 	$self->logDebug("database", $database);
 	$self->logDebug("user", $user);
-	$self->logDebug("password", $password);
+	#$self->logDebug("password", $password);
 
    #### CREATE DB OBJECT USING DBASE FACTORY
     my $db = Agua::DBaseFactory->new( 'MySQL',

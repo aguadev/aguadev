@@ -134,7 +134,7 @@ method biorepo {
     print "Can't create parentdir: $parentdir" and exit if not -d $parentdir;
 
 	my $pmfile	=	"$basedir/bin/install/resources/agua/$opsrepo.pm";
-	my $opsdir	=	$self->opsdir();
+	my $opsdir	=	"$basedir/bin/install/resources/agua";
 
 	my $ops	=	$self->setOps($owner, $login, $username, $opsrepo, $opspackage, $privacy, $installdir, $pmfile, $opsdir, $version);
 	
@@ -155,33 +155,6 @@ method setOps ($owner, $login, $username, $repository, $package, $privacy, $inst
 	$self->logDebug("repository", $repository);
 	$self->logDebug("package", $package);
 	$self->logDebug("privacy", $privacy);
-	$self->logDebug("pmfile", $pmfile);
-
-	#my $opsmodloaded = 0;
-	#if ( defined $pmfile ) {
-	#	my ($class)	= 	$pmfile =~ /^.+\/([^\/]+)\.pm$/;
-	#	my ($location)	= 	$pmfile =~ /^.+\/([^\/]+)$/;
-	#	$class =~ s/[\-]+//g;
-	#	$self->logDebug("class", $class);
-	#	
-	#	($opsdir)	= 	$pmfile =~ /^(.+)\/[^\/]+$/;
-	#	$self->logDebug("opsdir", $opsdir);
-	#
-	#	if ( -f $pmfile ) {
-	#		print "\nLoading class: $class.pm\n\n";
-	#		unshift @INC, $opsdir;
-	#	
-	#		my $klass = 'Agua::Ops';
-	#		$klass->meta->make_mutable;
-	#		Moose::Util::apply_all_roles($klass->meta, ($class));
-	#		$klass->meta->make_immutable;
-	#		
-	#		$opsmodloaded = 1;
-	#	}
-	#	else {
-	#		print "Deploy::setOps    Can't find pmfile: $pmfile\n" and exit;
-	#	}
-	#}
 
 	my $args	=	{
 		owner		=>	$owner,
@@ -389,29 +362,32 @@ method install {
 	$self->logDebug("opsfile", $opsfile);
 	my $pmfile		=	$self->pmfile();
 	$self->logDebug("pmfile", $pmfile);
-	
-	#### SET VARIABLES FROM OPS INFO
-	my $login 		=	$self->login();
-	my $owner 		=	$self->owner();
-	my $repository 	=	$self->repository();
-	$self->logDebug("login", $login);
-	$self->logDebug("owner", $owner);
-	$self->logDebug("repository", $repository);
 
 	#### SET PACKAGE DETAILS
 	my $package		=	$self->package();
 	print "Deploy::install    package not defined. Exiting\n" and return if not defined $package;
-	my $privacy		=	$self->privacy() || "public";
 	
+	#### SET VARIABLES FROM OPS INFO
+	my $login 		=	$self->login() || "agua";
+	my $owner 		=	$self->owner() || "agua";
+	my $privacy		=	$self->privacy() || "public";
+	my $repository 	=	$self->repository();
+	$self->logDebug("login", $login);
+	$self->logDebug("owner", $owner);
+	$self->logDebug("privacy", $privacy);
+	$self->logDebug("repository", $repository);
+
 	#### SET OPSDIR
 	my $opsdir;
-	$opsdir			=	"$installdir/repos/$privacy/$login/$opsrepo/$login/$package" if defined $privacy and defined $login;
-	#### SET OPSDIR FROM OPSFILE IF DEFINED
+    my $basedir		= 	$self->conf()->getKey("agua", "INSTALLDIR");
 	if ( defined $opsfile ) {
 		($opsdir) =	$opsfile =~ /^(.+?)\/[^\/]+$/;
 	}
+	if ( not defined $opsfile ) {
+		$opsdir		=	"$installdir/repos/$privacy/$owner/$opsrepo/$owner/$package";		
+	}
 	$self->logDebug("opsdir", $opsdir);	
-
+	
 	#### SET VERSION
 	my $version		=	$self->version();
 	$self->logDebug("version", $version);

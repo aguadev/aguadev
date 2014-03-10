@@ -713,10 +713,10 @@ method createCurlFile($login, $contents) {
 method createLoginFile($login, $password) {
 #### CREATE CURL AUTHENTICATION FILE
 	$self->logDebug("login", $login);
-	$self->logDebug("password", $password);
+	#$self->logDebug("password", $password);
 
 	my $contents = "user = $login:$password";
-	$self->logDebug("contents", $contents);
+	#$self->logDebug("contents", $contents);
 
 	#### CREATE KEYDIR IF NOT PRESENT
 	my $keydir 		= 	$self->getHubKeyDir($login);

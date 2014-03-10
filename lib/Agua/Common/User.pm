@@ -75,9 +75,9 @@ sub updateUser {
     #### ONLY AN ADMIN USER CAN CHANGE THE PASSWORD WITHOUT
     #### PROVIDING THE OLD PASSWORD
     my $old_password = $userobject->{oldpassword};
-	$self->logDebug("old_password", $old_password);
+	#$self->logDebug("old_password", $old_password);
     my $new_password = $userobject->{newpassword};
-	$self->logDebug("new_password", $new_password);
+	#$self->logDebug("new_password", $new_password);
 
     if ( not defined $new_password and not $new_password )
     {
@@ -100,7 +100,7 @@ sub updateUser {
 	$self->logDebug("query", $query);
 
     my $stored_password = $self->db()->query($query);
-	$self->logDebug("stored_password", $stored_password);
+	#$self->logDebug("stored_password", $stored_password);
 
 	#### QUIT IF NO STORED PASSWORD AND NOT ADMIN USER
     if ( not defined $stored_password and not $stored_password and not $is_admin)
@@ -149,7 +149,7 @@ sub updateUser {
 	#### UBUNTU
 	if ( $password ) {
 		my $change_password = "echo '$changed_username:$password' | chpasswd";
-		$self->logDebug("change_password", $change_password);
+		#$self->logDebug("change_password", $change_password);
 		print `$change_password`;	
 	}
 

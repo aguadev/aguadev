@@ -304,6 +304,7 @@ method setConfKey ($package, $version, $installdir, $opsinfo) {
 	$self->logDebug("package", $package);
 	$self->logDebug("version", $version);
 	$self->logDebug("opsinfo", $opsinfo);
+	print "Can't update config file - 'version' not defined\n" and exit if not defined $version;
 
 	my $current	=	$self->conf()->getKey("packages", $package);
 	undef $current->{$version};
@@ -1235,8 +1236,8 @@ method validateVersion ($login, $repository, $privacy, $selectedversion) {
 	$tagarray = $self->sortVersions($tagarray);
 	$self->logDebug("tagarray", $tagarray);
 
-	#### ORDER: FIRST TO LAST
-	@$tagarray = reverse(@$tagarray);
+	##### ORDER: FIRST TO LAST
+	#@$tagarray = reverse(@$tagarray);
 	
 	return $$tagarray[scalar(@$tagarray) - 1];
 }

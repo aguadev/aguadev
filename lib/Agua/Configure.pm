@@ -386,13 +386,13 @@ print "\n\n\n";
 method _loadUserData ($username, $database, $subdir) {
     my $rootpassword   	=   $self->rootpassword();
 	$rootpassword 		=	$self->_inputRootPassword() if not defined $rootpassword;
-	$self->logDebug("rootpassword", $rootpassword);
+	#$self->logDebug("rootpassword", $rootpassword);
 	
 	my $dumpfile		=	$self->_getDumpfile($username, $subdir);
 	$self->logDebug("dumpfile", $dumpfile);
 	
 	my $command = "mysql -u root -p$rootpassword $database < $dumpfile";
-	$self->logDebug("command", $command);
+	#$self->logDebug("command", $command);
 	print `$command`;
 	
 }

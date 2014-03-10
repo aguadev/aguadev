@@ -13,7 +13,7 @@ method doInstall ($installdir, $version) {
 	$self->logDebug("version", $version);
 	$self->logDebug("installdir", $installdir);
 
-	$version 	= 	$self->gitInstall($installdir, $version);
+	$version 	= 	$self->gitUpdate($installdir, $version);
 
 	$self->confirmInstall($installdir, $version);
 	

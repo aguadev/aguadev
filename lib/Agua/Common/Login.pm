@@ -168,8 +168,8 @@ sub submitLogin {
 		my $stored_password = $self->db()->query($query);	
 	
 		#### CHECK FOR INPUT PASSWORD MATCHES STORED PASSWORD
-		$self->logDebug("Stored_password", $stored_password) ;
-		$self->logDebug("Passed password", $password);
+		#$self->logDebug("Stored_password", $stored_password) ;
+		#$self->logDebug("Passed password", $password);
 	
 		$match = $password =~ /^$stored_password$/ if defined $stored_password; 
 		$self->logDebug("Match", $match);
@@ -320,9 +320,9 @@ sub newuser {
 	my $newuserpassword 	=	$self->cgiParam('newuserpassword');
 
 	$self->logDebug("DB User", $username);
-	$self->logDebug("DB Password", $password);
+	#$self->logDebug("DB Password", $password);
 	$self->logDebug("New user", $newuser);
-	$self->logDebug("New user password", $newuserpassword);
+	#$self->logDebug("New user password", $newuserpassword);
 
     ##### CREATE TABLE users IF NOT EXISTS
     #$self->createTable('users');
