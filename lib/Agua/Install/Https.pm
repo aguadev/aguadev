@@ -9,8 +9,8 @@ use FindBin qw($Bin);
 method enableHttps {
 	$self->logDebug("Agua::Install::enableHttps()");
 
-	#$self->logDebug("Doing generateCACert()");
-	#$self->generateCACert();
+	$self->logDebug("Doing generateCACert()");
+	$self->generateCACert();
 	
 	$self->logDebug("Doing enableApacheSsl()");
 	$self->enableApacheSsl();

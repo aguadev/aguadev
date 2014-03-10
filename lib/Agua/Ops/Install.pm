@@ -173,6 +173,10 @@ method installDependencies ($opsdir, $installdir) {
 			$targetdir =~ s/%INSTALLDIR%/$installdir/g;
 			$installdir	=	$targetdir;
 		}
+		else {
+			my $basedir	=	$self->getBaseDir($installdir);
+			$installdir	=	"$basedir/$package";
+		}
 
 		my $opsdir 	=	$self->opsdir();
 		($opsdir)	=	$opsdir	=~ /^(.+?)\/[^\/]+$/;
@@ -312,6 +316,14 @@ method setConfKey ($package, $version, $installdir, $opsinfo) {
 	$self->conf()->setKey("packages", "$package", $current);
 }
 
+method installedVersions ($package) {
+	my $query	=	qq{SELECT package,installdir, version
+FROM package
+WHERE package='$package'};
+	$self->logDebug("query", $query);
+	
+	return $self->db()->queryhasharray($query);
+}
 #### INSTALL TYPES
 method gitInstall ($installdir, $version) {
 
@@ -514,6 +526,8 @@ method zipInstall ($installdir, $version) {
 	#$self->logger()->write("Downloading file: $filename");
 	$self->runCommand("wget -c $fileurl --output-document=$filename");
 	
+	return 0 if not -f $filename or -z $filename;
+
 	#### GET ZIPTYPE
 	my $ziptype = 	"tar";
 	$ziptype	=	"bz" if $filename =~ /\.bz2$/;
@@ -633,46 +647,39 @@ method confirmInstall ($installdir, $version) {
 	$self->logDebug("opsdir", $opsdir);
 	my $file		=	"$opsdir/t/$version/output.txt";
 	$self->logDebug("file", $file);
-	return if not -f $file;
+	return 1 if not -f $file;
 
 	my $lines		=	$self->fileLines($file);
-	print "lines: ", join "\n", @$lines, "\n";
-	my 	$command	=	shift @$lines;
+	my $command 	=	shift @$lines;
 	$command		=~ s/^#//;
+	my $executor	=	"";
+	if ( $$lines[0] =~ /^#/ ) {
+		$executor	=	shift @$lines;
+		$executor		=~ s/^#//;
+	}
 	$self->logDebug("command", $command);
-	if ( $command	=~ /^(.+)\s+(\S+)\s*(\-\S+\s*)?$/ ) {
-		
-		my ($executor, $trash)	=	$command	=~ /^(.+\s+)[^\-]\S+\s*(\-\S+\s*)?$/;
-		$executor = "" if not defined $executor;
-		$self->logDebug("executor", $executor);
-		
-		$command	=~ 	/^(.+\s+)?(\S+)\s*(\-\S+\s*)?/;
-		my $executable	=	$1;
-		my $argument	=	$2 || "";
-		$command 	=	"cd $installdir/$version; $executor $executable $argument";
-	}
-	else {
-		$command 	=	"$installdir/$version/$command";
-	}
+	$self->logDebug("executor", $executor);
+
+	$command 	=	"cd $installdir/$version; $executor $command";
 	$self->logDebug("FINAL command", $command);
 
 	my ($output, $error)	=	$self->runCommand($command);
 	$output		=	$error if not defined $output or $output eq "";
 	my $actual;
 	@$actual	=	split "\n", $output;
-	print "actual: ", join "\n", @$actual, "\n";
+	#print "actual: ", join "\n", @$actual, "\n";
 
 	for ( my $i = 0; $i < @$lines; $i++ ) {
 		my $got	=	$$actual[$i] || ""; #### EXTRA EMPTY LINES
 		my $expected	=	$$lines[$i];
-
+		next if $expected =~ /^#SKIP/;
+		
+		
 		if ( $got ne $expected ) {
-			print "Mismatch between expected and actual output!\nExpected:\n$expected\n\nGot:\n$got\n\n";
-			print "Failed to install\n";
-			exit;
+			$self->logDebug("FAILED TO INSTALL. Mismatch between expected and actual output!\nExpected:\n$expected\n\nGot:\n$got\n\n");
+			return 0;
 		}
 	}
-	
 	$self->logDebug("**** CONFIRMED INSTALLATION ****");
 	
 	return 1;
@@ -792,6 +799,26 @@ method getArch {
 	
 	return $arch;
 }
+method installCpanm {
+	$self->changeDir("/usr/bin");
+	$self->runCommand("curl -LOk http://xrl.us/cpanm");
+	$self->runCommand("chmod 755 cpanm");
+}
+
+method installAnt {
+	my $arch = $self->getArch();
+	$self->logDebug("arch", $arch);
+	$self->runCommand("apt-get -y ant install") if $arch eq "ubuntu";
+	$self->runCommand("yum -y ant install") if $arch eq "centos";	
+}
+
+method getBaseDir ($installdir) {
+	$self->logDebug("installdir", $installdir);	
+	my ($basedir) 	= 	$installdir	=~	/^(.+?)\/[^\/]+$/;
+
+	return $basedir;
+}
+
 #### LOG
 method setLogFile ($package, $random) {
 	my $htmldir = $self->conf()->getKey('agua', 'HTMLDIR');
@@ -1249,4 +1276,3 @@ method setOpsInfo ($opsfile) {
 
 
 1;
-

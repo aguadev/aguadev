@@ -133,12 +133,6 @@ method install {
     #### SET COMMANDS IN STARTUP SCRIPT
     $self->setStartupScript();
     
-    ######## INSTALL R STATISTICAL SOFTWARE PACKAGE
-    ####$self->installR();
-    
-    ######## INSTALL Bio::Db::Sam
-    ####$self->installBioDbSam();
-
     #### CONFIRM INSTALLATION AND PRINT INFO
     $self->installConfirmation();
 }
