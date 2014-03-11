@@ -976,14 +976,7 @@ method setTestUser {
 	$self->setDbh({	database	=>	$testdatabase	});
 	
 	#### UPDATE TESTUSER PASSWORD IN TEST DATABASE
-	if ( $self->db()->query("SELECT 1 FROM users WHERE username='$testuser'")) {
-		my $query	=	"UPDATE users SET password='$testpassword' WHERE username='$testuser'";
-		$self->db()->do($query);
-	}
-	else {
-		my $query	=	"INSERT INTO users VALUES('$testuser', '$testpassword', '','','','', NOW())";
-		$self->db()->do($query);
-	}
+	$self->updateUserPassword($testuser, $testuserpassword);
 	
 	#### LOAD TEST USER DATA INTO TEST DATABASE
 	$self->_loadUserData($testuser, $testdatabase, "test");	
@@ -993,6 +986,17 @@ method setTestUser {
 	$self->setDbh({	database	=>	$database	});
 	
 	return $testuser, $testpassword;
+}
+
+method updateUserPassword ($username, $password) {
+	if ( $self->db()->query("SELECT 1 FROM users WHERE username='$username'")) {
+		my $query	=	"UPDATE users SET password='$password' WHERE username='$username'";
+		$self->db()->do($query);
+	}
+	else {
+		my $query	=	"INSERT INTO users VALUES('$username', '$password', '','','','', NOW())";
+		$self->db()->do($query);
+	}	
 }
 
 #### DATABASE UTILS

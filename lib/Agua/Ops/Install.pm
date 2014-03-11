@@ -595,7 +595,7 @@ method downloadInstall ($installdir, $version) {
     $self->changeDir($targetdir);
 
 	#$self->logger()->write("Downloading file: $filename");
-	$self->runCommand("wget -c $fileurl --output-document=$filename");
+	$self->runCommand("wget -c $fileurl --output-document=$filename --no-check-certificate");
 	
 	#### CHANGE NAME IF downloaded DEFINED
 	if ( defined $self->opsinfo()->downloaded() ) {
@@ -606,8 +606,7 @@ method downloadInstall ($installdir, $version) {
 		$self->runCommand("mv $filename $downloaded");
 	}
 
-	my $package	=	$self->opsinfo()->package();
-	
+	#my $package	=	$self->opsinfo()->package();
 	#$self->logger()->write("Completed installation of $package, version $version");
 	
 	return $version;	
@@ -675,7 +674,6 @@ method confirmInstall ($installdir, $version) {
 		my $got	=	$$actual[$i] || ""; #### EXTRA EMPTY LINES
 		my $expected	=	$$lines[$i];
 		next if $expected =~ /^#SKIP/;
-		
 		
 		if ( $got ne $expected ) {
 			$self->logDebug("FAILED TO INSTALL. Mismatch between expected and actual output!\nExpected:\n$expected\n\nGot:\n$got\n\n");
