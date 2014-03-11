@@ -17,7 +17,12 @@ method doInstall ($installdir, $version) {
 
 	$self->confirmInstall($installdir, $version);
 	
-	return $version;
+	my $owner	=	$self->owner();
+	my $username	=	$self->username();
+	my $package	=	$self->package();
+	$self->deletePackage($owner, $username, $package);
+	
+	return 1;
 }
 
 1;

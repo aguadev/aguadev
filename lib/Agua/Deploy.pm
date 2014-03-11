@@ -369,7 +369,7 @@ method install {
 	
 	#### SET VARIABLES FROM OPS INFO
 	my $login 		=	$self->login() || "agua";
-	my $owner 		=	$self->owner() || "agua";
+	my $owner 		=	$self->owner();
 	my $privacy		=	$self->privacy() || "public";
 	my $repository 	=	$self->repository();
 	$self->logDebug("login", $login);
@@ -384,7 +384,8 @@ method install {
 		($opsdir) =	$opsfile =~ /^(.+?)\/[^\/]+$/;
 	}
 	if ( not defined $opsfile ) {
-		$opsdir		=	"$installdir/repos/$privacy/$owner/$opsrepo/$owner/$package";		
+		my $aguauser	= 	$self->conf()->getKey("agua", "AGUAUSER");
+		$opsdir		=	"$installdir/repos/$privacy/$aguauser/$opsrepo/$aguauser/$package";		
 	}
 	$self->logDebug("opsdir", $opsdir);	
 	

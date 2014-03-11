@@ -263,19 +263,12 @@ method runInstall ($opsdir, $installdir, $package, $version) {
 	#### SET DATABASE OBJECT
 	$self->setDbObject() if not defined $self->db();
 
-	###### START LOGGING TO HTML FILE
-	#$self->logDebug("BEFORE startHtmlLog login", $login);
-	#$self->startHtmlLog();
-	#$self->logDebug("AFTER startHtmlLog login", $login);
-	
-	##### LOG STATUS
-	#$self->logger()->write("Installing package: $package to installation directory: $installdir");
-	
 	#### DO INSTALL
 	$self->logDebug("DOING self->doInstall");
 	return 0 if $self->can('doInstall') and not $self->doInstall($installdir, $version);
 
 	#### POST-INSTALL
+	$version = $self->version() if not defined $version or not $version;
 	return 0 if $self->can('postInstall') and not $self->postInstall($installdir, $version);
 	
 	#### UPDATE REPORT
@@ -361,7 +354,7 @@ method gitInstall ($installdir, $version) {
 
 	#### MAKE INSTALL DIRECTORY
 	$self->makeDir($installdir) if not -d $installdir;	
-	$self->logCritical("Can't create installdir", $installdir) if not -d $installdir;
+	$self->logCritical("Can't create installdir", $installdir) and return 0 if not -d $installdir;
 
 	#### SET DEFAULT KEYFILE
 	$keyfile = $self->setKeyfile($username, $hubtype) if $privacy ne "public" and $keyfile eq "";
@@ -369,7 +362,7 @@ method gitInstall ($installdir, $version) {
 	#### DELETE DIRECTORY IF EXISTS
 	my $targetdir = "$installdir/$version";
 	`rm -fr $targetdir`;
-	$self->logCritical("Can't delete targetdir: $targetdir") and exit if -d $targetdir;
+	$self->logCritical("Can't delete targetdir: $targetdir") and return 0 if -d $targetdir;
 	
 	#### ADD HUB TO /root/.ssh/authorized_hosts FILE	
 	$self->addHubToAuthorizedHosts($login, $hubtype, $keyfile, $privacy);	
@@ -384,7 +377,7 @@ method gitInstall ($installdir, $version) {
 	$self->changeToRepo($installdir);
 	$self->logDebug("Doing self->cloneRemoteRepo()");
 	my $success = $self->cloneRemoteRepo($owner, $repository, $hubtype, $login, $privacy, $keyfile, $version);
-	$self->logDebug("FAILED to clone repo    success: $success") and return if not $success;
+	$self->logDebug("FAILED to clone repo    success: $success") and return 0 if not $success;
 	
 	##### CHECKOUT SPECIFIC VERSION
 	$self->logDebug("Doing changeToRepo installdir", "$targetdir");
@@ -398,7 +391,7 @@ method gitInstall ($installdir, $version) {
 	$self->verifyVersion("$targetdir", $version) if $self->foundGitDir("$targetdir");
 	$self->version($version);
 	
-	return $version;
+	return 1;
 }
 
 method gitUpdate ($installdir, $selectedversion) {
@@ -431,7 +424,7 @@ method gitUpdate ($installdir, $selectedversion) {
 
 	#### VALIDATE VERSION IF SUPPLIED, OTHERWISE SET TO LATEST VERSION
 	my $version = $self->validateVersion($login, $repository, $privacy, $selectedversion);
-	$self->logDebug("version not defined") and exit if not defined $version;
+	$self->logDebug("version not defined") and return 0 if not defined $version;
 	$self->logDebug("version", $version);
 	$self->version($version);
 	$self->logDebug("AFTER validateVersion login", $login);
@@ -459,13 +452,13 @@ method gitUpdate ($installdir, $selectedversion) {
 		$self->logDebug("basedir", $basedir);
 		$self->logDebug("subdir", $subdir);
 		`mkdir -p $basedir` if not -d $basedir;
-		$self->logCritical("Can't create basedir", $basedir) if not -d $basedir;
+		$self->logCritical("Can't create basedir", $basedir) and return 0 if not -d $basedir;
 	
 		#### CLONE REPO
 		$self->changeToRepo($basedir);
 		$self->logDebug("keyfile", $keyfile);
 		$self->logDebug("Doing self->cloneRemoteRepo()");
-		$self->logDebug("FAILED to clone repo") and return if not $self->cloneRemoteRepo($owner, $repository, $hubtype, $login, $privacy, $keyfile, $subdir);
+		$self->logDebug("FAILED to clone repo") and return 0 if not $self->cloneRemoteRepo($owner, $repository, $hubtype, $login, $privacy, $keyfile, $subdir);
 	}
 	
 	#### OTHERWISE, MOVE TO REPO AND PULL
@@ -478,7 +471,7 @@ method gitUpdate ($installdir, $selectedversion) {
 		$self->initRepo($installdir) if not $self->foundGitDir($installdir);
 	
 		#### fetch FROM REMOTE AND DO HARD RESET
-		$self->logDebug("FAILED to fetch repo") and return if not $self->fetchResetRemoteRepo($owner, $repository, $hubtype, $login, $privacy, $keyfile);
+		$self->logDebug("FAILED to fetch repo") and return 0 if not $self->fetchResetRemoteRepo($owner, $repository, $hubtype, $login, $privacy, $keyfile);
 	
 		#### SAVE ANY CHANGES IN A SEPARATE BRANCH
 		$self->saveChanges($installdir, $version);
@@ -497,7 +490,7 @@ method gitUpdate ($installdir, $selectedversion) {
 	$self->verifyVersion($installdir, $version) if $self->foundGitDir($installdir);
 	$self->version($version);
 	
-	return $version;
+	return 1;
 }
 
 method zipInstall ($installdir, $version) {
@@ -518,6 +511,14 @@ method zipInstall ($installdir, $version) {
 		exit;
 	}
 	
+	#### DELETE DIRECTORY AND ZIPFILE IF EXIST
+	my $targetdir = "$installdir/$version";
+	`rm -fr $targetdir`;
+	$self->logCritical("Can't delete targetdir: $targetdir") and exit if -d $targetdir;
+	my $targetfile	=	"$installdir/$filename";
+	`rm -fr $targetfile` if -f $targetfile;
+	$self->logCritical("Can't delete targetfile: $targetfile") and exit if -d $targetfile;
+
 	#### MAKE INSTALL DIRECTORY
 	$self->makeDir($installdir) if not -d $installdir;	
 
@@ -525,7 +526,7 @@ method zipInstall ($installdir, $version) {
     $self->changeDir($installdir);
 
 	#$self->logger()->write("Downloading file: $filename");
-	$self->runCommand("wget -c $fileurl --output-document=$filename");
+	$self->runCommand("wget -c $fileurl --output-document=$filename --no-check-certificate");
 	
 	return 0 if not -f $filename or -z $filename;
 
@@ -809,8 +810,8 @@ method installCpanm {
 method installAnt {
 	my $arch = $self->getArch();
 	$self->logDebug("arch", $arch);
-	$self->runCommand("apt-get -y ant install") if $arch eq "ubuntu";
-	$self->runCommand("yum -y ant install") if $arch eq "centos";	
+	$self->runCommand("apt-get -y install ant") if $arch eq "ubuntu";
+	$self->runCommand("yum -y install ant") if $arch eq "centos";	
 }
 
 method getBaseDir ($installdir) {
@@ -1126,16 +1127,16 @@ method updatePackage ($owner, $username, $package, $version) {
 	#### UPDATE DATABASE        
 	my $object = {
 		owner           =>      $owner,
-			username        =>      $username,
-			package         =>      $package,
-			repository      =>      $self->repository() || "",
-			status          =>      "ready",
-			version         =>      $version,
-			opsdir          =>      $self->opsdir() || '',
-			installdir      =>      $self->installdir(),
-			privacy         =>      $self->privacy() || $self->opsinfo()->privacy(),
-			description     =>      $description,
-			website         =>      $website
+		username        =>      $username,
+		package         =>      $package,
+		repository      =>      $self->repository() || "",
+		status          =>      "ready",
+		version         =>      $version,
+		opsdir          =>      $self->opsdir() || '',
+		installdir      =>      $self->installdir(),
+		privacy         =>      $self->privacy() || $self->opsinfo()->privacy(),
+		description     =>      $description,
+		website         =>      $website
 	};
 	$self->logDebug("object", $object);
 
