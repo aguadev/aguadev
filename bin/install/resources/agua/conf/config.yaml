@@ -2,7 +2,7 @@
 agua:
   ADMINS: admin
   ADMINUSER: admin
-  AGUADIR: aguadev
+  AGUADIR: agua
   AGUAUSER: agua
   APACHEBINARY: /etc/init.d/apache2
   APACHECONF: /etc/apache2/apache2.conf
@@ -23,7 +23,7 @@ agua:
   GUESTUSER: guest
   HTMLDIR: /var/www/html
   INITCOMPLETE: 0
-  INSTALLDIR: /aguadev
+  INSTALLDIR: /agua
   MODULES: Agua::Admin,Agua::Folders,Agua::Package,Agua::Sharing,Agua::Upload,Agua::View,Agua::Workflow
   OPSPACKAGE: biorepository
   OPSREPO: biorepository
@@ -39,7 +39,7 @@ agua:
   STARCLUSTER: /agua/apps/starcluster/bin/starcluster
   TEMPDIR: /tmp
   TESTHTMLDIR: /var/www/html/t
-  URLPREFIX: aguadev
+  URLPREFIX: agua
   USERDIR: /home
   VERSION: 0.8.0-alpha.1+build13
 applications:
@@ -110,7 +110,7 @@ data:
     SAMTOOLSRAT: /data/sequence/reference/rat/rn4/samtools
 database:
   CLUSTER_MYSQLDATA: /private/var/mysql
-  DATABASE: aguadev
+  DATABASE: agua
   DBTYPE: MySQL
   DUMPFILE: bin/sql/dump/agua.dump
   GUESTUSER: guest
