@@ -217,11 +217,11 @@ method getSslConfigFiles {
 
 	return [
 		[
-			"$Bin/resources/apache2/centos/conf/httpd.conf",
+			"$Bin/resources/apache2/centos/httpd.conf",
 			"/etc/httpd/conf/httpd.conf"
 		],
 		[
-			"$Bin/resources/apache2/centos/conf/ports.conf",
+			"$Bin/resources/apache2/centos/ports.conf",
 			"/etc/httpd/conf/ports.conf"
 		],
 		[

@@ -92,6 +92,10 @@ method apacheCentos {
 	
 	#"wget http://mirror.tcpdiag.net/apache//httpd/mod_fcgid/mod_fcgid-2.3.9.tar.gz";
 	
+	#### SET SELinux TO Permissive
+	$self->logDebug("Setting SELinux to Permissive");
+	$self->runCommands(["setenforce 0"]);
+	
 	#### TO MAKE APACHE LOAD THE MODULE, REPLACE FILE
 	#### /etc/httpd/conf/httpd.conf
 	#### TO CONTAIN LINE

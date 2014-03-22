@@ -372,7 +372,7 @@ setData : function () {
 
 	//var data = {"data": [{"password": "mypass", "userid": "andyh"}, {"PAGE": [{"PAGENUM": "-1"}]}]};
 	//var data = {"password": "mypass", "userid": "andyh","PAGE": [{"PAGENUM": "-1"}]};
-	var data = {"password": "mypass", "userid": "andyh","PAGENUM": "-1"};
+	var data = {"password": "Test1Test", "userid": "andyh","PAGENUM": "-1"};
 	
 	var thisObj	=	this;
 	script.get({

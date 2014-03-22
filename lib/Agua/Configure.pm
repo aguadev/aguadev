@@ -976,7 +976,7 @@ method setTestUser {
 	$self->setDbh({	database	=>	$testdatabase	});
 	
 	#### UPDATE TESTUSER PASSWORD IN TEST DATABASE
-	$self->updateUserPassword($testuser, $testuserpassword);
+	$self->updateUserPassword($testuser, $testpassword);
 	
 	#### LOAD TEST USER DATA INTO TEST DATABASE
 	$self->_loadUserData($testuser, $testdatabase, "test");	

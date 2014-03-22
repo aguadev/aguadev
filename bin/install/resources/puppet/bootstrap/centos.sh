@@ -35,6 +35,8 @@ fi
 #### INSTALL MODULES
 echo "Installing stahnma-epel"
 puppet module install stahnma/epel --force
+echo "Installing ripienaar/concat"
+puppet module install ripienaar-concat
 echo "Installing puppetlabs-stdlib"
 puppet module install puppetlabs-stdlib --force
 echo "Installing puppetlabs-mysql"
@@ -47,4 +49,3 @@ echo "Installing puppetlabs-nodejs"
 puppet module install puppetlabs-nodejs --force
 echo "Installing puppetlabs-java"
 puppet module install puppetlabs-java --force
-

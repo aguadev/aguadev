@@ -29,7 +29,7 @@ host : null,
 
 // socketJs : String
 //		Location of socketio.js file
-socketJs : require.toUrl("plugins/exchange/socketio"),
+socketJs : require.toUrl("plugins/exchange/socketio.js"),
 
 // delayConnect : Integer
 //		Length of time (milliseconds) to delay in setTimeout before calling this.connect()
