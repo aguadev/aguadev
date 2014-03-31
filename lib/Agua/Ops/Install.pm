@@ -166,16 +166,16 @@ method installDependencies ($opsdir, $installdir) {
 	foreach my $missed ( @$missing ) {
 		my $package	=	$missed->{package};
 		my $version	=	$missed->{version};
+		my $targetdir;
 		$self->logDebug("package", $package);
 		$self->logDebug("version", $version);
 		if ( $missed->{installdir} ) {
-			my $targetdir	=	"$missed->{installdir}/$package";
+			$targetdir	=	"$missed->{installdir}/$package";
 			$targetdir =~ s/%INSTALLDIR%/$installdir/g;
-			$installdir	=	$targetdir;
 		}
 		else {
 			my $basedir	=	$self->getBaseDir($installdir);
-			$installdir	=	"$basedir/$package";
+			$targetdir	=	"$basedir/$package";
 		}
 
 		my $opsdir 	=	$self->opsdir();
@@ -195,7 +195,7 @@ method installDependencies ($opsdir, $installdir) {
 			conf        =>  $self->conf(),
 			opsrepo  	=>  $self->opsrepo(),
 			opsdir  	=>  $opsdir,
-			installdir	=>	$installdir,
+			installdir	=>	$targetdir,
 			package  	=>  $package,
 			version  	=>  $version,
 			opsfile  	=>  $opsfile,
@@ -528,7 +528,9 @@ method zipInstall ($installdir, $version) {
 	#$self->logger()->write("Downloading file: $filename");
 	$self->runCommand("wget -c $fileurl --output-document=$filename --no-check-certificate");
 	
-	return 0 if not -f $filename or -z $filename;
+	my $filepath	=	"$installdir/$filename";
+	$self->logDebug("filepath", $filepath);
+	return 0 if not -f $filepath or -z $filepath;
 
 	#### GET ZIPTYPE
 	my $ziptype = 	"tar";
@@ -673,7 +675,7 @@ method confirmInstall ($installdir, $version) {
 	for ( my $i = 0; $i < @$lines; $i++ ) {
 		my $got	=	$$actual[$i] || ""; #### EXTRA EMPTY LINES
 		my $expected	=	$$lines[$i];
-		next if $expected =~ /^#SKIP/;
+		next if $expected =~ /^SKIP/;
 		
 		if ( $got ne $expected ) {
 			$self->logDebug("FAILED TO INSTALL. Mismatch between expected and actual output!\nExpected:\n$expected\n\nGot:\n$got\n\n");

@@ -229,8 +229,10 @@ sub _addLinuxUser {
 #### CREATE USER ACCOUNT AND HOME DIRECTORY
 	my $self		=	shift;
 	my $object		=	shift;
+	my $arch		=	shift;
 	$self->logDebug("object", $object);
-
+	$self->logDebug("arch", $arch);
+	
 	my $username = $object->{username};
     $self->logError("username not defined") and exit if not defined $username;
 
@@ -261,10 +263,8 @@ sub _addLinuxUser {
 	$self->logDebug("$mkdir");
 	print `$mkdir`;
 
-    #### SET CHOWN
-    my $apache_user = $self->conf()->getKey("agua", 'APACHEUSER');
-	$self->logDebug("apache_user", $apache_user);
-    my $chown = "chown -R $username:$apache_user $userdir/$username $userdir/$username/$aguadir";
+    #### CHOWN USER HOME DIR
+    my $chown = "chown -R $username:$username $userdir/$username";
 	$self->logDebug("$chown");
 	print `$chown`;
 
