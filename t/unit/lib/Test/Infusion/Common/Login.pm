@@ -17,7 +17,6 @@ class Test::Infusion::Common::Login with (Infusion::Common::Login, Test::Agua::C
 
 use strict;
 use warnings;
-use Carp;
 use Test::More;
 
 use FindBin qw($Bin);

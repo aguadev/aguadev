@@ -1,0 +1,8 @@
+---
+openstack:
+  tenantid: 	ba9a2ae3bc684b579ebcfc46d0e1cb76
+  tenantname: 	annai_services
+  username: 	stuarty
+  authurl: 		http://10.2.16.64:5000/v2.0
+
+ 

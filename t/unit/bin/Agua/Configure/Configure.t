@@ -29,6 +29,7 @@ BEGIN
 {
     my $installdir = $ENV{'installdir'} || "/agua";
     unshift(@INC, "$installdir/lib");
+    unshift(@INC, "$installdir/lib/external/lib/perl5");
 }
 
 #### CREATE OUTPUTS DIR

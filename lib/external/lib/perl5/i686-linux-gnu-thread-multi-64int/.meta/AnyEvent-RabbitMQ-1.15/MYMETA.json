@@ -1,0 +1,62 @@
+{
+   "abstract" : "An asynchronous and multi channel Perl AMQP client.",
+   "author" : [
+      "Masahito Ikuta <cooldaemon@gmail.com>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Module::Install version 1.06, CPAN::Meta::Converter version 2.140640",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "AnyEvent-RabbitMQ",
+   "no_index" : {
+      "directory" : [
+         "inc",
+         "share",
+         "t",
+         "xt"
+      ]
+   },
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.59",
+            "Test::Exception" : "0",
+            "Test::More" : "0",
+            "version" : "0"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "AnyEvent" : "0",
+            "Devel::GlobalDestruction" : "0",
+            "File::ShareDir" : "0",
+            "List::MoreUtils" : "0",
+            "Net::AMQP" : "0.06",
+            "Readonly" : "1.03",
+            "namespace::clean" : "0",
+            "perl" : "5.006"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "license" : [
+         "http://dev.perl.org/licenses/"
+      ],
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/bobtfish/AnyEvent-RabbitMQ.git"
+      }
+   },
+   "version" : "1.15"
+}

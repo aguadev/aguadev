@@ -10,7 +10,6 @@ PURPOSE		TEST CLASS Illumina::WGS::Util::Dumper
 
 use strict;
 use warnings;
-use Carp;
 
 use FindBin qw($Bin);
 use lib "$Bin/../../../../../lib";

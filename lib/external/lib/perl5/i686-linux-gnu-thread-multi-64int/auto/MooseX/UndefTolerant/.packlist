@@ -1,0 +1,10 @@
+/tmp/perlmods/lib/perl5/MooseX/UndefTolerant.pm
+/tmp/perlmods/lib/perl5/MooseX/UndefTolerant/ApplicationToClass.pm
+/tmp/perlmods/lib/perl5/MooseX/UndefTolerant/ApplicationToRole.pm
+/tmp/perlmods/lib/perl5/MooseX/UndefTolerant/Attribute.pm
+/tmp/perlmods/lib/perl5/MooseX/UndefTolerant/Class.pm
+/tmp/perlmods/lib/perl5/MooseX/UndefTolerant/Composite.pm
+/tmp/perlmods/lib/perl5/MooseX/UndefTolerant/Constructor.pm
+/tmp/perlmods/lib/perl5/MooseX/UndefTolerant/Role.pm
+/tmp/perlmods/man/man3/MooseX::UndefTolerant.3pm
+/tmp/perlmods/man/man3/MooseX::UndefTolerant::Attribute.3pm

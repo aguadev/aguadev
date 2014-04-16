@@ -1,0 +1,1 @@
+{"provides":{"B::Hooks::OP::Check":{"version":"0.19","file":"lib/B/Hooks/OP/Check.pm"},"B::Hooks::OP::Check::Install::Files":{"file":"build/IFiles.pm"}},"target":"B::Hooks::OP::Check","version":"0.19","name":"B::Hooks::OP::Check","dist":"B-Hooks-OP-Check-0.19","pathname":"Z/ZE/ZEFRAM/B-Hooks-OP-Check-0.19.tar.gz"}

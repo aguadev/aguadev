@@ -30,6 +30,7 @@ BEGIN {
 	print "\n\nMUST SET installdir ENVIRONMENT VARIABLE BEFORE RUNNING TESTS\n\n" and exit if not defined $ENV{'installdir'};
     my $installdir = $ENV{'installdir'};
     unshift(@INC, "$installdir/lib");
+    unshift(@INC, "$installdir/lib/external/lib/perl5");
 }
 
 #### CREATE OUTPUTS DIR

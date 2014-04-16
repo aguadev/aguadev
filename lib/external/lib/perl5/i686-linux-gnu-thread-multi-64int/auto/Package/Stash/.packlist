@@ -1,0 +1,8 @@
+/tmp/perlmods/bin/package-stash-conflicts
+/tmp/perlmods/lib/perl5/Package/Stash.pm
+/tmp/perlmods/lib/perl5/Package/Stash/Conflicts.pm
+/tmp/perlmods/lib/perl5/Package/Stash/PP.pm
+/tmp/perlmods/man/man1/package-stash-conflicts.1p
+/tmp/perlmods/man/man3/Package::Stash.3pm
+/tmp/perlmods/man/man3/Package::Stash::Conflicts.3pm
+/tmp/perlmods/man/man3/Package::Stash::PP.3pm

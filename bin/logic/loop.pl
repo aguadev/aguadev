@@ -86,8 +86,8 @@ use Getopt::Long;
 use FindBin qw($Bin);
 
 #### USE LIBRARY
-use lib "$Bin/../../lib";	
-use lib "$Bin/../../lib/external";	
+use lib "$Bin/../../lib";
+use lib "$Bin/../../lib/external/lib/perl5";	
 
 #### INTERNAL MODULES
 use Timer;

@@ -1,0 +1,270 @@
+{
+   "abstract" : "Work with HTML in a DOM-like tree structure",
+   "author" : [
+      "Christopher J. Madsen <perl@cjmweb.net>",
+      "Jeff Fearn <jfearn@cpan.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Module::Build version 0.4205",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "HTML-Tree",
+   "no_index" : {
+      "directory" : [
+         "inc",
+         "t"
+      ]
+   },
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Encode" : "0",
+            "Module::Build" : "0.2808",
+            "Test::Fatal" : "0",
+            "Test::More" : "0",
+            "base" : "0"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0.2808"
+         }
+      },
+      "runtime" : {
+         "recommends" : {
+            "HTML::FormatText" : "0",
+            "LWP::UserAgent" : "5.815"
+         },
+         "requires" : {
+            "Carp" : "0",
+            "Exporter" : "0",
+            "HTML::Entities" : "0",
+            "HTML::Parser" : "3.46",
+            "HTML::Tagset" : "3.02",
+            "Scalar::Util" : "0",
+            "integer" : "0",
+            "perl" : "5.008"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/madsen/HTML-Tree.git",
+         "web" : "http://github.com/madsen/HTML-Tree"
+      }
+   },
+   "version" : "5.03",
+   "x_Dist_Zilla" : {
+      "plugins" : [
+         {
+            "class" : "Dist::Zilla::Plugin::Git::GatherDir",
+            "name" : "Git::GatherDir",
+            "version" : "1.122530"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::ManifestSkip",
+            "name" : "ManifestSkip",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::MetaJSON",
+            "name" : "MetaJSON",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::MetaYAML",
+            "name" : "MetaYAML",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::MetaConfig",
+            "name" : "MetaConfig",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::License",
+            "name" : "License",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::MatchManifest",
+            "name" : "MatchManifest",
+            "version" : "4.00"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::CheckChangesHasContent",
+            "name" : "CheckChangesHasContent",
+            "version" : "0.005"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::Test::PrereqsFromMeta",
+            "name" : "Test::PrereqsFromMeta",
+            "version" : "4.04"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::PodSyntaxTests",
+            "name" : "PodSyntaxTests",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::PodCoverageTests",
+            "name" : "PodCoverageTests",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::ModuleBuild::Custom",
+            "name" : "ModuleBuild::Custom",
+            "version" : "4.07"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::RecommendedPrereqs",
+            "name" : "RecommendedPrereqs",
+            "version" : "4.06"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::CheckPrereqsIndexed",
+            "name" : "CheckPrereqsIndexed",
+            "version" : "0.006"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::OurPkgVersion",
+            "name" : "OurPkgVersion",
+            "version" : "0.004000"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::TemplateCJM",
+            "name" : "TemplateCJM",
+            "version" : "4.10"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::PodWeaver",
+            "name" : "PodWeaver",
+            "version" : "3.101641"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::FileFinder::Filter",
+            "name" : "FilesToWeave",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::Repository",
+            "name" : "Repository",
+            "version" : "0.18"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::NextRelease",
+            "name" : "NextRelease",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::Git::NextVersion",
+            "name" : "Git::NextVersion",
+            "version" : "1.122530"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::Git::Check",
+            "name" : "@Git/Check",
+            "version" : "1.122530"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::Git::Commit",
+            "name" : "@Git/Commit",
+            "version" : "1.122530"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::Git::Tag",
+            "name" : "@Git/Tag",
+            "version" : "1.122530"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::Git::Push",
+            "name" : "@Git/Push",
+            "version" : "1.122530"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::Git::CheckFor::CorrectBranch",
+            "name" : "GitBranch",
+            "version" : "0.004"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::RunExtraTests",
+            "name" : "RunExtraTests",
+            "version" : "0.007"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::TestRelease",
+            "name" : "TestRelease",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::UploadToCPAN",
+            "name" : "UploadToCPAN",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::ArchiveRelease",
+            "name" : "ArchiveRelease",
+            "version" : "4.00"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::ConfirmRelease",
+            "name" : "ConfirmRelease",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::AutoPrereqs",
+            "name" : "AutoPrereqs",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::MetaNoIndex",
+            "name" : "MetaNoIndex",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::FinderCode",
+            "name" : ":InstallModules",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::FinderCode",
+            "name" : ":IncModules",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::FinderCode",
+            "name" : ":TestFiles",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::FinderCode",
+            "name" : ":ExecFiles",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::FinderCode",
+            "name" : ":ShareFiles",
+            "version" : "4.300023"
+         },
+         {
+            "class" : "Dist::Zilla::Plugin::FinderCode",
+            "name" : ":MainModule",
+            "version" : "4.300023"
+         }
+      ],
+      "zilla" : {
+         "class" : "Dist::Zilla::Dist::Builder",
+         "config" : {
+            "is_trial" : "0"
+         },
+         "version" : "4.300023"
+      }
+   }
+}

@@ -10,7 +10,6 @@ PURPOSE		TEST CLASS Object
 
 use strict;
 use warnings;
-use Carp;
 
 use FindBin qw($Bin);
 use lib "inputs/lib";

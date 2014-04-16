@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<SUBMISSION alias="TCGA-A6-2671-01A-01D-1408-10_2011-09-05" center_name="CGHUB" created_by="cgsubmit 3.1.1" submission_date="2014-02-02T14:41:38.369602" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="GeneTorrentManifest.xsd">
-  <SERVER_INFO server_path="770022df-9996-4197-bbce-847abeaa10c2" submission_uri="https://gtrepo.annailabs.com/cghub/data/analysis/upload/770022df-9996-4197-bbce-847abeaa10c2"/>
-  <FILES>
-    <FILE checksum="0e4f1bd5c5cc83b37d6c511dda98866c" checksum_method="MD5" filename="4-mb-real-testfile.bam" filetype="bam"/>
-  </FILES>
-</SUBMISSION>

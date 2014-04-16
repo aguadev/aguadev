@@ -29,7 +29,6 @@ EXAMPLES
 
 use strict;
 use warnings;
-use Carp;
 
 class Test::Agua::Uml::Role with (Test::Agua::Common::Util) extends Agua::Uml::Role {
 

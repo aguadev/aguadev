@@ -16,7 +16,6 @@ has 'outputdir'	=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
 
 use strict;
 use warnings;
-use Carp;
 
 #### EXTERNAL MODULES
 use FindBin qw($Bin);

@@ -27,7 +27,6 @@ our $DEBUG = 0;
 
 use strict;
 use warnings;
-use Carp;
 
 #### USE LIB FOR INHERITANCE
 use FindBin qw($Bin);

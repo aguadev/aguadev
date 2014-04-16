@@ -1,0 +1,16 @@
+/tmp/perlmods/lib/perl5/Config/Any.pm
+/tmp/perlmods/lib/perl5/Config/Any/Base.pm
+/tmp/perlmods/lib/perl5/Config/Any/General.pm
+/tmp/perlmods/lib/perl5/Config/Any/INI.pm
+/tmp/perlmods/lib/perl5/Config/Any/JSON.pm
+/tmp/perlmods/lib/perl5/Config/Any/Perl.pm
+/tmp/perlmods/lib/perl5/Config/Any/XML.pm
+/tmp/perlmods/lib/perl5/Config/Any/YAML.pm
+/tmp/perlmods/man/man3/Config::Any.3pm
+/tmp/perlmods/man/man3/Config::Any::Base.3pm
+/tmp/perlmods/man/man3/Config::Any::General.3pm
+/tmp/perlmods/man/man3/Config::Any::INI.3pm
+/tmp/perlmods/man/man3/Config::Any::JSON.3pm
+/tmp/perlmods/man/man3/Config::Any::Perl.3pm
+/tmp/perlmods/man/man3/Config::Any::XML.3pm
+/tmp/perlmods/man/man3/Config::Any::YAML.3pm

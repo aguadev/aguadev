@@ -4,10 +4,17 @@ use Test::More  tests => 22;
 use Getopt::Long;
 use FindBin qw($Bin);
 use lib "$Bin/../../../lib";
+
 BEGIN
 {
+  use Cwd qw(abs_path);
+  use File::Basename;
+  push (@INC,dirname(abs_path($0)).'/../lib');
+	print "abs_path: ", abs_path($0), "\n";
     my $installdir = $ENV{'installdir'} || "/agua";
     unshift(@INC, "$installdir/lib");
+    unshift(@INC, "$installdir/lib/external/lib/perl5");
+    unshift(@INC, "$installdir//apps/perl/5.18.2/lib/5.18.2");
 }
 
 #### CREATE OUTPUTS DIR
@@ -15,6 +22,7 @@ my $outputsdir = "$Bin/outputs";
 `mkdir -p $outputsdir` if not -d $outputsdir;
 
 #### INTERNAL MODULES
+use lib "/aguadev/t/unit/lib";
 use Test::Agua::Common::Admin;
 use Conf::Yaml;
 

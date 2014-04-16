@@ -87,8 +87,8 @@ use strict;
 
 #### USE LIBRARY
 use FindBin qw($Bin);
-use lib "$Bin/../../../lib";
-use lib "$Bin/../../../lib/external";
+use lib "$Bin/../../lib";
+use lib "$Bin/../../lib/external/lib/perl5";
 
 #### FLUSH BUFFER
 $| = 1;

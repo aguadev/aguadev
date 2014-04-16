@@ -24,10 +24,10 @@ USAGE
     ./flow.pl mode [switch] [args] [--help]
 
 
-mode     :    Type of workflow object (work|app|param)
-switch   :    Nested object (e.g., work app, app param)
-args     :    Arguments for the selected mode
---help   :    print help info
+ mode     :    Type of workflow object (work|app|param)
+ switch   :    Nested object (e.g., work app, app param)
+ args     :    Arguments for the selected mode
+ --help   :    print help info
 
 EXAMPLES
 
@@ -60,6 +60,8 @@ use strict;
 use Scalar::Util qw(weaken);
 use FindBin qw($Bin);
 use lib "$Bin/../../lib";
+use lib "$Bin/../../lib/external/lib/perl5";
+
 #BEGIN {
 #    unshift @INC, "/nethome/syoung/base/pipeline/moose/tmp/lib64/perl5/site_perl/5.8.8/x86_64-linux-thread-multi";
 #    unshift @INC, "/nethome/syoung/0.5/lib/external/perl5-32/site_perl/5.8.8";
@@ -86,7 +88,9 @@ print "flow.pl    arguments: @arguments\n";
 
 #### GET FILE
 my $file = shift @ARGV;
-print "flow.pl    file: $file\n";
+usage() if $file =~ /^-h$/ or $file =~ /^--help$/;
+
+#print "flow.pl    file: $file\n";
 #print "flow.pl    Can't find file: $file\n" and exit if not -f $file;
 
 #### GET SWITCH
@@ -96,9 +100,10 @@ print "flow.pl    file: $file\n";
 
 #### GET MODE
 my $mode = shift @ARGV;
+print "mode: $mode\n";
 print "No mode provided (try --help)\n" and exit if not defined $mode;
 usage() if $mode =~ /^-h$/ or $mode =~ /^--help$/;
-#print "mode: $mode\n";
+print "mode: $mode\n";
 
 #### MANAGE INDIVIDUAL OR NESTED WORKFLOW FILES
 if ( $file =~ /\.param$/ ) {
@@ -128,18 +133,6 @@ else
 {
     print "flow.pl    file type '$file' not recognised (must be .wk, .app or .param)\n";
 }
-
-##### PRINT RUN TIME
-#my $runtime = Timer::runtime( $time, time() );
-#print "flow.pl    \n";
-#print "flow.pl    Run time: $runtime\n";
-#print "flow.pl    Date: ";
-#print Timer::datetime(), "\n";
-#print "flow.pl    Command: \n";
-#print "flow.pl    $0 @arguments\n";
-#print "flow.pl    \n";
-#print "flow.pl    ****************************************\n\n\n";
-#exit;
 
 
 #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

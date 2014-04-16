@@ -161,6 +161,7 @@ method setConf {
 	
 	$self->conf($conf);
 }
+
 #### INSTALLDIR
 method setInstalldir {    
     my $installdir = $self->installdir();

@@ -1,5 +1,0 @@
-credential-file=<CREDENTIAL-FILE>
-cache-dir=<FUSECACHE>/
-gto-refresh-period=60
-inactivity-timeout=2
-log=syslog:standard

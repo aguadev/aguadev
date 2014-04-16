@@ -57,6 +57,7 @@ $| = 1;
 #### USE LIB
 use FindBin qw($Bin);
 use lib "$Bin/../../lib";
+use lib "$Bin/../../lib/external/lib/perl5";
 
 #### EXTERNAL MODULES
 use Getopt::Long;
@@ -81,14 +82,13 @@ GetOptions (
 #### PRINT HELP IF REQUESTED
 if ( defined $help )	{	usage();	}
 
-my $installer = Agua::Installer->new(
-    {
-        installdir  =>  $installdir,
-        domainname  =>  $domainname,
-        logfile     =>  $logfile
-    }
-);
-$installer->openLogfile();
+my $installer = Agua::Install->new({
+    installdir  =>  $installdir,
+    domainname  =>  $domainname,
+    logfile     =>  $logfile,
+    SHOWLOG     =>  5,
+    PRINTLOG    =>  5
+});
 
 #### QUIT IF FLAG FILE FOUND
 my $flagfile = "$Bin/../../conf/.https/CA_CERT_INSTALLED";

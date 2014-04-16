@@ -1,0 +1,64 @@
+{
+   "abstract" : "Lets you build groups of accessors",
+   "author" : [
+      "Matt S. Trout <mst@shadowcatsystems.co.uk>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Module::Install version 1.06, CPAN::Meta::Converter version 2.140640",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Class-Accessor-Grouped",
+   "no_index" : {
+      "directory" : [
+         "inc",
+         "t"
+      ]
+   },
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "ExtUtils::CBuilder" : "0.27",
+            "ExtUtils::MakeMaker" : "6.59",
+            "Test::Exception" : "0.31",
+            "Test::More" : "0.88"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "runtime" : {
+         "recommends" : {
+            "Class::XSAccessor" : "1.15",
+            "Sub::Name" : "0.05"
+         },
+         "requires" : {
+            "Carp" : "0",
+            "Class::XSAccessor" : "1.15",
+            "Module::Runtime" : "0.012",
+            "Scalar::Util" : "0",
+            "Sub::Name" : "0.05",
+            "Test::Exception" : "0.31",
+            "Test::More" : "0.88",
+            "perl" : "5.006"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "license" : [
+         "http://dev.perl.org/licenses/"
+      ],
+      "repository" : {
+         "type" : "git",
+         "url" : "git://git.shadowcat.co.uk/p5sagit/Class-Accessor-Grouped.git"
+      }
+   },
+   "version" : "0.10010"
+}

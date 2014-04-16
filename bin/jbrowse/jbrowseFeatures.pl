@@ -145,6 +145,7 @@ use Term::ANSIColor qw(:constants);
 
 #### USE LIBRARY
 use lib "$Bin/../../lib";
+use lib "$Bin/../../lib/external/lib/perl5";
 
 #### INTERNAL MODULES
 use Agua::View;
