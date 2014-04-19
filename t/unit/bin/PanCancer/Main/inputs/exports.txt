@@ -1,0 +1,1 @@
+export OS_USERNAME=test_user; export OS_TENANT_ID=12312312412312314124124312412; export OS_TENANT_NAME=test_tenant; export OS_AUTH_URL=http://11.12.26.96:5000/v2.0

@@ -1,0 +1,144 @@
+---
+packages:
+  R:
+    3.0.0:
+      INSTALLDIR: '/aguadev/apps/R/3.0.0'
+    3.0.1:
+      INSTALLDIR: '/aguadev/apps/R/3.0.1'
+    3.0.2:
+      INSTALLDIR: '/aguadev/apps/R/3.0.2'
+    3.0.2-1:
+      INSTALLDIR: '/aguadev/apps/R/3.0.2-1'
+  bamtools:
+    v2.3.0:
+      INSTALLDIR: '/aguadev/apps/bamtools/v2.3.0'
+  bedtools:
+    2.18.2:
+      INSTALLDIR: '/aguadev/apps/bedtools/2.18.2'
+    2.18.5:
+      INSTALLDIR: '/aguadev/apps/bedtools/2.18.5'
+    2.19.1:
+      INSTALLDIR: '/aguadev/apps/bedtools/2.19.1'
+  bedtools2:
+    2.18.5:
+      INSTALLDIR: '/aguadev/apps/bedtools2/2.18.5'
+    2.19.1:
+      INSTALLDIR: '/aguadev/apps/bedtools2/2.19.1'
+  bioapps:
+    0.6.0:
+      AUTHOR: syoung
+      DATAVOLUME: aquarius-8
+      INSTALLDIR: '/agua/apps/bioapps'
+  biobambam:
+    0.0.129:
+      INSTALLDIR: '/aguadev/apps/biobambam/0.0.129'
+  blat:
+    35:
+      INSTALLDIR: '/aguadev/apps/blat/35'
+  bowtie2:
+    2.1.0:
+      INSTALLDIR: '/aguadev/apps/bowtie2/2.1.0'
+    2.2.0:
+      INSTALLDIR: '/aguadev/apps/bowtie2/2.2.0'
+  bwa:
+    0.7.6a:
+      INSTALLDIR: '/aguadev/apps/bwa/0.7.6a'
+  circos:
+    0.64:
+      INSTALLDIR: '/aguadev/apps/circos/0.64'
+  cmake:
+    2.6.4:
+      INSTALLDIR: '/aguadev/apps/bamtools/2.6.4'
+    2.8.12.1:
+      INSTALLDIR: '/aguadev/apps/cmake/2.8.12.1'
+    2.8.12.2:
+      INSTALLDIR: '/aguadev/apps/cmake/2.8.12.2'
+  cufflinks:
+    2.1.1:
+      INSTALLDIR: '/aguadev/apps/cufflinks/2.1.1'
+  emboss:
+    6.6.0:
+      INSTALLDIR: '/aguadev/apps/emboss/6.6.0'
+  fastqc:
+    0.10.1:
+      INSTALLDIR: '/aguadev/apps/fastqc/0.10.1'
+  fastx:
+    0.0.12:
+      INSTALLDIR: '/aguadev/apps/fastx/0.0.12'
+  freebayes:
+    v0.9.14:
+      INSTALLDIR: '/aguadev/apps/freebayes/v0.9.14'
+    v9.9.13:
+      INSTALLDIR: '/aguadev/apps/freebayes/v9.9.13'
+  gatk:
+    2.8-1:
+      INSTALLDIR: '/aguadev/apps/gatk/2.8-1'
+  gatk-protected:
+    2.7-1-g42d771f:
+      INSTALLDIR: '/aguadev/apps/mutect/gatk-protected/2.7-1-g42d771f'
+  java:
+    1.7.0_51:
+      INSTALLDIR: '/aguadev/apps/java/1.7.0_51'
+  libmaus:
+    libmaus_0_0_77:
+      INSTALLDIR: '/aguadev/apps/libmaus/libmaus_0_0_77'
+  m4:
+    1.4.16:
+      INSTALLDIR: '/aguadev/apps/m4/1.4.16'
+    1.4.17:
+      INSTALLDIR: '/aguadev/apps/m4/1.4.17'
+  mutect:
+    1.1.6:
+      INSTALLDIR: '/aguadev/apps/mutect/1.1.6'
+  picard:
+    1.107:
+      INSTALLDIR: '/aguadev/apps/picard/1.107'
+  pip:
+    1.2.1:
+      INSTALLDIR: '/aguadev/apps/pip/1.2.1'
+    1.5.4:
+      INSTALLDIR: '/aguadev/apps/pip/1.5.4'
+  python:
+    2.7.3:
+      INSTALLDIR: '/aguadev/apps/python/2.7.3'
+    3.3.0:
+      INSTALLDIR: '/aguadev/apps/python/3.3.0'
+  rsem:
+    1.2.11:
+      INSTALLDIR: '/aguadev/apps/rsem/1.2.11'
+  samtools:
+    0.1.19:
+      INSTALLDIR: '/aguadev/apps/samtools/0.1.19'
+  setuptools:
+    2.1:
+      INSTALLDIR: '/aguadev/apps/setuptools/2.1'
+  snpeff:
+    3_5:
+      INSTALLDIR: '/aguadev/apps/snpeff/3_5'
+  tophat:
+    2.0.10:
+      INSTALLDIR: '/aguadev/apps/tophat/2.0.10'
+    2.0.9:
+      INSTALLDIR: '/aguadev/apps/tophat/2.0.9'
+  varscan:
+    2.3.6:
+      INSTALLDIR: '/aguadev/apps/varscan/2.3.6'
+starcluster:
+  data:
+    DEVICE: '/dev/sdj'
+    LOCALDIR: '/starclusters'
+    REMOTEDIR: '/data'
+    SNAPSHOT: snap-4b4fcf26
+    VOLUMESIZE: 100
+  images:
+    DEFAULT32BIT: ami-1e4dbf77
+    DEFAULT64BIT: ami-cea976a7
+  mounts:
+    DEVICES: '/dev/sdh,/dev/sdi,/dev/sdj'
+    MOUNTBASE: '/mnt'
+    MOUNTPOINTS: '/agua,/data,/home'
+    SOURCEDIRS: '/agua,/data,/home'
+  nfs:
+    MOUNTDPORT: 32767
+    NFSPORT: 2049
+    PORTMAPPORT: 111

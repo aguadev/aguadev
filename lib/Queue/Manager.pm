@@ -2,23 +2,23 @@ use MooseX::Declare;
 
 =head2
 
-
 NOTES
 
-	NOW	- USE SSH TO PARSE LOGS AND PERFORM SSH COMMANDS
+	Use SSH to parse logs and execute commands on remote nodes
 	
-	LATER - USE QUEUES:
+TO DO
+
+	Use queues to communicate between master and nodes:
 	
 		WORKERS REPORT STATUS TO MANAGER
 	
-		MANAGER DIRECT WORKERS TO:
+		MANAGER DIRECTS WORKERS TO:
 		
 			- DEPLOY APPS
 			
 			- PROVIDE WORKFLOW STATUS
 			
 			- STOP/START WORKFLOWS
-
 
 =cut
 

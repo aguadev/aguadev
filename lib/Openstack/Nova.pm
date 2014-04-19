@@ -24,11 +24,53 @@ has 'jsonparser'	=> ( isa => 'JSON', is => 'rw', lazy	=>	1, builder	=>	"setJsonP
 
 use FindBin qw($Bin);
 
-method setJsonParser {
-	my $jsonparser	=	JSON->new->allow_nonref;
-	$self->jsonparser($jsonparser);
+method list ($args) {
+	my $username	=	$args->{username};
+	my $name		=	$args->{name};
+	my $regex		=	$args->{regex};
+	my $command		=	$args->{command};
 	
-	return $jsonparser;
+	print "Neither name nor regex is defined. Exiting\n" and exit if not defined $name and not defined $regex;
+	
+	my $emptyname	=	undef;
+	my $entries	=	$self->getEntries($emptyname);
+	#$self->logDebug("entries", $entries);
+
+	my $ips	=	[];
+	for my $entry ( @$entries ) {
+		push @$ips, "$entry->{name}\t$entry->{internalip}\t$entry->{externalip}" if defined $regex and $entry->{name} =~ /$regex/;
+		push @$ips, "$entry->{name}\t$entry->{internalip}\t$entry->{externalip}" if not defined $regex and $entry->{name} eq $name;
+	}
+	$self->logDebug("ips", $ips);
+	print join "\n", @$ips;
+	print "\n";
+}
+
+method command($args) {
+	my $username	=	$args->{username};
+	my $name		=	$args->{name};
+	my $regex		=	$args->{regex};
+	my $command		=	$args->{command};
+	
+	print "Neither name nor regex is defined. Exiting\n" and exit if not defined $name and not defined $regex;
+	
+	my $emptyname	=	undef;
+	my $entries	=	$self->getEntries($emptyname);
+	#$self->logDebug("entries", $entries);
+
+	my $ips	=	[];
+	for my $entry ( @$entries ) {
+		push @$ips, $entry->{internalip} if defined $regex and $entry->{name} =~ /$regex/;
+		push @$ips, $entry->{internalip} if not defined $regex and $entry->{name} eq $name;
+	}
+	$self->logDebug("ips", $ips);
+	
+	foreach my $ip ( @$ips ) {
+		my $sshcommand	=	qq{ssh -o StrictHostKeyChecking=no -t $username\@$ip "$command"};
+		$self->logDebug("sshcommand", $sshcommand);
+		print `$command`
+	}
+	
 }
 
 method attach ($instanceid, $volumeid, $device, $size, $type, $mountpoint) {
@@ -200,6 +242,9 @@ method novaList ($nodename) {
 	my $exports	=	$self->getExports();
 	$self->logDebug("exports", $exports);
 	
+	#### CHECK IF NOVA IS INSTALLED
+	print "'nova' executable not found in path\n" and exit if `which nova` eq "";
+	
 	my $command	=	"$exports nova list";
 	$command	=	"$exports nova list --name $nodename" if defined $nodename and $nodename ne "";
 	$self->logDebug("command", $command);
@@ -236,7 +281,7 @@ method getExports {
 		if ( defined $value and $value ne "" ) {
 			my $label	=	$keypairs->{$key};
 			#$self->logDebug("label", $label);
-			$exports	.=	"export $label=$value; ";
+			$exports	.=	"export $label='$value'; ";
 		}
 	}
 	#$self->logDebug("exports", $exports);
@@ -259,7 +304,6 @@ method parseList ($list) {
 	return $ips;	
 }
 
-
 method parseEntries ($list) {
 	my $entries		=	[];
 	
@@ -275,12 +319,8 @@ method parseEntries ($list) {
 		my $hash = {};
 		for ( my $i = 0; $i < @$array; $i++ ) {
 			my $key	=	lc($$columns[$i]);
-			#$self->logDebug("key", $key);
-			#$self->logDebug("array", $array);
 			if ( $key eq "networks" ) {
 				my ($internal, $external)	=	$self->parseNetworks($$array[$i]);
-				#$self->logDebug("internal", $internal);
-				#$self->logDebug("external", $external);
 				
 				$hash->{internalip}	=	$internal;
 				$hash->{externalip}	=	$external;
@@ -330,9 +370,6 @@ method setUsername {
 	return $self->conf()->getKey("openstack:username", undef);
 }
 
-
-
-
 method runCommand ($command) {
 	$self->logDebug("command", $command);
 	
@@ -340,6 +377,13 @@ method runCommand ($command) {
 }
 
 
+
+method setJsonParser {
+	my $jsonparser	=	JSON->new->allow_nonref;
+	$self->jsonparser($jsonparser);
+	
+	return $jsonparser;
+}
 
 }
 

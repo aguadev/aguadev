@@ -1,0 +1,7 @@
+---
+openstack:
+  tenantid: 	12312312412312314124124312412
+  tenantname: 	test_tenant
+  username: 	test_user
+  authurl: 		http://11.12.26.96:5000/v2.0
+ 
