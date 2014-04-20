@@ -88,7 +88,7 @@ method stageRepo ($stagefile, $mode, $message) {
 		
 		print "DOING runStager($start-$end, $usemessage)\n";	
 		$self->logDebug("DOING runStager($start-$end, $usemessage)");	
-		$version	=	$self->runStager("$start-$stop", $usemessage);
+		$version	=	$self->runStager("$start-$end", $usemessage);
 		$start++;
 	}
 	
