@@ -75,8 +75,24 @@ method stageRepo ($stagefile, $mode, $message) {
 	$self->checkStagerInputs();
 
 	#### RUN STAGER
-	$self->logDebug("DOING runStager");	
-	return $self->runStager($mode, $message);
+	my $version;
+	my ($start,$stop)	=	$mode	=~ /^(\d+)\-(\d+)$/;
+	while ( ($stop - $start) >= 1) {
+		my $end	=	$start + 1;
+		
+		#### TRIM VERBOSE MESSAGE IF NOT FIRST STAGE
+		my $usemessage	=	$message;
+		($usemessage)	=	$message	=~ /^([^\n]+)/ if $start != 1;
+
+		last if $start ==2;
+		
+		print "DOING runStager($start-$end, $usemessage)\n";	
+		$self->logDebug("DOING runStager($start-$end, $usemessage)");	
+		$version	=	$self->runStager("$start-$stop", $usemessage);
+		$start++;
+	}
+	
+	return $version;
 }
 
 #### SET UP STAGER
@@ -172,7 +188,7 @@ method checkStagerInputs {
 
 	$self->logNote("neither version nor versiontype are defined") and exit if not defined $version and not defined $versiontype;
 	$self->logNote("both version and versiontype are defined") and exit if defined $version and defined $versiontype;
-	$self->logNote("versiontype must be 'major'O, 'minor', 'patch' or 'build'") and exit if defined $versiontype and not $versiontype =~ /^(major|minor|patch|release|build)$/;
+	$self->logNote("versiontype must be 'major', 'minor', 'patch' or 'build'") and exit if defined $versiontype and not $versiontype =~ /^(major|minor|patch|release|build)$/;
 	$self->logNote("releasename must be 'alpha', 'beta', or 'rc'") and exit if defined $releasename and not $releasename =~ /^(alpha|beta|rc)$/;
 	
 	$self->logNote("mode", $mode);
@@ -187,10 +203,10 @@ method checkStagerInputs {
 }
 
 #### RUN STAGER
-method runStager {
-	my $mode		=	$self->mode();
+method runStager ($mode, $message) {
+	$mode			=	$self->mode() if not defined $mode;
+	$message		=	$self->message() if not defined $message;
 	my $stagefile	=	$self->stagefile();
-	my $message		=	$self->message();
 	$self->logDebug("mode", $mode);
 	$self->logDebug("stagefile", $stagefile);
 	$self->logDebug("message", $message);

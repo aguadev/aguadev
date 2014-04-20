@@ -1,5 +1,7 @@
 use MooseX::Declare;
 
+
+
 =head2
 
 
@@ -30,7 +32,7 @@ method list ($args) {
 	my $regex		=	$args->{regex};
 	my $command		=	$args->{command};
 	
-	print "Neither name nor regex is defined. Exiting\n" and exit if not defined $name and not defined $regex;
+	print "Neither name nor regex is defined. XXX Exiting\n\n" and $self->usage() if not defined $name and not defined $regex;
 	
 	my $emptyname	=	undef;
 	my $entries	=	$self->getEntries($emptyname);
@@ -52,7 +54,7 @@ method command($args) {
 	my $regex		=	$args->{regex};
 	my $command		=	$args->{command};
 	
-	print "Neither name nor regex is defined. Exiting\n" and exit if not defined $name and not defined $regex;
+	print "Neither name nor regex is defined. Exiting\n\n" and $self->usage() if not defined $name and not defined $regex;
 	
 	my $emptyname	=	undef;
 	my $entries	=	$self->getEntries($emptyname);
@@ -66,9 +68,10 @@ method command($args) {
 	$self->logDebug("ips", $ips);
 	
 	foreach my $ip ( @$ips ) {
-		my $sshcommand	=	qq{ssh -o StrictHostKeyChecking=no -t $username\@$ip "$command"};
+		my $sshcommand	=	qq{ssh -o StrictHostKeyChecking=no -t $username\@$ip '$command'};
 		$self->logDebug("sshcommand", $sshcommand);
-		print `$command`
+		print `$command`;
+		sleep(1);
 	}
 	
 }
@@ -383,6 +386,11 @@ method setJsonParser {
 	$self->jsonparser($jsonparser);
 	
 	return $jsonparser;
+}
+
+method usage {
+	print `perldoc $0`;
+	exit;
 }
 
 }

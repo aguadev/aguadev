@@ -201,6 +201,7 @@ method changeState ($args) {
 	else {
 		my $uuids	=	$self->getUuidsByState($state);
 		foreach my $uuid ( keys %$uuids ) {
+			print "Changing state to '$target': $uuid\n";
 			$self->change($uuid, $target);
 		}
 	}
