@@ -15,7 +15,7 @@ has 'type'			=> ( isa => 'Str|Undef', is => 'rw' );
 has 'application'	=> ( isa => 'Str|Undef', is => 'rw' );
 has 'owner'			=> ( isa => 'Str|Undef', is => 'rw' );
 has 'login'			=> ( isa => 'Str|Undef', is => 'rw' );
-has 'token'			=> ( isa => 'Str|Undef', is => 'rw' );
+#has 'token'			=> ( isa => 'Str|Undef', is => 'rw' );
 has 'password'		=> ( isa => 'Str|Undef', is => 'rw' );
 has 'opsrepo'		=> ( isa => 'Str|Undef', is => 'rw' );
 has 'repository'	=> ( isa => 'Str|Undef', is => 'rw' );

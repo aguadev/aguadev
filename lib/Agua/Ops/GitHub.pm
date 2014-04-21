@@ -220,7 +220,7 @@ method getPrefix ($login, $hubtype, $keyfile, $privacy) {
 method cloneRemoteRepo ($owner, $repository, $hubtype, $login, $privacy, $keyfile, $target) {
 	$self->logDebug("keyfile", $keyfile);
 	my $prefix = $self->getPrefix($login, $hubtype, $keyfile, $privacy);
-	my $command = "git clone --recursive git://github.com/$owner/$repository.git $target  2>&1 ";
+	my $command = "git clone --recursive https://github.com/$owner/$repository.git $target  2>&1 ";
 	$command = "$prefix git clone --recursive git\@github.com:$owner/$repository.git $target  2>&1" if $prefix;
 	$self->logDebug("command", $command);
 

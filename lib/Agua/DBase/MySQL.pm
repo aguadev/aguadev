@@ -265,7 +265,7 @@ method tsvToHash ($tsvline, $fields) {
 
 method do ($query) {
 #### RETURN 1 IF COMMAND WAS SUCCESSFUL, OTHERWISE RETURN 0	
-	$self->logDebug("query", $query);
+	$self->logNote("query", $query);
 	$self->dbh()->{RaiseError} = 0; # DISABLE TERMINATION ON ERROR
 	my $success = $self->dbh()->do($query); ### or warn "Query failed: $DBI::errstr ($DBI::err)\n";
 	$self->dbh()->{RaiseError} = 1; # ENABLE TERMINATION ON ERROR

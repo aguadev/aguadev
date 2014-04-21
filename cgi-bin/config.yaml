@@ -1,0 +1,280 @@
+---
+agua:
+  ADMINS: admin
+  ADMINUSER: admin
+  AGUADIR: aguadev
+  AGUAUSER: agua
+  APACHEBINARY: /etc/init.d/apache2
+  APACHECONF: /etc/apache2/apache2.conf
+  APACHEUSER: www-data
+  APPLICATIONS: aquarius-8
+  APPSDIR: apps
+  APPSPACKAGE: bioapps
+  AUTHOR: syoung
+  CGIDIR: /var/www/cgi-bin
+  CLUSTERTYPE: SGE
+  DATA: aquarius-8
+  DATADIR: /data
+  DOJO: dojo-1.6.1rc2
+  EXECUTION_TEMPDIR: /tmp
+  FILECACHEDEPTH: '4'
+  GUESTACCESS: '1'
+  GUESTLOCK: '0'
+  GUESTUSER: guest
+  HTMLDIR: /var/www/html
+  INITCOMPLETE: '0'
+  INSTALLDIR: /aguadev
+  MODULES: Agua::Admin,Agua::Folders,Agua::Package,Agua::Sharing,Agua::Upload,Agua::View,Agua::Workflow
+  OPSPACKAGE: biorepository
+  OPSREPO: biorepository
+  PRIVATEOPSREPO: private
+  REPOSUBDIR: repos
+  REPOTYPE: github
+  S3BUCKET: https://s3-us-west-1.amazonaws.com/aguadev
+  SETUPCOMPLETE: '0'
+  SGEROOT: /opt/sge6
+  SGEUSER: sgeadmin
+  SGEUSERID: '1001'
+  SSHPASSWORDLOGIN: NO
+  STARCLUSTER: /agua/apps/starcluster/bin/starcluster
+  TEMPDIR: /tmp
+  TESTHTMLDIR: /var/www/html/t
+  URLPREFIX: aguadev
+  USERDIR: /home
+  VERSION: 0.8.0-alpha.1+build13
+applications:
+  aquarius-8:
+    BINARYDATA: /data/bioapps/binary
+    BOWTIE: /data/apps/bowtie/0.12.2
+    BOWTIESOURCE: /data/apps/bowtie/0.12.7-src
+    CASAVA: /data/apps/casava/1.6.0/bin
+    CROSSMATCH: /data/apps/crossmatch/0.990329/cross_match
+    CUFFLINKS: /data/apps/cufflinks/0.8.2
+    DELTAFILTER: /data/apps/mummer/delta-filter
+    ERANGE: /data/pipeline/erange2
+    GATK: /data/apps/gatk/1.0.4705
+    IAM: /usr/share/iam/1.2.0/bin
+    JBROWSE: /data/apps/jbrowse/100511/bin
+    MAQ: /data/apps/maq/0.7.1
+    MIRA: /data/apps/mira/bin/mira
+    NOVOALIGN: /data/apps/novoalign/2.05.33
+    NUCMER: /data/apps/mummer/nucmer
+    PYTHON: /data/apps/python/2.6.1/bin/python
+    REPMASK: /data/apps/erange2/data/repMask/rmask.db
+    RUNMAPPING: /data/apps/454/2.0.00.20-64/bin/runMapping
+    SAMTOOLS: /data/apps/samtools/0.1.6
+    SHOWCOORDS: /data/apps/mummer/show-coords
+    SQUASH: /data/apps/GAPipeline/1.5.1/bin/squashGenome
+    TANDEMREPEATSFINDER: /data/apps/tandemrepeats/4.04/trf
+    TOPHAT: /data/apps/tophat/1.0.12/bin
+    VCAKE: /data/apps/vcake/VCAKE_1.0.pl
+    VELVET: /data/apps/velvet/velvet
+aws:
+  ADMINKEY: test
+  AVAILZONE: us-east-1a
+  DATADEVICE: /dev/sdh
+  DATAFILETYPE: ext3
+  DATASNAPSHOT: snap-6341b301
+  DATAVOLUMESIZE: '200'
+  EC2HOME: /usr
+  JAVA: /usr/java
+  JAVAHOME: /usr
+  USERDEVICE: /dev/sdi
+  USERFILETYPE: ext3
+  USERVOLUMESIZE: '40'
+biorepository:
+  AUTHOR: syoung
+  INSTALLDIR: /agua/repos/public/agua/biorepository
+  VERSION: 0.6.0
+cluster:
+  CANCELJOB: '/opt/sge6/bin/lx24-amd64/qdel -j'
+  QSTAT: /opt/sge6/bin/lx24-amd64/qstat
+  QSUB: /opt/sge6/bin/lx24-amd64/qsub
+  SGEBIN: /opt/sge6/bin/lx24-amd64
+  SGEEXECDPORT: '63232'
+  SGEQMASTERPORT: '63231'
+  SGEROOT: /opt/sge6
+  SLEEP: '5'
+data:
+  aquarius-8:
+    BIOAPPS: /data/apps/bioapps
+    HUMAN: /data/sequence/human
+    HUMANLATESTBUILD: hg19
+    JBROWSEDATA: /data/jbrowse/species
+    MOUSE: /data/sequence/reference/mouse
+    MOUSELATESTBUILD: mm9
+    RAT: /data/sequence/reference/rat
+    RATLATESTBUILD: rn4
+    SAMTOOLSHUMAN: /data/sequence/reference/human/hg19/samtools
+    SAMTOOLSMOUSE: /data/sequence/reference/mouse/mm9/samtools
+    SAMTOOLSRAT: /data/sequence/reference/rat/rn4/samtools
+database:
+  CLUSTER_MYSQLDATA: /private/var/mysql
+  DATABASE: aguadev
+  DBTYPE: MySQL
+  DUMPFILE: bin/sql/dump/agua.dump
+  GUESTPASSWORD: guest
+  GUESTUSER: guest
+  MYSQLDATA: /var/lib/mysql
+  PASSWORD: '1234'
+  SESSIONTIMEOUT: '24'
+  TESTDATABASE: aguatest
+  TESTPASSWORD: '12345678'
+  TESTSESSIONID: 12345567890.1234.123
+  TESTUSER: testuser
+  USER: agua
+install:
+  AMQPVERSION: 0.1.6
+  NODEURL: http://nodejs.org/dist/v0.10.26/node-v0.10.26.tar.gz
+  RABBITJS: rabbit.js/example/socketio/server.js
+  RABBITVERSION: 0.2.0
+  SOCKETVERSION: 0.6.17
+openstack:
+  authurl: http://10.2.16.64:5000/v2.0
+  password: biofarm1!
+  tenantid: ba9a2ae3bc684b579ebcfc46d0e1cb76
+  tenantname: annai_services
+  username: stuarty
+packages:
+  R:
+    3.0.0:
+      INSTALLDIR: /aguadev/apps/R/3.0.0
+    3.0.1:
+      INSTALLDIR: /aguadev/apps/R/3.0.1
+    3.0.2:
+      INSTALLDIR: /aguadev/apps/R/3.0.2
+    3.0.2-1:
+      INSTALLDIR: /aguadev/apps/R/3.0.2-1
+  bamtools:
+    v2.3.0:
+      INSTALLDIR: /aguadev/apps/bamtools/v2.3.0
+  bedtools:
+    2.18.2:
+      INSTALLDIR: /aguadev/apps/bedtools/2.18.2
+    2.18.5:
+      INSTALLDIR: /aguadev/apps/bedtools/2.18.5
+    2.19.1:
+      INSTALLDIR: /aguadev/apps/bedtools/2.19.1
+  bedtools2:
+    2.18.5:
+      INSTALLDIR: /aguadev/apps/bedtools2/2.18.5
+    2.19.1:
+      INSTALLDIR: /aguadev/apps/bedtools2/2.19.1
+  bioapps:
+    0.6.0:
+      AUTHOR: syoung
+      DATAVOLUME: aquarius-8
+      INSTALLDIR: /agua/apps/bioapps
+  biobambam:
+    0.0.129:
+      INSTALLDIR: /aguadev/apps/biobambam/0.0.129
+  blat:
+    35:
+      INSTALLDIR: /aguadev/apps/blat/35
+  bowtie2:
+    2.1.0:
+      INSTALLDIR: /aguadev/apps/bowtie2/2.1.0
+    2.2.0:
+      INSTALLDIR: /aguadev/apps/bowtie2/2.2.0
+  bwa:
+    0.7.6a:
+      INSTALLDIR: /aguadev/apps/bwa/0.7.6a
+  circos:
+    0.64:
+      INSTALLDIR: /aguadev/apps/circos/0.64
+  cmake:
+    2.6.4:
+      INSTALLDIR: /aguadev/apps/bamtools/2.6.4
+    2.8.12.1:
+      INSTALLDIR: /aguadev/apps/cmake/2.8.12.1
+    2.8.12.2:
+      INSTALLDIR: /aguadev/apps/cmake/2.8.12.2
+  cufflinks:
+    2.1.1:
+      INSTALLDIR: /aguadev/apps/cufflinks/2.1.1
+  emboss:
+    6.6.0:
+      INSTALLDIR: /aguadev/apps/emboss/6.6.0
+  fastqc:
+    0.10.1:
+      INSTALLDIR: /aguadev/apps/fastqc/0.10.1
+  fastx:
+    0.0.12:
+      INSTALLDIR: /aguadev/apps/fastx/0.0.12
+  freebayes:
+    v0.9.14:
+      INSTALLDIR: /aguadev/apps/freebayes/v0.9.14
+    v9.9.13:
+      INSTALLDIR: /aguadev/apps/freebayes/v9.9.13
+  gatk:
+    2.8-1:
+      INSTALLDIR: /aguadev/apps/gatk/2.8-1
+  gatk-protected:
+    2.7-1-g42d771f:
+      INSTALLDIR: /aguadev/apps/mutect/gatk-protected/2.7-1-g42d771f
+  java:
+    1.7.0_51:
+      INSTALLDIR: /aguadev/apps/java/1.7.0_51
+  libmaus:
+    libmaus_0_0_77:
+      INSTALLDIR: /aguadev/apps/libmaus/libmaus_0_0_77
+  m4:
+    1.4.16:
+      INSTALLDIR: /aguadev/apps/m4/1.4.16
+    1.4.17:
+      INSTALLDIR: /aguadev/apps/m4/1.4.17
+  mutect:
+    1.1.6:
+      INSTALLDIR: /aguadev/apps/mutect/1.1.6
+  picard:
+    1.107:
+      INSTALLDIR: /aguadev/apps/picard/1.107
+  pip:
+    1.2.1:
+      INSTALLDIR: /aguadev/apps/pip/1.2.1
+    1.5.4:
+      INSTALLDIR: /aguadev/apps/pip/1.5.4
+  python:
+    2.7.3:
+      INSTALLDIR: /aguadev/apps/python/2.7.3
+    3.3.0:
+      INSTALLDIR: /aguadev/apps/python/3.3.0
+  rsem:
+    1.2.11:
+      INSTALLDIR: /aguadev/apps/rsem/1.2.11
+  samtools:
+    0.1.19:
+      INSTALLDIR: /aguadev/apps/samtools/0.1.19
+  setuptools:
+    2.1:
+      INSTALLDIR: /aguadev/apps/setuptools/2.1
+  snpeff:
+    3_5:
+      INSTALLDIR: /aguadev/apps/snpeff/3_5
+  tophat:
+    2.0.10:
+      INSTALLDIR: /aguadev/apps/tophat/2.0.10
+    2.0.9:
+      INSTALLDIR: /aguadev/apps/tophat/2.0.9
+  varscan:
+    2.3.6:
+      INSTALLDIR: /aguadev/apps/varscan/2.3.6
+starcluster:
+  data:
+    DEVICE: /dev/sdj
+    LOCALDIR: /starclusters
+    REMOTEDIR: /data
+    SNAPSHOT: snap-4b4fcf26
+    VOLUMESIZE: '100'
+  images:
+    DEFAULT32BIT: ami-1e4dbf77
+    DEFAULT64BIT: ami-cea976a7
+  mounts:
+    DEVICES: /dev/sdh,/dev/sdi,/dev/sdj
+    MOUNTBASE: /mnt
+    MOUNTPOINTS: /agua,/data,/home
+    SOURCEDIRS: /agua,/data,/home
+  nfs:
+    MOUNTDPORT: '32767'
+    NFSPORT: '2049'
+    PORTMAPPORT: '111'

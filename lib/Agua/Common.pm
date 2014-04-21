@@ -36,6 +36,7 @@ with 'Agua::Common::Base';
 with 'Agua::Common::Cloud';
 with 'Agua::Common::Cluster';
 with 'Agua::Common::Database';
+with 'Agua::Common::Exchange';
 with 'Agua::Common::File';
 with 'Agua::Common::Group';
 with 'Agua::Common::History';

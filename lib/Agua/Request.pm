@@ -26,8 +26,8 @@ has 'username'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 
 # Objects
 has 'data'		=> ( isa => 'HashRef|Undef', is => 'rw', default => undef );
-has 'db'	=> ( isa => 'Agua::DBase::MySQL', is => 'rw', required => 0 );
-has 'conf' 	=> (
+has 'db'		=> ( isa => 'Agua::DBase::MySQL', is => 'rw', required => 0 );
+has 'conf' 		=> (
 	isa 	=> 'Conf::Yaml',
 	is 		=>	'rw',
 	default	=>	sub { Conf::Yaml->new( {} );	}

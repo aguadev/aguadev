@@ -63,6 +63,7 @@ setHost : function () {
 	this.host = host;
 },
 connect : function () {
+	console.log("Exchange.connect    this.id: " + this.id);
 	console.log("Exchange.connect    io: " + io);
 	console.dir({io:io});
 	
@@ -92,6 +93,7 @@ connect : function () {
 	return this.conn;
 },
 sendMessage : function (message) {
+	console.log("Exchange.sendMessage    this.id: " + this.id);
     console.log("Exchange.sendMessage    message: " + message);
 
 	this.send({
@@ -99,6 +101,7 @@ sendMessage : function (message) {
 	});
 },
 send : function (data) {
+	console.log("Exchange.send    this.id: " + this.id);
     console.log("Exchange.send    data: " + data);
 	console.log("Exchange.send    this.conn: " + this.conn);
 	console.dir({this_conn:this.conn});

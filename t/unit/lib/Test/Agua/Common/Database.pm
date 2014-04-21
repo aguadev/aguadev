@@ -322,7 +322,7 @@ method setTestDatabaseRow {
 }
 
 method loadTsvFile ($table, $file) {
-	$self->logCaller("self->can('db')", $self->can('db'));
+	#$self->logCaller("self->can('db')", $self->can('db'));
 	
 	return if not $self->can('db');
 	$self->logNote("table", $table);

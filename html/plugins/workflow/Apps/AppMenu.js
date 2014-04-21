@@ -1,23 +1,3 @@
-//
-//dojo.provide("plugins.workflow.Apps.AppMenu");
-//
-//// ALLOW THE USER TO ADD, REMOVE AND MODIFY APPS
-//
-////dojo.require("dijit.dijit"); // optimize: load dijit layer
-//dojo.require("dojo.parser");
-//
-//// HAS A
-//dojo.require("dijit.Menu");
-//dojo.require("plugins.menu.Menu");
-//
-//// INHERITS
-//dojo.require("plugins.core.Common");
-//
-//
-//dojo.declare("plugins.workflow.Apps.AppMenu",
-//	[ dijit._Widget, dijit._Templated, plugins.core.Common ],
-//{
-
 define([
 	"dojo/_base/declare",
 	"dojo/_base/array",
@@ -67,13 +47,6 @@ return declare("plugins.workflow.Apps.AppMenu",
 //		The template of this widget. 
 templateString: dojo.cache("plugins", "workflow/Apps/templates/appmenu.html"),
 
-////Path to the template of this widget. 
-//templatePath: dojo.moduleUrl("plugins", "workflow/Apps/templates/appmenu.html"),
-
-//// Calls dijit._Templated.widgetsInTemplate
-//widgetsInTemplate : true,
-
-// addingApp :	Boolean
 //		Whether or not currently adding app
 addingApp : false,
 

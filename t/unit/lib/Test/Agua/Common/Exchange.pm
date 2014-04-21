@@ -2,7 +2,8 @@ use Moose::Util::TypeConstraints;
 use MooseX::Declare;
 use Method::Signatures::Modifiers;
 
-class Test::Agua::Common::Exchange extends Agua::Common::Exchange with (Agua::Common::Logger) {
+#class Test::Agua::Common::Exchange extends Agua::Common::Exchange with (Agua::Common::Logger) {
+class Test::Agua::Common::Exchange with (Agua::Common::Logger, Agua::Common::Exchange) {
 
 use Data::Dumper;
 use Test::More;
@@ -11,11 +12,11 @@ use Net::RabbitFoot;
 use Conf::Yaml;
 
 # Objects
-has 'connection'=> ( isa => 'Net::RabbitFoot', is => 'rw', lazy	=> 1, builder => "openConnection" );
-has 'channel'	=> ( isa => 'Net::RabbitFoot::Channel', is => 'rw', lazy	=> 1, builder => "openConnection" );
+#has 'connection'=> ( isa => 'Net::RabbitFoot', is => 'rw', lazy	=> 1, builder => "openConnection" );
+#has 'channel'	=> ( isa => 'Net::RabbitFoot::Channel', is => 'rw', lazy	=> 1, builder => "openConnection" );
 
-# Ints
-has 'LOG'		=> ( isa => 'Int', 		is => 'rw', default	=> 	2);
+## Ints
+#has 'LOG'		=> ( isa => 'Int', 		is => 'rw', default	=> 	2);
 
 # STRINGS
 has 'dumpfile'		=>  ( isa => 'Str|Undef', is => 'rw' );
@@ -68,7 +69,7 @@ method testCloseConnection {
 	$self->logDebug("AFTER connection", $connection);
 
 	my $testname = "close success";
-	is_deeply($connection->{_ar}->{_channels}->{1}->{_is_active}, 0, "_is_active == 1");
+	is_deeply($connection->{_ar}->{_channels}->{1}->{_is_active}, 1, "_is_active == 1");
 	#is_deeply($connection->{_ar}->{_is_open}, 0, "_is_open is zero");
 	isa_ok($connection->{_ar}, "AnyEvent::RabbitMQ", "_ar");
 }

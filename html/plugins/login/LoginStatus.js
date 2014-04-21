@@ -1,18 +1,35 @@
-dojo.provide("plugins.login.LoginStatus");
+console.log("plugins.login.LoginStatus    LOADING");
 
-// DISPLAY LOGIN STATUS AT RIGHT SIDE OF TOOLBAR
+/* DISPLAY LOGIN STATUS AT RIGHT SIDE OF TOOLBAR */
 
-dojo.require("dijit._Widget");
-dojo.require("dijit._Templated");
+define([
+	"dojo/_base/declare",
+	"dijit/_Widget",
+	"dijit/_TemplatedMixin",
+	"dijit/_WidgetsInTemplateMixin",
+	"dojo/domReady!",
+],
 
-dojo.declare( "plugins.login.LoginStatus",
-	[ dijit._Widget, dijit._Templated ], {
+function (
+	declare,
+	_Widget,
+	_TemplatedMixin,
+	_WidgetsInTemplate
+) {
 
-//Path to the template of this widget. 
-templatePath: dojo.moduleUrl("plugins", "login/templates/loginstatus.html"),
+/////}}}}}
 
-// Calls dijit._Templated.widgetsInTemplate
-widgetsInTemplate : true,
+return declare("plugins.login.LoginStatus",
+	[
+	_Widget,
+	_TemplatedMixin,
+	_WidgetsInTemplate
+], {
+
+// templateString : String
+//		The template of this widget. 
+templateString: dojo.cache("plugins", "login/templates/loginstatus.html"),
+
 
 /////}}}}}
 
@@ -20,9 +37,6 @@ constructor: function () {
 	console.log("LoginStatus.constructor    plugins.login.LoginStatus.constructor()");
 
 	this.loadCSS();
-},
-postMixInProperties: function() {
-	console.log("LoginStatus.postMixInProperties    plugins.login.LoginStatus.postMixInProperties()");
 },
 postCreate : function() {
 	console.log("LoginStatus.postCreate    plugins.login.LoginStatus.postCreate()");
@@ -37,13 +51,13 @@ startup : function () {
 loadCSS : function () {
 	console.log("LoginStatus.loadCSS    plugins.login.LoginStatus.loadCSS()");
 	var cssFiles = [
-		dojo.moduleUrl("plugins") + "login/css/loginstatus.css",
-		dojo.moduleUrl("plugins") + "login/css/login.css"
+		require.toUrl("plugins/login/css/loginstatus.css"),
+		require.toUrl("plugins/login/css/login.css")
 	];
 	for ( var i in cssFiles )
 	{
 		var cssFile = cssFiles[i];
-		console.log("LoginStatus.loadCSS    cssFile: " + cssFile);
+		//console.log("LoginStatus.loadCSS    cssFile: " + cssFile);
 
 		var cssNode = document.createElement('link');
 		cssNode.type = 'text/css';
@@ -55,4 +69,6 @@ loadCSS : function () {
 	}
 }
 
-}); // end of plugins.login.LoginStatus
+}); //	end declare
+
+});	//	end define

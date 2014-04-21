@@ -80,16 +80,20 @@ method stageRepo ($stagefile, $mode, $message) {
 	while ( ($stop - $start) >= 1) {
 		my $end	=	$start + 1;
 		
-		#### TRIM VERBOSE MESSAGE IF NOT FIRST STAGE
-		my $usemessage	=	$message;
-		($usemessage)	=	$message	=~ /^([^\n]+)/ if $start != 1;
+		##### TRIM VERBOSE MESSAGE IF NOT FIRST STAGE
+		#my $usemessage	=	$message;
+		#($usemessage)	=	$message	=~ /^([^\n]+)/ if $start != 1;
+		#
+		##last if $start ==2;
+		#
+		#print "DOING runStager($start-$end, $usemessage)\n";	
+		#$self->logDebug("DOING runStager($start-$end, $usemessage)");	
+		#$version	=	$self->runStager("$start-$end", $usemessage);
 
-		last if $start ==2;
-		
-		print "DOING runStager($start-$end, $usemessage)\n";	
-		$self->logDebug("DOING runStager($start-$end, $usemessage)");	
-		$version	=	$self->runStager("$start-$end", $usemessage);
+		$self->logDebug("DOING runStager($start-$end, $message)");	
+		$version	=	$self->runStager("$start-$end", $message);
 		$start++;
+
 	}
 	
 	return $version;
@@ -225,25 +229,25 @@ method runStager ($mode, $message) {
 
 	#### CHECKOUT SOURCE BRANCH
 	$self->checkoutBranch($sourcerepo, $branch);
-
+	
 	#### CREATE SOURCE VERSION AND COMMIT
 	$self->preSourceVersion($mode, $sourcerepo, $message) if $self->can('preSourceVersion');
 	($version) = $self->sourceVersion($sourcerepo, $message, $version, $versiontype);
 	$self->logDebug("version", $version);
 	$self->version($version);
-
+	
 	#### COMMIT SOURCE
 	$self->preSourceCommit($mode, $sourcerepo, $version, $message) if $self->can('preSourceCommit');
 	$self->sourceCommit($sourcerepo, "[$version] $message", $package);
-
+	
 	#### ADD SOURCE TAG
 	$self->preSourceTag($mode, $sourcerepo, $version, $message) if $self->can('preSourceTag');
 	$self->sourceTag($sourcerepo, $version, $message);
-
+	
 	#### CREATE TARGET VERSION
 	$self->preTargetVersion($mode, $targetrepo, $package) if $self->can('preTargetVersion');	
 	$self->targetVersion($targetrepo, $message, $package);
-
+	
 	##### EXPORT SOURCE TO TARGET
 	$self->preSourceToTarget($mode, $sourcerepo, $version, $message) if $self->can('preSourceToTarget');
 	$self->sourceToTarget($package, $sourcerepo, $targetrepo, $branch);

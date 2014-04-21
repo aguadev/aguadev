@@ -33,7 +33,7 @@ return declare("plugins/request/Controller",
 
 // templateString : String
 //		The template of this widget
-templateString: dojo.cache("plugins/request/templates/controller.html"),
+templateString: dojo.cache("plugins", "request/templates/controller.html"),
 
 // Calls dijit._Templated.widgetsInTemplate
 widgetsInTemplate : true,

@@ -77,6 +77,9 @@ getData : function() {
 	if ( Data == null )
 		Data = new Object;
 
+
+	Agua.exchange.send(query);
+	
 	var thisObject = this;
 	dojo.xhrPut(
 		{

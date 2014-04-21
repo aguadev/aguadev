@@ -207,8 +207,6 @@ setWorkflowOptions : function () {
 	})	
 }
 
-
-
 }); 	//	end declare
 
 });	//	end define

@@ -30,7 +30,7 @@ var object;
 window.object = object;
 
 // TEST NAME
-var test = "unit.plugins.login.login";
+var test = "unit.plugins.login.load";
 console.log("# test: " + test);
 dom.byId("pagetitle").innerHTML = test;
 dom.byId("pageheader").innerHTML = test;

@@ -1,0 +1,59 @@
+<EXPERIMENT_SET xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ncbi.nlm.nih.gov/viewvc/v1/trunk/sra/doc/SRA_1-5/SRA.experiment.xsd?view=co">
+  <EXPERIMENT alias="IWX_TCOL.A6-2671-01A-T_2pA_1" center_name="CGHUB">
+    <TITLE>Christy Test:  Derived from Baylors first upload</TITLE>
+    <STUDY_REF accession="SRP000677" refcenter="NHGRI" refname="CGTEST" />
+    <DESIGN>
+      <DESIGN_DESCRIPTION>Whole Exome Sequencing of TCGA Colon sample TCGA-A6-2671-01A-01D-1408-10 by Hybrid Selection</DESIGN_DESCRIPTION>
+      <SAMPLE_DESCRIPTOR accession="SRS156722" refcenter="TCGA" refname="98a2eb02-7bcf-4134-ab7e-943391710e98"
+      </SAMPLE_DESCRIPTOR>
+      <LIBRARY_DESCRIPTOR>
+        <LIBRARY_NAME>IWX_TCOL.A6-2671-01A-T_2pA</LIBRARY_NAME>
+        <LIBRARY_STRATEGY>WXS</LIBRARY_STRATEGY>
+        <LIBRARY_SOURCE>GENOMIC</LIBRARY_SOURCE>
+        <LIBRARY_SELECTION>Hybrid Selection</LIBRARY_SELECTION>
+        <LIBRARY_LAYOUT>
+          <PAIRED NOMINAL_LENGTH="200" NOMINAL_SDEV="20.0" />
+        </LIBRARY_LAYOUT>
+      </LIBRARY_DESCRIPTOR>
+      <SPOT_DESCRIPTOR>
+        <SPOT_DECODE_SPEC>
+          <READ_SPEC>
+            <READ_INDEX>0</READ_INDEX>
+            <READ_CLASS>Application Read</READ_CLASS>
+            <READ_TYPE>Forward</READ_TYPE>
+            <BASE_COORD>1</BASE_COORD>
+          </READ_SPEC>
+          <READ_SPEC>
+            <READ_INDEX>1</READ_INDEX>
+            <READ_CLASS>Application Read</READ_CLASS>
+            <READ_TYPE>Reverse</READ_TYPE>
+            <BASE_COORD>101</BASE_COORD>
+          </READ_SPEC>
+        </SPOT_DECODE_SPEC>
+      </SPOT_DESCRIPTOR>
+    </DESIGN>
+    <PLATFORM>
+      <ILLUMINA>
+        <INSTRUMENT_MODEL>Illumina HiSeq 2000</INSTRUMENT_MODEL>
+      </ILLUMINA>
+    </PLATFORM>
+    <PROCESSING>
+      <PIPELINE>
+        <PIPE_SECTION section_name="Base Caller">
+          <STEP_INDEX>1</STEP_INDEX>
+          <PREV_STEP_INDEX>NIL</PREV_STEP_INDEX>
+          <PROGRAM>Casava</PROGRAM>
+          <VERSION>V1.7</VERSION>
+          <NOTES />
+        </PIPE_SECTION>
+        <PIPE_SECTION section_name="Quality Scores">
+          <STEP_INDEX>2</STEP_INDEX>
+          <PREV_STEP_INDEX>1</PREV_STEP_INDEX>
+          <PROGRAM>Casava</PROGRAM>
+          <VERSION>V1.7</VERSION>
+          <NOTES />
+        </PIPE_SECTION>
+      </PIPELINE>
+    </PROCESSING>
+  </EXPERIMENT>
+</EXPERIMENT_SET>

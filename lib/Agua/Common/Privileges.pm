@@ -48,7 +48,6 @@ sub isAdminUser {
 	my $username	=	shift;
     $self->logDebug("username", $username);
 
-	my $json 		=	$self->json();
 	my $conf 		=	$self->conf();
 	my $isAdminUsers 	= 	$conf->getKey('agua', "ADMINS");
     $self->logDebug("isAdminUsers", $isAdminUsers);

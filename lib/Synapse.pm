@@ -29,17 +29,24 @@ class Synapse with Logger {
 
 #####////}}}}}
 
+
+use Conf::Yaml;
+use Agua::Ops;
+
 #### Integers
 has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 2 );
 has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 has 'count'			=>  ( isa => 'Int', is => 'rw', default => 50 );
 
 ##### Strings
-has 'synapse'		=>  ( isa => 'Str|Undef', is => 'rw', lazy	=>	1, builder	=>	"setSynapse" );
+has 'executable'		=>  ( isa => 'Str|Undef', is => 'rw', lazy	=>	1, builder	=>	"setExecutable" );
 
 ##### Objects
 has 'states'		=>  ( isa => 'HashRef|Undef', is => 'rw', lazy	=>	1, builder	=>	"setStates" );
 has 'activestates'	=>  ( isa => 'ArrayRef|Undef', is => 'rw', lazy	=>	1, builder	=>	"setActiveStates" );
+has 'conf'	=> ( isa => 'Conf::Yaml', is => 'rw', lazy => 1, builder => "setConf" );
+has 'ops'	=> ( isa => 'Agua::Ops', is => 'rw', lazy => 1, builder => "setOps" );
+
 
 use FindBin qw($Bin);
 use Test::More;
@@ -48,22 +55,42 @@ use Openstack::Nova;
 
 #####////}}}}}
 
+method BUILD ($args) {
+		#use Data::Dumper;
+		#print "Synapse::BUILD    args:\n";
+		#print Dumper $args;
+}
+
+method returnAssignment ($uuid) {
+	my $executable		=	$self->executable();
+	my $command		=	"$executable returnAssignment $uuid";
+	$self->logDebug("command", $command);
+	
+	return `$command`;	
+}
+
+method assignError ($uuid, $error) {
+	my $executable		=	$self->executable();
+	my $command		=	qq{$executable errorAssignment $uuid "$error"};
+	$self->logDebug("command", $command);
+	
+	return `$command`;
+}
 
 method addSamples ($args) {
 	my $count 	=	$args->{count};
 	$count		=	$self->count() if not defined $count;
 
-	my $synapse		=	$self->synapse();
-	my $command 	=	"$synapse getAssignments ucsc_biofarm --count=$count";
+	my $executable		=	$self->executable();
+	my $command 	=	"$executable getAssignments ucsc_biofarm --count=$count";
 	$self->logDebug("command", $command);
 	
 	print `$command`;		
 }
 
 method list ($args) {
-	my $synapse		=	$self->synapse();
-
-	my $command 	=	"$synapse getAssignments ucsc_biofarm";
+	my $executable		=	$self->executable();
+	my $command 	=	"$executable getAssignments ucsc_biofarm";
 	$self->logDebug("command", $command);
 	
 	print `$command`;	
@@ -157,9 +184,8 @@ method getUuidsByState ($state) {
 }
 
 method getAssignments {
-	my $synapse		=	$self->synapse();
-	
-	my $command		=	"$synapse getAssignments ucsc_biofarm";
+	my $executable		=	$self->executable();
+	my $command		=	"$executable getAssignments ucsc_biofarm";
 	$self->logDebug("command", $command);
 
 	my $assigned = {};	
@@ -175,6 +201,16 @@ method getAssignments {
 	return $assigned;
 }
 
+method getWorkAssignment ($state) {
+		my $executable		=	$self->executable();
+		my $command		=	"$executable getAssignmentForWork ucsc_biofarm $state";
+		$self->logDebug("command", $command);
+		
+		my $uuid	=		`$command`;
+		$uuid	=~ s/\s+$//;
+		
+		return $uuid;
+}
 method changeState ($args) {	
 	my $state	=	$args->{state};
 	my $target	=	$args->{target};
@@ -208,23 +244,72 @@ method changeState ($args) {
 }
 
 method change ($uuid, $state) {	
-	my $synapse		=	$self->synapse();
-
-	my $command 	=	"$synapse resetStatus $uuid --status $state";
+	my $executable		=	$self->executable();
+	my $command 	=	"$executable resetStatus $uuid --status $state";
 	$self->logDebug("command", $command);
 	
 	print `$command`;
 }
 
 
-method setSynapse {
-	#my $synapse = qq{source /agua/apps/bioapps/bin/pancancer/envars.sh; /agua/apps/bioapps/bin/pancancer/synapseICGCMonitor};
-	my $synapse = qq{/agua/apps/bioapps/bin/pancancer/synapseICGCMonitor};
+method setExecutable {
 
-	$self->synapse($synapse);
+		#### SET PYTHON ON PATH
+		my $python	=	$self->conf()->getKey("packages:python", "2.7.3");
+		$self->logDebug("python", $python);
+		my $installdir	=	$python->{INSTALLDIR};
+		$self->logDebug("installdir", $installdir);
+		my $export	=	"export PATH=$installdir";
 
-	return $self->synapse();
+		#### SET SYNAPSE EXECUTABLE
+		my $version = $self->latestVersion("synapse");
+		$self->logDebug("version", $version);
+		my $app	=	$self->conf()->getKey("packages:synapse", $version);
+		my $location	=	$app->{INSTALLDIR};
+		$self->logDebug("location", $location);
+
+		return "$export; $location";
 }
+
+method latestVersion ($package) {
+	$self->logDebug("package", $package);
+	my $subkey	=	undef;
+	my $installations	=	$self->conf()->getKey("packages", $package);
+	$self->logDebug("installations", $installations);
+
+	my $versions;
+	@$versions	=	keys %$installations;
+	$self->logDebug("versions", $versions);
+
+	$versions	=	$self->ops()->sortVersions($versions);
+	$self->logDebug("versions", $versions);
+	
+	my $latest	=	$$versions[ scalar(@$versions) - 1];
+	$self->logDebug("latest", $latest);
+	
+	return $latest;
+}
+
+method setConf {
+	my $conf 	= Conf::Yaml->new({
+		backup		=>	1,
+		SHOWLOG		=>	$self->SHOWLOG(),
+		PRINTLOG	=>	$self->PRINTLOG()
+	});
+	
+	$self->conf($conf);
+}
+
+method setOps () {
+	my $ops = Agua::Ops->new({
+		conf		=>	$self->conf(),
+		SHOWLOG		=>	$self->SHOWLOG(),
+		PRINTLOG	=>	$self->PRINTLOG()
+	});
+
+	$self->ops($ops);	
+}
+
 
 
 }

@@ -2,6 +2,7 @@ package Agua::Common::Login;
 use Moose::Role;
 
 has 'mode'		=> ( isa => 'Str|Undef', is => 'rw' );
+has 'token'		=> ( isa => 'Str|Undef', is => 'rw' );
 
 =head2
 
@@ -44,11 +45,10 @@ sub ldap {
 
 	use Net::LDAP;
 
-	my $json 		=	$self->json();
 	my $conf 		=	$self->conf();
-
-	my $username	=	$json->{username};
-	my $password 	=	$json->{password};
+	my $username	=	$self->username();
+	my $password 	=	$self->password();
+	$self->logDebug("username", $username);
 
 	#### EXAMPLE:
 	#### 'ldap.florida.edu'
@@ -178,71 +178,108 @@ sub submitLogin {
 
 	#### GENERATE SESSION ID
 	my $sessionid;
+	$sessionid	=	$self->getSessionId($username) if $match;	
 	
-	#### IF PASSWORD MATCHES, STORE SESSION ID AND RETURN '1'
-	my $exists;
+	#### LATER:: CLEAN OUT OLD SESSIONS
+	$self->cleanUpSessions();
 	
-	####
+	my $status	=	"ready";
+	my $error	=	"";
+	if ( not $match ) {
+		$status	=	"error";
+		$error	=	"Password does not match for user: $username";
+	}	
+	elsif ( not defined $sessionid and defined $ldap_server) {
+		$status	=	"error";
+		$error = "LDAP authentication failed for user: $username";
+	}
+	elsif ( not defined $sessionid ) {
+		$status	=	"error";
+		$error	=	"Authentication failed for user: $username";
+	}	
+	
+	$self->notifyStatus({
+		username	=>	$self->username(),
+		sourceid	=>	$self->sourceid(),
+		callback	=>	$self->callback(),
+		token		=>	$self->token(),
+		status		=>	$status,
+		error		=>	$error,
+		queue		=> 	"routing",
+		data 		=> {
+			sessionid => $sessionid,
+		}
+	});
+}
+
+sub getSessionId {
+	my $self		=	shift;
+	my $username	=	shift;
+
 	my $now = $self->db()->now();
 	$self->logDebug("now", $now);
 	
-	if ( $match )
+	my $exists;
+	my $sessionid = undef;
+	while ( not defined $sessionid )
 	{
-		while ( not defined $sessionid )
-		{
-			#### CREATE A RANDOM SESSION ID TO BE STORED IN dojo.cookie
-			#### AND PASSED WITH EVERY REQUEST
-			$sessionid = time() . "." . $$ . "." . int(rand(999));
+		#### CREATE A RANDOM SESSION ID TO BE STORED IN dojo.cookie
+		#### AND PASSED WITH EVERY REQUEST
+		$sessionid = time() . "." . $$ . "." . int(rand(999));
 
-			#### CHECK IF THIS SESSION ID ALREADY EXISTS
-			my $exists_query = qq{
-			SELECT username FROM sessions
-			WHERE username = '$username'
-			AND sessionid = '$sessionid'};
-			$self->logDebug("Exists query", $exists_query);
-			$exists = $self->db()->query($exists_query);
-			if ( defined $exists )
-			{
-				$self->logDebug("Exists", $exists);
-				$sessionid = undef;
-			}
-			else
-			{
-				$self->logDebug("Session ID for username $username does not exist in sessions table");
-			}
-		}        
-        
-		#### IF IT DOES EXIST, UPDATE THE TIME
+		#### CHECK IF THIS SESSION ID ALREADY EXISTS
+		my $exists_query = qq{
+		SELECT username FROM sessions
+		WHERE username = '$username'
+		AND sessionid = '$sessionid'};
+		$self->logDebug("Exists query", $exists_query);
+		$exists = $self->db()->query($exists_query);
 		if ( defined $exists )
 		{
-			my $update_query = qq{UPDATE sessions
-			SET datetime = $now
-			WHERE username = '$username'
-			AND sessionid = '$sessionid'};
-			$self->logDebug("Update query", $update_query);
-			my $update_success = $self->db()->query($update_query);
-			$self->logDebug("Update success", $update_success);
+			$self->logDebug("Exists", $exists);
+			$sessionid = undef;
 		}
-		
-		#### IF IT DOESN'T EXIST, INSERT IT INTO THE TABLE
 		else
 		{
-			my $query = qq{
+			$self->logDebug("Session ID for username $username does not exist in sessions table");
+		}
+	}        
+	
+	#### IF IT DOES EXIST, UPDATE THE TIME
+	if ( defined $exists )
+	{
+		my $update_query = qq{UPDATE sessions
+		SET datetime = $now
+		WHERE username = '$username'
+		AND sessionid = '$sessionid'};
+		$self->logDebug("Update query", $update_query);
+		my $update_success = $self->db()->query($update_query);
+		$self->logDebug("Update success", $update_success);
+	}
+	
+	#### IF IT DOESN'T EXIST, INSERT IT INTO THE TABLE
+	else
+	{
+		my $query = qq{
 INSERT INTO sessions
 (username, sessionid, datetime)
 VALUES
 ('$username', '$sessionid', $now )};
-			$self->logDebug("$query");
-			my $success = $self->db()->do($query);
-			$self->logDebug("$success");
-			if ( $success )
-			{
-				$self->logDebug("Session ID has been stored.");
-			}
-		}		
-	}
+		$self->logDebug("$query");
+		my $success = $self->db()->do($query);
+		$self->logDebug("$success");
+		if ( $success )
+		{
+			$self->logDebug("Session ID has been stored.");
+		}
+	}		
 	
-	#### LATER:: CLEAN OUT OLD SESSIONS
+	return $sessionid;	
+}
+
+sub cleanUpSessions {
+	my $self		=	shift;
+
 	# DELETE FROM sessions WHERE datetime < ADDDATE(NOW(), INTERVAL -48 HOUR)
 	# DELETE FROM sessions WHERE datetime < DATE_SUB(NOW(), INTERVAL 1 DAY)
 	my $timeout = $self->conf()->getKey('database', 'SESSIONTIMEOUT');
@@ -255,20 +292,7 @@ VALUES
 DELETE FROM sessions
 WHERE timediff(sysdate(), datetime) > $timeout * 3600} if defined $dbtype and $dbtype eq "MySQL";
 	$self->logDebug("delete_query", $delete_query);
-	$self->db()->do($delete_query);
-	
-	if ( not defined $sessionid and defined $ldap_server)
-	{
-		$self->logError("LDAP authentication failed for user: $username");
-		return;
-	}
-	elsif ( not defined $sessionid )
-	{
-		$self->logError("Authentication failed for user: $username");
-		return;
-	}
-	
-	print "{ sessionid : '$sessionid' }";
+	$self->db()->do($delete_query);	
 }
 
 sub guestLogin {

@@ -72,9 +72,14 @@ setExchange : function (Exchange) {
 	// CONNECT
 	var thisObject = this;
 	setTimeout(function(){
-		thisObject.exchange.connect();
+		try {
+			thisObject.exchange.connect();
+		}
+		catch(e) {
+			console.log("Agua.Exchange.setExchange    *** CAN'T CONNECT TO SOCKET ***");;
+		}
 	},
-	1000);	
+	2000);	
 
 	return this.exchange;
 },
@@ -151,7 +156,7 @@ onMessage : function (message) {
 
 	// RETURN IF NO TOKEN MATCH
 	if ( token != this.token ) {
-		console.log("Agua.Exchange.onMessage    token: " + widget + " does not match this.token: " + this.token + ". RETURNING");
+		console.log("Agua.Exchange.onMessage    token: " + token + " does not match this.token: " + this.token + ". RETURNING");
 		return;
 	}
 	

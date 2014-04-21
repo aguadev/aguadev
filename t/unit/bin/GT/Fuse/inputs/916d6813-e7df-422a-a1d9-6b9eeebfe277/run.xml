@@ -1,0 +1,10 @@
+<RUN_SET xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ncbi.nlm.nih.gov/viewvc/v1/trunk/sra/doc/SRA_1-5/SRA.run.xsd?view=co">
+  <RUN alias="110823_SN881_0126_AD08JDACXX_6_ID01" center_name="CGHUB">
+    <EXPERIMENT_REF refname="IWX_TCOL.A6-2671-01A-T_2pA_1" refcenter="CGHUB" />
+    <DATA_BLOCK>
+      <FILES>
+        <FILE filename="4-mb-real-testfile.bam" filetype="bam" checksum_method="MD5" checksum="0e4f1bd5c5cc83b37d6c511dda98866c" />
+      </FILES>
+    </DATA_BLOCK>
+  </RUN>
+</RUN_SET>

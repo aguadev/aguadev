@@ -33,14 +33,14 @@ return declare("plugins/view/Controller",
 
 	
 //Path to the template of this widget. 
-templatePath: dojo.moduleUrl("plugins", "view/templates/controller.html"),
+templatePath: require.toUrl("plugins/view/templates/controller.html"),
 
 // Calls dijit._Templated.widgetsInTemplate
 widgetsInTemplate : true,
 
 // CSS FILE FOR BUTTON STYLING
 cssFiles : [
-	dojo.moduleUrl("plugins") + "view/css/controller.css"
+	require.toUrl("plugins/view/css/controller.css")
 ],
 
 // ARRAY OF TAB PANES

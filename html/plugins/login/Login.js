@@ -1,43 +1,59 @@
-dojo.provide("plugins.login.Login");
+console.log("plugins.login.Login    LOADING");
 
-/*
-  
-	DISPLAY A LOGIN DIALOGUE WINDOW AND AUTHENTICATE
+/* DISPLAY A LOGIN DIALOGUE WINDOW AND AUTHENTICATE
 
 	WITH THE REMOTE DATABASE TO RETRIEVE A SESSION ID 
 
 	AND STORE IT IN Agua.cookie("sessionid")
-
 */
 
-dojo.require("plugins.core.Common");
+define([
+	"dojo/_base/declare",
+	"dijit/_Widget",
+	"dijit/_TemplatedMixin",
+	"dijit/_WidgetsInTemplateMixin",
+	"plugins/core/Common",
+	"plugins/login/LoginStatus",
+	"dojo/domReady!",
 
-// REQUIRED WIDGETS
-dojo.require("dojox.widget.Dialog");
-dojo.require("dijit.form.Button");
-dojo.require("dijit.form.TextBox");
-dojo.require("dojo.fx.easing");
-dojo.require("dojox.timing.Sequence");
-dojo.require("dijit.ProgressBar");
+	"dojox/widget/Dialog",
+	"dijit/form/Button",
+	"dijit/form/TextBox",
+	"dojo/fx/easing",
+	"dijit/ProgressBar",
+],
 
-// HAS A
-dojo.require("plugins.login.LoginStatus");
+function (
+	declare,
+	_Widget,
+	_TemplatedMixin,
+	_WidgetsInTemplate,
+	Common,
+	LoginStatus
+) {
 
-dojo.declare( "plugins.login.Login",
-	[ dijit._Widget, dijit._Templated, plugins.core.Common ], {
+/////}}}}}
 
-//Path to the template of this widget. 
-templatePath: dojo.moduleUrl("plugins", "login/templates/login.html"),
+return declare("plugins.login.Login",
+	[
+	_Widget,
+	_TemplatedMixin,
+	_WidgetsInTemplate,
+	Common
+], {
 
-// Calls dijit._Templated.widgetsInTemplate
-widgetsInTemplate : true,
+// templateString : String
+//		The template of this widget. 
+templateString: dojo.cache("plugins", "login/templates/login.html"),
 
+// loginMessage : String
+//		Display this login prompt message
 loginMessage : "",
 
 cssFiles: [
-	dojo.moduleUrl("plugins") + "login/css/login.css",
-	dojo.moduleUrl("dojox") + "widget/Dialog/Dialog.css",
-	dojo.moduleUrl("dijit") + "themes/claro/claro.css"
+	require.toUrl("plugins/login/css/login.css"),
+	require.toUrl("dojox/widget/Dialog/Dialog.css"),
+	require.toUrl("dijit/themes/claro/claro.css")
 ],
 
 // logging : Bool
@@ -51,7 +67,7 @@ constructor : function () {
 	this.loadCSS();
 	
 	// GENERATE LOGIN STATUS TABLE IN RIGHT SIDE OF AGUA TOOLBAR
-	this.statusBar = new plugins.login.LoginStatus();
+	this.statusBar = new LoginStatus();
 	this.statusBar.launcher.title = "Log In";
 	var listener = dojo.connect(this.statusBar.launcher, "onclick", this, "show");
 	this.statusBar.launcher.listener = listener;
@@ -260,56 +276,46 @@ login : function () {
 	
 	// CREATE JSON QUERY
 	var query 			= 	new Object;
+	query.token			=	Agua.token;
+	query.sourceid		=	this.id;
+	query.callback		=	"handleResponse",
 	query.username 		= 	username;
 	query.password 		= 	password;
-	query.mode 		= 	"submitLogin";
+	query.mode 			= 	"submitLogin";
 	query.module 		= 	"Agua::Workflow";
 	console.log("Login.login     query: " + dojo.toJson(query));
 	
-	var url = Agua.cgiUrl + "agua.cgi";
+	var url = Agua.cgiUrl + "agua.pl";
 	console.log("Login.login     url: " + url);		
 
-	console.log("Login.login    BEFORE xhrPut");
 	console.log("Login.login    Agua.cookie('username'): " + Agua.cookie('username'));
 	console.log("Login.login    Agua.cookie('sessionid'): " + Agua.cookie('sessionid'));
 
-	var thisObject = this;
+	console.log("Login.login    BEFORE Agua.exchange.send(query)");
+	Agua.exchange.send(query);	
+	console.log("Login.login    Agua.exchange.send(query)");
+},
+handleResponse : function (response) {
+	console.group("Login-" + this.id + "    handleResponse");
+	console.log("Login.login    response: " + dojo.toJson(response));
 
-	// DO xhrPut TO SERVER
-	var deferred = dojo.xhrPut(
-		{
-			url: url,
-			contentType: "json",
-			handleAs: 'json',
-			sync: true,
-			putData: dojo.toJson(query),
-			preventCache: true,
-			handle: function(response) {
-				if ( response.error ) {
-					// SET this.logging TO FALSE
-					console.log("Login.login    Error. Setting this.logging to FALSE");
-					thisObject.logging = false;
+	if ( response.error ) {
+		// SET this.logging TO FALSE
+		console.log("Login.login    Error. Setting this.logging to FALSE");
+		this.logging = false;
 
-					// SHOW ERROR STATUS ON LOGIN BUTTON
-					dojo.addClass(thisObject.message, "error");
-					thisObject.message.innerHTML = "Invalid username and password";
+		// SHOW ERROR STATUS ON LOGIN BUTTON
+		dojo.addClass(this.message, "error");
+		this.message.innerHTML = "Invalid username and password";
 
-					// SHOW LOGIN INPUTS
-					thisObject.showInputs();
-				}
-				else {
-					thisObject.handleLogin(response, username);
-				}
-			},
-			error: function (response, ioArgs) {
-				console.log("Login.login    Response is NULL. Setting this.logging to FALSE");
+		// SHOW LOGIN INPUTS
+		this.showInputs();
+	}
+	else {
+		this.handleLogin(response);
+	}
 
-				thisObject.logging = false;
-			}
-		}
-	);
-		
-	console.log("Login.login    After xhrPut");
+	console.groupEnd();
 },
 setLoginStyle : function () {
 	// HIDE INPUTS
@@ -366,40 +372,40 @@ setLoading : function () {
 	dojo.addClass(this.message, "loading");
 	this.message.innerHTML = "Loading...";
 },
-handleLogin : function (data, username) {
-	console.log("Login.handleLogin     xhrPut data Json: " + dojo.toJson(data));
-
+handleLogin : function (response) {
+	console.log("Login.handleLogin     xhrPut response Json: " + dojo.toJson(response));
+	
 	// SHOW PROGRESS BAR
 	this.showProgressBar();
 	
 	// REMOVE PASSWORD
 	this.password.set('value', '');
 
-	// SHOW ERROR IF PRESENT AS data.error
-	if ( data.error != null )
+	// SHOW ERROR IF PRESENT AS response.error
+	if ( response.error != null && response.error != "" )
 	{
-		console.log("Login.handleLogin    Login error: " + data.error);
+		console.log("Login.handleLogin    Login error: " + response.error);
 
 		console.log("Login.handleLogin    DOING this.showInputs()");
 		this.showInputs();
 		
 		// SHOW ERROR STATUS ON LOGIN BUTTON
 		dojo.addClass(this.message, "error");
-		this.message.innerHTML = data.error;
+		this.message.innerHTML = response.error;
 	}
 	
 	// IF NO ERROR, PROCESS LOGIN
 	else {
 		console.log("Login.handleLogin    Successful login");
-		console.log("Login.handleLogin    data: " + dojo.toJson(data));
+		console.log("Login.handleLogin    response: " + dojo.toJson(response));
 
 		// SET sessionid AND username IN DOJO COOKIE
 		// THE COOKIE WILL EXPIRE AT THE END OF THE SESSION
-		Agua.cookie("sessionid", data.sessionid);
-		Agua.cookie("username", username);
+		Agua.cookie("sessionid", response.data.sessionid);
+		Agua.cookie("username", response.username);
 
-		console.log("Login.handleLogin    username: " + username);
-		console.log("Login.handleLogin    sessionid: " + data.sessionid);
+		console.log("Login.handleLogin    username: " + response.username);
+		console.log("Login.handleLogin    sessionid: " + response.sessionid);
 		
 		// SHOW 'Accepted' IN GREEN
 		dojo.removeClass(this.message, "error");
@@ -413,7 +419,7 @@ handleLogin : function (data, username) {
 		}, 1000, this);
 
 		// CHANGE LOGIN STATUS BAR TO 'username' AND 'Log Out'
-		this.statusBar.username.innerHTML = "<span class='label'></span> " + username;
+		this.statusBar.username.innerHTML = "<span class='label'></span> " + response.username;
 		
 		// SET LAUNCHER TITLE TO "Log Out"
 		this.statusBar.launcher.title = "Log Out";
@@ -478,6 +484,7 @@ logout : function (e) {
 	// CLEAR TOOLBAR, PANES AND USER DATA
 	Agua.logout();
 }
-}); // end of plugins.login.Login
 
+}); //	end declare
 
+});	//	end define

@@ -45,7 +45,7 @@ my $installdir  =   $ENV{'installdir'} || "/agua";
 my $configfile	=   "$installdir/conf/config.yaml";
 
 #### SET $Bin
-$Bin =~ s/^.+\/bin/$installdir\/t\/bin/;
+$Bin =~ s/^.+\/bin/$installdir\/t\/unit\/bin/;
 
 #### GET OPTIONS
 my $logfile 	= "/tmp/testuser.login.log";
@@ -72,7 +72,7 @@ my $conf = Conf::Yaml->new(
 isa_ok($conf, "Conf::Yaml", "conf");
 
 #### SET DUMPFILE
-my $dumpfile    =   "$Bin/../../../../dump/create.dump";
+my $dumpfile    =   "$installdir/bin/sql/dump/agua/agua.dump";
 
 #### SET DBTYPE
 my $dbtype = "MySQL";

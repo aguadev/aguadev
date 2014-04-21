@@ -67,6 +67,7 @@ method read ($inputfile) {
 		}
 	}
 	else {
+		#open(FILE, "<", $inputfile) or die "Can't open inputfile: $inputfile\n";
 		my $yaml = YAML::Tiny->read($inputfile) or $self->logCritical("Can't open inputfile: $inputfile") and exit;
 		
 		$self->yaml($yaml);
