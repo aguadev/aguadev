@@ -2,7 +2,7 @@ use Moose::Util::TypeConstraints;
 use MooseX::Declare;
 use Method::Signatures::Modifiers;
 
-class Agua::Request {
+class Agua::Request with Agua::Common::Exchange {
 
 #### INTERNAL MODULES
 use Agua::Common::Util;
@@ -32,24 +32,8 @@ has 'conf' 		=> (
 	is 		=>	'rw',
 	default	=>	sub { Conf::Yaml->new( {} );	}
 );
-has 'exchange'	=> ( isa => 'Agua::Common::Exchange', is  => 'rw', required	=>	0, lazy	=> 1, builder => "setExchange" );
 
 #####/////}}}}}
-
-#### EXCHANGE
-method setExchange () {
-	$self->logDebug("");
-	
-	my $exchange	=	Agua::Common::Exchange->new({
-		logfile		=>	$self->logfile(),
-		SHOWLOG		=>	$self->SHOWLOG(),
-		PRINTLOG	=>	$self->PRINTLOG(),
-		conf		=>	$self->conf()
-	});
-	$self->logDebug("exchange", $exchange);
-	
-	$self->exchange($exchange);
-}
 
 method notifyStatus ($data) {	
 	$self->logDebug("DOING self->openConnection() with data", $data);

@@ -64,15 +64,15 @@ use Conf::Yaml;
 
 #### GET CONF
 #### SET LOG
-my $SHOWLOG		=	2;
-my $PRINTLOG	=	5;
+my $showlog		=	2;
+my $printlog	=	5;
 my $configfile = "$Bin/../../conf/config.yaml";
 my $logfile = "/tmp/agua-build.log";
 my $conf = Conf::Yaml->new(
     memory      =>  1,
     inputfile	=>	$configfile,
-    SHOWLOG     =>  2,
-    PRINTLOG    =>  2,
+    showlog     =>  2,
+    printlog    =>  2,
     logfile     =>  $logfile
 );
 my $installdir = $conf->getKey("agua", "INSTALLDIR");

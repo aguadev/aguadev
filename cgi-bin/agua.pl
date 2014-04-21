@@ -30,13 +30,13 @@ my $time = [gettimeofday()];
 
 #### SET LOG
 my $showlog     =   2;
-my $PRINTLOG    =   4;
+my $printlog    =   4;
 
 my $conf = Conf::Yaml->new(
 	inputfile	=>	"$Bin/conf/config.yaml",
 	backup		=>	1,
     showlog     =>  2,
-    PRINTLOG    =>  4
+    printlog    =>  4
 );
 
 
@@ -174,7 +174,7 @@ sub loadModules {
         my $object = $class->new({
             conf        =>  $conf,
             showlog     =>  $showlog,
-            PRINTLOG    =>  $PRINTLOG
+            printlog    =>  $printlog
         });
  #       print "object: $object\n";
         

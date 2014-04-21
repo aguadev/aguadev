@@ -47,7 +47,6 @@ method installExchange {
 	#### 4. INSTALL FOREVER
 	$self->runCommands(["npm install forever -g"]);
 	
-
 	#### 5. SET EXCHANGE TO RUN AS A DAEMON
 	$self->daemoniseExchange();
 
@@ -230,7 +229,6 @@ method installNode ($nodeurl, $installdir) {
 		$self->runCommands(["yum groupinstall \"Development Tools\" -y"]);
 		$self->runCommands(["yum install kernel-devel -y"]);
 	}
-	
 
 	#### CREATE BASEDIR
 	my $basedir	=	"$installdir/apps/node";

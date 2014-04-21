@@ -55,8 +55,8 @@ use Agua::Ops;
 my $branch          =   "master";
 my $versionformat  =   "semver";
 my $logfile 		= 	"/tmp/stager.log";
-my $SHOWLOG     	=   2;
-my $PRINTLOG    	=   5;
+my $showlog     	=   2;
+my $printlog    	=   5;
 my $stagefile;
 my $mode;
 my $message;
@@ -79,8 +79,8 @@ GetOptions (
     'versiontype=s'     =>  \$versiontype,
 
 	#### DEBUG
-    'SHOWLOG=s'         =>  \$SHOWLOG,
-    'PRINTLOG=s'        =>  \$PRINTLOG,
+    'showlog=s'         =>  \$showlog,
+    'printlog=s'        =>  \$printlog,
 
 	#### OPTIONAL
     'versionfile=s'     =>  \$versionfile,
@@ -114,8 +114,8 @@ my $object = Agua::Ops->new({
     outputdir       =>  $outputdir,
     releasename     =>  $releasename,
     logfile     	=>   $logfile,
-    SHOWLOG     	=>   $SHOWLOG,
-    PRINTLOG   		=>   $PRINTLOG
+    showlog     	=>   $showlog,
+    printlog   		=>   $printlog
 });
 $object->stageRepo($stagefile, $mode, $message);
 

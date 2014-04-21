@@ -125,13 +125,13 @@ $versionfile = "$repodir/VERSION" if not defined $versionfile;
 
 #### SET LOG
 my $logfile = "/tmp/agua-version.log";
-my $SHOWLOG     =   2;
-my $PRINTLOG    =   5;
+my $showlog     =   2;
+my $printlog    =   5;
 
 my $object = Agua::Ops->new({
     logfile     =>   $logfile,
-    SHOWLOG     =>   $SHOWLOG,
-    PRINTLOG    =>   $PRINTLOG,
+    showlog     =>   $showlog,
+    printlog    =>   $printlog,
     
     login       =>  $login
 });

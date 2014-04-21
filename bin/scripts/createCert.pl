@@ -86,8 +86,8 @@ my $installer = Agua::Install->new({
     installdir  =>  $installdir,
     domainname  =>  $domainname,
     logfile     =>  $logfile,
-    SHOWLOG     =>  5,
-    PRINTLOG    =>  5
+    showlog     =>  5,
+    printlog    =>  5
 });
 
 #### QUIT IF FLAG FILE FOUND

@@ -76,8 +76,8 @@ usage() if defined $help;
 
 #### SET LOG
 my $logfile     = "/tmp/doc.log";
-my $SHOWLOG     =   5;
-my $PRINTLOG    =   5;
+my $showlog     =   5;
+my $printlog    =   5;
 
 #### CHECK INPUTS
 print "doc.pl    inputdir not defined\n" and exit if not defined $inputdir;
@@ -85,8 +85,8 @@ print "doc.pl    outputdir not defined\n" and exit if not defined $outputdir;
 
 my $object = new Doc({
     logfile     =>  $logfile,
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG
+    showlog     =>  $showlog,
+    printlog    =>  $printlog
 });
 $object->docToWiki($inputdir, $outputdir, $prefix);
 

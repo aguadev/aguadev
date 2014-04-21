@@ -203,8 +203,8 @@ sub init {
 my $configfile = "$Bin/../../conf/config.yaml";
 my $conf = Conf::Yaml->new({
 	inputfile 	=> 	$configfile,
-	SHOWLOG		=>	2,
-	PRINTLOG	=>	5
+	showlog		=>	2,
+	printlog	=>	5
 });
 my $logfile	=	"$Bin/../../log/agua-ops.log";
 $conf->logfile($logfile);
@@ -212,8 +212,8 @@ $conf->logfile($logfile);
 #### SET DEFAULT OPTIONS
 $options->{conffile} 	= 	"$Bin/../../conf/config.yaml" if not defined $options->{conffile};
 $options->{logfile} 	= 	$logfile if not defined $options->{logfile};
-$options->{SHOWLOG}		=	2 if not defined $options->{SHOWLOG};
-$options->{PRINTLOG}	=	2 if not defined $options->{PRINTLOG};
+$options->{showlog}		=	2 if not defined $options->{showlog};
+$options->{printlog}	=	2 if not defined $options->{printlog};
 $options->{conf}		=	$conf;
 $options->{opsmodloaded}=	$opsmodloaded;
 

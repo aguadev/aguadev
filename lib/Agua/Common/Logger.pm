@@ -47,10 +47,10 @@ PURPOSE
 #Boolean
 has 'backup' 	=> ( isa => 'Int', 		is => 'rw', default => 0 );
 # Ints
-has 'SHOWLOG'	=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);  
-has 'PRINTLOG'	=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);
-has 'OLDSHOWLOG'=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);  
-has 'OLDPRINTLOG'=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);
+has 'showlog'	=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);  
+has 'printlog'	=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);
+has 'oldshowlog'=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);  
+has 'oldprintlog'=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);
 has 'errpid' 	=> ( isa => 'Int', 		is => 'rw', required => 0 );
 has 'indent'	=> ( isa => 'Int', 		is => 'rw', default	=>	4 );
 
@@ -65,6 +65,82 @@ has 'olderr' 	=> ( isa => 'FileHandle', is => 'rw', required => 0 );
 
 #### EXTERNAL MODULES
 use Data::Dumper;
+#use PadWalker qw/peek_my peek_our/;
+#
+#sub get_name_my {
+#    my $pad = peek_my($_[0] + 1);
+#    for (keys %$pad) {
+#        return $_ if $$pad{$_} == \$_[1]
+#    }
+#}
+#sub get_name_our {
+#    my $pad = peek_our($_[0] + 1);
+#    for (keys %$pad) {
+#        return $_ if $$pad{$_} == \$_[1]
+#    }
+#}
+#sub get_name_stash {
+#    my $caller = caller($_[0]) . '::';
+#    my $stash = do {
+#        no strict 'refs';
+#        \%$caller
+#    };
+#    my %lookup;
+#    for my $name (keys %$stash) {
+#        if (ref \$$stash{$name} eq 'GLOB') {
+#            for (['$' => 'SCALAR'],
+#                 ['@' => 'ARRAY'],
+#                 ['%' => 'HASH'],
+#                 ['&' => 'CODE']) {
+#                if (my $ref = *{$$stash{$name}}{$$_[1]}) {
+#                    $lookup{$ref} ||= $$_[0] . $caller . $name
+#                }
+#            }
+#        }
+#    }
+#    $lookup{\$_[1]}
+#}
+#sub get_name {
+#    unshift @_, @_ == 2 ? 1 + shift : 1;
+#    &get_name_my  or
+#    &get_name_our or
+#    &get_name_stash
+#}
+#
+#
+#sub log {
+#    my ($self, $variable) = @_;
+#
+#	my $name = get_name(1, $variable) || 'name not found';
+#	print "$name: $_\n";
+#	
+#	return -1 if not $self->showlog() > 3 and not $self->printlog() > 3;
+#
+#	$name = '' if not defined $name;
+#    $self->appendLog($self->logfile()) if not defined $self->logfh();   
+#
+#	my $text = $variable;
+#	if ( not defined $variable and $#_ == 2 )	{
+#		$text = "undef";
+#	}
+#	elsif ( ref($variable) )	{
+#		$text = $self->objectToJson($variable);
+#	}
+#
+#    my ($package, $filename, $linenumber) = caller;
+#    my $timestamp = $self->logTimestamp();
+#	my $callingsub = (caller 1)[3] || '';
+#	
+#	my $indent = $self->indent();
+#	my $spacer = " " x $indent;
+#	my $line = "$timestamp$spacer" . "[DEBUG]   \t$callingsub\t$linenumber\t$name\n";
+#	$line = "$timestamp$spacer" . "[DEBUG]   \t$callingsub\t$linenumber\t$name: $text\n" if $#_ == 2;
+#
+#    print { $self->logfh() } $line if defined $self->logfh() and $self->printlog() > 3;
+#    print $line if $self->showlog() > 3;
+#	return $line;
+#}
+#
 
 sub setUserLogfile {
 	my ($self, $username, $identifier, $mode) =	@_;
@@ -115,8 +191,8 @@ sub logGroup {
 	my $spacer = " " x $indent;
     my $line = "$timestamp$spacer". "[GROUP]    \t$callingsub\t$linenumber\t$message\n";
 
-    print { $self->logfh() } $line if defined $self->logfh() and $self->PRINTLOG() > 3;
-    print $line if $self->SHOWLOG() > 3;
+    print { $self->logfh() } $line if defined $self->logfh() and $self->printlog() > 3;
+    print $line if $self->showlog() > 3;
 
 	return $line;
 }
@@ -138,8 +214,8 @@ sub logGroupEnd {
 	my $spacer = " " x $indent;
     my $line = "$timestamp$spacer". "[GROUPEND]    \t$callingsub\t$linenumber\t$message\n";
 
-    print { $self->logfh() } $line if defined $self->logfh() and $self->PRINTLOG() > 3;
-    print $line if $self->SHOWLOG() > 3;
+    print { $self->logfh() } $line if defined $self->logfh() and $self->printlog() > 3;
+    print $line if $self->showlog() > 3;
 
 	$indent -= 4;
 	$indent = 2 if $indent < 4;
@@ -163,7 +239,7 @@ sub logReport {
 
 sub logNote {
     my ($self, $message, $variable) = @_;
-	return -1 if not $self->SHOWLOG() > 4 and not $self->PRINTLOG() > 4;
+	return -1 if not $self->showlog() > 4 and not $self->printlog() > 4;
 
 	$message = '' if not defined $message;
     $self->appendLog($self->logfile()) if not defined $self->logfh(); 
@@ -185,15 +261,15 @@ sub logNote {
 	my $line = "$timestamp$spacer" . "[NOTE]   \t$callingsub\t$linenumber\t$message\n";
 	$line = "$timestamp$spacer" . "[NOTE]   \t$callingsub\t$linenumber\t$message: $text\n" if $#_ == 2;
 
-    print { $self->logfh() } $line if defined $self->logfh() and $self->PRINTLOG() > 4;
-    print $line if $self->SHOWLOG() > 4;
+    print { $self->logfh() } $line if defined $self->logfh() and $self->printlog() > 4;
+    print $line if $self->showlog() > 4;
 	return $line;
 }
 
 sub logDebug {
     my ($self, $message, $variable) = @_;
 	
-	return -1 if not $self->SHOWLOG() > 3 and not $self->PRINTLOG() > 3;
+	return -1 if not $self->showlog() > 3 and not $self->printlog() > 3;
 
 	$message = '' if not defined $message;
     $self->appendLog($self->logfile()) if not defined $self->logfh();   
@@ -215,14 +291,14 @@ sub logDebug {
 	my $line = "$timestamp$spacer" . "[DEBUG]   \t$callingsub\t$linenumber\t$message\n";
 	$line = "$timestamp$spacer" . "[DEBUG]   \t$callingsub\t$linenumber\t$message: $text\n" if $#_ == 2;
 
-    print { $self->logfh() } $line if defined $self->logfh() and $self->PRINTLOG() > 3;
-    print $line if $self->SHOWLOG() > 3;
+    print { $self->logfh() } $line if defined $self->logfh() and $self->printlog() > 3;
+    print $line if $self->showlog() > 3;
 	return $line;
 }
 
 sub logInfo {
     my ($self, $message) = @_;
-	return -1 if not $self->SHOWLOG() > 2 and not $self->PRINTLOG() > 2;
+	return -1 if not $self->showlog() > 2 and not $self->printlog() > 2;
 	
 	$message = '' if not defined $message;
     $self->appendLog($self->logfile()) if not defined $self->logfh();   
@@ -231,15 +307,15 @@ sub logInfo {
 	my $callingsub = (caller 1)[3];
 	my $line = "$timestamp\t[INFO]    \t$callingsub\t$linenumber\t$message\n";
 
-    print { $self->logfh() } $line if defined $self->logfh() and $self->PRINTLOG() > 2;
-    print $line if $self->SHOWLOG() > 2;
+    print { $self->logfh() } $line if defined $self->logfh() and $self->printlog() > 2;
+    print $line if $self->showlog() > 2;
 	
 	return $line;
 }
 
 sub logWarning {
     my ($self, $message) = @_;
-	return -1 if not $self->SHOWLOG() > 1 and not $self->PRINTLOG() > 1;
+	return -1 if not $self->showlog() > 1 and not $self->printlog() > 1;
 	
 	$message = '' if not defined $message;
     $self->appendLog($self->logfile()) if not defined $self->logfh();   
@@ -248,15 +324,15 @@ sub logWarning {
 	my $callingsub = (caller 1)[3];
 	my $line = "$timestamp\t[WARNING] \t$callingsub\t$linenumber\t$message\n";
 
-    print { $self->logfh() } $line if defined $self->logfh() and $self->PRINTLOG() > 1;
-    print $line if $self->SHOWLOG() > 1;
+    print { $self->logfh() } $line if defined $self->logfh() and $self->printlog() > 1;
+    print $line if $self->showlog() > 1;
 	
 	return $line;
 }
 
 sub logCritical {
     my ($self, $message) = @_;
-	return -1 if not $self->SHOWLOG() > 0 and not $self->PRINTLOG() > 0;
+	return -1 if not $self->showlog() > 0 and not $self->printlog() > 0;
 	
 	$message = '' if not defined $message;
     $self->appendLog($self->logfile()) if not defined $self->logfh();   
@@ -265,8 +341,8 @@ sub logCritical {
 	my $callingsub = (caller 1)[3];
 	my $line = "$timestamp\t[CRITICAL]\t$callingsub\t$linenumber\t$message\n";
 
-    print { $self->logfh() } $line if defined $self->logfh() and $self->PRINTLOG() > 0;
-    print $line if $self->SHOWLOG() > 0;
+    print { $self->logfh() } $line if defined $self->logfh() and $self->printlog() > 0;
+    print $line if $self->showlog() > 0;
 	
 	#### FOR FASTCGI: SKIP TO END OF SCRIPT WITHOUT EXITING
 	#### NB: MUST PUT THIS AT END OF SCRIPT:
@@ -310,8 +386,8 @@ sub logCaller {
 #	my $callerline = (caller 2)[2];
 #    my $line = "$timestamp\t[CALLER]  \t$callingsub\t$linenumber\tcaller: $caller\t$callerline\t$message\n";
 
-    print $line if $self->SHOWLOG() > 3;
-    print { $self->logfh() } $line if defined $self->logfh() and $self->PRINTLOG() > 3;
+    print $line if $self->showlog() > 3;
+    print { $self->logfh() } $line if defined $self->logfh() and $self->printlog() > 3;
 	return $line;
 }
 
@@ -323,7 +399,7 @@ sub logError {
     my $timestamp = $self->logTimestamp();
 	my $callingsub = (caller 1)[3];
     my $line = "$timestamp\t[ERROR]   \t$callingsub\t$linenumber\t$message\n";
-    print { $self->logfh() } $line if defined $self->logfh() and $self->PRINTLOG() > 0;
+    print { $self->logfh() } $line if defined $self->logfh() and $self->printlog() > 0;
 
     print qq{{"error":"$message","subroutine":"$callingsub","linenumber":"$linenumber","filename":"$filename","timestamp":"$timestamp"}\n};
 	
@@ -353,7 +429,7 @@ sub logStatus {
     my $timestamp = $self->logTimestamp();
 	my $callingsub = (caller 1)[3];
     my $line = "$timestamp\t[STATUS]  \t$callingsub\t$linenumber\t$message\n";
-    print { $self->logfh() } $line if defined $self->logfh() and $self->PRINTLOG() > 0;
+    print { $self->logfh() } $line if defined $self->logfh() and $self->printlog() > 0;
 
 	my $datajson = $self->objectToJson($data);
     print qq{{"status":"$message","subroutine":"$callingsub","linenumber":"$linenumber","filename":"$filename","timestamp":"$timestamp","data":$datajson}\n};
@@ -462,10 +538,10 @@ sub stopLogStderr {
 sub pauseLog{
     my ($self) = @_;
 
-	$self->OLDSHOWLOG($self->SHOWLOG());
-	$self->OLDPRINTLOG($self->PRINTLOG());
-	$self->PRINTLOG(0);
-	$self->SHOWLOG(0);
+	$self->oldshowlog($self->showlog());
+	$self->oldprintlog($self->printlog());
+	$self->printlog(0);
+	$self->showlog(0);
 	return;	
 }
 
@@ -474,15 +550,15 @@ sub resumeLog{
     $logfile = $self->logfile() if not defined $logfile;
     $self->logError("logfile not defined") and exit if not defined $logfile;
 
-	$self->SHOWLOG($self->OLDSHOWLOG()) if defined $self->OLDSHOWLOG();
-	$self->PRINTLOG($self->OLDPRINTLOG()) if defined $self->OLDPRINTLOG();
+	$self->showlog($self->oldshowlog()) if defined $self->oldshowlog();
+	$self->printlog($self->oldprintlog()) if defined $self->oldprintlog();
 }
 
 sub stopLog{
     my ($self) = @_;
 
-	$self->PRINTLOG(0);
-	$self->SHOWLOG(0);
+	$self->printlog(0);
+	$self->showlog(0);
 	
 	#### CLOSE LOG FILEHANDLE
 	my $logfh = $self->logfh();

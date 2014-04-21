@@ -116,16 +116,20 @@ sub getData {
 	$output->{queries}			= $self->getQueries();
 	$output->{downloads}		= $self->getDownloads();
 
-	#### PRINT JSON AND EXIT
-	use JSON -support_by_pp; 
-	my $jsonParser = JSON->new();
-	#my $jsonText = $jsonParser->encode->allow_nonref->pretty->get_utf8->($output);
-    #my $jsonText = $jsonParser->pretty->indent->encode($output);
-    my $jsonText = $jsonParser->encode($output);
+	
+	$self->logDebug("DOING self->exchange()->sendData(data)");
+	return $self->notifyStatus($output);
 
-	#### TO AVOID HIJACKING --- DO NOT--- PRINT AS 'json-comment-optional'
-	print "{}&&$jsonText";
-	return;
+#	#### PRINT JSON AND EXIT
+#	use JSON -support_by_pp; 
+#	my $jsonParser = JSON->new();
+#	#my $jsonText = $jsonParser->encode->allow_nonref->pretty->get_utf8->($output);
+	#    #my $jsonText = $jsonParser->pretty->indent->encode($output);
+#    my $jsonText = $jsonParser->encode($output);
+
+	##### TO AVOID HIJACKING --- DO NOT--- PRINT AS 'json-comment-optional'
+	#print "$jsonText";
+	#return;
 }
 
 sub getConf {

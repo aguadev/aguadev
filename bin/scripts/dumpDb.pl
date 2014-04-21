@@ -88,16 +88,16 @@ die "Can't create output directory: $outputdir\n" if not -d $outputdir;
 
 #### SET LOG
 my $logfile = "/tmp/dumpdb.log";
-my $SHOWLOG 	= 	2;
-my $PRINTLOG 	= 	5;
+my $showlog 	= 	2;
+my $printlog 	= 	5;
 
 #### GET CONF
 my $configfile = "$Bin/../../conf/config.yaml";
 my $conf = Conf::Yaml->new({
 	inputfile 	=> $configfile,
 	logfile		=>	$logfile,
-	SHOWLOG		=>	2,
-	PRINTLOG	=>	5
+	showlog		=>	2,
+	printlog	=>	5
 });
 
 #### GET DATABASE INFO
@@ -119,8 +119,8 @@ my $object = Agua::Configure->new({
 	database	=>	$db,
 	configfile	=>	$configfile,
 	logfile		=>	$logfile,
-	SHOWLOG		=>	$SHOWLOG,
-	PRINTLOG	=>	$PRINTLOG
+	showlog		=>	$showlog,
+	printlog	=>	$printlog
 });
 
 $object->setDbh();

@@ -107,8 +107,8 @@ my $mode         = "config";
 my $database;
 my $configfile   = "$Bin/../../conf/config.yaml";
 my $logfile      = "/tmp/agua-config.log";
-my $SHOWLOG      =    2;
-my $PRINTLOG     =    5;
+my $showlog      =    2;
+my $printlog     =    5;
 my $help;
 GetOptions (
     'mode=s'        => \$mode,
@@ -116,8 +116,8 @@ GetOptions (
     'configfile=s'  => \$configfile,
     'dumpfile=s'    => \$dumpfile,
     'logfile=s'     => \$logfile,
-    'SHOWLOG=i'     => \$SHOWLOG,
-    'PRINTLOG=i'    => \$PRINTLOG,
+    'showlog=i'     => \$showlog,
+    'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
@@ -126,8 +126,8 @@ my $conf = Conf::Yaml->new(
     memory      =>  0,
     inputfile   =>  $configfile,
     backup      =>  1,
-    SHOWLOG     =>  2,
-    PRINTLOG    =>  2,
+    showlog     =>  2,
+    printlog    =>  2,
     logfile     =>  $logfile
 );
 
@@ -138,8 +138,8 @@ my $object = Agua::Configure->new({
     configfile  =>  $configfile,
     logfile     =>  $logfile,
     dumpfile    =>  $dumpfile,
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG
+    showlog     =>  $showlog,
+    printlog    =>  $printlog
 });
 
 #### CHECK MODE

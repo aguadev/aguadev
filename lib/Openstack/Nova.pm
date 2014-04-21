@@ -1,7 +1,5 @@
 use MooseX::Declare;
 
-
-
 =head2
 
 
@@ -12,6 +10,7 @@ class Openstack::Nova with Logger {
 #####////}}}}}
 
 use Conf::Yaml;
+use Agua::Ssh;
 
 #### Integers
 has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 2 );
@@ -22,9 +21,11 @@ has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 #### Objects
 has 'conf'			=> ( isa => 'Conf::Yaml', is => 'rw', required	=>	0 );
 has 'jsonparser'	=> ( isa => 'JSON', is => 'rw', lazy	=>	1, builder	=>	"setJsonParser"	);
-
+has 'ssh'			=> ( isa => 'Agua::Ssh', is => 'rw', lazy	=>	1, builder	=>	"setSsh"	);
 
 use FindBin qw($Bin);
+
+
 
 method list ($args) {
 	my $username	=	$args->{username};
@@ -48,7 +49,7 @@ method list ($args) {
 	print "\n";
 }
 
-method command($args) {
+method command ($args) {
 	my $username	=	$args->{username};
 	my $name		=	$args->{name};
 	my $regex		=	$args->{regex};
@@ -68,12 +69,14 @@ method command($args) {
 	$self->logDebug("ips", $ips);
 	
 	foreach my $ip ( @$ips ) {
-		my $sshcommand	=	qq{ssh -o StrictHostKeyChecking=no -t $username\@$ip '$command'};
+		my $sshcommand	=	qq{ssh -o LogLevel=quiet -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -t $username\@$ip "$command"};
+		print "$sshcommand\n";
 		$self->logDebug("sshcommand", $sshcommand);
-		print `$command`;
+		my $output = `$command`;
+		
+		print "$output\n";
 		sleep(1);
 	}
-	
 }
 
 method attach ($instanceid, $volumeid, $device, $size, $type, $mountpoint) {

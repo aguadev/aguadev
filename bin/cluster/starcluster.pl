@@ -42,8 +42,8 @@ use lib "$Bin/../../lib/external/lib/perl5";
 
 my $configfile = "$Bin/../../conf/config.yaml";
 my $logfile = "/tmp/agua-starcluster.log";
-my $SHOWLOG = 2;
-my $PRINTLOG = 5;
+my $showlog = 2;
+my $printlog = 5;
 use Conf::Yaml;
 
 my $conf = Conf::Yaml->new(
@@ -52,8 +52,8 @@ my $conf = Conf::Yaml->new(
 	separator	=>	"\t",
 	spacer		=>	"\\s\+",
 	logfile		=>	$logfile,
-	SHOWLOG		=>	$SHOWLOG,
-	PRINTLOG	=>	$PRINTLOG
+	showlog		=>	$showlog,
+	printlog	=>	$printlog
 );
 
 #### INTERNAL MODULES

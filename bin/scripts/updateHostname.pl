@@ -60,11 +60,11 @@ my $conf = Conf::Yaml->new(
 
 #### GET OPTIONS
 my $help;
-my $SHOWLOG      =    2;
-my $PRINTLOG     =    5;
+my $showlog      =    2;
+my $printlog     =    5;
 GetOptions (
-    'SHOWLOG=i'     => \$SHOWLOG,
-    'PRINTLOG=i'    => \$PRINTLOG,
+    'showlog=i'     => \$showlog,
+    'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
 
@@ -83,8 +83,8 @@ use Moose;
 use Data::Dumper;
 
 # INTS
-has 'SHOWLOG'			=>  ( isa => 'Int', is => 'rw', default => 2 );
-has 'PRINTLOG'			=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'showlog'			=>  ( isa => 'Int', is => 'rw', default => 2 );
+has 'printlog'			=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # STRINGS
 has 'cluster'		=>  ( isa => 'Str|Undef', is => 'rw' );
@@ -119,8 +119,8 @@ use Moose::Util qw( apply_all_roles );
 my $object = UpdateHosts->new({
 	conf	 	=>  $conf,
 	tempdir		=>	$tempdir,
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG	
+    showlog     =>  $showlog,
+    printlog    =>  $printlog	
 });
 apply_all_roles( $object, 'Agua::Common::Logger' );
 apply_all_roles( $object, 'Agua::Common::Util' );

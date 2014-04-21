@@ -32,8 +32,8 @@ sudo ./deploy.pl \
  [--pmfile String] \
  [--repository String] \
  [--logfile String] \
- [--SHOWLOG String] \
- [--PRINTLOG String] \
+ [--showlog String] \
+ [--printlog String] \
  [--help]
 
  --mode       :	deploy | bioapps | biorepo | ... options (see below)
@@ -45,8 +45,8 @@ sudo ./deploy.pl \
  --pmfile     :	Location of *.pm file containing installation instructions
  --repository :	Name of Git repository to be used as the code source
  --logfile    :	Location of log file
- --SHOWLOG    :	Print debug and other information to STDOUT (levels 1-5)
- --PRINTLOG   :	Print debug and other information to logfile (levels 1-5)
+ --showlog    :	Print debug and other information to STDOUT (levels 1-5)
+ --printlog   :	Print debug and other information to logfile (levels 1-5)
  --help       :	Print help info
 
 The 'mode' options are as follows:
@@ -111,8 +111,8 @@ my $token;
 my $keyfile;
 my $password;
 my $logfile      =	"/tmp/agua-deploy.log";
-my $SHOWLOG      =	2;
-my $PRINTLOG     =	5;
+my $showlog      =	2;
+my $printlog     =	5;
 my $help;
 GetOptions (
     'mode=s'        => \$mode,
@@ -124,8 +124,8 @@ GetOptions (
     'version=s'  	=> \$version,
     'repository=s'  => \$repository,
     'logfile=s'     => \$logfile,
-    'SHOWLOG=i'     => \$SHOWLOG,
-    'PRINTLOG=i'    => \$PRINTLOG,
+    'showlog=i'     => \$showlog,
+    'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
@@ -135,8 +135,8 @@ my $conf = Conf::Yaml->new(
     inputfile   =>  $configfile,
     backup      =>  1,
 
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG,
+    showlog     =>  $showlog,
+    printlog    =>  $printlog,
     logfile     =>  $logfile
 );
 
@@ -163,8 +163,8 @@ my $object = Agua::Deploy->new({
     keyfile  	=>  $keyfile,
     password  	=>  $password,
 
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG,
+    showlog     =>  $showlog,
+    printlog    =>  $printlog,
     logfile     =>  $logfile
 });
 

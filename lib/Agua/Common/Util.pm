@@ -22,7 +22,7 @@ use lib "$Bin/../../";
 sub setSlots {
 	my $self		=	shift;
 	my $arguments	=	shift;
-	$self->logDebug("arguments", $arguments);
+	#$self->logDebug("arguments", $arguments);
 
 	#### ADD ARGUMENT VALUES TO SLOTS
 	if ( $arguments )

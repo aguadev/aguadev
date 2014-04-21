@@ -202,8 +202,8 @@ my $parallel;
 my $verbose;
 my $dot = 1;
 my $cleanup = undef;
-my $SHOWLOG = 0;
-my $PRINTLOG = 0;
+my $showlog = 0;
+my $printlog = 0;
 
 my $help;
 print "jbrowseFeatures.pl    Use option --help for usage instructions.\n" and exit if not GetOptions (	
@@ -238,8 +238,8 @@ print "jbrowseFeatures.pl    Use option --help for usage instructions.\n" and ex
     'tempdir=s' 	=> \$tempdir,
     'cleanup=s' 	=> \$cleanup,
 
-    'SHOWLOG=i' 	=> \$SHOWLOG,
-    'PRINTLOG=i' 	=> \$PRINTLOG,
+    'showlog=i' 	=> \$showlog,
+    'printlog=i' 	=> \$printlog,
 
     'help' 			=> \$help
 );
@@ -310,8 +310,8 @@ $viewObject->initialise({
     cleanup     =>	$cleanup,
     qsub        =>	$qsub,
 
-    SHOWLOG     =>	$SHOWLOG,
-    PRINTLOG    =>	$PRINTLOG,
+    showlog     =>	$showlog,
+    printlog    =>	$printlog,
 
     conf        =>	$conf,
     command 	=>  \@arguments

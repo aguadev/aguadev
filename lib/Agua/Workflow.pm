@@ -46,7 +46,7 @@ use strict;
 use warnings;
 use Carp;
 
-class Agua::Workflow with Agua::Common {
+class Agua::Workflow with (Agua::Common, Agua::Common::Exchange) {
 
 #### EXTERNAL MODULES
 use Data::Dumper;
@@ -60,6 +60,8 @@ use Agua::Stage;
 use Agua::StarCluster;
 use Agua::Instance;
 use Agua::Monitor::SGE;
+
+
 
 # Integers
 has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 1 );  

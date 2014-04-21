@@ -71,3 +71,5 @@ MooseX::ConfigFromFile
 Guard
 MooseX::AttributeHelpers
 Net::RabbitFoot 
+B::Hooks::OP::PPAddr --force
+TryCatch
