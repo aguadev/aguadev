@@ -30,8 +30,8 @@ class Queue::Daemon with (Logger, Agua::Common::Exchange, Agua::Common::Util) {
 #####////}}}}}
 
 # Integers
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 2 );
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings
 has 'novaclient'	=> ( isa => 'Openstack::Nova', is => 'rw', lazy	=>	1, builder	=>	"setNovaClient" );
@@ -67,7 +67,8 @@ method loadModules {
     my $modulestring = $self->conf()->getKey("agua", "MODULES");
 	#$self->logDebug("modulestring", $modulestring);
 
-	$modulestring = "Agua::Workflow";    
+	$modulestring = "Agua::Deploy";    
+	#$modulestring = "Agua::Workflow";    
 	#print "modulestring: $modulestring\n";
 
     my @modulenames = split ",", $modulestring;
@@ -219,7 +220,7 @@ method handleInput ($modules, $json) {
     #$self->checkInputs($data, $required);
 
 	my $object	=   $self->getObject($modules, $data);
-	$self->logDebug("object", $object);
+	#$self->logDebug("object", $object);
 	$self->notifyError($data, "failed to create object") and return if not defined $object;
 
 	#### GET MODE

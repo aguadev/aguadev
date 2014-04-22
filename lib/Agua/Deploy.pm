@@ -9,7 +9,6 @@ PURPOSE
 
     1. INSTALL KEY AGUA DEPENDENCIES
     
-    
 =cut
 use strict;
 use warnings;
@@ -32,8 +31,8 @@ use Conf::Yaml;
 use Agua::Ops;
 
 # Booleans
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 1 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );
 
 # Strings
 has 's3bucket'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
@@ -69,15 +68,19 @@ has 'ops' 	=> (
 method BUILD ($hash) {
 	$self->logDebug("Agua::Deploy::BUILD()");
 	#$self->logDebug("self", $self);
-	$self->initialise();
+	$self->initialise($hash);
 }
 
-method initialise {	
-    my $conf 		= 	Conf::Yaml->new({inputfile=>"$Bin/../../conf/config.yaml"});
+method initialise ($hash) {	
+    
+	#### SET SLOTS
+	$self->setSlots($hash);
+	
+	my $conf 		= 	Conf::Yaml->new({inputfile=>"$Bin/../../conf/config.yaml"});
 	
 	#### SET CONF LOG
-	$self->conf()->SHOWLOG($self->SHOWLOG());
-	$self->conf()->PRINTLOG($self->PRINTLOG());	
+	$self->conf()->showlog($self->showlog());
+	$self->conf()->printlog($self->printlog());	
 }
 
 method deploy {
@@ -170,8 +173,8 @@ method setOps ($owner, $login, $username, $repository, $package, $privacy, $inst
 		privacy		=>	$privacy,
 		installdir	=>	$installdir,
 		logfile 	=>	$self->logfile(),
-		SHOWLOG		=>	$self->SHOWLOG(),
-		PRINTLOG	=>	$self->PRINTLOG()
+		showlog		=>	$self->showlog(),
+		printlog	=>	$self->printlog()
 		,
 		conf		=>	$self->conf()
 	};
@@ -380,10 +383,10 @@ method install {
 	#### SET OPSDIR
 	my $opsdir;
     my $basedir		= 	$self->conf()->getKey("agua", "INSTALLDIR");
-	if ( defined $opsfile ) {
+	if ( defined $opsfile and $opsfile ) {
 		($opsdir) =	$opsfile =~ /^(.+?)\/[^\/]+$/;
 	}
-	if ( not defined $opsfile ) {
+	else {
 		my $aguauser	= 	$self->conf()->getKey("agua", "AGUAUSER");
 		$opsdir		=	"$installdir/repos/$privacy/$aguauser/$opsrepo/$aguauser/$package";		
 	}

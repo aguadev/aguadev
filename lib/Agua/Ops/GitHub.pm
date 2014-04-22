@@ -466,7 +466,7 @@ method getRemoteTags ($login, $repository, $privacy) {
 	my $command 	= "curl $apiroot/repos/$login/$repository/tags";
 	$self->logDebug("command", $command);
 	my ($json) 		= $self->runCommand($command);	
-	$self->logDebug("json", $json);
+	#$self->logDebug("json", $json);
 
 	return $self->parseTags($json);
 }
@@ -492,8 +492,8 @@ method getPrivateRemoteTags ($login, $repository, $token) {
 
 method parseTags ($json) {
 	my $objects = $self->decodeJson($json);
-	$self->logDebug("objects", $objects);
-	$self->logDebug("ref objects", ref($objects));
+	#$self->logDebug("objects", $objects);
+	#$self->logDebug("ref objects", ref($objects));
 	return [] if not defined $objects;
 	return [] if ref($objects) ne "ARRAY";
 	

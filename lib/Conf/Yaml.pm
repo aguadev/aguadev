@@ -11,7 +11,9 @@ has 'memory'		=> ( isa => 'Bool', 	is => 'rw', default	=> 	0);
 has 'backup'		=> ( isa => 'Bool', 	is => 'rw', default	=> 	1);
 
 # Ints
-has 'valueoffset'	=>  ( isa => 'Int', is => 'rw', default => 24 );  
+has 'valueoffset'	=>  ( isa => 'Int', is => 'rw', default => 24 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings
 has 'inputfile' 	=>	(	is	=>	'rw',	isa	=>	'Str'	);

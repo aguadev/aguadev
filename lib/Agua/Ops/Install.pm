@@ -238,13 +238,14 @@ method runInstall ($opsdir, $installdir, $package, $version) {
 	$self->logDebug("installdir", $installdir);
 	$self->logDebug("package", $package);
 	$self->logDebug("version", $version);
+	$self->version($version);
 
 	#### PRE-INSTALL
 	$self->logDebug("BEFORE preInstall");
 	my $report = $self->preInstall($installdir, $version) if $self->can('preInstall');
-	$self->updateReport([$report]) if defined $report;
-	$report = undef;
-	$self->logDebug("AFTER self->preInstall");
+	#$self->updateReport([$report]) if defined $report;
+	#$report = undef;
+	#$self->logDebug("AFTER self->preInstall");
 
 	#### SET VARIABLES
 	my $repository		=	$self->repository();
@@ -253,10 +254,6 @@ method runInstall ($opsdir, $installdir, $package, $version) {
 	my $keyfile			=	$self->keyfile();
 	my $hubtype			=	$self->hubtype();
 	my $username		=	$self->username();
-
-	$self->logDebug("version", $version);
-	$self->logDebug("installdir", $installdir);
-	$self->logDebug("opsdir", $opsdir);
 	$self->logDebug("repository", $repository);
 	$self->logDebug("owner", $owner);
 
@@ -268,11 +265,11 @@ method runInstall ($opsdir, $installdir, $package, $version) {
 	return 0 if $self->can('doInstall') and not $self->doInstall($installdir, $version);
 
 	#### POST-INSTALL
-	$version = $self->version() if not defined $version or not $version;
+	$version = $self->version();
 	return 0 if $self->can('postInstall') and not $self->postInstall($installdir, $version);
 	
-	#### UPDATE REPORT
-	$self->updateReport([$report]) if defined $report;
+	##### UPDATE REPORT
+	#$self->updateReport([$report]) if defined $report;
 	
 	#### UPDATE PACKAGE IN DATABASE
 	#$self->logger()->write("Updating 'package' table");
@@ -287,6 +284,7 @@ method runInstall ($opsdir, $installdir, $package, $version) {
 
 	#### TERMINAL INSTALL
 	#$self->logger()->write("BEFORE terminalInstall method");
+	$version = $self->version();
 	$report = $self->terminalInstall($installdir, $version);
 	$self->updateReport([$report]) if defined $report and $report;
 	
@@ -394,7 +392,7 @@ method gitInstall ($installdir, $version) {
 	return 1;
 }
 
-method gitUpdate ($installdir, $selectedversion) {
+method gitUpdate ($installdir, $version) {
 
 	my $repository		=	$self->repository();
 	my $owner 			= 	$self->owner();
@@ -411,7 +409,7 @@ method gitUpdate ($installdir, $selectedversion) {
 	$self->logCritical("hubtype not defined") and exit if not defined $hubtype;
 
 	$self->logDebug("login", $login);
-	$self->logDebug("selectedversion", $selectedversion);
+	$self->logDebug("version", $version);
 	$self->logDebug("installdir", $installdir);
 	$self->logDebug("repository", $repository);
 	$self->logDebug("owner", $owner);
@@ -423,11 +421,16 @@ method gitUpdate ($installdir, $selectedversion) {
 	$keyfile = $self->setKeyfile($username, $hubtype) if not defined $keyfile or not $keyfile;
 
 	#### VALIDATE VERSION IF SUPPLIED, OTHERWISE SET TO LATEST VERSION
-	my $version = $self->validateVersion($login, $repository, $privacy, $selectedversion);
-	$self->logDebug("version not defined") and return 0 if not defined $version;
+	if ( defined $version ) {
+		if ( $version eq "latest" ) {
+			$version	=	$self->getLatestVersion($login, $repository, $privacy, $version);
+			$self->version($version);
+		}
+		elsif ( $version ne "" ) {
+			$self->logDebug("Failed to validate version: $version'") and return 0 if not $self->validateVersion($login, $repository, $privacy, $version);
+		}
+	}
 	$self->logDebug("version", $version);
-	$self->version($version);
-	$self->logDebug("AFTER validateVersion login", $login);
 
 	#### CHECK IF REPO EXISTS
 	$self->logDebug("installdir", $installdir);
@@ -717,7 +720,7 @@ method doInstall ($installdir, $version) {
 	$self->logDebug("version", $version);
 	#$self->logger()->write("Doing doInstall");
 	
-	return 1;
+	return $self->getInstall($installdir, $version);
 }
 
 method postInstall ($installdir, $version) {
@@ -1208,32 +1211,40 @@ method updateVersion ($version) {
 	return $self->updateTable($object, $table, $required, $updates);
 }
 
-method validateVersion ($login, $repository, $privacy, $selectedversion) {
+method validateVersion ($login, $repository, $privacy, $version) {
 #### VALIDATE VERSION IF SUPPLIED, OTHERWISE SET TO LATEST VERSION
 	$self->logCaller("");
 	$self->logDebug("login", $login);
 	$self->logDebug("repository", $repository);
 	$self->logDebug("privacy", $privacy);
-	$self->logDebug("selectedversion", $selectedversion);
 	
 	my $tags = $self->getRemoteTags($login, $repository, $privacy);
-	$self->logDebug("no tags present in repository") and return $selectedversion if not defined $tags or not @$tags;
-	#$self->logDebug("tags", $tags);
-	my $validated = 0;
+	$self->logDebug("tags", $tags);
+
+	return if not defined $tags or not @$tags;
+
 	foreach my $tag ( @$tags ) {
-		$validated = 1 if defined $selectedversion and $tag->{name} eq $selectedversion;
+		return 1 if $tag->{name} eq $version;
 	}
-	if ( $validated )	{
-		return $selectedversion;
-	}
-	elsif ( defined $selectedversion ) {
-		$self->logWarning("Could not validate version: $selectedversion") and return;
-	}
+
+	return 0;
+}
+
+method getLatestVersion ($login, $repository, $privacy) {
+#### VALIDATE VERSION IF SUPPLIED, OTHERWISE SET TO LATEST VERSION
+	$self->logCaller("");
+	$self->logDebug("login", $login);
+	$self->logDebug("repository", $repository);
+	$self->logDebug("privacy", $privacy);
+	
+	my $tags = $self->getRemoteTags($login, $repository, $privacy);
+	#$self->logDebug("tags", $tags);
+
+	return if not defined $tags or not @$tags;
 	
 	#### SORT VERSIONS
 	my $tagarray;
 	$tagarray = $self->hasharrayToArray($tags, "name");
-
 	$tagarray = $self->sortVersions($tagarray);
 	$self->logDebug("tagarray", $tagarray);
 
