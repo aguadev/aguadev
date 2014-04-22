@@ -96,7 +96,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer) {
     }
 
     method run() {
-        $self->logDebug("Workflow::run(app)");
+        $self->logDebug("");
 
         $self->_loadFile();
         #$self->logDebug("self->toString(): "), $self->toString(), "\n";

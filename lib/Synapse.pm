@@ -184,7 +184,7 @@ method getUuidsByState ($state) {
 }
 
 method getAssignments {
-	my $executable		=	$self->executable();
+	my $executable	=	$self->executable();
 	my $command		=	"$executable getAssignments ucsc_biofarm";
 	$self->logDebug("command", $command);
 
@@ -254,21 +254,22 @@ method change ($uuid, $state) {
 
 method setExecutable {
 
-		#### SET PYTHON ON PATH
-		my $python	=	$self->conf()->getKey("packages:python", "2.7.3");
-		$self->logDebug("python", $python);
-		my $installdir	=	$python->{INSTALLDIR};
-		$self->logDebug("installdir", $installdir);
-		my $export	=	"export PATH=$installdir";
+	#### SET PYTHON ON PATH
+	my $python		=	$self->conf()->getKey("packages:python", "2.7.3");
+	#$self->logDebug("python", $python);
+	my $installdir	=	$python->{INSTALLDIR};
+	#$self->logDebug("installdir", $installdir);
+	my $export		=	"export PATH=$installdir";
 
-		#### SET SYNAPSE EXECUTABLE
-		my $version = $self->latestVersion("synapse");
-		$self->logDebug("version", $version);
-		my $app	=	$self->conf()->getKey("packages:synapse", $version);
-		my $location	=	$app->{INSTALLDIR};
-		$self->logDebug("location", $location);
+	##### SET SYNAPSE EXECUTABLE
+	#my $version 	= $self->latestVersion("synapse");
+	##$self->logDebug("version", $version);
+	#my $app			=	$self->conf()->getKey("packages:synapse", $version);
+	#my $location	=	$app->{INSTALLDIR};
+	#$self->logDebug("location", $location);
+	my $location =	$self->conf()->getKey("synapse:installdir", undef);
 
-		return "$export; $location";
+	return "$export; $location";
 }
 
 method latestVersion ($package) {
