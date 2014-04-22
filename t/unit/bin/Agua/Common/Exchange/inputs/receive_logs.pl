@@ -8,7 +8,9 @@ use AnyEvent;
 use Net::RabbitFoot;
 
 my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
-    host => 'localhost',
+#    host => 'localhost',
+#    host => '10.0.2.2',
+    host => '172.17.42.1',
     port => 5672,
     user => 'guest',
     pass => 'guest',

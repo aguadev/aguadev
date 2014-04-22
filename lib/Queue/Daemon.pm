@@ -98,8 +98,12 @@ method setListener ($modules) {
     use AnyEvent;
     use Net::RabbitFoot;
     
+	my $host	=	$self->conf()->getKey("queue:masterip", undef);
+	$self->logDebug("host", $host);
+	$host = "localhost" if not defined $host;
+	
     my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
-        host => 'localhost',
+        host => $host,
         port => 5672,
         user => 'guest',
         pass => 'guest',

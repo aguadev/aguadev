@@ -1,24 +1,22 @@
 #!/bin/sh
 
 ### BEGIN INIT INFO
-# Provides:           docker
+# Provides:           rabbitjs
 # Required-Start:     $syslog $remote_fs
 # Required-Stop:      $syslog $remote_fs
 # Default-Start:      2 3 4 5
 # Default-Stop:       0 1 6
-# Short-Description:  Create lightweight, portable, self-sufficient containers.
+# Short-Description:  A simple, socket-oriented API* for messaging in Node.JS, using RabbitMQ as a backend
 # Description:
-#  Docker is an open-source project to easily create lightweight, portable,
-#  self-sufficient containers from any application. The same container that a
-#  developer builds and tests on a laptop can run at scale, in production, on
-#  VMs, bare metal, OpenStack clusters, public clouds and more.
+#  See README for more details:
+#  https://github.com/squaremo/rabbit.js/blob/master/README.md
 ### END INIT INFO
 
 export PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
 
 BASE=$(basename $0)
 
-# modify these in /etc/default/$BASE (/etc/default/docker)
+# modify these in /etc/default/$BASE (/etc/default/rabbitjs)
 RABBITJS=/usr/bin/$BASE
 RABBITJS_PIDFILE=/var/run/$BASE.pid
 RABBITJS_LOGFILE=/var/log/$BASE.log
@@ -38,7 +36,7 @@ if [ -x /sbin/initctl ] && /sbin/initctl version 2>/dev/null | grep -q upstart; 
 	exit 1
 fi
 
-# Check docker is present
+# Check rabbitjs is present
 if [ ! -x $RABBITJS ]; then
 	log_failure_msg "$RABBITJS not present or not executable"
 	exit 1
@@ -81,7 +79,7 @@ case "$1" in
 		cgroupfs_mount
 
 		touch "$RABBITJS_LOGFILE"
-		chgrp docker "$RABBITJS_LOGFILE"
+		chgrp rabbitjs "$RABBITJS_LOGFILE"
 
 		log_begin_msg "Starting $RABBITJS_DESC: $BASE"
 		start-stop-daemon --start --background \
@@ -104,9 +102,9 @@ case "$1" in
 
 	restart)
 		fail_unless_root
-		docker_pid=`cat "$RABBITJS_PIDFILE" 2>/dev/null`
-		[ -n "$docker_pid" ] \
-			&& ps -p $docker_pid > /dev/null 2>&1 \
+		rabbitjs_pid=`cat "$RABBITJS_PIDFILE" 2>/dev/null`
+		[ -n "$rabbitjs_pid" ] \
+			&& ps -p $rabbitjs_pid > /dev/null 2>&1 \
 			&& $0 stop
 		$0 start
 		;;
@@ -117,7 +115,7 @@ case "$1" in
 		;;
 
 	status)
-		status_of_proc -p "$RABBITJS_PIDFILE" "$RABBITJS" docker
+		status_of_proc -p "$RABBITJS_PIDFILE" "$RABBITJS" rabbitjs
 		;;
 
 	*)
