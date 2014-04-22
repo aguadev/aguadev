@@ -39,17 +39,17 @@ my $conf = Conf::Yaml->new(
 	separator	=>	"\t",
 	spacer		=>	"\\s\+",
     logfile     =>  $logfile,
-	SHOWLOG     =>  2,
-	PRINTLOG    =>  2
+	showlog     =>  2,
+	printlog    =>  2
 );
 
 #### GET OPTIONS
-my $SHOWLOG = 2;
-my $PRINTLOG = 5;
+my $showlog = 2;
+my $printlog = 5;
 my $help;
 GetOptions (
-    'SHOWLOG=i'     => \$SHOWLOG,
-    'PRINTLOG=i'    => \$PRINTLOG,
+    'showlog=i'     => \$showlog,
+    'printlog=i'    => \$printlog,
     'dumpfile=s'    => \$dumpfile,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
@@ -62,8 +62,8 @@ my $user        = $conf->getKey('database', 'TESTUSER');
 my $password    = $conf->getKey('database', 'TESTPASSWORD');
 my $object = new Test::Agua::Common::Stage(
     logfile     =>  $logfile,
-	SHOWLOG     =>  $SHOWLOG,
-	PRINTLOG    =>  $PRINTLOG,
+	showlog     =>  $showlog,
+	printlog    =>  $printlog,
     conf        =>  $conf,
     dumpfile    =>  $dumpfile,
     database    =>  $database,

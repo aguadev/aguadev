@@ -48,8 +48,8 @@ has 'help'		=> ( isa => 'Bool', is  => 'rw', required	=>	0, documentation => "Pr
 has 'backup'	=> ( isa => 'Bool', is  => 'rw', default	=>	0, documentation => "Automatically back up files before altering"	);
 
 # Ints
-has 'SHOWLOG'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
-has 'PRINTLOG'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);
+has 'showlog'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
+has 'printlog'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);
 has 'sleep'			=> ( is  => 'rw', 'isa' => 'Int', default	=>	600	);
 
 # Strings
@@ -409,8 +409,8 @@ method setDbObject () {
             user      	=>  $user,
             password  	=>  $password,
 			logfile		=>	$self->logfile(),
-			SHOWLOG		=>	2,
-			PRINTLOG	=>	2
+			showlog		=>	2,
+			printlog	=>	2
         }
     ) or die "Can't create database object to create database: $database. $!\n";
 

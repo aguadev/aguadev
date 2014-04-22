@@ -21,8 +21,8 @@ my $outputsdir = "$Bin/outputs";
 use Test::Agua::Common::Cluster;
 use Conf::Yaml;
 
-my $SHOWLOG     = 3;
-my $PRINTLOG    = 3;
+my $showlog     = 3;
+my $printlog    = 3;
 my $logfile = "$Bin/outputs/testuser.cluster.log";
 
 #### SET CONF FILE
@@ -38,8 +38,8 @@ my $conf = Conf::Yaml->new(
 	separator	=>	"\t",
 	spacer		=>	"\\s\+",
     logfile     =>  $logfile,
-    SHOWLOG     =>  2,
-    PRINTLOG    =>  2
+    showlog     =>  2,
+    printlog    =>  2
 );
 
 #### SET DUMPFILE
@@ -57,8 +57,8 @@ my $tester = new Test::Agua::Common::Cluster(
     username    =>  "testuser",
     project     =>  "Project1",
     workflow    =>  "Workflow1",
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG
+    showlog     =>  $showlog,
+    printlog    =>  $printlog
 );
 
 #### STAGE TO BE ADDED/REMOVED    

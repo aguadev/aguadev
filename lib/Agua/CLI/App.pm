@@ -16,8 +16,8 @@ class Agua::CLI::App with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::Statu
     
     #### LOGGER
     has 'logfile'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
-    has 'SHOWLOG'	=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
-    has 'PRINTLOG'	=> ( isa => 'Int', is => 'rw', default 	=> 	5 	);
+    has 'showlog'	=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
+    has 'printlog'	=> ( isa => 'Int', is => 'rw', default 	=> 	5 	);
 
     ##### STORED VARIABLES
     has 'localonly'	=> ( isa => 'Bool|Undef', is => 'rw', default    => 0, documentation => q{Set to 1 if application should only be run locally, i.e., not executed on the cluster} );
@@ -586,8 +586,8 @@ method clear {
 
 	#### RESET TO DEFAULT OR CLEAR ALL ATTRIBUTES
 	foreach my $attribute ( @$attributes ) {
-        next if $attribute eq "SHOWLOG";
-        next if $attribute eq "PRINTLOG";
+        next if $attribute eq "showlog";
+        next if $attribute eq "printlog";
         next if $attribute eq "db";
         
 		my $attr = $meta->get_attribute($attribute);

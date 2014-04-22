@@ -23,8 +23,8 @@ use Conf::Yaml;
 use FindBin qw($Bin);
 
 # Ints
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings
 has 'installdir'	=> ( isa => 'Str|Undef', is => 'rw' );
@@ -401,7 +401,7 @@ method testLoadConfig {
 	
 	my $conf = Conf::Yaml->new({
 		inputfile	=>	$inputfile,
-		SHOWLOG		=>	2
+		showlog		=>	2
 	});
 	$self->conf($conf);
 	

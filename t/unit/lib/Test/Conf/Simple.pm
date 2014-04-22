@@ -10,8 +10,8 @@ use FindBin qw($Bin);
 has 'memory'		=> ( isa => 'Bool', 	is => 'rw', default	=> 	0);
 
 # Ints
-has 'SHOWLOG'		=> ( isa => 'Int', 		is => 'rw', default	=> 	2);
-has 'PRINTLOG'		=> ( isa => 'Int', 		is => 'rw', default	=> 	5);
+has 'showlog'		=> ( isa => 'Int', 		is => 'rw', default	=> 	2);
+has 'printlog'		=> ( isa => 'Int', 		is => 'rw', default	=> 	5);
 
 # Objects
 has 'sections'		=> ( isa => 'ArrayRef', is => 'rw'	);
@@ -34,8 +34,8 @@ method testWriteToMemory {
 	my $logfile = "$Bin/outputs/writetomemory.log";
 	#$self->startLog($logfile);
 	$self->logfile($logfile);
-	$self->SHOWLOG(2);
-	$self->PRINTLOG(5);
+	$self->showlog(2);
+	$self->printlog(5);
 
 	#### SETUP
     $self->setUpFile($originalfile, $inputfile);

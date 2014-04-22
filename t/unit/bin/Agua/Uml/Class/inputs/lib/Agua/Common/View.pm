@@ -99,8 +99,8 @@ ORDER BY project, view};
 		$data->{mode}		=	"activateView";
 
 		$data->{logfile} 	= 	$self->logfile();
-		$data->{SHOWLOG} 	= 	$self->SHOWLOG();		
-		$data->{PRINTLOG}	=	$self->PRINTLOG();		
+		$data->{showlog} 	= 	$self->showlog();		
+		$data->{printlog}	=	$self->printlog();		
 
 		my $parser = JSON->new();
 		my $json = $parser->encode($data);
@@ -119,8 +119,8 @@ ORDER BY project, view};
 		#$args->{json} 		= 	$json;
 		#$args->{conf} 		= 	$self->conf();
 		#$args->{logfile} 	= 	$logfile;
-		#$args->{SHOWLOG} 	= 	$self->SHOWLOG();		
-		#$args->{PRINTLOG}	=	$self->PRINTLOG();		
+		#$args->{showlog} 	= 	$self->showlog();		
+		#$args->{printlog}	=	$self->printlog();		
 		#
 		#my $view = Agua::View->new($args);
 		#$view->activateView($json); 	

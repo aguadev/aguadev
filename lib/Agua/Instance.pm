@@ -24,8 +24,8 @@ use Getopt::Simple;
 use Agua::Ops;
 
 # Booleans
-has 'SHOWLOG'			=>  ( isa => 'Int', is => 'rw', default => 0 );  
-has 'PRINTLOG'			=>  ( isa => 'Int', is => 'rw', default => 0 );
+has 'showlog'			=>  ( isa => 'Int', is => 'rw', default => 0 );  
+has 'printlog'			=>  ( isa => 'Int', is => 'rw', default => 0 );
 
 #### Int
 has 'amazonuserid'	=> ( isa => 'Int|Undef', is => 'rw', required	=>	0	);
@@ -85,9 +85,9 @@ method init($hash) {
 	$self->startLog($self->logfile()) if defined $self->logfile();
 	$self->logDebug("logfile: " . $self->logfile()) if defined $self->logfile();
 
-	#### SET ops SHOWLOG AND PRINTLOG
-	$self->ops()->SHOWLOG($self->SHOWLOG());
-	$self->ops()->PRINTLOG($self->PRINTLOG());
+	#### SET ops showlog AND printlog
+	$self->ops()->showlog($self->showlog());
+	$self->ops()->printlog($self->printlog());
 	
 	$self->load($hash) if defined $hash and $hash != {};
 }
@@ -95,8 +95,8 @@ method init($hash) {
 method setOps () {
 	my $ops = Agua::Ops->new({
 		conf		=>	$self->conf(),
-		SHOWLOG		=>	$self->SHOWLOG(),
-		PRINTLOG	=>	$self->PRINTLOG()
+		showlog		=>	$self->showlog(),
+		printlog	=>	$self->printlog()
 	});
 
 	$self->ops($ops);	

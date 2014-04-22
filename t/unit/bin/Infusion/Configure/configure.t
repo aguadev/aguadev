@@ -21,8 +21,8 @@ use Getopt::Long;
 use Test::Illumina::WGS::Util::Configure;
 
 #### SET LOG
-my $SHOWLOG     =   2;
-my $PRINTLOG    =   2;
+my $showlog     =   2;
+my $printlog    =   2;
 my $logfile = "$Bin/outputs/sync.log";
 
 #### GET OPTIONS
@@ -32,8 +32,8 @@ my $testuser;
 my $tableorder  =   "sample,project";  #### FIRST FILES IN REVERSE ORDER
 my $help;
 GetOptions (
-    'SHOWLOG=i'         => \$SHOWLOG,
-    'PRINTLOG=i'        => \$PRINTLOG,
+    'showlog=i'         => \$showlog,
+    'printlog=i'        => \$printlog,
     'rootpassword=s'    => \$rootpassword,
     'testdatabase=s'    => \$testdatabase,
     'testuser=s'        => \$testuser,
@@ -48,8 +48,8 @@ my $configfile = "$Bin/../../../../../conf/config.yaml";
 my $conf = Conf::Yaml->new({
     configfile	=>  $configfile,
     backup	    =>  1,
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG    
+    showlog     =>  $showlog,
+    printlog    =>  $printlog    
 });
 
 #### LOAD LOGIN, ETC. FROM ENVIRONMENT VARIABLES
@@ -69,8 +69,8 @@ my $firsttables;
 @$firsttables = split ",", $tableorder;
 
 my $object = Test::Illumina::WGS::Util::Configure->new({
-    SHOWLOG         =>  $SHOWLOG,
-    PRINTLOG        =>  $PRINTLOG,
+    showlog         =>  $showlog,
+    printlog        =>  $printlog,
     rootpassword    =>  $rootpassword,
     testdatabase    =>  $testdatabase,
     testuser        =>  $testuser,

@@ -18,10 +18,10 @@ PURPOSE
 		
 		4. CONFIRM DIFFERENCES BETWEEN FILES IN inputs AND outputs
 		
-USAGE		./Configure.t [Int --SHOWLOG] [Int --PRINTLOG] [--help]
+USAGE		./Configure.t [Int --showlog] [Int --printlog] [--help]
 
-		--SHOWLOG		Displayed log level (1-5)	
-		--PRINTLOG		Logfile log level (1-5)	
+		--showlog		Displayed log level (1-5)	
+		--printlog		Logfile log level (1-5)	
 		--help			Show this message
 
 =cut
@@ -57,19 +57,19 @@ $Bin =~ s/^.+t\/bin/$installdir\/t\/bin/;
 use Test::Agua::JBrowse;
 
 #### GET OPTIONS
-my $SHOWLOG     =   2;
-my $PRINTLOG    =   5;
+my $showlog     =   2;
+my $printlog    =   5;
 my $help;
 GetOptions (
-    'SHOWLOG=i'     => \$SHOWLOG,
-    'PRINTLOG=i'    => \$PRINTLOG,
+    'showlog=i'     => \$showlog,
+    'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
 
 my $object = Test::Agua::JBrowse->new({
-	SHOWLOG		=> 	$SHOWLOG,
-	PRINTLOG	=>	$PRINTLOG
+	showlog		=> 	$showlog,
+	printlog	=>	$printlog
 });
 
 #### COMPARISON AND RESTORE STATE

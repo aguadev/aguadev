@@ -32,8 +32,8 @@ use FindBin qw($Bin);
 use Conf::Yaml;
 
 #### SET LOG
-my $SHOWLOG     =   2;
-my $PRINTLOG    =   5;
+my $showlog     =   2;
+my $printlog    =   5;
 my $logfile = "$Bin/outputs/sync.log";
 
 #### GET OPTIONS
@@ -44,8 +44,8 @@ my $token;
 my $keyfile;
 my $help;
 GetOptions (
-    'SHOWLOG=i'     => \$SHOWLOG,
-    'PRINTLOG=i'    => \$PRINTLOG,
+    'showlog=i'     => \$showlog,
+    'printlog=i'    => \$printlog,
     'login=s'       => \$login,
     'owner=s'       => \$owner,
     'username=s'    => \$username,
@@ -63,14 +63,14 @@ $keyfile = $ENV{'keyfile'} if not defined $keyfile;
 my $conf = Conf::Yaml->new(
     memory      =>  1,
     inputfile	=>	$configfile,
-    SHOWLOG     =>  2,
-    PRINTLOG    =>  2,
+    showlog     =>  2,
+    printlog    =>  2,
     logfile     =>  $logfile
 );
 
 my $object = new Test::Agua::CLI::Project(
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG,
+    showlog     =>  $showlog,
+    printlog    =>  $printlog,
     logfile     =>  $logfile,
     dumpfile    =>  $dumpfile,
     conf        =>  $conf,

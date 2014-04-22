@@ -64,8 +64,8 @@ use Agua::Monitor::SGE;
 
 
 # Integers
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 4 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 4 );
 has 'workflowpid'	=> ( isa => 'Int|Undef', is => 'rw', required => 0 );
 has 'workflownumber'=>  ( isa => 'Str|Undef', is => 'rw' );
 has 'start'     	=>  ( isa => 'Int|Undef', is => 'rw' );
@@ -140,16 +140,16 @@ method initialise ($json) {
 		
 	#### SET CLUSTER INSTANCES LOG
 	$self->head()->logfile($logfile);
-	$self->head()->SHOWLOG($self->SHOWLOG());
-	$self->head()->PRINTLOG($self->PRINTLOG());
+	$self->head()->showlog($self->showlog());
+	$self->head()->printlog($self->printlog());
 	$self->master()->logfile($logfile);
-	$self->master()->SHOWLOG($self->SHOWLOG());
-	$self->master()->PRINTLOG($self->PRINTLOG());
+	$self->master()->showlog($self->showlog());
+	$self->master()->printlog($self->printlog());
 	
 	#### SET HEADNODE OPS LOG
 	$self->head()->ops()->logfile($logfile);	
-	$self->head()->ops()->SHOWLOG($self->SHOWLOG());
-	$self->head()->ops()->PRINTLOG($self->PRINTLOG());
+	$self->head()->ops()->showlog($self->showlog());
+	$self->head()->ops()->printlog($self->printlog());
 
 	#### SET HEADNODE OPS CONF
 	my $conf 	= 	$self->conf();
@@ -157,8 +157,8 @@ method initialise ($json) {
 
 	#### SET MASTER OPS LOG
 	$self->master()->ops()->logfile($logfile);	
-	$self->master()->ops()->SHOWLOG($self->SHOWLOG());
-	$self->master()->ops()->PRINTLOG($self->PRINTLOG());
+	$self->master()->ops()->showlog($self->showlog());
+	$self->master()->ops()->printlog($self->printlog());
 
 	#### SET MASTER OPS CONF
 	$self->master()->ops()->conf($conf);	
@@ -436,8 +436,8 @@ method setStarCluster {
 	my $starcluster = Agua::StarCluster->new({
 		username	=>	$self->username(),
 		conf		=>	$self->conf(),
-        SHOWLOG     => 	$self->SHOWLOG(),
-        PRINTLOG    =>  $self->PRINTLOG()
+        showlog     => 	$self->showlog(),
+        printlog    =>  $self->printlog()
     });
 
 	$self->starcluster($starcluster);
@@ -486,8 +486,8 @@ method loadStarCluster ($username, $cluster) {
 	$clusterobject->{executable} = $executable;
 	
 	#### SET LOG
-	$clusterobject->{SHOWLOG} = $self->SHOWLOG();
-	$clusterobject->{PRINTLOG} = $self->PRINTLOG();
+	$clusterobject->{showlog} = $self->showlog();
+	$clusterobject->{printlog} = $self->printlog();
 	
 	#### GET ENVARS
 	my $envars = $self->getEnvars($username, $cluster);
@@ -733,8 +733,8 @@ method setStages ($username, $cluster, $json, $project, $workflow) {
 		$stage->{envars}		=  	$self->envars();
 
 		#### ADD LOG INFO
-		$stage->{SHOWLOG} 		=	$self->SHOWLOG();
-		$stage->{PRINTLOG} 		=	$self->PRINTLOG();
+		$stage->{showlog} 		=	$self->showlog();
+		$stage->{printlog} 		=	$self->printlog();
 		$stage->{logfile} 		=	$self->logfile();
 
 		my $stageobject = Agua::Stage->new($stage);
@@ -1150,8 +1150,8 @@ method setMonitor {
 		envars		=>	$self->envars(),
 
 		logfile		=>	$self->logfile(),
-		SHOWLOG		=>	$self->SHOWLOG(),
-		PRINTLOG	=>	$self->PRINTLOG()
+		showlog		=>	$self->showlog(),
+		printlog	=>	$self->printlog()
 	});
 	
 	$self->monitor($monitor);
@@ -1169,8 +1169,8 @@ method updateMonitor {
 		cluster		=>	$self->cluster(),
 		envars		=>	$self->envars(),
 		logfile		=>	$self->logfile(),
-		SHOWLOG		=>	$self->SHOWLOG(),
-		PRINTLOG	=>	$self->PRINTLOG()
+		showlog		=>	$self->showlog(),
+		printlog	=>	$self->printlog()
 	});
 
 	return $self->monitor();
@@ -1915,8 +1915,8 @@ method generateClusterKeypair {
 			username	=>	$username,
 			keyname		=>	$keyname,
 			conf		=>	$self->conf(),
-			SHOWLOG		=>	$self->SHOWLOG(),
-			PRINTLOG	=>	$self->PRINTLOG(),
+			showlog		=>	$self->showlog(),
+			printlog	=>	$self->printlog(),
 			logfile		=>	$self->logfile()
 		}
 	) if not $self->starcluster()->loaded();
@@ -2010,8 +2010,8 @@ method createConfigFile ($username, $cluster) {
 method setHead {
 	my $instance = Agua::Instance->new({
 		conf		=>	$self->conf(),
-		SHOWLOG		=>	$self->SHOWLOG(),
-		PRINTLOG	=>	$self->PRINTLOG()
+		showlog		=>	$self->showlog(),
+		printlog	=>	$self->printlog()
 	});
 
 	$self->head($instance);	
@@ -2020,8 +2020,8 @@ method setHead {
 method setMaster {
 	my $instance = Agua::Instance->new({
 		conf		=>	$self->conf(),
-		SHOWLOG		=>	$self->SHOWLOG(),
-		PRINTLOG	=>	$self->PRINTLOG()
+		showlog		=>	$self->showlog(),
+		printlog	=>	$self->printlog()
 	});
 
 	$self->master($instance);	

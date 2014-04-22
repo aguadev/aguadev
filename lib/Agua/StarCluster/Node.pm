@@ -18,8 +18,8 @@ use File::Path;
 use Data::Dumper;
 
 # Booleans
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 0 );  
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 0 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 0 );  
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 0 );
 has 'running'		=> ( isa => 'Bool|Undef', is => 'rw', default => undef );
 has 'exists'		=> ( isa => 'Bool|Undef', is => 'rw', default => undef );
 
@@ -92,8 +92,8 @@ method clear {
 
 	#### RESET TO DEFAULT OR CLEAR ALL ATTRIBUTES
 	foreach my $attribute ( @$attributes ) {
-        next if $attribute eq "SHOWLOG";
-        next if $attribute eq "PRINTLOG";
+        next if $attribute eq "showlog";
+        next if $attribute eq "printlog";
         next if $attribute eq "db";
         
 		my $attr = $meta->get_attribute($attribute);

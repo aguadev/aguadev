@@ -48,8 +48,8 @@ use overload 'eq' => 'equal';
 use FindBin qw($Bin);
 
 # Booleans
-has 'SHOWLOG'			=>  ( isa => 'Int', is => 'rw', default => 0 );  
-has 'PRINTLOG'			=>  ( isa => 'Int', is => 'rw', default => 0 );
+has 'showlog'			=>  ( isa => 'Int', is => 'rw', default => 0 );  
+has 'printlog'			=>  ( isa => 'Int', is => 'rw', default => 0 );
 
 # Ints
 has 'workflowpid'	=>	( isa => 'Int|Undef', is => 'rw' );

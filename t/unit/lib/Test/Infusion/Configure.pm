@@ -35,18 +35,18 @@ sub testCreateTestDb {
 	my $testdatabase=	"test_1_2_3";
 	my $configfile  = 	"$Bin/inputs/config.yaml";
 	my $logfile     = 	"$Bin/outputs/log/saffron-config.log";
-	#my $SHOWLOG     =    2;
-	#my $PRINTLOG    =    2;
-	my $SHOWLOG     =    $self->SHOWLOG();
-	my $PRINTLOG    =    $self->PRINTLOG();
+	#my $showlog     =    2;
+	#my $printlog    =    2;
+	my $showlog     =    $self->showlog();
+	my $printlog    =    $self->printlog();
 	my $help;
 	
 	my $conf = Conf::Yaml->new({
 		memory      =>  1,
 		configfile  =>  $configfile,
 		backup      =>  1,
-		SHOWLOG     =>  2,
-		PRINTLOG    =>  2,
+		showlog     =>  2,
+		printlog    =>  2,
 		logfile     =>  $logfile
 	});
 
@@ -58,8 +58,8 @@ sub testCreateTestDb {
 		configfile  =>  $configfile,
 		logfile     =>  $logfile,
 		dumpfile    =>  $dumpfile,
-		SHOWLOG     =>  $SHOWLOG,
-		PRINTLOG    =>  $PRINTLOG,
+		showlog     =>  $showlog,
+		printlog    =>  $printlog,
 		errortype	=>	"text"
 	});
 	
@@ -83,16 +83,16 @@ sub testCreateTables {
 	my $testdatabase=	"test_1_2_3";
 	my $configfile  = 	"$Bin/inputs/config.yaml";
 	my $logfile     = 	"$Bin/outputs/log/saffron-config.log";
-	my $SHOWLOG     =    $self->SHOWLOG();
-	my $PRINTLOG    =    $self->PRINTLOG();
+	my $showlog     =    $self->showlog();
+	my $printlog    =    $self->printlog();
 	my $help;
 	
 	my $conf = Conf::Yaml->new({
 		memory      =>  1,
 		configfile  =>  $configfile,
 		backup      =>  1,
-		SHOWLOG     =>  2,
-		PRINTLOG    =>  2,
+		showlog     =>  2,
+		printlog    =>  2,
 		logfile     =>  $logfile
 	});
 
@@ -104,8 +104,8 @@ sub testCreateTables {
 		configfile  =>  $configfile,
 		logfile     =>  $logfile,
 		dumpfile    =>  $dumpfile,
-		SHOWLOG     =>  $SHOWLOG,
-		PRINTLOG    =>  $PRINTLOG,
+		showlog     =>  $showlog,
+		printlog    =>  $printlog,
 		errortype	=>	"text"
 	});
 	
@@ -130,8 +130,8 @@ sub testCreateTables {
 		database	=>	$testdatabase,
 		dbtype		=>	$self->dbtype,
 		logfile		=>	$self->logfile(),
-		SHOWLOG		=>	$self->SHOWLOG(),
-		PRINTLOG	=>	$self->PRINTLOG(),
+		showlog		=>	$self->showlog(),
+		printlog	=>	$self->printlog(),
 		parent		=>	$self
 	});
 	
@@ -185,16 +185,16 @@ sub testLoadTsvFiles {
 	my $testdatabase=	"test_1_2_3";
 	my $configfile  = 	"$Bin/inputs/config.yaml";
 	my $logfile     = 	"$Bin/outputs/log/saffron-config.log";
-	my $SHOWLOG     =    $self->SHOWLOG();
-	my $PRINTLOG    =    $self->PRINTLOG();
+	my $showlog     =    $self->showlog();
+	my $printlog    =    $self->printlog();
 	my $help;
 	
 	my $conf = Conf::Yaml->new({
 		memory      =>  1,
 		configfile  =>  $configfile,
 		backup      =>  1,
-		SHOWLOG     =>  2,
-		PRINTLOG    =>  2,
+		showlog     =>  2,
+		printlog    =>  2,
 		logfile     =>  $logfile
 	});
 
@@ -205,8 +205,8 @@ sub testLoadTsvFiles {
 		testdatabase=>  $testdatabase,
 		configfile  =>  $configfile,
 		logfile     =>  $logfile,
-		SHOWLOG     =>  $SHOWLOG,
-		PRINTLOG    =>  $PRINTLOG,
+		showlog     =>  $showlog,
+		printlog    =>  $printlog,
 		errortype	=>	"text"
 	});
 
@@ -231,8 +231,8 @@ sub testLoadTsvFiles {
 		database	=>	$testdatabase,
 		dbtype		=>	$self->dbtype,
 		logfile		=>	$self->logfile(),
-		SHOWLOG		=>	$self->SHOWLOG(),
-		PRINTLOG	=>	$self->PRINTLOG(),
+		showlog		=>	$self->showlog(),
+		printlog	=>	$self->printlog(),
 		parent		=>	$self
 	});
 	

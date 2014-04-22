@@ -28,8 +28,8 @@ has 'starcluster'	=> ( isa => 'Test::Agua::StarCluster', is => 'rw', lazy => 1, 
 #	is =>	'rw',
 #	isa => 'Test::Agua::StarCluster',
 #	default	=>	sub { Test::Agua::StarCluster->new({
-#        SHOWLOG     => 2,
-#        PRINTLOG    =>  5
+#        showlog     => 2,
+#        printlog    =>  5
 #    });	}
 #);
 
@@ -78,8 +78,8 @@ method setStarCluster {
 		username	=>	$self->username(),
 		cluster		=>  $self->cluster(),
 		conf		=>	$self->conf(),
-        SHOWLOG     => 	$self->SHOWLOG(),
-        PRINTLOG    =>  $self->PRINTLOG()
+        showlog     => 	$self->showlog(),
+        printlog    =>  $self->printlog()
     });
 
 	$self->starcluster($starcluster);
@@ -390,7 +390,7 @@ method copyStagesField ($source, $target, $field) {
 	}
 	
 	#$self->logDebug("FINAL target", $target);
-	#$self->SHOWLOG(1);
+	#$self->showlog(1);
 
 	return $target;	
 }

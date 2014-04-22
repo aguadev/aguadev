@@ -30,8 +30,8 @@ class Queue::Manager with Logger {
 #####////}}}}}
 
 # Integers
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 2 );
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings
 has 'novaclient'	=> ( isa => 'Openstack::Nova', is => 'rw', lazy	=>	1, builder	=>	"setNovaClient" );
@@ -186,8 +186,8 @@ method setNovaClient {
 	
 	my $novaclient	= Openstack::Nova->new({
 	conf		=>	$self->conf(),
-    SHOWLOG     =>  $self->SHOWLOG(),
-    PRINTLOG    =>  $self->PRINTLOG(),
+    showlog     =>  $self->showlog(),
+    printlog    =>  $self->printlog(),
     logfile     =>  $self->logfile()
 });
 

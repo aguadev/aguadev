@@ -74,12 +74,12 @@ my $targettracksdir		=	"$targetdir/data/plugins/view/jbrowse/users/admin/Project
 my $logfile             =   "$Bin/outputs/view.log";
 
 #### GET OPTIONS
-my $SHOWLOG     =   2;
-my $PRINTLOG    =   5;
+my $showlog     =   2;
+my $printlog    =   5;
 my $help;
 GetOptions (
-    'SHOWLOG=i'     => \$SHOWLOG,
-    'PRINTLOG=i'    => \$PRINTLOG,
+    'showlog=i'     => \$showlog,
+    'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
@@ -90,13 +90,13 @@ my $conf = Conf::Yaml->new(
 	separator	=>	"\t",
 	spacer		=>	"\\s\+",
     logfile     =>  $logfile,
-	SHOWLOG     =>  2,
-	PRINTLOG    =>  2
+	showlog     =>  2,
+	printlog    =>  2
 );
 my $object = Test::Agua::View->new({   
     conf        =>  $conf,
-	SHOWLOG     =>  $SHOWLOG,
-	PRINTLOG    =>  $PRINTLOG,
+	showlog     =>  $showlog,
+	printlog    =>  $printlog,
     #database    =>  "testuser",
     dumpfile    =>  $dumpfile,
     logfile     =>  $logfile,

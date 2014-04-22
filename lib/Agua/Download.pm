@@ -27,8 +27,8 @@ use lib FindBin::Real::Bin() . "/lib";
 use Agua::JSON;
 
 # Integers
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 has 'validated'		=> ( isa => 'Int', is => 'rw', default => 0 );
 
 # Strings

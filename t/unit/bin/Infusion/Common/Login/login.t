@@ -21,8 +21,8 @@ use Test::More  tests => 2;
 use Test::Infusion::Common::Login;
 
 #### SET LOG
-my $SHOWLOG     =   2;
-my $PRINTLOG    =   5;
+my $showlog     =   2;
+my $printlog    =   5;
 my $logfile     =   "$Bin/outputs/sync.log";
 my $testpassword;
 my $testuser;
@@ -30,8 +30,8 @@ my $testuser;
 #### GET OPTIONS
 my $help;
 GetOptions (
-    'SHOWLOG=i'         => \$SHOWLOG,
-    'PRINTLOG=i'        => \$PRINTLOG,
+    'showlog=i'         => \$showlog,
+    'printlog=i'        => \$printlog,
     'testpassword=s'    => \$testpassword,
     'testuser=s'        => \$testuser,
     'help'              => \$help
@@ -43,8 +43,8 @@ my $configfile = "$Bin/../../../../../conf/config.yaml";
 my $conf = Conf::Yaml->new({
     configfile	=>  $configfile,
     backup	    =>  1,
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG    
+    showlog     =>  $showlog,
+    printlog    =>  $printlog    
 });
 
 #### LOAD LOGIN, ETC. FROM ENVIRONMENT VARIABLES
@@ -52,8 +52,8 @@ $testpassword = $ENV{'testpassword'} if not defined $testpassword or not $testpa
 $testuser = $ENV{'testuser'} if not defined $testuser;
 
 my $object = Test::Infusion::Common::Login->new({
-    SHOWLOG         =>  $SHOWLOG,
-    PRINTLOG        =>  $PRINTLOG,
+    showlog         =>  $showlog,
+    printlog        =>  $printlog,
     testpassword    =>  $testpassword,
     testuser        =>  $testuser,
     logfile         =>  $logfile,

@@ -16,8 +16,8 @@ class Agua::CLI::App with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::Statu
     
     #### LOGGER
     has 'logfile'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
-    has 'SHOWLOG'	=> ( isa => 'Int', is => 'rw', default 	=> 	4 	);  
-    has 'PRINTLOG'	=> ( isa => 'Int', is => 'rw', default 	=> 	5 	);
+    has 'showlog'	=> ( isa => 'Int', is => 'rw', default 	=> 	4 	);  
+    has 'printlog'	=> ( isa => 'Int', is => 'rw', default 	=> 	5 	);
 
     ##### STORED VARIABLES
     has 'localonly'	=> ( isa => 'Bool|Undef', is => 'rw', default    => 0, documentation => q{Set to 1 if application should only be run locally, i.e., not executed on the cluster} );

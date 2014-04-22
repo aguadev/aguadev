@@ -12,8 +12,8 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer) {
 
     #### LOGGER
     has 'logfile'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
-    has 'SHOWLOG'	=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);  
-    has 'PRINTLOG'	=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);
+    has 'showlog'	=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);  
+    has 'printlog'	=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);
 
     #### STORED LOGISTICS VARIABLES
     has 'owner'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous' );

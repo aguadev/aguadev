@@ -10,11 +10,11 @@ PURPOSE		DRIVE TESTS OF Agua::Configure
 
 		chmod 4755 Configure.t; chown root Configure.t
 
-USAGE		./Configure.t [Int --SHOWLOG] [Int --PRINTLOG]
+USAGE		./Configure.t [Int --showlog] [Int --printlog]
                             [String logfile] [--help]
 
-		--SHOWLOG		Displayed log level (1-5)	
-		--PRINTLOG		Logfile log level (1-5)	
+		--showlog		Displayed log level (1-5)	
+		--printlog		Logfile log level (1-5)	
 		--logfile		Location of logfile
 		--help			Show this message
 =cut
@@ -58,12 +58,12 @@ if ( $whoami ne "root" ) {
 }
 
 #### GET OPTIONS
-my $SHOWLOG     =   2;
-my $PRINTLOG    =   5;
+my $showlog     =   2;
+my $printlog    =   5;
 my $help;
 GetOptions (
-    'SHOWLOG=i'     => \$SHOWLOG,
-    'PRINTLOG=i'    => \$PRINTLOG,
+    'showlog=i'     => \$showlog,
+    'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
@@ -75,14 +75,14 @@ my $conf = Conf::Yaml->new(
     memory      =>  1,
     inputfile	=>	$configfile,
 	backup		=>	1,
-    SHOWLOG     =>  2,
-    PRINTLOG    =>  2,
+    showlog     =>  2,
+    printlog    =>  2,
     logfile     =>  $logfile
 );
 
 my $object = new Test::Agua::Configure(
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG,
+    showlog     =>  $showlog,
+    printlog    =>  $printlog,
     logfile     =>  $logfile,
     conf        =>  $conf
 );

@@ -8,8 +8,8 @@ class GT::Fuse with Agua::Common::Logger {
 #####////}}}}}
 
 # Integers
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 2 );
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings
 has 'uuid'			=> 	( isa => 'Str|Undef', is => 'rw', required => 0 );

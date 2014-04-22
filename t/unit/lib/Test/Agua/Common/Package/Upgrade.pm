@@ -32,8 +32,8 @@ method BUILD ($hash) {
 	if ( defined $self->logfile() ) {
 		$self->head()->ops()->logfile($self->logfile());
 		$self->head()->ops()->keyfile($self->keyfile());
-		$self->head()->ops()->SHOWLOG($self->SHOWLOG());
-		$self->head()->ops()->PRINTLOG($self->PRINTLOG());
+		$self->head()->ops()->showlog($self->showlog());
+		$self->head()->ops()->printlog($self->printlog());
 	}
 }
 

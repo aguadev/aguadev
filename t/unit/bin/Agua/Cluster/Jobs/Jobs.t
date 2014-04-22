@@ -33,12 +33,12 @@ use Test::Agua::Cluster::Jobs;
 use Conf::Yaml;
 
 #### GET OPTIONS
-my $SHOWLOG = 3;
-my $PRINTLOG = 3;
+my $showlog = 3;
+my $printlog = 3;
 my $help;
 GetOptions (
-    'SHOWLOG=i'     => \$SHOWLOG,
-    'PRINTLOG=i'    => \$PRINTLOG,
+    'showlog=i'     => \$showlog,
+    'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
@@ -52,8 +52,8 @@ my $conf = Conf::Yaml->new(
 	separator	=>	"\t",
 	spacer		=>	"\\s\+",
     logfile     =>  $logfile,
-    SHOWLOG     =>  2,
-    PRINTLOG    =>  2
+    showlog     =>  2,
+    printlog    =>  2
 );
 
 #### SET DUMPFILE
@@ -66,8 +66,8 @@ my $object = Test::Agua::Cluster::Jobs->new({
     conf        =>  $conf,
     username    =>  "testuser",
     logfile     =>  $logfile,
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG
+    showlog     =>  $showlog,
+    printlog    =>  $printlog
 });
 
 $object->testCreateTaskDirs();

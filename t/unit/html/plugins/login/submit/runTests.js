@@ -63,7 +63,7 @@ doh.register(test, [
 		var username = object.username.get('value');
 		var password = object.password.get('value');
 
-		var expected	=	 {"mode":"submitLogin","module":"Agua::Workflow","password":"aaa","username":"admin","SHOWLOG":4,"sourceid":"1234","token":"1234","callback":"handleResponse"}
+		var expected	=	 {"mode":"submitLogin","module":"Agua::Workflow","password":"aaa","username":"admin","showlog":4,"sourceid":"1234","token":"1234","callback":"handleResponse"}
 
 		// OVERLOAD send TO TEST OUTPUT
 		Agua.exchange	=	{};

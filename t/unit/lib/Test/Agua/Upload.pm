@@ -7,8 +7,8 @@ use FindBin qw($Bin);
 use JSON;
 
 # Ints
-has 'SHOWLOG'		=> ( isa => 'Int', 		is => 'rw', default	=> 	2);
-has 'PRINTLOG'		=> ( isa => 'Int', 		is => 'rw', default	=> 	2);
+has 'showlog'		=> ( isa => 'Int', 		is => 'rw', default	=> 	2);
+has 'printlog'		=> ( isa => 'Int', 		is => 'rw', default	=> 	2);
 
 # Strings
 has 'dumpfile'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);

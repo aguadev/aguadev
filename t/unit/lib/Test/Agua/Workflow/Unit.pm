@@ -58,8 +58,8 @@ method setStarCluster {
 		username	=>	$self->username(),
 		cluster		=>  $self->cluster(),
 		conf		=>	$self->conf(),
-        SHOWLOG     => 	$self->SHOWLOG(),
-        PRINTLOG    =>  $self->PRINTLOG()
+        showlog     => 	$self->showlog(),
+        printlog    =>  $self->printlog()
     });
 
 	$self->starcluster($starcluster);
@@ -592,7 +592,7 @@ method copyStagesField ($source, $target, $field) {
 	}
 	
 	#$self->logDebug("FINAL target", $target);
-	#$self->SHOWLOG(1);
+	#$self->showlog(1);
 
 	return $target;	
 }

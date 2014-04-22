@@ -34,8 +34,8 @@ use Conf::Yaml;
 use Agua::Ops;
 
 #### Integers
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 2 );
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 has 'count'			=>  ( isa => 'Int', is => 'rw', default => 50 );
 
 ##### Strings
@@ -293,8 +293,8 @@ method latestVersion ($package) {
 method setConf {
 	my $conf 	= Conf::Yaml->new({
 		backup		=>	1,
-		SHOWLOG		=>	$self->SHOWLOG(),
-		PRINTLOG	=>	$self->PRINTLOG()
+		showlog		=>	$self->showlog(),
+		printlog	=>	$self->printlog()
 	});
 	
 	$self->conf($conf);
@@ -303,8 +303,8 @@ method setConf {
 method setOps () {
 	my $ops = Agua::Ops->new({
 		conf		=>	$self->conf(),
-		SHOWLOG		=>	$self->SHOWLOG(),
-		PRINTLOG	=>	$self->PRINTLOG()
+		showlog		=>	$self->showlog(),
+		printlog	=>	$self->printlog()
 	});
 
 	$self->ops($ops);	

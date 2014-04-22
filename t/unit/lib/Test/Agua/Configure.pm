@@ -83,8 +83,8 @@ method testEnableSsh {
 		spacer 		=>	"\\s+",
 		inputfile	=>	$inputfile,
 		logfile		=>	$logfile,
-		SHOWLOG		=>	4,
-		PRINTLOG	=>	5
+		showlog		=>	4,
+		printlog	=>	5
 	});
 	my $sshlogin = $sshconfig->getKey("PasswordAuthentication");
 	$self->logDebug("sshlogin", $sshlogin);
@@ -178,8 +178,8 @@ method testDisableSsh {
 		spacer 		=>	"\\s+",
 		inputfile	=>	$inputfile,
 		logfile		=>	$logfile,
-		SHOWLOG		=>	4,
-		PRINTLOG	=>	5
+		showlog		=>	4,
+		printlog	=>	5
 	});
 	my $sshlogin = $sshconfig->getKey("PasswordAuthentication");
 	$self->logDebug("sshlogin", $sshlogin);

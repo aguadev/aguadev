@@ -29,8 +29,8 @@ use POSIX;
 use Data::Dumper;
 
 # Ints
-has 'SHOWLOG'	=>  ( isa => 'Int', is => 'rw', default => 2 );  
-has 'PRINTLOG'	=>  ( isa => 'Int', is => 'rw', default => 2 );
+has 'showlog'	=>  ( isa => 'Int', is => 'rw', default => 2 );  
+has 'printlog'	=>  ( isa => 'Int', is => 'rw', default => 2 );
 
 # Strings
 has 'dbtype'	=> ( isa => 'Str|Undef', is => 'ro', default => 'mysql' );

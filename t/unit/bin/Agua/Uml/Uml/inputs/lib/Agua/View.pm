@@ -134,8 +134,8 @@ use Agua::DBaseFactory;
 use Agua::JBrowse;
 
 # Booleans
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 2 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );
 
 # Ints
 has 'validated'	=> ( isa => 'Int', is => 'rw', default => 0 );
@@ -194,8 +194,8 @@ method initialise ($json) {
 	#### SET CONF LOG (IN CASE View IS CALLED AS A COMPONENT
 	#### I.E., NOT VIA view.cgi)
 	$self->conf()->logfile($logfile) if not defined $self->conf()->logfile();
-	$self->conf()->SHOWLOG($self->SHOWLOG()) if not defined $self->conf()->SHOWLOG();
-	$self->conf()->PRINTLOG($self->PRINTLOG()) if not defined $self->conf()->PRINTLOG();
+	$self->conf()->showlog($self->showlog()) if not defined $self->conf()->showlog();
+	$self->conf()->printlog($self->printlog()) if not defined $self->conf()->printlog();
 	
 	#### SET DATABASE HANDLE
 	$self->setDbh();

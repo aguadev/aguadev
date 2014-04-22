@@ -28,8 +28,8 @@ use Agua::Admin;
 use Conf::Agua;
 
 # Ints
-has 'SHOWLOG'		=> ( isa => 'Int', 		is => 'rw', default 	=> 	2 	);  
-has 'PRINTLOG'		=> ( isa => 'Int', 		is => 'rw', default 	=> 	2 	);
+has 'showlog'		=> ( isa => 'Int', 		is => 'rw', default 	=> 	2 	);  
+has 'printlog'		=> ( isa => 'Int', 		is => 'rw', default 	=> 	2 	);
 has 'maxnamelength'=> ( isa => 'Int', 	is => 'rw', default 	=> 	80 	);
 has 'validated'	=> ( isa => 'Int', is => 'rw', default => 0 );
 

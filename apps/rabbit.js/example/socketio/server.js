@@ -33,7 +33,7 @@ socketioserver.sockets.on('connection', function(connection) {
 });
 
 
-httpserver.listen(8000, '0.0.0.0');
+httpserver.listen(8080, '0.0.0.0');
 
 // ==== boring detail
 

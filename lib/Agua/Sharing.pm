@@ -28,8 +28,8 @@ class Agua::Sharing with (Agua::Common) {
 use Agua::Instance;
 
 # Ints
-has 'SHOWLOG'	=>  ( isa => 'Int', is => 'rw', default => 4 );  
-has 'PRINTLOG'	=>  ( isa => 'Int', is => 'rw', default => 1 );
+has 'showlog'	=>  ( isa => 'Int', is => 'rw', default => 4 );  
+has 'printlog'	=>  ( isa => 'Int', is => 'rw', default => 1 );
 has 'validated'	=> ( isa => 'Int', is => 'rw', default => 0 );
 
 # Strings
@@ -63,8 +63,8 @@ has 'head' 	=> (
 	default	=>	sub {
 		Agua::Instance->new({
 			logfile		=>	"$Bin/log/sharing.head.log",
-			SHOWLOG		=>	2,
-			PRINTLOG	=>	5
+			showlog		=>	2,
+			printlog	=>	5
 		});
 	}
 );
@@ -107,8 +107,8 @@ method initialise ($json) {
 	$self->logDebug("HERE");
 	if ( defined $self->logfile() ) {
 		$self->head()->ops()->logfile($self->logfile());
-		$self->head()->ops()->SHOWLOG($self->SHOWLOG());
-		$self->head()->ops()->PRINTLOG($self->PRINTLOG());
+		$self->head()->ops()->showlog($self->showlog());
+		$self->head()->ops()->printlog($self->printlog());
 	}
 
 	#### SET DATABASE HANDLE

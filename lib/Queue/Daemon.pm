@@ -30,17 +30,21 @@ class Queue::Daemon with (Logger, Agua::Common::Exchange, Agua::Common::Util) {
 #####////}}}}}
 
 # Integers
-has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );
-has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'showlog'	=>  ( isa => 'Int', is => 'rw', default => 2 );
+has 'printlog'	=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings
-has 'novaclient'	=> ( isa => 'Openstack::Nova', is => 'rw', lazy	=>	1, builder	=>	"setNovaClient" );
-has 'conf'	=> ( isa => 'Conf::Yaml', is => 'rw', required	=>	0 );
+has 'novaclient'=> ( isa => 'Openstack::Nova', is => 'rw', lazy	=>	1, builder	=>	"setNovaClient" );
+
+# Objects
+has 'lastsent'	=> ( isa => 'HashRef|Undef', is => 'rw', required	=>	0 );
+has 'conf'		=> ( isa => 'Conf::Yaml', is => 'rw', required	=>	0 );
 
 use FindBin qw($Bin);
 use Test::More;
 
 use TryCatch;
+use Test::More;
 
 #####////}}}}}
 
@@ -65,11 +69,10 @@ method loadModules {
     my $modules;
     my $installdir = $self->conf()->getKey("agua", "INSTALLDIR");
     my $modulestring = $self->conf()->getKey("agua", "MODULES");
-	#$self->logDebug("modulestring", $modulestring);
 
-	$modulestring = "Agua::Deploy";    
+	#$self->logDebug("modulestring", $modulestring);
+	#$modulestring = "Agua::Deploy";    
 	#$modulestring = "Agua::Workflow";    
-	#print "modulestring: $modulestring\n";
 
     my @modulenames = split ",", $modulestring;
     foreach my $modulename ( @modulenames) {
@@ -99,16 +102,26 @@ method setListener ($modules) {
     use AnyEvent;
     use Net::RabbitFoot;
     
-	my $host	=	$self->conf()->getKey("queue:masterip", undef);
+	my $host		=	$self->conf()->getKey("queue:masterip", undef);
+	my $user		= 	$self->conf()->getKey("queue:user", undef);
+	my $password	=	$self->conf()->getKey("queue:password", undef);
+	my $vhost		=	$self->conf()->getKey("queue:vhost", undef);
 	$self->logDebug("host", $host);
-	$host = "localhost" if not defined $host;
+	$self->logDebug("user", $user);
+	#$self->logDebug("password", $password);
+	$self->logDebug("vhost", $vhost);
 	
     my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
-        host => $host,
-        port => 5672,
-        user => 'guest',
-        pass => 'guest',
-        vhost => '/',
+        host 	=>	$host,
+        port 	=>	5672,
+        user 	=>	$user,
+        pass 	=>	$password,
+        vhost	=>	$vhost,
+		#host => 'localhost',
+		#port => 5672,
+		#user => 'guest',
+		#pass => 'guest',
+		#vhost => '/',
     );
     
     my $channel = $conn->open_channel();
@@ -196,8 +209,17 @@ method handleInput ($modules, $json) {
     #### GET DATA
     my $data = $self->parseJson($json);
 	#$self->logDebug("data", $data);
+
 	return if not defined $data;
-    
+
+	if ( $self->can('lastsent') ) {
+		$self->logDebug("Checking for match with self->lastsent()");
+		$self->logDebug("data", $data);
+		$self->logDebug("self->lastsent()", $self->lastsent());
+
+		return if Test::More::eq_hash($data, $self->lastsent());
+    }
+
 	if ( defined $data->{processid} and $data->{processid} eq $$ ) {
 		$self->logDebug("processid matches self. Ignoring");
 		return;
@@ -232,6 +254,17 @@ method handleInput ($modules, $json) {
     $self->notifyError($data, "mode not supported: $mode") and return if not $object->can($mode);
 	#print "{ error: 'mode not supported: $mode' }" and return if not $object->can($mode);
     
+	#### CHECK HOSTNAME
+	if ( defined $data->{hostname} and $data->{hostname} ne "" ) {
+		$self->logDebug("Checking hostname matches '$data->{hostname}'");
+		my $hostname	=	$self->getHostname();
+		if ( $hostname ne $data->{hostname} ) {
+		    $self->notifyError($data, "data->{hostname} '$data->{hostname}' failed to match hostname '$hostname'");
+			return;
+		}
+		
+		$self->logDebug("hostname matches data->{hostname}: $hostname");
+	}
 	
     #### RUN QUERY
 	try {
@@ -245,6 +278,24 @@ method handleInput ($modules, $json) {
     
 	#### HANDLE ANY EXIT CALLS IN THE MODULES    
     EXITLABEL: { warn "EXIT\n"; };
+}
+
+method getHostname {
+
+	#### E.G., split.v2-5.hd800-real-de2e4a8b-7034-4525-ab3e-33fc993797f8.novalocal
+	my $command		=	"curl http://169.254.169.254/2009-04-04/meta-data/hostname";
+	$self->logDebug("command", $command);
+	#my $hostname	=	`$command`;
+	my $hostname	=	"split.v2-5.hd800-real-de2e4a8b-7034-4525-ab3e-33fc993797f8.novalocal";
+	$hostname		=~	s/\.novalocal\s*$//;
+	$self->logDebug("hostname", $hostname);
+	
+	if ( $hostname eq "" ) {
+		$hostname	=	`hostname`;
+		$hostname	=~	s/\s+$//g;
+	}
+
+	return $hostname;	
 }
 
 method getObject ($modules, $data) {

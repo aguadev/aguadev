@@ -111,15 +111,15 @@ method _roleUser ($sourcefile, $targetfile, $outfh) {
 
 	my $role = Agua::Uml::Role->new({
 		sourcefile 	=> 	$sourcefile,
-	    SHOWLOG    	=>  $self->SHOWLOG(),
-	    PRINTLOG   	=>  $self->PRINTLOG
+	    showlog    	=>  $self->showlog(),
+	    printlog   	=>  $self->printlog
 	});
 	$self->logDebug("role", $role->summary());
 	
 	my $user = Agua::Uml::Class->new({
 		targetfile 	=> 	$targetfile,
-	    SHOWLOG    	=>  $self->SHOWLOG(),
-	    PRINTLOG   	=>  $self->PRINTLOG
+	    showlog    	=>  $self->showlog(),
+	    printlog   	=>  $self->printlog
 	});
 	$self->logDebug("user", $user->summary());
 	
@@ -159,8 +159,8 @@ method _roleUsers ($sourcefile, $targetdir, $outputfile) {
 
 	my $role = Agua::Uml::Role->new({
 		sourcefile 	=> 	$sourcefile,
-	    SHOWLOG    	=>  $self->SHOWLOG(),
-	    PRINTLOG   	=>  $self->PRINTLOG
+	    showlog    	=>  $self->showlog(),
+	    printlog   	=>  $self->printlog
 	});
 	$self->logDebug("role->modulename()", $role->modulename());
 
@@ -267,32 +267,32 @@ method _getClasses ($targetdir) {
 	$self->logNote("files", $files);
 
 
-	my $showlog = $self->SHOWLOG();
-	$self->SHOWLOG(2);
+	my $showlog = $self->showlog();
+	$self->showlog(2);
 	
 	foreach my $file ( @$files ) {
 		my $targetfile = "$targetdir/$file";
 		$self->logNote("targetfile", $targetfile);
 
 #$self->logDebug("file", $file);
-#$self->SHOWLOG(5) if $file eq "View.pm";
+#$self->showlog(5) if $file eq "View.pm";
 
 		my $class = Agua::Uml::Class->new({
 			targetfile 	=> 	$targetfile,
 			targetdir 	=> 	$targetdir,
-			SHOWLOG    	=>  $self->SHOWLOG(),
-			PRINTLOG   	=>  $self->PRINTLOG
+			showlog    	=>  $self->showlog(),
+			printlog   	=>  $self->printlog
 		});
 		#$self->logNote("class", $class);
 		next if not defined $class or not defined $class->modulename();
 		$self->logNote("class->modulename()", $class->modulename());
 		$classes->{$class->modulename()} = $class;
 
-#$self->SHOWLOG(2) if $file eq "View.pm";
+#$self->showlog(2) if $file eq "View.pm";
 
 	}
 
-	$self->SHOWLOG($showlog);
+	$self->showlog($showlog);
 
 
 	$self->logNote("CLASSES for targetdir", $targetdir);
@@ -342,8 +342,8 @@ method _userRoles ($targetfile, $outputfile) {
 	$self->logDebug("targetfile", $targetfile);
 	my $user = Agua::Uml::Class->new({
 		targetfile 	=> 	$targetfile,
-	    SHOWLOG    	=>  $self->SHOWLOG(),
-	    PRINTLOG   	=>  $self->PRINTLOG
+	    showlog    	=>  $self->showlog(),
+	    printlog   	=>  $self->printlog
 	});
 	$self->logDebug("user", $user->summary());
 	#$self->logDebug("user->roles", $user->roles());	
@@ -583,8 +583,8 @@ method hashKeysToString ($hash) {
 #		my $class = Agua::Uml::Role->new({
 #			classfile 	=> 	$classfile,
 #			sourcedir 	=> 	$sourcedir,
-#			SHOWLOG    	=>  $self->SHOWLOG(),
-#			PRINTLOG   	=>  $self->PRINTLOG
+#			showlog    	=>  $self->showlog(),
+#			printlog   	=>  $self->printlog
 #		});
 #		$self->logDebug("class", $class);
 #		

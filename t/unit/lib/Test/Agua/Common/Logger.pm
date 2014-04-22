@@ -6,8 +6,8 @@ use Test::More;
 use FindBin qw($Bin);
 
 # Ints
-has 'SHOWLOG'	=> ( isa => 'Int', 		is => 'rw', default	=> 	2);
-has 'PRINTLOG'	=> ( isa => 'Int', 		is => 'rw', default	=> 	5);
+has 'showlog'	=> ( isa => 'Int', 		is => 'rw', default	=> 	2);
+has 'printlog'	=> ( isa => 'Int', 		is => 'rw', default	=> 	5);
 
 # Strings
 
@@ -30,8 +30,8 @@ method test_WARN_Handler {
 	
 	my $logfile = "$Bin/outputs/warnhandler.log";
 	$self->startLog($logfile);
-	$self->SHOWLOG(5);
-	$self->PRINTLOG(5);
+	$self->showlog(5);
+	$self->printlog(5);
 
 	for (my $x = 1; $x < 3; $x++) {
 		warn "warning $x";
@@ -56,8 +56,8 @@ method test_DIE_Handler {
 
 	my $logfile = "$Bin/outputs/diehandler.log";
 	$self->startLog($logfile);
-	$self->SHOWLOG(2);
-	$self->PRINTLOG(5);
+	$self->showlog(2);
+	$self->printlog(5);
 
 	chdir("$Bin/inputs/exists") or warn($!);
 	ok(1, "DIE_handler    NO DIE when chdir to existing directory");
@@ -82,8 +82,8 @@ method testStartLog () {
 
 	my $logfile = "$Bin/outputs/start.log";
 	$self->startLog($logfile);
-	$self->SHOWLOG(2);
-	$self->PRINTLOG(5);
+	$self->showlog(2);
+	$self->printlog(5);
 	my $random = rand(99999999999);
 	$self->logDebug("FIRST ENTRY IN LOG FILE", $random);
 	my $content = `cat $logfile`;
@@ -96,8 +96,8 @@ method testStopLog () {
 
 	my $logfile = "$Bin/outputs/stop.log";
 	$self->startLog($logfile);
-	$self->SHOWLOG(2);
-	$self->PRINTLOG(5);
+	$self->showlog(2);
+	$self->printlog(5);
 	my $random = rand(99999999999);
 	$self->logDebug("FIRST ENTRY IN LOG FILE", $random);
 	warn "BEFORE stopLog    THIS STDERR SHOULD APPEAR IN LOG FILE\n";
@@ -118,8 +118,8 @@ method testPauseLog () {
 
 	my $logfile = "$Bin/outputs/pause.log";
 	$self->startLog($logfile);
-	$self->SHOWLOG(2);
-	$self->PRINTLOG(5);
+	$self->showlog(2);
+	$self->printlog(5);
 	my $random = rand(99999999999);
 	$self->logDebug("FIRST LOG ENTRY", $random);
 	$self->logDebug("THIS STDOUT SHOULD APPEAR IN LOG FILE");
@@ -147,8 +147,8 @@ method testResumeLog {
 	
 	my $logfile = "$Bin/outputs/resume.log";
 	$self->startLog($logfile);
-	$self->SHOWLOG(2);
-	$self->PRINTLOG(5);
+	$self->showlog(2);
+	$self->printlog(5);
 	my $random = rand(99999999999);
 	$self->logDebug("FIRST ENTRY IN LOG FILE", $random);
 	warn "BEFORE pauseLog    THIS STDERR SHOULD APPEAR IN LOG FILE\n";
@@ -177,8 +177,8 @@ method testLogDebug {
 
 	my $logfile = "$Bin/outputs/logdebug.log";
 	$self->startLog($logfile);
-	$self->SHOWLOG(2);
-	$self->PRINTLOG(5);
+	$self->showlog(2);
+	$self->printlog(5);
 	
 	my $var = { test =>     1};
 	my $undef = undef;

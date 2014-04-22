@@ -49,12 +49,12 @@ $Bin =~ s/^.+\/bin/$installdir\/t\/unit\/bin/;
 
 #### GET OPTIONS
 my $logfile 	= "/tmp/testuser.login.log";
-my $SHOWLOG     =   2;
-my $PRINTLOG    =   5;
+my $showlog     =   2;
+my $printlog    =   5;
 my $help;
 GetOptions (
-    'SHOWLOG=i'     => \$SHOWLOG,
-    'PRINTLOG=i'    => \$PRINTLOG,
+    'showlog=i'     => \$showlog,
+    'printlog=i'    => \$printlog,
     'logfile=s'     => \$logfile,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
@@ -66,8 +66,8 @@ my $conf = Conf::Yaml->new(
     separator	=>	"\t",
     spacer	    =>	"\\s\+",
     logfile     =>  $logfile,
-	SHOWLOG     =>  2,
-	PRINTLOG    =>  5    
+	showlog     =>  2,
+	printlog    =>  5    
 );
 isa_ok($conf, "Conf::Yaml", "conf");
 
@@ -82,8 +82,8 @@ my $object = new Test::Agua::Common::Login(
     dbtype     	=>  $dbtype,
     logfile     =>  $logfile,
     dumpfile    =>  $dumpfile,
-	SHOWLOG     =>  $SHOWLOG,
-	PRINTLOG    =>  $PRINTLOG
+	showlog     =>  $showlog,
+	printlog    =>  $printlog
 );
 isa_ok($object, "Test::Agua::Common::Login", "object");
 

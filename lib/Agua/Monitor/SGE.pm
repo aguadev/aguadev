@@ -76,8 +76,8 @@ use FindBin qw($Bin);
 
 #### Boolean
 has 'loaded'		=> ( isa => 'Bool', is => 'rw', default => 0 );  
-has 'SHOWLOG'			=>  ( isa => 'Int', is => 'rw', default => 1 );  
-has 'PRINTLOG'			=>  ( isa => 'Int', is => 'rw', default => 2 );
+has 'showlog'			=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'printlog'			=>  ( isa => 'Int', is => 'rw', default => 2 );
 
 #### Int
 has 'pid'		=> ( isa => 'Int|Undef', is => 'rw' );
@@ -174,8 +174,8 @@ method clear {
 
 	#### RESET TO DEFAULT OR CLEAR ALL ATTRIBUTES
 	foreach my $attribute ( @$attributes ) {
-        next if $attribute eq "SHOWLOG";
-        next if $attribute eq "PRINTLOG";
+        next if $attribute eq "showlog";
+        next if $attribute eq "printlog";
         next if $attribute eq "db";
         
 		my $attr = $meta->get_attribute($attribute);
@@ -229,16 +229,16 @@ method initialise () {
 
 	#### SET CLUSTER INSTANCES LOG
 	$self->head()->logfile($logfile);
-	$self->head()->SHOWLOG($self->SHOWLOG());
-	$self->head()->PRINTLOG($self->PRINTLOG());
+	$self->head()->showlog($self->showlog());
+	$self->head()->printlog($self->printlog());
 	$self->master()->logfile($logfile);
-	$self->master()->SHOWLOG($self->SHOWLOG());
-	$self->master()->PRINTLOG($self->PRINTLOG());
+	$self->master()->showlog($self->showlog());
+	$self->master()->printlog($self->printlog());
 	
 	#### SET HEADNODE OPS LOG
 	$self->head()->ops()->logfile($logfile);	
-	$self->head()->ops()->SHOWLOG($self->SHOWLOG());
-	$self->head()->ops()->PRINTLOG($self->PRINTLOG());
+	$self->head()->ops()->showlog($self->showlog());
+	$self->head()->ops()->printlog($self->printlog());
 
 	#### SET HEADNODE OPS CONF
 	my $conf 	= 	$self->conf();
@@ -246,8 +246,8 @@ method initialise () {
 
 	#### SET MASTER OPS LOG
 	$self->master()->ops()->logfile($logfile);	
-	$self->master()->ops()->SHOWLOG($self->SHOWLOG());
-	$self->master()->ops()->PRINTLOG($self->PRINTLOG());
+	$self->master()->ops()->showlog($self->showlog());
+	$self->master()->ops()->printlog($self->printlog());
 
 	#### SET MASTER OPS CONF
 	$self->master()->ops()->conf($conf);	

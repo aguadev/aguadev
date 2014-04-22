@@ -33,8 +33,8 @@ sub setDbh {
 	my $dbfile 		=	$args->{dbfile};
 
 	my $logfile = $self->logfile();
-	my $SHOWLOG = $self->SHOWLOG();
-	my $PRINTLOG = $self->PRINTLOG();
+	my $showlog = $self->showlog();
+	my $printlog = $self->printlog();
 
 	$self->logNote("AFTER database", $database);
 	$self->logNote("AFTER dbtype", $dbtype);
@@ -84,8 +84,8 @@ sub setDbh {
 			user        =>  $user,
 			password    =>  $password,
 			logfile		=>	$logfile,
-			SHOWLOG		=>	$SHOWLOG,
-			PRINTLOG	=>	$PRINTLOG,
+			showlog		=>	$showlog,
+			printlog	=>	$printlog,
 			parent		=>	$self
 		}
 	) or print qq{ error: 'Agua::Database::setDbh    Cannot create database object $database: $!' } and return;

@@ -51,8 +51,8 @@ sub testGetSlots {
 	#print Dumper $slots;
 	
 	my $expected = [
-		'PRINTLOG',
-		'SHOWLOG',
+		'printlog',
+		'showlog',
 		'conf',
 		'configfile',
 		'database',
@@ -90,10 +90,10 @@ sub testGetAncestorSlots {
 	#print Dumper $slots;
 	
 	my $expected = [
-		'OLDPRINTLOG',
-		'OLDSHOWLOG',
-		'PRINTLOG',
-		'SHOWLOG',
+		'OLDprintlog',
+		'OLDshowlog',
+		'printlog',
+		'showlog',
 		'backup',
 		'errortype',
 		'errpid',
@@ -120,10 +120,10 @@ sub testGrandParentSlots {
 	#print Dumper $slots;
 	
 	my $expected = [
-		'OLDPRINTLOG',
-		'OLDSHOWLOG',
-		'PRINTLOG',
-		'SHOWLOG',
+		'OLDprintlog',
+		'OLDshowlog',
+		'printlog',
+		'showlog',
 		'backup',
 		'conf',
 		'configfile',

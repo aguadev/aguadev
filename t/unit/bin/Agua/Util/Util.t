@@ -26,13 +26,13 @@ $Bin =~ s/^.+t\/bin/$installdir\/t\/bin/;
 
 use Test::Agua::Util;
 
-my $SHOWLOG 	=	2;
-my $PRINTLOG 	=	5;
+my $showlog 	=	2;
+my $printlog 	=	5;
 my $logfile = "/tmp/testuser.util.log";
 my $object = Test::Agua::Util->new(
     logfile     =>  $logfile,
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG
+    showlog     =>  $showlog,
+    printlog    =>  $printlog
 );
 
 #Completed running plugin: sge.CreateCell

@@ -23,8 +23,8 @@ use Getopt::Long;
 use Test::Agua::Ops::Stager;
 
 #### SET LOG
-my $SHOWLOG     =   0;
-my $PRINTLOG    =   4;
+my $showlog     =   0;
+my $printlog    =   4;
 my $logfile = "$Bin/outputs/version.log";
 
 #### GET OPTIONS
@@ -33,15 +33,15 @@ my $token;
 my $keyfile;
 my $help;
 GetOptions (
-    'SHOWLOG=i'     => \$SHOWLOG,
-    'PRINTLOG=i'    => \$PRINTLOG,
+    'showlog=i'     => \$showlog,
+    'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
 
 my $object = new Test::Agua::Ops::Stager(
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG,
+    showlog     =>  $showlog,
+    printlog    =>  $printlog,
     logfile     =>  $logfile
 );
 isa_ok($object, "Test::Agua::Ops::Stager");
@@ -62,8 +62,8 @@ sub usage {
         
 OPTIONS:
 
---SHOWLOG     Integer from 1 (least) to 5 (most) to display log information
---PRINTLOG    Integer from 1 (least) to 5 (most) to print log info to file
+--showlog     Integer from 1 (least) to 5 (most) to display log information
+--printlog    Integer from 1 (least) to 5 (most) to print log info to file
 
     };
 }

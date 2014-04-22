@@ -24,8 +24,8 @@ use Test::Agua::Monitor::SGE;
 use Conf::Yaml;
 
 my $logfile = "/tmp/testuser.monitor.sge.log";
-my $SHOWLOG = 2;
-my $PRINTLOG = 2;
+my $showlog = 2;
+my $printlog = 2;
 
 #### SET CONF FILE
 my $installdir  =   $ENV{'installdir'} || "/agua";
@@ -44,15 +44,15 @@ my $conf = Conf::Yaml->new(
 	separator	=>	"\t",
 	spacer		=>	"\\s\+",
     logfile     =>  $logfile,
-	SHOWLOG     =>  2,
-	PRINTLOG    =>  2
+	showlog     =>  2,
+	printlog    =>  2
 );
 
 my $object = Test::Agua::Monitor::SGE->new({
     dumpfile    =>  $dumpfile,
     logfile     =>  $logfile,
-	SHOWLOG     =>  $SHOWLOG,
-	PRINTLOG    =>  $PRINTLOG,
+	showlog     =>  $showlog,
+	printlog    =>  $printlog,
     conf        =>  $conf,
     cluster     =>  "SGE",
     username    =>  "admin"    

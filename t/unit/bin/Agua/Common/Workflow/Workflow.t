@@ -31,8 +31,8 @@ my $configfile  =   "$installdir/conf/config.yaml";
 $Bin =~ s/^.+t\/bin/$installdir\/t\/bin/;
 
 my $logfile = "$Bin/outputs/testuser.workflow.log";
-my $SHOWLOG     =   2;
-my $PRINTLOG    =   5;
+my $showlog     =   2;
+my $printlog    =   5;
 
 my $conf = Conf::Yaml->new(
     inputfile	=>	$configfile,
@@ -40,8 +40,8 @@ my $conf = Conf::Yaml->new(
     separator	=>	"\t",
     spacer	    =>	"\\s\+",
     logfile     =>  $logfile,
-	SHOWLOG     =>  2,
-	PRINTLOG    =>  2    
+	showlog     =>  2,
+	printlog    =>  2    
 );
 isa_ok($conf, "Conf::Yaml", "conf");
 
@@ -54,8 +54,8 @@ my $workflow = new Test::Agua::Common::Workflow(
     conf        =>  $conf,
     dumpfile    =>  $dumpfile,
     logfile     =>  $logfile,
-	SHOWLOG     =>  $SHOWLOG,
-	PRINTLOG    =>  $PRINTLOG,
+	showlog     =>  $showlog,
+	printlog    =>  $printlog,
 	username	=>	$username
 );
 isa_ok($workflow, "Test::Agua::Common::Workflow", "workflow");

@@ -21,11 +21,11 @@ OUTPUT
     SUBDIRS MIRRORING THE bin DIRECTORY
 
 
-USAGE		./Doc.t [Int --SHOWLOG] [Int --PRINTLOG]
+USAGE		./Doc.t [Int --showlog] [Int --printlog]
                             [String logfile] [--help]
 
-		--SHOWLOG		Displayed log level (1-5)	
-		--PRINTLOG		Logfile log level (1-5)	
+		--showlog		Displayed log level (1-5)	
+		--printlog		Logfile log level (1-5)	
 		--logfile		Location of logfile
 		--help			Show this message
 
@@ -54,12 +54,12 @@ my $logfile     = "$Bin/outputs/doc.log";
 
 
 #### GET OPTIONS
-my $SHOWLOG     =   2;
-my $PRINTLOG    =   5;
+my $showlog     =   2;
+my $printlog    =   5;
 my $help;
 GetOptions (
-    'SHOWLOG=i'     => \$SHOWLOG,
-    'PRINTLOG=i'    => \$PRINTLOG,
+    'showlog=i'     => \$showlog,
+    'printlog=i'    => \$printlog,
     'logfile=s'     => \$logfile,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
@@ -70,8 +70,8 @@ use Test::Doc;
 
 my $object = new Test::Doc({
     logfile     =>  $logfile,
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG,
+    showlog     =>  $showlog,
+    printlog    =>  $printlog,
     basedir     =>  $Bin
 });
 

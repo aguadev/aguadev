@@ -32,8 +32,8 @@ method BUILD ($hash) {
 	if ( defined $self->logfile() ) {
 		$self->head()->ops()->logfile($self->logfile());
 		$self->head()->ops()->keyfile($self->keyfile());
-		$self->head()->ops()->SHOWLOG($self->SHOWLOG());
-		$self->head()->ops()->PRINTLOG($self->PRINTLOG());
+		$self->head()->ops()->showlog($self->showlog());
+		$self->head()->ops()->printlog($self->printlog());
 	}
 }
 
@@ -239,8 +239,8 @@ method setOpsInfo ($opsfile) {
 	my $opsinfo = Agua::OpsInfo->new({
 		inputfile	=>	$opsfile,
 		logfile		=>	$self->logfile(),
-		SHOWLOG		=>	$self->SHOWLOG(),
-		PRINTLOG	=>	$self->PRINTLOG()
+		showlog		=>	$self->showlog(),
+		printlog	=>	$self->printlog()
 	});
 	$self->opsinfo($opsinfo);
 	#$self->logDebug("opsinfo", $opsinfo);

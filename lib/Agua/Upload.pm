@@ -35,8 +35,8 @@ use Agua::Common::Exchange;
 
 
 # Ints
-has 'SHOWLOG'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
-has 'PRINTLOG'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);
+has 'showlog'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
+has 'printlog'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);
 has 'maxnamelength'	=> ( isa => 'Int', is => 'rw', default 	=> 	80 	);
 has 'validated'		=> ( isa => 'Int', is => 'rw', default => 0 );
 has 'counter'		=> ( isa => 'Int', is => 'rw', default => -1 );
@@ -70,8 +70,8 @@ has 'exchange'	=> ( isa => 'Agua::Common::Exchange', is  => 'rw', required	=>	0,
 #	default	=>	sub {
 #		Agua::Common::Exchange->new({
 #			#logfile		=>	"$Bin/log/admin.head.log",
-#			SHOWLOG		=>	2
-#			#PRINTLOG	=>	5
+#			showlog		=>	2
+#			#printlog	=>	5
 #		});
 #	}
 #);
@@ -101,8 +101,8 @@ method setExchange () {
 	
 	my $exchange	=	Agua::Common::Exchange->new({
 		logfile		=>	$self->logfile(),
-		SHOWLOG		=>	$self->SHOWLOG(),
-		PRINTLOG	=>	$self->PRINTLOG(),
+		showlog		=>	$self->showlog(),
+		printlog	=>	$self->printlog(),
 		conf		=>	$self->conf()
 	});
 	$self->logDebug("exchange", $exchange);

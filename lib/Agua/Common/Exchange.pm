@@ -146,8 +146,9 @@ method sendMessage ($message) {
 }
 
 method sendData ($data) {
-	$self->logDebug("");
-	$data->{processid}	=	$$;
+	my $processid	=	$$;
+	$self->logDebug("processid", $processid);
+	$data->{processid}	=	$processid;
 	#$self->logDebug("data", $data);
 
 	my $jsonparser = JSON->new();
@@ -206,12 +207,28 @@ method sendTask ($message) {
 }
 
 method handleTasks {
+
+	my $host		=	$self->conf()->getKey("queue:masterip", undef);
+	my $user		= 	$self->conf()->getKey("queue:user", undef);
+	my $password	=	$self->conf()->getKey("queue:password", undef);
+	my $vhost		=	$self->conf()->getKey("queue:vhost", undef);
+	$self->logDebug("host", $host);
+	$self->logDebug("user", $user);
+	#$self->logDebug("password", $password);
+	$self->logDebug("vhost", $vhost);
+	
+
 	my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
-		host => 'localhost',
-		port => 5672,
-		user => 'guest',
-		pass => 'guest',
-		vhost => '/',
+        host 	=>	$host,
+        port 	=>	5672,
+        user 	=>	$user,
+        pass 	=>	$password,
+        vhost	=>	$vhost,
+		#host => 'localhost',
+		#port => 5672,
+		#user => 'guest',
+		#pass => 'guest',
+		#vhost => '/',
 	);
 	
 	my $channel = $conn->open_channel();

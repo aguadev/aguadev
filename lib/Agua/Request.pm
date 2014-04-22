@@ -11,8 +11,8 @@ use Agua::JBrowse;
 use Agua::Common::Exchange;
 
 # Booleans
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 4 );  
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 4 );  
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Ints
 has 'validated'	=> ( isa => 'Int', is => 'rw', default => 0 );

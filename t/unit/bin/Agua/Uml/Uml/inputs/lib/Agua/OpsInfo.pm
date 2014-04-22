@@ -95,8 +95,8 @@ use Data::Dumper;
 use JSON;
 
 # Ints
-has 'SHOWLOG'		=> ( isa => 'Int', is => 'rw', default 	=> 	5 	);  
-has 'PRINTLOG'		=> ( isa => 'Int', is => 'rw', default 	=> 	5 	);
+has 'showlog'		=> ( isa => 'Int', is => 'rw', default 	=> 	5 	);  
+has 'printlog'		=> ( isa => 'Int', is => 'rw', default 	=> 	5 	);
 
 # Strings
 has 'package'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);

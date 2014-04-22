@@ -28,8 +28,8 @@ use lib "$Bin/../../lib";
 use Conf::Yaml;
 
 # Integers
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings
 has 'tempdir'		=> 	( isa => 'Str|Undef', is => 'rw', required => 1 );

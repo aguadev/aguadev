@@ -23,8 +23,8 @@ use Carp;
 class Agua::Logger with Agua::Common::Logger {
 
 # Booleans
-has 'SHOWLOG'	=>  ( isa => 'Int', is => 'rw', default => 1 );  
-has 'PRINTLOG'	=>  ( isa => 'Int', is => 'rw', default => 1 );
+has 'showlog'	=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'printlog'	=>  ( isa => 'Int', is => 'rw', default => 1 );
 
 # Objects
 has 'lines'     => ( isa => 'ArrayRef', is => 'rw', default => sub { [] } );

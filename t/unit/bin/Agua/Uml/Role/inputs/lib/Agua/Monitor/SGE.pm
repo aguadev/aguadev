@@ -74,8 +74,8 @@ use Data::Dumper;
 use FindBin qw($Bin);
 
 # BOOLEANS
-has 'SHOWLOG'			=>  ( isa => 'Int', is => 'rw', default => 1 );  
-has 'PRINTLOG'			=>  ( isa => 'Int', is => 'rw', default => 2 );
+has 'showlog'			=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'printlog'			=>  ( isa => 'Int', is => 'rw', default => 2 );
 
 # INTS
 has 'pid'		=> ( isa => 'Int|Undef', is => 'rw' );

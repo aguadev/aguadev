@@ -11,8 +11,8 @@ use Conf::Yaml;
 use FindBin qw($Bin);
 
 # Ints
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );  
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );  
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 has 'validated'		=> ( isa => 'Int', is => 'rw', default => 0 );
 
 # Strings

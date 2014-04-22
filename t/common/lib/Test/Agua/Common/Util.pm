@@ -115,8 +115,8 @@ method clear {
 	#### RESET TO DEFAULT OR CLEAR ALL ATTRIBUTES
 	foreach my $attribute ( @$attributes ) {
 		$self->logDebug("attribute", $attribute);
-        next if $attribute eq "SHOWLOG";
-        next if $attribute eq "PRINTLOG";
+        next if $attribute eq "showlog";
+        next if $attribute eq "printlog";
         next if $attribute eq "db";
         
 		my $attr = $meta->get_attribute($attribute);

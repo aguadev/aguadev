@@ -135,8 +135,8 @@ method identicalFiles ($actualfile, $expectedfile) {
 method setConf {
 	my $conf 	= Conf::Yaml->new({
 		backup		=>	1,
-		SHOWLOG		=>	$self->SHOWLOG(),
-		PRINTLOG	=>	$self->PRINTLOG()
+		showlog		=>	$self->showlog(),
+		printlog	=>	$self->printlog()
 	});
 	
 	$self->conf($conf);

@@ -29,8 +29,8 @@ my $configfile    =   "$installdir/conf/config.yaml";
 $Bin =~ s/^.+t\/bin/$installdir\/t\/bin/;
 
 #### SET LOG
-my $SHOWLOG     =   2;
-my $PRINTLOG    =   5;
+my $showlog     =   2;
+my $printlog    =   5;
 my $logfile     =   "$Bin/outputs/install.log";
 
 #### GET OPTIONS
@@ -42,8 +42,8 @@ my $password;
 my $keyfile;
 my $help;
 GetOptions (
-    'SHOWLOG=i'     => \$SHOWLOG,
-    'PRINTLOG=i'    => \$PRINTLOG,
+    'showlog=i'     => \$showlog,
+    'printlog=i'    => \$printlog,
     'login=s'       => \$login,
     'showreport=s'  => \$showreport,
     'token=s'       => \$token,
@@ -71,16 +71,16 @@ print "Hub.t    Must run as root\n" and exit if $whoami ne "root";
 my $conf = Conf::Yaml->new(
     memory      =>  1,
     inputfile	=>	$configfile,
-    SHOWLOG     =>  2,
-    PRINTLOG    =>  2,
+    showlog     =>  2,
+    printlog    =>  2,
     logfile     =>  $logfile
 );
 
 my $username = $conf->getKey("database", "TESTUSER");
 
 my $object = new Test::Agua::Common::Hub (
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG,
+    showlog     =>  $showlog,
+    printlog    =>  $printlog,
     logfile     =>  $logfile,
     dumpfile    =>  $dumpfile,
     conf        =>  $conf,

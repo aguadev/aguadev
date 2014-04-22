@@ -221,8 +221,8 @@ method testClear {
 
 	#### RESET TO DEFAULT OR CLEAR ALL ATTRIBUTES
 	foreach my $attribute ( @$attributes ) {
-        next if $attribute eq "SHOWLOG";
-        next if $attribute eq "PRINTLOG";
+        next if $attribute eq "showlog";
+        next if $attribute eq "printlog";
         next if $attribute eq "db";
 		next if $attribute eq "custom_fields";
         

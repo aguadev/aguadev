@@ -15,8 +15,8 @@ use Conf::Yaml;
 use FindBin qw($Bin);
 
 # Ints
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings
 has 'logfile'       => ( isa => 'Str|Undef', is => 'rw' );
@@ -85,8 +85,8 @@ THIRD LINE
 		#versionfile     =>  $versionfile,
 		#releasename     =>  $releasename,
 		logfile     	=>   $logfile,
-		SHOWLOG     	=>   $self->SHOWLOG(),
-		PRINTLOG   		=>   $self->PRINTLOG()
+		showlog     	=>   $self->showlog(),
+		printlog   		=>   $self->printlog()
 	});
 
 	$object->stageRepo($stagefile, $mode, $message);	

@@ -97,8 +97,8 @@ method upgrade {
 		owner		=>	$owner,
 		conf		=>	$self->conf(),
 		db			=>	$self->db(),
-		SHOWLOG		=>	$self->SHOWLOG(),
-		PRINTLOG	=>	$self->PRINTLOG(),
+		showlog		=>	$self->showlog(),
+		printlog	=>	$self->printlog(),
 		showreport	=>	0,
 		logfile		=>	$self->logfile()
 	});

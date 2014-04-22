@@ -32,16 +32,16 @@ use Conf::Yaml;
 my $logfile = "$Bin/outputs/upgrade.log";
 
 #### GET OPTIONS
-my $SHOWLOG     =   2;
-my $PRINTLOG    =   5;
+my $showlog     =   2;
+my $printlog    =   5;
 my $keyfile;
 my $amazonuserid;
 my $awsaccesskeyid;
 my $awssecretaccesskey;
 my $help;
 GetOptions (
-    'SHOWLOG=i'             => \$SHOWLOG,
-    'PRINTLOG=i'            => \$PRINTLOG,
+    'showlog=i'             => \$showlog,
+    'printlog=i'            => \$printlog,
     'keyfile=s'             => \$keyfile,
     'amazonuserid=s'        => \$amazonuserid,
     'awsaccesskeyid=s'      => \$awsaccesskeyid,
@@ -65,14 +65,14 @@ $awssecretaccesskey = $ENV{'awssecretaccesskey'} if not defined $awssecretaccess
 my $conf = Conf::Yaml->new(
     memory      =>  1,
     inputfile	=>	$configfile,
-    SHOWLOG     =>  2,
-    PRINTLOG    =>  2,
+    showlog     =>  2,
+    printlog    =>  2,
     logfile     =>  $logfile
 );
 
 my $object = new Test::Agua::StarCluster(
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG,
+    showlog     =>  $showlog,
+    printlog    =>  $printlog,
     logfile     =>  $logfile,
     dumpfile    =>  $dumpfile,
     conf        =>  $conf,

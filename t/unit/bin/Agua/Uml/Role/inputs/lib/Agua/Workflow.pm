@@ -64,8 +64,8 @@ use Agua::Monitor::SGE;
 if ( 1 ) {
 
 # Integers
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 has 'workflowpid'	=> ( isa => 'Int|Undef', is => 'rw', required => 0 );
 has 'workflownumber'=>  ( isa => 'Str|Undef', is => 'rw' );
 has 'start'     	=>  ( isa => 'Int|Undef', is => 'rw' );
@@ -114,13 +114,13 @@ has 'head' 	=> (
 	is =>	'rw',
 	'isa' => 'Agua::Instance',
 	default	=>	sub { Agua::Instance->new({});	}
-	#default	=>	sub { Agua::Instance->new({SHOWLOG=>5, PRINTLOG=>5});	}
+	#default	=>	sub { Agua::Instance->new({showlog=>5, printlog=>5});	}
 );
 has 'master' 	=> (
 	is =>	'rw',
 	'isa' => 'Agua::Instance',
 	default	=>	sub { Agua::Instance->new({});	}
-	#default	=>	sub { Agua::Instance->new({SHOWLOG=>5, PRINTLOG=>5});	}
+	#default	=>	sub { Agua::Instance->new({showlog=>5, printlog=>5});	}
 );
 
 }
@@ -155,16 +155,16 @@ method initialise ($json) {
 		
 	#### SET CLUSTER INSTANCES LOG
 	$self->head()->logfile($logfile);
-	$self->head()->SHOWLOG($self->SHOWLOG());
-	$self->head()->PRINTLOG($self->PRINTLOG());
+	$self->head()->showlog($self->showlog());
+	$self->head()->printlog($self->printlog());
 	$self->master()->logfile($logfile);
-	$self->master()->SHOWLOG($self->SHOWLOG());
-	$self->master()->PRINTLOG($self->PRINTLOG());
+	$self->master()->showlog($self->showlog());
+	$self->master()->printlog($self->printlog());
 	
 	#### SET HEADNODE OPS LOG
 	$self->head()->ops()->logfile($logfile);	
-	$self->head()->ops()->SHOWLOG($self->SHOWLOG());
-	$self->head()->ops()->PRINTLOG($self->PRINTLOG());
+	$self->head()->ops()->showlog($self->showlog());
+	$self->head()->ops()->printlog($self->printlog());
 
 	#### SET HEADNODE OPS CONF
 	my $conf 	= 	$self->conf();
@@ -172,8 +172,8 @@ method initialise ($json) {
 
 	#### SET MASTER OPS LOG
 	$self->master()->ops()->logfile($logfile);	
-	$self->master()->ops()->SHOWLOG($self->SHOWLOG());
-	$self->master()->ops()->PRINTLOG($self->PRINTLOG());
+	$self->master()->ops()->showlog($self->showlog());
+	$self->master()->ops()->printlog($self->printlog());
 
 	#### SET MASTER OPS CONF
 	$self->master()->ops()->conf($conf);	
@@ -428,8 +428,8 @@ method setStarClusterObject ($username, $cluster) {
 	$clusterobject->{executable} = $executable;
 	
 	#### SET LOG
-	$clusterobject->{SHOWLOG} = $self->SHOWLOG();
-	$clusterobject->{PRINTLOG} = $self->PRINTLOG();
+	$clusterobject->{showlog} = $self->showlog();
+	$clusterobject->{printlog} = $self->printlog();
 	
 	#### BALANCER OUTPUT FILE IS LOGFILE
 	my $logfile = $self->getBalancerOutputfile($cluster);
@@ -538,8 +538,8 @@ method setStages ($username, $cluster, $json, $project, $workflow) {
 		$stage->{envars}		=  	$self->envars();
 
 		#### ADD LOG INFO
-		$stage->{SHOWLOG} 		=	$self->SHOWLOG();
-		$stage->{PRINTLOG} 		=	$self->PRINTLOG();
+		$stage->{showlog} 		=	$self->showlog();
+		$stage->{printlog} 		=	$self->printlog();
 		$stage->{logfile} 		=	$self->logfile();
 
 		my $stageobject = Agua::Stage->new($stage);
@@ -630,8 +630,8 @@ method createQueue ($project, $workflow, $username, $cluster, $envars) {
 	
 	#### SET STARCLUSTER ARGS	
 	my $args = {};
-	$args->{SHOWLOG} 	= $self->SHOWLOG();
-	$args->{PRINTLOG} 	= $self->PRINTLOG();
+	$args->{showlog} 	= $self->showlog();
+	$args->{printlog} 	= $self->printlog();
 	$args->{username}	= $username;
 	$args->{cluster} 	= $cluster;
 	$args->{project} 	= $project;
@@ -729,8 +729,8 @@ method getMonitor {
 			cluster		=>	$self->cluster(),
 			envars		=>	$self->envars(),
 			logfile		=>	$self->logfile(),
-			SHOWLOG		=>	$self->SHOWLOG(),
-			PRINTLOG	=>	$self->PRINTLOG()
+			showlog		=>	$self->showlog(),
+			printlog	=>	$self->printlog()
 			
 		}
 	);
@@ -1467,8 +1467,8 @@ method generateClusterKeypair {
 			username	=>	$username,
 			keyname		=>	$keyname,
 			conf		=>	$self->conf(),
-			SHOWLOG		=>	$self->SHOWLOG(),
-			PRINTLOG	=>	$self->PRINTLOG(),
+			showlog		=>	$self->showlog(),
+			printlog	=>	$self->printlog(),
 			logfile		=>	$self->logfile()
 		}
 	);
@@ -1537,8 +1537,8 @@ method _createConfigFile {
 	$data->{project} 	= $json->{project};
 	$data->{workflow} 	= $json->{workflow};
 	$data->{cluster} 	= $json->{cluster};
-	$data->{SHOWLOG} 	= $json->{SHOWLOG} if defined $json->{SHOWLOG};
-	$data->{PRINTLOG} 	= $json->{PRINTLOG} if defined $json->{PRINTLOG};
+	$data->{showlog} 	= $json->{showlog} if defined $json->{showlog};
+	$data->{printlog} 	= $json->{printlog} if defined $json->{printlog};
 	$data->{amazonuserid} = $aws->{amazonuserid};
 	$data->{accesskeyid} = $aws->{awsaccesskeyid};
 	$data->{awssecretaccesskey} = $aws->{awssecretaccesskey};

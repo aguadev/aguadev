@@ -53,7 +53,7 @@ sub initialise {
 sub logDebug {
     my ($self, $message, $variable) = @_;
 	
-	return -1 if not $self->SHOWLOG() > 3 and not $self->PRINTLOG() > 3;
+	return -1 if not $self->showlog() > 3 and not $self->printlog() > 3;
 
 	$message = '' if not defined $message;
     $self->appendLog($self->logfile()) if not defined $self->logfh();   
@@ -75,8 +75,8 @@ sub logDebug {
 	my $line = "$timestamp$spacer" . "[DEBUG]   \t$callingsub\t$linenumber\t$message\n";
 	$line = "$timestamp$spacer" . "[DEBUG]   \t$callingsub\t$linenumber\t$message: $text\n" if $#_ == 2;
 
-    print { $self->logfh() } $line if defined $self->logfh() and $self->PRINTLOG() > 3;
-    print $line if $self->SHOWLOG() > 3;
+    print { $self->logfh() } $line if defined $self->logfh() and $self->printlog() > 3;
+    print $line if $self->showlog() > 3;
 	return $line;
 }
 

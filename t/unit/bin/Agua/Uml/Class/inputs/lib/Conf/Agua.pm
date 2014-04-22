@@ -5,8 +5,8 @@ class Conf::Agua with (Conf, Agua::Common::Logger) {
 use Data::Dumper;
 
 # Integers
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings
 has 'username'  	=>  ( isa => 'Str', is => 'rw' );

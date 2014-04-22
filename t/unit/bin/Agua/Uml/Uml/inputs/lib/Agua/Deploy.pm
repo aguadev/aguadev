@@ -31,8 +31,8 @@ use Agua::DBaseFactory;
 use Conf::Agua;
 
 # Booleans
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 1 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );
 
 # Strings
 has 'configfile'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
@@ -64,8 +64,8 @@ method initialise {
 
 	
 	#### SET CONF LOG
-	$self->conf()->SHOWLOG($self->SHOWLOG());
-	$self->conf()->PRINTLOG($self->PRINTLOG());	
+	$self->conf()->showlog($self->showlog());
+	$self->conf()->printlog($self->printlog());	
 }
 
 method deploy {

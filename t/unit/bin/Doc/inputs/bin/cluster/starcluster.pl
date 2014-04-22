@@ -43,8 +43,8 @@ use lib "$Bin/../../../lib/";
 
 my $configfile = "$Bin/../../../conf/default.conf";
 my $logfile = "/tmp/agua-starcluster.log";
-my $SHOWLOG = 2;
-my $PRINTLOG = 5;
+my $showlog = 2;
+my $printlog = 5;
 use Conf::Agua;
 my $conf = Conf::Agua->new(
 	inputfile	=>	$configfile,
@@ -52,8 +52,8 @@ my $conf = Conf::Agua->new(
 	separator	=>	"\t",
 	spacer		=>	"\\s\+",
 	logfile		=>	$logfile,
-	SHOWLOG		=>	$SHOWLOG,
-	PRINTLOG	=>	$PRINTLOG
+	showlog		=>	$showlog,
+	printlog	=>	$printlog
 );
 
 #### INTERNAL MODULES

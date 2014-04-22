@@ -44,8 +44,8 @@ use Conf::Yaml;
 use Agua::StarCluster;
 
 # Booleans
-has 'SHOWLOG'			=>  ( isa => 'Int', is => 'rw', default => 1 );  
-has 'PRINTLOG'			=>  ( isa => 'Int', is => 'rw', default => 1 );
+has 'showlog'			=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'printlog'			=>  ( isa => 'Int', is => 'rw', default => 1 );
 
 # Ints
 has 'keydir'	=> ( isa => 'Str|Undef', is => 'rw' );

@@ -70,7 +70,7 @@ method editMysqlConfig {
 	my $config = Conf::Ini->new({
 		inputfile	=>	$configfile,
 		separator	=>	"=",
-		#SHOWLOG		=>	5
+		#showlog		=>	5
 	});
 	$self->logDebug("config", $config);
 	

@@ -16,8 +16,8 @@ my $outputsdir = "$Bin/outputs";
 `mkdir -p $outputsdir` if not -d $outputsdir;
 
 #### SET LOG
-my $SHOWLOG     =   4;
-my $PRINTLOG    =   4;
+my $showlog     =   4;
+my $printlog    =   4;
 my $logfile = "$Bin/outputs/version.log";
 
 #### GET OPTIONS
@@ -26,8 +26,8 @@ my $token;
 my $keyfile;
 my $help;
 GetOptions (
-    'SHOWLOG=i'     => \$SHOWLOG,
-    'PRINTLOG=i'    => \$PRINTLOG,
+    'showlog=i'     => \$showlog,
+    'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
@@ -39,8 +39,8 @@ BEGIN {
 require_ok('Test::Agua::Common::Logger');
 
 my $object = Test::Agua::Common::Logger->new(
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG
+    showlog     =>  $showlog,
+    printlog    =>  $printlog
 );
 isa_ok($object, "Test::Agua::Common::Logger");
 

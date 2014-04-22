@@ -43,8 +43,8 @@ use Agua::Ops;
 
 if ( 1 ) {
 # Booleans
-has 'SHOWLOG'			=>  ( isa => 'Int', is => 'rw', default => 2 );  
-has 'PRINTLOG'			=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'showlog'			=>  ( isa => 'Int', is => 'rw', default => 2 );  
+has 'printlog'			=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 #### Ints
 has 'datavolumesize'	=> ( isa => 'Int', is  => 'rw',  required	=>	1, default => 0	);
@@ -96,8 +96,8 @@ method BUILD ($hash) {
 
 	#### SET OPS TEMPDIR
 	$self->ops->tempdir($self->tempdir());
-	$self->ops->SHOWLOG($self->SHOWLOG());
-	$self->ops->PRINTLOG($self->PRINTLOG());	
+	$self->ops->showlog($self->showlog());
+	$self->ops->printlog($self->printlog());	
 }
 
 method init {

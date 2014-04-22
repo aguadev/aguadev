@@ -19,8 +19,8 @@ use Agua::DBaseFactory;
 use Conf::Yaml;
 
 # Ints
-has 'SHOWLOG'	=> ( isa => 'Int', 		is => 'rw', default	=> 	2);
-has 'PRINTLOG'	=> ( isa => 'Int', 		is => 'rw', default	=> 	5);
+has 'showlog'	=> ( isa => 'Int', 		is => 'rw', default	=> 	2);
+has 'printlog'	=> ( isa => 'Int', 		is => 'rw', default	=> 	5);
 
 # Strings
 has 'requestor'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );

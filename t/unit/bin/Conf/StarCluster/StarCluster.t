@@ -50,8 +50,8 @@ my $removedfile     =   "$Bin/inputs/syoung-microcluster-removed.config";
 my $object = Test::Conf::StarCluster->new(
     logfile     =>  $logfile,
 	backup      =>	0,
-    SHOWLOG     =>  2,
-    PRINTLOG    =>  5
+    showlog     =>  2,
+    printlog    =>  5
 );
 
 $object->testGetKey($originalfile, $inputfile);

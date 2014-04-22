@@ -46,12 +46,12 @@ my $urlprefix  	=   $ENV{'urlprefix'} || "agua";
 
 #### GET OPTIONS
 my $logfile 	= 	"$Bin/outputs/gtfuse.log";
-my $SHOWLOG     =   2;
-my $PRINTLOG    =   5;
+my $showlog     =   2;
+my $printlog    =   5;
 my $help;
 GetOptions (
-    'SHOWLOG=i'     => \$SHOWLOG,
-    'PRINTLOG=i'    => \$PRINTLOG,
+    'showlog=i'     => \$showlog,
+    'printlog=i'    => \$printlog,
     'logfile=s'     => \$logfile,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
@@ -59,8 +59,8 @@ usage() if defined $help;
 
 my $object1 = new Test::Openstack::Nova(
     logfile     =>  $logfile,
-	SHOWLOG     =>  $SHOWLOG,
-	PRINTLOG    =>  $PRINTLOG
+	showlog     =>  $showlog,
+	printlog    =>  $printlog
 );
 isa_ok($object1, "Test::Openstack::Nova", "object1");
 
@@ -72,8 +72,8 @@ $object1->testParseVolumeId();
 
 my $object2 = new Test::Openstack::Nova::Ips(
     logfile     =>  $logfile,
-	SHOWLOG     =>  $SHOWLOG,
-	PRINTLOG    =>  $PRINTLOG
+	showlog     =>  $showlog,
+	printlog    =>  $printlog
 );
 isa_ok($object2, "Test::Openstack::Nova::Ips", "object2");
 

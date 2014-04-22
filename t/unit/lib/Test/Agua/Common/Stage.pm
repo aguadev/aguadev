@@ -22,8 +22,8 @@ has 'workflowpid'	=> ( isa => 'Int|Undef', is => 'rw', required => 0 );
 has 'workflownumber'=>  ( isa => 'Str', is => 'rw' );
 has 'start'     	=>  ( isa => 'Int', is => 'rw' );
 has 'submit'  		=>  ( isa => 'Int', is => 'rw' );
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings
 has 'dumpfile'		=> ( isa => 'Str|Undef', is => 'rw', required => 1 );

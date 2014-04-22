@@ -28,14 +28,14 @@ my $dumpfile    =   "$Bin/../../../../dump/create.dump";
 
 #### SET LOGFILE
 my $logfile = "$Bin/outputs/opsinfo.log";
-my $SHOWLOG     =   2;
-my $PRINTLOG    =   5;
+my $showlog     =   2;
+my $printlog    =   5;
 
 my $help;
 GetOptions (
     'logfile=s'     =>  \$logfile,
-    'SHOWLOG=s'     =>  \$SHOWLOG,
-    'PRINTLOG=s'    =>  \$PRINTLOG,
+    'showlog=s'     =>  \$showlog,
+    'printlog=s'    =>  \$printlog,
     'help'          =>  \$help
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
@@ -49,16 +49,16 @@ my $conf = Conf::Yaml->new(
 	separator	=>	"\t",
 	spacer		=>	"\\s\+",
     logfile     =>  $logfile,
-    SHOWLOG     =>  2,
-    PRINTLOG    =>  2
+    showlog     =>  2,
+    printlog    =>  2
 );
 
 my $object = Test::Agua::Workflow::Unit->new(
     conf            =>  $conf,
     logfile         =>  $logfile,
     dumpfile        =>  $dumpfile,
-    SHOWLOG         =>  $SHOWLOG,
-    PRINTLOG        =>  $PRINTLOG
+    showlog         =>  $showlog,
+    printlog        =>  $printlog
 );
 isa_ok($object, "Test::Agua::Workflow::Unit");
 

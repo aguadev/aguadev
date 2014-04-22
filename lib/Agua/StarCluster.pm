@@ -112,8 +112,8 @@ has 'loaded'		=> ( isa => 'Bool', is => 'rw', default => 0 );
 has 'help'			=> ( isa => 'Bool', is  => 'rw', required	=>	0, documentation => "Print help message"	);
 
 #### Int
-has 'SHOWLOG'		=> ( isa => 'Int', is => 'rw', default 	=> 2 );  
-has 'PRINTLOG'		=> ( isa => 'Int', is => 'rw', default 	=> 5 );
+has 'showlog'		=> ( isa => 'Int', is => 'rw', default 	=> 2 );  
+has 'printlog'		=> ( isa => 'Int', is => 'rw', default 	=> 5 );
 has 'sleep'			=> ( isa => 'Int', is => 'rw', default	=>	600	);
 has 'workflowpid'	=> ( isa => 'Int', is => 'rw', required	=>	0	);
 has 'tailwait'		=> ( isa => 'Int', is => 'rw', required	=>	0, default => 30	);
@@ -269,8 +269,8 @@ method clear {
 
 	#### RESET TO DEFAULT OR CLEAR ALL ATTRIBUTES
 	foreach my $attribute ( @$attributes ) {
-        next if $attribute eq "SHOWLOG";
-        next if $attribute eq "PRINTLOG";
+        next if $attribute eq "showlog";
+        next if $attribute eq "printlog";
         next if $attribute eq "db";
         
 		my $attr = $meta->get_attribute($attribute);
@@ -459,7 +459,7 @@ method isRunning {
 		cluster	    =>	$cluster,
 		executable	=>	$executable,
 		configfile	=>	$configfile,
-		SHOWLOG		=>	$self->SHOWLOG()
+		showlog		=>	$self->showlog()
 	});
 	
 	my $running = $self->instance()->isRunning();

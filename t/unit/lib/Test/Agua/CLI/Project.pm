@@ -18,8 +18,8 @@ use Conf::Yaml;
 use FindBin qw($Bin);
 
 # Ints
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 has 'validated'		=> ( isa => 'Int', is => 'rw', default => 0 );
 
 # Strings
@@ -69,8 +69,8 @@ method BUILD ($hash) {
 	
 	if ( defined $self->logfile() ) {
 		$self->head()->ops()->logfile($self->logfile());
-		$self->head()->ops()->SHOWLOG($self->SHOWLOG());
-		$self->head()->ops()->PRINTLOG($self->PRINTLOG());
+		$self->head()->ops()->showlog($self->showlog());
+		$self->head()->ops()->printlog($self->printlog());
 	}
 }
 

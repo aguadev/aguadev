@@ -231,8 +231,8 @@ method createProjectFiles ($username, $workflowdir) {
 		$project->{username} 	=	$username;
 		$project->{outputfile} 	= 	$projectfile;
 		$project->{logfile} 	=	$self->logfile();
-		$project->{SHOWLOG}		=	$self->SHOWLOG();
-		$project->{PRINTLOG}	=	$self->PRINTLOG();
+		$project->{showlog}		=	$self->showlog();
+		$project->{printlog}	=	$self->printlog();
 
 		my $projectobject = Agua::CLI::Project->new($project);
 
@@ -256,8 +256,8 @@ method createProjectFiles ($username, $workflowdir) {
 			$workflow->{username} 	=	$username;
 			$workflow->{outputfile} = 	$workflowfile;
 			$workflow->{logfile} 	=	$self->logfile();
-			$workflow->{SHOWLOG}	=	$self->SHOWLOG();
-			$workflow->{PRINTLOG}	=	$self->PRINTLOG();
+			$workflow->{showlog}	=	$self->showlog();
+			$workflow->{printlog}	=	$self->printlog();
 	
 			my $workflowobject = Agua::CLI::Workflow->new($workflow);
 			
@@ -269,8 +269,8 @@ method createProjectFiles ($username, $workflowdir) {
 				#### CREATE APPLICATION AND LOAD PARAMETERS
 				$stage->{username} 	=	$username;
 				$stage->{logfile} 	=	$self->logfile();
-				$stage->{SHOWLOG}	=	$self->SHOWLOG();
-				$stage->{PRINTLOG}	=	$self->PRINTLOG();
+				$stage->{showlog}	=	$self->showlog();
+				$stage->{printlog}	=	$self->printlog();
 			
 				$self->logDebug("stage", $stage);
 				my $appobject = Agua::CLI::App->new($stage);
@@ -325,8 +325,8 @@ method loadProjectFiles ($username, $package, $installdir, $workflowdir) {
 		my $projectobject = Agua::CLI::Project->new(
 			inputfile	=>	$projectfile,
 			logfile		=>	$self->logfile(),
-			SHOWLOG		=>	$self->SHOWLOG(),
-			PRINTLOG	=>	$self->PRINTLOG()
+			showlog		=>	$self->showlog(),
+			printlog	=>	$self->printlog()
 		);
 		#$self->logDebug("projectobject", $projectobject);
 		$self->projectToDatabase($username, $projectobject);
@@ -639,8 +639,8 @@ method _createAppFile ($app, $parameters, $username, $appdir) {
 	$app->{username} 	=	$username;
 	$app->{outputfile} 	= 	$appfile;
 	$app->{logfile} 	=	$self->logfile();
-	$app->{SHOWLOG}		=	$self->SHOWLOG();
-	$app->{PRINTLOG}	=	$self->PRINTLOG();
+	$app->{showlog}		=	$self->showlog();
+	$app->{printlog}	=	$self->printlog();
 	
 	my $application = Agua::CLI::App->new($app);
 	$self->logNote("application", $application);
@@ -677,8 +677,8 @@ method loadAppFiles ($username, $package, $installdir, $appdir) {
 			my $inputfile = "$subdir/$appfile";
 			my $application = Agua::CLI::App->new({
 				logfile 	=>	$self->logfile,
-				SHOWLOG		=>	$self->SHOWLOG,
-				PRINTLOG	=>	$self->PRINTLOG,
+				showlog		=>	$self->showlog,
+				printlog	=>	$self->printlog,
 				inputfile	=>	$inputfile
 			});
 			$application->read();
@@ -765,8 +765,8 @@ $self->logDebug("DEBUG EXIT") and exit;
 		$source->{username} 	=	$username;
 		$source->{outputfile} 	= 	$sourcefile;
 		$source->{logfile} 		=	$self->logfile();
-		$source->{SHOWLOG}		=	$self->SHOWLOG();
-		$source->{PRINTLOG}		=	$self->PRINTLOG();
+		$source->{showlog}		=	$self->showlog();
+		$source->{printlog}		=	$self->printlog();
 	}
 
 
@@ -1050,8 +1050,8 @@ method createOpsFile ($object, $file, $opsrepo, $type) {
 	if ( not defined $self->opsinfo() ) {
 		my $opsinfo = Agua::OpsInfo->new({
 			logfile		=>	$self->logfile(),
-			SHOWLOG		=>	$self->SHOWLOG(),
-			PRINTLOG	=>	$self->PRINTLOG()
+			showlog		=>	$self->showlog(),
+			printlog	=>	$self->printlog()
 		});
 		$self->opsinfo($opsinfo);
 		$self->logDebug("opsinfo", $opsinfo);

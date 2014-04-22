@@ -140,8 +140,8 @@ use Agua::JBrowse;
 use Agua::Common::Exchange;
 
 # Booleans
-has 'SHOWLOG'		=>  ( isa => 'Int', is => 'rw', default => 4 );  
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 4 );  
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Ints
 has 'validated'	=> ( isa => 'Int', is => 'rw', default => 0 );
@@ -227,8 +227,8 @@ method initialise ($json) {
 	#### SET CONF LOG (IN CASE View IS CALLED AS A COMPONENT
 	#### I.E., NOT VIA view.cgi)
 	$self->conf()->logfile($logfile) if not defined $self->conf()->logfile();
-	$self->conf()->SHOWLOG($self->SHOWLOG()) if not defined $self->conf()->SHOWLOG();
-	$self->conf()->PRINTLOG($self->PRINTLOG()) if not defined $self->conf()->PRINTLOG();
+	$self->conf()->showlog($self->showlog()) if not defined $self->conf()->showlog();
+	$self->conf()->printlog($self->printlog()) if not defined $self->conf()->printlog();
 	
 	#### SET DATABASE HANDLE
 	$self->setDbh();
@@ -255,8 +255,8 @@ method setExchange () {
 	
 	my $exchange	=	Agua::Common::Exchange->new({
 		logfile		=>	$self->logfile(),
-		SHOWLOG		=>	$self->SHOWLOG(),
-		PRINTLOG	=>	$self->PRINTLOG(),
+		showlog		=>	$self->showlog(),
+		printlog	=>	$self->printlog(),
 		conf		=>	$self->conf()
 	});
 	$self->logDebug("exchange", $exchange);

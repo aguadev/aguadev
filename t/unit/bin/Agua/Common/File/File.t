@@ -30,12 +30,12 @@ my $configfile    =   "$installdir/conf/config.yaml";
 $Bin =~ s/^.+t\/bin/$installdir\/t\/bin/;
 
 my $logfile     =   "$Bin/outputs/file.log";
-my $SHOWLOG     =   2;
-my $PRINTLOG    =   5;
+my $showlog     =   2;
+my $printlog    =   5;
 my $help;
 GetOptions (
-    'SHOWLOG=i'     => \$SHOWLOG,
-    'PRINTLOG=i'    => \$PRINTLOG,
+    'showlog=i'     => \$showlog,
+    'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
@@ -46,8 +46,8 @@ my $conf = Conf::Yaml->new(
 	separator	=>	"\t",
 	spacer		=>	"\\s\+",
     logfile     =>  $logfile,
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG
+    showlog     =>  $showlog,
+    printlog    =>  $printlog
 );
 
 my $username	=	$conf->getKey("database", "TESTUSER");
@@ -55,8 +55,8 @@ my $username	=	$conf->getKey("database", "TESTUSER");
 my $object = Test::Agua::Common::File->new(
     conf        =>  $conf,
     logfile     =>  $logfile,
-    SHOWLOG     =>  $SHOWLOG,
-    PRINTLOG    =>  $PRINTLOG,
+    showlog     =>  $showlog,
+    printlog    =>  $printlog,
 	username	=>	$username
 );
 isa_ok($object, "Test::Agua::Common::File");
