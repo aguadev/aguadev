@@ -61,18 +61,18 @@ method getPackages {
 	$self->logDebug("query", $query);
 	my $packages = $self->db()->queryhasharray($query);
 	$packages = [] if not defined $packages;
-	#$packages = $self->defaultPackages() if not defined $packages;
-	#$self->logDebug("BEFORE packages", $packages);
 	
 	#### SET USER LOGIN token
 	my ($login, $token) = $self->setLoginCredentials($username, $hubtype, "private");
 	$self->token($token);
 	
-	#### GET VERSIONS FOR ALL PACKAGES
-	foreach my $package ( @$packages ) {
-		$package->{current} = $self->getCurrentVersions($username, $package->{owner}, $package->{package}, $hubtype, $package->{privacy});
-	}
-	$self->logDebug("AFTER packages", $packages);
+	#### LATER: MOVE INTO STANDALONE METHOD TO UPDATE PACKAGES WHEN CALLED FROM CLIENT 'Package Management' PANEL	
+	
+	##### GET VERSIONS FOR ALL PACKAGES
+	#foreach my $package ( @$packages ) {
+	#	$package->{current} = $self->getCurrentVersions($username, $package->{owner}, $package->{package}, $hubtype, $package->{privacy});
+	#}
+	#$self->logDebug("AFTER packages", $packages);
 	
 	return $packages;
 }

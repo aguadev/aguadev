@@ -1,0 +1,11 @@
+# Agua Upstart and SysVinit configuration file
+
+# Customize location of Agua binary (especially for development testing).
+#AGUA="/usr/local/bin/agua"
+
+# Use AGUA_OPTS to modify the daemon startup options.
+#AGUA_OPTS="--showlog 4 --printlog 5"
+
+# If you need Agua to use a specific environment variable, it can also be specified here.
+export SOME_ENVIRONMENT_VARIABLE=somevalue
+

@@ -17,18 +17,25 @@ has 'callback'	=>	( isa => 'Undef|Str', is => 'rw', default => "" );
 has 'connection'=> ( isa => 'Net::RabbitFoot', is => 'rw', lazy	=> 1, builder => "openConnection" );
 has 'channel'	=> ( isa => 'Net::RabbitFoot::Channel', is => 'rw', lazy	=> 1, builder => "openConnection" );
 
-method notifyStatus ($data) {	
-	$self->logDebug("DOING self->openConnection() with data", $data);
-	async {
-	
+method notifyStatus ($data) {
+	$self->logDebug("");
+	#$self->logDebug("DOING self->openConnection() with data", $data);
+	async {	
 		$self->logDebug("DOING self->openConnection()");
 		my $connection = $self->openConnection();
-		$self->logDebug("connection", $connection);
+		#$self->logDebug("connection", $connection);
 		sleep(1);
 		
 		$self->logDebug("DOING self->sendData(data)");
+		print "Exchange::notifyStatus    DOING self->sendData(data)\n";
 		$self->sendData($data);
 	}
+}
+
+method notifyError ($data, $error) {
+	$data->{error}	=	$error;
+	
+	$self->notifyStatus($data);
 }
 
 method notify ($status, $error, $data) {
@@ -64,10 +71,10 @@ method openConnection {
 		vhost => '/',
 	);
 	
-	$self->logDebug("DOING connection->open_channel()");
+	#$self->logDebug("DOING connection->open_channel()");
 	my $channel = $connection->open_channel();
 	$self->channel($channel);
-	$self->logDebug("BEFORE channel", $channel);
+	#$self->logDebug("BEFORE channel", $channel);
 
 	#### SET DEFAULT CHANNEL
 	$self->setChannel("chat", "fanout");	
@@ -77,8 +84,8 @@ method openConnection {
 	);
 	#$self->logDebug("channel", $channel);
 
-	#### START RABBIT.JS
-	$self->startRabbitJs();
+	##### START RABBIT.JS
+	#$self->startRabbitJs();
 	
 	return $connection;
 }
@@ -107,8 +114,6 @@ method stopRabbitJs {
 	my $rabbitjs	=	$self->conf()->getKey("install", "RABBITJS");
 	my $command		=	"node $installdir/$appsdir/$rabbitjs";
 	$self->logDebug("command", $command);
-	
-	$self->logDebug("DEBUG EXIT") and exit;
 	
 	return `$command`;
 }
@@ -141,20 +146,22 @@ method sendMessage ($message) {
 }
 
 method sendData ($data) {
-	$self->logDebug("data", $data);
+	$self->logDebug("");
+	$data->{processid}	=	$$;
+	#$self->logDebug("data", $data);
 
 	my $jsonparser = JSON->new();
 	my $json = $jsonparser->encode($data);
-	$self->logDebug("json", $json);
+	#$self->logDebug("json", $json);
 
-	$self->logDebug("BEFORE channel->publish, self->channel", $self->channel());
-
+	#$self->logDebug("BEFORE channel->publish, self->channel", $self->channel());
 	my $result = $self->channel()->publish(
 		exchange => 'chat',
 		routing_key => '',
 		body => $json,
 	);
 	$self->logDebug(" [x] Sent message", $json);
+	$self->logDebug(" [x] Sent message length", length($json));
 
 	return $result;
 }

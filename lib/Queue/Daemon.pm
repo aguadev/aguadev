@@ -25,7 +25,7 @@ TO DO
 use strict;
 use warnings;
 
-class Queue::Daemon with (Logger, Agua::Common::Util) {
+class Queue::Daemon with (Logger, Agua::Common::Exchange, Agua::Common::Util) {
 
 #####////}}}}}
 
@@ -62,7 +62,6 @@ method initialise ($args) {
 }
 
 method loadModules {
-
     my $modules;
     my $installdir = $self->conf()->getKey("agua", "INSTALLDIR");
     my $modulestring = $self->conf()->getKey("agua", "MODULES");
@@ -136,7 +135,8 @@ method setListener ($modules) {
 			my $var = shift;
 			my $body = $var->{body}->{payload};
 		
-			print " [x] $body\n";
+			#print " [x] $body\n";
+			print " [x] Incoming message\n";
 			&$handler($this, $modules, $body);
 		},
         queue => $queue_name,
@@ -147,7 +147,8 @@ method setListener ($modules) {
 }
 
 method parseJson ($json) {
-	$self->logDebug("json", $json);
+	$self->logDebug("");
+	#$self->logDebug("json", $json);
     
     use JSON;
     my $jsonParser = JSON->new();
@@ -185,12 +186,18 @@ method checkInputs ($json, $keys) {
 }
 
 method handleInput ($modules, $json) {
-
+	
+	$self->logDebug();
     #### GET DATA
     my $data = $self->parseJson($json);
-	$self->logDebug("data", $data);
+	#$self->logDebug("data", $data);
 	return if not defined $data;
     
+	if ( defined $data->{processid} and $data->{processid} eq $$ ) {
+		$self->logDebug("processid matches self. Ignoring");
+		return;
+	}	
+	
     #### SET WHOAMI
     my $whoami = `whoami`;
     chomp($whoami);
@@ -206,56 +213,80 @@ method handleInput ($modules, $json) {
     #
     ##### CHECK INPUTS
     #$self->checkInputs($data, $required);
-    
-    my $object  =   $self->getObject($modules, $data);
+
+	my $object	=   $self->getObject($modules, $data);
+	$self->logDebug("object", $object);
+	$self->notifyError($data, "failed to create object") and return if not defined $object;
+
+	#### GET MODE
 	my $mode	=	$data->{mode};
 	$self->logDebug("mode", $mode);
+    $self->notifyError($data, "mode not defined") and return if not defined $mode;
     
-    #### CHECK OBJECT 'CAN' mode
-    print "{ error: 'mode not supported: $mode' }" and return if not $object->can($mode);
+    #### VERIFY MODULE SUPPORTS MODE
+    $self->notifyError($data, "mode not supported: $mode") and return if not $object->can($mode);
+	#print "{ error: 'mode not supported: $mode' }" and return if not $object->can($mode);
     
+	
     #### RUN QUERY
-    no strict;
-    $object->$mode();
-    use strict;
+	try {
+		no strict;
+		$object->$mode();
+		use strict;
+	}
+	catch {
+	    $self->notifyError($data, "failed to run mode '$mode'");
+	}
     
-    #### DEBUG INFO
-    my $endtime = time();
-    #warn "total: " . ($endtime - $begintime) . "\n";
-    
+	#### HANDLE ANY EXIT CALLS IN THE MODULES    
     EXITLABEL: { warn "EXIT\n"; };
 }
 
 method getObject ($modules, $data) {
 
-    #### GET MODE
-    my $mode = $data->{mode};
-    #warn "$mode $whoami $cnt\n";
-    return if not defined $mode;
-    
-    #### GET USERNAME
-    my $username = $data->{username};
-    print "{ error: 'username not defined' }" and return if not defined $username;
-    
-    #### GET MODULE
-    my $module = $data->{module};
-    
-    #### SET LOGFILE
-    my $logfile     =   "$Bin/log/$username.$module.log";
-    $self->conf()->logfile($logfile);
-    
-    #### GET OBJECT
-    my $object = $modules->{$module};
-    print "{ error: 'module not supported: $module' }" and return if not defined $object;
-    
-    #### SET OBJECT LOGFILE AND INITIALISE
-    $object->logfile($logfile);
-    $object->initialise($data);
+	#$self->logDebug("modules", $modules);
+	#$self->logDebug("data", $data);
 
-	return $object;
+	#try {
+
+		#### GET MODE
+		my $mode = $data->{mode};
+		print "mode: $mode\n";
+		return if not defined $mode;
+		
+		#### GET USERNAME
+		my $username = $data->{username};
+		print "{ error: 'username not defined' }" and return if not defined $username;
+		
+		#### GET MODULE
+		my $module = $data->{module};
+		
+		#### SET LOGFILE
+		my $logfile     =   $self->setLogFile($username, $module);
+		$self->conf()->logfile($logfile);
+		
+		#### GET OBJECT
+		my $object = $modules->{$module};
+		print "{ error: 'module not supported: $module' }" and return if not defined $object;
+		
+		#### SET OBJECT LOGFILE AND INITIALISE
+		$object->logfile($logfile);
+		$object->initialise($data);
+	
+		return $object;
+	#}
+	#catch {
+	#	return;
+	#}
 }
 
-
+method setLogFile ($username, $module) {
+	#### SET LOGFILE
+	my $logfile =   "$Bin/../../log/$username.$module.log";
+	$logfile	=~ 	s/::/-/g;
+	
+	return $logfile;
+}
 
 
 

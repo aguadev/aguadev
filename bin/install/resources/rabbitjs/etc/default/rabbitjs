@@ -1,0 +1,8 @@
+# RabbitJs Upstart and SysVinit configuration file
+
+# Customize location of RabbitJs binary (especially for development testing).
+#AGUA="node /agua/apps/rabbit.js.DEV/example/socketio/server.js"
+
+# If you need RabbitJs to use a specific environment variable, it can also be specified here.
+export SOME_ENVIRONMENT_VARIABLE=somevalue
+

@@ -48,7 +48,7 @@ sub _getWorkflows {
 WHERE username='$username'
 ORDER BY project, name};
 	$self->logDebug("$query");
-	$self->logDebug("self->db()", $self->db());
+	#$self->logDebug("self->db()", $self->db());
 
 	my $workflows = $self->db()->queryhasharray($query);
 

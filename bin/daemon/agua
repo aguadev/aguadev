@@ -5,7 +5,7 @@ use Getopt::Long;
 use FindBin qw($Bin);
 
 #### USE LIBS
-use lib "$Bin/../lib";
+use lib "$Bin/../../lib";
 
 #### INTERNAL MODULES
 use Conf::Yaml;
@@ -14,7 +14,7 @@ use Queue::Daemon;
 #### SET LOG
 my $showlog     =   4;
 my $printlog    =   4;
-my $logfile		=	"/tmp/agua-daemon.$$.log";
+my $logfile		=	"/tmp/agua-daemon.log";
 my $help;
 GetOptions (
     'showlog=i'     => \$showlog,
@@ -24,16 +24,18 @@ GetOptions (
 usage() if defined $help;
 
 my $conf = Conf::Yaml->new(
-    inputfile	  =>	"$Bin/conf/config.yaml",
-    backup		  =>	1,
+    inputfile	=>	"$Bin/../../conf/config.yaml",
+    backup		=>	1,
     showlog     =>  2,
-    printlog    =>  4
+    printlog    =>  4,
+	logfile		=>	$logfile
 );
 
 my $object      =  Queue::Daemon->new({
     conf        =>  $conf,
     showlog     =>  $showlog,
-    printlog    =>  $printlog
+    printlog    =>  $printlog,
+	logfile		=>	$logfile
 });
 
 ##############################################################

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+node /agua/apps/rabbit.js/example/socketio/server.js

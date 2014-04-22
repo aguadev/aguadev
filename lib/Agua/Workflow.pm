@@ -182,6 +182,7 @@ method initialise ($json) {
 
 method setUserLogfile ($username, $identifier, $mode) {
 	my $installdir = $self->conf()->getKey("agua", "INSTALLDIR");
+	$identifier	=~ s/::/-/g;
 	
 	return "$installdir/log/$username.$identifier.$mode.log";
 }
