@@ -1,0 +1,59 @@
+{
+   "abstract" : "automatically give your module the ability to have plugins",
+   "author" : [
+      "Simon Wistow <simon@thegestalt.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Module::Build version 0.4003, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Module-Pluggable",
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Test::More" : "0.62"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0.38"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "File::Basename" : "0",
+            "File::Spec" : "3.00",
+            "if" : "0"
+         }
+      }
+   },
+   "provides" : {
+      "Devel::InnerPackage" : {
+         "file" : "lib/Devel/InnerPackage.pm",
+         "version" : "0.4"
+      },
+      "Module::Pluggable" : {
+         "file" : "lib/Module/Pluggable.pm",
+         "version" : "5.1"
+      },
+      "Module::Pluggable::Object" : {
+         "file" : "lib/Module/Pluggable/Object.pm",
+         "version" : "5.1"
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "license" : [
+         "http://dev.perl.org/licenses/"
+      ],
+      "repository" : {
+         "url" : "https://github.com/simonwistow/Module-Pluggable"
+      }
+   },
+   "version" : "5.1"
+}

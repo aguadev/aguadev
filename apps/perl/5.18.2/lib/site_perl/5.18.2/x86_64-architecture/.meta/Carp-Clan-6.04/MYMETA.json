@@ -1,0 +1,30 @@
+{
+   "abstract" : "Report errors from perspective of caller of a \"clan\" of modules",
+   "author" : [
+      "Steffen Beyer <STBEY@cpan.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "ExtUtils::MakeMaker version 6.42, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Carp-Clan",
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Test::Exception" : "0"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "version" : "6.04"
+}

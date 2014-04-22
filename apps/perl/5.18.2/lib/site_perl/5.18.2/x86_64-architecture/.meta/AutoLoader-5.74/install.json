@@ -1,0 +1,1 @@
+{"name":"AutoLoader","version":"5.74","dist":"AutoLoader-5.74","pathname":"S/SM/SMUELLER/AutoLoader-5.74.tar.gz","provides":{"AutoSplit":{"file":"lib/AutoSplit.pm","version":"1.06"},"AutoLoader":{"file":"lib/AutoLoader.pm","version":"5.74"}},"target":"S/SM/SMUELLER/AutoLoader-5.74.tar.gz"}

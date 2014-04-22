@@ -1,0 +1,55 @@
+{
+   "abstract" : "detect outdated CPAN modules in your environment.",
+   "author" : [
+      "Tokuhiro Matsuno"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Minilla/v0.0.49, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "cpan-outdated",
+   "prereqs" : {
+      "configure" : {
+         "requires" : {
+            "CPAN::Meta" : "0",
+            "Module::Build" : "0.4"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "CPAN::DistnameInfo" : "0.1",
+            "IO::Zlib" : "0",
+            "LWP" : "0",
+            "Module::CoreList" : "0",
+            "Module::Metadata" : "1.000007",
+            "local::lib" : "1.006008",
+            "perl" : "5.008001",
+            "version" : "0"
+         }
+      }
+   },
+   "provides" : {
+      "App::cpanoutdated" : {
+         "file" : "lib/App/cpanoutdated.pm",
+         "version" : "0.28"
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/tokuhirom/cpan-outdated/issues"
+      },
+      "homepage" : "https://github.com/tokuhirom/cpan-outdated",
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/tokuhirom/cpan-outdated.git",
+         "web" : "https://github.com/tokuhirom/cpan-outdated"
+      }
+   },
+   "version" : "0.28"
+}

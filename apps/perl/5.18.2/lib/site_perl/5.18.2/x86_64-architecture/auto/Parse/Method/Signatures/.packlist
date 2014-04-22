@@ -1,0 +1,17 @@
+/agua/apps/perl/5.18.2/lib/site_perl/5.18.2/Parse/Method/Signatures.pm
+/agua/apps/perl/5.18.2/lib/site_perl/5.18.2/Parse/Method/Signatures/Param.pm
+/agua/apps/perl/5.18.2/lib/site_perl/5.18.2/Parse/Method/Signatures/Param/Bindable.pm
+/agua/apps/perl/5.18.2/lib/site_perl/5.18.2/Parse/Method/Signatures/Param/Named.pm
+/agua/apps/perl/5.18.2/lib/site_perl/5.18.2/Parse/Method/Signatures/Param/Placeholder.pm
+/agua/apps/perl/5.18.2/lib/site_perl/5.18.2/Parse/Method/Signatures/Param/Positional.pm
+/agua/apps/perl/5.18.2/lib/site_perl/5.18.2/Parse/Method/Signatures/Param/Unpacked.pm
+/agua/apps/perl/5.18.2/lib/site_perl/5.18.2/Parse/Method/Signatures/Param/Unpacked/Array.pm
+/agua/apps/perl/5.18.2/lib/site_perl/5.18.2/Parse/Method/Signatures/Param/Unpacked/Hash.pm
+/agua/apps/perl/5.18.2/lib/site_perl/5.18.2/Parse/Method/Signatures/ParamCollection.pm
+/agua/apps/perl/5.18.2/lib/site_perl/5.18.2/Parse/Method/Signatures/Sig.pm
+/agua/apps/perl/5.18.2/lib/site_perl/5.18.2/Parse/Method/Signatures/TypeConstraint.pm
+/agua/apps/perl/5.18.2/lib/site_perl/5.18.2/Parse/Method/Signatures/Types.pm
+/agua/apps/perl/5.18.2/man/man3/Parse::Method::Signatures.3
+/agua/apps/perl/5.18.2/man/man3/Parse::Method::Signatures::Param.3
+/agua/apps/perl/5.18.2/man/man3/Parse::Method::Signatures::Sig.3
+/agua/apps/perl/5.18.2/man/man3/Parse::Method::Signatures::TypeConstraint.3

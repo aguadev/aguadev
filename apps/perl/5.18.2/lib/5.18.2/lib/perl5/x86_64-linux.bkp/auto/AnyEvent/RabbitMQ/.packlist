@@ -1,0 +1,8 @@
+/agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5/AnyEvent/RabbitMQ.pm
+/agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5/AnyEvent/RabbitMQ/Channel.pm
+/agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5/AnyEvent/RabbitMQ/LocalQueue.pm
+/agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5/auto/share/dist/AnyEvent-RabbitMQ/README
+/agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5/auto/share/dist/AnyEvent-RabbitMQ/fixed_amqp0-8.xml
+/agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5/auto/share/dist/AnyEvent-RabbitMQ/fixed_amqp0-9-1.xml
+/agua/apps/perl/5.18.2/lib/5.18.2/man/man3/AnyEvent::RabbitMQ.3
+/agua/apps/perl/5.18.2/lib/5.18.2/man/man3/AnyEvent::RabbitMQ::Channel.3

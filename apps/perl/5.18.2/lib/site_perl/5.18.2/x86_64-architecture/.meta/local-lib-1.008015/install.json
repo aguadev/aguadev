@@ -1,0 +1,1 @@
+{"target":"ETHER/local-lib-1.008015.tar.gz","name":"local::lib","provides":{"lib::core::only":{"file":"lib/lib/core/only.pm"},"local::lib":{"file":"lib/local/lib.pm","version":"1.008015"}},"dist":"local-lib-1.008015","version":"1.008015","pathname":"E/ET/ETHER/local-lib-1.008015.tar.gz"}

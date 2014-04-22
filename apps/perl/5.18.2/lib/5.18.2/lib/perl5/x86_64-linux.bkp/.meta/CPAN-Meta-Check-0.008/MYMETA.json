@@ -1,0 +1,73 @@
+{
+   "abstract" : "Verify requirements in a CPAN::Meta object",
+   "author" : [
+      "Leon Timmermans <leont@cpan.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Dist::Zilla version 4.300039, CPAN::Meta::Converter version 2.132830, CPAN::Meta::Converter version 2.140640",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "CPAN-Meta-Check",
+   "prereqs" : {
+      "build" : {
+         "requires" : {}
+      },
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.30"
+         }
+      },
+      "develop" : {
+         "requires" : {
+            "Pod::Coverage::TrustPod" : "0",
+            "Test::Pod" : "1.41",
+            "Test::Pod::Coverage" : "1.08"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "CPAN::Meta::Prereqs" : "2.132830",
+            "CPAN::Meta::Requirements" : "2.121",
+            "Exporter" : "5.57",
+            "Module::Metadata" : "0",
+            "strict" : "0",
+            "warnings" : "0"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "CPAN::Meta" : "2.120920",
+            "Env" : "0",
+            "File::Spec" : "0",
+            "IO::Handle" : "0",
+            "IPC::Open3" : "0",
+            "Test::Deep" : "0",
+            "Test::More" : "0.88"
+         }
+      }
+   },
+   "provides" : {
+      "CPAN::Meta::Check" : {
+         "file" : "lib/CPAN/Meta/Check.pm",
+         "version" : "0.008"
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "mailto" : "bug-cpan-meta-check at rt.cpan.org",
+         "web" : "http://rt.cpan.org/Public/Dist/Display.html?Name=CPAN-Meta-Check"
+      },
+      "repository" : {
+         "type" : "git",
+         "url" : "git://github.com/Leont/cpan-meta-check.git",
+         "web" : "https://github.com/Leont/cpan-meta-check"
+      }
+   },
+   "version" : "0.008"
+}

@@ -1,0 +1,10 @@
+/agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5/DBD/Mock.pm
+/agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5/DBD/Mock/Pool.pm
+/agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5/DBD/Mock/Pool/db.pm
+/agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5/DBD/Mock/Session.pm
+/agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5/DBD/Mock/StatementTrack.pm
+/agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5/DBD/Mock/StatementTrack/Iterator.pm
+/agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5/DBD/Mock/db.pm
+/agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5/DBD/Mock/dr.pm
+/agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5/DBD/Mock/st.pm
+/agua/apps/perl/5.18.2/lib/5.18.2/man/man3/DBD::Mock.3

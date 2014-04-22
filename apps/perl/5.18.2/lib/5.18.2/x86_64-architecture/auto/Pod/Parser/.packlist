@@ -1,0 +1,14 @@
+/agua/apps/perl/5.18.2/bin/podselect
+/agua/apps/perl/5.18.2/lib/5.18.2/Pod/Find.pm
+/agua/apps/perl/5.18.2/lib/5.18.2/Pod/InputObjects.pm
+/agua/apps/perl/5.18.2/lib/5.18.2/Pod/ParseUtils.pm
+/agua/apps/perl/5.18.2/lib/5.18.2/Pod/Parser.pm
+/agua/apps/perl/5.18.2/lib/5.18.2/Pod/PlainText.pm
+/agua/apps/perl/5.18.2/lib/5.18.2/Pod/Select.pm
+/agua/apps/perl/5.18.2/man/man1/podselect.1
+/agua/apps/perl/5.18.2/man/man3/Pod::Find.3
+/agua/apps/perl/5.18.2/man/man3/Pod::InputObjects.3
+/agua/apps/perl/5.18.2/man/man3/Pod::ParseUtils.3
+/agua/apps/perl/5.18.2/man/man3/Pod::Parser.3
+/agua/apps/perl/5.18.2/man/man3/Pod::PlainText.3
+/agua/apps/perl/5.18.2/man/man3/Pod::Select.3

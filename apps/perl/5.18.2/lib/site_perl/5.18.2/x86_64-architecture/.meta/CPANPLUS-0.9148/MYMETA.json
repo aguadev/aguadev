@@ -1,0 +1,69 @@
+{
+   "abstract" : "Ameliorated interface to the CPAN",
+   "author" : [
+      "Jos Boumans <kane@cpan.org>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Module::Install version 0.650, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "CPANPLUS",
+   "no_index" : {
+      "directory" : [
+         "lib/CPANPLUS/inc",
+         "inc",
+         "t"
+      ]
+   },
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Archive::Extract" : "0.16",
+            "Archive::Tar" : "1.23",
+            "Digest::SHA" : "0.0",
+            "ExtUtils::Install" : "1.42",
+            "File::Fetch" : "0.15_02",
+            "File::Spec" : "0.82",
+            "IO::Zlib" : "1.04",
+            "IPC::Cmd" : "0.36",
+            "Locale::Maketext::Simple" : "0.01",
+            "Log::Message" : "0.01",
+            "Module::CoreList" : "2.22",
+            "Module::Load" : "0.10",
+            "Module::Load::Conditional" : "0.50",
+            "Module::Loaded" : "0.01",
+            "Module::Pluggable" : "2.4",
+            "Object::Accessor" : "0.44",
+            "Package::Constants" : "0.01",
+            "Params::Check" : "0.36",
+            "Parse::CPAN::Meta" : "1.4200",
+            "Storable" : "0.0",
+            "Term::UI" : "0.18",
+            "Test::Harness" : "2.62",
+            "Test::More" : "0.47",
+            "version" : "0.77"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "homepage" : "http://github.com/jib/cpanplus-devel",
+      "license" : [
+         "http://dev.perl.org/licenses/"
+      ],
+      "repository" : {
+         "url" : "http://github.com/jib/cpanplus-devel"
+      }
+   },
+   "version" : "0.9148"
+}

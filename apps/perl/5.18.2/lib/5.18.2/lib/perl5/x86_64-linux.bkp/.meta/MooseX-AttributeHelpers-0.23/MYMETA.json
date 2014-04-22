@@ -1,0 +1,176 @@
+{
+   "abstract" : "Extend your attribute interfaces (deprecated)",
+   "author" : [
+      "Stevan Little <stevan@iinteractive.com>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Module::Install version 0.91, CPAN::Meta::Converter version 2.140640",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "MooseX-AttributeHelpers",
+   "no_index" : {
+      "directory" : [
+         "inc",
+         "t"
+      ]
+   },
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "6.42",
+            "Moose" : "0.56",
+            "Test::Exception" : "0.21",
+            "Test::Moose" : "0",
+            "Test::More" : "0.62"
+         }
+      }
+   },
+   "provides" : {
+      "MooseX::AttributeHelpers" : {
+         "file" : "lib/MooseX/AttributeHelpers.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Bool" : {
+         "file" : "lib/MooseX/AttributeHelpers/Bool.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Collection::Array" : {
+         "file" : "lib/MooseX/AttributeHelpers/Collection/Array.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Collection::Bag" : {
+         "file" : "lib/MooseX/AttributeHelpers/Collection/Bag.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Collection::Hash" : {
+         "file" : "lib/MooseX/AttributeHelpers/Collection/Hash.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Collection::ImmutableHash" : {
+         "file" : "lib/MooseX/AttributeHelpers/Collection/ImmutableHash.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Collection::List" : {
+         "file" : "lib/MooseX/AttributeHelpers/Collection/List.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Counter" : {
+         "file" : "lib/MooseX/AttributeHelpers/Counter.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Meta::Method::Curried" : {
+         "file" : "lib/MooseX/AttributeHelpers/Meta/Method/Curried.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Meta::Method::Provided" : {
+         "file" : "lib/MooseX/AttributeHelpers/Meta/Method/Provided.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::MethodProvider::Array" : {
+         "file" : "lib/MooseX/AttributeHelpers/MethodProvider/Array.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::MethodProvider::Bag" : {
+         "file" : "lib/MooseX/AttributeHelpers/MethodProvider/Bag.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::MethodProvider::Bool" : {
+         "file" : "lib/MooseX/AttributeHelpers/MethodProvider/Bool.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::MethodProvider::Counter" : {
+         "file" : "lib/MooseX/AttributeHelpers/MethodProvider/Counter.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::MethodProvider::Hash" : {
+         "file" : "lib/MooseX/AttributeHelpers/MethodProvider/Hash.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::MethodProvider::ImmutableHash" : {
+         "file" : "lib/MooseX/AttributeHelpers/MethodProvider/ImmutableHash.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::MethodProvider::List" : {
+         "file" : "lib/MooseX/AttributeHelpers/MethodProvider/List.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::MethodProvider::String" : {
+         "file" : "lib/MooseX/AttributeHelpers/MethodProvider/String.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Number" : {
+         "file" : "lib/MooseX/AttributeHelpers/Number.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::String" : {
+         "file" : "lib/MooseX/AttributeHelpers/String.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Trait::Base" : {
+         "file" : "lib/MooseX/AttributeHelpers/Trait/Base.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Trait::Bool" : {
+         "file" : "lib/MooseX/AttributeHelpers/Trait/Bool.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Trait::Collection" : {
+         "file" : "lib/MooseX/AttributeHelpers/Trait/Collection.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Trait::Collection::Array" : {
+         "file" : "lib/MooseX/AttributeHelpers/Trait/Collection/Array.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Trait::Collection::Bag" : {
+         "file" : "lib/MooseX/AttributeHelpers/Trait/Collection/Bag.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Trait::Collection::Hash" : {
+         "file" : "lib/MooseX/AttributeHelpers/Trait/Collection/Hash.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Trait::Collection::ImmutableHash" : {
+         "file" : "lib/MooseX/AttributeHelpers/Trait/Collection/ImmutableHash.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Trait::Collection::List" : {
+         "file" : "lib/MooseX/AttributeHelpers/Trait/Collection/List.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Trait::Counter" : {
+         "file" : "lib/MooseX/AttributeHelpers/Trait/Counter.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Trait::Number" : {
+         "file" : "lib/MooseX/AttributeHelpers/Trait/Number.pm",
+         "version" : "0.23"
+      },
+      "MooseX::AttributeHelpers::Trait::String" : {
+         "file" : "lib/MooseX/AttributeHelpers/Trait/String.pm",
+         "version" : "0.23"
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "license" : [
+         "http://dev.perl.org/licenses/"
+      ]
+   },
+   "version" : "0.23"
+}

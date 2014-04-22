@@ -1,0 +1,1 @@
+{"dist":"Any-Moose-0.21","version":"0.21","target":"Any::Moose","provides":{"AnyMooseTest":{"file":"t/lib/AnyMooseTest.pm"},"inc::MakeMaker":{"file":"inc/MakeMaker.pm"},"Any::Moose":{"version":"0.21","file":"lib/Any/Moose.pm"}},"name":"Any::Moose","pathname":"S/SA/SARTAK/Any-Moose-0.21.tar.gz"}

@@ -1,0 +1,60 @@
+---
+distribution: !!perl/hash:CPAN::Distribution
+  CALLED_FOR: HTTP::Daemon
+  CHECKSUM_STATUS: OK
+  ID: G/GA/GAAS/HTTP-Daemon-6.01.tar.gz
+  RO:
+    CPAN_COMMENT: ~
+    CPAN_USERID: GAAS
+  archived: tar
+  build_dir: /agua/apps/perl/cpan/build/HTTP-Daemon-6.01-ty29e8
+  incommandcolor: 2
+  install: !!perl/hash:CPAN::Distrostatus
+    COMMANDID: 1
+    FAILED: ''
+    TEXT: YES
+    TIME: 1397126578
+  localfile: /home/syoung/.cpan/sources/authors/id/G/GA/GAAS/HTTP-Daemon-6.01.tar.gz
+  make: !!perl/hash:CPAN::Distrostatus
+    COMMANDID: 1
+    FAILED: ''
+    TEXT: YES
+    TIME: 1397126573
+  make_test: !!perl/hash:CPAN::Distrostatus
+    COMMANDID: 1
+    FAILED: ''
+    TEXT: YES
+    TIME: 1397126578
+  negative_prefs_cache: 1
+  prefs:
+    install: {}
+  prereq_pm:
+    build_requires:
+      ExtUtils::MakeMaker: 0
+    requires:
+      HTTP::Date: 6
+      HTTP::Request: 6
+      HTTP::Response: 6
+      HTTP::Status: 6
+      IO::Socket: 0
+      LWP::MediaTypes: 6
+      Sys::Hostname: 0
+      perl: 5.008001
+  reqtype: r
+  sponsored_mods: {}
+  unwrapped: !!perl/hash:CPAN::Distrostatus
+    COMMANDID: 1
+    FAILED: ''
+    TEXT: YES
+    TIME: 1397126573
+  writemakefile: !!perl/hash:CPAN::Distrostatus
+    COMMANDID: 1
+    FAILED: ''
+    TEXT: YES
+    TIME: 1397126573
+perl:
+  $^X: /mnt/repos/private/syoung/aguadev/apps/perl/5.18.2/bin/perl
+  mtime_$^X: 1397050678
+  mtime_dll: 0
+  sitearchexp: /agua/apps/perl/5.18.2/lib/site_perl/5.18.2/x86_64-linux
+time: 1397126578

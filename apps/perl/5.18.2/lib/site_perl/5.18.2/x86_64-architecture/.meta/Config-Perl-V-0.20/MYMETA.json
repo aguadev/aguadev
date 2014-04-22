@@ -1,0 +1,60 @@
+{
+   "abstract" : "Structured data retrieval of perl -V output",
+   "author" : [
+      "H.Merijn Brand <h.m.brand@xs4all.nl>"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Author, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Config-Perl-V",
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "runtime" : {
+         "recommends" : {
+            "perl" : "5.016003"
+         },
+         "requires" : {
+            "Config" : "0"
+         }
+      },
+      "test" : {
+         "requires" : {
+            "Test::More" : "0",
+            "Test::NoWarnings" : "0"
+         }
+      }
+   },
+   "provides" : {
+      "Config::Perl::V" : {
+         "file" : "V.pm",
+         "version" : "0.20"
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "license" : [
+         "http://dev.perl.org/licenses/"
+      ],
+      "repository" : {
+         "type" : "git",
+         "url" : "http://repo.or.cz/r/Config-Perl-V.git",
+         "web" : "http://repo.or.cz/w/Config-Perl-V.git"
+      }
+   },
+   "version" : "0.20"
+}

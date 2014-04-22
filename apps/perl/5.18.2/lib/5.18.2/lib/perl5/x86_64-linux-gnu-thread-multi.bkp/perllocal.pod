@@ -1,0 +1,88 @@
+=head2 Thu Apr 10 04:04:30 2014: C<Module> L<Test::UseAllModules|Test::UseAllModules>
+
+=over 4
+
+=item *
+
+C<installed into: /agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.14>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Apr 10 04:04:32 2014: C<Module> L<MouseX::Types|MouseX::Types>
+
+=over 4
+
+=item *
+
+C<installed into: /agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.06>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Apr 10 04:04:33 2014: C<Module> L<MouseX::Types::Path::Class|MouseX::Types::Path::Class>
+
+=over 4
+
+=item *
+
+C<installed into: /agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.07>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+
+=head2 Thu Apr 10 04:04:33 2014: C<Module> L<MouseX::ConfigFromFile|MouseX::ConfigFromFile>
+
+=over 4
+
+=item *
+
+C<installed into: /agua/apps/perl/5.18.2/lib/5.18.2/lib/perl5>
+
+=item *
+
+C<LINKTYPE: dynamic>
+
+=item *
+
+C<VERSION: 0.05>
+
+=item *
+
+C<EXE_FILES: >
+
+=back
+

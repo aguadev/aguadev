@@ -1,0 +1,54 @@
+---
+distribution: !!perl/hash:CPAN::Distribution
+  CALLED_FOR: File::Listing
+  CHECKSUM_STATUS: OK
+  ID: G/GA/GAAS/File-Listing-6.04.tar.gz
+  RO:
+    CPAN_COMMENT: ~
+    CPAN_USERID: GAAS
+  archived: tar
+  build_dir: /agua/apps/perl/cpan/build/File-Listing-6.04-e6DCL_
+  incommandcolor: 2
+  install: !!perl/hash:CPAN::Distrostatus
+    COMMANDID: 1
+    FAILED: ''
+    TEXT: YES
+    TIME: 1397126572
+  localfile: /home/syoung/.cpan/sources/authors/id/G/GA/GAAS/File-Listing-6.04.tar.gz
+  make: !!perl/hash:CPAN::Distrostatus
+    COMMANDID: 1
+    FAILED: ''
+    TEXT: YES
+    TIME: 1397126570
+  make_test: !!perl/hash:CPAN::Distrostatus
+    COMMANDID: 1
+    FAILED: ''
+    TEXT: YES
+    TIME: 1397126572
+  negative_prefs_cache: 1
+  prefs:
+    install: {}
+  prereq_pm:
+    build_requires:
+      ExtUtils::MakeMaker: 0
+    requires:
+      HTTP::Date: 6
+      perl: 5.006002
+  reqtype: r
+  sponsored_mods: {}
+  unwrapped: !!perl/hash:CPAN::Distrostatus
+    COMMANDID: 1
+    FAILED: ''
+    TEXT: YES
+    TIME: 1397126570
+  writemakefile: !!perl/hash:CPAN::Distrostatus
+    COMMANDID: 1
+    FAILED: ''
+    TEXT: YES
+    TIME: 1397126570
+perl:
+  $^X: /mnt/repos/private/syoung/aguadev/apps/perl/5.18.2/bin/perl
+  mtime_$^X: 1397050678
+  mtime_dll: 0
+  sitearchexp: /agua/apps/perl/5.18.2/lib/site_perl/5.18.2/x86_64-linux
+time: 1397126572

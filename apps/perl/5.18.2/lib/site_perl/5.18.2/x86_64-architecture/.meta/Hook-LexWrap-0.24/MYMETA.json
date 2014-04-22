@@ -1,0 +1,48 @@
+{
+   "abstract" : "Lexically scoped subroutine wrappers",
+   "author" : [
+      "Damian Conway (damian@conway.org)"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Module::Build version 0.4003, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Hook-LexWrap",
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Test::More" : "0"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "perl" : "5.006"
+         }
+      }
+   },
+   "provides" : {
+      "Hook::LexWrap" : {
+         "file" : "lib/Hook/LexWrap.pm",
+         "version" : "0.24"
+      },
+      "Hook::LexWrap::Cleanup" : {
+         "file" : "lib/Hook/LexWrap.pm",
+         "version" : "0"
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "license" : [
+         "http://dev.perl.org/licenses/"
+      ],
+      "repository" : {
+         "url" : "http://github.com/chorny/Hook-LexWrap"
+      }
+   },
+   "version" : "0.24"
+}

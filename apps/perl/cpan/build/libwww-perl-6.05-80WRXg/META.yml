@@ -1,0 +1,52 @@
+--- #YAML:1.0
+name:               libwww-perl
+version:            6.05
+abstract:           The World-Wide Web library for Perl
+author:
+    - Gisle Aas <gisle@activestate.com>
+license:            perl
+distribution_type:  module
+configure_requires:
+    ExtUtils::MakeMaker:  0
+build_requires:
+    ExtUtils::MakeMaker:  0
+requires:
+    Digest::MD5:          0
+    Encode:               2.12
+    Encode::Locale:       0
+    File::Listing:        6
+    HTML::Entities:       0
+    HTML::HeadParser:     0
+    HTTP::Cookies:        6
+    HTTP::Daemon:         6
+    HTTP::Date:           6
+    HTTP::Negotiate:      6
+    HTTP::Request:        6
+    HTTP::Request::Common:  6
+    HTTP::Response:       6
+    HTTP::Status:         6
+    IO::Select:           0
+    IO::Socket:           0
+    LWP::MediaTypes:      6
+    MIME::Base64:         2.1
+    Net::FTP:             2.58
+    Net::HTTP:            6.04
+    perl:                 5.008001
+    URI:                  1.10
+    URI::Escape:          0
+    WWW::RobotRules:      6
+resources:
+    MailingList:  mailto:libwww@perl.org
+    repository:   https://github.com/libwww-perl/libwww-perl
+no_index:
+    directory:
+        - t
+        - inc
+generated_by:       ExtUtils::MakeMaker version 6.57_05
+meta-spec:
+    url:      http://module-build.sourceforge.net/META-spec-v1.4.html
+    version:  1.4
+recommends:
+    Authen::NTLM:         1.02
+    Data::Dump:           0
+    LWP::Protocol::https:  6.02

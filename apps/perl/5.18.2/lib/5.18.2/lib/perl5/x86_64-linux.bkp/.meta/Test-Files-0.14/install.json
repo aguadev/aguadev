@@ -1,0 +1,1 @@
+{"provides":{"Test::Simple::Catch":{"file":"t/lib/Test/Simple/Catch.pm"},"Test::Files":{"file":"Files.pm","version":"0.14"}},"target":"Test::Files","name":"Test::Files","dist":"Test-Files-0.14","version":"0.14","pathname":"P/PH/PHILCROW/Test-Files-0.14.tar.gz"}

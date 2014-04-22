@@ -1,0 +1,39 @@
+{
+   "abstract" : "run code after a subroutine call, preserving the context the subroutine would have seen if it were the last statement in the caller",
+   "author" : [
+      "AND COPYRIGHT"
+   ],
+   "dynamic_config" : 0,
+   "generated_by" : "Module::Install version 0.68, CPAN::Meta::Converter version 2.120921",
+   "license" : [
+      "unknown"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Context-Preserve",
+   "no_index" : {
+      "directory" : [
+         "inc",
+         "t"
+      ]
+   },
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "ExtUtils::MakeMaker" : "0"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Exporter" : "0",
+            "Test::Exception" : "0",
+            "Test::More" : "0",
+            "ok" : "0"
+         }
+      }
+   },
+   "release_status" : "stable",
+   "version" : "0.01"
+}

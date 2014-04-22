@@ -1,0 +1,24 @@
+# Index created by AutoSplit for blib/lib/Heap/Simple/Perl.pm
+#    (file acts as timestamp)
+package Heap::Simple::Perl;
+sub insert  ;
+sub extract_upto  ;
+sub first  ;
+sub top  ;
+sub extract_top  ;
+sub extract_min  ;
+sub extract_first  ;
+sub top_key  ;
+sub min_key  ;
+sub first_key  ;
+sub key  ;
+sub keys  ;
+sub values  ;
+sub _absorb  ;
+sub _key_absorb  ;
+sub user_data  ;
+sub infinity  ;
+sub _i_recover  ;
+sub _e_recover  ;
+sub merge_arrays  ;
+1;
