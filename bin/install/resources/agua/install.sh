@@ -15,5 +15,5 @@ ln -s /agua/bin/daemon/agua /usr/bin/agua
 
 # 3. RUN SERVICE
 
-service rabbitjs start
+service agua start
 
