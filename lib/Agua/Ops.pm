@@ -229,6 +229,9 @@ method changeDir ($directory) {
 method runCommand ($command) {
 #### RUN COMMAND LOCALLY OR ON REMOTE HOST
 	#### ADD ENVIRONMENT VARIABLES IF EXIST
+	print "Agua::Ops::runCommand: $command\n";
+	$self->showlog(4);
+	
 	$command = $self->envars() . $command if defined $self->envars();
 	$command = "cd ".  $self->cwd() . "; " . $command if defined $self->cwd() and $self->cwd();
 	$self->logDebug("command", $command);

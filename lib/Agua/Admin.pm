@@ -57,18 +57,24 @@ has 'conf' 	=> (
 );
 
 has 'head' 	=> (
-	is =>	'rw',
-	'isa' => 'Agua::Instance',
-	default	=>	sub {
-		Agua::Instance->new({
-			logfile		=>	"$Bin/log/admin.head.log",
-			showlog		=>	2,
-			printlog	=>	5
-		});
-	}
+	is 		=>	'rw',
+	'isa' 	=> 'Agua::Instance',
+	lazy	=>	1,
+	builder	=>	"setInstance"
 );
 
 ### /////}
+
+method setInstance  {
+	my $installdir	=	$self->conf()->getKey("agua", "INSTALLDIR");
+	my $instance	=	Agua::Instance->new({
+		logfile		=>	"$installdir/log/admin.head.log",
+		showlog		=>	2,
+		printlog	=>	5
+	});	
+	
+	return $instance;
+}
 
 method BUILD ($hash) {
 	#$self->logDebug("Agua::Admin::BUILD()");

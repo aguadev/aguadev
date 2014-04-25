@@ -35,6 +35,7 @@ has 'printlog'	=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings
 has 'novaclient'=> ( isa => 'Openstack::Nova', is => 'rw', lazy	=>	1, builder	=>	"setNovaClient" );
+has 'logfile'	=> ( isa => 'Str|Undef', is => 'rw'	);
 
 # Objects
 has 'lastsent'	=> ( isa => 'HashRef|Undef', is => 'rw', required	=>	0 );
@@ -44,7 +45,8 @@ use FindBin qw($Bin);
 use Test::More;
 
 use TryCatch;
-use Test::More;
+use Data::Dumper;
+
 
 #####////}}}}}
 
@@ -58,6 +60,10 @@ method BUILD ($args) {
 }
 
 method initialise ($args) {
+
+	#### SET SLOTS
+	$self->setSlots($args);
+
 	#### LOAD MODULES
 	my $modules = $self->loadModules();
 
@@ -73,13 +79,14 @@ method loadModules {
 	#$self->logDebug("modulestring", $modulestring);
 	#$modulestring = "Agua::Deploy";    
 	#$modulestring = "Agua::Workflow";    
+	#$modulestring 	=	"Queue::Monitor";
 
     my @modulenames = split ",", $modulestring;
     foreach my $modulename ( @modulenames) {
         my $modulepath = $modulename;
         $modulepath =~ s/::/\//g;
         my $location    = "$installdir/lib/$modulepath.pm";
-#        print "location: $location\n";
+        #print "location: $location\n";
         my $class       = "$modulename";
         eval("use $class");
     
@@ -99,32 +106,10 @@ method loadModules {
 method setListener ($modules) {
 
     $|++;
-    use AnyEvent;
-    use Net::RabbitFoot;
     
-	my $host		=	$self->conf()->getKey("queue:masterip", undef);
-	my $user		= 	$self->conf()->getKey("queue:user", undef);
-	my $password	=	$self->conf()->getKey("queue:password", undef);
-	my $vhost		=	$self->conf()->getKey("queue:vhost", undef);
-	$self->logDebug("host", $host);
-	$self->logDebug("user", $user);
-	#$self->logDebug("password", $password);
-	$self->logDebug("vhost", $vhost);
-	
-    my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
-        host 	=>	$host,
-        port 	=>	5672,
-        user 	=>	$user,
-        pass 	=>	$password,
-        vhost	=>	$vhost,
-		#host => 'localhost',
-		#port => 5672,
-		#user => 'guest',
-		#pass => 'guest',
-		#vhost => '/',
-    );
+	my $connection	=	$self->newConnection();
     
-    my $channel = $conn->open_channel();
+    my $channel = $connection->open_channel();
     
     $channel->declare_exchange(
         #exchange => 'logs',
@@ -142,7 +127,7 @@ method setListener ($modules) {
         queue => $queue_name,
     );
     
-    print " [*] Waiting for logs. To exit press CTRL-C\n";
+    print " [*] $queue_name. Waiting for logs. To exit press CTRL-C\n";
     
 	no warnings;
 	my $handler	= *handleInput;
@@ -318,15 +303,25 @@ method getObject ($modules, $data) {
 		my $module = $data->{module};
 		
 		#### SET LOGFILE
-		my $logfile     =   $self->setLogFile($username, $module);
-		$self->conf()->logfile($logfile);
-		
+		my $logfile			=	$self->logfile();
+		if ( not defined $logfile or $logfile eq "" ) {
+			$self->logDebug("DOING self->setLogfile()");
+			$logfile     =   $self->setLogFile($username, $module);
+			$self->conf()->logfile($logfile);
+		}
+
 		#### GET OBJECT
 		my $object = $modules->{$module};
-		print "{ error: 'module not supported: $module' }" and return if not defined $object;
+		if ( not defined $object ) {
+			$data->{error}	=	"module $module not supported or failed to run mode: $mode";
+			$self->sendData($data);
+			return;
+		}
 		
 		#### SET OBJECT LOGFILE AND INITIALISE
+		#$self->logDebug("Doing object->logfile");
 		$object->logfile($logfile);
+#		$self->logDebug("Doing object->initialise");
 		$object->initialise($data);
 	
 		return $object;

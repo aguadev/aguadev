@@ -14,11 +14,17 @@ my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
 #    pass => 'mypassword',
 #   vhost => 'myvhost',
 
+#    host => 'localhost',
+#    port => 5672,
+#    user => 'guest',
+#    pass => 'guest',
+#    vhost => '/',
+
     host => 'localhost',
     port => 5672,
-    user => 'guest',
-    pass => 'guest',
-    vhost => '/',
+    user => 'myuser',
+    pass => 'mypassword',
+    vhost => 'myvhost',
 );
 
 my $channel = $conn->open_channel();

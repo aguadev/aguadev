@@ -12,7 +12,7 @@ use Conf::Yaml;
 use Queue::Daemon;
 
 #### SET LOG
-my $showlog     =   4;
+my $showlog     =   2;
 my $printlog    =   4;
 my $logfile		=	"/tmp/agua-daemon.log";
 my $help;
@@ -37,6 +37,7 @@ my $object      =  Queue::Daemon->new({
     printlog    =>  $printlog,
 	logfile		=>	$logfile
 });
+
 
 ##############################################################
 

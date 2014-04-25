@@ -13,8 +13,8 @@ method installMysql {
 	$self->installMysqlPackages();
 
 	#### REPLACED BY CALL TO mysql.pp
-	######## EDIT CONFIG
-	####$self->editMysqlConfig();
+	#### EDIT CONFIG
+	$self->editMysqlConfig();
 
 	#### MAKE MYSQL START AT BOOT
 	$self->mysqlBootStart();

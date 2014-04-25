@@ -189,6 +189,8 @@ sub installPerlMods {
 
 #	$self->installPackage("perl-ExtUtils-MakeMaker");
     
+	$self->installPackage("build-essential");
+	
 	#### centos
 	my $arch	=	$self->getArch();
 	if ( $arch eq "centos" ) {

@@ -4,6 +4,7 @@ use Method::Signatures::Simple;
 
 ####////}}}}
 
+use AnyEvent;
 use Net::RabbitFoot;
 use JSON;
 use Coro;
@@ -12,13 +13,14 @@ use Data::Dumper;
 #### Strings
 has 'sourceid'	=>	( isa => 'Undef|Str', is => 'rw', default => "" );
 has 'callback'	=>	( isa => 'Undef|Str', is => 'rw', default => "" );
+has 'token'		=> ( isa => 'Str|Undef', is => 'rw' );
 
 #### Objects
 has 'connection'=> ( isa => 'Net::RabbitFoot', is => 'rw', lazy	=> 1, builder => "openConnection" );
 has 'channel'	=> ( isa => 'Net::RabbitFoot::Channel', is => 'rw', lazy	=> 1, builder => "openConnection" );
 
 method notifyStatus ($data) {
-	$self->logDebug("");
+	$self->logDebug("data", $data);
 	#$self->logDebug("DOING self->openConnection() with data", $data);
 	async {	
 		$self->logDebug("DOING self->openConnection()");
@@ -41,9 +43,6 @@ method notifyError ($data, $error) {
 method notify ($status, $error, $data) {
 	#### NOTIFY CLIENT OF STATUS
 	my $object = {
-		sourceid	=> 	$self->sourceid(),
-		callback	=> 	$self->callback(),
-		token		=>	$self->token(),
 		queue		=> 	"routing",
 		status		=> 	$status,
 		error		=>	$error,
@@ -56,20 +55,7 @@ method notify ($status, $error, $data) {
 
 method openConnection {
 	$self->logDebug("");
-	
-	my $hostname	=	`hostname -s`;
-	$hostname		=~	s/\s+$//;
-	$self->logDebug("hostname", $hostname);
-
-	my $connection = Net::RabbitFoot->new()->load_xml_spec()->connect(
-		host => 'localhost',
-		#host => '10.14.152.42',
-		#host => $hostname,
-		port => 5672,
-		user => 'guest',
-		pass => 'guest',
-		vhost => '/',
-	);
+	my $connection	=	$self->newConnection();
 	
 	#$self->logDebug("DOING connection->open_channel()");
 	my $channel = $connection->open_channel();
@@ -151,9 +137,14 @@ method sendData ($data) {
 	$data->{processid}	=	$processid;
 	#$self->logDebug("data", $data);
 
+	#### ADD UNIQUE IDENTIFIERS
+	$data->{sourceid}	= 	$self->sourceid();
+	$data->{callback}	= 	$self->callback();
+	$data->{token}		=	$self->token();
+
 	my $jsonparser = JSON->new();
 	my $json = $jsonparser->encode($data);
-	#$self->logDebug("json", $json);
+	$self->logDebug("json", $json);
 
 	#$self->logDebug("BEFORE channel->publish, self->channel", $self->channel());
 	my $result = $self->channel()->publish(
@@ -168,23 +159,9 @@ method sendData ($data) {
 }
 
 method sendTask ($message) {
-	my $host	=	`facter ipaddress_vmnet8`;
-	#my $host	=	`facter ipaddress`;
-	$host		=~	s/\s+$//;
-	$self->logDebug("host", $host);
-
-	#my $host    =   "127.0.0.1";
-	#my $host    =   "localhost";
-	my $connection = Net::RabbitFoot->new()->load_xml_spec()->connect(
-		#host => 'localhost',
-		#host => '10.14.152.42',
-		host => $host,
-		port => 5672,
-		user => 'guest',
-		pass => 'guest',
-		vhost => '/',
-	);
 	
+	my $connection	=	$self->newConnection();
+
 	$self->logDebug("DOING connection->open_channel()");
 	my $channel = $connection->open_channel();
 	$self->channel($channel);
@@ -205,6 +182,34 @@ method sendTask ($message) {
 	
 	print " [x] Sent '$message'\n";
 }
+
+method newConnection {
+	my $host		=	$self->conf()->getKey("queue:masterip", undef);
+	my $user		= 	$self->conf()->getKey("queue:user", undef);
+	my $password	=	$self->conf()->getKey("queue:password", undef);
+	my $vhost		=	$self->conf()->getKey("queue:vhost", undef);
+	$self->logDebug("host", $host);
+	$self->logDebug("user", $user);
+	#$self->logDebug("password", $password);
+	$self->logDebug("vhost", $vhost);
+	
+    my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
+        host 	=>	$host,
+        port 	=>	5672,
+        user 	=>	$user,
+        pass 	=>	$password,
+        vhost	=>	$vhost,
+		#host => 'localhost',
+		#port => 5672,
+		#user => 'guest',
+		#pass => 'guest',
+		#vhost => '/',
+    );
+	#$self->logDebug("conn", $conn);
+	
+	return $conn;	
+}
+
 
 method handleTasks {
 

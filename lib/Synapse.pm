@@ -268,6 +268,7 @@ method setExecutable {
 	#my $location	=	$app->{INSTALLDIR};
 	#$self->logDebug("location", $location);
 	my $location =	$self->conf()->getKey("synapse:installdir", undef);
+	$self->logDebug("location", $location);
 
 	return "$export; $location";
 }
