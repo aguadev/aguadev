@@ -7,14 +7,21 @@ use FindBin qw($Bin);
 #### USE LIBS
 use lib "$Bin/../../lib";
 
+my $installdir;
+BEGIN {
+    $installdir = $ENV{'installdir'} || "/agua";
+    unshift(@INC, "$installdir/lib");
+}
+
 #### INTERNAL MODULES
+#use lib "/agua/lib";
 use Conf::Yaml;
 use Queue::Daemon;
 
 #### SET LOG
 my $showlog     =   2;
 my $printlog    =   4;
-my $logfile		=	"/tmp/agua-daemon.log";
+my $logfile		=	"$installdir/log/agua-daemon.log";
 my $help;
 GetOptions (
     'showlog=i'     => \$showlog,
@@ -23,8 +30,9 @@ GetOptions (
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
 
+my $configfile	=	"$installdir/conf/config.yaml";
 my $conf = Conf::Yaml->new(
-    inputfile	=>	"$Bin/../../conf/config.yaml",
+    inputfile	=>	$configfile,
     backup		=>	1,
     showlog     =>  2,
     printlog    =>  4,
