@@ -35,6 +35,7 @@ method notifyStatus ($data) {
 }
 
 method notifyError ($data, $error) {
+	$self->logDebug("error", $error);
 	$data->{error}	=	$error;
 	
 	$self->notifyStatus($data);
@@ -69,9 +70,6 @@ method openConnection {
 		type => 'fanout',
 	);
 	#$self->logDebug("channel", $channel);
-
-	##### START RABBIT.JS
-	#$self->startRabbitJs();
 	
 	return $connection;
 }
@@ -184,7 +182,7 @@ method sendTask ($message) {
 }
 
 method newConnection {
-	my $host		=	$self->conf()->getKey("queue:masterip", undef);
+	my $host		=	$self->conf()->getKey("queue:host", undef);
 	my $user		= 	$self->conf()->getKey("queue:user", undef);
 	my $password	=	$self->conf()->getKey("queue:password", undef);
 	my $vhost		=	$self->conf()->getKey("queue:vhost", undef);
@@ -199,6 +197,7 @@ method newConnection {
         user 	=>	$user,
         pass 	=>	$password,
         vhost	=>	$vhost,
+		
 		#host => 'localhost',
 		#port => 5672,
 		#user => 'guest',
@@ -213,7 +212,7 @@ method newConnection {
 
 method handleTasks {
 
-	my $host		=	$self->conf()->getKey("queue:masterip", undef);
+	my $host		=	$self->conf()->getKey("queue:host", undef);
 	my $user		= 	$self->conf()->getKey("queue:user", undef);
 	my $password	=	$self->conf()->getKey("queue:password", undef);
 	my $vhost		=	$self->conf()->getKey("queue:vhost", undef);

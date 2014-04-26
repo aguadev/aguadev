@@ -20,7 +20,6 @@ has 'validated'	=> ( isa => 'Int', is => 'rw', default => 0 );
 # Strings
 has 'logfile'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'sourceid'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
-has 'token'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'callback'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'username'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 

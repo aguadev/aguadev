@@ -720,7 +720,7 @@ method doInstall ($installdir, $version) {
 	$self->logDebug("version", $version);
 	#$self->logger()->write("Doing doInstall");
 	
-	return $self->getInstall($installdir, $version);
+	return $self->gitInstall($installdir, $version);
 }
 
 method postInstall ($installdir, $version) {

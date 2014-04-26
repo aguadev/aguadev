@@ -177,7 +177,7 @@ method unlock {
     #$self->logDebug("self->locked: "), $self->locked(), "\n";
 }
 
-method run() {
+method run {
     #$self->logDebug("App::run(app)");
     $self->logDebug("No location for app. Exiting") if not $self->location();
     

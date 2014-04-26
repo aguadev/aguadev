@@ -2,7 +2,6 @@ package Agua::Common::Login;
 use Moose::Role;
 
 has 'mode'		=> ( isa => 'Str|Undef', is => 'rw' );
-has 'token'		=> ( isa => 'Str|Undef', is => 'rw' );
 
 =head2
 

@@ -255,11 +255,9 @@ method change ($uuid, $state) {
 method setExecutable {
 
 	#### SET PYTHON ON PATH
-	my $python		=	$self->conf()->getKey("packages:python", "2.7.3");
-	#$self->logDebug("python", $python);
-	my $installdir	=	$python->{INSTALLDIR};
-	#$self->logDebug("installdir", $installdir);
-	my $export		=	"export PATH=$installdir";
+	my $hash		=	$self->conf()->getKey("packages:python", "2.7");
+	my $python	=	$hash->{INSTALLDIR};
+	$self->logDebug("python", $python);
 
 	##### SET SYNAPSE EXECUTABLE
 	#my $version 	= $self->latestVersion("synapse");
@@ -270,7 +268,7 @@ method setExecutable {
 	my $location =	$self->conf()->getKey("synapse:installdir", undef);
 	$self->logDebug("location", $location);
 
-	return "$export; $location";
+	return "$python $location";
 }
 
 method latestVersion ($package) {
