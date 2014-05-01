@@ -1,1 +1,0 @@
-{"pathname":"H/HA/HAARG/Import-Into-1.002001.tar.gz","name":"Import::Into","version":"1.002001","target":"Import::Into","provides":{"Import::Into":{"version":"1.002001","file":"lib/Import/Into.pm"}},"dist":"Import-Into-1.002001"}

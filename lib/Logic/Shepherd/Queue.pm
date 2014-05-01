@@ -1,5 +1,5 @@
 use MooseX::Declare;
-class Logic::Shepherd::Queue with (Agua::Common::Exchange, Agua::Common::Util) extends Logic::Shepherd {
+class Logic::Shepherd::Queue with (Exchange, Agua::Common::Util) extends Logic::Shepherd {
 
 #### EXTERNAL MODULES
 use Data::Dumper;

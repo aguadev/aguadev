@@ -137,7 +137,7 @@ use File::Remove;
 use Agua::Common::Util;
 use Agua::DBaseFactory;
 use Agua::JBrowse;
-use Agua::Common::Exchange;
+use Exchange;
 
 # Booleans
 has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 4 );  
@@ -175,7 +175,7 @@ has 'conf' 	=> (
 	is 		=>	'rw',
 	default	=>	sub { Conf::Yaml->new( {} );	}
 );
-has 'exchange'	=> ( isa => 'Agua::Common::Exchange', is  => 'rw', required	=>	0, lazy	=> 1, builder => "setExchange" );
+has 'exchange'	=> ( isa => 'Exchange', is  => 'rw', required	=>	0, lazy	=> 1, builder => "setExchange" );
 
 ####/////}
 
@@ -253,7 +253,7 @@ method initialise ($json) {
 method setExchange () {
 	$self->logDebug("");
 	
-	my $exchange	=	Agua::Common::Exchange->new({
+	my $exchange	=	Exchange->new({
 		logfile		=>	$self->logfile(),
 		showlog		=>	$self->showlog(),
 		printlog	=>	$self->printlog(),

@@ -364,6 +364,35 @@ CREATE TABLE `project` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `provenance`
+--
+
+DROP TABLE IF EXISTS `provenance`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `provenance` (
+  `username` varchar(30) NOT NULL,
+  `project` varchar(40) NOT NULL,
+  `workflow` varchar(40) NOT NULL,
+  `workflownumber` int(6) NOT NULL,
+  `sample` varchar(40) NOT NULL,
+  `stage` varchar(40) NOT NULL,
+  `stagenumber` int(6) NOT NULL,
+  `application` varchar(40) NOT NULL,
+  `owner` varchar(40) NOT NULL,
+  `package` varchar(40) NOT NULL,
+  `version` varchar(40) NOT NULL,
+  `installdir` varchar(255) NOT NULL,
+  `host` varchar(40) NOT NULL,
+  `started` datetime DEFAULT NULL,
+  `completed` datetime DEFAULT NULL,
+  `duration` int(12) DEFAULT NULL,
+  `status` varchar(40) NOT NULL,
+  PRIMARY KEY (`username`,`project`,`workflow`,`workflownumber`,`sample`,`stage`,`stagenumber`,`application`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `query`
 --
 
@@ -379,6 +408,24 @@ CREATE TABLE `query` (
   `operator` varchar(40) NOT NULL,
   `value` varchar(40) NOT NULL,
   PRIMARY KEY (`username`,`query`,`ordinal`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `queue`
+--
+
+DROP TABLE IF EXISTS `queue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `queue` (
+  `username` varchar(30) NOT NULL,
+  `project` varchar(40) NOT NULL,
+  `workflow` varchar(40) NOT NULL,
+  `workflownumber` int(8) NOT NULL,
+  `sample` varchar(40) NOT NULL,
+  `status` varchar(40) NOT NULL,
+  PRIMARY KEY (`username`,`project`,`workflow`,`workflownumber`,`sample`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -598,4 +645,4 @@ CREATE TABLE `workflow` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-03-30 15:19:01
+-- Dump completed on 2014-04-30 10:09:59

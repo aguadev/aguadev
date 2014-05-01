@@ -27,6 +27,8 @@ class Agua::CLI::App with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::Statu
     has 'version'	=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'installdir'=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'name'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, documentation => q{Name of this object} );
+    has 'number'	=> ( isa => 'Int|Undef', is => 'rw', required => 0 );
+    
     has 'type'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, documentation => q{User-defined application type} );
     has 'url'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, documentation => q{URL of application website} );
     has 'linkurl'	=> ( isa => 'Str|Undef', is => 'rw', required => 0, documentation => q{URL for application usage information (e.g., man pages, help)} );
@@ -63,13 +65,13 @@ class Agua::CLI::App with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::Statu
     #### TRANSIENT VARIABLES
     #has 'args'	    => ( isa => 'ArrayRef[Str|Int]', is => 'rw', required => 0 );
     has 'newname'	=> ( isa => 'Str', is => 'rw', required => 0 );
-    has 'paramname'	    => ( isa => 'Str', is => 'rw', required => 0 );
+    has 'paramname'	=> ( isa => 'Str', is => 'rw', required => 0 );
     has 'field'	    => ( isa => 'Str', is => 'rw', required => 0 );
     has 'value'	    => ( isa => 'Str', is => 'rw', required => 0 );
-    has 'fields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['name', 'owner', 'package', 'version', 'installdir', 'type', 'location', 'executor', 'description', 'notes', 'url', 'linkurl', 'ordinal', 'status', 'submit', 'appfile', 'field', 'value', 'cmdfile', 'inputfile', 'outputfile', 'paramname', 'scrapefile', 'stdoutfile', 'stderrfile', 'queued', 'started', 'completed', 'duration', 'stagepid', 'stagejobid', 'workflowpid'] } );
-    has 'savefields'    => ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { ['name', 'owner', 'package', 'version', 'installdir', 'ordinal', 'status', 'queued', 'started', 'completed', 'duration', 'locked', 'type', 'location', 'executor', 'description', 'notes', 'submit', 'url', 'linkurl', 'localonly', 'stdoutfile', 'stderrfile', 'stagepid', 'stagejobid', 'workflowpid'] } );
-    has 'exportfields'    => ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { ['name', 'owner', 'package', 'version', 'installdir', 'ordinal', 'status', 'type', 'location', 'executor', 'description', 'notes', 'url', 'linkurl', 'localonly', 'stdoutfile', 'stderrfile', 'queued', 'started', 'completed', 'duration', 'stagepid', 'stagejobid', 'workflowpid'] } );
-    has 'appfields'    => ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { ['name', 'owner', 'package', 'version', 'installdir', 'ordinal', 'type', 'location', 'executor', 'description', 'notes', 'url', 'linkurl', 'localonly'] } );
+    has 'fields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['name', 'number', 'owner', 'package', 'version', 'installdir', 'type', 'location', 'executor', 'description', 'notes', 'url', 'linkurl', 'ordinal', 'status', 'submit', 'appfile', 'field', 'value', 'cmdfile', 'inputfile', 'outputfile', 'paramname', 'scrapefile', 'stdoutfile', 'stderrfile', 'queued', 'started', 'completed', 'duration', 'stagepid', 'stagejobid', 'workflowpid'] } );
+    has 'savefields'    => ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { ['name', 'number', 'owner', 'package', 'version', 'installdir', 'ordinal', 'status', 'queued', 'started', 'completed', 'duration', 'locked', 'type', 'location', 'executor', 'description', 'notes', 'submit', 'url', 'linkurl', 'localonly', 'stdoutfile', 'stderrfile', 'stagepid', 'stagejobid', 'workflowpid'] } );
+    has 'exportfields'    => ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { ['name', 'number', 'owner', 'package', 'version', 'installdir', 'ordinal', 'status', 'type', 'location', 'executor', 'description', 'notes', 'url', 'linkurl', 'localonly', 'stdoutfile', 'stderrfile', 'queued', 'started', 'completed', 'duration', 'stagepid', 'stagejobid', 'workflowpid'] } );
+    has 'appfields'    => ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { ['name', 'number', 'owner', 'package', 'version', 'installdir', 'ordinal', 'type', 'location', 'executor', 'description', 'notes', 'url', 'linkurl', 'localonly'] } );
     has 'inputfile'=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
     has 'appfile'=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
     has 'cmdfile'=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
@@ -897,11 +899,11 @@ method copy () {
 
 
 method _toExportHash ($fields) {
-    $self->logCaller("");
-    $self->logDebug("fields", $fields);
+    #$self->logCaller("");
+    #$self->logDebug("fields", $fields);
     my $hash;
     foreach my $field ( @$fields ) {
-        $self->logDebug("field $field: self->$field()", $self->$field() );
+        #$self->logDebug("field $field: self->$field()", $self->$field() );
         next if ref($self->$field) eq "ARRAY";
         $hash->{$field} = $self->$field();
     }

@@ -25,7 +25,7 @@ TO DO
 use strict;
 use warnings;
 
-class Queue::Daemon with (Logger, Agua::Common::Exchange, Agua::Common::Util) {
+class Queue::Daemon with (Logger, Exchange, Agua::Common::Util) {
 
 #####////}}}}}
 
@@ -101,6 +101,53 @@ method loadModules {
     }
 
     return $modules; 
+}
+
+method receiveTopic ($modules) {
+
+    $|++;
+    
+	my $connection	=	$self->newConnection();
+    
+    my $channel = $connection->open_channel();
+    my $exchange	=	"chat";
+	
+    $channel->declare_exchange(
+        #exchange => 'logs',
+        exchange => $exchange,
+        type => 'fanout',
+    );
+    
+    my $result = $channel->declare_queue( exclusive => 1, );
+    
+    my $queue_name = $result->{method_frame}->{queue};
+    
+    $channel->bind_queue(
+        #exchange => 'logs',
+        exchange => $exchange,
+        queue => $queue_name,
+    );
+    
+    print " [*] $queue_name. Waiting for logs. To exit press CTRL-C\n";
+    
+	no warnings;
+	my $handler	= *handleInput;
+	use warnings;
+	my $this	=	$self;
+    $channel->consume(
+        on_consume => sub {
+			my $var = shift;
+			my $body = $var->{body}->{payload};
+		
+			#print " [x] $body\n";
+			print " [x] Incoming message\n";
+			&$handler($this, $modules, $body);
+		},
+        queue => $queue_name,
+        no_ack => 1,
+    );
+    
+    AnyEvent->condvar->recv;    
 }
 
 method setListener ($modules) {
@@ -267,20 +314,35 @@ method handleInput ($modules, $json) {
 
 method getHostname {
 
+	#### GET OPENSTACK HOST NAME
 	#### E.G., split.v2-5.hd800-real-de2e4a8b-7034-4525-ab3e-33fc993797f8.novalocal
-	my $command		=	"curl http://169.254.169.254/2009-04-04/meta-data/hostname";
-	$self->logDebug("command", $command);
-	#my $hostname	=	`$command`;
-	my $hostname	=	"split.v2-5.hd800-real-de2e4a8b-7034-4525-ab3e-33fc993797f8.novalocal";
+	my $hostname	=	$self->novaclient()->getMetaData("hostname");
 	$hostname		=~	s/\.novalocal\s*$//;
 	$self->logDebug("hostname", $hostname);
 	
+	#### OTHERWISE, GET LOCAL HOSTNAME
 	if ( $hostname eq "" ) {
 		$hostname	=	`hostname`;
 		$hostname	=~	s/\s+$//g;
 	}
 
 	return $hostname;	
+}
+
+method getInternalIp {
+	return	$self->novaclient()->getMetaData("local-ipv4");
+}
+
+method getExternalIp {
+	return	$self->novaclient()->getMetaData("public-ipv4");
+}
+
+method updateIps {
+	my $internalip	=	$self->getInternalIp();
+	my $externalip	=	$self->getExternalIp();
+
+	$self->conf()->setKey("queue:selfinternalip", $internalip);
+	$self->conf()->setKey("queue:selfexternalip", $externalip);
 }
 
 method getObject ($modules, $data) {

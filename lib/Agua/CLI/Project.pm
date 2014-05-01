@@ -4,13 +4,16 @@ use Getopt::Simple;
 use FindBin qw($Bin);
 use lib "$Bin/../..";
 
-class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer) {
+class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::Util, Agua::Common::Database) {
+
     use File::Path;
     use JSON;
     use Data::Dumper;
     use Agua::CLI::Workflow;
     use Agua::CLI::App;
     use Agua::CLI::Parameter;
+	use Agua::Package;
+    use Agua::DBaseFactory;
 
     #### LOGGER
     has 'logfile'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
@@ -19,9 +22,11 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer) {
 
     #### STORED LOGISTICS VARIABLES
     has 'owner'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous' );
-    has 'project'	=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
-    has 'name'	    => ( isa => 'Str|Undef', is => 'rw', required => 0 );
-    has 'number'	=> ( isa => 'Int|Undef', is => 'rw', required	=>	0	);
+    has 'username'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous' );
+    has 'database'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous' );
+    has 'name'	=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
+    has 'workflow'	    => ( isa => 'Str|Undef', is => 'rw', required => 0 );
+    has 'number'	=> ( isa => 'Int|Undef', is => 'rw', default    =>  1	);
     has 'type'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, documentation => q{User-defined workflow type} );
     has 'description'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
     has 'notes'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
@@ -51,13 +56,14 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer) {
     has 'appFile'	=> ( isa => 'Str', is => 'rw', required => 0 );
     has 'field'	    => ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'value'	    => ( isa => 'Str|Undef', is => 'rw', required => 0 );
-    has 'fields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['name', 'number', 'owner', 'description', 'notes', 'outputdir', 'field', 'value', 'wkfile', 'outputfile', 'cmdfile', 'start', 'stop', 'ordinal', 'from', 'to', 'status', 'started', 'stopped', 'duration', 'epochqueued', 'epochstarted', 'epochstopped', 'epochduration'] } );
+    has 'fields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['username', 'database', 'name', 'number', 'owner', 'description', 'notes', 'outputdir', 'field', 'value', 'projfile', 'wkfile', 'outputfile', 'cmdfile', 'start', 'stop', 'ordinal', 'from', 'to', 'status', 'started', 'stopped', 'duration', 'epochqueued', 'epochstarted', 'epochstopped', 'epochduration'] } );
     has 'savefields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['name', 'number', 'owner', 'description', 'notes', 'status', 'started', 'stopped', 'duration', 'locked'] } );
     has 'exportfields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['name', 'number', 'owner', 'description', 'notes', 'status', 'started', 'stopped', 'duration', 'provenance'] } );
     has 'inputfile' => ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
+    has 'projfile'    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
     has 'wkfile'    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
     has 'cmdfile'=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
-    has 'workflowfile'   => ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
+    has 'projectfile'   => ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
     has 'logfile'   => ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
     has 'outputfile'=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
     has 'outputdir'=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
@@ -67,23 +73,36 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer) {
     has 'user'      => ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'password'  => ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'force'     => ( isa => 'Maybe', is => 'rw', required => 0 );
-    has 'db'		=> ( isa => 'Agua::DBase::MySQL', is => 'rw', required => 0 );
-    has 'logfh'     => ( isa => 'FileHandle', is => 'rw', required => 0 );
     has 'start'	=> ( isa => 'Str', is => 'rw', required => 0 );
     has 'stop'	=> ( isa => 'Str', is => 'rw', required => 0 );
 
+    #### OBJECTS
+    has 'db'		=> ( isa => 'Agua::DBase::MySQL|Undef', is => 'rw', required => 0 );
+    has 'logfh'     => ( isa => 'FileHandle', is => 'rw', required => 0 );
+    has 'conf' 	=> (
+	is =>	'rw',
+	isa => 'Conf::Yaml'
+#    ,
+#	default	=>	sub { Conf::Yaml->new(	memory	=>	1	);	}
+);
+
+    
 ####//}}    
     
-    method BUILD ($hash) { 
+    method BUILD ($args) { 
         $self->logDebug("Project::BUILD()");    
         $self->initialise();
     }
 
-    method initialise () {
-        $self->logDebug("");
+    method initialise {
+        $self->logCaller("");
+
         $self->owner("anonymous") if not defined $self->owner();
-        $self->inputfile($self->wkfile()) if defined $self->wkfile() and $self->wkfile();
+        $self->inputfile($self->projfile()) if defined $self->projfile() and $self->projfile() ne "";
         
+        $self->logDebug("Doing self->setDbh");
+        $self->setDbh();
+
         $self->logDebug("inputfile must end in '.proj'") and exit
             if $self->inputfile()
             and not $self->inputfile() =~ /\.proj$/;
@@ -91,15 +110,20 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer) {
         $self->logDebug("outputfile must end in '.proj'") and exit
             if $self->outputfile()
             and not $self->outputfile() =~ /\.proj$/;
-        
+
         $self->read();
     }
 
-    method getopts () {
-        #$self->logDebug("Agua::CLI::Project::getopts()");
+    method getopts {
+        $self->_getopts();
+        $self->initialise();
+    }
+
+    method _getopts {
+        $self->logDebug("Agua::CLI::Project::_getopts    \@ARGV: @ARGV");
         my @temp = @ARGV;
         my $args = $self->args();
-
+        
         my $olderr;
         open $olderr, ">&STDERR";	
         open(STDERR, ">/dev/null") or die "Can't redirect STDERR to /dev/null\n";
@@ -110,17 +134,18 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer) {
         #$self->logDebug("options->{switch}:");
         #print Dumper $options->{switch};
         my $switch = $options->{switch};
-        foreach my $key ( keys %$switch )
-        {
+        #print "CLI::Project::switch    ";
+        foreach my $key ( keys %$switch ) {
+            #print "$key \n" if not defined $switch->{$key};
+            print "CLI::Project::switch    $key : $switch->{$key}\n" if defined $switch->{$key};
             $self->$key($switch->{$key}) if defined $switch->{$key};
         }
+        #print "\n";
 
         @ARGV = @temp;
-        $self->initialise();
     }
 
-
-    method args() {
+    method args {
         my $meta = $self->meta();
 
         my %option_type_map = (
@@ -164,6 +189,105 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer) {
         #$self->logDebug("self->locked: "), $self->locked(), "\n";
     }
 
+    method save {
+        $self->showlog(4);
+        $self->logDebug("");
+
+        $self->_getopts();
+        
+        #### READ INPUTFILE
+        $self->read();
+
+        #### SET USERNAME
+        my $username    =   $self->setUsername();
+        $self->logDebug("username", $username);
+        
+        #### LOAD INTO DATABASE
+        my $loader      =   $self->getLoader();        
+    	$loader->logDebug("loader->db->database", $loader->db()->database());
+		$loader->projectToDatabase($username, $self);
+    }
+
+    method saveWorkflow {
+        $self->showlog(4);
+        $self->logDebug("");
+
+        #### SET USERNAME AND OWNER
+        my $username    =   $self->setUsername();
+        my $owner       =   $username;
+        my $project     =   $self->name();
+        $self->logDebug("username", $username);
+        $self->logDebug("project", $project);
+
+        $self->loadFromDatabase($username, $project);
+
+        #### GET INPUTFILE
+        my $workflowfile =   $self->wkfile();
+        $self->logDebug("workflow");
+        
+        #### SET PROJECTFILE
+        my ($projectfile) =   $workflowfile =~  /^(.+)\/[^\/]+$/;
+        $projectfile    =   "." if not defined $projectfile;
+        $projectfile    .=  "/$project.proj";
+        $self->logDebug("projectfile", $projectfile);
+        $self->inputfile($projectfile);
+        $self->logDebug("projectfile", $projectfile);
+        
+        my $workflow = Agua::CLI::Workflow->new(
+            project     =>  $project,
+            username    =>  $self->username(),
+            inputfile   =>  $workflowfile,
+            showlog     =>  $self->showlog(),
+            printlog    =>  $self->printlog(),
+            conf        =>  $self->conf(),
+            db          =>  $self->db()
+        );
+        $workflow->_getopts();
+        $workflow->_loadFile();
+
+        #### VALIDATE
+        $self->logCritical("workflow->name not defined") and exit if not defined $workflow->name();
+
+        #### ADD WORKFLOW OBJECT TO PROJECT OBJECT
+        $self->_saveWorkflow($workflow);
+        
+        #### SAVE TO DATABASE
+        $workflow->save();
+    }
+
+    method _saveWorkflow ($workflowobject) {
+        $self->logDebug("");
+    
+        return $self->_insertWorkflow($workflowobject, $workflowobject->ordinal() - 1) if $workflowobject->ordinal();
+        
+        #### INCREMENT ORDINAL AND SET ON THIS APP
+        $workflowobject->ordinal(scalar(@{$self->workflows()} + 1));
+        
+        push @{$self->workflows()}, $workflowobject;
+        $self->_numberWorkflows();
+        
+        return scalar(@{$self->workflows()});
+    }
+
+    method loadFromDatabase ($username, $project) {
+        $self->logDebug("username", $username);
+        $self->logDebug("project", $project);
+
+        my $loader  =   $self->getLoader();
+
+        #### GET WORKFLOWS		
+        my $data    =   $self->db()->queryhash("SELECT * FROM project WHERE name='$project'");
+        my $workflows = $loader->getWorkflowsByProject($data);
+        $self->logDebug("no. workflows", scalar(@$workflows));
+        #$self->logDebug("workflows", $workflows);
+        
+        my $workflowobjects 	=	$loader->getWorkflowObjectsForProject($workflows, $username);
+        $self->logDebug("no. workflowobjects", scalar(@$workflowobjects));
+        foreach my $workflowobject ( @$workflowobjects ) {
+            #### SAVE WORKFLOW TO DATABASE
+            $self->_saveWorkflow($workflowobject);
+        }
+    }
     method run() {
         $self->logDebug("Project::run(app)");
 
@@ -395,12 +519,10 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer) {
 
         return 1;
     }
-
     method _addWorkflow ($workflowobject) {
-        #$self->logDebug("Project::_addWorkflow()");
+        $self->logDebug("");
     
-        return $self->_insertWorkflow($workflowobject, $workflowobject->ordinal() - 1)
-            if $workflowobject->ordinal();
+        return $self->_insertWorkflow($workflowobject, $workflowobject->ordinal() - 1) if $workflowobject->ordinal();
         
         #### INCREMENT ORDINAL AND SET ON THIS APP
         $workflowobject->ordinal(scalar(@{$self->workflows()} + 1));
@@ -416,8 +538,12 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer) {
         my $workflowname    = $workflowobject->name();
         my $workflownumber  = $workflowobject->number();
         my $projectfile     = $self->outputfile();
-        $projectfile        = $self->inputfile() if not defined $projectfile;
+        $self->logDebug("projectfile", $projectfile);
+        $projectfile        = $self->inputfile() if not defined $projectfile or $projectfile eq "";
         my ($projectdir)    = $projectfile =~ /^(.+?)\/[^\/]+$/;
+        $projectdir =   "." if not defined $projectdir;
+        $self->logDebug("projectdir", $projectdir);
+
         my $workflowfile = "$projectdir/$workflownumber-$workflowname.work";
         $self->logDebug("workflowfile", $workflowfile);
         `rm -fr $workflowfile`;
@@ -591,7 +717,7 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer) {
 
     method wiki () {
         #$self->logDebug("Project::wiki()");
-        $self->_loadFile() if $self->wkfile();
+        $self->_loadFile() if $self->projfile();
 
         print $self->_wiki();
 
@@ -820,7 +946,7 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer) {
         my $jsonParser = JSON->new();
     	my $projectobject = $jsonParser->decode($contents);
         
-        my $workflowdatas = $projectobject->{workflows};
+        my $workflowdatas = $projectobject->{workflows} || [];
         $self->logDebug("No. workflowdatas", scalar(@$workflowdatas));
 
         delete $projectobject->{workflows};
@@ -923,7 +1049,6 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer) {
         );
         $self->logDebug("error: 'Cannot create $dbtype database object: $!' ") and exit if not defined $self->db();
         $self->logDebug("self->db: "), $self->db(), "\n";
-        
     }
 
     method _confirm ($message){

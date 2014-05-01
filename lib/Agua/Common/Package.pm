@@ -110,7 +110,6 @@ method getPackage ($owner, $package) {
 	$self->logDebug("owner", $owner);
 	$self->logDebug("package", $package);
 	
-	
 	my $query = qq{SELECT * FROM package
 WHERE owner='$owner'
 AND package='$package'

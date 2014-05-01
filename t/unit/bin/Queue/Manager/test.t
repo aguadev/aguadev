@@ -46,7 +46,7 @@ my $urlprefix  =   $ENV{'urlprefix'} || "agua";
 #$Bin =~ s/^.+\/bin/$installdir\/t\/unit\/bin/;
 
 #### GET OPTIONS
-my $logfile 	= "$Bin/outputs/gtfuse.log";
+my $logfile 	= "$Bin/outputs/test.log";
 my $showlog     =   2;
 my $printlog    =   5;
 my $help;
@@ -58,8 +58,18 @@ GetOptions (
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
 
+my $configfile	=	"$installdir/conf/config.yaml";
+my $conf	=	Conf::Yaml->new({
+	inputfile	=>	$configfile,
+	showlog		=>	$showlog,
+	printlog	=>	$printlog
+});
+
+my $dumpfile	=	"$installdir/bin/sql/dump/agua/create-agua.dump";
 my $object = new Test::Queue::Manager(
+	conf		=>	$conf,
     logfile     =>  $logfile,
+    dumpfile    =>  $dumpfile,
 	showlog     =>  $showlog,
 	printlog    =>  $printlog
 );
@@ -67,8 +77,9 @@ isa_ok($object, "Test::Queue::Manager", "object");
 
 #### TESTS
 #$object->testDownloadPercent();
-$object->testParseUuid();
-
+#$object->testParseUuid();
+#$object->testGetQueuedJobs();
+$object->testMaintainQueue();
 
 #### SATISFY Agua::Logger::logError CALL TO EXITLABEL
 no warnings;

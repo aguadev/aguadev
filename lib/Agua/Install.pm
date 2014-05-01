@@ -78,20 +78,6 @@ method BUILD ($args) {
 	$self->logDebug("self", $self);
 }
 
-#### UPGRADE
-method upgrade {
-    #### SET INSTALLDIR TO SIMPLEST PATH
-    $self->setInstalldir();
-
-    ## LINK INSTALLATION DIRECTORIES TO WEB DIRECTORIES
-    $self->linkDirectories();
-    
-    ### SET PERMISSIONS TO ALLOW ACCESS BY www-data USER
-    $self->setPermissions();
-	
-    ### CONFIRM INSTALLATION AND PRINT INFO
-    $self->installConfirmation();
-}
 #### INSTALL
 method install {
     #### SET INSTALLDIR TO SIMPLEST PATH
@@ -106,8 +92,8 @@ method install {
 	#### SET PUPPET DIRS
 	$self->setPuppetDirs();
 	
-    #### INSTALL APACHE
-    $self->installApache();
+    ##### INSTALL APACHE
+    #$self->installApache();
 
     #### GENERATE NEW PUBLIC CERTIFICATE (HTTPS)
     $self->enableHttps();
@@ -115,23 +101,23 @@ method install {
     #### INSTALL NODE, RABBIT AND AMQP EXCHANGE
     $self->installExchange();
     
-    #### FIX /etc/fstab SO MICRO INSTANCE CAN REBOOT
-    $self->enableReboot();
+    ##### FIX /etc/fstab SO MICRO INSTANCE CAN REBOOT
+    #$self->enableReboot();
     
     #### INSTALL MYSQL
     $self->installMysql();
     
-    #### INSTALL EC2-API-TOOLS
-    $self->installEc2();
+    ##### INSTALL EC2-API-TOOLS
+    #$self->installEc2();
 
     #### LINK INSTALLATION DIRECTORIES TO WEB DIRECTORIES
     $self->linkDirectories();
     
-    #### SET PERMISSIONS TO ALLOW ACCESS BY www-data USER
-    $self->setPermissions();
+    ##### SET PERMISSIONS TO ALLOW ACCESS BY www-data USER
+    #$self->setPermissions();
     
-    #### SET COMMANDS IN STARTUP SCRIPT
-    $self->setStartupScript();
+    ##### SET COMMANDS IN STARTUP SCRIPT
+    #$self->setStartupScript();
     
     #### CONFIRM INSTALLATION AND PRINT INFO
     $self->installConfirmation();

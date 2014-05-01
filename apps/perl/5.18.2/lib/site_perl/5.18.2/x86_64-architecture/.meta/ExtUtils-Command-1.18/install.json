@@ -1,1 +1,0 @@
-{"version":"1.18","name":"ExtUtils::Command","pathname":"F/FL/FLORA/ExtUtils-Command-1.18.tar.gz","dist":"ExtUtils-Command-1.18","provides":{"ExtUtils::Command":{"version":"1.18","file":"lib/ExtUtils/Command.pm"},"TieOut":{"file":"t/lib/TieOut.pm"}},"target":"F/FL/FLORA/ExtUtils-Command-1.18.tar.gz"}

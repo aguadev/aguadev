@@ -99,9 +99,6 @@ sub getStages {
 	my $owner = $json->{username};
 	$self->logDebug("owner", $owner);
 
-    #### VALIDATE    
-    $self->logError("User session not validated") and exit unless $self->validate();
-
 	my $query = qq{SELECT * FROM stage
 WHERE username='$owner'\n};
 	$query .= qq{AND project='$json->{project}'\n} if defined $json->{project};
@@ -110,7 +107,7 @@ WHERE username='$owner'\n};
 	$self->logDebug("$query");
 	my $stages = $self->db()->queryhasharray($query);
 	$stages = [] if not defined $stages;
-	#$self->logNote("stages", $stages);
+	$self->logNote("stages", $stages);
 	
 	return $stages;
 }

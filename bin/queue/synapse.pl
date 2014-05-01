@@ -14,7 +14,15 @@ HISTORY
 
 USAGE
 
-$0 <--mode String> <--uuid Int> <--state (SSD|HD)>
+$0 <--mode String> <--uuid Int> <--state (SSD|HD)> [--assignee String]
+
+	mode:
+		list
+		getAssignments
+		changeState
+		returnAssignment
+		assignError
+		clearErrors
 
 =cut
 
@@ -30,17 +38,16 @@ BEGIN {
     unshift(@INC, "$installdir/lib");
 }
 
-use lib "/agua/lib";
-
 #### INTERNAL MODULES
 use Conf::Yaml;
 use Synapse;
 
-my $installdir = $ENV{'installdir'} || "/agua";
+my $installdir 	=	 $ENV{'installdir'} || "/agua";
 my $configfile	=	"$installdir/conf/config.yaml";
 
 my $mode;
 my $uuid;
+my $assignee	=	"ucsc_biofarm";
 my $state;
 my $target;
 my $showlog		=	2;
@@ -69,9 +76,9 @@ my $conf = Conf::Yaml->new(
     logfile     =>  $logfile
 );
 
-
 my $object = Synapse->new({
 	conf		=>	$conf,
+	assignee	=>	$assignee,
     showlog     =>  $showlog,
     printlog    =>  $printlog,
     logfile     =>  $logfile

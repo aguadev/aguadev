@@ -281,7 +281,7 @@ method testNotifyStatus {
 		}
 	];
 	
-	my $exchange = Agua::Common::Exchange->new();
+	my $exchange = Exchange->new();
 	$self->logDebug("exchange", $exchange);
 
 	#### SET JSON PARSER

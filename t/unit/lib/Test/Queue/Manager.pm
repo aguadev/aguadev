@@ -3,14 +3,54 @@ use MooseX::Declare;
 use strict;
 use warnings;
 
-class Test::Queue::Manager extends Queue::Manager {
+class Test::Queue::Manager extends Queue::Manager with Test::Agua::Common::Database {
 
 has 'logfile'	=> 	( isa => 'Str|Undef', is => 'rw', required => 1 );
+has 'dumpfile'	=> 	( isa => 'Str|Undef', is => 'rw', required => 1 );
 
 use FindBin qw($Bin);
 use Test::More;
 
 #####////}}}}}
+
+method testMaintainQueue {
+	#### SET TEST DATABASE
+	$self->setUpTestDatabase();
+	
+	my $tsvfile	=	"$Bin/inputs/queue.tsv";
+	$self->loadTsvFile("queue", $tsvfile);
+	
+	#my $queuedata	=	{
+	#	username	=>	"testuser",
+	#	project		=>	"PanCancer",
+	#	workflow	=>	"Sleep",
+	#	workflownumber	=>	1,
+	#	database	=>	"aguatest"
+	#};
+	
+	my $queuedata	=	{
+		username	=>	"syoung",
+		project		=>	"PanCancer",
+		workflow	=>	"Align",
+		workflownumber	=>	3,
+		database	=>	"agua"
+	};
+	
+	$self->maintainQueue($queuedata);
+}
+
+method testGetQueuedJobs {
+	#### OVERRIDE rabbitmqctl
+	$self->rabbitmqctl("$Bin/inputs/rabbitmqctl.pl");
+	my $rabbitmqctl	=	$self->rabbitmqctl();
+	$self->logDebug("rabbitmqctl", $rabbitmqctl);
+
+	my $queue	=	"syoung.1234567890.Align";
+	my $queuedjobs	=	$self->getQueuedJobs($queue);
+	$self->logDebug("queuedjobs", $queuedjobs);
+	
+	ok($queuedjobs == 12, "12 queued jobs");
+}
 
 method testWorkflowStatus {
 	my $configfile	=	"$Bin/inputs/config.yaml";
@@ -36,7 +76,7 @@ root     18376  0.0  0.0   4168   348 ?        S    Apr12   0:00 time /usr/bin/g
 root     18377  0.0  0.0 156940 11796 ?        S    Apr12   0:23 /usr/bin/gtdownload --max-children 8 -c /home/ubuntu/annai-cghub.key -v -d eba7900a-2e1d-4a55-a3ba-e900be55642e -l syslog:full
 root     18378  1.4  0.4 641056 321376 ?       Sl   Apr12  55:57 /usr/bin/gtdownload --max-children 8 -c /home/ubuntu/annai-cghub.key -v -d eba7900a-2e1d-4a55-a3ba-e900be55642e -l syslog:full
 root     18382  1.5  0.4 641060 324292 ?       Sl   Apr12  56:36 /usr/bin/gtdownload --max-children 8 -c /home/ubuntu/annai-cghub.key -v -d eba7900a-2e1d-4a55-a3ba-e900be55642e -l syslog:full
-root     18386  1.3  0.4 641064 324900 ?       Sl   Apr12  51:28 /usr/bin/gtdownload --max-children 8 -c /home/ubuntu/annai-cghub.key -v -d eba7900a-2e1d-4a55-a3ba-e900be55642e -l syslog:full
+root     18386  1.3  0.4 641064 324900 ? Sl   Apr12  51:28 /usr/bin/gtdownload --max-children 8 -c /home/ubuntu/annai-cghub.key -v -d eba7900a-2e1d-4a55-a3ba-e900be55642e -l syslog:full
 root     18390  1.4  0.4 641068 324672 ?       Sl   Apr12  54:10 /usr/bin/gtdownload --max-children 8 -c /home/ubuntu/annai-cghub.key -v -d eba7900a-2e1d-4a55-a3ba-e900be55642e -l syslog:full
 root     18394  1.6  0.4 641072 323988 ?       Sl   Apr12  62:22 /usr/bin/gtdownload --max-children 8 -c /home/ubuntu/annai-cghub.key -v -d eba7900a-2e1d-4a55-a3ba-e900be55642e -l syslog:full
 root     18398  1.3  0.4 641076 323128 ?       Sl   Apr12  50:52 /usr/bin/gtdownload --max-children 8 -c /home/ubuntu/annai-cghub.key -v -d eba7900a-2e1d-4a55-a3ba-e900be55642e -l syslog:full

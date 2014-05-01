@@ -67,6 +67,7 @@ has 'location'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'username'  	=>  ( isa => 'Str', is => 'rw', required => 1  );
 has 'workflow'  	=>  ( isa => 'Str', is => 'rw', required => 1  );
 has 'requestor'		=> ( is  => 'rw', 'isa' => 'Str', required	=>	0	);
+has 'sample'   		=>  ( isa => 'Str', is => 'rw', required => 0  );
 has 'project'   	=>  ( isa => 'Str', is => 'rw', required => 1  );
 has 'name'   		=>  ( isa => 'Str', is => 'rw', required => 1  );
 has 'queue'			=>  ( isa => 'Str', is => 'rw', required => 1  );
@@ -201,10 +202,11 @@ method runLocally {
     my ($changedir) = $application =~ /^(.+?)\/[^\/]+$/;
 	$self->logDebug("changedir", $changedir);
     
-	$self->logDebug("\$self->db()->dbh(): " . $self->db()->dbh());
+#	$self->logDebug("\$self->db()->dbh(): " . $self->db()->dbh());
 	
 	#### NO BUFFERING
 	$| = 1;
+
 	#### COMMAND
 	my $command = join " ", @system_call;
 
@@ -225,18 +227,15 @@ method runLocally {
 		$self->db()->dbh()->{InactiveDestroy} = 1;
 		my $dbh = $self->db()->dbh();
 		undef $dbh;
-		#$self->db()->dbh()->disconnect();
-		`echo '$command' > /tmp/command.$$.txt`;
 		
-		#### CHANGE DIR
-        chdir($changedir);
-
-		#### SYSTEM COMMAND
-		my $result = system($command);
-		$self->logDebug("CHILD result", $result);
-
-		my $resultfile = $self->resultfile();
-		print `echo $result > $resultfile`;
+		my $resultfile	=	$self->resultfile();
+		`rm -fr $resultfile` if -f $resultfile;
+		my $commandfile	=	"/tmp/command.$$.txt";
+		`echo '$command' > $commandfile`;
+		`echo "echo \\\$\? > $resultfile" >> $commandfile`;
+		`chmod 755 $commandfile`;
+		`$commandfile`;
+		
 		exit;
 	}
     
@@ -271,10 +270,14 @@ completed=''};
 	$self->logDebug("result", $result);
 	
 	#### SET STATUS TO 'error' IF result IS NOT ZERO
-	$self->setStatus('error') if not defined $result;
-	$self->setStatus('completed') if defined $result and $result == 0;
-	
+	if ( defined $result and $result == 0 ) {
+		$self->setStatus('completed') ;
+	}
+	else {
+		$self->setStatus('error') if not defined $result;
+	}
 	$self->logDebug("Returning result", $result);
+
 	return $result;
 }
 
@@ -475,6 +478,12 @@ method setArguments ($stageparameters) {
 		my $valuetype 	=	$stageparameter->{valuetype};
 		my $discretion 	=	$stageparameter->{discretion};
 
+		my $sample		=	$self->sample();
+		if ( defined $sample and $sample ne "" ) {
+			$value	=~	s/<SAMPLEID>/$sample/g;
+		}
+		
+		
 		$clustertype = 1 if $name eq "clustertype";
 
 		$self->logNote("name", $name);

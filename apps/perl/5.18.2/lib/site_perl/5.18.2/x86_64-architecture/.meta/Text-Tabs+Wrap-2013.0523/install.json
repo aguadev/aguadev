@@ -1,1 +1,0 @@
-{"dist":"Text-Tabs+Wrap-2013.0523","pathname":"M/MU/MUIR/modules/Text-Tabs+Wrap-2013.0523.tar.gz","name":"Text::Wrap","version":"2013.0523","target":"M/MU/MUIR/modules/Text-Tabs+Wrap-2013.0523.tar.gz","provides":{"Text::Tabs":{"file":"lib.modern/Text/Tabs.pm","version":"2013.0523"},"Text::Wrap":{"file":"lib.modern/Text/Wrap.pm","version":"2013.0523"}}}

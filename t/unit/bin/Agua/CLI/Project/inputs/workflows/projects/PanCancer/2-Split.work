@@ -1,0 +1,40 @@
+{
+   "project": "PanCancer",
+   "name"   : "Split",
+   "number" : 2,
+   "description" : "Split sample-level BAM files into lane-level BAM files",
+   "notes" : "Wrapper for bam_split.py",
+   "apps" : [
+      {
+         "name" : "split",
+         "type" : "converter",
+         "package" : "pancancer",
+         "location" : "bin/job_split.sh",
+         "installdir" : "/agua/apps/pancancer",
+         "executor" :"source /agua/apps/pancancer/envars.sh && ",
+         "version" : "0.0.1",
+         "description" : "Split sample-level BAM files into lane-level BAM files",
+         "linkurl" : "http://www.github.com/annaisystems/pancancer",
+         "parameters" : [
+            {
+               "param" : "volume",
+               "ordinal" : 1,
+               "argument" : "",
+               "paramtype" : "String",
+               "valuetype" : "input",
+               "category" : "directory",
+               "description" : "Path to the base directory containing input file subfolders"
+            },
+            {
+               "param" : "uuid",
+               "ordinal" : 2,
+               "argument" : "",
+               "paramtype" : "String",
+               "valuetype" : "input",
+               "category" : "id",
+               "description" : "Unique identifier for the sample"
+            }
+         ]
+      }
+   ]
+}

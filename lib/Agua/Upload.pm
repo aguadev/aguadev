@@ -31,7 +31,7 @@ use JSON;
 
 #### INTERNAL MODULES
 use Conf::Yaml;
-use Agua::Common::Exchange;
+use Exchange;
 
 
 # Ints
@@ -61,14 +61,14 @@ has 'conf'		=> ( isa => 'Conf::Yaml', is => 'rw', required => 0 	);
 has 'data'		=> ( isa => 'ArrayRef|Undef', is => 'rw', required	=>	0	);
 
 # Objects
-has 'exchange'	=> ( isa => 'Agua::Common::Exchange', is  => 'rw', required	=>	0, lazy	=> 1, builder => "setExchange" );
+has 'exchange'	=> ( isa => 'Exchange', is  => 'rw', required	=>	0, lazy	=> 1, builder => "setExchange" );
 
 #has 'exchange'
 #	=> (
-#	isa => 'Agua::Common::Exchange',
+#	isa => 'Exchange',
 #	is => 'rw',
 #	default	=>	sub {
-#		Agua::Common::Exchange->new({
+#		Exchange->new({
 #			#logfile		=>	"$Bin/log/admin.head.log",
 #			showlog		=>	2
 #			#printlog	=>	5
@@ -99,7 +99,7 @@ method initialise {
 method setExchange () {
 	$self->logDebug("");
 	
-	my $exchange	=	Agua::Common::Exchange->new({
+	my $exchange	=	Exchange->new({
 		logfile		=>	$self->logfile(),
 		showlog		=>	$self->showlog(),
 		printlog	=>	$self->printlog(),

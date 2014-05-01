@@ -302,8 +302,7 @@ method queryarray ($query) {
 
 method queryhash ($query) {
 #### RETURN A HASH    
-
-$self->logCaller("query: $query");
+	#$self->logCaller("query: $query");
 
 	$self->dbh()->{RaiseError} = 0; # DISABLE TERMINATION ON ERROR	
     my $sth = $self->dbh()->prepare($query);

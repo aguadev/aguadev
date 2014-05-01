@@ -1,9 +1,0 @@
-/tmp/perlmods/bin/format-sql
-/tmp/perlmods/lib/perl5/DBIx/Class/Storage/Debug/PrettyPrint.pm
-/tmp/perlmods/lib/perl5/SQL/Abstract.pm
-/tmp/perlmods/lib/perl5/SQL/Abstract/Test.pm
-/tmp/perlmods/lib/perl5/SQL/Abstract/Tree.pm
-/tmp/perlmods/man/man3/DBIx::Class::Storage::Debug::PrettyPrint.3pm
-/tmp/perlmods/man/man3/SQL::Abstract.3pm
-/tmp/perlmods/man/man3/SQL::Abstract::Test.3pm
-/tmp/perlmods/man/man3/SQL::Abstract::Tree.3pm

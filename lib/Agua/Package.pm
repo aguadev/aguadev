@@ -24,14 +24,10 @@ use Carp;
 
 class Agua::Package with (Agua::Common::Package,
 	Agua::Common::Database,
-	Agua::Common::Logger,
+	Agua::Common::Privileges,
 	Agua::Common::Project,
 	Agua::Common::Workflow,
-	Agua::Common::Privileges,
 	Agua::Common::Stage,
-	Agua::Common::App,
-	Agua::Common::Parameter,
-	Agua::Common::Base,
 	Agua::Common::Util) extends Agua::Ops {
 
 
@@ -90,30 +86,28 @@ has 'conf' 	=> (
 	isa => 'Conf::Yaml',
 	default	=>	sub { Conf::Yaml->new(	memory	=>	1	);	}
 );
+has 'db'	=> (
+	isa => 'Agua::DBase::MySQL|Undef',
+	is => 'rw',
+	required => 0
+);
 
 ####////}}
 
 method BUILD ($hash) {
 }
 
-method initialis ($json) {
-#### IF JSON IS DEFINED, ADD VALUES TO SLOTS
-	$self->json($json);
-	if ( $self->json() ) {
-		foreach my $key ( keys %{$self->{json}} ) {
-			$json->{$key} = $self->unTaint($json->{$key});
-			$self->$key($self->{json}->{$key}) if $self->can($key);
-		}
-	}
-	$self->logDebug("json", $self->json());
+method initialise ($args) {
+	$self->setSlots($args);
+	#$self->logDebug("args", $args);
 
 	#### SET LOG
-	my $username 	=	$self->username() || $self->json()->{username};
+	my $username 	=	$self->username() || $args->{username} || "agua";
 	my $logfile 	= 	$self->logfile();
 	$self->logDebug("logfile", $logfile);
-	my $mode		=	$self->mode();
+	my $mode		=	$self->mode() || $args->{mode} || "package";
 	$self->logDebug("mode", $mode);
-	if ( not defined $logfile or not $logfile ) {
+	if ( not defined $logfile or not $logfile and defined $mode) {
 		my $identifier 	= 	"package";
 		$self->setUserLogfile($username, $identifier, $mode);
 		$self->appendLog($logfile);
@@ -121,11 +115,18 @@ method initialis ($json) {
 	
 	#### SET DATABASE HANDLE
 	$self->logDebug("Doing self->setDbh()");
-	$self->setDbh();
+	$self->setDbh() if not defined $self->db();
     
-	#### VALIDATE
-    $self->logError("User session not validated for username: $username") and exit unless $self->validate();
+#	#### VALIDATE
+#    $self->logError("User session not validated for username: $username") and exit unless $self->validate();
 
+}
+
+method getWhoami {
+	my $whoami	=	`whoami`;
+	$whoami	=~	s/\s+$//;
+	
+	return $whoami;
 }
 
 method setUserLogfile ($username, $identifier, $mode) {

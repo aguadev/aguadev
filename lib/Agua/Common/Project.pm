@@ -89,24 +89,14 @@ sub _addProject {
     my $username = $data->{'username'};
 	my $fileroot = $self->getFileroot($username);
 	$self->logDebug("fileroot", $fileroot);
-	my $directory = "$fileroot/$data->{name}";
-	$self->logDebug("Creating directory", $directory);
-	my $whoami = `whoami`;
-	chomp($whoami);
-	$self->logDebug("whoami", $whoami);
-	
+
 	#### CREATE
-	`mkdir -p $directory` if not -d $directory;
-
-	#### REMOVED THIS CHECK TO AVOID ERROR:
-	##### mkdir: cannot create directory `/home/admin': Permission denied
-	####
-	#	$self->logError("Could not create the fileroot directory: $fileroot") and exit if not -d $directory;
-
-    my $apache_user = $self->conf()->getKey("agua", 'APACHEUSER');
-	$self->logDebug("apache_user", $apache_user);
-	my $chmod = "chown -R $apache_user:$apache_user $directory &> /dev/null";
-	print `$chmod`;
+	my $directory = "$fileroot/$data->{name}";
+	if ( not -d $directory ) {
+		$self->logDebug("Creating directory", $directory);
+		`mkdir -p $directory`;
+		return 0 if not -d $directory;
+	}
 	
 	return 1;
 }

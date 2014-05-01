@@ -31,25 +31,32 @@ USAGE
 
 EXAMPLES
 
-# create workflow
+PROJECTS
 
-perl flow.pl work create --wkfile /workflows/workflowOne.wk --name workflowOne
+# Add project to database
+/agua/apps/bin/cli/flow.pl proj save --projfile ./Project1.proj
 
-# create application from command file
+# Add workflows to project (and save to database)
+/agua/apps/bin/cli/flow.pl proj saveWorkflow --project Project1 --wkfile ./workflowOne.work
 
-perl flow.pl app loadCmd --cmdfile /workflows/applicationOne.cmd --appfile /workflows/applicationOne.app --name applicationOne
+WORKFLOWS
 
-# add application to workflow
+# Create a workflow file with a specified name
+./flow.pl work create --wkfile /workflows/workflowOne.wk --name workflowOne
 
-perl flow.pl work addApp --wkfile /workflows/workflowOne.wk --appfile /workflows/applicationOne.app --name applicationOne
+# Add an application to workflow file
+./flow.pl work addApp --wkfile /workflows/workflowOne.wk --appfile /workflows/applicationOne.app --name applicationOne
 
-# run single application
+# Run a single application in a workflow
+./flow.pl work app run --wkfile /workflows/workflowOne.wk --name applicationOne
 
-perl flow.pl work app run --wkfile /workflows/workflowOne.wk --name applicationOne
+# Run all applications in workflow
+./flow.pl work run --wkfile /workflows/workflowOne.wk 
 
-# run all applications in workflow
+APPLICATIONS
 
-perl flow.pl work run --wkfile /workflows/workflowOne.wk 
+# Create an application file from a file containing the application run command
+./flow.pl app loadCmd --cmdfile /workflows/applicationOne.cmd --appfile /workflows/applicationOne.app --name applicationOne
 
 =cut
 
@@ -60,62 +67,61 @@ use strict;
 use Scalar::Util qw(weaken);
 use FindBin qw($Bin);
 use lib "$Bin/../../lib";
-use lib "$Bin/../../lib/external/lib/perl5";
-
-#BEGIN {
-#    unshift @INC, "/nethome/syoung/base/pipeline/moose/tmp/lib64/perl5/site_perl/5.8.8/x86_64-linux-thread-multi";
-#    unshift @INC, "/nethome/syoung/0.5/lib/external/perl5-32/site_perl/5.8.8";
-#    unshift @INC, "/nethome/syoung/0.5/lib/external/perl5-64/site_perl/5.8.8/x86_64-linux-thread-multi";
-#    unshift @INC, "/nethome/syoung/0.5/lib/external/perl5-32/5.8.8";    
-#}
 
 #### EXTERNAL MODULES
 use Term::ANSIColor qw(:constants);
 use Data::Dumper;
-#use Getopt::Long qw(GetOptionsFromString);
-#use Getopt::Simple;
-use Agua::CLI::Parameter;
-use Agua::CLI::App;
-use Agua::CLI::Workflow;
 
 #### INTERNAL MODULES
 use Timer;
+use Agua::CLI::Parameter;
+use Agua::CLI::App;
+use Agua::CLI::Workflow;
+use Agua::CLI::Project;
+
+#### SET CONF FILE
+my $installdir  =   $ENV{'installdir'} || "/agua";
+my $configfile  =   "$installdir/conf/config.yaml";
+my $logfile  =   "$installdir/log/flow.log";
+my $conf = Conf::Yaml->new(
+    memory      =>  1,
+    inputfile	=>	$configfile,
+    showlog     =>  2,
+    printlog    =>  2,
+    logfile     =>  $logfile
+);
 
 #### GET MODE AND ARGUMENTS
 my @arguments = @ARGV;
 usage() if not @arguments;
-print "flow.pl    arguments: @arguments\n";
+#print "flow.pl    arguments: @arguments\n";
 
 #### GET FILE
 my $file = shift @ARGV;
 usage() if $file =~ /^-h$/ or $file =~ /^--help$/;
-
+print "flow.pl    Can't find file: $file\n" and exit if not -f $file;
 #print "flow.pl    file: $file\n";
-#print "flow.pl    Can't find file: $file\n" and exit if not -f $file;
-
-#### GET SWITCH
-#my $switch = shift @ARGV;
-##print "Argument '$switch' not supported. Please use 'param', 'app' or 'work'\n"
-#    and exit if $switch !~ /^(param|app|work)$/;
 
 #### GET MODE
 my $mode = shift @ARGV;
-print "mode: $mode\n";
+#print "mode: $mode\n";
 print "No mode provided (try --help)\n" and exit if not defined $mode;
 usage() if $mode =~ /^-h$/ or $mode =~ /^--help$/;
-print "mode: $mode\n";
+#print "mode: $mode\n";
 
 #### MANAGE INDIVIDUAL OR NESTED WORKFLOW FILES
 if ( $file =~ /\.param$/ ) {
     my $parameter = Agua::CLI::Parameter->new(
-        paramfile => $file
+        paramfile   =>  $file,
+        conf        =>  $conf
     );
     $parameter->getopts();
     $parameter->$mode();    
 }
 elsif ( $file =~ /\.app$/ ) {
     my $app = Agua::CLI::App->new(
-        appfile => $file
+        appfile     =>  $file,
+        conf        =>  $conf
     );
     $app->getopts();
     $app->$mode();    
@@ -123,15 +129,25 @@ elsif ( $file =~ /\.app$/ ) {
 elsif ( $file =~ /\.wk$/ )
 {
     my $workflow = Agua::CLI::Workflow->new(
-        wkfile => $file
+        wkfile      =>  $file,
+        conf        =>  $conf
     );
     $workflow->getopts();
     my $success = $workflow->$mode();
     print "flow.pl    mode '$mode' not recognised\n" and exit if $success != 1;
 }
+elsif ( $file =~ /\.proj$/ )
+{
+    my $project = Agua::CLI::Project->new(
+        inputfile   =>  $file,
+        conf        =>  $conf
+    );
+    $project->getopts();
+    $project->$mode();
+}
 else
 {
-    print "flow.pl    file type '$file' not recognised (must be .wk, .app or .param)\n";
+    print "flow.pl    file type '$file' not recognised (must be .proj, .wk, .app or .param)\n";
 }
 
 

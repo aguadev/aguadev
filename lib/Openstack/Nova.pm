@@ -25,7 +25,13 @@ has 'ssh'			=> ( isa => 'Agua::Ssh', is => 'rw', lazy	=>	1, builder	=>	"setSsh"	
 
 use FindBin qw($Bin);
 
+method getMetaData ($type) {
+	return if not defined $type or $type eq "";
+	my $command		=	"curl http://169.254.169.254/2009-04-04/meta-data/$type";
+	$self->logDebug("command", $command);
 
+	return	`$command`;
+}
 
 method list ($args) {
 	my $username	=	$args->{username};
@@ -385,10 +391,7 @@ method runCommand ($command) {
 
 
 method setJsonParser {
-	my $jsonparser	=	JSON->new->allow_nonref;
-	$self->jsonparser($jsonparser);
-	
-	return $jsonparser;
+	return JSON->new->allow_nonref;
 }
 
 method usage {
@@ -398,5 +401,3 @@ method usage {
 
 }
 
-
-#1;

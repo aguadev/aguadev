@@ -4,7 +4,7 @@ use Getopt::Simple;
 use FindBin qw($Bin);
 use lib "$Bin/../..";
 
-class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer) {
+class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::Util) {
     use File::Path;
     use JSON;
     use Data::Dumper;
@@ -16,10 +16,11 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer) {
     has 'printlog'	=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);
 
     #### STORED LOGISTICS VARIABLES
-    has 'owner'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous' );
+    has 'owner'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
+    has 'package'	=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'project'	=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'name'	    => ( isa => 'Str|Undef', is => 'rw', required => 0 );
-    has 'number'	=> ( isa => 'Int|Undef', is => 'rw', required	=>	0	);
+    has 'number'	=> ( isa => 'Int|Undef', is => 'rw', default	=>	1	);
     has 'type'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, documentation => q{User-defined application type} );
     has 'description'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
     has 'notes'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
@@ -49,9 +50,9 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer) {
     has 'appFile'	=> ( isa => 'Str', is => 'rw', required => 0 );
     has 'field'	    => ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'value'	    => ( isa => 'Str|Undef', is => 'rw', required => 0 );
-    has 'fields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['project', 'name', 'number', 'owner', 'description', 'notes', 'outputdir', 'field', 'value', 'wkfile', 'outputfile', 'cmdfile', 'start', 'stop', 'ordinal', 'from', 'to', 'status', 'started', 'stopped', 'duration', 'epochqueued', 'epochstarted', 'epochstopped', 'epochduration'] } );
-    has 'savefields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['project', 'name', 'number', 'owner', 'description', 'notes', 'status', 'started', 'stopped', 'duration', 'locked'] } );
-    has 'exportfields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['project', 'name', 'number', 'owner', 'description', 'notes', 'status', 'started', 'stopped', 'duration', 'provenance'] } );
+    has 'fields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['username', 'project', 'name', 'number', 'owner', 'description', 'notes', 'outputdir', 'field', 'value', 'wkfile', 'outputfile', 'cmdfile', 'start', 'stop', 'ordinal', 'from', 'to', 'status', 'started', 'stopped', 'duration', 'epochqueued', 'epochstarted', 'epochstopped', 'epochduration'] } );
+    has 'savefields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['username', 'project', 'name', 'number', 'owner', 'description', 'notes', 'status', 'started', 'stopped', 'duration', 'locked'] } );
+    has 'exportfields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['username', 'project', 'name', 'number', 'owner', 'description', 'notes', 'status', 'started', 'stopped', 'duration', 'provenance'] } );
     has 'inputfile' => ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
     has 'wkfile'    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
     has 'cmdfile'=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
@@ -65,11 +66,19 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer) {
     has 'user'      => ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'password'  => ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'force'     => ( isa => 'Maybe', is => 'rw', required => 0 );
-    #has 'db'  => ( isa => 'DBase::SQLite|DBase::MySQL', is => 'rw' );
-    has 'logfh'     => ( isa => 'FileHandle', is => 'rw', required => 0 );
     has 'start'	=> ( isa => 'Str', is => 'rw', required => 0 );
     has 'stop'	=> ( isa => 'Str', is => 'rw', required => 0 );
 
+    #### OBJECTS
+    has 'db'		=> ( isa => 'Agua::DBase::MySQL', is => 'rw', required => 0 );
+    has 'logfh'     => ( isa => 'FileHandle', is => 'rw', required => 0 );
+    has 'conf' 	=> (
+	is =>	'rw',
+	isa => 'Conf::Yaml'
+#    ,
+#	default	=>	sub { Conf::Yaml->new(	memory	=>	1	);	}
+);
+    
 ####//}}    
     
     method BUILD ($hash) { 
@@ -95,6 +104,20 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer) {
         #$self->logDebug("self->locked: "), $self->locked(), "\n";
     }
 
+    method save {
+        $self->logDebug("");
+        
+        #### SET USERNAME AND OWNER
+        $self->setUsername();
+        
+        #### LOAD INTO DATABASE
+        my $loader      =   $self->getLoader();        
+    	$loader->logDebug("loader->db->database", $loader->db()->database());
+        
+        #### LOAD INTO DATABASE
+		$loader->saveWorkflowToDatabase($self);
+    }
+   
     method run() {
         $self->logDebug("");
 
@@ -571,6 +594,12 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer) {
 
     method getopts () {
         #$self->logDebug("Agua::CLI::Workflow::getopts()");
+        $self->_getopts();    
+        $self->initialise();
+    }
+
+    method _getopts () {
+        #$self->logDebug("Agua::CLI::Workflow::getopts()");
         my @temp = @ARGV;
         my $args = $self->args();
 
@@ -590,9 +619,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer) {
         }
 
         @ARGV = @temp;
-        $self->initialise();
     }
-
 
     method args() {
         my $meta = $self->meta();

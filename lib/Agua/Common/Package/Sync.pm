@@ -214,10 +214,10 @@ method createProjectFiles ($username, $workflowdir) {
 	$self->logDebug("no. projects", scalar(@$projects));
 	#$self->logDebug("projects", $projects);
 
-	foreach my $project ( @$projects ) {
+	foreach my $projectdata ( @$projects ) {
 
 		#### CREATE PROJECT DIR
-		my $projectname = $project->{name};
+		my $projectname = $projectdata->{name};
 		my $projectdir = "$workflowdir/projects/$projectname";
 		File::Path::mkpath($projectdir) if not -d $projectdir;
 		$self->logError("Can't create projectdir: $projectdir") and exit if not -d $projectdir;
@@ -227,66 +227,15 @@ method createProjectFiles ($username, $workflowdir) {
 		$self->logDebug("projectfile", $projectfile);
 		`rm -fr $projectfile`;
 
-		$project->{owner} 		=	$username;
-		$project->{username} 	=	$username;
-		$project->{outputfile} 	= 	$projectfile;
-		$project->{logfile} 	=	$self->logfile();
-		$project->{showlog}		=	$self->showlog();
-		$project->{printlog}	=	$self->printlog();
+		$projectdata->{owner} 		=	$username;
+		$projectdata->{username} 	=	$username;
+		$projectdata->{outputfile} 	= 	$projectfile;
+		$projectdata->{logfile} 	=	$self->logfile();
+		$projectdata->{showlog}		=	$self->showlog();
+		$projectdata->{printlog}	=	$self->printlog();
 
-		my $projectobject = Agua::CLI::Project->new($project);
-
-		#### GET WORKFLOWS		
-		my $workflows = $self->getWorkflowsByProject($project);
-		$self->logDebug("no. workflows", scalar(@$workflows));
-		#$self->logDebug("workflows", $workflows);
-	
-		foreach my $workflow ( @$workflows ) {
-			#$self->logDebug("workflow", $workflow);
-			$workflow->{workflow} = $workflow->{name};
-			my $stages = $self->getStagesByWorkflow($workflow);
-			next if not defined $stages;
-			$self->logDebug("No. stages", scalar(@$stages));
-			
-			my $workflowfile = "$projectdir/$workflow->{number}-$workflow->{name}.work";
-			$self->logDebug("workflowfile", $workflowfile);	
-	
-			#### CREATE WORKFLOW AND LOAD STAGES
-			$workflow->{owner} 		=	$username;
-			$workflow->{username} 	=	$username;
-			$workflow->{outputfile} = 	$workflowfile;
-			$workflow->{logfile} 	=	$self->logfile();
-			$workflow->{showlog}	=	$self->showlog();
-			$workflow->{printlog}	=	$self->printlog();
-	
-			my $workflowobject = Agua::CLI::Workflow->new($workflow);
-			
-			foreach my $stage ( @$stages ) {
-				$stage->{appname} = $stage->{name};
-				$stage->{appnumber} = $stage->{number};
-				my $parameters = $self->getParametersByStage($stage);
-				
-				#### CREATE APPLICATION AND LOAD PARAMETERS
-				$stage->{username} 	=	$username;
-				$stage->{logfile} 	=	$self->logfile();
-				$stage->{showlog}	=	$self->showlog();
-				$stage->{printlog}	=	$self->printlog();
-			
-				$self->logDebug("stage", $stage);
-				my $appobject = Agua::CLI::App->new($stage);
-				#$self->logDebug("appobject", $appobject);
-				foreach my $parameter ( @$parameters ) {
-					$parameter->{param} = $parameter->{name};
-					$appobject->loadParam($parameter);
-				}
-				
-				$workflowobject->_addApp($appobject);
-			}
-
-			#### ADD WORKFLOW TO PROJECT
-			$projectobject->_addWorkflow($workflowobject);
-
-		}	#### workflows
+		my $projectobject = Agua::CLI::Project->new($projectdata);
+		$self->loadProjectFromDatabase($projectobject, $projectdata, $projectfile);
 
 		#### PRINT PROJECT
 		$self->logDebug("printing projectfile", $projectfile);
@@ -295,6 +244,74 @@ method createProjectFiles ($username, $workflowdir) {
 	}	#### projects
 	
 	$self->logDebug("END");
+}
+
+method loadProjectFromDatabase ($projectobject, $projectdata, $projectfile) {
+	#### GET WORKFLOWS		
+	my $workflows = $self->getWorkflowsByProject($projectdata);
+	$self->logDebug("no. workflows", scalar(@$workflows));
+	#$self->logDebug("workflows", $workflows);
+	
+	my $username	=	$projectobject->username();
+	$self->logDebug("username", $username);
+	
+	my $workflowobjects 	=	$self->getWorkflowObjectsForProject($workflows, $username);
+	
+	foreach my $workflowobject ( @$workflowobjects ) {
+		#### ADD WORKFLOW TO PROJECT
+		$projectobject->_addWorkflow($workflowobject);
+	}
+
+	return $projectobject;
+}	
+method getWorkflowObjectsForProject ($workflows, $username) {
+	
+	my $workflowobjects	=	[];
+	foreach my $workflow ( @$workflows ) {
+		#$self->logDebug("workflow", $workflow);
+		$workflow->{workflow} = $workflow->{name};
+
+		#### GET STAGES
+		my $stages = $self->getStagesByWorkflow($workflow);
+		$self->logDebug("No. stages", scalar(@$stages));
+		
+		#### CREATE WORKFLOW AND LOAD STAGES
+		$workflow->{owner} 		=	$username;
+		$workflow->{username} 	=	$username;
+		#$workflow->{outputfile} = 	$workflowfile;
+		$workflow->{logfile} 	=	$self->logfile();
+		$workflow->{showlog}	=	$self->showlog();
+		$workflow->{printlog}	=	$self->printlog();
+
+		my $workflowobject = Agua::CLI::Workflow->new($workflow);
+		
+		foreach my $stage ( @$stages ) {
+			$stage->{appname} = $stage->{name};
+			$stage->{appnumber} = $stage->{number};
+			my $parameters = $self->getParametersByStage($stage);
+			
+			#### CREATE APPLICATION AND LOAD PARAMETERS
+			$stage->{username} 	=	$username;
+			$stage->{logfile} 	=	$self->logfile();
+			$stage->{showlog}	=	$self->showlog();
+			$stage->{printlog}	=	$self->printlog();
+		
+			$self->logDebug("stage", $stage);
+			my $appobject = Agua::CLI::App->new($stage);
+			#$self->logDebug("appobject", $appobject);
+			foreach my $parameter ( @$parameters ) {
+				$parameter->{param} = $parameter->{name};
+				$appobject->loadParam($parameter);
+			}
+			
+			$workflowobject->_addApp($appobject);
+		}
+		
+		push @$workflowobjects, $workflowobject;
+
+	}	#### workflows
+	
+	return $workflowobjects;
 }
 
 method loadProjectFiles ($username, $package, $installdir, $workflowdir) {
@@ -316,7 +333,7 @@ method loadProjectFiles ($username, $package, $installdir, $workflowdir) {
 	my $index = 0;
 	foreach my $project ( @$projects ) {
 		$index++;
-				
+		
 		my $projectfile = "$workflowdir/projects/$project/$project.proj";
 		$self->logDebug("projectfile", $projectfile);
 		$self->logCritical("projectfile not found", $projectfile) if not -f $projectfile;
@@ -377,6 +394,87 @@ method loadProjectFiles ($username, $package, $installdir, $workflowdir) {
 	$self->logDebug("END");
 }
 
+method loadWorkflow ($workflowobject, $package, $installdir) {
+	$self->logDebug("workflowobject: $workflowobject");
+	my $username		=	$workflowobject->username();
+	my $projectname 	= 	$workflowobject->project();
+	my $workflowname 	= 	$workflowobject->name();
+	my $workflownumber 	= 	$workflowobject->number();
+
+	#### SKIP IF WORKFLOW ALREADY EXISTS
+	my $workflowdata = $workflowobject->exportData();
+	delete $workflowdata->{apps};
+	$self->logDebug("workflowdata", $workflowdata);
+	my $keys = ['owner', 'username', 'project', 'name', 'number'];
+	
+	#### ADD WORKFLOW
+	$self->workflowToDatabase($workflowdata);
+
+	#### STAGES
+	my $stageobjects = $workflowobject->apps();
+	$self->logDebug("No. stageobjects", scalar(@$stageobjects));
+	foreach my $stageobject ( @$stageobjects ) {
+		#$self->logDebug("stageobject", $stageobject);
+		my $stagenumber = $stageobject->{ordinal};
+
+		#### ADD STAGE	
+		$self->stageToDatabase($username, $stageobject, $projectname, $workflowname, $workflownumber, $stagenumber);
+		
+		#### PARAMETERS
+		my $parameterobjects = $stageobject->parameters();
+		my $paramnumber = 0;
+		foreach my $parameterobject ( @$parameterobjects ) {
+			$paramnumber++;
+			
+			#### ADD PARAMETER
+			$self->stageParameterToDatabase($username, $package, $installdir, $stageobject, $parameterobject, $projectname, $workflowname, $workflownumber, $stagenumber, $paramnumber);
+		}
+	}
+}
+
+method saveWorkflowToDatabase ($workflowobject) {
+	my $username		=	$workflowobject->username();
+	my $projectname 	= 	$workflowobject->project();
+	my $workflowname 	= 	$workflowobject->name();
+	my $workflownumber 	= 	$workflowobject->number();
+	$self->logDebug("username", $username);	
+	
+	#### SKIP IF WORKFLOW ALREADY EXISTS
+	my $workflowdata = $workflowobject->exportData();
+	$workflowdata->{username}	=	$username;
+	$workflowdata->{owner}		=	$username;
+	$self->logDebug("Number of apps", scalar(@{$workflowdata->{apps}}) );
+	delete $workflowdata->{apps};
+	$self->logDebug("workflowdata", $workflowdata);
+	my $keys = ['owner', 'username', 'project', 'name', 'number'];
+	
+	#### ADD WORKFLOW
+	$self->workflowToDatabase($workflowdata);
+
+	#### STAGES
+	my $stageobjects = $workflowobject->apps();
+	$self->logDebug("No. stageobjects", scalar(@$stageobjects));
+	foreach my $stageobject ( @$stageobjects ) {
+		#$self->logDebug("stageobject", $stageobject);
+		my $stagenumber = $stageobject->{number};
+		my $package	=	$stageobject->{package};
+		my $installdir	=	$stageobject->{installdir};
+		
+		#### ADD STAGE	
+		$self->stageToDatabase($username, $stageobject, $projectname, $workflowname, $workflownumber, $stagenumber);
+		
+		#### PARAMETERS
+		my $parameterobjects = $stageobject->parameters();
+		my $paramnumber = 0;
+		foreach my $parameterobject ( @$parameterobjects ) {
+			$paramnumber++;
+			
+			#### ADD PARAMETER
+			$self->stageParameterToDatabase($username, $package, $installdir, $stageobject, $parameterobject, $projectname, $workflowname, $workflownumber, $stagenumber, $paramnumber);
+		}
+	}	
+}
+
 method projectToDatabase ($username, $projectobject) {
 	$self->logCritical("username not defined") and exit if not defined $username;
 	my $projectdata = $projectobject->exportData();
@@ -391,13 +489,10 @@ method projectToDatabase ($username, $projectobject) {
 	return $self->_addProject($projectdata);
 }
 
-method workflowToDatabase ($username, $workflowobject) {
-	$self->logCritical("username not defined") and exit if not defined $username;
-print "\n";
-	my $workflowdata = $workflowobject->exportData();
-	delete $workflowdata->{apps};
-	$workflowdata->{username} = $self->username();
+method workflowToDatabase ($workflowdata) {
 	$self->logDebug("workflowdata", $workflowdata);
+	$self->logCritical("username not defined") and exit if not defined $workflowdata->{username};
+	delete $workflowdata->{apps};
 
 	#### REMOVE WORKFLOW
 	$self->_removeWorkflow($workflowdata);

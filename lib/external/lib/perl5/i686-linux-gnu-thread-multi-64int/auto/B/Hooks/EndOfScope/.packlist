@@ -1,8 +1,0 @@
-/tmp/perlmods/lib/perl5/B/Hooks/EndOfScope.pm
-/tmp/perlmods/lib/perl5/B/Hooks/EndOfScope/PP.pm
-/tmp/perlmods/lib/perl5/B/Hooks/EndOfScope/PP/FieldHash.pm
-/tmp/perlmods/lib/perl5/B/Hooks/EndOfScope/PP/HintHash.pm
-/tmp/perlmods/lib/perl5/B/Hooks/EndOfScope/XS.pm
-/tmp/perlmods/man/man3/B::Hooks::EndOfScope.3pm
-/tmp/perlmods/man/man3/B::Hooks::EndOfScope::PP.3pm
-/tmp/perlmods/man/man3/B::Hooks::EndOfScope::XS.3pm

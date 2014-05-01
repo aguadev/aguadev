@@ -68,6 +68,4 @@ AnyEvent --force
 AnyEvent::RabbitMQ
 MooseX::ConfigFromFile --force
 Net::RabbitFoot --force
-
-##### DO THIS MANUALLY
-##Bio::DB::SeqFeature
+TryCatch

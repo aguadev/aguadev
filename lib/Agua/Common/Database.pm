@@ -27,7 +27,7 @@ sub setDbh {
 
 	$self->logNote("args", $args);	
 	
-	my $database 	=	$args->{database};
+	my $database 	=	$args->{database} || $self->database();
 	my $user 		=	$args->{user};
 	my $password 	=	$args->{password};
 	my $dbtype 		=	$args->{dbtype};

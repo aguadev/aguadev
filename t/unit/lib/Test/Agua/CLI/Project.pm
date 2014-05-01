@@ -2,9 +2,9 @@ use MooseX::Declare;
 use Method::Signatures::Simple;
 
 class Test::Agua::CLI::Project with (Test::Agua::Common::Database,
-	Test::Agua::Common::Util,
-	Agua::Common::Base,
+	Test::Common,
 	Agua::Common::Database,
+	Agua::Common::Base,
 	Agua::Common::Package,
 	Agua::Common::Util) extends Agua::CLI::Project {
 
@@ -61,6 +61,8 @@ has 'conf' 	=> (
 	isa => 'Conf::Yaml',
 	default	=>	sub { Conf::Yaml->new(	memory	=>	1	);	}
 );
+
+has 'jsonparser'	=> ( isa => 'JSON', is => 'rw', lazy => 1, builder => "setJsonParser" );
 
 ####////}}
 
@@ -182,9 +184,114 @@ method testSortWorkflowFiles () {
 	$workflows = $projectobject->sortWorkflowFiles($workflows);
 	$self->logDebug("workflows", $workflows);
 
-	ok ($self->identicalArray($workflows, $expected), "sortWorkflowFiles    correct sorted order");	
+#	ok ($self->identicalArray($workflows, $expected), "sortWorkflowFiles    correct sorted order");	
+	is_deeply($workflows, $expected, "sortWorkflowFiles    correct sorted order");	
 }
 
+method testSave {
+	#### SET DBH
+	$self->setTestDbh();
+	$self->db()->do("DELETE FROM project");
+	
+	my $projectfile	=	"$Bin/inputs/workflows/projects/PanCancer/PanCancer.proj";
+	$self->inputfile($projectfile);
+
+	#### SET USERNAME AND OWNER
+	my $username	=	"testuser";
+	$self->username($username);
+	$self->owner($username);
+
+	#### SAVE
+	$self->save();
+
+	#### GET ACTUAL
+	my $name	=	$self->name();
+	$self->logDebug("name", $name);
+	my $entry	=	$self->db()->queryhash("SELECT * FROM project WHERE name='$name'");
+	$self->logDebug("self->db->database", $self->db()->database());
+	$self->logDebug("entry", $entry);
+	
+	#### GET EXPECTED
+	my $json	=	$self->getFileContents($projectfile);
+	$self->logDebug("json", $json);
+	my $data	=	$self->jsonparser()->decode($json);
+	$self->logDebug("data", $data);
+	
+	#### VERIFY
+	foreach my $field ( keys %$data ) {
+		next if $field eq "workflows";
+		$self->logDebug("field $field: expected $data->{$field}, actual: $entry->{$field}");
+		ok($data->{$field} eq $entry->{$field}, "loaded field $field");
+	}
+}
+
+method testSaveWorkflow {
+	#### SET DBH
+	$self->setTestDbh();
+	$self->db()->do("DELETE FROM workflow");
+
+	#### INPUTS
+	my $directory	=	"$Bin/outputs/workflows/projects/PanCancer";
+	#my $workflows	=	["1-Download.work", "2-Split.work", "3-Align.work"];
+	my $workflows	=	["1-Download.work"];
+	my $project		=	"PanCancer";
+	my $projectfile	=	"$directory/$project.proj";
+
+	#### COPY FILES
+	$self->setUpDirs("$Bin/inputs/workflows/projects/PanCancer", "$Bin/outputs/workflows/projects/PanCancer");
+	$self->setUpFile("$Bin/inputs/workflows/projects/PanCancer/$project.proj", "$Bin/outputs/workflows/projects/PanCancer/$project.proj");
+	
+	#### SET INPUTFILE
+	$self->inputfile($projectfile);
+
+	#### SET USERNAME, OWNER AND PROJECT
+	my $username	=	"testuser";
+	$self->username($username);
+	$self->owner($username);
+	$self->name($project);
+
+	foreach my $workflow (  @$workflows ) {
+		my ($workflownumber, $workflowname)	= $workflow =~/^(\d+)-(.+).(wrk|wk|work)$/;
+		$self->logDebug("workflowname", $workflowname);
+		$self->logDebug("workflownumber", $workflownumber);
+
+		#### SET WORKFILE
+		my $wkfile	=	$self->wkfile("$directory/$workflow");
+		$self->logDebug("wkfile", $wkfile);
+		$self->logDebug("self->wkfile", $self->wkfile());
+
+		#### SAVE WORKFLOW
+		$self->saveWorkflow();
+		
+		#### VERIFY ENTRIES IN TABLES
+		my $query	=	qq{SELECT * FROM workflow
+WHERE username='$username'
+AND project='$project'
+AND name='$workflowname'
+AND number='$workflownumber'};
+		$self->logDebug("query", $query);
+		my $workflowdata	=	$self->db()->queryhash($query);
+		$self->logDebug("workflowdata", $workflowdata);
+		
+		#### GET EXPECTED
+		my $json	=	$self->getFileContents($wkfile);
+		#$self->logDebug("json", $json);
+		my $data	=	$self->jsonparser()->decode($json);
+		$self->logDebug("data", $data);
+		
+		### VERIFY
+		foreach my $field ( keys %$workflowdata ) {
+			ok($data->{$field} eq $workflowdata->{$field}, "loaded field $field");
+		}
+	}
+}
+
+method setJsonParser {
+	my $jsonparser	=	JSON->new->allow_nonref;
+	$self->jsonparser($jsonparser);
+	
+	return $jsonparser;
+}
 
 
 }   #### Test::Agua::CLI::Project

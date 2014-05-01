@@ -90,18 +90,9 @@ has 'version'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
 has 'keyfile'	=> ( isa => 'Str|Undef', is => 'rw', default	=>	''	);
 
 has 'conf'	=> ( isa => 'Conf::Yaml', is => 'rw', lazy => 1, builder => "setConf" );
-#has 'conf' 	=> (
-#	is =>	'rw',
-#	'isa' => 'Conf::Yaml',
-#	default	=>	sub { Conf::Yaml->new();	}
-#);
-
 has 'opsinfo' 	=> (
 	is 			=>	'rw',
 	isa 		=> 'Agua::OpsInfo'
-	#,
-	#'builder'	=>	'setOpsInfo',
-	#'lazy'		=>	1
 );
 has 'logger' 	=> (
 	is 			=>	'rw',
@@ -111,13 +102,12 @@ has 'logger' 	=> (
 
 ####/////}}}}
 
-method BUILD ($hash) {
-	#$self->logDebug("hash", $hash);
+method BUILD ($args) {
 	$self->logDebug("");
-	$self->initialise();
+	$self->initialise($args);
 }
 
-method initialise () {
+method initialise ($args) {
 	$self->logDebug("");
 	
 	#### OPEN LOGFILE IF DEFINED

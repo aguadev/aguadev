@@ -439,9 +439,9 @@ sub getFileroot {
 	my $aguadir = $self->conf()->getKey('agua', 'AGUADIR');
 	my $fileroot = "$userdir/$username/$aguadir";
 
-	#### USE TEST FILE ROOT IF TEST USER
-	$fileroot = $self->getTestFileroot() if $self->isTestUser($username);
-	$self->logDebug("fileroot", $fileroot);
+	##### USE TEST FILE ROOT IF TEST USER
+	#$fileroot = $self->getTestFileroot() if $self->isTestUser($username);
+	#$self->logDebug("fileroot", $fileroot);
 
 	$self->fileroot($fileroot);
 	
@@ -451,7 +451,7 @@ sub getFileroot {
 sub isTestUser {
 	my $self		=	shift;
 	my $username	=	shift;
-	$self->logCaller("");
+	#$self->logCaller("");
 	$self->logNote("username", $username);
 
 
@@ -469,16 +469,16 @@ sub isTestUser {
 	return 0;
 }
 
-sub getTestFileroot {
-	my $self		=	shift;
-
-	my $testuser	=	$self->conf()->getKey("database", "TESTUSER");
-	$self->logDebug("testuser", $testuser);
-	my $aguadir = $self->conf()->getKey('agua', 'AGUADIR');
-	my $installdir = $self->conf()->getKey('agua', 'INSTALLDIR');
-	
-	return "$installdir/t/nethome/$testuser/$aguadir";
-}
+#sub getTestFileroot {
+#	my $self		=	shift;
+#
+#	my $testuser	=	$self->conf()->getKey("database", "TESTUSER");
+#	$self->logDebug("testuser", $testuser);
+#	my $aguadir = $self->conf()->getKey('agua', 'AGUADIR');
+#	my $installdir = $self->conf()->getKey('agua', 'INSTALLDIR');
+#	
+#	return "$installdir/t/nethome/$testuser/$aguadir";
+#}
 
 
 1;

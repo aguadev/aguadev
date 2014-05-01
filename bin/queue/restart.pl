@@ -10,7 +10,7 @@ PURPOSE
 	
 	2. Run 'max' number of commands concurrently
 	
-	3. Poll running completed to determine which have complete
+	3. Poll running completed to determine which have completed
 	
 	4. Execute remaining commands up to 'max' number
 	
@@ -57,7 +57,7 @@ my $logfile		=	"/tmp/pancancer-restart.$$.log";
 my $help;
 GetOptions (
     'nodename=s'	=> \$nodename,
-    'mode=s'	=> \$mode,
+    'mode=s'		=> \$mode,
     'showlog=i'     => \$showlog,
     'printlog=i'    => \$printlog,
     'help'          => \$help

@@ -25,7 +25,7 @@ TO DO
 use strict;
 use warnings;
 
-class Queue::Monitor with (Logger, Agua::Common::Util, Agua::Common::Exchange) {
+class Queue::Monitor with (Logger, Agua::Common::Util, Exchange) {
 
 #####////}}}}}
 
@@ -46,7 +46,6 @@ use Test::More;
 use Data::Dumper;
 
 #####////}}}}}
-
 
 method initialise ($hash) {
 	#### SET SLOTS
@@ -75,7 +74,7 @@ method systemCommand {
 			stderr => $stderr,
 		}
 	});
-	print "AFTERRRRRRRRRRRRRR\n";
+	print "AFTERRRRRRRRRRRRRR notifyStatus\n";
 	
 	return 1;
 }

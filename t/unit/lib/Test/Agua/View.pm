@@ -179,7 +179,7 @@ ll /agua/t/cgi-bin/view/inputs/nethome/syoung/agua/Project1/Workflow9/jbrowse/te
 		$targettracksdir,
 		{
 			username	=>	"admin",
-			sessionId	=>	"9999999999.9999.999",
+			sessionid	=>	"9999999999.9999.999",
 			mode		=>	"addViewFeature",
 			sourceid	=>	"plugins_view_View_0",
 			callback	=>	"_handleAddViewFeature",

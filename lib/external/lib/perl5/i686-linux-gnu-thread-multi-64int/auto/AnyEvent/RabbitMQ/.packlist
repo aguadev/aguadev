@@ -1,8 +1,0 @@
-/tmp/perlmods/lib/perl5/AnyEvent/RabbitMQ.pm
-/tmp/perlmods/lib/perl5/AnyEvent/RabbitMQ/Channel.pm
-/tmp/perlmods/lib/perl5/AnyEvent/RabbitMQ/LocalQueue.pm
-/tmp/perlmods/lib/perl5/auto/share/dist/AnyEvent-RabbitMQ/README
-/tmp/perlmods/lib/perl5/auto/share/dist/AnyEvent-RabbitMQ/fixed_amqp0-8.xml
-/tmp/perlmods/lib/perl5/auto/share/dist/AnyEvent-RabbitMQ/fixed_amqp0-9-1.xml
-/tmp/perlmods/man/man3/AnyEvent::RabbitMQ.3pm
-/tmp/perlmods/man/man3/AnyEvent::RabbitMQ::Channel.3pm

@@ -2,7 +2,7 @@ use Moose::Util::TypeConstraints;
 use MooseX::Declare;
 use Method::Signatures::Modifiers;
 
-class Test::Agua::Common::Login with (Agua::Common::Login, Test::Agua::Common::Database, Agua::Common::Logger, Agua::Common::Database, Agua::Common::Privileges, Agua::Common::Exchange) {
+class Test::Agua::Common::Login with (Agua::Common::Login, Test::Agua::Common::Database, Agua::Common::Logger, Agua::Common::Database, Agua::Common::Privileges, Exchange) {
 
 use Data::Dumper;
 use Test::More;
@@ -110,7 +110,7 @@ method testSubmitLogin {
 		$self->logDebug("username", $username);
 		$self->logDebug("password", $password);
 
-		#### OVERRIDE Agua::Common::Exchange::send
+		#### OVERRIDE Exchange::send
 		no warnings;
 		*notifyStatus = sub {
 			my $self	=	shift;

@@ -1,0 +1,40 @@
+{
+   "project": "PanCancer",
+   "name"   : "Align",
+   "number" : 3,   
+   "description" : "Alignment of lane-level BAM files",
+   "notes" : "Piped together bamtofastq -> bwa mem --> bamsort",
+   "apps" : [
+      {
+         "name" : "align",
+         "type" : "aligner",
+         "package" : "pancancer",
+         "location" : "bin/job_align.sh",
+         "installdir" : "/agua/apps/pancancer",
+         "executor" :"source /agua/apps/pancancer/envars.sh && ",
+         "version" : "0.0.1",
+         "description" : "Run bwa_mem.pl alignment of lane-level BAM files",
+         "linkurl" : "http://www.github.com/annaisystems/pancancer",
+         "parameters" : [
+            {
+               "param" : "volume",
+               "ordinal" : 1,
+               "argument" : "",
+               "paramtype" : "String",
+               "valuetype" : "input",
+               "category" : "directory",
+               "description" : "Path to the base directory containing input file subfolders"
+            },
+            {
+               "param" : "uuid",
+               "ordinal" : 2,
+               "argument" : "",
+               "paramtype" : "String",
+               "valuetype" : "input",
+               "category" : "id",
+               "description" : "Unique identifier for the sample"
+            }
+         ]
+      }
+   ]
+}

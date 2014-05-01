@@ -39,31 +39,31 @@ has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 has 'count'			=>  ( isa => 'Int', is => 'rw', default => 50 );
 
 ##### Strings
-has 'executable'		=>  ( isa => 'Str|Undef', is => 'rw', lazy	=>	1, builder	=>	"setExecutable" );
+has 'executable'	=>  ( isa => 'Str|Undef', is => 'rw', lazy	=>	1, builder	=>	"setExecutable" );
+has 'assignee'		=>  ( isa => 'Str|Undef', is => 'rw' );
 
 ##### Objects
 has 'states'		=>  ( isa => 'HashRef|Undef', is => 'rw', lazy	=>	1, builder	=>	"setStates" );
 has 'activestates'	=>  ( isa => 'ArrayRef|Undef', is => 'rw', lazy	=>	1, builder	=>	"setActiveStates" );
-has 'conf'	=> ( isa => 'Conf::Yaml', is => 'rw', lazy => 1, builder => "setConf" );
-has 'ops'	=> ( isa => 'Agua::Ops', is => 'rw', lazy => 1, builder => "setOps" );
-
+has 'stablestates'	=>  ( isa => 'ArrayRef|Undef', is => 'rw', lazy	=>	1, builder	=>	"setStableStates" );
+has 'conf'			=> ( isa => 'Conf::Yaml', is => 'rw', lazy => 1, builder => "setConf" );
+has 'ops'			=> ( isa => 'Agua::Ops', is => 'rw', lazy => 1, builder => "setOps" );
 
 use FindBin qw($Bin);
 use Test::More;
 
-use Openstack::Nova;
-
 #####////}}}}}
 
 method BUILD ($args) {
-		#use Data::Dumper;
-		#print "Synapse::BUILD    args:\n";
-		#print Dumper $args;
+	#use Data::Dumper;
+	#print "Synapse::BUILD    args:\n";
+	#print Dumper $args;
 }
 
 method returnAssignment ($uuid) {
 	my $executable		=	$self->executable();
-	my $command		=	"$executable returnAssignment $uuid";
+	my $assignee		=	$self->assignee();
+	my $command		=	"$executable returnAssignment $uuid $assignee";
 	$self->logDebug("command", $command);
 	
 	return `$command`;	
@@ -71,31 +71,40 @@ method returnAssignment ($uuid) {
 
 method assignError ($uuid, $error) {
 	my $executable		=	$self->executable();
+	my $assignee		=	$self->assignee();
 	my $command		=	qq{$executable errorAssignment $uuid "$error"};
 	$self->logDebug("command", $command);
 	
 	return `$command`;
 }
 
+#### GET ADDITIONAL SAMPLES
 method addSamples ($args) {
-	my $count 	=	$args->{count};
+	return $self->getBamForWork($args->{count});
+}
+
+method getBamForWork ($count) {
 	$count		=	$self->count() if not defined $count;
 
 	my $executable		=	$self->executable();
-	my $command 	=	"$executable getAssignments ucsc_biofarm --count=$count";
+	my $assignee		=	$self->assignee();
+	my $command 	=	"$executable getBamForWork $assignee --count=$count";
 	$self->logDebug("command", $command);
 	
 	print `$command`;		
 }
 
+#### LIST SAMPLES
 method list ($args) {
 	my $executable		=	$self->executable();
-	my $command 	=	"$executable getAssignments ucsc_biofarm";
+	my $assignee		=	$self->assignee();
+	my $command 	=	"$executable getAssignments $assignee";
 	$self->logDebug("command", $command);
 	
 	print `$command`;	
 }
 
+#### CLEAR ERRORS
 method clearErrors ($args) {	
 	my $state	=	$args->{state};
 	$self->logDebug("state", $state);
@@ -130,6 +139,16 @@ method getPreviousState ($current) {
 	return $previous;
 }
 
+method getPreviousStableState ($current) {
+	my $states	=	$self->stablestates();
+	$self->logDebug("states", $states);
+
+	my $previous	=	$states->{$current};
+	$self->logDebug("previous", $previous);
+
+	return $previous;
+}
+
 method getNextState ($current) {
 	$self->logDebug("current", $current);
 	my $states	=	$self->states();
@@ -148,6 +167,14 @@ method reverse ($hash) {
 	return $hash2;
 }
 
+method setPreviousStates {
+	return {
+		'download' 		=>	'todownload',
+		'split' 		=>	'downloaded',
+		'align' 		=>	'split'
+	};
+}
+
 method setStates {
 	return {
 		'unassigned' 	=>	'todownload',
@@ -159,7 +186,7 @@ method setStates {
 		'aligning' 		=>	'aligned',
 		'aligned' 		=>	'uploading',
 		'uploading' 	=>	'uploaded'
-	}
+	};
 }
 
 method setActiveStates {
@@ -185,7 +212,8 @@ method getUuidsByState ($state) {
 
 method getAssignments {
 	my $executable	=	$self->executable();
-	my $command		=	"$executable getAssignments ucsc_biofarm";
+	my $assignee		=	$self->assignee();
+	my $command		=	"$executable getAssignments $assignee";
 	$self->logDebug("command", $command);
 
 	my $assigned = {};	
@@ -202,15 +230,17 @@ method getAssignments {
 }
 
 method getWorkAssignment ($state) {
-		my $executable		=	$self->executable();
-		my $command		=	"$executable getAssignmentForWork ucsc_biofarm $state";
-		$self->logDebug("command", $command);
-		
-		my $uuid	=		`$command`;
-		$uuid	=~ s/\s+$//;
-		
-		return $uuid;
+	my $executable		=	$self->executable();
+	my $assignee		=	$self->assignee();
+	my $command		=	"$executable getAssignmentForWork $assignee $state";
+	$self->logDebug("command", $command);
+	
+	my $uuid	=		`$command`;
+	$uuid	=~ s/\s+$//;
+	
+	return $uuid;
 }
+#### CHANGE STATE
 method changeState ($args) {	
 	my $state	=	$args->{state};
 	my $target	=	$args->{target};
@@ -245,7 +275,8 @@ method changeState ($args) {
 
 method change ($uuid, $state) {	
 	my $executable		=	$self->executable();
-	my $command 	=	"$executable resetStatus $uuid --status $state";
+	my $assignee		=	$self->assignee();
+	my $command 	=	"$executable resetStatus $uuid --status $state  $assignee";
 	$self->logDebug("command", $command);
 	
 	print `$command`;

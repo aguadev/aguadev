@@ -1,8 +1,0 @@
-/agua/apps/perl/5.18.2/bin/package-stash-conflicts
-/agua/apps/perl/5.18.2/lib/site_perl/5.18.2/Package/Stash.pm
-/agua/apps/perl/5.18.2/lib/site_perl/5.18.2/Package/Stash/Conflicts.pm
-/agua/apps/perl/5.18.2/lib/site_perl/5.18.2/Package/Stash/PP.pm
-/agua/apps/perl/5.18.2/man/man1/package-stash-conflicts.1
-/agua/apps/perl/5.18.2/man/man3/Package::Stash.3
-/agua/apps/perl/5.18.2/man/man3/Package::Stash::Conflicts.3
-/agua/apps/perl/5.18.2/man/man3/Package::Stash::PP.3

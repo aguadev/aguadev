@@ -364,6 +364,35 @@ CREATE TABLE `project` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `provenance`
+--
+
+DROP TABLE IF EXISTS `provenance`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `provenance` (
+  `username` varchar(30) NOT NULL,
+  `project` varchar(40) NOT NULL,
+  `workflow` varchar(40) NOT NULL,
+  `workflownumber` int(6) NOT NULL,
+  `sample` varchar(40) NOT NULL,
+  `stage` varchar(40) NOT NULL,
+  `stagenumber` int(6) NOT NULL,
+  `application` varchar(40) NOT NULL,
+  `owner` varchar(40) NOT NULL,
+  `package` varchar(40) NOT NULL,
+  `version` varchar(40) NOT NULL,
+  `installdir` varchar(255) NOT NULL,
+  `host` varchar(40) NOT NULL,
+  `started` datetime DEFAULT NULL,
+  `completed` datetime DEFAULT NULL,
+  `duration` int(12) DEFAULT NULL,
+  `status` varchar(40) NOT NULL,
+  PRIMARY KEY (`username`,`project`,`workflow`,`workflownumber`,`sample`,`stage`,`stagenumber`,`application`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `query`
 --
 
@@ -379,6 +408,24 @@ CREATE TABLE `query` (
   `operator` varchar(40) NOT NULL,
   `value` varchar(40) NOT NULL,
   PRIMARY KEY (`username`,`query`,`ordinal`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `queue`
+--
+
+DROP TABLE IF EXISTS `queue`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `queue` (
+  `username` varchar(30) NOT NULL,
+  `project` varchar(40) NOT NULL,
+  `workflow` varchar(40) NOT NULL,
+  `workflownumber` int(8) NOT NULL,
+  `sample` varchar(40) NOT NULL,
+  `status` varchar(40) NOT NULL,
+  PRIMARY KEY (`username`,`project`,`workflow`,`workflownumber`,`sample`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -598,19 +645,10 @@ CREATE TABLE `workflow` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-03-30 15:22:02
+-- Dump completed on 2014-04-30 10:11:33
 #### INSERT TABLES 
 INSERT INTO project VALUES ('guest','Project1',0,'','','','');
 INSERT INTO project VALUES ('guest','Project2',0,'','','','');
-INSERT INTO sessions VALUES ('guest','1396048288.4499.560','2014-03-28 16:11:28');
-INSERT INTO sessions VALUES ('guest','1396048684.4499.821','2014-03-28 16:18:04');
-INSERT INTO sessions VALUES ('guest','1396050160.5079.109','2014-03-28 16:42:40');
-INSERT INTO sessions VALUES ('guest','1396050213.5108.201','2014-03-28 16:43:33');
-INSERT INTO sessions VALUES ('guest','1396050374.5108.379','2014-03-28 16:46:14');
-INSERT INTO sessions VALUES ('guest','1396050703.5108.13','2014-03-28 16:51:43');
-INSERT INTO sessions VALUES ('guest','1396050741.5108.497','2014-03-28 16:52:21');
-INSERT INTO sessions VALUES ('guest','1396050901.5108.301','2014-03-28 16:55:26');
-INSERT INTO sessions VALUES ('guest','1396055180.5108.665','2014-03-28 18:06:20');
 INSERT INTO stage VALUES ('agua','emboss','6.4.0.0','/aguadev/apps/emboss','guest','Project1','Workflow1',1,'aligncopypair','1','alignment','bin/aligncopypair','','',0,'','','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0,0,0,'','','','');
 INSERT INTO stageparameter VALUES ('agua','guest','Project1','Workflow1',0,'aligncopypair','1','append',0,0,'input','boolean','boolean','-append','N','optional','','This allows you to append the name and comments you have given on to the end of the existing alignment header.','','','',0);
 INSERT INTO stageparameter VALUES ('agua','guest','Project1','Workflow1',0,'aligncopypair','1','comment',0,0,'input','string','string','-comment','','optional','','Comment on the alignment (Any string)','','','',0);

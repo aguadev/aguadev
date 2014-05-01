@@ -46,7 +46,7 @@ use strict;
 use warnings;
 use Carp;
 
-class Agua::Workflow with (Agua::Common, Agua::Common::Exchange) {
+class Agua::Workflow with (Agua::Common, Exchange) {
 
 #### EXTERNAL MODULES
 use Data::Dumper;
@@ -68,6 +68,7 @@ has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );
 has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 4 );
 has 'workflowpid'	=> ( isa => 'Int|Undef', is => 'rw', required => 0 );
 has 'workflownumber'=>  ( isa => 'Str|Undef', is => 'rw' );
+has 'sample'     	=>  ( isa => 'Int|Undef', is => 'rw' );
 has 'start'     	=>  ( isa => 'Int|Undef', is => 'rw' );
 has 'stop'     		=>  ( isa => 'Int|Undef', is => 'rw' );
 has 'submit'  		=>  ( isa => 'Int|Undef', is => 'rw' );
@@ -101,7 +102,7 @@ has 'ssh'			=> ( isa => 'Agua::Ssh', is => 'rw', required	=>	0	);
 has 'opsinfo'		=> ( isa => 'Agua::OpsInfo', is => 'rw', required	=>	0	);
 has 'jsonparser'	=> ( isa => 'JSON', is => 'rw', lazy => 1, builder => "setJsonParser" );
 has 'json'			=> ( isa => 'HashRef', is => 'rw', required => 0 );
-has 'db'			=> ( isa => 'Agua::DBase::MySQL', is => 'rw', required => 0 );
+has 'db'			=> ( isa => 'Agua::DBase::MySQL', is => 'rw', lazy	=>	1,	builder	=>	"setDbh" );
 has 'stages'		=> 	( isa => 'ArrayRef', is => 'rw', required => 0 );
 has 'stageobjects'	=> 	( isa => 'ArrayRef', is => 'rw', required => 0 );
 has 'conf'	=> ( isa => 'Conf::Yaml', is => 'rw', lazy => 1, builder => "setConf" );
@@ -215,6 +216,7 @@ method executeWorkflow {
 			
 =cut
 
+	my $database 	=	$self->database();
 	my $username 	=	$self->username();
 	my $cluster 	=	$self->cluster();
 	my $project 	=	$self->project();
@@ -670,12 +672,9 @@ method setStages ($username, $cluster, $json, $project, $workflow) {
 	#### SET START AND STOP
 	my ($start, $stop) = $self->setStartStop($stages, $json);
 	
-	#### GET SETUID
-	my $setuid = $self->json()->{setuid};
-	$self->logDebug("setuid", $setuid) if defined $setuid;
-
 	#### GET FILEROOT
 	my $fileroot = $self->getFileroot($username);	
+	$self->logDebug("fileroot", $fileroot);
 	
 	#### SET FILE DIRS
 	my ($scriptsdir, $stdoutdir, $stderrdir) = $self->setFileDirs($fileroot, $project, $workflow);
@@ -686,7 +685,7 @@ method setStages ($username, $cluster, $json, $project, $workflow) {
 
 	#### CLUSTER, QUEUE AND QUEUE OPTIONS
 	my $queue = $self->queueName($username, $project, $workflow);
-	my $queue_options = $self->json()->{queue_options};
+	#my $queue_options = $self->json()->{queue_options};
 	
 	#### SET OUTPUT DIR
 	my $outputdir =  "$fileroot/$project/$workflow/";
@@ -703,6 +702,7 @@ method setStages ($username, $cluster, $json, $project, $workflow) {
 	my $stageobjects = [];    
 	for ( my $counter = $start; $counter < $stop + 1; $counter++ ) {
 		my $stage = $$stages[$counter];
+		$self->logDebug("stage", $stage);
 		
 		#### QUIT IF NO STAGE PARAMETERS
 		$self->logError("stageparameters not defined for stage $stage->{name}") and exit if not defined $stage->{stageparameters};
@@ -724,10 +724,13 @@ method setStages ($username, $cluster, $json, $project, $workflow) {
 		$stage->{db}			=	$self->db();
 		$stage->{conf}			=  	$self->conf();
 		$stage->{fileroot}		=  	$fileroot;
+
 		$stage->{queue}			=  	$queue;
-		$stage->{queue_options}	=  	$queue_options;
+		$stage->{sample}		=  	$self->sample();
+		#### LATER: REPLACE
+		#$stage->{queue_options}	=  	$queue_options;
+
 		$stage->{outputdir}		=  	$outputdir;
-		$stage->{setuid}		=  	$setuid;
 		$stage->{qsub}			=  	$self->conf()->getKey("cluster", "QSUB");
 		$stage->{qstat}			=  	$self->conf()->getKey("cluster", "QSTAT");
 		$stage->{envars}		=  	$self->envars();
@@ -776,8 +779,7 @@ method setFileDirs ($fileroot, $project, $workflow) {
 method runStages ($stages) {
 	$self->logDebug("no. stages", scalar(@$stages));
 
-	for ( my $stage_counter = 0; $stage_counter < @$stages; $stage_counter++ )
-	{
+	for ( my $stage_counter = 0; $stage_counter < @$stages; $stage_counter++ ) {
 		my $stage = $$stages[$stage_counter];
 		my $stage_number = $stage->number();
 		my $stage_name = $stage->name();
@@ -866,18 +868,21 @@ method checkPrevious ($stages, $json) {
 
 method setStageParameters ($stages, $json) {
 	#### GET THE PARAMETERS FOR THE STAGES WE WANT TO RUN
-	$self->logDebug("Agua::Workflow::setStageParameters(stages, json)");
+	$self->logDebug("stages", $stages);
+	$self->logDebug("json", $json);
+	
 	#### GET THE PARAMETERS FOR THE STAGES WE WANT TO RUN
-	my $start = $json->{start};
+	my $start = $json->{start} || 1;
     $start--;
-	for ( my $i = $start; $i < @$stages; $i++ )
-	{
+	for ( my $i = $start; $i < @$stages; $i++ ) {
 		$$stages[$i]->{appname} = $$stages[$i]->{name};
 		$$stages[$i]->{appnumber} = $$stages[$i]->{number};
 		my $keys = ["username", "project", "workflow", "appname", "appnumber"];
 		my $where = $self->db()->where($$stages[$i], $keys);
 		my $query = qq{SELECT * FROM stageparameter
 $where AND paramtype='input'};
+		$self->logDebug("query", $query);
+
 		my $stageparameters = $self->db()->queryhasharray($query);
 		$$stages[$i]->{stageparameters} = $stageparameters;
 	}

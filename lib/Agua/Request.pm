@@ -2,13 +2,13 @@ use Moose::Util::TypeConstraints;
 use MooseX::Declare;
 use Method::Signatures::Modifiers;
 
-class Agua::Request with Agua::Common::Exchange {
+class Agua::Request with Exchange {
 
 #### INTERNAL MODULES
 use Agua::Common::Util;
 use Agua::DBaseFactory;
 use Agua::JBrowse;
-use Agua::Common::Exchange;
+use Exchange;
 
 # Booleans
 has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 4 );  

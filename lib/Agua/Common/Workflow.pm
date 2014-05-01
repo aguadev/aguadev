@@ -46,7 +46,7 @@ sub _getWorkflows {
 	#### GET ALL SOURCES
 	my $query = qq{SELECT * FROM workflow
 WHERE username='$username'
-ORDER BY project, name};
+ORDER BY project, number, name};
 	$self->logDebug("$query");
 	#$self->logDebug("self->db()", $self->db());
 
@@ -74,8 +74,8 @@ sub getWorkflowsByProject {
 	my $query = qq{SELECT * FROM workflow
 WHERE username='$username'
 AND project='$project'
-ORDER BY name};
-	$self->logDebug("self->db()", $self->db());
+ORDER BY number};
+	#$self->logDebug("self->db()", $self->db());
 	$self->logDebug("$query");
 	my $workflows = $self->db()->queryhasharray($query);
 	$workflows = [] if not defined $workflows;
@@ -149,20 +149,8 @@ sub _addWorkflow {
 	my $directory = "$fileroot/$data->{project}/$data->{name}";
 	$self->logDebug("Creating directory", $directory);
 	
-	#### REPLACED THIS TO AVOID ERROR WHEN DIRECTORY ALREADY EXISTS:
-	#### mkdir /home/admin/aguadev: Permission denied at /aguadev/cgi-bin/lib/Agua/Common/Workflow.pm line 151.
-	# File::Path::mkpath($directory);
-
 	#### CREATE DIRECTORY IF NOT EXISTS	
 	`mkdir -p $directory` if not -d $directory;
-
-	#### REMOVED THIS CHECK TO AVOID ERROR:
-	##### mkdir: cannot create directory `/home/admin': Permission denied
-	####
-	# $self->logError("Could not create the fileroot directory: $fileroot") and exit if not -d $directory;
-	
-	#### SET PERMISSIONS
-	$self->setPermissions($username, $directory);
 
 	return 1;
 }
@@ -670,9 +658,6 @@ sub copyFilesystem {
     my $result = File::Copy::Recursive::rcopy($source, $target);
     $self->logDebug("copy result", $result);
     
-	#### SET PERMISSIONS
-	$self->setPermissions($username, $target);
-	
     return $result;
 }
 

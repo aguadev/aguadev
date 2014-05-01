@@ -1,7 +1,7 @@
 use MooseX::Declare;
 use Conf::Json;
 
-class Test::Conf::Json extends Conf::Json with (Agua::Common, Test::Agua::Common) {
+class Test::Conf::Json extends Conf::Json with (Agua::Common, Test::Agua::Common, Test::Common, Test::Agua::Common::Database) {
 	
 use Data::Dumper;
 use Test::More;
@@ -237,19 +237,5 @@ method testMultiInsert ($originalfile, $multifile, $inputfile, $prettyfile, $ins
 	#### CLEAN UP
 	$self->setUpDirs();
 }
-
-method setUpDirs {
-	#### CLEAN UP
-	`rm -fr $Bin/outputs`;
-	`cp -r $Bin/inputs $Bin/outputs`;
-	`cd $Bin/outputs; find ./ -type d -exec chmod 0755 {} \\;; find ./ -type f -exec chmod 0644 {} \\;;`;
-}
-
-method setUpFile ($sourcefile, $targetfile) {
-	`cp $sourcefile $targetfile`;
-	`chmod 644 $targetfile`;	
-}
-
-
 
 }

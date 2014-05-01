@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/agua/bin/daemon/task --mode listen
