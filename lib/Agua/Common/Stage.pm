@@ -43,7 +43,7 @@ sub updateStage {
 	my $self		=	shift;
 
 	my $json 		=	$self->json();
- 	$self->logDebug("");
+ 	$self->logDebug("$$ ");
 
 	#### DO ADD STAGE WITH NEW NUMBER
 	my $old_number = $json->{number};
@@ -68,9 +68,9 @@ sub updateStage {
 	my $query = qq{UPDATE stageparameter
 SET appnumber='$json->{newnumber}'
 $where};
-	$self->logDebug("query", $query);
+	$self->logDebug("$$ query", $query);
 	$success = $self->db()->do($query);
-	$self->logDebug("success", $success);
+	$self->logDebug("$$ success", $success);
 	
 	$self->logStatus("Successful update of appnumber to $json->{newnumber} in stageparameter table") if $success;
 	$self->logStatus("Could not update appnumber to $json->{newnumber} in stageparameter table") if not $success;
@@ -91,20 +91,20 @@ sub getStages {
 =cut
 
 	my $self		=	shift;
-	my $json		=	shift;
-	$self->logDebug("");
+	my $data		=	shift;
+	$self->logDebug("$$ ");
 
 	#### SET OWNER 
-    $json	=	$self->json() if not defined $json;	
-	my $owner = $json->{username};
-	$self->logDebug("owner", $owner);
+	my $owner = $data->{username};
+	$self->logDebug("$$ owner", $owner);
 
 	my $query = qq{SELECT * FROM stage
 WHERE username='$owner'\n};
-	$query .= qq{AND project='$json->{project}'\n} if defined $json->{project};
-	$query .= qq{AND workflow='$json->{workflow}'\n} if defined $json->{workflow};
+	$query .= qq{AND project='$data->{project}'\n} if defined $data->{project};
+	$query .= qq{AND workflow='$data->{workflow}'\n} if defined $data->{workflow};
+	$query .= qq{AND workflownumber='$data->{workflownumber}'\n} if defined $data->{workflownumber};
 	$query .= qq{ORDER BY project, workflow, number};
-	$self->logDebug("$query");
+	$self->logDebug("$$ $query");
 	my $stages = $self->db()->queryhasharray($query);
 	$stages = [] if not defined $stages;
 	$self->logNote("stages", $stages);
@@ -115,17 +115,17 @@ WHERE username='$owner'\n};
 sub getStagesByWorkflow {
 	my $self			=	shift;
 	my $workflowobject	=	shift;
-	$self->logDebug("workflowobject", $workflowobject);
+	$self->logDebug("$$ workflowobject", $workflowobject);
 
 	my $required = ["username", "project", "workflow"];
 	my $where = $self->db()->where($workflowobject, $required);
 	my $query = qq{SELECT * FROM stage
 $where};
-	#$self->logDebug("$query");
+	#$self->logDebug("$$ $query");
 
 	my $stages = $self->db()->queryhasharray($query);
 	$stages = [] if not defined $stages;
-	#$self->logDebug("stages", $stages);
+	#$self->logDebug("$$ stages", $stages);
 
 	return $stages;
 }
@@ -160,7 +160,7 @@ sub addStage {
 =cut
 
 	my $self		=	shift;
- 	$self->logDebug("Common::addStage()");
+ 	$self->logDebug("$$ Common::addStage()");
 
 	#### VALIDATE    
     $self->logError("User session not validated") and exit unless $self->validate();
@@ -173,7 +173,7 @@ sub addStage {
 
 sub updateStageSubmit {
 	my $self		=	shift;
- 	$self->logDebug("Common::updateStageSubmit()");
+ 	$self->logDebug("$$ Common::updateStageSubmit()");
     my $json 			=	$self->json();
 	my $submit		=	$json->{submit};
 	my $username	=	$json->{username};
@@ -189,7 +189,7 @@ AND project='$project'
 AND workflow='$workflow'
 AND workflownumber='$workflownumber'
 AND number='$number'};
-	$self->logDebug("$query");
+	$self->logDebug("$$ $query");
 	my $success = $self->db()->do($query);
 	$self->logError("Failed to update workflow $json->{workflow} stage $json->{number} submit: $submit'") if not defined $success or not $success;
 	$self->logStatus("Updated workflow $json->{workflow} stage $json->{number} submit: $submit") if $success;
@@ -225,7 +225,7 @@ sub insertStage {
 
 	my $self		=	shift;
 	my $data 		=	$self->json();
- 	$self->logDebug("data", $data);
+ 	$self->logDebug("$$ data", $data);
 
 	#### VALIDATE    
     $self->logError("User session not validated") and exit unless $self->validate();
@@ -245,13 +245,13 @@ sub _insertStage {
 	my $where = $self->db()->where($data, $where_fields);
 	my $query = qq{SELECT * FROM stage
 $where};
-	$self->logDebug("query", $query);
+	$self->logDebug("$$ query", $query);
 	my $stages = $self->db()->queryhasharray($query);
-	$self->logDebug("stages", $stages);
+	$self->logDebug("$$ stages", $stages);
 	
 	#### GET THE STAGE NUMBER 
 	my $number = $data->{number};
-	$self->logDebug("number", $number);
+	$self->logDebug("$$ number", $number);
 
 	#### CHECK IF REQUIRED FIELDS ARE DEFINED
 	my $required_fields = ["username", "owner", "project", "workflow", "name", "number"];
@@ -280,9 +280,9 @@ $where};
 		my $query = qq{UPDATE stage SET
 number='$new_number'
 $where};
-		$self->logDebug("query", $query);
+		$self->logDebug("$$ query", $query);
 		my $success = $self->db()->do($query);
-		$self->logDebug("success", $success);
+		$self->logDebug("$$ success", $success);
 	}
 	
 	#### INCREMENT THE appnumber FOR DOWNSTREAM STAGES IN THE stageparameter TABLE
@@ -296,9 +296,9 @@ $where};
 		my $query = qq{UPDATE stageparameter SET
 appnumber='$new_number'
 $where};
-		$self->logDebug("query", $query);
+		$self->logDebug("$$ query", $query);
 		my $success = $self->db()->do($query);
-		$self->logDebug("success", $success);
+		$self->logDebug("$$ success", $success);
 	}
 
 	my $success = $self->_addStage($data);
@@ -326,7 +326,7 @@ $where};
 sub addStageParametersForStage {
 	my $self		=	shift;
 	my $data		=	shift;
-	$self->logDebug("data", $data);
+	$self->logDebug("$$ data", $data);
 	
 	#### GET APPLICATION OWNER
 	my $owner = $data->{owner};
@@ -342,8 +342,8 @@ sub addStageParametersForStage {
 	#### CHECK INPUTS
 	$self->logError("appname $appname not defined or empty") and return if not defined $appname or $appname =~ /^\s*$/;
 	$self->logError("username $username not defined or empty") and return if not defined $username or $username =~ /^\s*$/;
-	$self->logDebug("username", $username);
-	$self->logDebug("appname", $appname);
+	$self->logDebug("$$ username", $username);
+	$self->logDebug("$$ appname", $appname);
 
 	#### DELETE EXISTING ENTRIES FOR THIS STAGE IN stageparameter TABLE
 	my $success;
@@ -353,17 +353,17 @@ AND project='$project'
 AND workflow='$workflow'
 AND appname='$appname'
 AND appnumber='$number'};
-	$self->logDebug("$query");
+	$self->logDebug("$$ $query");
 	$success = $self->db()->do($query);
-	$self->logDebug("Delete success", $success);
+	$self->logDebug("$$ Delete success", $success);
 	
 	#### GET ORIGINAL PARAMETERS FROM parameter TABLE
 	$query = qq{SELECT * FROM parameter
 WHERE owner='$owner'
 AND appname='$appname'};
-    $self->logDebug("$query");
+    $self->logDebug("$$ $query");
     my $parameters = $self->db()->queryhasharray($query);
-	$self->logDebug("No. parameters", scalar(@$parameters));
+	$self->logDebug("$$ No. parameters", scalar(@$parameters));
 	$self->logError("no entries in parameter table") and return if not defined $parameters;
 	
 	##### SET QUERY WITH PLACEHOLDERS
@@ -393,13 +393,13 @@ AND appname='$appname'};
 		my $values_csv = $self->db()->fieldsToCsv($fields, $parameter);
 		my $query = qq{INSERT INTO $table 
 	VALUES ($values_csv) };
-		$self->logDebug("$query");
+		$self->logDebug("$$ $query");
 		my $do_result = $self->db()->do($query);
-		$self->logDebug("do_result", $do_result);
+		$self->logDebug("$$ do_result", $do_result);
 		
 		$success = 0 if not $do_result;
 	}
-	$self->logDebug("success", $success);
+	$self->logDebug("$$ success", $success);
 	
 	return $success;
 }
@@ -420,7 +420,7 @@ sub _addStage {
 
 	my $self		=	shift;
 	my $data		=	shift;
- 	$self->logDebug("data", $data);	
+ 	$self->logDebug("$$ data", $data);	
 	
 	#### SET TABLE AND REQUIRED FIELDS	
 	my $table = "stage";
@@ -433,19 +433,19 @@ sub _addStage {
     $self->logError("undefined values: @$not_defined") and exit if @$not_defined;
 
 	#### DO ADD
- 	$self->logDebug("Doing _addToTable(table, data, required_fields)");
+ 	$self->logDebug("$$ Doing _addToTable(table, data, required_fields)");
 	my $success = $self->_addToTable($table, $data, $required_fields, $inserted_fields);	
- 	$self->logDebug("_addToTable(stagedata) success", $success);
+ 	$self->logDebug("$$ _addToTable(stagedata) success", $success);
 	
 	#### ADD IT TO THE report TABLE IF ITS A REPORT
- 	$self->logDebug("data->{type}", $data->{type});
+ 	$self->logDebug("$$ data->{type}", $data->{type});
 	if ( $success and defined $data->{type} and $data->{type} eq "report" )
 	{
 		$data->{appname} = $data->{name};
 		$self->data($data);
 		
 		$success = $self->_addReport();
-	 	$self->logDebug("_addStage() success", $success);
+	 	$self->logDebug("$$ _addStage() success", $success);
 	}
 	
 	return $success;
@@ -466,7 +466,7 @@ sub _removeStage {
 
 	my $self		=	shift;
 	my $data		=	shift;
- 	$self->logDebug("data", $data);
+ 	$self->logDebug("$$ data", $data);
 
 	#### CHECK UNIQUE FIELDS ARE DEFINED
 	#### NB: ALSO CHECK name THOUGH NOT NECCESSARY FOR UNIQUE ID
@@ -505,18 +505,18 @@ sub removeStage {
 =cut
 
 	my $self		=	shift;
- 	$self->logDebug("Common::removeStage()");
+ 	$self->logDebug("$$ Common::removeStage()");
 
         my $json 			=	$self->json();
 
- 	$self->logDebug("json", $json);
+ 	$self->logDebug("$$ json", $json);
 	
 	#### GET THE STAGES BELONGING TO THIS WORKFLOW
 	my $where_fields = ["username", "project", "workflow"];
 	my $where = $self->db()->where($json, $where_fields);
 	my $query = qq{SELECT * FROM stage
 $where};
-	$self->logDebug("query", $query);
+	$self->logDebug("$$ query", $query);
 	my $stages = $self->db()->queryhasharray($query);
 	if ( not defined $stages or scalar(@$stages) == 0 )
 	{
@@ -526,7 +526,7 @@ $where};
 #	#### GET THE STAGE PARAMETERS BELONGING TO THIS WORKFLOW
 #	$query = qq{SELECT * FROM stageparameter
 #$where};
-#	$self->logDebug("query", $query);
+#	$self->logDebug("$$ query", $query);
 #	my $stageparameters = $self->db()->queryhasharray($query);
 #	if ( not defined $stageparameters or scalar(@$stageparameters) == 0 )
 #	{
@@ -563,9 +563,9 @@ $where};
 		my $query = qq{UPDATE stage SET
 number='$i'
 $where};
-		$self->logDebug("query", $query);
+		$self->logDebug("$$ query", $query);
 		my $success = $self->db()->do($query);
-		$self->logDebug("success", $success);
+		$self->logDebug("$$ success", $success);
 
 		#### UPDATE report TABLE IF ITS A REPORT
 		if ( $stage->{type} eq "report" )
@@ -578,9 +578,9 @@ $where};
 			my $query = qq{UPDATE report SET
 appnumber='$i'
 $where};
-			$self->logDebug("'update report' query", $query);
+			$self->logDebug("$$ 'update report' query", $query);
 			my $success = $self->db()->do($query);
-			$self->logDebug("'update report' success", $success);
+			$self->logDebug("$$ 'update report' success", $success);
 			
 		}
 	}
@@ -596,9 +596,9 @@ $where};
 		my $query = qq{UPDATE stageparameter SET
 appnumber='$i'
 $where};
-		$self->logDebug("query", $query);
+		$self->logDebug("$$ query", $query);
 		my $success = $self->db()->do($query);
-		$self->logDebug("update stage number to $i, success", $success);
+		$self->logDebug("$$ update stage number to $i, success", $success);
 	}
 
  	$self->logStatus("Removed stage $json->{name} from workflow $json->{workflow}");

@@ -13,40 +13,177 @@ use Test::More;
 
 #####////}}}}}
 
+method testUpdateQueue {
+	diag("updateQueue");
+
+	#### SET UP DATABASE
+	my $database	=	$self->conf()->getKey("database:TESTDATABASE", undef);
+	$self->logDebug("database", $database);
+	$self->database($database);
+	$self->setTestDbh();
+	$self->db()->do("DELETE FROM queue");
+
+	my $data 	=	{
+"username"	=>	"testuser",
+"project"	=>	"PanCancer",
+"workflow"	=>	"Align",
+"workflownumber"=>	"1",
+"sample"	=>	"a9012345678",
+"stage"		=>	"align",
+"stagenumber"=>	"1",
+"application"=>	"sleep",
+"owner"		=>	"syoung",
+"package"	=>	"package",
+"version"	=>	"0.8.0",
+"installdir"=>	"/agua/apps/bioapps",
+"location"	=>	"bin/test/sleep.sh",
+"host"		=>	"10.0.2.15",
+"queued"	=>	"2014-05-03 06:49:30",
+"started"	=>	"2014-05-03 06:49:30",
+"completed"	=>	"2014-05-03 06:51:10",
+"status"	=>	"completed",
+"stdout"	=>	"ubuntu.example.com\\nSat May  3 06:53:26 UTC 2014\\nCompleted\\n",
+"stderr"	=>	""
+};
+
+	ok($self->updateQueue($data), "updated queue table");
+}
+
+method testGetSynapseStatus {
+	diag("getSynapseStatus");
+
+	my $data 	=	{
+"username"	=>	"testuser",
+"project"	=>	"PanCancer",
+"workflow"	=>	"Align",
+"workflownumber"=>	"1",
+"sample"	=>	"a9012345678",
+"stage"		=>	"align",
+"stagenumber"=>	"1",
+"application"=>	"sleep",
+"owner"		=>	"syoung",
+"package"	=>	"package",
+"version"	=>	"0.8.0",
+"installdir"=>	"/agua/apps/bioapps",
+"location"	=>	"bin/test/sleep.sh",
+"host"		=>	"10.0.2.15",
+"queued"	=>	"2014-05-03 06:49:30",
+"started"	=>	"2014-05-03 06:49:30",
+"completed"	=>	"2014-05-03 06:51:10",
+"status"	=>	"completed",
+"stdout"	=>	"ubuntu.example.com\\nSat May  3 06:53:26 UTC 2014\\nCompleted\\n",
+"stderr"	=>	""
+};
+
+	my $expected		=	"aligned";
+	my $synapsestatus	=	$self->getSynapseStatus($data);
+	$self->logDebug("synapsestatus", $synapsestatus);
+	
+	ok($synapsestatus eq $expected, "aligned");
+}
+
+method testHandleTopic {
+	diag("handleTopic");	
+	#my $installdir	=	$ENV{'installdir'} || "/agua";
+	#my $sqlfile		=	"$installdir/bin/sql/provenance";
+
+	#### SET UP DATABASE
+	my $database	=	$self->conf()->getKey("database:TESTDATABASE", undef);
+	$self->logDebug("database", $database);
+	$self->database($database);
+	$self->setTestDbh();
+	$self->db()->do("DELETE FROM provenance");
+	$self->db()->do("DELETE FROM queue");
+	
+	#### INPUT DATA	
+	my $json 	=	qq{{
+"username"	:	"syoung",
+"project"	:	"PanCancer",
+"workflow"	:	"Align",
+"workflownumber"	:	"1",
+"sample"	:	"a9012345678",
+"stage"		:	"align",
+"stagenumber":	"1",
+"application":	"sleep",
+"owner"		:	"syoung",
+"package"	:	"package",
+"version"	:	"0.8.0",
+"installdir":	"/agua/apps/bioapps",
+"location"	:	"bin/test/sleep.sh",
+"host"		:	"10.0.2.15",
+"queued"	:	"2014-05-03 06:49:30",
+"started"	:	"2014-05-03 06:49:30",
+"completed"	:	"2014-05-03 06:51:10",
+"status"	:	"completed",
+"stdout"	:	"ubuntu.example.com\\nSat May  3 06:53:26 UTC 2014\\nCompleted\\n",
+"stderr"	:	""
+}};
+	
+	#### HANDLE TOPIC
+	$self->handleTopic($json);
+
+	#### VERIFY
+	my $data	=	$self->jsonparser()->decode($json);
+	my $query =	"SELECT * FROM provenance";
+	$self->logDebug("query", $query);
+	my $actual	=	$self->db()->queryhash($query);
+	$self->logDebug("actual", $actual);
+
+	is_deeply($actual, $data, "loaded fields identical to input");	
+}
+
+method testReceiveTopic {
+	diag("receiveTopic");
+	
+	
+	$self->receiveTopic();	
+}
+method testListenTopics {
+	diag("listenTopics");
+	
+	
+	$self->listenTopics();
+}
 method testMaintainQueue {
+	diag("maintainQueue");
+	
 	#### SET TEST DATABASE
 	$self->setUpTestDatabase();
 	
 	my $tsvfile	=	"$Bin/inputs/queue.tsv";
 	$self->loadTsvFile("queue", $tsvfile);
 	
-	#my $queuedata	=	{
-	#	username	=>	"testuser",
-	#	project		=>	"PanCancer",
-	#	workflow	=>	"Sleep",
-	#	workflownumber	=>	1,
-	#	database	=>	"aguatest"
-	#};
-	
 	my $queuedata	=	{
-		username	=>	"syoung",
+		username	=>	"testuser",
 		project		=>	"PanCancer",
-		workflow	=>	"Align",
-		workflownumber	=>	3,
-		database	=>	"agua"
+		workflow	=>	"Sleep",
+		workflownumber	=>	1,
+		database	=>	"aguatest"
 	};
 	
+	#my $queuedata	=	{
+	#	username	=>	"syoung",
+	#	project		=>	"PanCancer",
+	#	workflow	=>	"Align",
+	#	workflownumber	=>	3,
+	#	database	=>	"agua"
+	#};
+	
 	$self->maintainQueue($queuedata);
+
+	#### TO DO: MOCK OUT QUEUE REPONSES
 }
 
-method testGetQueuedJobs {
+method testGetNumberQueuedJobs {
+	diag("getNumberQueuedJobs");
+	
 	#### OVERRIDE rabbitmqctl
 	$self->rabbitmqctl("$Bin/inputs/rabbitmqctl.pl");
 	my $rabbitmqctl	=	$self->rabbitmqctl();
 	$self->logDebug("rabbitmqctl", $rabbitmqctl);
 
 	my $queue	=	"syoung.1234567890.Align";
-	my $queuedjobs	=	$self->getQueuedJobs($queue);
+	my $queuedjobs	=	$self->getNumberQueuedJobs($queue);
 	$self->logDebug("queuedjobs", $queuedjobs);
 	
 	ok($queuedjobs == 12, "12 queued jobs");

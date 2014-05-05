@@ -48,6 +48,7 @@ has 'conf'		=> ( isa => 'Conf::Yaml', is => 'rw', required	=>	0 );
 has 'nova'		=> ( isa => 'Openstack::Nova', is => 'rw', lazy	=>	1, builder	=>	"setNova" );
 has 'synapse'	=> ( isa => 'Synapse', is => 'rw', lazy	=>	1, builder	=>	"setSynapse" );
 has 'db'		=> ( isa => 'Agua::DBase::MySQL', is => 'rw', required	=>	0 );
+has 'jsonparser'=> ( isa => 'JSON', is => 'rw', lazy	=>	1, builder	=>	"setJsonParser" );
 
 use FindBin qw($Bin);
 use Test::More;
@@ -66,12 +67,16 @@ method initialise ($args) {
 }
 
 method manage {
+	
+	#### MAINTAIN QUEUES AT LEVELS REQUIRED FOR OPTIMAL THROUGHPUT.
+	#### ADD EXTRA JOBS IF NUMBER OF JOBS IN QUEUE IS BELOW THRESHOLD
+
 	#### GET CURRENT QUEUES
 	my $queues	=	$self->getQueues();
-	
-	#### UPDATE ALL QUEUES
-	#### - ADD EXTRA JOBS IF NUMBER OF JOBS IN QUEUE IS BELOW THRESHOLD
 	my $shutdown	=	$self->conf()->getKey("shutdown", undef);
+
+	#### LISTEN FOR REPORTS FROM WORKERS
+	$self->listenTopics();
 
 	while ( scalar(@$queues) > 0 and not $shutdown eq "true" ) {
 		foreach my $queue ( @$queues ) {
@@ -120,6 +125,130 @@ method setConfigMaxJobs ($queuename, $value) {
 
 method getConfigMaxJobs ($queuename) {
 	return $self->conf()->getKey("queue:maxjobs", $queuename);
+}
+
+method listenTopics {
+	$self->logDebug("");
+	my $childpid = fork;
+	if ( $childpid ) #### ****** Parent ****** 
+	{
+		$self->logDebug("PARENT childpid", $childpid);
+	}
+	elsif ( defined $childpid ) {
+		$self->receiveTopic();
+	}
+}
+
+method receiveTopic {
+	$self->logDebug("");
+	#### OPEN CONNECTION
+	my $connection	=	$self->newConnection();	
+	my $channel = $connection->open_channel();
+	
+	my $exchange	=	$self->conf()->getKey("queue:topicexchange", undef);
+	$channel->declare_exchange(
+		exchange => $exchange,
+		type => 'topic',
+	);
+	
+	my $result = $channel->declare_queue(exclusive => 1);
+	my $queuename = $result->{method_frame}->{queue};
+	
+	my $keys	=	$self->conf()->getKey("queue:topickeys", undef);
+	$self->logDebug("keys", $keys);
+
+	$self->logDebug("exchange", $exchange);
+	
+	for my $key ( @$keys ) {
+		$channel->bind_queue(
+			exchange => $exchange,
+			queue => $queuename,
+			routing_key => $key,
+		);
+	}
+	
+	print " [*] Listening for topics: @$keys\n";
+
+	no warnings;
+	my $handler	= *handleTopic;
+	use warnings;
+	my $this	=	$self;
+
+	$channel->consume(
+        on_consume => sub {
+			my $var = shift;
+			my $body = $var->{body}->{payload};
+		
+			print " [x] Received message: $body\n";
+			&$handler($this, $body);
+		},
+		no_ack => 1,
+	);
+	
+	# Wait forever
+	AnyEvent->condvar->recv;	
+}
+
+method handleTopic ($json) {
+	$self->logDebug("json", $json);
+
+	my $data = $self->jsonparser()->decode($json);
+	#$self->logDebug("data", $data);
+
+	my $mode =	$data->{mode};
+	$self->logDebug("mode", $mode);
+	
+	if ( $mode eq "hostStatus" ) {
+		$self->updateHostStatus($data);
+	}
+	else {
+		$self->updateTaskStatus($data);
+	}
+}
+
+method updateTaskStatus ($data) {
+	$self->logDebug("data", $data);
+	my $keys	=	[ "username", "project", "workflow", "workflownumber", "sample", "stage", "stagenumber" ];
+	my $notdefined	=	$self->notDefined($data, $keys);	
+	$self->logDebug("notdefined", $notdefined) and return if @$notdefined;
+
+	#### ADD TO provenance TABLE
+	my $table	=	"provenance";
+	$self->_addToTable($table, $data, $keys);
+
+	#### UPDATE queue TABLE
+	$self->updateQueue($data);	
+}
+
+method updateQueue ($data) {
+	$self->logDebug("data", $data);	
+	
+	#### UPDATE queue TABLE
+	my $table	=	"queue";
+	my $keys	=	["username", "project", "workflow", "workflownumber", "sample" ];
+	$self->_addToTable($table, $data, $keys);
+	
+	#### UPDATE SYNAPSE
+	my $synapsestatus	=	$self->getSynapseStatus($data);
+	my $sample	=	$data->{sample};
+	$self->synapse()->change($sample, $synapsestatus);
+}
+
+method getSynapseStatus ($data) {
+	#### UPDATE SYNAPSE
+	my $sample	=	$data->{sample};
+	my $stage	=	lc($data->{workflow});
+	my $status	=	$data->{status};
+
+	$self->logDebug("sample", $sample);
+	$self->logDebug("stage", $stage);
+	$self->logDebug("status", $status);
+
+	my $statemap	=	$self->synapse()->statemap();
+	my $synapsestatus	=	$statemap->{"$stage:$status"};
+	$self->logDebug("synapsestatus", $synapsestatus);
+
+	return $synapsestatus;	
 }
 
 method getTasks ($queuedata, $limit) {
@@ -195,18 +324,26 @@ method pushTask ($task) {
 	my $notdefined	=	$self->notDefined($task, ["username", "project", "workflow", "workflownumber", "sample"]);
 	$self->logCritical("not defined", $notdefined) and return if @$notdefined;
 
-	my $query	=	qq{INSERT INTO queue VALUES (
-'$task->{username}',
-'$task->{project}',
-'$task->{workflow}',
-'$task->{workflownumber}',
-'$task->{sample}',
-'none'
-)};
-	$self->logDebug("query", $query);
+	my $status	=	"unassigned";
+	my $table	=	"queue";
+	my $keys	=	[ "username", "project", "workflow", "workflownumber", "sample" ];
 
-	return 0 if not $self->db()->do($query);
-	return 1;	
+	$self->_removeFromTable($table, $task, $keys);
+	
+	return $self->_addToTable($table, $task, $keys);
+
+#	my $query	=	qq{INSERT INTO queue VALUES (
+#'$task->{username}',
+#'$task->{project}',
+#'$task->{workflow}',
+#'$task->{workflownumber}',
+#'$task->{sample}',
+#'$task->{status}'
+#)};
+#	$self->logDebug("query", $query);
+
+#	return 0 if not $self->db()->do($query);
+	#return 1;	
 }
 
 method allocateSamples ($queuedata, $limit) {
@@ -234,6 +371,7 @@ method maxJobsForQueue ($queuedata) {
 	
 	return $maxjobs;
 }
+
 method getSampleFromSynapse ($maxjobs) {
 	$self->synapse()->getBamForWork($maxjobs);
 }
@@ -403,6 +541,7 @@ method status ($nodename) {
 		}
 	}
 }
+
 method getDownloadUuid ($ip) {
 	$self->logDebug("ip", $ip);
 	my $command =	qq{ssh -o "StrictHostKeyChecking no" -t ubuntu\@$ip "ps aux | grep /usr/bin/gtdownload"};
@@ -530,5 +669,9 @@ method pullProvenance {
 }
 
 
+
+method setJsonParser {
+	return JSON->new->allow_nonref;
+}
 
 }

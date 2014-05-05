@@ -261,7 +261,7 @@ sub createDir {
     my $self    	=   shift;
     my $directory	=   shift;
 	
-	$self->logDebug("directory", $directory);
+	$self->logNote("directory", $directory);
 	`mkdir -p $directory`;
 	$self->logError("Can't create directory: $directory") and exit if not -d $directory;
 	
@@ -666,7 +666,7 @@ sub getEnvars {
 
 	#### IF THE INITIAL (PARENT) WORKFLOW JOB WAS RUN LOCALLY MUST PICK UP THE SGE 
 	#### ENVIRONMENT VARIABLES FROM THE SHELL IN ORDER TO IDENTIFY WHERE TO SUBMIT JOBS TO
-	$self->logDebug("Retrieving environment variables from shell");
+	$self->logNote("Retrieving environment variables from shell");
 	$sessionid		=	$ENV{'SESSION_ID'} if not defined $sessionid or not $sessionid;
 	$username 		= 	$ENV{'USERNAME'} if defined $ENV{'USERNAME'} and (not defined $username or not $username) and $ENV{'USERNAME'};
 	$cluster 		= 	$ENV{'CLUSTER'} if defined $ENV{'CLUSTER'};
@@ -691,12 +691,12 @@ sub getEnvars {
 		and defined $sgecell and $sgecell
 		and defined $self->db()
 		and defined $self->db()->dbh() ) {
-		$self->logDebug("Retrieving environment variables from database");
+		$self->logNote("Retrieving environment variables from database");
 		my $query = qq{SELECT qmasterport
 FROM clustervars
 WHERE username = '$username'
 AND cluster = '$sgecell'};
-		$self->logDebug("$query");
+		$self->logNote("$query");
 		$qmasterport 	= 	$self->db()->query($query);
 		$execdport 		= 	$qmasterport + 1 if defined $qmasterport;
 	}
@@ -705,19 +705,19 @@ AND cluster = '$sgecell'};
 	$project = $self->project() if $self->can('project') and $self->project();
 	$workflow = $self->workflow() if $self->can('workflow') and $self->workflow();
 
-	$self->logDebug("BEFORE queue = self->queueName(username, project, workflow)");
-	$self->logDebug("project", $project) if defined $project;
-	$self->logDebug("workflow", $workflow) if defined $workflow;
+	$self->logNote("BEFORE queue = self->queueName(username, project, workflow)");
+	$self->logNote("project", $project) if defined $project;
+	$self->logNote("workflow", $workflow) if defined $workflow;
 	$queue = $self->queueName($username, $project, $workflow) if defined $project and defined $workflow;
 	$self->queue($queue) if defined $queue and not $self->queue();
 
-	$self->logDebug("queue", $queue) if defined $queue;
-	$self->logDebug("username", $username) if defined $username;
-	$self->logDebug("qmasterport", $qmasterport) if defined $qmasterport;
-	$self->logDebug("execdport", $execdport) if defined $execdport;
-	$self->logDebug("sgeroot", $sgeroot) if defined $sgeroot;
-	$self->logDebug("queue", $queue) if defined $queue;
-	$self->logDebug("queue not defined") if not defined $queue;
+	$self->logNote("queue", $queue) if defined $queue;
+	$self->logNote("username", $username) if defined $username;
+	$self->logNote("qmasterport", $qmasterport) if defined $qmasterport;
+	$self->logNote("execdport", $execdport) if defined $execdport;
+	$self->logNote("sgeroot", $sgeroot) if defined $sgeroot;
+	$self->logNote("queue", $queue) if defined $queue;
+	$self->logNote("queue not defined") if not defined $queue;
 	
 	my $envars = {};
 	$envars->{qmasterport} 	= $qmasterport;

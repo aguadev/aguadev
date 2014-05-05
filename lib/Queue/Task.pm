@@ -25,7 +25,7 @@ TO DO
 use strict;
 use warnings;
 
-class Queue::Task with (Logger, Exchange, Agua::Common::Database) {
+class Queue::Task with (Logger, Exchange, Agua::Common::Database, Agua::Common::Timer) {
 
 #####////}}}}}
 
@@ -66,50 +66,59 @@ method initialise ($args) {
 
 method listen {
 	my $taskqueue =	$self->conf()->getKey("queue:taskqueue", undef);
-	$self->logDebug("taskqueue", $taskqueue);
-	
-	$self->receiveTask($taskqueue);	
+	$self->logDebug("$$ taskqueue", $taskqueue);
+
+	$self->logDebug("");
+	my $childpid = fork;
+	if ( $childpid ) #### ****** Parent ****** 
+	{
+		$self->logDebug("$$ PARENT childpid", $childpid);
+	}
+	elsif ( defined $childpid ) {
+		$self->receiveTask($taskqueue);	
+	}	
 }
 
 method receiveTask ($taskqueue) {
-	$self->logDebug("queue", $taskqueue);
+	$self->logDebug("$$ queue", $taskqueue);
 	
 	#### OPEN CONNECTION
 	my $connection	=	$self->newConnection();	
 	my $channel 	= 	$connection->open_channel();
-	$self->channel($channel);
-	$self->channel()->declare_queue(
+	#$self->channel($channel);
+	$channel->declare_queue(
 		queue => $taskqueue,
 		durable => 1,
 	);
 	
-	print " [*] Waiting for tasks in queue: $taskqueue\n";
+	print "$$ [*] Waiting for tasks in queue: $taskqueue\n";
 	
-	$self->channel()->qos(prefetch_count => 1,);
+	$channel->qos(prefetch_count => 1,);
 	
 	no warnings;
 	my $handler	= *handleTask;
 	use warnings;
 	my $this	=	$self;
 	
-	$self->channel()->consume(
+	$channel->consume(
 		on_consume	=>	sub {
 			my $var 	= 	shift;
-			print "Exchange::receiveTask    DOING CALLBACK";
+			print "$$ Exchange::receiveTask    DOING CALLBACK";
 			#print Dumper $var;
 		
 			my $body 	= 	$var->{body}->{payload};
 			print " [x] Received $body\n";
 		
 			my @c = $body =~ /\./g;
-			sleep(10);
-			#sleep(scalar(@c));
 		
-			print " [x] Done\n";
-			$channel->ack();
-			#print " AFTER channel->ack()\n";
+			Coro::async_pool {
 
-			&$handler($this, $body);
+				#### RUN TASK
+				&$handler($this, $body);
+				
+				#### SEND ACK AFTER TASK COMPLETED
+				$channel->ack();
+			}
 		},
 		no_ack => 0,
 	);
@@ -119,23 +128,110 @@ method receiveTask ($taskqueue) {
 }
 
 method handleTask ($json) {
-	$self->logDebug("json", $json);
+	$self->logDebug("$$ json", $json);
 	my $data = $self->jsonparser()->decode($json);    
-	$self->logDebug("data", $data);
+
+	$data->{start}		=  	1;
+	$data->{conf}		=   $self->conf();
+	$data->{showlog}	=   $self->showlog();
+	$data->{printlog}	=   $self->printlog();	
+	$data->{worker}		=	$self;
 
 	$self->setDbh() if not defined $self->db();
 
-	$data->{start}		=  1;
-	$data->{conf}		=  $self->conf();
-	#$data->{db}			=  $self->db();
-	$data->{showlog}	=  $self->showlog();
-	$data->{printlog}	=  $self->printlog();
-	
 	my $workflow = Agua::Workflow->new($data);
-	print "workflow: $workflow\n";
+	print "$$ workflow: $workflow\n";
 	$self->logDebug("workflow");
 
-	$workflow->executeWorkflow();
+	$workflow->executeWorkflow();	
+
+	#### SHUTDOWN IF SPECIFIED IN config.yaml
+	$self->verifyShutdown();
+}
+
+method verifyShutdown {
+	my $shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
+	$self->logDebug("shutdown", $shutdown);
+	
+	if ( $shutdown eq "true" ) {
+		$self->logDebug("DOING self->shutdown()");
+		$self->shutdown();
+	}
+}
+
+method shutdown {
+	$self->logDebug("");
+	
+	#### REPORT
+	my $datetime	=	$self->getMysqlTime();
+	my $host		=	$self->getHostName();
+	my $data	=	{
+		datetime	=>	$datetime,
+		host		=>	$host,
+		status		=>	"shutdown",
+		mode		=>	"hostStatus"
+	};
+
+	#### REPORT HOST STATUS TO 
+	$self->sendTopic($data, "update.host.status");
+	
+	#### SHUTDOWN TASK DAEMON
+	$self->logDebug("SHUTTING DOWN: service task stop");
+	`service task stop`;
+}
+
+method getHostName {
+	my $hostname	=	`facter ipaddress`;
+	$hostname		=~ 	s/\s+$//;
+	
+	return $hostname;
+}
+
+method sendTopic ($data, $key) {
+	$self->logDebug("$$ data", $data);
+	$self->logDebug("$$ key", $key);
+
+	my $exchange	=	$self->conf()->getKey("queue:topicexchange", undef);
+	$self->logDebug("$$ exchange", $exchange);
+
+	my $host		=	$self->host() || $self->conf()->getKey("queue:host", undef);
+	my $user		= 	$self->user() || $self->conf()->getKey("queue:user", undef);
+	my $pass	=	$self->pass() || $self->conf()->getKey("queue:pass", undef);
+	my $vhost		=	$self->vhost() || $self->conf()->getKey("queue:vhost", undef);
+	$self->logDebug("$$ host", $host);
+	$self->logDebug("$$ user", $user);
+	$self->logDebug("$$ pass", $pass);
+	$self->logDebug("$$ vhost", $vhost);
+	
+    my $connection = Net::RabbitFoot->new()->load_xml_spec()->connect(
+        host 	=>	$host,
+        port 	=>	5672,
+        user 	=>	$user,
+        pass 	=>	$pass,
+        vhost	=>	$vhost,
+    );
+
+	$self->logDebug("$$ connection: $connection");
+	$self->logDebug("$$ DOING connection->open_channel");
+	my $channel 	= 	$connection->open_channel();
+	$self->channel($channel);
+
+	$self->logDebug("$$ DOING channel->declare_exchange");
+
+	$channel->declare_exchange(
+		exchange => $exchange,
+		type => 'topic',
+	);
+	
+	my $json	=	$self->jsonparser()->encode($data);
+	$self->logDebug("$$ json", $json);
+	$self->channel()->publish(
+		exchange => $exchange,
+		routing_key => $key,
+		body => $json,
+	);
+	
+	print "$$ [x] Sent topic with key '$key'\n";
 }
 
 method setJsonParser {

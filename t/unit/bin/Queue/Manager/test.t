@@ -75,11 +75,19 @@ my $object = new Test::Queue::Manager(
 );
 isa_ok($object, "Test::Queue::Manager", "object");
 
-#### TESTS
+#### AUT0MATED
 #$object->testDownloadPercent();
 #$object->testParseUuid();
-#$object->testGetQueuedJobs();
-$object->testMaintainQueue();
+#$object->testGetNumberQueuedJobs();
+#$object->testHandleTopic();
+#$object->testGetSynapseStatus();
+#$object->testUpdateQueue();
+
+##### INTERACTIVE
+$object->testReceiveTopic();
+##$object->testListenTopics();
+##$object->testMaintainQueue();
+
 
 #### SATISFY Agua::Logger::logError CALL TO EXITLABEL
 no warnings;

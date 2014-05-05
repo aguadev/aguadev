@@ -68,7 +68,6 @@ my $conf	=	Conf::Yaml->new({
 	printlog	=>	$printlog
 });
 
-
 #my $object1 = new Test::Queue::Task::Receive(
 #	conf		=>	$conf,
 #    logfile     =>  $logfile,
@@ -76,10 +75,9 @@ my $conf	=	Conf::Yaml->new({
 #	printlog    =>  $printlog
 #);
 #isa_ok($object1, "Test::Queue::Task", "object1");
-#
-##### TESTS
-#$object1->testReceiveTask();
 
+##### INTERACTIVE
+#$object1->testReceiveTask();
 
 my $object2 = new Test::Queue::Task(
 	conf		=>	$conf,
@@ -89,9 +87,11 @@ my $object2 = new Test::Queue::Task(
 );
 isa_ok($object2, "Test::Queue::Task", "object2");
 
-#### TESTS
+#### INTERACTIVE
 $object2->testHandleTask();
-
+#$object2->testSendTopic();
+#$object2->testVerifyShutdown();
+#$object2->testShutdown();
 
 #### SATISFY Agua::Logger::logError CALL TO EXITLABEL
 no warnings;

@@ -40,10 +40,11 @@ has 'count'			=>  ( isa => 'Int', is => 'rw', default => 50 );
 
 ##### Strings
 has 'executable'	=>  ( isa => 'Str|Undef', is => 'rw', lazy	=>	1, builder	=>	"setExecutable" );
-has 'assignee'		=>  ( isa => 'Str|Undef', is => 'rw' );
+has 'assignee'		=>  ( isa => 'Str|Undef', is => 'rw', default	=>	"ucsc_biofarm" );
 
 ##### Objects
 has 'states'		=>  ( isa => 'HashRef|Undef', is => 'rw', lazy	=>	1, builder	=>	"setStates" );
+has 'statemap'		=>  ( isa => 'HashRef|Undef', is => 'rw', lazy	=>	1, builder	=>	"setStateMap" );
 has 'activestates'	=>  ( isa => 'ArrayRef|Undef', is => 'rw', lazy	=>	1, builder	=>	"setActiveStates" );
 has 'stablestates'	=>  ( isa => 'ArrayRef|Undef', is => 'rw', lazy	=>	1, builder	=>	"setStableStates" );
 has 'conf'			=> ( isa => 'Conf::Yaml', is => 'rw', lazy => 1, builder => "setConf" );
@@ -175,6 +176,23 @@ method setPreviousStates {
 	};
 }
 
+method setStateMap {
+	return {
+		'download:queued' 		=>	'todownload',
+		'download:started' 		=>	'downloading',
+		'download:completed'	=>	'downloaded',
+		'split:queued' 			=>	'splitting',
+		'split:started' 		=>	'splitting',
+		'split:completed' 		=>	'split',
+		'align:queued' 			=>	'aligning',
+		'align:started' 		=>	'aligning',
+		'align:completed' 		=>	'aligned',
+		'upload:queued' 		=>	'uploading',
+		'upload:started' 		=>	'uploading',
+		'upload:completed' 		=>	'uploaded'
+	};
+}
+
 method setStates {
 	return {
 		'unassigned' 	=>	'todownload',
@@ -276,12 +294,11 @@ method changeState ($args) {
 method change ($uuid, $state) {	
 	my $executable		=	$self->executable();
 	my $assignee		=	$self->assignee();
-	my $command 	=	"$executable resetStatus $uuid --status $state  $assignee";
+	my $command 	=	"$executable resetStatus $uuid --status $state --assignee $assignee";
 	$self->logDebug("command", $command);
 	
 	print `$command`;
 }
-
 
 method setExecutable {
 

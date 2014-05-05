@@ -132,22 +132,40 @@ sub currentTimeToMysql {
 	return "$extra_digits$currentTime";
 }
 
+sub getMysqlTime {
+	my $self	=	shift;
+	my $time	=	`date`;
+	$self->logDebug("$$ time", $time);
+	
+	my $mysqltime	=	$self->datetimeToMysql($time);
+	$self->logDebug("$$ mysqltime", $mysqltime);
+	
+	return $mysqltime;
+}
 
 sub datetimeToMysql {
 	my $self		=	shift;
 
-    # CONVERT FROM BLAST DATETIME TO MYSQL DATETIME
-	# BLAST DATE: Fri Jul 6 09:32:36 1998
-	# .ACE DATE: Thu Jan 19 20:32:58 2006
-	# .PHD DATE: Thu Jan 19 20:32:58 2006
+    # CONVERT FROM DATETIME
+	#
+	# date DATE: 	Sat May 3 	19:24:16 UTC 2014
+	# BLAST DATE: 	Fri Jul 6 	09:32:36 1998
+	# .ACE DATE: 	Thu Jan 19 	20:32:58 2006
+	# .PHD DATE: 	Thu Jan 19 	20:32:58 2006
+	# STAT DATE: Apr 16 19:39:22 2006
+	#
+	# TO MYSQL DATETIME
+	#
 	# MYSQL DATE: 1998-07-06 09:32:36
 	# 
-    # STAT DATE: Apr 16 19:39:22 2006
-    
-	my $blast_datetime      =   shift;
+	
+	my $datetime      =   shift;
+	$self->logNote("datetime", $datetime);
  
-    my ( $month, $date, $hour, $minutes, $seconds, $year) = $blast_datetime =~ /^\s*\S+\s+(\S+)\s+(\d+)\s+(\d+):(\d+):(\d+)\s+(\d+)\s*/;
-   # $date = Annotation::two_digit($date);
+    my ( $month, $date, $hour, $minutes, $seconds, $timezone, $year) = $datetime =~ /^\s*\S+\s+(\S+)\s+(\d+)\s+(\d+):(\d+):(\d+)\s+(\w+)?\s+(\d+)\s*/;
+
+	$self->logNote("timezone", $timezone);
+	$self->logNote("month", $month);
     $month = $self->monthNumber($month);
     my $mysql_datetime = "$year-$month-$date $hour:$minutes:$seconds";
     

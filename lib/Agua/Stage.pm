@@ -61,13 +61,13 @@ has 'submit'     	=>  ( isa => 'Int|Undef', is => 'rw' );
 
 # Strings
 has 'clustertype'	=>  ( isa => 'Str|Undef', is => 'rw', default => "SGE" );
-has 'fileroot'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
-has 'executor'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
-has 'location'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
+has 'fileroot'		=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
+has 'executor'		=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
+has 'location'		=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'username'  	=>  ( isa => 'Str', is => 'rw', required => 1  );
 has 'workflow'  	=>  ( isa => 'Str', is => 'rw', required => 1  );
-has 'requestor'		=> ( is  => 'rw', 'isa' => 'Str', required	=>	0	);
-has 'sample'   		=>  ( isa => 'Str', is => 'rw', required => 0  );
+has 'requestor'		=> 	( isa => 'Str', is => 'rw', required	=>	0	);
+has 'sample'   		=>  ( isa => 'Str|Undef', is => 'rw', required => 0  );
 has 'project'   	=>  ( isa => 'Str', is => 'rw', required => 1  );
 has 'name'   		=>  ( isa => 'Str', is => 'rw', required => 1  );
 has 'queue'			=>  ( isa => 'Str', is => 'rw', required => 1  );
@@ -82,6 +82,9 @@ has 'cluster'		=>  ( isa => 'Str|Undef', is => 'rw' );
 has 'qsub'			=>  ( isa => 'Str', is => 'rw' );
 has 'qstat'			=>  ( isa => 'Str', is => 'rw' );
 has 'resultfile'	=>  ( isa => 'Str', is => 'ro', default => sub { "/tmp/result-$$" });
+has 'queued'		=>  ( isa => 'Str', is => 'rw' );
+has 'started'		=>  ( isa => 'Str', is => 'rw' );
+has 'completed'		=>  ( isa => 'Str', is => 'rw' );
 
 # OBJECTS
 has 'envars'		=> ( isa => 'HashRef', is => 'rw', required => 1 );
@@ -93,8 +96,8 @@ has 'stageparameters'=> ( isa => 'ArrayRef', is => 'rw', required => 1 );
 ####////}
 
 method BUILD ($args) {
-	#$self->logDebug("Stage::BUILD    args:");
-	#$self->logDebug("args", $args);
+	#$self->logDebug("$$ Stage::BUILD    args:");
+	#$self->logDebug("$$ args", $args);
 }
 
 method run {
@@ -112,20 +115,20 @@ method run {
 		
 =cut
 
-	$self->logDebug("Stage::run()");
+	$self->logDebug("$$ Stage::run()");
 	
 	#### TO DO: START PROGRESS UPDATER
 
 	#### EXECUTE APPLICATION
-	my $success;
+	my $exitcode;
 	my $error;
 	
-	$self->logDebug("self->cluster", $self->cluster())  if defined $self->cluster();
+	$self->logDebug("$$ self->cluster", $self->cluster())  if defined $self->cluster();
 	
 	my $submit = $self->submit();
 	my $cluster = $self->cluster(); 
-	$self->logDebug("submit", $submit);
-	$self->logDebug("cluster", $cluster);
+	$self->logDebug("$$ submit", $submit);
+	$self->logDebug("$$ cluster", $cluster);
 
 	#### SET STATUS TO running
 	$self->setStatus('running');
@@ -133,38 +136,42 @@ method run {
 	#### RUN ON CLUSTER
 	if ( defined $cluster and $cluster and defined $submit and $submit )
 	{
-		$self->logDebug("Doing self->runOnCluster()");
-		($success, $error) = $self->runOnCluster();
-		$self->logDebug("self->runOnCluster() stage run success", $success);
+		$self->logDebug("$$ Doing self->runOnCluster()");
+		($exitcode, $error) = $self->runOnCluster();
+		$self->logDebug("$$ self->runOnCluster() stage run exitcode", $exitcode);
 	}
 	#### RUN LOCALLY	
 	else
 	{
-		$self->logDebug("Doing self->runLocally()");
-		($success, $error) = $self->runLocally();
-		$self->logDebug("self->runLocally stage run success (0 means OK)", $success)  if defined $success;
+		$self->logDebug("$$ Doing self->runLocally()");
+		($exitcode, $error) = $self->runLocally();
+		$self->logDebug("$$ self->runLocally stage run exitcode (0 means OK)", $exitcode)  if defined $exitcode;
 	}
 	
 	#### REGISTER PROCESS IDS SO WE CAN MONITOR THEIR PROGRESS
 	$self->registerRunInfo();
-		
-	return ($success, $error);
-}
 
+	#### SET EMPTY IF UNDEFINED
+	$error = "" if not defined $error;
+	$exitcode = "" if not defined $exitcode;
+		
+	return ($exitcode, $error);
+}
 
 method runLocally {
 #### EXECUTE THE APPLICATION LOCALLY
-	$self->logDebug("Stage::runLocally()");
+	$self->logDebug("$$ Stage::runLocally()");
     my $stageparameters =	$self->stageparameters();
 	$self->logError("stageparemeters not defined") and exit if not defined $stageparameters;
+	
 	#### GET FILE ROOT
 	my $username = $self->username();
 	my $fileroot = $self->fileroot();
-	$self->logDebug("fileroot", $fileroot);
+	$self->logDebug("$$ fileroot", $fileroot);
 
 	#### CONVERT ARGUMENTS INTO AN ARRAY IF ITS A NON-EMPTY STRING
 	my $arguments = $self->setArguments($stageparameters);
-	$self->logDebug("arguments: @$arguments");
+	$self->logDebug("$$ arguments: @$arguments");
 
 	#### SET ENVIRONMENT VARIABLES AND EXECUTOR
 	my $executor = $self->envars()->{tostring};
@@ -176,16 +183,16 @@ method runLocally {
 	#### GET exports FROM ENVARS
 	my $envars = $self->getEnvars();
 	my $exports = $envars->{tostring};
-	$self->logDebug("exports", $exports);
+	$self->logDebug("$$ exports", $exports);
 	
 	#### SET EXECUTOR
 	$executor	=	"export PERL5LIB=$perl5lib; $exports ";
 	$executor 	.= $self->executor() if $self->executor();
-	$self->logDebug("self->executor(): " . $self->executor());
+	$self->logDebug("$$ self->executor(): " . $self->executor());
 	
 	#### PREFIX APPLICATION PATH WITH PACKAGE INSTALLATION DIRECTORY
 	my $application = $self->installdir() . "/" . $self->location();	
-	$self->logDebug("application", $application);
+	$self->logDebug("$$ application", $application);
 	
 	#### SET SYSTEM CALL
 	my @system_call = ($executor, $application, @$arguments);
@@ -195,14 +202,14 @@ method runLocally {
 	my $stderrfile = $self->stderrfile;
 	push @system_call, "1> $stdoutfile" if defined $stdoutfile;
 	push @system_call, "2> $stderrfile" if defined $stderrfile;
-	$self->logDebug("system_call: @system_call");
+	$self->logDebug("$$ system_call: @system_call");
 
     #### SET CHANGE DIR TO APPLICATION DIRECTORY, JUST IN CASE
-    $self->logDebug("application", $application);
+    $self->logDebug("$$ application", $application);
     my ($changedir) = $application =~ /^(.+?)\/[^\/]+$/;
-	$self->logDebug("changedir", $changedir);
+	$self->logDebug("$$ changedir", $changedir);
     
-#	$self->logDebug("\$self->db()->dbh(): " . $self->db()->dbh());
+#	$self->logDebug("$$ \$self->db()->dbh(): " . $self->db()->dbh());
 	
 	#### NO BUFFERING
 	$| = 1;
@@ -212,14 +219,14 @@ method runLocally {
 
 	#### SET STAGE PID
 	my $stagepid = $$;
-	$self->logDebug("stagepid", $stagepid);
+	$self->logDebug("$$ stagepid", $stagepid);
 	$self->setStagePid($stagepid);
 	
 	#### RUN APP BY FORKING
 	my $childpid = fork;
 	if ( $childpid ) #### ****** Parent ****** 
 	{
-		$self->logDebug("PARENT childpid", $childpid);
+		$self->logDebug("$$ PARENT childpid", $childpid);
 	}
 	elsif ( defined $childpid ) #### ****** Child ******
 	{
@@ -256,18 +263,18 @@ completed=''};
 	$self->setFields($set);
 	
 	#### WAIT FOR JOB TO FINISH
-	$self->logDebug("Doing wait for command to complete");
+	$self->logDebug("$$ Doing wait for command to complete");
 	wait;
 
 	#### PAUSE FOR RESULT FILE TO BE WRITTEN 
 	sleep(3);
-	$self->logDebug("Finished wait for command to complete");
+	$self->logDebug("$$ Finished wait for command to complete");
 	my $resultfile = $self->resultfile();
 	open(RESULT, $resultfile);
 	my $result = <RESULT>;
 	close(RESULT);
-	$self->logDebug("resultfile", $resultfile);
-	$self->logDebug("result", $result);
+	$self->logDebug("$$ resultfile", $resultfile);
+	$self->logDebug("$$ result", $result);
 	
 	#### SET STATUS TO 'error' IF result IS NOT ZERO
 	if ( defined $result and $result == 0 ) {
@@ -276,7 +283,7 @@ completed=''};
 	else {
 		$self->setStatus('error') if not defined $result;
 	}
-	$self->logDebug("Returning result", $result);
+	$self->logDebug("$$ Returning result", $result);
 
 	return $result;
 }
@@ -292,7 +299,7 @@ method runOnCluster {
 		SUBMIT THE SHELLSCRIPT FOR EXECUTION ON A CLUSTER
 
 =cut
-	$self->logDebug("Stage::runOnCluster()");	;
+	$self->logDebug("$$ Stage::runOnCluster()");	;
 
 	#### CLUSTER MONITOR
 	my $monitor		=	$self->monitor();	
@@ -307,7 +314,7 @@ method runOnCluster {
 	my $qstat		= $self->qstat();
 	my $qsub		= $self->qsub();
 	my $workflowpid = $self->workflowpid();
-    $self->logDebug("cluster", $cluster);
+    $self->logDebug("$$ cluster", $cluster);
 
 	#### SET DEFAULTS
 	$queue = '' if not defined $queue;
@@ -320,7 +327,7 @@ method runOnCluster {
 
 	#### GET ARGUMENTS ARRAY
     my $stageparameters =	$self->stageparameters();
-    #$self->logDebug("Arguments", $stageparameters);
+    #$self->logDebug("$$ Arguments", $stageparameters);
     $stageparameters =~ s/\'/"/g;
 	my $arguments = $self->setArguments($stageparameters);    
 
@@ -331,17 +338,17 @@ method runOnCluster {
 	#### SET EXECUTOR
 	my $executor	.=	"export PERL5LIB=$perl5lib; ";
 	$executor 		.= 	$self->executor() if $self->executor();
-	$self->logDebug("self->executor(): " . $self->executor());
+	$self->logDebug("$$ self->executor(): " . $self->executor());
 
 	#### SET APPLICATION
 	my $application = $self->installdir() . "/" . $self->location();	
-	$self->logDebug("application", $application);
+	$self->logDebug("$$ application", $application);
 
 	#### ADD THE INSTALLDIR IF THE LOCATION IS NOT AN ABSOLUTE PATH
-	$self->logDebug("installdir", $installdir);
+	$self->logDebug("$$ installdir", $installdir);
 	if ( $application !~ /^\// and $application !~ /^[A-Z]:/i ) {
 		$application = "$installdir/bin/$application";
-		$self->logDebug("Added installdir to stage_arguments->{location}: " . $application);
+		$self->logDebug("$$ Added installdir to stage_arguments->{location}: " . $application);
 	}
 
 	#### SET SYSTEM CALL
@@ -350,14 +357,14 @@ method runOnCluster {
 	
     #### GET OUTPUT DIR
     my $outputdir = $self->outputdir();
-    $self->logDebug("outputdir", $outputdir);
+    $self->logDebug("$$ outputdir", $outputdir);
 
 	#### SET JOB NAME AS project-workflow-number
 	my $label =	$project;
 	$label .= "-" . $workflownumber;
 	$label .= "-" . $workflow;
 	$label .= "-" . $number;
-    $self->logDebug("label", $label);
+    $self->logDebug("$$ label", $label);
 
 	#### SET *** BATCH *** JOB 
 	my $job = $self->setJob([$command], $label, $outputdir);
@@ -371,14 +378,14 @@ method runOnCluster {
 	
 	#### PRINT SHELL SCRIPT	
 	$self->printSgeScriptfile($scriptfile, $commands, $label, $stdoutfile, $stderrfile, $lockfile);
-	$self->logDebug("scriptfile", $scriptfile);
+	$self->logDebug("$$ scriptfile", $scriptfile);
 
 	#### SET QUEUE
-	$self->logDebug("queue", $queue);
+	$self->logDebug("$$ queue", $queue);
 	$job->{queue} = $self->queue();
 	
 	#### SET QSUB
-	$self->logDebug("qsub", $qsub);
+	$self->logDebug("$$ qsub", $qsub);
 	$job->{qsub} = $self->qsub();
 
 	#### SET SGE ENVIRONMENT VARIABLES
@@ -386,8 +393,8 @@ method runOnCluster {
 
 	#### SUBMIT TO CLUSTER AND GET THE JOB ID 
 	my ($jobid, $error)  = $monitor->submitJob($job);
-	$self->logDebug("jobid", $jobid);
-	$self->logDebug("error", $error);
+	$self->logDebug("$$ jobid", $jobid);
+	$self->logDebug("$$ error", $error);
 
 	return (undef, $error) if not defined $jobid or $jobid =~ /^\s*$/;
 
@@ -398,14 +405,14 @@ method runOnCluster {
 	$self->setQueued();
 
 	#### GET JOB STATUS
-	$self->logDebug("Monitoring job...");
+	$self->logDebug("$$ Monitoring job...");
 	my $jobstatus = $monitor->jobStatus($jobid);
-	$self->logDebug("jobstatus", $jobstatus);
+	$self->logDebug("$$ jobstatus", $jobstatus);
 
 	#### SET SLEEP
 	my $sleep = $self->conf()->getKey("cluster", 'SLEEP');
 	$sleep = 5 if not defined $sleep;
-	$self->logDebug("sleep", $sleep);
+	$self->logDebug("$$ sleep", $sleep);
 	
 	my $set_running = 0;
 	while ( $jobstatus ne "completed" and $jobstatus ne "error" ) {
@@ -417,16 +424,16 @@ method runOnCluster {
 		$self->setStatus('completed') if $jobstatus eq "completed";
 		$self->setStatus('error') if $jobstatus eq "error";
 	}
-	$self->logDebug("jobstatus", $jobstatus);
+	$self->logDebug("$$ jobstatus", $jobstatus);
 
 	#### 20 SECONDS SEEMS LONG ENOUGH FOR qacct INFO TO BE READY
 	my $PAUSE = 2;
-	$self->logDebug("Sleeping $PAUSE before self->setRunTimes(jobid)");
+	$self->logDebug("$$ Sleeping $PAUSE before self->setRunTimes(jobid)");
 	sleep($PAUSE);
 	$self->setRunTimes($jobid);
 
 
-	$self->logDebug("Completed");
+	$self->logDebug("$$ Completed");
 
 	return 0;
 }	#	runOnCluster
@@ -439,7 +446,7 @@ WHERE username = '$username'
 AND project = '$project'
 AND workflow = '$workflow'
 };
-	$self->logDebug("$query");
+	$self->logDebug("$$ $query");
 	my $success = $self->db()->do($query);
 	if ( not $success )
 	{
@@ -465,6 +472,10 @@ method setArguments ($stageparameters) {
 	$self->logNote("username", $username);
 	$self->logNote("cluster", $cluster);
 	$self->logNote("fileroot", $fileroot);
+
+	#### SORT BY ORDINALS
+	@$stageparameters = sort { $a->{ordinal} cmp $b->{ordinal} } @$stageparameters;
+	#$self->logDebug("SORTED stageparameters", $stageparameters);
 	
 	#### GENERATE ARGUMENTS ARRAY
 	#$self->logNote("Generating arguments array...");
@@ -482,7 +493,6 @@ method setArguments ($stageparameters) {
 		if ( defined $sample and $sample ne "" ) {
 			$value	=~	s/<SAMPLEID>/$sample/g;
 		}
-		
 		
 		$clustertype = 1 if $name eq "clustertype";
 
@@ -571,7 +581,8 @@ method setArguments ($stageparameters) {
 		}
 	}
 
-	$self->logNote("arguments", $arguments);
+	$self->logDebug("arguments", $arguments);
+
 	return $arguments;
 }
 
@@ -592,7 +603,7 @@ method registerRunInfo {
 			- THE CHILD OF THE STAGE'S APPLICATION
 		
 =cut
-	$self->logDebug("Agua::Stage::registerRunInfo()");
+	$self->logDebug("$$ Agua::Stage::registerRunInfo()");
 
     	my $workflowpid = $self->workflowpid();
 	my $stagepid 	= $self->stagepid() || '';
@@ -617,7 +628,7 @@ method registerRunInfo {
     my $success = $self->db()->do($query);
 	if ( not $success )
 	{
-		$self->logDebug("Could not insert entry for stage $self->stagenumber() into 'stage' table");
+		$self->logDebug("$$ Could not insert entry for stage $self->stagenumber() into 'stage' table");
         return 0;
     }
 
@@ -629,7 +640,7 @@ method register {
 #### SET STATUS TO waiting FOR A STAGE IN THE stage TABLE
 	my $status	=	shift;
 
-	$self->logDebug("Stage::register()");
+	$self->logDebug("$$ Stage::register()");
 
     
 	#### SET SELF _status TO waiting
@@ -649,16 +660,16 @@ method register {
     AND workflow = '$workflow'
     AND workflownumber = '$workflownumber'
     AND number = '$number'};
-    $self->logDebug("$query");
+    $self->logDebug("$$ $query");
     my $success = $self->db()->do($query);
-	$self->logDebug("insert success", $success);
+	$self->logDebug("$$ insert success", $success);
 	if ( not $success )
 	{
 		warn "Stage::register    Could not insert entry for stage $self->stagenumber() into 'stage' table\n";
         return 0;
     }
 
-	$self->logDebug("Successful insert!");
+	$self->logDebug("$$ Successful insert!");
 	return 1;
 }
 
@@ -692,9 +703,9 @@ method isComplete {
 	AND workflow = '$workflow'
 	AND number = '$number'
 	AND status='completed'};
-	$self->logDebug("$query");
+	$self->logDebug("$$ $query");
 	my $complete = $self->db()->query($query);
-	$self->logDebug("complete", $complete);
+	$self->logDebug("$$ complete", $complete);
 	
 	return 0 if not defined $complete or not $complete;
 	return 1;
@@ -703,12 +714,12 @@ method isComplete {
 
 
 method setRunTimes ($jobid) {
-	$self->logDebug("Stage::setRunTimes(jobid)");
-	$self->logDebug("jobid", $jobid);
+	$self->logDebug("$$ Stage::setRunTimes(jobid)");
+	$self->logDebug("$$ jobid", $jobid);
 	my $username = $self->username();
 	my $cluster = $self->cluster();
 	my $qacct = $self->monitor()->qacct($username, $cluster, $jobid);
-	$self->logDebug("qacct", $qacct);
+	$self->logDebug("$$ qacct", $qacct);
 
 	return if not defined $qacct or not $qacct;
 	return if $qacct =~ /^error: job id \d+ not found/;
@@ -729,13 +740,13 @@ method setRunTimes ($jobid) {
 queued = '$queued',
 started = '$started',
 completed = '$completed'};
-	$self->logDebug("set", $set);
+	$self->logDebug("$$ set", $set);
 
 	$self->setFields($set);
 }
 method setStatus ($status) {	
 #### SET THE status FIELD IN THE stage TABLE FOR THIS STAGE
-    $self->logDebug("status", $status);
+    $self->logDebug("$$ status", $status);
 
 	#### GET TABLE KEYS
 	my $username = $self->username();
@@ -762,7 +773,7 @@ AND number = '$number'};
 
 
 method setQueued {
-	$self->logDebug("Stage::setQueued(set)");
+	$self->logDebug("$$ Stage::setQueued(set)");
 	my $now = $self->db()->now();
 	my $set = qq{
 status		=	'queued',
@@ -773,7 +784,7 @@ completed 	= 	''};
 }
 
 method setRunning {
-	$self->logDebug("Stage::setRunning(set)");
+	$self->logDebug("$$ Stage::setRunning(set)");
 	my $now = $self->db()->now();
 	my $set = qq{
 status		=	'running',

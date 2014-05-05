@@ -55,6 +55,7 @@ with 'Agua::Common::Sharing';
 with 'Agua::Common::Source';
 with 'Agua::Common::Stage';
 with 'Agua::Common::Ssh';
+with 'Agua::Common::Timer';
 with 'Agua::Common::Transport';
 with 'Agua::Common::User';
 with 'Agua::Common::Util';

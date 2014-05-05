@@ -46,7 +46,7 @@ use strict;
 use warnings;
 use Carp;
 
-class Agua::Workflow with (Agua::Common, Exchange) {
+class Agua::Workflow with Agua::Common {
 
 #### EXTERNAL MODULES
 use Data::Dumper;
@@ -62,13 +62,12 @@ use Agua::Instance;
 use Agua::Monitor::SGE;
 
 
-
 # Integers
 has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
 has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 4 );
 has 'workflowpid'	=> ( isa => 'Int|Undef', is => 'rw', required => 0 );
 has 'workflownumber'=>  ( isa => 'Str|Undef', is => 'rw' );
-has 'sample'     	=>  ( isa => 'Int|Undef', is => 'rw' );
+has 'sample'     	=>  ( isa => 'Str|Undef', is => 'rw' );
 has 'start'     	=>  ( isa => 'Int|Undef', is => 'rw' );
 has 'stop'     		=>  ( isa => 'Int|Undef', is => 'rw' );
 has 'submit'  		=>  ( isa => 'Int|Undef', is => 'rw' );
@@ -110,6 +109,8 @@ has 'starcluster'	=> ( isa => 'Agua::StarCluster', is => 'rw', lazy => 1, builde
 has 'head'	=> ( isa => 'Agua::Instance', is => 'rw', lazy => 1, builder => "setHead" );
 has 'master'	=> ( isa => 'Agua::Instance', is => 'rw', lazy => 1, builder => "setMaster" );
 has 'monitor'	=> ( isa => 'Agua::Monitor::SGE', is => 'rw', lazy => 1, builder => "setMonitor" );
+has 'worker'	=> ( isa => 'Maybe', is => 'rw', required => 0 );
+
 
 ####////}}}
 
@@ -121,8 +122,8 @@ method initialise ($json) {
 	my $username 	=	$json->{username};
 	my $logfile 	= 	$json->{logfile};
 	my $mode		=	$json->{mode};
-	$self->logDebug("logfile", $logfile);
-	$self->logDebug("mode", $mode);
+	$self->logDebug("$$ logfile", $logfile);
+	$self->logDebug("$$ mode", $mode);
 	if ( not defined $logfile or not $logfile ) {
 		my $identifier 	= 	"workflow";
 		$self->setUserLogfile($username, $identifier, $mode);
@@ -137,7 +138,7 @@ method initialise ($json) {
 			$self->$key($json->{$key}) if $self->can($key);
 		}
 	}
-	$self->logDebug("json", $json);	
+	$self->logDebug("$$ json", $json);	
 		
 	#### SET CLUSTER INSTANCES LOG
 	$self->head()->logfile($logfile);
@@ -165,11 +166,11 @@ method initialise ($json) {
 	$self->master()->ops()->conf($conf);	
 	
 	#### SET DATABASE HANDLE
-	$self->logDebug("Doing self->setDbh");
+	$self->logDebug("$$ Doing self->setDbh");
 	$self->setDbh();
     
 	#### VALIDATE
-	$self->logDebug("mode", $mode);
+	$self->logDebug("$$ mode", $mode);
     $self->logError("User session not validated for username: $username") and exit unless $mode eq "submitLogin" or $self->validate();
 
 	#### SET WORKFLOW PROCESS ID
@@ -222,14 +223,15 @@ method executeWorkflow {
 	my $project 	=	$self->project();
 	my $workflow 	=	$self->workflow();
 	my $workflownumber=	$self->workflownumber();
+	my $sample 		=	$self->sample();
 	my $start 		=	$self->start();
 	my $submit 		= 	$self->submit();
-	$self->logDebug("submit", $submit);
-	$self->logDebug("username", $username);
-	$self->logDebug("project", $project);
-	$self->logDebug("workflow", $workflow);
-	$self->logDebug("workflownumber", $workflownumber);
-	$self->logDebug("cluster", $cluster);
+	$self->logDebug("$$ submit", $submit);
+	$self->logDebug("$$ username", $username);
+	$self->logDebug("$$ project", $project);
+	$self->logDebug("$$ workflow", $workflow);
+	$self->logDebug("$$ workflownumber", $workflownumber);
+	$self->logDebug("$$ cluster", $cluster);
 	
 	#### QUIT IF INSUFFICIENT INPUTS
 	if ( not $username or not $project or not $workflow or not $workflownumber or not $start ) {
@@ -254,36 +256,41 @@ method executeWorkflow {
 	#$self->logStatus("Running workflow $project.$workflow");
 	
 	#### SET STAGES
-	$self->logDebug("DOING self->setStages");
+	$self->logDebug("$$ DOING self->setStages");
 	my $data = {
 		username	=>	$username,
 		project		=>	$project,
-		workflow	=>	$workflow
+		workflow	=>	$workflow,
+		workflownumber	=> $workflownumber,
+		sample		=>	$sample
 	};
-	my $stages = $self->setStages($username, $cluster, $data, $project, $workflow);
+	my $stages = $self->setStages($username, $cluster, $data, $project, $workflow, $workflownumber, $sample);
 
 	#### RUN LOCALLY OR ON CLUSTER
 	if ( not $submit or not defined $cluster or not $cluster ) {
-		$self->logDebug("DOING self->runLocally");
+		$self->logDebug("$$ DOING self->runLocally");
 		$self->runLocally($stages);
 	}
 	else {
-		$self->logDebug("DOING self->runOnCluster");
+		$self->logDebug("$$ DOING self->runOnCluster");
 		$self->runOnCluster($stages, $username, $project, $workflow, $workflownumber, $cluster);
 	}
 
 	$self->logGroupEnd("Agua::Workflow::executeWorkflow");
 
-	$self->logDebug("COMPLETED");
+	$self->logDebug("$$ COMPLETED");
+
+	#### HANDLE ANY EXIT CALLS IN THE MODULES    
+    EXITLABEL: { warn "EXIT\n"; };
 }
 
 method runLocally ($stages) {
-	$self->logDebug("no. stages", scalar(@$stages));
+	$self->logDebug("$$ no. stages", scalar(@$stages));
 
 	#### RUN STAGES
-	$self->logDebug("BEFORE runStages()\n");
+	$self->logDebug("$$ BEFORE runStages()\n");
 	$self->runStages($stages);
-	$self->logDebug("AFTER runStages()\n");
+	$self->logDebug("$$ AFTER runStages()\n");
 }
 
 method runOnCluster ($stages, $username, $project, $workflow, $workflownumber, $cluster) {
@@ -294,7 +301,7 @@ method runOnCluster ($stages, $username, $project, $workflow, $workflownumber, $
 #### 5. START SGE IF NOT RUNNING
 #### 6. RUN STAGES
 
-	$self->logDebug("XOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXO");
+	$self->logDebug("$$ XOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXOXO");
 	
 	#### LOAD STARCLUSTER
 	$self->loadStarCluster($username, $cluster);
@@ -329,7 +336,7 @@ method runOnCluster ($stages, $username, $project, $workflow, $workflownumber, $
 	
 	#### CREATE UNIQUE QUEUE FOR WORKFLOW
 	my $envars = $self->getEnvars($username, $cluster);
-	$self->logDebug("envars", $envars);
+	$self->logDebug("$$ envars", $envars);
 	$self->createQueue($username, $cluster, $project, $workflow, $envars);
 	
 	#### SET CLUSTER WORKFLOW STATUS TO 'running'
@@ -342,9 +349,9 @@ method runOnCluster ($stages, $username, $project, $workflow, $workflownumber, $
 	$self->setDbh();
 	
 	#### RUN STAGES
-	$self->logDebug("BEFORE runStages()\n");
+	$self->logDebug("$$ BEFORE runStages()\n");
 	$self->runStages($stages);
-	$self->logDebug("AFTER runStages()\n");
+	$self->logDebug("$$ AFTER runStages()\n");
 	
 	#### RESET DBH JUST IN CASE
 	$self->setDbh();
@@ -357,62 +364,62 @@ method runOnCluster ($stages, $username, $project, $workflow, $workflownumber, $
 	
 	#### RETURN IF OTHER WORKFLOWS ARE RUNNING
 	my $clusterbusy = $self->clusterIsBusy($username, $cluster);
-	$self->logDebug("clusterbusy", $clusterbusy);
+	$self->logDebug("$$ clusterbusy", $clusterbusy);
 	return if $clusterbusy;
 	
 	#### OTHERWISE, SET CLUSTER FOR TERMINATION
 	$self->markForTermination($username, $cluster);
 	
-	$self->logDebug("COMPLETED");
+	$self->logDebug("$$ COMPLETED");
 }
 
 method ensureStarClusterRunning ($username, $cluster) {
 #### START STARCLUSTER IF NOT RUNNING
-	$self->logDebug("");
+	$self->logDebug("$$ ");
 	
 	#### CHECK IF STARCLUSTER IS RUNNING
-    $self->logDebug("DOING self->starcluster()->isRunning()");
+    $self->logDebug("$$ DOING self->starcluster()->isRunning()");
 	my $clusterrunning = $self->starcluster()->isRunning();
-	$self->logDebug("clusterrunning", $clusterrunning);
+	$self->logDebug("$$ clusterrunning", $clusterrunning);
 	return 1 if $clusterrunning;
 	
 	#### START STARCLUSTER IF NOT RUNNING
 	my $success = $self->startStarCluster($username, $cluster);
-	$self->logDebug("Failed to start cluster") if not $success;
+	$self->logDebug("$$ Failed to start cluster") if not $success;
 
 	return $success;
 }
 
 method ensureBalancerRunning ($username, $cluster) {
 #### START BALANCER IF NOT CLUSTER OR BALANCER RUNNING
-	$self->logDebug("");
+	$self->logDebug("$$ ");
 	
 	#### CHECK IF BALANCER IS RUNNING
 	my $balancerrunning = $self->starcluster()->balancerRunning();
-	$self->logDebug("balancerrunning", $balancerrunning);
+	$self->logDebug("$$ balancerrunning", $balancerrunning);
 
 	return 1 if $balancerrunning;
 
 	#### START BALANCER IF NOT RUNNING
 	my $success = $self->startStarBalancer($username, $cluster);
-	$self->logDebug("Failed to start cluster") if not $success;
+	$self->logDebug("$$ Failed to start cluster") if not $success;
 	
 	return $success;
 }
 
 method ensureSgeRunning ($username, $cluster, $project, $workflow) {
-	$self->logDebug("");
+	$self->logDebug("$$ ");
 	
 	#### RESET DBH JUST IN CASE
 	$self->setDbh();
 	
 	#### CHECK SGE IS RUNNING ON MASTER THEN HEADNODE
-	$self->logDebug("DOING self->checkSge($username, $cluster)");
+	$self->logDebug("$$ DOING self->checkSge($username, $cluster)");
 	my $isrunning = $self->checkSge($username, $cluster);
-	$self->logDebug("isrunning", $isrunning);
+	$self->logDebug("$$ isrunning", $isrunning);
 	
 	#### RESET DBH IF NOT DEFINED
-	$self->logDebug("DOING self->setDbh()");
+	$self->logDebug("$$ DOING self->setDbh()");
 	$self->setDbh();
 
 	if ( $isrunning ) {
@@ -425,7 +432,7 @@ method ensureSgeRunning ($username, $cluster, $project, $workflow) {
 		#### SET CLUSTER STATUS TO 'error'
 		$self->updateClusterStatus($username, $cluster, 'SGE error');
 
-		$self->logDebug("Failed to start SGE");
+		$self->logDebug("$$ Failed to start SGE");
 		
 		return 0;
 	}
@@ -446,19 +453,19 @@ method setStarCluster {
 }
 method loadStarCluster ($username, $cluster) {
 #### RETURN INSTANCE OF StarCluster
-	$self->logDebug("username", $username);
-	$self->logDebug("cluster", $cluster);
+	$self->logDebug("$$ username", $username);
+	$self->logDebug("$$ cluster", $cluster);
 	$self->logError("username not defined") and exit if not defined $username;
 	$self->logError("cluster not defined") and exit if not defined $cluster;
 
 	#### GET CLUSTER INFO
 	my $clusterobject = $self->getCluster($username, $cluster);
-	$self->logDebug("clusterobject", $clusterobject);
+	$self->logDebug("$$ clusterobject", $clusterobject);
 	$self->logError("Agua::Workflow::loadStarCluster    clusterobject not defined") if not defined $clusterobject;
 
 	#### SET SGE PORTS
 	my $clustervars = $self->getClusterVars($username, $cluster);
-	$self->logDebug("clustervars", $clustervars);
+	$self->logDebug("$$ clustervars", $clustervars);
 	$clusterobject = $self->addHashes($clusterobject, $clustervars) if defined $clustervars;
 	
 	### SET whoami
@@ -479,12 +486,12 @@ method loadStarCluster ($username, $cluster) {
 	
 	#### ADD AWS
 	my $aws 		= 	$self->_getAws($username);	
-	$self->logDebug("aws", $aws);
+	$self->logDebug("$$ aws", $aws);
 	$clusterobject = $self->addHashes($clusterobject, $aws) if defined $aws;
 	
 	#### SET STARCLUSTER BINARY
 	my $executable = $self->conf()->getKey("agua", "STARCLUSTER");
-	$self->logDebug("executable", $executable);
+	$self->logDebug("$$ executable", $executable);
 	$clusterobject->{executable} = $executable;
 	
 	#### SET LOG
@@ -504,17 +511,17 @@ method loadStarCluster ($username, $cluster) {
 	#### INSTANTIATE STARCLUSTER OBJECT
 	$self->logNote("DOING self->starcluster->load(clusterobject)", $clusterobject);
 	my $starcluster = $self->starcluster()->load($clusterobject);
-	$self->logDebug("AFTER self->starcluster(starcluster)");
+	$self->logDebug("$$ AFTER self->starcluster(starcluster)");
 	
 	return $starcluster;	
 }
 
 method startStarCluster ($username, $cluster) {	
-	$self->logDebug("username", $username);
-	$self->logDebug("cluster", $cluster);
+	$self->logDebug("$$ username", $username);
+	$self->logDebug("$$ cluster", $cluster);
 	
 	#### UPDATE CLUSTER STATUS TO 'starting'
-	$self->logDebug("Starting StarCluster: $cluster\n");
+	$self->logDebug("$$ Starting StarCluster: $cluster\n");
 	$self->updateClusterStatus($username, $cluster, "starting cluster");
 
 	#### TERMINATE BALANCER
@@ -522,14 +529,14 @@ method startStarCluster ($username, $cluster) {
 	
 	#### START STARCLUSTER
 	my $success = $self->starcluster()->startCluster();
-	$self->logDebug("starcluster->starCluster    success", $success);
+	$self->logDebug("$$ starcluster->starCluster    success", $success);
 	
 	#### VERIFY CLUSTER IS RUNNING
 	my $isrunning = $self->starcluster()->isRunning();
-	$self->logDebug("isrunning", $isrunning);
+	$self->logDebug("$$ isrunning", $isrunning);
 	
 	#### RESET DBH IF NOT DEFINED
-	$self->logDebug("DOING self->setDbh()");
+	$self->logDebug("$$ DOING self->setDbh()");
 	$self->setDbh();
 
 	if ( $isrunning ) {
@@ -550,15 +557,15 @@ method startStarBalancer ($username, $cluster) {
 #### 1. START STARCLUSTER BALANCER
 #### 2. UPDATE BALANCER PID IN clusterstatus TABLE
 ####. 
-	$self->logDebug("username", $username);
-	$self->logDebug("cluster", $cluster);
+	$self->logDebug("$$ username", $username);
+	$self->logDebug("$$ cluster", $cluster);
 
 	#### START BALANCER
 	my $pid = $self->starcluster()->startBalancer();
-	$self->logDebug("pid", $pid);
+	$self->logDebug("$$ pid", $pid);
 	
 	#### RESET DBH
-	$self->logDebug("DOING self->setDbh()");
+	$self->logDebug("$$ DOING self->setDbh()");
 	$self->setDbh();
 
 	#### SET PROCESS PID IN clusterstatus TABLE
@@ -579,20 +586,20 @@ method startStarBalancer ($username, $cluster) {
 }
 
 method markForTermination ($username, $cluster) {
-	$self->logDebug("");
+	$self->logDebug("$$ ");
 	
 	#### SET MINNODES TO ZERO	
 	$self->starcluster()->minnodes(0);
-	$self->logDebug("self->starcluster->minnodes", $self->starcluster()->minnodes());
+	$self->logDebug("$$ self->starcluster->minnodes", $self->starcluster()->minnodes());
 	
 	#### STOP BALANCER
-	$self->logDebug("DOING self->starcluster->terminateBalancer");
+	$self->logDebug("$$ DOING self->starcluster->terminateBalancer");
 	$self->starcluster()->terminateBalancer();
 
 	#### RESTART BALANCER (DUE TO TERMINATE)
-	$self->logDebug("DOING self->starcluster->launchBalancer");
+	$self->logDebug("$$ DOING self->starcluster->launchBalancer");
 	my $pid = $self->starcluster()->launchBalancer();
-	$self->logDebug("pid", $pid);
+	$self->logDebug("$$ pid", $pid);
 	
 	return if not defined $pid;
 
@@ -606,7 +613,7 @@ method getEc2KeyFiles {
 	#### USE ADMIN KEY FILES IF USER IS IN ADMINUSER LIST
 	my $username	=	$self->username();
 	my $adminkey 	=	$self->getAdminKey($username);
-	$self->logDebug("adminkey", $adminkey);
+	$self->logDebug("$$ adminkey", $adminkey);
 
 	my $adminuser = $self->conf()->getKey("agua", "ADMINUSER");
 	if ( $adminkey ) {
@@ -617,8 +624,8 @@ method getEc2KeyFiles {
 		$object->{privatekey} =  $self->getEc2PrivateFile($username);
 		$object->{publiccert} =  $self->getEc2PublicFile($username);
 	}	
-	$self->logDebug("privatekey", $object->{privatekey});
-	$self->logDebug("publiccert", $object->{publiccert});
+	$self->logDebug("$$ privatekey", $object->{privatekey});
+	$self->logDebug("$$ publiccert", $object->{publiccert});
 
 	return $object;
 }
@@ -631,11 +638,11 @@ method stopStarCluster {
 	$self->updateClusterStatus($username, $cluster, 'stopping');
 	
 	#### LOAD STARCLUSTER IF NOT LOADED
-	$self->logDebug("Doing self->loadStarCluster($username, $cluster) if not loaded");
+	$self->logDebug("$$ Doing self->loadStarCluster($username, $cluster) if not loaded");
 	$self->loadStarCluster($username, $cluster) if not $self->starcluster()->loaded();
 	
 	#### STOP STARCLUSTER AND BALANCER
-	$self->logDebug("Doing starcluster->stopCluster()");
+	$self->logDebug("$$ Doing starcluster->stopCluster()");
 	my $stopped = $self->starcluster()->stopCluster();	
 	
 	if ( $stopped ) {
@@ -653,39 +660,39 @@ method stopStarCluster {
 }
 
 #### STAGES
-method setStages ($username, $cluster, $json, $project, $workflow) {
+method setStages ($username, $cluster, $data, $project, $workflow, $workflownumber, $sample) {
 	$self->logGroup("Agua::Workflow::setStages");
-	$self->logDebug("username", $username);
-	$self->logDebug("cluster", $cluster);
-	$self->logDebug("project", $project);
-	$self->logDebug("workflow", $workflow);
+	$self->logDebug("$$ username", $username);
+	$self->logDebug("$$ cluster", $cluster);
+	$self->logDebug("$$ project", $project);
+	$self->logDebug("$$ workflow", $workflow);
 	
 	#### SET STAGES
-	my $stages = $self->getStages($json);
+	my $stages = $self->getStages($data);
 	
 	#### VERIFY THAT PREVIOUS STAGE HAS STATUS completed
-	return 0 if not $self->checkPrevious($stages, $json);
+	return 0 if not $self->checkPrevious($stages, $data);
 
 	#### GET STAGE PARAMETERS FOR THESE STAGES
-	$stages = $self->setStageParameters($stages, $json);
+	$stages = $self->setStageParameters($stages, $data);
 
 	#### SET START AND STOP
-	my ($start, $stop) = $self->setStartStop($stages, $json);
+	my ($start, $stop) = $self->setStartStop($stages, $data);
 	
 	#### GET FILEROOT
 	my $fileroot = $self->getFileroot($username);	
-	$self->logDebug("fileroot", $fileroot);
+	$self->logDebug("$$ fileroot", $fileroot);
 	
 	#### SET FILE DIRS
 	my ($scriptsdir, $stdoutdir, $stderrdir) = $self->setFileDirs($fileroot, $project, $workflow);
-	$self->logDebug("scriptsdir", $scriptsdir);
+	$self->logDebug("$$ scriptsdir", $scriptsdir);
 	
 	#### WORKFLOW PROCESS ID
 	my $workflowpid = $self->workflowpid();
 
 	#### CLUSTER, QUEUE AND QUEUE OPTIONS
 	my $queue = $self->queueName($username, $project, $workflow);
-	#my $queue_options = $self->json()->{queue_options};
+	#my $queue_options = $self->data()->{queue_options};
 	
 	#### SET OUTPUT DIR
 	my $outputdir =  "$fileroot/$project/$workflow/";
@@ -694,15 +701,18 @@ method setStages ($username, $cluster, $json, $project, $workflow) {
 	my $envars = $self->getEnvars($username, $cluster);
 
 	#### GET MONITOR
-	$self->logDebug("BEFORE monitor = self->updateMonitor()");
-	my $monitor = $self->updateMonitor();
-	$self->logDebug("AFTER monitor = self->updateMonitor()");
+	my $scheduler	=	$self->conf()->getKey("agua:SCHEDULER", undef);
+	$self->logDebug("$$ scheduler", $scheduler);
+	$self->logDebug("$$ BEFORE monitor = self->updateMonitor()");
+	my $monitor	= 	undef;
+	$monitor = $self->updateMonitor() if $scheduler eq "sge";
+	$self->logDebug("$$ AFTER monitor = self->updateMonitor()");
 
 	#### LOAD STAGE OBJECT FOR EACH STAGE TO BE RUN
 	my $stageobjects = [];    
 	for ( my $counter = $start; $counter < $stop + 1; $counter++ ) {
 		my $stage = $$stages[$counter];
-		$self->logDebug("stage", $stage);
+		$self->logDebug("$$ stage", $stage);
 		
 		#### QUIT IF NO STAGE PARAMETERS
 		$self->logError("stageparameters not defined for stage $stage->{name}") and exit if not defined $stage->{stageparameters};
@@ -726,7 +736,7 @@ method setStages ($username, $cluster, $json, $project, $workflow) {
 		$stage->{fileroot}		=  	$fileroot;
 
 		$stage->{queue}			=  	$queue;
-		$stage->{sample}		=  	$self->sample();
+		$stage->{sample}		=  	$sample;
 		#### LATER: REPLACE
 		#$stage->{queue_options}	=  	$queue_options;
 
@@ -750,7 +760,7 @@ method setStages ($username, $cluster, $json, $project, $workflow) {
 
 	#### SET self->stages()
 	$self->stages($stageobjects);
-	$self->logDebug("final no. stageobjects", scalar(@$stageobjects));
+	$self->logDebug("$$ final no. stageobjects", scalar(@$stageobjects));
 	
 	$self->logGroupEnd("Agua::Workflow::setStages");
 
@@ -758,9 +768,9 @@ method setStages ($username, $cluster, $json, $project, $workflow) {
 }
 
 method setFileDirs ($fileroot, $project, $workflow) {
-	$self->logDebug("fileroot", $fileroot);
-	$self->logDebug("project", $project);
-	$self->logDebug("workflow", $workflow);
+	$self->logDebug("$$ fileroot", $fileroot);
+	$self->logDebug("$$ project", $project);
+	$self->logDebug("$$ workflow", $workflow);
 	my $scriptsdir = $self->createDir("$fileroot/$project/$workflow/scripts");
 	my $stdoutdir = $self->createDir("$fileroot/$project/$workflow/stdout");
 	my $stderrdir = $self->createDir("$fileroot/$project/$workflow/stdout");
@@ -777,33 +787,52 @@ method setFileDirs ($fileroot, $project, $workflow) {
 }
 
 method runStages ($stages) {
-	$self->logDebug("no. stages", scalar(@$stages));
+	$self->logDebug("$$ no. stages", scalar(@$stages));
 
 	for ( my $stage_counter = 0; $stage_counter < @$stages; $stage_counter++ ) {
 		my $stage = $$stages[$stage_counter];
 		my $stage_number = $stage->number();
 		my $stage_name = $stage->name();
 		
+		my $mysqltime	=	$self->getMysqlTime();
+		$stage->queued($mysqltime);
+		$stage->started($mysqltime);
+		
+		#### REPORT STARTING STAGE
+		$self->updateJobStatus($stage, "started");
+		
 		####  RUN STAGE
-		$self->logDebug("Running stage $stage_number", $stage_name);
-		my ($completed, $error) = $stage->run();
-		$self->logDebug("completed", $completed);
-		$self->logDebug("error", $error);
-		$error = "" if not defined $error;
-		$completed = "" if not defined $completed;
-		$self->logDebug("Ended running stage $stage_counter", $completed);
+		$self->logDebug("$$ Running stage $stage_number", $stage_name);
+		my ($exitcode, $error) = $stage->run();
+		$self->logDebug("$$ exitcode", $exitcode);
+		$self->logDebug("$$ error", $error);
+		$self->logDebug("$$ Ended running stage $stage_counter", $exitcode);
 
 		#### STOP IF THIS STAGE DIDN'T COMPLETE SUCCESSFULLY
 		#### ALL APPLICATIONS MUST RETURN '0' FOR SUCCESS)
-		$completed = 0 if $completed eq "0";
-		if ( $completed == 0 ) {
-			$self->logDebug("Stage $stage_number: '$stage_name' completed successfully");
+		if ( $exitcode == 0 ) {
+			$self->logDebug("$$ Stage $stage_number: '$stage_name' completed successfully");
+			$stage->setStatus('completed');
+			
+			my $status	=	"completed";
+			if ( defined $self->worker() ) {
+				$self->logDebug("$$ DOING self->updateJobStatus: $status");
+				$self->updateJobStatus($stage, $status);
+			}
 		}
 		else {
-            $self->logDebug("Setting status to 'error'");
-            $stage->setStatus('error');
-            $self->logDebug("After setting status");
-			$self->logError("Stage $stage_number. $stage_name failed. code: $completed. error: $error");
+			my $status	=	"error: $exitcode";
+			$stage->setStatus('error');
+
+			if ( defined $self->worker() ) {
+				$self->updateJobStatus($stage, $status);
+			}
+			else {
+				$self->logDebug("$$ Setting status to 'error'");
+				$self->logDebug("$$ After setting status");
+				$self->logError("Stage $stage_number. $stage_name failed. code: $exitcode. error: $error");
+			}
+			
 			return 0;
 		}
 	}    
@@ -811,8 +840,83 @@ method runStages ($stages) {
 	return 1;
 }
 
+method getStageApp ($stage) {
+	$self->logDebug("stage", $stage);
+	
+	my $appname		=	$stage->name();
+	my $installdir	=	$stage->installdir();
+	my $version		=	$stage->version();
+	
+	my $query	=	qq{SELECT * FROM package
+WHERE appname='$stage->{appname}'
+AND installdir='$stage->{installdir}'
+AND version='$stage->{version}'
+};
+	$self->logDebug("query", $query);
+	my $app	=	$self->db()->query($query);
+	$self->logDebug("app", $app);
+
+	return $app;
+}
+method getStageFields {
+	return [
+		'username',
+		'project',
+		'workflow',
+		'workflownumber',
+		'sample',
+		'name',
+		'number',
+		'location',
+		'executor',
+		'cluster',
+		'queued',
+		'started',
+		'completed'
+	];
+}
+method updateJobStatus ($stage, $status) {
+	$self->logDebug("$$ stage: $stage");
+	$self->logDebug("$$ status", $status);
+
+	#### POPULATE FIELDS
+	my $data	=	{};
+	my $fields	=	$self->getStageFields();
+	foreach my $field ( @$fields ) {
+		$data->{$field}	=	$stage->$field();
+	}
+
+	#### ADD stage... TO NAME AND NUMBER
+	$data->{stage}	=	$stage->name();
+	$data->{stagenumber}	=	$stage->number();
+
+	#### ADD ANCILLARY DATA
+	$data->{status}	=	$status;	
+	$data->{host}	=	$self->getHostName();
+	$self->logDebug("$$ data", $data);
+
+	#### ADD STDOUT AND STDERR
+	my $stdout 		=	"";
+	my $stderr		=	"";
+	$stdout			=	$self->getFileContents($stage->stdoutfile()) if -f $stage->stdoutfile();
+	$stderr			=	$self->getFileContents($stage->stderrfile()) if -f $stage->stderrfile();
+	$data->{stderr}	=	$stderr;
+	$data->{stdout}	=	$stdout;
+	
+	#### SEND TOPIC	
+	$self->logDebug("$$ DOING worker->sendTopic");
+	my $key = "update.job.status";
+	$self->worker()->sendTopic($data, $key);
+}
+
+method getHostName {
+	my $hostname	=	`facter ipaddress`;
+	$hostname		=~ 	s/\s+$//;
+	
+	return $hostname;
+}
 method getWorkflowStages ($json) {
-	$self->logDebug("Agua::Workflow::getWorkflowStages(json)");
+	$self->logDebug("$$ Agua::Workflow::getWorkflowStages(json)");
     
 	my $username = $json->{username};
     my $project = $json->{project};
@@ -829,11 +933,11 @@ WHERE username ='$username'
 AND project = '$project'
 AND workflow = '$workflow'
 ORDER BY number};
-    $self->logDebug("$query");
+    $self->logDebug("$$ $query");
     my $stages = $self->db()->queryhasharray($query);
 	$self->logError("stages not defined for username: $username") and return if not defined $stages;	
 
-	$self->logDebug("stages:");
+	$self->logDebug("$$ stages:");
 	foreach my $stage ( @$stages )
 	{
 		my $stage_number = $stage->number();
@@ -850,7 +954,7 @@ method checkPrevious ($stages, $json) {
 	
 	my $start = $json->{start};
     $start--;	
-	$self->logDebug("start", $start);
+	$self->logDebug("$$ start", $start);
 	return 1 if $start <= 0;
 
 	my $stage_number = $start - 1;
@@ -866,13 +970,13 @@ method checkPrevious ($stages, $json) {
 	return 1;
 }
 
-method setStageParameters ($stages, $json) {
+method setStageParameters ($stages, $data) {
 	#### GET THE PARAMETERS FOR THE STAGES WE WANT TO RUN
-	$self->logDebug("stages", $stages);
-	$self->logDebug("json", $json);
+	$self->logDebug("$$ stages", $stages);
+	$self->logDebug("$$ data", $data);
 	
 	#### GET THE PARAMETERS FOR THE STAGES WE WANT TO RUN
-	my $start = $json->{start} || 1;
+	my $start = $data->{start} || 1;
     $start--;
 	for ( my $i = $start; $i < @$stages; $i++ ) {
 		$$stages[$i]->{appname} = $$stages[$i]->{name};
@@ -881,9 +985,10 @@ method setStageParameters ($stages, $json) {
 		my $where = $self->db()->where($$stages[$i], $keys);
 		my $query = qq{SELECT * FROM stageparameter
 $where AND paramtype='input'};
-		$self->logDebug("query", $query);
+		$self->logDebug("$$ query", $query);
 
 		my $stageparameters = $self->db()->queryhasharray($query);
+		$self->logNote("stageparameters", $stageparameters);
 		$$stages[$i]->{stageparameters} = $stageparameters;
 	}
 	
@@ -891,8 +996,8 @@ $where AND paramtype='input'};
 }
 
 method setStartStop ($stages, $json) {
-	$self->logDebug("Agua::Workflow::setStartStop(stages, json)");
-	$self->logDebug("No. stages: " . scalar(@$stages));
+	$self->logDebug("$$ Agua::Workflow::setStartStop(stages, json)");
+	$self->logDebug("$$ No. stages: " . scalar(@$stages));
 	$self->logError("stages is empty") and return if not scalar(@$stages);
 
 	my $start = $self->start();
@@ -916,8 +1021,8 @@ method setStartStop ($stages, $json) {
 		$self->logError("start ($start) is greater than stop ($stop)");
 	}
 
-	$self->logDebug("Setting start: $start");	
-	$self->logDebug("Setting stop: $stop");	
+	$self->logDebug("$$ Setting start: $start");	
+	$self->logDebug("$$ Setting stop: $stop");	
 	
 	$self->start($start);
 	$self->stop($stop);
@@ -928,9 +1033,9 @@ method setStartStop ($stages, $json) {
 #### QUEUE
 method deleteDefaultMaster {
 	#### DELETE 'master' FROM ADMIN, SUBMIT AND EXECUTION HOST LISTS
-	$self->logDebug("");
+	$self->logDebug("$$ ");
 	my $output = $self->removeFromAllHosts("master");
-	$self->logDebug("output", $output);
+	$self->logDebug("$$ output", $output);
 	
 	$self->deleteAdminHost("master");
 	$self->deleteSubmitHost("master");
@@ -943,36 +1048,36 @@ method setMasterInfo ($username, $cluster, $qmasterport, $execdport) {
 #### 3. SET MASTER common/act_qmaster
 #### 4. UPDATE MASTER dnsname IN @allhosts GROUP hostlist
 
-	$self->logDebug("username", $username);
+	$self->logDebug("$$ username", $username);
 
 	#### LOAD STARCLUSTER IF NOT ALREADY LOADED
 	$self->loadStarCluster($username, $cluster) if not $self->starcluster()->loaded();
 
 	#### QUIT IF CLUSTER DOES NOT EXIST
 	my $exists = $self->starcluster()->instance()->exists();
-	$self->logDebug("exists", $exists);
+	$self->logDebug("$$ exists", $exists);
 	return if not $exists;
 
 	#### GET STORED AND CURRENT MASTER EXTERNAL FQDN
 	my $newexternalfqdn = $self->starcluster()->instance()->master()->externalfqdn();
-	$self->logDebug("newexternalfqdn", $newexternalfqdn);
+	$self->logDebug("$$ newexternalfqdn", $newexternalfqdn);
 	my $masterinfo = $self->getHeadnodeMasterInfo($cluster);
-	$self->logDebug("masterinfo", $masterinfo);
+	$self->logDebug("$$ masterinfo", $masterinfo);
 	my $oldexternalfqdn = $masterinfo->{externalfqdn};
-	$self->logDebug("oldexternalfqdn", $oldexternalfqdn);
+	$self->logDebug("$$ oldexternalfqdn", $oldexternalfqdn);
 	
 	#### QUIT IF MASTER INSTANCE HAS NOT CHANGED
 	return $masterinfo if $newexternalfqdn eq $oldexternalfqdn;
 	
 	#### GET NEW MASTER INSTANCE INFO
 	my $instanceinfo	= $self->getMasterInstanceInfo($username, $cluster);
-	$self->logDebug("instanceinfo", $instanceinfo);
+	$self->logDebug("$$ instanceinfo", $instanceinfo);
 	my $newname 		= $instanceinfo->{internalfqdn};
 	my $internalip 		= $instanceinfo->{internalip};
 	my $instanceid 		= $instanceinfo->{instanceid};
 	my $externalfqdn 	= $instanceinfo->{externalfqdn};
 	my $externalip 		= $instanceinfo->{externalip};
-	$self->logDebug("newname", $newname);
+	$self->logDebug("$$ newname", $newname);
 	
 	#### 1. SET HEADNODE qmaster_info
 	$self->_setHeadnodeMasterInfo($cluster, $newname, $internalip, $instanceid, $externalfqdn, $externalip);
@@ -997,16 +1102,16 @@ method setMasterInfo ($username, $cluster, $qmasterport, $execdport) {
 
 method createQueue ($username, $cluster, $project, $workflow, $envars) {
 	$self->logCaller("");
-	$self->logDebug("project", $project);
-	$self->logDebug("workflow", $workflow);
-	$self->logDebug("username", $username);
-	$self->logDebug("cluster", $cluster);
+	$self->logDebug("$$ project", $project);
+	$self->logDebug("$$ workflow", $workflow);
+	$self->logDebug("$$ username", $username);
+	$self->logDebug("$$ cluster", $cluster);
 	
 	$self->logError("Agua::Workflow::createQueue    project not defined") if not defined $project;
 	$self->logError("Agua::Workflow::createQueue    workflow not defined") if not defined $workflow;
 
 	my $headip = $self->getHeadnodeInternalIp();
-	$self->logDebug("headip", $headip);
+	$self->logDebug("$$ headip", $headip);
 	
 	#### SET VARIABLES
 	$self->username($username);
@@ -1020,7 +1125,7 @@ method createQueue ($username, $cluster, $project, $workflow, $envars) {
 	
 	#### SET CONFIGFILE
 	my $adminkey = $self->getAdminKey($username);
-	$self->logDebug("adminkey", $adminkey);
+	$self->logDebug("$$ adminkey", $adminkey);
 	my $adminuser = $self->conf()->getKey("agua", "ADMINUSER");
 	my $configfile;
 	$configfile =  $self->setConfigFile($username, $cluster) if not $adminkey;
@@ -1030,19 +1135,19 @@ method createQueue ($username, $cluster, $project, $workflow, $envars) {
 	#### SET INSTANCETYPE
 	my $clusterobject = $self->getCluster($username, $cluster);
 	my $instancetype = $clusterobject->{instancetype};
-	$self->logDebug("instancetype", $instancetype);
+	$self->logDebug("$$ instancetype", $instancetype);
 	$self->instancetype($instancetype);
 	
 	#### CREATE QUEUE
 	my $queue = $self->queueName($username, $project, $workflow);
 	my $qmasterport = $envars->{qmasterport};
 	my $execdport = $envars->{execdport};
-	$self->logDebug("queue", $queue);
-	$self->logDebug("qmasterport", $qmasterport);
-	$self->logDebug("execdport", $execdport);
+	$self->logDebug("$$ queue", $queue);
+	$self->logDebug("$$ qmasterport", $qmasterport);
+	$self->logDebug("$$ execdport", $execdport);
 
 	#### SET QUEUE
-	$self->logDebug("Doing self->setQueue($queue)\n");
+	$self->logDebug("$$ Doing self->setQueue($queue)\n");
 	$self->setQueue($queue, $qmasterport, $execdport);
 
 	$self->logGroupEnd("Agua::Workflow::createQueue    COMPLETED");
@@ -1061,40 +1166,40 @@ method deleteQueue ($project, $workflow, $username, $cluster, $envars) {
 
 	#### DETERMINE WHETHER TO USE ADMIN KEY FILES
 	my $adminkey = $self->getAdminKey($username);
-	$self->logDebug("adminkey", $adminkey);
+	$self->logDebug("$$ adminkey", $adminkey);
 	return if not defined $adminkey;
 	my $adminuser = $self->conf()->getKey("agua", "ADMINUSER");
 	$args->{configfile} =  $self->setConfigFile($username, $cluster) if not $adminkey;
 	$args->{configfile} =  $self->setConfigFile($username, $cluster, $adminuser) if $adminkey;
-	$self->logDebug("configfile", $args->{configfile});
+	$self->logDebug("$$ configfile", $args->{configfile});
 
 	#### ADD CONF OBJECT	
 	$args->{conf} = $self->conf();
 
-	$self->logDebug("args", $args);
+	$self->logDebug("$$ args", $args);
 	
 	#### RUN starcluster.pl TO GENERATE KEYPAIR FILE IN .starcluster DIR
 	my $queue = $self->queueName($username, $project, $workflow);
-	$self->logDebug("queue", $queue);
+	$self->logDebug("$$ queue", $queue);
 
 #    #### SET STARCLUSTER
 #	my $starcluster = $self->starcluster();
 #	$starcluster = $self->starcluster()->load($args) if not $self->starcluster()->loaded();
     
     #### UNSET QUEUE
-#    $self->logDebug("Doing StarCluster->unsetQueue($queue)");
+#    $self->logDebug("$$ Doing StarCluster->unsetQueue($queue)");
 #	$starcluster->unsetQueue($queue);
-    $self->logDebug("Doing self->unsetQueue($queue)");
+    $self->logDebug("$$ Doing self->unsetQueue($queue)");
 	$self->unsetQueue($queue);
 }
 
 #### QUEUE
 method setQueue ($queue, $qmasterport, $execdport) {
-	$self->logDebug("DOING slots = self->setSlotNumber(self->instancetype())");
+	$self->logDebug("$$ DOING slots = self->setSlotNumber(self->instancetype())");
 	my $slots = $self->setSlotNumber($self->instancetype());
 	$slots = 1 if not defined $slots;
-	$self->logDebug("slots", $slots);
-	$self->logDebug("self->qmasterport", $self->qmasterport());
+	$self->logDebug("$$ slots", $slots);
+	$self->logDebug("$$ self->qmasterport", $self->qmasterport());
 	
 	my $parameters = {
 		qname			=>	$queue,
@@ -1105,38 +1210,38 @@ method setQueue ($queue, $qmasterport, $execdport) {
 	};
 
 	my $queuefile = $self->getQueuefile("queue-$queue");
-	$self->logDebug("queuefile", $queuefile);
+	$self->logDebug("$$ queuefile", $queuefile);
 	
 	my $exists = $self->queueExists($queue, $qmasterport, $execdport);
-	$self->logDebug("exists", $exists);
+	$self->logDebug("$$ exists", $exists);
 	
 	$self->_addQueue($queue, $queuefile, $parameters) if not $exists;
 }
 
 method unsetQueue ($queue) {
 	my $queuefile = $self->getQueuefile("queue-$queue");
-	$self->logDebug("queuefile", $queuefile); 
+	$self->logDebug("$$ queuefile", $queuefile); 
 	
 	$self->_removeQueue($queue, $queuefile);
 }
 
 method setPE ($pe, $queue) {
- 	$self->logDebug("pe", $pe);
- 	$self->logDebug("queue", $queue);
+ 	$self->logDebug("$$ pe", $pe);
+ 	$self->logDebug("$$ queue", $queue);
 
 	my $slots = $self->setSlotNumber($self->instancetype());
-	$self->logDebug("slots", $slots); 
+	$self->logDebug("$$ slots", $slots); 
 
 	my $pefile = $self->getQueuefile("pe-$pe");
-	$self->logDebug("pefile", $pefile); 
+	$self->logDebug("$$ pefile", $pefile); 
 	my $queuefile = $self->getQueuefile("queue-$queue");
-	$self->logDebug("queuefile", $queuefile); 
+	$self->logDebug("$$ queuefile", $queuefile); 
 
 	$self->addPE($pe, $pefile, $slots);
 
 	#$self->addPEToQueue($pe, $queue, $queuefile);
 
-	$self->logDebug("Completed"); 
+	$self->logDebug("$$ Completed"); 
 }
 
 ### QUEUE MONITOR
@@ -1162,7 +1267,7 @@ method setMonitor {
 	$self->monitor($monitor);
 }
 method updateMonitor {
-	$self->logDebug("");
+	$self->logDebug("$$ ");
 	$self->monitor()->load ({
 		pid			=>	$self->workflowpid(),
 		conf 		=>	$self->conf(),
@@ -1184,7 +1289,7 @@ method updateMonitor {
 
 #### STOP WORKFLOW
 method stopWorkflow {
-    $self->logDebug("");
+    $self->logDebug("$$ ");
     
 	my $json         =	$self->json();
 
@@ -1197,9 +1302,9 @@ method stopWorkflow {
 	my $cluster = $json->{cluster};
 	my $start = $json->{start};
     $start--;
-    $self->logDebug("project", $project);
-    $self->logDebug("start", $start);
-    $self->logDebug("workflow", $workflow);
+    $self->logDebug("$$ project", $project);
+    $self->logDebug("$$ start", $start);
+    $self->logDebug("$$ workflow", $workflow);
     
 	#### GET ALL STAGES FOR THIS WORKFLOW
     my $query = qq{SELECT * FROM stage
@@ -1208,9 +1313,9 @@ AND project = '$project'
 AND workflow = '$workflow'
 AND status='running'
 ORDER BY number};
-	$self->logDebug("$query");
+	$self->logDebug("$$ $query");
 	my $stages = $self->db()->queryhasharray($query);
-	$self->logDebug("stages", $stages);
+	$self->logDebug("$$ stages", $stages);
 
 	#### EXIT IF NO PIDS
 	$self->logError("No running stages in $project.$workflow") and return if not defined $stages;
@@ -1220,17 +1325,17 @@ ORDER BY number};
 	$self->logError("More than one running stage in $project.$workflow. Continuing with stopWorkflow") if scalar(@$stages) > 1;
 
 	my $submit = $$stages[0]->{submit};
-	$self->logDebug("submit", $submit);
+	$self->logDebug("$$ submit", $submit);
 
 	my $messages;
 	if ( defined $submit and $submit )
 	{
-		$self->logDebug("Doing killClusterJob(stages)");
+		$self->logDebug("$$ Doing killClusterJob(stages)");
 		$messages = $self->killClusterJob($project, $workflow, $username, $cluster, $stages);
 	}
 	else
 	{
-		$self->logDebug("Doing killLocalJob(stages)");
+		$self->logDebug("$$ Doing killLocalJob(stages)");
 		$messages = $self->killLocalJob($stages);
 	}
 	
@@ -1242,7 +1347,7 @@ AND project = '$project'
 AND workflow = '$workflow'
 AND status = 'running'
 };
-	$self->logDebug("$update_query\n");
+	$self->logDebug("$$ $update_query\n");
 	my $success = $self->db()->do($update_query);
 	$self->logError("Could not update stages for $project.$workflow") and exit if not $success;
 	$self->logStatus("Updated stages for $project.$workflow");
@@ -1266,9 +1371,9 @@ method killClusterJob ($project, $workflow, $username, $cluster, $stages) {
 			(SHOULD BE REGISTERED IN THE stagejobs TABLE)
 
 =cut
-    $self->logDebug("Agua::Workflow::killClusterJob(stages)");
+    $self->logDebug("$$ Agua::Workflow::killClusterJob(stages)");
     
-    $self->logDebug("stages", $stages);
+    $self->logDebug("$$ stages", $stages);
 
         my $json         =	$self->json();
 	
@@ -1296,9 +1401,9 @@ method cancelJob ($jobid) {
 		CANCEL A CLUSTER JOB BY JOB ID
 		
 =cut
-	$self->logDebug("Agua::Workflow::cancelJob(jobid)");
+	$self->logDebug("$$ Agua::Workflow::cancelJob(jobid)");
 	my $canceljob = $self->conf()->getKey("cluster", 'CANCELJOB');
-	$self->logDebug("jobid", $jobid);
+	$self->logDebug("$$ jobid", $jobid);
 	
 	my $command = "$canceljob $jobid";
 
@@ -1309,7 +1414,7 @@ method killLocalJob ($stages) {
 #### 1. 'kill -9' THE PROCESS IDS OF ANY RUNNING STAGE OF THE WORKFLOW
 #### 2. INCLUDES STAGE PID, App PARENT PID AND App CHILD PID)
 
-    $self->logDebug("stages", $stages);
+    $self->logDebug("$$ stages", $stages);
 	my $messages = [];
 	foreach my $stage ( @$stages )
 	{
@@ -1331,7 +1436,7 @@ method getStatus {
 #### 4. UPDATE stage TABLE WITH JOB STATUS FROM QSTAT IF CLUSTER IS RUNNING
 #### 5. RETURN VALUES FROM 1, 2 AND 3 IN A HASH
 
-    $self->logDebug("");
+    $self->logDebug("$$ ");
 	
     my $username	= 	$self->username();
     my $cluster 	= 	$self->cluster();
@@ -1346,11 +1451,11 @@ method getStatus {
 	$self->logError("workflow not defined") and exit if not defined $self->workflow();
 	$self->logError("json not defined") and exit if not defined $self->json();
 
-    $self->logDebug("project", $project);
-    $self->logDebug("workflow", $workflow);
+    $self->logDebug("$$ project", $project);
+    $self->logDebug("$$ workflow", $workflow);
 
 	my $status = $self->_getStatus($username, $start, $project, $workflow, $json);
-	#$self->logDebug("status", $status);
+	#$self->logDebug("$$ status", $status);
 	
 	#### PRINT STATUS
     require JSON;
@@ -1386,11 +1491,11 @@ OUTPUT
 
 =cut
 
-    $self->logDebug("username", $username);
-    $self->logDebug("start", $start);
-    $self->logDebug("project", $project);
-    $self->logDebug("workflow", $workflow);
-    $self->logDebug("json", $json);
+    $self->logDebug("$$ username", $username);
+    $self->logDebug("$$ start", $start);
+    $self->logDebug("$$ project", $project);
+    $self->logDebug("$$ workflow", $workflow);
+    $self->logDebug("$$ json", $json);
 
 	#### GET STAGES FROM stage TABLE
     my $query = qq{SELECT *, NOW() AS now
@@ -1400,16 +1505,16 @@ AND project = '$project'
 AND workflow = '$workflow'
 ORDER BY number
 };
-	$self->logDebug("query", $query);
+	$self->logDebug("$$ query", $query);
     my $stages = $self->db()->queryhasharray($query);
-	$self->logDebug("stages", $stages);
+	$self->logDebug("$$ stages", $stages);
 	
 	#### QUIT IF stages NOT DEFINED
 	$self->logError("No stages with run status for username: $username, project: $project, workflow: $workflow from start: $start") and exit if not defined $stages;
 
 	#### RETRIEVE CLUSTER INFO FROM clusterworkflow TABLE
 	my $cluster = $self->getClusterByWorkflow($username, $project, $workflow);
-	$self->logDebug("cluster", $cluster);
+	$self->logDebug("$$ cluster", $cluster);
 	$cluster = "" if not defined $cluster;
 	$self->cluster($cluster);
 
@@ -1421,13 +1526,13 @@ ORDER BY number
 }
 
 method _getStatusCluster($username, $cluster, $project, $workflow, $stages) {
-	$self->logDebug("");	
+	$self->logDebug("$$ ");	
 
 	#### GET WORKFLOW STATUS
 	my $clusterworkflow = $self->getClusterWorkflow($username, $cluster, $project, $workflow);
-	$self->logDebug("clusterworkflow", $clusterworkflow);
+	$self->logDebug("$$ clusterworkflow", $clusterworkflow);
 	my $workflowstatus = $self->getWorkflowStatus($username, $project, $workflow);	
-	$self->logDebug("workflowstatus", $workflowstatus);
+	$self->logDebug("$$ workflowstatus", $workflowstatus);
 
 	#### SET DEFAULT VALUES
 	my $stagestatus = {
@@ -1451,7 +1556,7 @@ method _getStatusCluster($username, $cluster, $project, $workflow, $stages) {
 
 	#### GET CLUSTER STATUS
 	my $currentstatus  =	$self->getClusterStatus($username, $cluster);
-	$self->logDebug("currentstatus", $currentstatus);
+	$self->logDebug("$$ currentstatus", $currentstatus);
 
 	#### RETURN EMPTY CLUSTER/QUEUE STATUS IF NO CURRENT CLUSTER STATUS
 	return $status if not defined $currentstatus;
@@ -1464,7 +1569,7 @@ method _getStatusCluster($username, $cluster, $project, $workflow, $stages) {
 	#### CHECK IF CLUSTER IS RUNNING	
 	my $starcluster 		= 	$self->loadStarCluster($username, $cluster);
 	my $clusterrunning 		= 	$self->starcluster()->isRunning();
-	$self->logDebug("clusterrunning", $clusterrunning);
+	$self->logDebug("$$ clusterrunning", $clusterrunning);
 
 	#### RETURN CURRENT CLUSTER STATUS AND EMPTY QUEUE STATUS
 	#### IF CLUSTER IS NOT RUNNING
@@ -1472,24 +1577,24 @@ method _getStatusCluster($username, $cluster, $project, $workflow, $stages) {
 	
 	#### GET MASTER INFO
 	my $masterinfo = $self->getHeadnodeMasterInfo($cluster);
-	$self->logDebug("masterinfo", $masterinfo);
+	$self->logDebug("$$ masterinfo", $masterinfo);
 	return $status if not defined $masterinfo;
 	
 	### SET MASTER OPS SSH
 	my $mastername	=	$masterinfo->{internalfqdn};
-	$self->logDebug("mastername", $mastername);	
-	$self->logDebug("DOING setMasterOpsSsh($mastername)");
+	$self->logDebug("$$ mastername", $mastername);	
+	$self->logDebug("$$ DOING setMasterOpsSsh($mastername)");
 	$self->setMasterOpsSsh($mastername);
 	
 	#### DETECT IF MASTER IS READY BY CONNECTING VIA SSH
-	$self->logDebug("DOING masterConnect()");
+	$self->logDebug("$$ DOING masterConnect()");
 	my $timeout = 10;
 	my $masterconnect = $self->masterConnect($timeout);
-	$self->logDebug("masterconnect", $masterconnect);
+	$self->logDebug("$$ masterconnect", $masterconnect);
 	
 	#### REFRESH CLUSTER STATUS
 	$clusterstatus = $self->clusterStatus();
-	$self->logDebug("clusterstatus", $clusterstatus);
+	$self->logDebug("$$ clusterstatus", $clusterstatus);
 	
 	#### IF CLUSTER IS RUNNING AND MASTER IS ACCESSIBLE,
 	#### GET QUEUE STATUS
@@ -1498,7 +1603,7 @@ method _getStatusCluster($username, $cluster, $project, $workflow, $stages) {
 		#### GET qstat QUEUE STATUS FOR THIS USER'S PROJECT WORKFLOW
 		my $monitor = $self->updateMonitor();
 		$queuestatus = $monitor->queueStatus();
-		$self->logDebug("queuestatus", $queuestatus);
+		$self->logDebug("$$ queuestatus", $queuestatus);
 	
 		#### UPDATE stage TABLE WITH JOB STATUS FROM QSTAT
 		$self->updateStageStatus($monitor, $stages);
@@ -1512,10 +1617,10 @@ method _getStatusCluster($username, $cluster, $project, $workflow, $stages) {
 }
 
 method getWorkflowStatus ($username, $project, $workflow) {
-	$self->logDebug("workflow", $workflow);
+	$self->logDebug("$$ workflow", $workflow);
 
 	my $object = $self->getWorkflow($username, $project, $workflow);
-	$self->logDebug("object", $object);
+	$self->logDebug("$$ object", $object);
 	return if not defined $object;
 	
 	return $object->{status};
@@ -1523,11 +1628,11 @@ method getWorkflowStatus ($username, $project, $workflow) {
 
 #### MASTER NODE METHODS
 method masterConnect ($timeout) {
-	$self->logDebug("timeout", $timeout);	
+	$self->logDebug("$$ timeout", $timeout);	
 	my $command = "hostname";
-	$self->logDebug("command", $command);
+	$self->logDebug("$$ command", $command);
 	my $connect = $self->master()->ops()->timeoutCommand($command, $timeout);
-	$self->logDebug("connect", $connect);
+	$self->logDebug("$$ connect", $connect);
 	
 	return 0 if not $connect;
 	return 1;
@@ -1538,10 +1643,10 @@ method _getStatusLocal ($username, $project, $workflow, $stages) {
 #### I.E., JOB WAS SUBMITTED LOCALLY. 
 #### NB: THE stage TABLE SHOULD BE UPDATED BY THE PROCESS ON EXIT.
 
-	$self->logDebug("username", $username);
+	$self->logDebug("$$ username", $username);
 	
 	my $workflowobject = $self->getWorkflow($username, $project, $workflow);
-	$self->logDebug("workflowobject", $workflowobject);
+	$self->logDebug("$$ workflowobject", $workflowobject);
 	my $status = $workflowobject->{status} || '';
 	my $stagestatus 	= 	{
 		project		=>	$project,
@@ -1549,12 +1654,12 @@ method _getStatusLocal ($username, $project, $workflow, $stages) {
 		stages		=>	$stages,
 		status		=>	$status
 	};
-	$self->logDebug("stagestatus", $stagestatus);
+	$self->logDebug("$$ stagestatus", $stagestatus);
 	
 	my $clusterstatus 	=	$self->_emptyClusterStatus(undef, undef);
-	$self->logDebug("clusterstatus", $clusterstatus);
+	$self->logDebug("$$ clusterstatus", $clusterstatus);
 	my $queuestatus		=	$self->_emptyQueueStatus();
-	$self->logDebug("queuestatus", $queuestatus);
+	$self->logDebug("$$ queuestatus", $queuestatus);
 	
 	return {
 		stagestatus 	=> 	$stagestatus,
@@ -1586,11 +1691,11 @@ method _emptyQueueStatus {
 method updateStageStatus($monitor, $stages) {
 #### UPDATE stage TABLE WITH JOB STATUS FROM QSTAT
 	my $statusHash = $monitor->statusHash();
-	$self->logDebug("statusHash", $statusHash);	
+	$self->logDebug("$$ statusHash", $statusHash);	
 	foreach my $stage ( @$stages ) {
 		my $stagejobid = $stage->{stagejobid};
 		next if not defined $stagejobid or not $stagejobid;
-		$self->logDebug("pid", $stagejobid);
+		$self->logDebug("$$ pid", $stagejobid);
 
 		#### GET STATUS
 		my $status;
@@ -1598,7 +1703,7 @@ method updateStageStatus($monitor, $stages) {
 		{
 			$status = $statusHash->{$stagejobid};
 			next if not defined $status;
-			$self->logDebug("status", $status);
+			$self->logDebug("$$ status", $status);
 
 			#### SET TIME ENTRY TO BE UPDATED
 			my $datetime = "queued";
@@ -1617,16 +1722,16 @@ WHERE username ='$stage->{username}'
 AND project = '$stage->{project}'
 AND workflow = '$stage->{workflow}'
 AND number='$stage->{number}'};
-				$self->logDebug("$query");
+				$self->logDebug("$$ $query");
 				my $result = $self->db()->do($query);
-				$self->logDebug("status update result", $result);
+				$self->logDebug("$$ status update result", $result);
 			}
 		}
 	}	
 }
 
 method clusterStatus {
-	$self->logDebug("");
+	$self->logDebug("$$ ");
 	my $username = $self->username();
 	my $cluster = $self->cluster();
 	$self->logError("cluster not defined") and return if not $cluster;
@@ -1640,7 +1745,7 @@ method clusterStatus {
 	#### GET CLUSTER LIST
 	my $configfile	=	$self->setConfigFile($username, $cluster);
 	my $command = "starcluster -c $configfile listclusters $cluster";
-	$self->logDebug("command", $command);
+	$self->logDebug("$$ command", $command);
 	my ($clusterlist) = $self->head()->ops()->runCommand($command);
 	my $status = "unknown";
 	if ( $clusterlist =~ /Cluster nodes:\s+master\s+(\S+)/ ) {
@@ -1668,7 +1773,7 @@ method updateWorkflowStatus ($username, $cluster, $project, $workflow, $status) 
 		name		=>	$workflow,
 		status		=>	$status,
 	};
-	$self->logDebug("hash", $hash);
+	$self->logDebug("$$ hash", $hash);
 	my $required_fields = ["username", "project", "name"];
 	my $set_hash = {
 		status		=>	$status
@@ -1676,21 +1781,21 @@ method updateWorkflowStatus ($username, $cluster, $project, $workflow, $status) 
 	my $set_fields = ["status"];
 	
 	my $success = $self->db()->_updateTable($table, $hash, $required_fields, $set_hash, $set_fields);
-	$self->logDebug("success", $success);
+	$self->logDebug("$$ success", $success);
 	
 	return $success;
 }
 
 method updateClusterWorkflow ($username, $cluster, $project, $workflow, $status) {
- 	$self->logDebug("");
+ 	$self->logDebug("$$ ");
 
 	my $query = qq{SELECT * FROM clusterworkflow
 WHERE username='$username'
 AND project='$project'
 AND workflow='$workflow'};
-	$self->logDebug("$query");
+	$self->logDebug("$$ $query");
 	my $exists = $self->db()->query($query);
-	$self->logDebug("clusterworkflow entry exists", $exists);
+	$self->logDebug("$$ clusterworkflow entry exists", $exists);
 
 	#### SET STATUS
 	my $success;
@@ -1700,7 +1805,7 @@ SET status='$status'
 WHERE username='$username'
 AND project='$project'
 AND workflow='$workflow'};
-		$self->logDebug("$query");
+		$self->logDebug("$$ $query");
 		$success = $self->db()->do($query);
 	}
 	else {
@@ -1716,7 +1821,7 @@ AND workflow='$workflow'};
 		my $required_fields = [ "username", "project", "workflow" ];
 		my $inserted_fields = $self->db()->fields("clusterworkflow");
 		$success = $self->_addToTable("clusterworkflow", $object, $required_fields, $inserted_fields);
-		$self->logDebug("insert success", $success)  if defined $success;
+		$self->logDebug("$$ insert success", $success)  if defined $success;
 
 		my $success = $self->db()->do($query);
 	}
@@ -1726,7 +1831,7 @@ AND workflow='$workflow'};
 }
 
 method updateClusterPid ($username, $cluster, $pid) {
-	$self->logDebug("pid", $pid);
+	$self->logDebug("$$ pid", $pid);
 	#### CHANGE STATUS TO COMPLETED IN clusterstatus TABLE
 	
 	my $query = qq{UPDATE clusterstatus
@@ -1739,16 +1844,16 @@ AND cluster='$cluster'};
 }
 
 method updateClusterStatus ($username, $cluster, $status) {
- 	$self->logDebug("username", $username);
-	$self->logDebug("cluster", $cluster);
-	$self->logDebug("status", $status);
+ 	$self->logDebug("$$ username", $username);
+	$self->logDebug("$$ cluster", $cluster);
+	$self->logDebug("$$ status", $status);
 	
 	my $query = qq{SELECT 1 FROM clusterstatus
 WHERE username='$username'
 AND cluster='$cluster'};
-	$self->logDebug("$query");
+	$self->logDebug("$$ $query");
 	my $exists = $self->db()->query($query);
-	$self->logDebug("clusterstatus entry exists", $exists);
+	$self->logDebug("$$ clusterstatus entry exists", $exists);
 
 	#### SET STATUS
 	my $now = $self->db()->now();
@@ -1759,7 +1864,7 @@ SET polled=$now,
 status='$status'
 WHERE username='$username'
 AND cluster='$cluster'};
-		$self->logDebug("$query");
+		$self->logDebug("$$ $query");
 		$success = $self->db()->do($query);
 	}
 	else {
@@ -1767,7 +1872,7 @@ AND cluster='$cluster'};
 FROM cluster
 WHERE username='$username'
 AND cluster='$cluster'};
-		$self->logDebug("$query");
+		$self->logDebug("$$ $query");
 		my $object = $self->db()->queryhash($query);
 		$object->{started} = $now;
 		$object->{polled} = $now;
@@ -1783,7 +1888,7 @@ AND cluster='$cluster'};
 		#### DO THE ADD
 		my $inserted_fields = $self->db()->fields("clusterstatus");
 		$success = $self->_addToTable("clusterstatus", $object, $required_fields, $inserted_fields);
-		$self->logDebug("insert success", $success)  if defined $success;
+		$self->logDebug("$$ insert success", $success)  if defined $success;
 	}
 
 	return 1 if defined $success and $success;
@@ -1792,8 +1897,8 @@ AND cluster='$cluster'};
 
 #### START BALANCER
 method startBalancer ($clusterobject) {
-    $self->logDebug("Workflow::startBalancer(clusterobject)");
-    $self->logDebug("clusterobject", $clusterobject);
+    $self->logDebug("$$ Workflow::startBalancer(clusterobject)");
+    $self->logDebug("$$ clusterobject", $clusterobject);
 	
     my $username    = $self->username();
     my $cluster    = $self->cluster();
@@ -1804,21 +1909,21 @@ method startBalancer ($clusterobject) {
 
 #### STOP CLUSTER
 method stopCluster {
-	$self->logDebug("Agua::Workflow::stopCluster()");
+	$self->logDebug("$$ Agua::Workflow::stopCluster()");
 
     my $json         =	$self->json();
 	my $username 	=	$json->{username};
 	my $cluster 	=	$json->{cluster};
 
-	$self->logDebug("cluster", $json->{cluster});
-	$self->logDebug("username", $json->{username});
+	$self->logDebug("$$ cluster", $json->{cluster});
+	$self->logDebug("$$ username", $json->{username});
 
-	$self->logDebug("Doing starcluster = StarCluster->new(json)");
+	$self->logDebug("$$ Doing starcluster = StarCluster->new(json)");
 	my $starcluster = $self->loadStarCluster($username, $cluster);
 
 	$self->logError("Cluster $cluster is not running: $cluster") and return if not $starcluster->isRunning();
 	
-	$self->logDebug("Doing StarCluster->stop()");
+	$self->logDebug("$$ Doing StarCluster->stop()");
 	$starcluster->stopCluster();
 }
 
@@ -1826,15 +1931,15 @@ method stopCluster {
 method startCluster {
 	my $username 	=	$self->username();
 	my $cluster 	=	$self->cluster();
-	$self->logDebug("username", $username);
-	$self->logDebug("cluster", $cluster);
+	$self->logDebug("$$ username", $username);
+	$self->logDebug("$$ cluster", $cluster);
 	
-	$self->logDebug("Doing self->loadStarCluster()");
+	$self->logDebug("$$ Doing self->loadStarCluster()");
 	my $starcluster = $self->loadStarCluster($username, $cluster);
 
 	$self->logError("Cluster $cluster is already running: $cluster") and return if $starcluster->isRunning();
 	
-	$self->logDebug("Doing StarCluster->start()");
+	$self->logDebug("$$ Doing StarCluster->start()");
 	my $started = $starcluster->startCluster();
 	
 	$self->logError("Failed to start cluster", $cluster) and exit if not $started;
@@ -1846,11 +1951,11 @@ method addAws {
 #### SAVE USER'S AWS AUTHENTICATION INFORMATION TO aws TABLE
 	my $username 	= 	$self->username();
     my $json 		=	$self->json();
-	$self->logDebug("username", $username);
-	$self->logDebug("json", $json);
+	$self->logDebug("$$ username", $username);
+	$self->logDebug("$$ json", $json);
     
 	my $clusterrunning = $self->clusterWorkflowIsRunning($username);
-	$self->logDebug("clusterrunning", $clusterrunning);
+	$self->logDebug("$$ clusterrunning", $clusterrunning);
 	$self->logError("Can't add AWS credentials (and regenerate keypair file) while any cluster is running. Please stop all workflows running on clusters and retry", $clusterrunning) and exit if $clusterrunning;
 
 	#### REMOVE 
@@ -1865,13 +1970,13 @@ method addAws {
 	$json->{ec2privatekey} =~ s/\s+//g;
 	
 	#### PRINT KEY FILES
-	$self->logDebug("DOING self->printKeyFiles()");
+	$self->logDebug("$$ DOING self->printKeyFiles()");
 	my $privatekey	=	$json->{ec2privatekey};
 	my $publiccert	=	$json->{ec2publiccert};
 	$self->printEc2KeyFiles($username, $privatekey, $publiccert);
 	
 	#### GENERATE KEYPAIR FILE FROM KEYS
-	$self->logDebug("Doing self->generateClusterKeypair()");
+	$self->logDebug("$$ Doing self->generateClusterKeypair()");
 	$self->generateClusterKeypair();
 	
  	$self->logStatus("Added AWS credentials");
@@ -1882,34 +1987,34 @@ method clusterWorkflowIsRunning ($username) {
 	my $query = qq{SELECT 1 from clusterworkflow
 WHERE username='$username'
 AND status='running'};
-	$self->logDebug("query", $query);
+	$self->logDebug("$$ query", $query);
     my $result =  $self->db()->query($query);
-	$self->logDebug("result", $result);
+	$self->logDebug("$$ result", $result);
 	
 	return 0 if not defined $result or not $result;
 	return 1;
 }
 #### STARCLUSTER KEYS
 method generateClusterKeypair {
-	$self->logDebug("");
+	$self->logDebug("$$ ");
 	
 	my $username 		=	$self->username();
 	my $login 			=	$self->login();
 	my $hubtype 		=	$self->hubtype();
-	$self->logDebug("username", $username);
-	$self->logDebug("login", $login);
-	$self->logDebug("hubtype", $hubtype);
+	$self->logDebug("$$ username", $username);
+	$self->logDebug("$$ login", $login);
+	$self->logDebug("$$ hubtype", $hubtype);
 
 	#### SET KEYNAME
 	my $keyname 		= 	"$username-key";
-	$self->logDebug("keyname", $keyname);
+	$self->logDebug("$$ keyname", $keyname);
 
 	#### SET PRIVATE KEY AND PUBLIC CERT FILE LOCATIONS	
 	my $privatekey	=	$self->getEc2PrivateFile($username);
 	my $publiccert 	= 	$self->getEc2PublicFile($username);
 
-	$self->logDebug("privatekey", $privatekey);
-	$self->logDebug("publiccert", $publiccert);
+	$self->logDebug("$$ privatekey", $privatekey);
+	$self->logDebug("$$ publiccert", $publiccert);
 
     #### SET STARCLUSTER	
 	my $starcluster = $self->starcluster();
@@ -1927,14 +2032,14 @@ method generateClusterKeypair {
 	) if not $self->starcluster()->loaded();
 	
 	#### GENERATE KEYPAIR FILE IN .starcluster DIR
-	$self->logDebug("Doing starcluster->generateKeypair()");
+	$self->logDebug("$$ Doing starcluster->generateKeypair()");
 	$starcluster->generateKeypair();
 }
 
 ### NEW/ADD CLUSTER
 method newCluster {
 #### CREATE NEW CELL DIR
-	$self->logDebug("");
+	$self->logDebug("$$ ");
     my $json 		=	$self->json();
 	my $username 	=	$json->{username};
 	my $cluster 	=	$json->{cluster};
@@ -1948,14 +2053,14 @@ method newCluster {
 	$self->setDbh();
 
 	#### CREATE STARCLUSTER config FILE
-	$self->logDebug("Creating configfile and copying celldir");
+	$self->logDebug("$$ Creating configfile and copying celldir");
 	$self->createConfigFile($username, $cluster);	
 	$self->_createCellDir();	
 }
 
 method addCluster {
 #### MODIFY EXISTING CLUSTER. DO NOT CREATE NEW CELL DIR
- 	$self->logDebug("");
+ 	$self->logDebug("$$ ");
     my $data 		=	$self->json();
 	my $username 	=	$self->json()->{username};
 	my $cluster 	=	$data->{cluster};
@@ -1991,13 +2096,13 @@ method addCluster {
 		$self->setDbh();
 	
 		#### CREATE STARCLUSTER config FILE
-		$self->logDebug("Doing     self->createConfigFile($username, $cluster)");
+		$self->logDebug("$$ Doing     self->createConfigFile($username, $cluster)");
 		$self->createConfigFile($username, $cluster);
 	}
 }
 
 method createConfigFile ($username, $cluster) {
-	$self->logDebug("");
+	$self->logDebug("$$ ");
 	
 	#### LOAD STARCLUSTER IF NOT LOADED
 	$self->loadStarCluster($username, $cluster) if not $self->starcluster()->loaded();

@@ -136,8 +136,8 @@ method loadArgs ($args) {
 			$isobject = 0 if not $ref;
 			$isobject = 0 if $ref eq "HASH";
 			$isobject = 0 if $ref eq "ARRAY";
-			$self->logDebug("ADDING key $key", $args->{$key}) if not $isobject;
-			$self->logDebug("ADDING key $key: $args->{$key}") if $isobject;
+			#$self->logDebug("ADDING key $key", $args->{$key}) if not $isobject;
+			#$self->logDebug("ADDING key $key: $args->{$key}") if $isobject;
 			$self->$key($args->{$key}) if $self->can($key);
 		}
 	}

@@ -131,7 +131,7 @@ method receiveTopic ($modules) {
     print " [*] $queue_name. Waiting for logs. To exit press CTRL-C\n";
     
 	no warnings;
-	my $handler	= *handleInput;
+	my $handler	= *handleTopic;
 	use warnings;
 	my $this	=	$self;
     $channel->consume(
@@ -177,7 +177,7 @@ method setListener ($modules) {
     print " [*] $queue_name. Waiting for logs. To exit press CTRL-C\n";
     
 	no warnings;
-	my $handler	= *handleInput;
+	my $handler	= *handleTopic;
 	use warnings;
 	my $this	=	$self;
     $channel->consume(
@@ -235,7 +235,7 @@ method checkInputs ($json, $keys) {
     }
 }
 
-method handleInput ($modules, $json) {
+method handleTopic ($modules, $json) {
 	
 	$self->logDebug();
     #### GET DATA

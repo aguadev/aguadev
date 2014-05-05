@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS stage (
     project             VARCHAR(20) NOT NULL,
     workflow            VARCHAR(20) NOT NULL,
     workflownumber      INT(12),
+	sample            	VARCHAR(20) NOT NULL,
     
     name                VARCHAR(40) NOT NULL default '',    
     number              INT(12),

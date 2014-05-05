@@ -192,19 +192,16 @@ method receive ($args) {
 	}
 	
 	$channel->consume(
-		on_consume => \&callback,
-		queue => $queuename,
-		no_ack => 1,
+		on_consume 	=> 	\&callback,
+		queue 		=> 	$queuename,
+		no_ack 		=> 	1
 	);
 	
 	AnyEvent->condvar->recv;
 }
 
 method startRabbitJs {
-	my $installdir	=	$self->conf()->getKey("agua", "INSTALLDIR");
-	my $appsdir		=	$self->conf()->getKey("agua", "APPSDIR");
-	my $rabbitjs	=	$self->conf()->getKey("install", "RABBITJS");
-	my $command		=	"node $installdir/$appsdir/$rabbitjs &";
+	my $command		=	"service rabbitjs restart";
 	$self->logDebug("command", $command);
 	
 	my $childpid = fork;
@@ -218,11 +215,7 @@ method startRabbitJs {
 }
 
 method stopRabbitJs {
-
-	my $installdir	=	$self->installdir();
-	my $appsdir		=	$self->conf()->getKey("agua", "APPSDIR");
-	my $rabbitjs	=	$self->conf()->getKey("install", "RABBITJS");
-	my $command		=	"node $installdir/$appsdir/$rabbitjs";
+	my $command		=	"service rabbitjs stop";
 	$self->logDebug("command", $command);
 	
 	return `$command`;
@@ -292,17 +285,15 @@ method addIdentifiers ($data) {
 	return $data;	
 }
 
-
-
 method newConnection {
 	my $host		=	$self->host() || $self->conf()->getKey("queue:host", undef);
 	my $user		= 	$self->user() || $self->conf()->getKey("queue:user", undef);
 	my $pass	=	$self->pass() || $self->conf()->getKey("queue:pass", undef);
 	my $vhost		=	$self->vhost() || $self->conf()->getKey("queue:vhost", undef);
-	$self->logDebug("host", $host);
-	$self->logDebug("user", $user);
-	$self->logDebug("pass", $pass);
-	$self->logDebug("vhost", $vhost);
+	$self->logDebug("$$ host", $host);
+	$self->logDebug("$$ user", $user);
+	$self->logDebug("$$ pass", $pass);
+	$self->logDebug("$$ vhost", $vhost);
 	
     my $connection = Net::RabbitFoot->new()->load_xml_spec()->connect(
         host 	=>	$host,
@@ -311,9 +302,13 @@ method newConnection {
         pass 	=>	$pass,
         vhost	=>	$vhost,
     );
-	#$self->logDebug("conn", $conn);
+	sleep(1);
+	#$self->logDebug("$$ conn", $conn);
 	$self->connection($connection);
-	
+
+	#my $channel 	= 	$connection->open_channel();
+	#$self->channel($channel);
+
 	return $connection;	
 }
 
