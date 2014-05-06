@@ -3,7 +3,7 @@ use MooseX::Declare;
 use strict;
 use warnings;
 
-class Test::Queue::Task extends Queue::Task with Test::Agua::Common::Database {
+class Test::Queue::Worker extends Queue::Worker with Test::Agua::Common::Database {
 
 has 'sleep'	=> 	( isa => 'Int|Undef', is => 'rw', default => 10 );
 has 'logfile'	=> 	( isa => 'Str|Undef', is => 'rw', required => 1 );
@@ -51,7 +51,7 @@ method testVerifyShutdown {
 	ok($shuttingdown eq "true", "shutdown");
 }
 
-method testHandleTask {
+method testHandleWorker {
 	$self->setTestDbh();
 	
 	$self->db()->do("DELETE FROM project");
@@ -83,7 +83,7 @@ method testHandleTask {
 		"sample"		:	"e1234567890"
 	}};
 
-	$self->handleTask($json);
+	$self->handleWorker($json);
 
 	my $errors	=	$?;
 	$self->logDebug("errors", $errors);
@@ -139,10 +139,10 @@ method testSendTopic {
 	$self->sendTopic($data, $key);	
 }
 
-method testReceiveTask {
+method testReceiveWorker {
 	#### VERIFY CONNECTION IS LISTENING
 	my $taskqueue	=	"testuser.PanCancer.Sleep";
-	$self->receiveTask($taskqueue);	
+	$self->receiveWorker($taskqueue);	
 }
 
 

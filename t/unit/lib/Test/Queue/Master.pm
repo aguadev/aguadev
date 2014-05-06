@@ -3,7 +3,7 @@ use MooseX::Declare;
 use strict;
 use warnings;
 
-class Test::Queue::Manager extends Queue::Manager with Test::Agua::Common::Database {
+class Test::Queue::Master extends Queue::Master with Test::Agua::Common::Database {
 
 has 'logfile'	=> 	( isa => 'Str|Undef', is => 'rw', required => 1 );
 has 'dumpfile'	=> 	( isa => 'Str|Undef', is => 'rw', required => 1 );
@@ -21,7 +21,7 @@ method testUpdateQueue {
 	$self->logDebug("database", $database);
 	$self->database($database);
 	$self->setTestDbh();
-	$self->db()->do("DELETE FROM queue");
+	$self->db()->do("DELETE FROM queuesample");
 
 	my $data 	=	{
 "username"	=>	"testuser",
@@ -46,7 +46,7 @@ method testUpdateQueue {
 "stderr"	=>	""
 };
 
-	ok($self->updateQueue($data), "updated queue table");
+	ok($self->updateQueue($data), "updated queuesample table");
 }
 
 method testGetSynapseStatus {
@@ -93,7 +93,7 @@ method testHandleTopic {
 	$self->database($database);
 	$self->setTestDbh();
 	$self->db()->do("DELETE FROM provenance");
-	$self->db()->do("DELETE FROM queue");
+	$self->db()->do("DELETE FROM queuesample");
 	
 	#### INPUT DATA	
 	my $json 	=	qq{{
@@ -150,8 +150,8 @@ method testMaintainQueue {
 	#### SET TEST DATABASE
 	$self->setUpTestDatabase();
 	
-	my $tsvfile	=	"$Bin/inputs/queue.tsv";
-	$self->loadTsvFile("queue", $tsvfile);
+	my $tsvfile	=	"$Bin/inputs/queuesample.tsv";
+	$self->loadTsvFile("queuesample", $tsvfile);
 	
 	my $queuedata	=	{
 		username	=>	"testuser",

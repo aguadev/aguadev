@@ -1,0 +1,3 @@
+#!/bin/bash
+
+/agua/bin/daemon/worker --mode listen

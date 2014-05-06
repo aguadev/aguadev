@@ -16,13 +16,13 @@ BEGIN {
 #### INTERNAL MODULES
 #use lib "/agua/lib";
 use Conf::Yaml;
-use Queue::Task;
+use Queue::Worker;
 
 #### SET LOG
 my $mode;
 my $showlog     =   2;
 my $printlog    =   4;
-my $logfile		=	"$installdir/log/task-daemon.log";
+my $logfile	=	"$installdir/log/worker.log";
 my $help;
 GetOptions (
     'mode=i'     	=> \$mode,
@@ -41,7 +41,7 @@ my $conf = Conf::Yaml->new(
 	logfile		=>	$logfile
 );
 
-my $object      =  Queue::Task->new({
+my $object      =  Queue::Worker->new({
 	mode		=>	$mode,
     conf        =>  $conf,
     showlog     =>  $showlog,

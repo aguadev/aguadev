@@ -25,7 +25,7 @@ TO DO
 use strict;
 use warnings;
 
-class Queue::Task with (Logger, Exchange, Agua::Common::Database, Agua::Common::Timer) {
+class Queue::Worker with (Logger, Exchange, Agua::Common::Database, Agua::Common::Timer) {
 
 #####////}}}}}
 
@@ -68,18 +68,18 @@ method listen {
 	my $taskqueue =	$self->conf()->getKey("queue:taskqueue", undef);
 	$self->logDebug("$$ taskqueue", $taskqueue);
 
-	$self->logDebug("");
-	my $childpid = fork;
-	if ( $childpid ) #### ****** Parent ****** 
-	{
-		$self->logDebug("$$ PARENT childpid", $childpid);
-	}
-	elsif ( defined $childpid ) {
-		$self->receiveTask($taskqueue);	
-	}	
+	#$self->logDebug("");
+	#my $childpid = fork;
+	#if ( $childpid ) #### ****** Parent ****** 
+	#{
+	#	$self->logDebug("$$ PARENT childpid", $childpid);
+	#}
+	#elsif ( defined $childpid ) {
+		$self->receiveWorker($taskqueue);	
+	#}	
 }
 
-method receiveTask ($taskqueue) {
+method receiveWorker ($taskqueue) {
 	$self->logDebug("$$ queue", $taskqueue);
 	
 	#### OPEN CONNECTION
@@ -96,14 +96,14 @@ method receiveTask ($taskqueue) {
 	$channel->qos(prefetch_count => 1,);
 	
 	no warnings;
-	my $handler	= *handleTask;
+	my $handler	= *handleWorker;
 	use warnings;
 	my $this	=	$self;
 	
 	$channel->consume(
 		on_consume	=>	sub {
 			my $var 	= 	shift;
-			print "$$ Exchange::receiveTask    DOING CALLBACK";
+			print "$$ Exchange::receiveWorker    DOING CALLBACK";
 			#print Dumper $var;
 		
 			my $body 	= 	$var->{body}->{payload};
@@ -127,7 +127,7 @@ method receiveTask ($taskqueue) {
 	AnyEvent->condvar->recv;	
 }
 
-method handleTask ($json) {
+method handleWorker ($json) {
 	$self->logDebug("$$ json", $json);
 	my $data = $self->jsonparser()->decode($json);    
 

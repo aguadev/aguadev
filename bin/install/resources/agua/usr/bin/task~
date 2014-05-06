@@ -1,5 +1,0 @@
-#!/bin/bash
-
-source /agua/apps/pancancer/envars.sh
-
-/agua/apps/perl/5.18.2/bin/perl /agua/bin/daemon/agua

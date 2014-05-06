@@ -64,7 +64,7 @@ method BUILD ($args) {
 method returnAssignment ($uuid) {
 	my $executable		=	$self->executable();
 	my $assignee		=	$self->assignee();
-	my $command		=	"$executable returnAssignment $uuid $assignee";
+	my $command		=	"$executable returnAssignment $uuid --assignee $assignee";
 	$self->logDebug("command", $command);
 	
 	return `$command`;	
@@ -92,7 +92,19 @@ method getBamForWork ($count) {
 	my $command 	=	"$executable getBamForWork $assignee --count=$count";
 	$self->logDebug("command", $command);
 	
-	print `$command`;		
+	my $tempfile	=	"/tmp/synapse-$$.bamlist";
+	$self->logDebug("tempfile", $tempfile);
+	print `$command 2> $tempfile 1>> $tempfile`;
+	
+	my $string	=	`cat $tempfile`;
+	$self->logDebug("string", $string);
+
+	#`rm -fr $tempfile`;
+	my $samples;
+	@$samples = split "\n", $string;
+	shift @$samples;
+	
+	return $samples;
 }
 
 #### LIST SAMPLES

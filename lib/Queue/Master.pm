@@ -25,7 +25,7 @@ TO DO
 use strict;
 use warnings;
 
-class Queue::Manager with (Logger, Exchange, Agua::Common::Database) {
+class Queue::Master with (Logger, Exchange, Agua::Common::Database) {
 
 #####////}}}}}
 
@@ -47,7 +47,7 @@ has 'modules'	=> ( isa => 'ArrayRef|Undef', is => 'rw', lazy	=>	1, builder	=>	"s
 has 'conf'		=> ( isa => 'Conf::Yaml', is => 'rw', required	=>	0 );
 has 'nova'		=> ( isa => 'Openstack::Nova', is => 'rw', lazy	=>	1, builder	=>	"setNova" );
 has 'synapse'	=> ( isa => 'Synapse', is => 'rw', lazy	=>	1, builder	=>	"setSynapse" );
-has 'db'		=> ( isa => 'Agua::DBase::MySQL', is => 'rw', required	=>	0 );
+has 'db'		=> ( isa => 'Agua::DBase::MySQL', is => 'rw', lazy	=>	1,	builder	=>	"setDbh" );
 has 'jsonparser'=> ( isa => 'JSON', is => 'rw', lazy	=>	1, builder	=>	"setJsonParser" );
 
 use FindBin qw($Bin);
@@ -73,6 +73,8 @@ method manage {
 
 	#### GET CURRENT QUEUES
 	my $queues	=	$self->getQueues();
+	$self->logDebug("queues", $queues);
+
 	my $shutdown	=	$self->conf()->getKey("shutdown", undef);
 
 	#### LISTEN FOR REPORTS FROM WORKERS
@@ -86,8 +88,17 @@ method manage {
 		my $sleep	=	$self->sleep();	
 		sleep($sleep);
 		$queues		=	$self->getQueues();
-		$shutdown	=	$self->conf()->getKey("shutdown", undef);
+		$shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
 	}	
+}
+
+method getQueues {
+	my $query       =	qq{SELECT DISTINCT username, project, workflow, workflownumber
+FROM queue
+ORDER BY username, project, workflownumber};
+	$self->logDebug("query", $query);
+
+	return	$self->db()->queryhasharray($query);
 }
 
 method maintainQueue ($queuedata) {
@@ -101,7 +112,7 @@ method maintainQueue ($queuedata) {
 	$self->logDebug("FINAL maxjobs", $maxjobs);
 
 	#### GET NUMBER OF QUEUED JOBS
-	my $numberqueued	=	$self->getNumberQueuedJobs($queuename);
+	my $numberqueued	=	$self->getNumberQueuedJobs($queuename) || 0;
 	$self->logDebug("numberqueued", $numberqueued);
 
 	#### ADD MORE JOBS TO QUEUE IF LESS THAN maxjobs
@@ -256,7 +267,7 @@ method getTasks ($queuedata, $limit) {
 	$self->logDebug("queuedata", $queuedata);
 	$self->logDebug("limit", $limit);
 
-	#### GET TASKS FROM queue TABLE
+	#### GET TASKS FROM queuesample TABLE
 	my $tasks	=	$self->pullTasks($queuedata, $limit);
 	$self->logDebug("tasks", $tasks);
 
@@ -301,10 +312,10 @@ method pullTasks ($queuedata, $limit) {
 	$self->logDebug("queuedata", $queuedata);
 
 	#### VERIFY VALUES
-	my $notdefined	=	$self->notDefined($queuedata, ["username", "project", "workflow", "workflownumber"]);
-	$self->logCritical("not defined", $notdefined) and return if @$notdefined;
+	my $notdefined	=	$self->notDefined($queuedata, ["username", "project", "workflow"]);
+	$self->logCritical("not defined", @$notdefined) and return if scalar(@$notdefined) != 0;
 
-	my $query		=	qq{SELECT * FROM queue
+	my $query		=	qq{SELECT * FROM queuesample
 WHERE username='$queuedata->{username}'
 AND project='$queuedata->{project}'
 AND workflow='$queuedata->{workflow}'
@@ -321,29 +332,15 @@ method pushTask ($task) {
 	$self->logDebug("task", $task);
 	
 	#### VERIFY VALUES
-	my $notdefined	=	$self->notDefined($task, ["username", "project", "workflow", "workflownumber", "sample"]);
-	$self->logCritical("not defined", $notdefined) and return if @$notdefined;
+	my $keys	=	["username", "project", "workflow", "workflownumber", "sample"];
+	my $notdefined	=	$self->notDefined($task, $keys);
+	$self->logCritical("not defined", @$notdefined) and return if @$notdefined;
 
 	my $status	=	"unassigned";
-	my $table	=	"queue";
-	my $keys	=	[ "username", "project", "workflow", "workflownumber", "sample" ];
-
+	my $table	=	"queuesample";
 	$self->_removeFromTable($table, $task, $keys);
 	
 	return $self->_addToTable($table, $task, $keys);
-
-#	my $query	=	qq{INSERT INTO queue VALUES (
-#'$task->{username}',
-#'$task->{project}',
-#'$task->{workflow}',
-#'$task->{workflownumber}',
-#'$task->{sample}',
-#'$task->{status}'
-#)};
-#	$self->logDebug("query", $query);
-
-#	return 0 if not $self->db()->do($query);
-	#return 1;	
 }
 
 method allocateSamples ($queuedata, $limit) {
@@ -357,6 +354,15 @@ method allocateSamples ($queuedata, $limit) {
 	}
 	
 	return 1;
+}
+
+method copyHash ($hash1) {
+	my $hash2 = {};
+	foreach my $key ( keys %$hash1 ) {
+		$hash2->{$key}	=	$hash1->{$key};
+	}
+	
+	return $hash2;
 }
 
 method maxJobsForQueue ($queuedata) {
@@ -373,7 +379,10 @@ method maxJobsForQueue ($queuedata) {
 }
 
 method getSampleFromSynapse ($maxjobs) {
-	$self->synapse()->getBamForWork($maxjobs);
+	my $samples	=	$self->synapse()->getBamForWork($maxjobs);
+	$self->logDebug("samples", $samples);
+	
+	return $samples;
 }
 
 method getNumberQueuedJobs ($queue) {

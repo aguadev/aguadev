@@ -1,0 +1,11 @@
+# Worker Upstart and SysVinit configuration file
+
+# Customize location of Worker binary (especially for development testing).
+#WORKER="/usr/local/bin/worker"
+
+# Use WORKER_OPTS to modify the daemon startup options.
+#WORKER_OPTS="--showlog 4 --printlog 5"
+
+# If you need Worker to use a specific environment variable, it can also be specified here.
+export SOME_ENVIRONMENT_VARIABLE=somevalue
+
