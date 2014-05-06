@@ -82,9 +82,10 @@ isa_ok($object, "Test::Queue::Master", "object");
 #$object->testHandleTopic();
 #$object->testGetSynapseStatus();
 #$object->testUpdateQueue();
+$object->testUpdateSamples();
 
 ##### INTERACTIVE
-$object->testReceiveTopic();
+#$object->testReceiveTopic();
 ##$object->testListenTopics();
 ##$object->testMaintainQueue();
 

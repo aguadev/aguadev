@@ -3,15 +3,52 @@ use MooseX::Declare;
 use strict;
 use warnings;
 
-class Test::Queue::Master extends Queue::Master with Test::Agua::Common::Database {
+class Test::Queue::Master extends Queue::Master with (Test::Agua::Common::Database, Agua::Common::Util) {
+
+use Test::Synapse;
 
 has 'logfile'	=> 	( isa => 'Str|Undef', is => 'rw', required => 1 );
 has 'dumpfile'	=> 	( isa => 'Str|Undef', is => 'rw', required => 1 );
+
+has 'synapse'	=> ( isa => 'Test::Synapse', is => 'rw', lazy	=>	1, builder	=>	"setSynapse" );
+
 
 use FindBin qw($Bin);
 use Test::More;
 
 #####////}}}}}
+
+method testUpdateSamples {
+
+	#### SET TEST DATABASE
+	$self->setUpTestDatabase();
+	
+	#### LOAD TABLE
+	my $query	=	qq{DELETE FROM queuesample};
+	$self->logDebug("query", $query);
+	$self->db()->do($query);
+	my $tsvfile	=	"$Bin/inputs/updateSamples/queuesample.tsv";
+	$self->loadTsvFile("queuesample", $tsvfile);
+	
+$self->logDebug("DEBUG EXIT") and exit;
+	
+	my $assignmentfile	=	"$Bin/inputs/assignments.txt";
+	$self->logDebug("assignmentfile", $assignmentfile);
+	my $contents	=	$self->fileContents($assignmentfile);
+	my @entries		=	split "\n", $contents;
+	$self->logDebug("No. entries", $#entries + 1);
+	$self->synapse()->outputs([\@entries]);
+	
+	my $queuedata	=	{
+		username	=>	"syoung",
+		project		=>	"PanCancer",
+		workflow	=>	"Align"
+	};
+	$self->updateSamples($queuedata);
+	my $statemap	=	$self->synapse()->reversestatemap();
+	$self->logDebug("statemap", $statemap);
+
+}
 
 method testUpdateQueue {
 	diag("updateQueue");
@@ -258,6 +295,19 @@ method identicalFiles ($actualfile, $expectedfile) {
 	
 	return 1 if $diff eq '';
 	return 0;
+}
+
+
+method setSynapse {
+
+	my $synapse	= Test::Synapse->new({
+		conf		=>	$self->conf(),
+		showlog     =>  $self->showlog(),
+		printlog    =>  $self->printlog(),
+		logfile     =>  $self->logfile()
+	});
+
+	$self->synapse($synapse);
 }
 
 

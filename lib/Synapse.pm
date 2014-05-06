@@ -45,6 +45,7 @@ has 'assignee'		=>  ( isa => 'Str|Undef', is => 'rw', default	=>	"ucsc_biofarm" 
 ##### Objects
 has 'states'		=>  ( isa => 'HashRef|Undef', is => 'rw', lazy	=>	1, builder	=>	"setStates" );
 has 'statemap'		=>  ( isa => 'HashRef|Undef', is => 'rw', lazy	=>	1, builder	=>	"setStateMap" );
+has 'reversestatemap'		=>  ( isa => 'HashRef|Undef', is => 'rw', lazy	=>	1, builder	=>	"setReverseStateMap" );
 has 'activestates'	=>  ( isa => 'ArrayRef|Undef', is => 'rw', lazy	=>	1, builder	=>	"setActiveStates" );
 has 'stablestates'	=>  ( isa => 'ArrayRef|Undef', is => 'rw', lazy	=>	1, builder	=>	"setStableStates" );
 has 'conf'			=> ( isa => 'Conf::Yaml', is => 'rw', lazy => 1, builder => "setConf" );
@@ -205,6 +206,20 @@ method setStateMap {
 	};
 }
 
+method setReverseStateMap {
+	return {
+		'todownload'	=>	'download:queued',
+		'downloading'	=>	'download:started',
+		'downloaded'	=>	'download:completed',
+		'splitting'		=>	'split:started',
+		'split'			=>	'split:completed',
+		'aligning'		=>	'align:started',
+		'aligned'		=>	'align:completed',
+		'uploading'		=>	'upload:started',
+		'uploaded'		=>	'upload:completed'
+	};
+}
+
 method setStates {
 	return {
 		'unassigned' 	=>	'todownload',
@@ -316,7 +331,9 @@ method setExecutable {
 
 	#### SET PYTHON ON PATH
 	my $hash		=	$self->conf()->getKey("packages:python", "2.7");
-	my $python	=	$hash->{INSTALLDIR};
+	my $python	=	`which python`;
+	$python 	=~	s/\s+$//;
+	$python		=	$hash->{INSTALLDIR} if defined $hash;
 	$self->logDebug("python", $python);
 
 	##### SET SYNAPSE EXECUTABLE

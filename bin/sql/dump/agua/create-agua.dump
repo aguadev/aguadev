@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.5.34, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: aguadev
+-- Host: localhost    Database: agua
 -- ------------------------------------------------------
 -- Server version	5.5.34-0ubuntu0.13.04.1
 
@@ -423,6 +423,22 @@ CREATE TABLE `queue` (
   `project` varchar(40) NOT NULL,
   `workflow` varchar(40) NOT NULL,
   `workflownumber` int(8) NOT NULL,
+  PRIMARY KEY (`username`,`project`,`workflow`,`workflownumber`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `queuesample`
+--
+
+DROP TABLE IF EXISTS `queuesample`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `queuesample` (
+  `username` varchar(30) NOT NULL,
+  `project` varchar(40) NOT NULL,
+  `workflow` varchar(40) NOT NULL,
+  `workflownumber` int(8) NOT NULL,
   `sample` varchar(40) NOT NULL,
   `status` varchar(40) NOT NULL,
   PRIMARY KEY (`username`,`project`,`workflow`,`workflownumber`,`sample`)
@@ -645,4 +661,4 @@ CREATE TABLE `workflow` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-04-30 10:09:59
+-- Dump completed on 2014-05-06 15:24:58

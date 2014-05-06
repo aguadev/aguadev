@@ -68,13 +68,13 @@ method listen {
 	my $taskqueue =	$self->conf()->getKey("queue:taskqueue", undef);
 	$self->logDebug("$$ taskqueue", $taskqueue);
 
-	#$self->logDebug("");
 	#my $childpid = fork;
 	#if ( $childpid ) #### ****** Parent ****** 
 	#{
 	#	$self->logDebug("$$ PARENT childpid", $childpid);
 	#}
 	#elsif ( defined $childpid ) {
+	
 		$self->receiveWorker($taskqueue);	
 	#}	
 }
@@ -232,6 +232,8 @@ method sendTopic ($data, $key) {
 	);
 	
 	print "$$ [x] Sent topic with key '$key'\n";
+
+	$connection->close();
 }
 
 method setJsonParser {

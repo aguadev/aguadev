@@ -33,6 +33,7 @@ class Queue::Master with (Logger, Exchange, Agua::Common::Database) {
 has 'showlog'	=>  ( isa => 'Int', is => 'rw', default => 2 );
 has 'printlog'	=>  ( isa => 'Int', is => 'rw', default => 5 );
 has 'maxjobs'	=>  ( isa => 'Int', is => 'rw', default => 10 );
+has 'sleep'		=>  ( isa => 'Int', is => 'rw', default => 30 );
 
 # Strings
 has 'user'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0 );
@@ -77,19 +78,73 @@ method manage {
 
 	my $shutdown	=	$self->conf()->getKey("shutdown", undef);
 
+	#### INITIALISE/UPDATE queuesample TABLE FROM SYNAPSE
+	#### USE FIRST QUEUE FOR username, project AND workflow INFO
+	$self->updateSamples($$queues[0]);
+
 	#### LISTEN FOR REPORTS FROM WORKERS
 	$self->listenTopics();
 
-	while ( scalar(@$queues) > 0 and not $shutdown eq "true" ) {
+	while ( not $shutdown eq "true" ) {
 		foreach my $queue ( @$queues ) {
 			$self->maintainQueue($queue);
 		}
 
-		my $sleep	=	$self->sleep();	
+		my $sleep	=	$self->sleep();
+		print "Queue::Master::manage    Sleeping $sleep seconds\n";
 		sleep($sleep);
 		$queues		=	$self->getQueues();
 		$shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
 	}	
+}
+
+method updateSamples ($queuedata) {
+	$self->logDebug("queuedata", $queuedata);
+
+	my $assignments	=	$self->getSampleList();
+	$self->logDebug("no. assignments", scalar(@$assignments));
+	$self->logDebug("assignements[0]", $$assignments[0]);
+	
+	foreach my $assignment ( @$assignments ) {
+		my ($uuid, $synapsestatus)	=	$assignment	=~ /^\s*(\S+)\s+(\S+)/;
+		$self->logDebug("uuid", $uuid);
+		$self->logDebug("synapsestatus", $synapsestatus);
+		
+		if ( not $self->isAssigned($uuid, $queuedata)) {
+			$self->logDebug("DOING makeAssigned: $uuid, $synapsestatus");
+			$self->makeAssigned($uuid, $synapsestatus, $queuedata);
+
+	$self->logDebug("DEBUG EXIT") and exit;
+
+		}
+		
+	}
+}
+
+method isAssigned ($uuid, $queuedata) {
+	my $query	=	qq{SELECT 1 FROM queuesample
+WHERE sample='$uuid'
+AND username='$queuedata->{username}'
+AND project='$queuedata->{project}'
+AND workflow='$queuedata->{workflow}'
+};
+	$self->logDebug("query", $query);
+
+	return $self->db()->query($query);
+}
+
+method makeAssigned ($uuid, $state) {
+	$self->logDebug("uuid", $uuid);
+	$self->logDebug("state", $state);
+	
+	my $query	=	qq{SELECT 1 FROM queuesample
+WHERE sample='$uuid'};
+	
+}
+
+method getSampleList {
+	$self->logDebug("");
+	return $self->synapse()->getAssignments();
 }
 
 method getQueues {
@@ -119,12 +174,18 @@ method maintainQueue ($queuedata) {
 	my $limit	=	$maxjobs - $numberqueued;
 	$self->logDebug("limit", $limit);
 
+#$self->logDebug("DEBUG EXIT") and exit;
+
 	return 0 if $limit <= 0;
 
 	my $tasks	=	$self->getTasks($queuedata, $limit);
 	$self->logDebug("tasks", $tasks);
 	foreach my $task ( @$tasks ) {
 		$self->sendTask($task);
+	
+$self->logDebug("DEBUG EXIT") and exit;
+
+
 	}
 	
 	return 1;
@@ -255,7 +316,7 @@ method getSynapseStatus ($data) {
 	$self->logDebug("stage", $stage);
 	$self->logDebug("status", $status);
 
-	my $statemap	=	$self->synapse()->statemap();
+	my $statemap		=	$self->synapse()->statemap();
 	my $synapsestatus	=	$statemap->{"$stage:$status"};
 	$self->logDebug("synapsestatus", $synapsestatus);
 
@@ -412,7 +473,7 @@ method sendTask ($task) {
 
 	#### SET QUEUE
 	my $queuename		=	$self->setQueueName($task);
-	$task->{queue}	=	$queuename;	
+	$task->{queue}		=	$queuename;	
 	
 	#### ADD UNIQUE IDENTIFIERS
 	$task	=	$self->addIdentifiers($task);
@@ -434,7 +495,7 @@ method sendTask ($task) {
 	);
 	
 	#### BIND QUEUE TO EXCHANGE
-	$self->channel()->publish(
+	$channel->publish(
 		exchange => '',
 		routing_key => $queuename,
 		body => $json,
@@ -645,14 +706,6 @@ method setSynapse {
 	});
 
 	$self->synapse($synapse);
-}
-
-method getSampleList {
-	
-	#### LATER: TRIAGE
-	my $list	=	$self->synapse()->getList();
-	
-	return;
 }
 
 method pushWorkflow {

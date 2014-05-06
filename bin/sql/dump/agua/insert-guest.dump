@@ -1,13 +1,1 @@
 #### INSERT TABLES 
-INSERT INTO project VALUES ('guest','Project1',0,'','','','');
-INSERT INTO project VALUES ('guest','Project2',0,'','','','');
-INSERT INTO stage VALUES ('agua','emboss','6.4.0.0','/aguadev/apps/emboss','guest','Project1','Workflow1',1,'aligncopypair','1','alignment','bin/aligncopypair','','',0,'','','0000-00-00 00:00:00','0000-00-00 00:00:00','0000-00-00 00:00:00',0,0,0,'','','','');
-INSERT INTO stageparameter VALUES ('agua','guest','Project1','Workflow1',0,'aligncopypair','1','append',0,0,'input','boolean','boolean','-append','N','optional','','This allows you to append the name and comments you have given on to the end of the existing alignment header.','','','',0);
-INSERT INTO stageparameter VALUES ('agua','guest','Project1','Workflow1',0,'aligncopypair','1','comment',0,0,'input','string','string','-comment','','optional','','Comment on the alignment (Any string)','','','',0);
-INSERT INTO stageparameter VALUES ('agua','guest','Project1','Workflow1',0,'aligncopypair','1','name',0,0,'input','string','string','-name','','optional','','Name of the alignment (Any string)','','','',0);
-INSERT INTO stageparameter VALUES ('agua','guest','Project1','Workflow1',0,'aligncopypair','1','outfile',0,0,'input','outfile','file','-outfile','*.aligncopypair','required','','Output alignment file name (default -aformat simple)','','','',0);
-INSERT INTO stageparameter VALUES ('agua','guest','Project1','Workflow1',0,'aligncopypair','1','sequences',0,0,'input','infile','file','-sequences','','required','','File containing a sequence alignment.','','','',0);
-INSERT INTO users VALUES ('guest','guest','','','','','2014-01-13 00:29:26');
-INSERT INTO workflow VALUES ('guest','Project1','Workflow1',1,'','','','');
-INSERT INTO workflow VALUES ('guest','Project2','Workflow1',1,'','','','');
-INSERT INTO workflow VALUES ('guest','Project2','Workflow2',2,'','','','');
