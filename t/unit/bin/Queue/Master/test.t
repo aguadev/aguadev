@@ -76,13 +76,13 @@ my $object = new Test::Queue::Master(
 isa_ok($object, "Test::Queue::Master", "object");
 
 #### AUTOMATED
-#$object->testDownloadPercent();
-#$object->testParseUuid();
-#$object->testGetNumberQueuedJobs();
+$object->testDownloadPercent();
+$object->testParseUuid();
+$object->testGetNumberQueuedJobs();
 $object->testHandleTopic();
-#$object->testGetSynapseStatus();
-#$object->testUpdateQueue();
-#$object->testUpdateSamples();
+$object->testGetSynapseStatus();
+$object->testUpdateQueue();
+$object->testUpdateSamples();
 
 ##### INTERACTIVE
 #$object->testReceiveTopic();

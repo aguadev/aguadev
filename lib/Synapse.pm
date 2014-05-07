@@ -60,7 +60,7 @@ method BUILD ($args) {
 }
 
 method returnAssignment ($uuid) {
-	my $executable		=	$self->setExecutable();
+	my $executable		=	$self->executable();
 	my $assignee		=	$self->assignee();
 	my $command			=	"$executable returnAssignment $uuid --assignee $assignee";
 	$self->logDebug("command", $command);
@@ -69,7 +69,7 @@ method returnAssignment ($uuid) {
 }
 
 method assignError ($uuid, $error) {
-	my $executable		=	$self->setExecutable();
+	my $executable		=	$self->executable();
 	my $assignee		=	$self->assignee();
 	my $command		=	qq{$executable errorAssignment $uuid "$error"};
 	$self->logDebug("command", $command);
@@ -85,7 +85,7 @@ method addSamples ($args) {
 method getBamForWork ($count) {
 	$count		=	$self->count() if not defined $count;
 
-	my $executable		=	$self->setExecutable();
+	my $executable		=	$self->executable();
 	my $assignee		=	$self->assignee();
 	my $command 	=	"$executable getBamForWork $assignee --count=$count";
 	$self->logDebug("command", $command);
@@ -107,7 +107,7 @@ method getBamForWork ($count) {
 
 #### LIST SAMPLES
 method list ($args) {
-	my $executable		=	$self->setExecutable();
+	my $executable		=	$self->executable();
 	my $assignee		=	$self->assignee();
 	my $command 	=	"$executable getAssignments $assignee";
 	$self->logDebug("command", $command);
@@ -261,7 +261,7 @@ method getUuidsByState ($state) {
 }
 
 method getAssignments {
-	my $executable	=	$self->setExecutable();
+	my $executable	=	$self->executable();
 	my $assignee		=	$self->assignee();
 	my $command		=	"$executable getAssignments $assignee";
 	$self->logDebug("command", $command);
@@ -280,7 +280,7 @@ method getAssignments {
 }
 
 method getWorkAssignment ($state) {
-	my $executable		=	$self->setExecutable();
+	my $executable		=	$self->executable();
 	my $assignee		=	$self->assignee();
 	my $command		=	"$executable getAssignmentForWork $assignee $state";
 	$self->logDebug("command", $command);
@@ -327,7 +327,7 @@ method change ($uuid, $state) {
 	$self->logDebug("uuid", $uuid);
 	$self->logDebug("state", $state);
 	
-	my $executable		=	$self->setExecutable();
+	my $executable		=	$self->executable();
 	$self->logDebug("executable", $executable);
 	
 	my $assignee	=	$self->assignee();

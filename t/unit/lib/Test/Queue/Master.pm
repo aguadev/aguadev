@@ -212,7 +212,6 @@ method testHandleTopic {
 "sample"	:	"a9012345678",
 "stage"		:	"align",
 "stagenumber":	"1",
-"application":	"sleep",
 "owner"		:	"syoung",
 "package"	:	"package",
 "version"	:	"0.8.0",
@@ -231,13 +230,15 @@ method testHandleTopic {
 	$self->handleTopic($json);
 
 	#### VERIFY
-	my $data	=	$self->jsonparser()->decode($json);
+	my $expected	=	$self->jsonparser()->decode($json);
+	delete $expected->{mode};
+	
 	my $query =	"SELECT * FROM provenance";
 	$self->logDebug("query", $query);
 	my $actual	=	$self->db()->queryhash($query);
 	$self->logDebug("actual", $actual);
 
-	is_deeply($actual, $data, "loaded fields identical to input");	
+	is_deeply($actual, $expected, "loaded fields identical to input");	
 }
 
 method testReceiveTopic {

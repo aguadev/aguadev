@@ -87,7 +87,7 @@ method manage {
 
 	while ( not $shutdown eq "true" ) {
 		foreach my $queue ( @$queues ) {
-			$self->maintainQueue($queue);
+			$self->maintainQueue($queues, $queue);
 		}
 
 		my $sleep	=	$self->sleep();
@@ -98,6 +98,7 @@ method manage {
 	}	
 }
 
+#### UPDATE SAMPLES
 method updateSamples ($queues) {
 	$self->logDebug("queues", $queues);
 	
@@ -194,6 +195,7 @@ ORDER BY username, project, workflownumber};
 	return	$self->db()->queryhasharray($query);
 }
 
+#### MAINTAIN QUEUES
 method maintainQueue ($queuedata) {
 	$self->logDebug("queuedata", $queuedata);
 	
@@ -212,29 +214,15 @@ method maintainQueue ($queuedata) {
 	my $limit	=	$maxjobs - $numberqueued;
 	$self->logDebug("limit", $limit);
 
-#$self->logDebug("DEBUG EXIT") and exit;
-
 	return 0 if $limit <= 0;
 
 	my $tasks	=	$self->getTasks($queuedata, $limit);
 	$self->logDebug("tasks", $tasks);
 	foreach my $task ( @$tasks ) {
 		$self->sendTask($task);
-	
-$self->logDebug("DEBUG EXIT") and exit;
-
-
 	}
 	
 	return 1;
-}
-
-method setConfigMaxJobs ($queuename, $value) {
-	return $self->conf()->setKey("queue:maxjobs", $queuename, $value);
-}
-
-method getConfigMaxJobs ($queuename) {
-	return $self->conf()->getKey("queue:maxjobs", $queuename);
 }
 
 method listenTopics {
@@ -342,6 +330,14 @@ method updateQueue ($data) {
 	my $synapsestatus	=	$self->getSynapseStatus($data);
 	my $sample	=	$data->{sample};
 	$self->synapse()->change($sample, $synapsestatus);
+}
+
+method setConfigMaxJobs ($queuename, $value) {
+	return $self->conf()->setKey("queue:maxjobs", $queuename, $value);
+}
+
+method getConfigMaxJobs ($queuename) {
+	return $self->conf()->getKey("queue:maxjobs", $queuename);
 }
 
 method getSynapseStatus ($data) {
@@ -579,6 +575,7 @@ method setModules {
     return $modules; 
 }
 
+#### UTILS
 method exited ($nodename) {	
 	my $entries	=	$self->nova()->getEntries($nodename);
 	foreach my $entry ( @$entries ) {
@@ -682,15 +679,20 @@ method parseUuid ($lines) {
 	return;
 }
 
-method stopWorkflow ($ips, $type) {
+method stopWorkflow ($ips, $workflow) {
 	$self->logDebug("ips", $ips);
-	$self->logDebug("type", $type);
-
+	$self->logDebug("workflow", $workflow);
+	
+	foreach my $ip ( @$ips ) {
+		my $data	=	{};
+		$data->{module}	=	"Agua::Workflow";
+		$data->{mode}	=	"stopWorkflow";
+		
+	}
 }
 
 method getWorkflows ($node) {
 #### GET CURRENT WORKFLOW STATES (COMPLETED, EXITED)
-	
 	
 }
 
@@ -701,8 +703,7 @@ method runCommand ($command) {
 }
 
 method startWorkflow {
-	
-
+	#### OVERRIDE	
 }
 
 

@@ -75,11 +75,11 @@ method listen {
 	#}
 	#elsif ( defined $childpid ) {
 	
-		$self->receiveWorker($taskqueue);	
+		$self->receiveTask($taskqueue);	
 	#}	
 }
 
-method receiveWorker ($taskqueue) {
+method receiveTask ($taskqueue) {
 	$self->logDebug("$$ queue", $taskqueue);
 	
 	#### OPEN CONNECTION
@@ -96,14 +96,14 @@ method receiveWorker ($taskqueue) {
 	$channel->qos(prefetch_count => 1,);
 	
 	no warnings;
-	my $handler	= *handleWorker;
+	my $handler	= *handleTask;
 	use warnings;
 	my $this	=	$self;
 	
 	$channel->consume(
 		on_consume	=>	sub {
 			my $var 	= 	shift;
-			print "$$ Exchange::receiveWorker    DOING CALLBACK";
+			print "$$ Exchange::receiveTask    DOING CALLBACK";
 			#print Dumper $var;
 		
 			my $body 	= 	$var->{body}->{payload};
@@ -127,7 +127,7 @@ method receiveWorker ($taskqueue) {
 	AnyEvent->condvar->recv;	
 }
 
-method handleWorker ($json) {
+method handleTask ($json) {
 	$self->logDebug("$$ json", $json);
 	my $data = $self->jsonparser()->decode($json);    
 
