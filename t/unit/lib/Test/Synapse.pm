@@ -32,9 +32,6 @@ class Test::Synapse extends Synapse {
 use Conf::Yaml;
 use Agua::Ops;
 
-#### Strings
-has 'executable'		=>  ( isa => 'Str|Undef', is => 'rw', lazy	=>	1, builder	=>	"setExecutable" );
-
 #### Arrays
 has 'outputs'		=>  ( isa => 'ArrayRef|Undef', is => 'rw', default	=>	sub { return [] } );
 
@@ -50,9 +47,6 @@ method getAssignments {
 }
 
 method getWorkAssignment ($state) {
-	$self->returnOutput();
-}
-method setExecutable {
 	$self->returnOutput();
 }
 

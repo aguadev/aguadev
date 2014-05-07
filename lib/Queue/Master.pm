@@ -80,7 +80,7 @@ method manage {
 
 	#### INITIALISE/UPDATE queuesample TABLE FROM SYNAPSE
 	#### USE FIRST QUEUE FOR username, project AND workflow INFO
-	$self->updateSamples($$queues[0]);
+	$self->updateSamples($queues);
 
 	#### LISTEN FOR REPORTS FROM WORKERS
 	$self->listenTopics();
@@ -98,30 +98,68 @@ method manage {
 	}	
 }
 
-method updateSamples ($queuedata) {
-	$self->logDebug("queuedata", $queuedata);
+method updateSamples ($queues) {
+	$self->logDebug("queues", $queues);
+	
+	#### NB: ASSUMES ONLY ONE PROJECT IN queues: PanCancer
+	
+	my $project		=	$$queues[0]->{project};
+	$self->logDebug("project", $project);
+	my $username		=	$$queues[0]->{username};
+	$self->logDebug("username", $username);
+	my $defaultworkflow		=	$$queues[0]->{workflow};
+	$self->logDebug("defaultworkflow", $defaultworkflow);
 
 	my $assignments	=	$self->getSampleList();
 	$self->logDebug("no. assignments", scalar(@$assignments));
 	$self->logDebug("assignements[0]", $$assignments[0]);
 	
+	my $statemap	=	$self->synapse()->reversestatemap();
+	$self->logDebug("statemap", $statemap);
+
+	my $workflowmap;
+	%$workflowmap	=	map { $_->{workflow} => $_->{workflownumber} } @$queues;
+	$self->logDebug("workflowmap", $workflowmap);
+
+	my $counter = 0;
+
 	foreach my $assignment ( @$assignments ) {
 		my ($uuid, $synapsestatus)	=	$assignment	=~ /^\s*(\S+)\s+(\S+)/;
 		$self->logDebug("uuid", $uuid);
 		$self->logDebug("synapsestatus", $synapsestatus);
-		
-		if ( not $self->isAssigned($uuid, $queuedata)) {
-			$self->logDebug("DOING makeAssigned: $uuid, $synapsestatus");
-			$self->makeAssigned($uuid, $synapsestatus, $queuedata);
 
-	$self->logDebug("DEBUG EXIT") and exit;
+		my $statusstring	=	$statemap->{$synapsestatus};
+		$self->logDebug("statusstring", $statusstring);
 
+		my ($workflow, $status);
+		if ( $statusstring eq "none", ) {
+			$workflow	=	$defaultworkflow;
+			$status		=	"none";
+		}
+		else {
+			($workflow, $status)	=	$statusstring	=~ /^([^:]+):(.+)$/;
+			$workflow	=	uc(substr($workflow, 0, 1)) . substr($workflow, 1);
 		}
 		
+		$self->logDebug("workflow", $workflow);
+		$self->logDebug("status", $status);
+	
+		my $queuedata	=	{};
+		$queuedata->{project}	=	$project;
+		$queuedata->{username}	=	$username;
+		$queuedata->{workflow}	=	$workflow;
+		$queuedata->{workflownumber}	=	$workflowmap->{$workflow};
+		$queuedata->{status}	=	$status;
+		$queuedata->{sample}	=	$uuid;
+		
+		if ( not $self->inSamples($uuid, $queuedata)) {
+			$self->logDebug("DOING makeAssigned: $uuid, $synapsestatus");
+			$self->addToSamples($uuid, $synapsestatus, $queuedata);
+		}
 	}
 }
 
-method isAssigned ($uuid, $queuedata) {
+method inSamples ($uuid, $queuedata) {
 	my $query	=	qq{SELECT 1 FROM queuesample
 WHERE sample='$uuid'
 AND username='$queuedata->{username}'
@@ -133,13 +171,14 @@ AND workflow='$queuedata->{workflow}'
 	return $self->db()->query($query);
 }
 
-method makeAssigned ($uuid, $state) {
+method addToSamples ($uuid, $state, $queuedata) {
 	$self->logDebug("uuid", $uuid);
 	$self->logDebug("state", $state);
 	
-	my $query	=	qq{SELECT 1 FROM queuesample
-WHERE sample='$uuid'};
+	my $table	=	"queuesample";
+	my $keys	=	["username", "project", "workflow", "sample" ];
 	
+	return $self->_addToTable($table, $queuedata, $keys);
 }
 
 method getSampleList {
@@ -148,8 +187,7 @@ method getSampleList {
 }
 
 method getQueues {
-	my $query       =	qq{SELECT DISTINCT username, project, workflow, workflownumber
-FROM queue
+	my $query       =	qq{SELECT * FROM queue
 ORDER BY username, project, workflownumber};
 	$self->logDebug("query", $query);
 
@@ -346,27 +384,11 @@ method getTasks ($queuedata, $limit) {
 		$task->{database}=	$queuedata->{database} || $self->database() || $self->conf()->getKey("database:DATABASE", undef);
 		
 		#### UPDATE TASK STATUS AS queued
-		$self->updateTaskStatus($task, "queued");
+		$task->{status}	=	"queued";
+		$self->updateTaskStatus($task);
 	}
 	
 	return $tasks;
-}
-
-method updateTaskStatus ($task, $status) {
-	$self->logDebug("status", $status);
-	
-	#### VERIFY VALUES
-	my $notdefined	=	$self->notDefined($task, ["username", "project", "workflow", "workflownumber"]);
-	$self->logCritical("not defined", $notdefined) and return if @$notdefined;
-
-	my $query		=	qq{UPDATE queue
-SET status='$status'
-WHERE username='$task->{username}'
-AND project='$task->{project}'
-AND workflow='$task->{workflow}'
-AND workflownumber='$task->{workflownumber}'};
-
-	return $self->db()->do($query);
 }
 
 method pullTasks ($queuedata, $limit) {

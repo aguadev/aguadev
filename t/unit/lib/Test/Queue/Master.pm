@@ -19,35 +19,101 @@ use Test::More;
 #####////}}}}}
 
 method testUpdateSamples {
-
+	diag("updateSamples");
+	
 	#### SET TEST DATABASE
 	$self->setUpTestDatabase();
 	
-	#### LOAD TABLE
-	my $query	=	qq{DELETE FROM queuesample};
-	$self->logDebug("query", $query);
-	$self->db()->do($query);
-	my $tsvfile	=	"$Bin/inputs/updateSamples/queuesample.tsv";
-	$self->loadTsvFile("queuesample", $tsvfile);
-	
-$self->logDebug("DEBUG EXIT") and exit;
-	
+	#### SET QUEUES
+	my $queues	=	[
+	{
+		username	=>	"testuser",
+		project		=>	"PanCancer",
+		workflow	=>	"Download",
+		workflownumber	=>	1
+	},
+	{
+		username	=>	"testuser",
+		project		=>	"PanCancer",
+		workflow	=>	"Split",
+		workflownumber	=>	2
+	},
+	{
+		username	=>	"testuser",
+		project		=>	"PanCancer",
+		workflow	=>	"Align",
+		workflownumber	=>	3
+	}];
+
+	my $tests	=	[
+	{
+		testname		=>	"empty table",
+		tsvfile			=>	"",
+		expectedfile	=>	"$Bin/inputs/updateSamples/expected.tsv"	
+	}
+	,
+	{
+		testname		=>	"already populated table - no duplicates",
+		tsvfile			=>	"$Bin/inputs/updateSamples/queuesample.tsv",
+		expectedfile	=>	"$Bin/inputs/updateSamples/expected-added.tsv"	
+	}
+	];
+
+	#### PRELOAD 'synapse' ENTRIES INTO FAKE Synapse.pm OBJECT
 	my $assignmentfile	=	"$Bin/inputs/assignments.txt";
 	$self->logDebug("assignmentfile", $assignmentfile);
 	my $contents	=	$self->fileContents($assignmentfile);
 	my @entries		=	split "\n", $contents;
 	$self->logDebug("No. entries", $#entries + 1);
-	$self->synapse()->outputs([\@entries]);
+	$self->synapse()->outputs([\@entries, \@entries]);
 	
-	my $queuedata	=	{
-		username	=>	"syoung",
-		project		=>	"PanCancer",
-		workflow	=>	"Align"
-	};
-	$self->updateSamples($queuedata);
-	my $statemap	=	$self->synapse()->reversestatemap();
-	$self->logDebug("statemap", $statemap);
+	foreach my $test ( @$tests ) {
+		my $tsvfile		=	$test->{tsvfile};
+		my $testname	=	$test->{testname};
+		
+		#### LOAD TABLE
+		my $query	=	qq{DELETE FROM queuesample};
+		$self->logDebug("query", $query);
+		$self->db()->do($query);
 
+		#### LOAD TSVFILE IF NOT EMPTY		
+		$self->loadTsvFile("queuesample", $tsvfile) if $tsvfile ne "";
+		
+		#### UPDATE SAMPLES
+		$self->updateSamples($queues);
+	
+		$query	=	qq{SELECT * FROM queuesample};
+		$self->logDebug("query", $query);
+		my $samples	=	$self->db()->queryhasharray($query);
+		
+		my $expectedfile=	$test->{expectedfile};
+		my $fields		=	$self->db()->fields("queuesample");
+		my $expected	=	$self->fileToHasharray($expectedfile, $fields);
+	
+		is_deeply($samples, $expected, $testname);
+	}
+}
+
+method fileToHasharray ($file, $fields) {
+	$self->logDebug("file", $file);
+	
+	my $hasharray	=	[];
+	my $contents	=	$self->fileContents($file);
+	my @lines		=	split "\n", $contents;
+	foreach my $line ( @lines ) {
+		next if $line =~ /^\s*$/;
+		
+		my $hash;
+		my @elements	=	split "\t", $line;
+		for ( my $i = 0; $i < @$fields; $i++ ) {
+			my $value	=	$elements[$i] || "";
+			$hash->{$$fields[$i]}	=	$value;
+		}
+		
+		push @$hasharray, $hash;
+	}
+	
+	return $hasharray;
 }
 
 method testUpdateQueue {
@@ -120,7 +186,11 @@ method testGetSynapseStatus {
 }
 
 method testHandleTopic {
-	diag("handleTopic");	
+	diag("handleTopic");
+	
+	#### SET TEST DATABASE
+	$self->setUpTestDatabase();
+	
 	#my $installdir	=	$ENV{'installdir'} || "/agua";
 	#my $sqlfile		=	"$installdir/bin/sql/provenance";
 
@@ -134,6 +204,7 @@ method testHandleTopic {
 	
 	#### INPUT DATA	
 	my $json 	=	qq{{
+"mode"		:	"jobStatus",
 "username"	:	"syoung",
 "project"	:	"PanCancer",
 "workflow"	:	"Align",

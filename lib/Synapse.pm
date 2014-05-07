@@ -57,22 +57,19 @@ use Test::More;
 #####////}}}}}
 
 method BUILD ($args) {
-	#use Data::Dumper;
-	#print "Synapse::BUILD    args:\n";
-	#print Dumper $args;
 }
 
 method returnAssignment ($uuid) {
-	my $executable		=	$self->executable();
+	my $executable		=	$self->setExecutable();
 	my $assignee		=	$self->assignee();
-	my $command		=	"$executable returnAssignment $uuid --assignee $assignee";
+	my $command			=	"$executable returnAssignment $uuid --assignee $assignee";
 	$self->logDebug("command", $command);
 	
 	return `$command`;	
 }
 
 method assignError ($uuid, $error) {
-	my $executable		=	$self->executable();
+	my $executable		=	$self->setExecutable();
 	my $assignee		=	$self->assignee();
 	my $command		=	qq{$executable errorAssignment $uuid "$error"};
 	$self->logDebug("command", $command);
@@ -88,7 +85,7 @@ method addSamples ($args) {
 method getBamForWork ($count) {
 	$count		=	$self->count() if not defined $count;
 
-	my $executable		=	$self->executable();
+	my $executable		=	$self->setExecutable();
 	my $assignee		=	$self->assignee();
 	my $command 	=	"$executable getBamForWork $assignee --count=$count";
 	$self->logDebug("command", $command);
@@ -110,7 +107,7 @@ method getBamForWork ($count) {
 
 #### LIST SAMPLES
 method list ($args) {
-	my $executable		=	$self->executable();
+	my $executable		=	$self->setExecutable();
 	my $assignee		=	$self->assignee();
 	my $command 	=	"$executable getAssignments $assignee";
 	$self->logDebug("command", $command);
@@ -191,15 +188,19 @@ method setPreviousStates {
 
 method setStateMap {
 	return {
-		'download:queued' 		=>	'todownload',
+		'none' 					=>	'todownload',
+		'download:error' 		=>	'error:downloading',
 		'download:started' 		=>	'downloading',
 		'download:completed'	=>	'downloaded',
+		'split:error' 			=>	'error:splitting',
 		'split:queued' 			=>	'splitting',
 		'split:started' 		=>	'splitting',
 		'split:completed' 		=>	'split',
+		'align:error' 			=>	'error:aligning',
 		'align:queued' 			=>	'aligning',
 		'align:started' 		=>	'aligning',
 		'align:completed' 		=>	'aligned',
+		'upload:error' 			=>	'error:uploading',
 		'upload:queued' 		=>	'uploading',
 		'upload:started' 		=>	'uploading',
 		'upload:completed' 		=>	'uploaded'
@@ -208,13 +209,17 @@ method setStateMap {
 
 method setReverseStateMap {
 	return {
-		'todownload'	=>	'download:queued',
+		'todownload'	=>	'none',
+		'error:downloading'=>	'download:error',
 		'downloading'	=>	'download:started',
 		'downloaded'	=>	'download:completed',
+		'error:splitting'=>	'download:error',
 		'splitting'		=>	'split:started',
 		'split'			=>	'split:completed',
+		'error:aligning'=>	'download:error',
 		'aligning'		=>	'align:started',
 		'aligned'		=>	'align:completed',
+		'error:uploading'=>	'upload:error',
 		'uploading'		=>	'upload:started',
 		'uploaded'		=>	'upload:completed'
 	};
@@ -256,7 +261,7 @@ method getUuidsByState ($state) {
 }
 
 method getAssignments {
-	my $executable	=	$self->executable();
+	my $executable	=	$self->setExecutable();
 	my $assignee		=	$self->assignee();
 	my $command		=	"$executable getAssignments $assignee";
 	$self->logDebug("command", $command);
@@ -275,7 +280,7 @@ method getAssignments {
 }
 
 method getWorkAssignment ($state) {
-	my $executable		=	$self->executable();
+	my $executable		=	$self->setExecutable();
 	my $assignee		=	$self->assignee();
 	my $command		=	"$executable getAssignmentForWork $assignee $state";
 	$self->logDebug("command", $command);
@@ -318,9 +323,14 @@ method changeState ($args) {
 	}
 }
 
-method change ($uuid, $state) {	
-	my $executable		=	$self->executable();
-	my $assignee		=	$self->assignee();
+method change ($uuid, $state) {
+	$self->logDebug("uuid", $uuid);
+	$self->logDebug("state", $state);
+	
+	my $executable		=	$self->setExecutable();
+	$self->logDebug("executable", $executable);
+	
+	my $assignee	=	$self->assignee();
 	my $command 	=	"$executable resetStatus $uuid --status $state --assignee $assignee";
 	$self->logDebug("command", $command);
 	
@@ -328,24 +338,18 @@ method change ($uuid, $state) {
 }
 
 method setExecutable {
+	#### SET PYTHONPATH
+	my $pythonpath		=	$self->conf()->getKey("synapse:pythonpath", undef);
+	$ENV{'PYTHONPATH'}	=	$pythonpath;
 
-	#### SET PYTHON ON PATH
-	my $hash		=	$self->conf()->getKey("packages:python", "2.7");
-	my $python	=	`which python`;
-	$python 	=~	s/\s+$//;
-	$python		=	$hash->{INSTALLDIR} if defined $hash;
-	$self->logDebug("python", $python);
+	#### SET PYTHON AND SYNAPSE EXECUTABLES
+	my $python		=	$self->conf()->getKey("synapse:python", undef);
+	my $synapse 	=	$self->conf()->getKey("synapse:installdir", undef);
+	$self->logDebug("synapse", $synapse);
+	my $executable		=	"$python $synapse";
+	$self->logDebug("executable", $executable);
 
-	##### SET SYNAPSE EXECUTABLE
-	#my $version 	= $self->latestVersion("synapse");
-	##$self->logDebug("version", $version);
-	#my $app			=	$self->conf()->getKey("packages:synapse", $version);
-	#my $location	=	$app->{INSTALLDIR};
-	#$self->logDebug("location", $location);
-	my $location =	$self->conf()->getKey("synapse:installdir", undef);
-	$self->logDebug("location", $location);
-
-	return "$python $location";
+	return $executable;
 }
 
 method latestVersion ($package) {

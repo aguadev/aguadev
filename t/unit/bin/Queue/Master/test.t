@@ -18,7 +18,7 @@ NOTES
 
 =cut
 
-use Test::More 	tests => 23;
+use Test::More 	tests =>	11;
 use Getopt::Long;
 use FindBin qw($Bin);
 use lib "$Bin/../../../../../lib";	#### PACKAGE MODULES
@@ -75,14 +75,14 @@ my $object = new Test::Queue::Master(
 );
 isa_ok($object, "Test::Queue::Master", "object");
 
-#### AUT0MATED
+#### AUTOMATED
 #$object->testDownloadPercent();
 #$object->testParseUuid();
 #$object->testGetNumberQueuedJobs();
-#$object->testHandleTopic();
+$object->testHandleTopic();
 #$object->testGetSynapseStatus();
 #$object->testUpdateQueue();
-$object->testUpdateSamples();
+#$object->testUpdateSamples();
 
 ##### INTERACTIVE
 #$object->testReceiveTopic();
