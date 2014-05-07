@@ -88,7 +88,7 @@ my $object2 = new Test::Queue::Worker(
 isa_ok($object2, "Test::Queue::Worker", "object2");
 
 #### INTERACTIVE
-$object2->testHandleWorker();
+$object2->testHandleTask();
 #$object2->testSendTopic();
 #$object2->testVerifyShutdown();
 #$object2->testShutdown();

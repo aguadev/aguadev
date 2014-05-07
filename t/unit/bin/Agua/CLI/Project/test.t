@@ -90,7 +90,10 @@ $object->startLog($object->logfile());
 #$object->testSave();
 
 #### SAVE WORKFLOW
-$object->testSaveWorkflow();
+#$object->testSaveWorkflow();
+
+#### DELETE
+$object->testDelete();
 
 #### CLEAN UP
 `rm -fr $Bin/outputs/*`

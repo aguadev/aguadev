@@ -111,6 +111,24 @@ method setInstallDir ($username, $owner, $package, $type) {
 }
 
 #### WORKFLOWS
+method testDelete {
+	
+	##### INCOMPLETE ######
+	##### INCOMPLETE ######
+	##### INCOMPLETE ######
+	##### INCOMPLETE ######
+
+	#### SET DBH
+	$self->setupTestDatabase();
+
+	#### LOAD TSV FILES
+	$self->db()->do("DELETE FROM project");
+	
+	my $projectfile	=	"$Bin/inputs/workflows/projects/PanCancer/PanCancer.proj";
+	$self->inputfile($projectfile);
+	
+}
+
 method testGetWorkflowFiles {
 	require Agua::CLI::Project;
 	my $projectobject = Agua::CLI::Project->new();

@@ -76,11 +76,12 @@ method manage {
 	my $queues	=	$self->getQueues();
 	$self->logDebug("queues", $queues);
 
-	my $shutdown	=	$self->conf()->getKey("shutdown", undef);
-
-	#### INITIALISE/UPDATE queuesample TABLE FROM SYNAPSE
-	#### USE FIRST QUEUE FOR username, project AND workflow INFO
-	$self->updateSamples($queues);
+	my $shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
+	$self->logDebug("shutdown", $shutdown);
+	
+	####### INITIALISE/UPDATE queuesample TABLE FROM SYNAPSE
+	####### USE FIRST QUEUE FOR username, project AND workflow INFO
+	###$self->updateSamples($queues);
 
 	#### LISTEN FOR REPORTS FROM WORKERS
 	$self->listenTopics();
@@ -184,7 +185,7 @@ method addToSamples ($uuid, $state, $queuedata) {
 
 method getSampleList {
 	$self->logDebug("");
-	return $self->synapse()->getAssignments();
+	return $self->synapse()->getSampleLines();
 }
 
 method getQueues {
@@ -196,7 +197,7 @@ ORDER BY username, project, workflownumber};
 }
 
 #### MAINTAIN QUEUES
-method maintainQueue ($queuedata) {
+method maintainQueue ($queues, $queuedata) {
 	$self->logDebug("queuedata", $queuedata);
 	
 	my $queuename	=	$self->setQueueName($queuedata);
@@ -216,13 +217,102 @@ method maintainQueue ($queuedata) {
 
 	return 0 if $limit <= 0;
 
-	my $tasks	=	$self->getTasks($queuedata, $limit);
+	#### QUEUE UP ADDITIONAL SAMPLES
+	my $tasks	=	$self->getTasks($queues, $queuedata, $limit);
+	
+	
+$self->logDebug("DEBUG RETURN") and return;
+
 	$self->logDebug("tasks", $tasks);
 	foreach my $task ( @$tasks ) {
 		$self->sendTask($task);
 	}
 	
 	return 1;
+}
+
+method getTasks ($queues, $queuedata, $limit) {
+	#### GET ADDITIONAL SAMPLES TO ADD TO QUEUE
+	$self->logDebug("queuedata", $queuedata);
+	$self->logDebug("limit", $limit);
+
+	#### GET TASKS FROM queuesample TABLE
+	my $tasks	=	$self->pullTasks($queues, $queuedata, $limit);
+	$self->logDebug("tasks", $tasks);
+
+
+$self->logDebug("DEBUG RETURN") and return [];
+
+	#### REPLENISH queue TABLE IF EMPTY		
+	if ( not defined $tasks or scalar(@$tasks) < $limit ) {
+		$self->allocateSamples($queuedata, $limit);
+		$tasks	=	$self->pullTasks($queues, $queuedata, $limit);
+	}
+	return if not defined $tasks;
+
+	#### DIRECT THE TASK TO EXECUTE A WORKFLOW
+	foreach my $task ( @$tasks ) {
+		$task->{module}	=	"Agua::Workflow";
+		$task->{mode}	=	"executeWorkflow";
+		$task->{database}=	$queuedata->{database} || $self->database() || $self->conf()->getKey("database:DATABASE", undef);
+		
+		#### UPDATE TASK STATUS AS queued
+		$task->{status}	=	"queued";
+		$self->updateTaskStatus($task);
+	}
+	
+	return $tasks;
+}
+
+method pullTasks ($queues, $queuedata, $limit) {
+	$self->logDebug("queues", $queues);
+	$self->logDebug("queuedata", $queuedata);
+
+	my $workflownumber	=	$queuedata->{workflownumber};
+	my $previous	=	$self->getPrevious($queues, $queuedata);
+	$self->logDebug("previous", $previous);
+
+	#### VERIFY VALUES
+	my $notdefined	=	$self->notDefined($queuedata, ["username", "project", "workflow"]);
+	$self->logCritical("not defined", @$notdefined) and return if scalar(@$notdefined) != 0;
+
+	my $query		=	qq{SELECT * FROM queuesample
+WHERE username='$previous->{username}'
+AND project='$previous->{project}'
+AND workflow='$previous->{workflow}'
+AND workflownumber='$previous->{workflownumber}'
+AND status='$previous->{status}'
+LIMIT $limit};
+	$self->logDebug("query", $query);
+	
+	return $self->db()->queryhasharray($query) || [];
+}
+
+method getPrevious ($queues, $queuedata) {
+	$self->logDebug("queues", $queues);
+	$self->logDebug("queuedata", $queuedata);
+
+	my $workflownumber	=	$queuedata->{workflownumber};
+	$self->logDebug("workflownumber", $workflownumber);
+	
+	my $previous	=	{};
+	if ( $workflownumber == 1 ) {
+		$previous->{status}		=	"none";
+		$previous->{username}	=	$queuedata->{username};
+		$previous->{project}	=	$queuedata->{project};
+		$previous->{workflow}	=	$queuedata->{workflow};
+		$previous->{workflownumber}	=	$queuedata->{workflownumber};
+	}
+	else {
+		my $previousdata		=	$$queues[$workflownumber - 2];
+		$previous->{status}		=	"completed";
+		$previous->{username}	=	$previousdata->{username};
+		$previous->{project}	=	$previousdata->{project};
+		$previous->{workflow}	=	$previousdata->{workflow};
+		$previous->{workflownumber}	=	$previousdata->{workflownumber};
+	}
+
+	return $previous;	
 }
 
 method listenTopics {
@@ -318,12 +408,12 @@ method updateTaskStatus ($data) {
 	$self->updateQueue($data);	
 }
 
-method updateQueue ($data) {
+method updateQueueSamples ($data) {
 	$self->logDebug("data", $data);	
 	
-	#### UPDATE queue TABLE
-	my $table	=	"queue";
-	my $keys	=	["username", "project", "workflow", "workflownumber", "sample" ];
+	#### UPDATE queuesample TABLE
+	my $table	=	"queuesample";
+	my $keys	=	["username", "project", "workflow", "workflownumber", "sample", "status" ];
 	$self->_addToTable($table, $data, $keys);
 	
 	#### UPDATE SYNAPSE
@@ -357,54 +447,6 @@ method getSynapseStatus ($data) {
 	return $synapsestatus;	
 }
 
-method getTasks ($queuedata, $limit) {
-	#### GET UNQUEUED TASKS FOR QUEUEING
-	$self->logDebug("queuedata", $queuedata);
-	$self->logDebug("limit", $limit);
-
-	#### GET TASKS FROM queuesample TABLE
-	my $tasks	=	$self->pullTasks($queuedata, $limit);
-	$self->logDebug("tasks", $tasks);
-
-	#### REPLENISH queue TABLE IF EMPTY		
-	if ( not defined $tasks or scalar(@$tasks) < $limit ) {
-		$self->allocateSamples($queuedata, $limit);
-		$tasks	=	$self->pullTasks($queuedata);
-	}
-	return if not defined $tasks;
-
-	#### DIRECT THE TASK TO EXECUTE A WORKFLOW
-	foreach my $task ( @$tasks ) {
-		$task->{module}	=	"Agua::Workflow";
-		$task->{mode}	=	"executeWorkflow";
-		$task->{database}=	$queuedata->{database} || $self->database() || $self->conf()->getKey("database:DATABASE", undef);
-		
-		#### UPDATE TASK STATUS AS queued
-		$task->{status}	=	"queued";
-		$self->updateTaskStatus($task);
-	}
-	
-	return $tasks;
-}
-
-method pullTasks ($queuedata, $limit) {
-	$self->logDebug("queuedata", $queuedata);
-
-	#### VERIFY VALUES
-	my $notdefined	=	$self->notDefined($queuedata, ["username", "project", "workflow"]);
-	$self->logCritical("not defined", @$notdefined) and return if scalar(@$notdefined) != 0;
-
-	my $query		=	qq{SELECT * FROM queuesample
-WHERE username='$queuedata->{username}'
-AND project='$queuedata->{project}'
-AND workflow='$queuedata->{workflow}'
-AND workflownumber='$queuedata->{workflownumber}'
-AND status='none'
-LIMIT $limit};
-	$self->logDebug("query", $query);
-	
-	return $self->db()->queryhasharray($query) || [];
-}
 
 method pushTask ($task) {
 	#### STORE UNQUEUED TASK IN queue TABLE

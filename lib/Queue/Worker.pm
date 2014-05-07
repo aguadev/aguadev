@@ -165,7 +165,7 @@ method shutdown {
 	#### REPORT
 	my $datetime	=	$self->getMysqlTime();
 	my $host		=	$self->getHostName();
-	my $data	=	{
+	my $data		=	{
 		datetime	=>	$datetime,
 		host		=>	$host,
 		status		=>	"shutdown",

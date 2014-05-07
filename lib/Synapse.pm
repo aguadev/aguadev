@@ -169,6 +169,96 @@ method getNextState ($current) {
 	return $next;
 }
 
+#### LIST ASSIGNED SAMPLES
+method getAssignments {
+	my $lines	=	$self->getSampleLines();
+	my $assigned = [];	
+	foreach my $line ( @$lines ) {
+		my ($uuid, $state)	=	$line	=~ /^(\S+)\s+(\S+)/;
+		$self->logDebug("uuid", $uuid);
+		$self->logDebug("state", $state);
+		
+		$assigned->{$uuid}	=	$state;
+	}
+	$self->logDebug("Returning assigned", $assigned);
+	
+	return $assigned;
+}
+
+method getSampleLines {
+	$self->logDebug("");
+	my $executable	=	$self->executable();
+	my $assignee		=	$self->assignee();
+	my $command		=	"$executable getAssignments $assignee";
+	$self->logDebug("command", $command);
+	
+	my $list		=	`$command`;
+	my $lines;
+	@$lines			=	split "\n", $list;
+	$self->logDebug("lines", $lines);
+	
+	return $lines;
+}
+
+method getWorkAssignment ($state) {
+	my $executable		=	$self->executable();
+	my $assignee		=	$self->assignee();
+	my $command		=	"$executable getAssignmentForWork $assignee $state";
+	$self->logDebug("command", $command);
+	
+	my $uuid	=		`$command`;
+	$uuid	=~ s/\s+$//;
+	
+	return $uuid;
+}
+#### CHANGE STATE
+method changeState ($args) {	
+	my $state	=	$args->{state};
+	my $target	=	$args->{target};
+	my $uuid	=	$args->{uuid};
+	$self->logDebug("state", $state);	
+	$self->logDebug("target", $target);
+	$self->logDebug("uuid", $uuid);
+
+	if ( not defined $target ) {
+		print "Synapse::changeState    target not defined. Exiting\n";
+		exit;
+	}
+	
+	if ( not defined $state ) {
+		if ( not defined $uuid ) {
+			print "Synapse::changeState    Either state or uuid must be provided. Exiting\n";
+			exit;
+		}
+		else {
+			print "Setting to '$target' uuid: $uuid\n";
+			$self->change($uuid, $target);
+		}
+	}
+	else {
+		my $uuids	=	$self->getUuidsByState($state);
+		foreach my $uuid ( keys %$uuids ) {
+			print "Changing state to '$target': $uuid\n";
+			$self->change($uuid, $target);
+		}
+	}
+}
+
+method change ($uuid, $state) {
+	$self->logDebug("uuid", $uuid);
+	$self->logDebug("state", $state);
+	
+	my $executable		=	$self->executable();
+	$self->logDebug("executable", $executable);
+	
+	my $assignee	=	$self->assignee();
+	my $command 	=	"$executable resetStatus $uuid --status $state --assignee $assignee";
+	$self->logDebug("command", $command);
+	
+	print `$command`;
+}
+
+#### UTILS
 method reverse ($hash) {
 	my ($hash2, $key, $value);
 	while ( ($key, $value) = each %$hash ) {
@@ -260,82 +350,6 @@ method getUuidsByState ($state) {
 	return $hash;
 }
 
-method getAssignments {
-	my $executable	=	$self->executable();
-	my $assignee		=	$self->assignee();
-	my $command		=	"$executable getAssignments $assignee";
-	$self->logDebug("command", $command);
-
-	my $assigned = {};	
-	my $list		=	`$command`;
-	foreach my $line ( split "\n", $list ) {
-		my ($uuid, $state)	=	$line	=~ /^(\S+)\s+(\S+)/;
-		$self->logDebug("uuid", $uuid);
-		$self->logDebug("state", $state);
-		
-		$assigned->{$uuid}	=	$state;
-	}
-	
-	return $assigned;
-}
-
-method getWorkAssignment ($state) {
-	my $executable		=	$self->executable();
-	my $assignee		=	$self->assignee();
-	my $command		=	"$executable getAssignmentForWork $assignee $state";
-	$self->logDebug("command", $command);
-	
-	my $uuid	=		`$command`;
-	$uuid	=~ s/\s+$//;
-	
-	return $uuid;
-}
-#### CHANGE STATE
-method changeState ($args) {	
-	my $state	=	$args->{state};
-	my $target	=	$args->{target};
-	my $uuid	=	$args->{uuid};
-	$self->logDebug("state", $state);	
-	$self->logDebug("target", $target);
-	$self->logDebug("uuid", $uuid);
-
-	if ( not defined $target ) {
-		print "Synapse::changeState    target not defined. Exiting\n";
-		exit;
-	}
-	
-	if ( not defined $state ) {
-		if ( not defined $uuid ) {
-			print "Synapse::changeState    Either state or uuid must be provided. Exiting\n";
-			exit;
-		}
-		else {
-			print "Setting to '$target' uuid: $uuid\n";
-			$self->change($uuid, $target);
-		}
-	}
-	else {
-		my $uuids	=	$self->getUuidsByState($state);
-		foreach my $uuid ( keys %$uuids ) {
-			print "Changing state to '$target': $uuid\n";
-			$self->change($uuid, $target);
-		}
-	}
-}
-
-method change ($uuid, $state) {
-	$self->logDebug("uuid", $uuid);
-	$self->logDebug("state", $state);
-	
-	my $executable		=	$self->executable();
-	$self->logDebug("executable", $executable);
-	
-	my $assignee	=	$self->assignee();
-	my $command 	=	"$executable resetStatus $uuid --status $state --assignee $assignee";
-	$self->logDebug("command", $command);
-	
-	print `$command`;
-}
 
 method setExecutable {
 	#### SET PYTHONPATH
@@ -390,7 +404,6 @@ method setOps () {
 
 	$self->ops($ops);	
 }
-
 
 
 }

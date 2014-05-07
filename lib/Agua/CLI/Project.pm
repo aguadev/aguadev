@@ -208,6 +208,52 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::U
 		$loader->projectToDatabase($username, $self);
     }
 
+    method delete {
+        #### REMOVE PROJECT FROM ALL DATABASE TABLES
+        my $username    =   $self->setUsername();
+        my $owner       =   $username;
+        my $project     =   $self->name();
+        
+        #### TABLE: project
+        my $table       =   "project";
+        my $query       =   qq{DELETE FROM project
+WHERE username='$username'
+AND name='$project'
+};
+        $self->logDebug("query", $query);
+        $self->db()->do($query);
+
+        #### TABLE: workflow
+        $table       =   "workflow";
+        $query       =   qq{DELETE FROM $table
+WHERE username='$username'
+AND project='$project'
+};
+        $self->logDebug("query", $query);
+        $self->db()->do($query);
+
+        #### TABLE: stage
+        $table          =   "stage";
+        $query       =   qq{DELETE FROM $table
+WHERE username='$username'
+AND project='$project'
+};
+        $self->logDebug("query", $query);
+        $self->db()->do($query);
+
+        #### TABLE: stageparameter
+        $table          =   "stageparameter";
+        $query       =   qq{DELETE FROM $table
+WHERE username='$username'
+AND project='$project'
+};
+        $self->logDebug("query", $query);
+        $self->db()->do($query);
+
+        my $database    =   $self->db()->database();
+        print "Project '$project' deleted from database '$database'\n";
+    }
+
     method saveWorkflow {
         $self->showlog(4);
         $self->logDebug("");

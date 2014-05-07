@@ -51,7 +51,7 @@ method testVerifyShutdown {
 	ok($shuttingdown eq "true", "shutdown");
 }
 
-method testHandleWorker {
+method testHandleTask {
 	$self->setTestDbh();
 	
 	$self->db()->do("DELETE FROM project");
@@ -73,17 +73,18 @@ method testHandleWorker {
 	#	"database"		:	"aguatest",
 	#	"sample"		:	"e1234567890"
 	#}};
+	
 	my $json	=	qq{{
 		"username"		:	"syoung",
 		"project"		:	"PanCancer",
-		"workflow"		:	"Split",
-		"workflownumber":	2,
-		"number"		:	2,
+		"workflow"		:	"Align",
+		"workflownumber":	3,
+		"number"		:	3,
 		"database"		:	"agua",
-		"sample"		:	"e1234567890"
+		"sample"		:	"f68ceda0-e068-46b3-a07b-2fa064a9709d"
 	}};
 
-	$self->handleWorker($json);
+	$self->handleTask($json);
 
 	my $errors	=	$?;
 	$self->logDebug("errors", $errors);
@@ -139,10 +140,10 @@ method testSendTopic {
 	$self->sendTopic($data, $key);	
 }
 
-method testReceiveWorker {
+method testReceiveTask {
 	#### VERIFY CONNECTION IS LISTENING
 	my $taskqueue	=	"testuser.PanCancer.Sleep";
-	$self->receiveWorker($taskqueue);	
+	$self->receiveTask($taskqueue);	
 }
 
 
