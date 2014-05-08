@@ -25,7 +25,7 @@ TO DO
 use strict;
 use warnings;
 
-class Queue::Master with (Logger, Exchange, Agua::Common::Database) {
+class Queue::Master with (Logger, Exchange, Agua::Common::Database, Agua::Common::Timer) {
 
 #####////}}}}}
 
@@ -251,12 +251,19 @@ method getTasks ($queues, $queuedata, $limit) {
 
 	#### DIRECT THE TASK TO EXECUTE A WORKFLOW
 	foreach my $task ( @$tasks ) {
-		$task->{module}	=	"Agua::Workflow";
-		$task->{mode}	=	"executeWorkflow";
-		$task->{database}=	$queuedata->{database} || $self->database() || $self->conf()->getKey("database:DATABASE", undef);
+		$task->{module}		=	"Agua::Workflow";
+		$task->{mode}		=	"executeWorkflow";
+		$task->{database}	=	$queuedata->{database} || $self->database() || $self->conf()->getKey("database:DATABASE", undef);
+		
+		$task->{workflow}	=	$queuedata->{workflow};
+		$task->{workflownumber}=	$queuedata->{workflownumber};
 		
 		#### UPDATE TASK STATUS AS queued
-		$task->{status}	=	"queued";
+		$task->{status}		=	"queued";
+		
+		#### SET TIME QUEUED
+		$task->{queued}		=	$self->getMysqlTime();
+
 		$self->updateTaskStatus($task);
 	}
 	
@@ -402,7 +409,7 @@ method handleTopic ($json) {
 
 method updateTaskStatus ($data) {
 	$self->logDebug("data", $data);
-	my $keys	=	[ "username", "project", "workflow", "workflownumber", "sample", "stage", "stagenumber" ];
+	my $keys	=	[ "username", "project", "workflow", "workflownumber", "sample" ];
 	my $notdefined	=	$self->notDefined($data, $keys);	
 	$self->logDebug("notdefined", $notdefined) and return if @$notdefined;
 

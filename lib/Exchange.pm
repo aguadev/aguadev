@@ -306,16 +306,14 @@ method newConnection {
         vhost	=>	$vhost,
     );
 	$self->logDebug("AFTER my connnection = Net::RabbitFoot(). SLEEPING FOR 5 SECONDS");
-	
-	
-	sleep(5);
+	sleep(1);
 
-	$self->logDebug("AFTER my connnection = Net::RabbitFoot()");
+	#$self->logDebug("AFTER my connnection = Net::RabbitFoot()");
 
 
 	#$self->logDebug("$$ conn", $conn);
 	$self->connection($connection);
-	$self->logDebug("AFTER connection->connnection()");
+	#$self->logDebug("AFTER connection->connnection()");
 	
 	#my $channel 	= 	$connection->open_channel();
 	#$self->channel($channel);

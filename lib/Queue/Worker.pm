@@ -133,6 +133,7 @@ method handleTask ($json) {
 	$data->{start}		=  	1;
 	$data->{conf}		=   $self->conf();
 	$data->{showlog}	=   $self->showlog();
+	$data->{logfile}	=   $self->logfile();
 	$data->{printlog}	=   $self->printlog();	
 	$data->{worker}		=	$self;
 
