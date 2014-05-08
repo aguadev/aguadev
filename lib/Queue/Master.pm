@@ -101,6 +101,7 @@ method manage {
 
 #### UPDATE SAMPLES
 method updateSamples ($queues) {
+
 	$self->logDebug("queues", $queues);
 	
 	#### NB: ASSUMES ONLY ONE PROJECT IN queues: PanCancer
@@ -185,6 +186,7 @@ method addToSamples ($uuid, $state, $queuedata) {
 
 method getSampleList {
 	$self->logDebug("");
+
 	return $self->synapse()->getSampleLines();
 }
 
@@ -219,9 +221,6 @@ method maintainQueue ($queues, $queuedata) {
 
 	#### QUEUE UP ADDITIONAL SAMPLES
 	my $tasks	=	$self->getTasks($queues, $queuedata, $limit);
-	
-	
-$self->logDebug("DEBUG RETURN") and return;
 
 	$self->logDebug("tasks", $tasks);
 	foreach my $task ( @$tasks ) {
@@ -240,11 +239,11 @@ method getTasks ($queues, $queuedata, $limit) {
 	my $tasks	=	$self->pullTasks($queues, $queuedata, $limit);
 	$self->logDebug("tasks", $tasks);
 
-
-$self->logDebug("DEBUG RETURN") and return [];
-
 	#### REPLENISH queue TABLE IF EMPTY		
-	if ( not defined $tasks or scalar(@$tasks) < $limit ) {
+	my $workflownumber	=	$queuedata->{workflownumber};
+	$self->logDebug("workflownumber", $workflownumber);
+	
+	if ( $workflownumber == 1 and (not defined $tasks or scalar(@$tasks) < $limit) ) {
 		$self->allocateSamples($queuedata, $limit);
 		$tasks	=	$self->pullTasks($queues, $queuedata, $limit);
 	}
@@ -315,6 +314,7 @@ method getPrevious ($queues, $queuedata) {
 	return $previous;	
 }
 
+#### LISTEN FOR TOPICS 
 method listenTopics {
 	$self->logDebug("");
 	my $childpid = fork;
@@ -327,13 +327,17 @@ method listenTopics {
 	}
 }
 
+
 method receiveTopic {
 	$self->logDebug("");
+	
 	#### OPEN CONNECTION
 	my $connection	=	$self->newConnection();	
 	my $channel = $connection->open_channel();
 	
 	my $exchange	=	$self->conf()->getKey("queue:topicexchange", undef);
+	$self->logDebug("exchange", $exchange);
+
 	$channel->declare_exchange(
 		exchange => $exchange,
 		type => 'topic',
@@ -342,9 +346,11 @@ method receiveTopic {
 	my $result = $channel->declare_queue(exclusive => 1);
 	my $queuename = $result->{method_frame}->{queue};
 	
-	my $keys	=	$self->conf()->getKey("queue:topickeys", undef);
-	$self->logDebug("keys", $keys);
-
+	my $keystring	=	$self->conf()->getKey("queue:topickeys", undef);
+	$self->logDebug("keystring", $keystring);
+	my $keys;
+	@$keys		=	split ",", $keystring;
+	
 	$self->logDebug("exchange", $exchange);
 	
 	for my $key ( @$keys ) {
@@ -383,7 +389,7 @@ method handleTopic ($json) {
 	my $data = $self->jsonparser()->decode($json);
 	#$self->logDebug("data", $data);
 
-	my $mode =	$data->{mode};
+	my $mode =	$data->{mode} || "";
 	$self->logDebug("mode", $mode);
 	
 	if ( $mode eq "hostStatus" ) {
@@ -404,8 +410,13 @@ method updateTaskStatus ($data) {
 	my $table	=	"provenance";
 	$self->_addToTable($table, $data, $keys);
 
-	#### UPDATE queue TABLE
-	$self->updateQueue($data);	
+	#### UPDATE queuesamples TABLE
+	$self->updateQueueSamples($data);	
+
+	#### UPDATE SYNAPSE
+	my $synapsestatus	=	$self->getSynapseStatus($data);
+	my $sample	=	$data->{sample};
+	$self->synapse()->change($sample, $synapsestatus);
 }
 
 method updateQueueSamples ($data) {
@@ -413,13 +424,11 @@ method updateQueueSamples ($data) {
 	
 	#### UPDATE queuesample TABLE
 	my $table	=	"queuesample";
-	my $keys	=	["username", "project", "workflow", "workflownumber", "sample", "status" ];
-	$self->_addToTable($table, $data, $keys);
+	my $keys	=	[ "sample" ];
+	$self->_removeFromTable($table, $data, $keys);
 	
-	#### UPDATE SYNAPSE
-	my $synapsestatus	=	$self->getSynapseStatus($data);
-	my $sample	=	$data->{sample};
-	$self->synapse()->change($sample, $synapsestatus);
+	$keys	=	["username", "project", "workflow", "workflownumber", "sample", "status" ];
+	$self->_addToTable($table, $data, $keys);
 }
 
 method setConfigMaxJobs ($queuename, $value) {

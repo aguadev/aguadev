@@ -125,6 +125,8 @@ method testSendTopic {
 		"stdout"	=>	"ubuntu.example.comSat May  3 06:53:26 UTC 2014Completed",
 		"completed"	=>	"2014-05-03 06:49:30",
 		"workflownumber"	=>	"1",
+		"stage"		=>	"sleep",
+		"stagenumber"	=>	"1",
 		"sample"	=>	"e9012345678",
 		"location"	=>	"bin/test/sleep.sh",
 		"executor"	=>	"",

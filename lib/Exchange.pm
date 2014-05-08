@@ -295,17 +295,28 @@ method newConnection {
 	$self->logDebug("$$ pass", $pass);
 	$self->logDebug("$$ vhost", $vhost);
 	
-    my $connection = Net::RabbitFoot->new()->load_xml_spec()->connect(
+
+	$self->logDebug("BEFORE my connnection = Net::RabbitFoot()");
+    
+	my $connection = Net::RabbitFoot->new()->load_xml_spec()->connect(
         host 	=>	$host,
         port 	=>	5672,
         user 	=>	$user,
         pass 	=>	$pass,
         vhost	=>	$vhost,
     );
-	sleep(1);
+	$self->logDebug("AFTER my connnection = Net::RabbitFoot(). SLEEPING FOR 5 SECONDS");
+	
+	
+	sleep(5);
+
+	$self->logDebug("AFTER my connnection = Net::RabbitFoot()");
+
+
 	#$self->logDebug("$$ conn", $conn);
 	$self->connection($connection);
-
+	$self->logDebug("AFTER connection->connnection()");
+	
 	#my $channel 	= 	$connection->open_channel();
 	#$self->channel($channel);
 

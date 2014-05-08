@@ -30,8 +30,8 @@ my @binding_keys = @ARGV or die "Usage: $0 [binding_key]...\n";
 
 for my $key (@binding_keys) {
     $channel->bind_queue(
-        exchange => 'topic_logs',
-        queue => $queue_name,
+        exchange    => 'topic_logs',
+        queue       => $queue_name,
         routing_key => $key,
     );
 }

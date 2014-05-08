@@ -18,6 +18,42 @@ use Test::More;
 
 #####////}}}}}
 
+method testUpdateQueueSamples {
+	diag("updateQueueSamples");
+	
+	#### SET TEST DATABASE
+	$self->setUpTestDatabase();
+
+	#### SAMPLE ID
+	my $sample	=	"01497a54-775c-479f-a540-d69dd6aa5d8e";
+	
+	my $query	=	qq{DELETE FROM queuesample};
+	$self->db()->do($query);
+	$query	=	qq{INSERT INTO queuesample VALUES
+('syoung'PanCancer', 'Download', '1', '$sample')};
+	$self->logDebug("query", $query);
+	$self->db()->do($query);
+
+	my $expected	=	{
+		username	=>	"syoung",
+		project		=>	"PanCancer",
+		workflow	=>	"Align",
+		workflownumber	=>	2,
+		sample		=>	$sample,
+		status		=>	"started"
+	};
+	
+	$self->updateQueueSamples($expected);
+	
+	$query	=	qq{SELECT * FROM queuesample WHERE sample='$sample'};
+	my $result	=	$self->db()->queryhasharray($query);
+	$self->logDebug("result", $result);
+	ok(scalar(@$result) == 1, "one result only");
+	
+	my $actual	=	$$result[0];
+	is_deeply($actual, $expected, "new entry replaced old");
+}
+
 method testUpdateSamples {
 	diag("updateSamples");
 	
@@ -243,7 +279,6 @@ method testHandleTopic {
 
 method testReceiveTopic {
 	diag("receiveTopic");
-	
 	
 	$self->receiveTopic();	
 }

@@ -191,6 +191,9 @@ method sendTopic ($data, $key) {
 	$self->logDebug("$$ data", $data);
 	$self->logDebug("$$ key", $key);
 
+	#### SET mode
+	$data->{mode}	=	"updateHostStatus";
+
 	my $exchange	=	$self->conf()->getKey("queue:topicexchange", undef);
 	$self->logDebug("$$ exchange", $exchange);
 

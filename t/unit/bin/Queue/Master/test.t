@@ -83,6 +83,7 @@ $object->testHandleTopic();
 $object->testGetSynapseStatus();
 $object->testUpdateQueue();
 $object->testUpdateSamples();
+$object->testUpdateQueueSamples();
 
 ##### INTERACTIVE
 #$object->testReceiveTopic();
