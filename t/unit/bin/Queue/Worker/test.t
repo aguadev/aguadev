@@ -68,16 +68,16 @@ my $conf	=	Conf::Yaml->new({
 	printlog	=>	$printlog
 });
 
-#my $object1 = new Test::Queue::Worker::Receive(
-#	conf		=>	$conf,
-#    logfile     =>  $logfile,
-#	showlog     =>  $showlog,
-#	printlog    =>  $printlog
-#);
-#isa_ok($object1, "Test::Queue::Worker", "object1");
+my $object1 = new Test::Queue::Worker::Receive(
+	conf		=>	$conf,
+    logfile     =>  $logfile,
+	showlog     =>  $showlog,
+	printlog    =>  $printlog
+);
+isa_ok($object1, "Test::Queue::Worker", "object1");
 
-##### INTERACTIVE
-#$object1->testReceiveWorker();
+#### INTERACTIVE
+$object1->testReceiveWorker();
 
 my $object2 = new Test::Queue::Worker(
 	conf		=>	$conf,

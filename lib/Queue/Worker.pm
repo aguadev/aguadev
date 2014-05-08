@@ -104,7 +104,6 @@ method receiveTask ($taskqueue) {
 		on_consume	=>	sub {
 			my $var 	= 	shift;
 			print "$$ Exchange::receiveTask    DOING CALLBACK";
-			#print Dumper $var;
 		
 			my $body 	= 	$var->{body}->{payload};
 			print " [x] Received $body\n";
@@ -141,7 +140,7 @@ method handleTask ($json) {
 
 	my $workflow = Agua::Workflow->new($data);
 	print "$$ workflow: $workflow\n";
-	$self->logDebug("workflow");
+	$self->logDebug("new Agua::Workflow object: $workflow");
 
 	$workflow->executeWorkflow();	
 

@@ -244,8 +244,9 @@ method executeWorkflow {
 		$error =~ s/,\s+$//;
 		$self->logError("Cannot run workflow $project.$workflow becuase of undefined values: $error") and return;
 	}
-	#### QUIT IF RUNNING ALREADY
-	$self->logError("workflow $project.$workflow is already running") and return if $self->workflowIsRunning($username, $project, $workflow);
+
+	##### QUIT IF RUNNING ALREADY
+	#$self->logError("workflow $project.$workflow is already running") and return if $self->workflowIsRunning($username, $project, $workflow);
 	
 	#### QUIT IF submit BUT cluster IS EMPTY
 	$self->logError("Cannot run workflow $project.$workflow: cluster not defined") and return if $submit and not $cluster;
