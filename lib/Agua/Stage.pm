@@ -134,15 +134,13 @@ method run {
 	$self->setStatus('running');
  
 	#### RUN ON CLUSTER
-	if ( defined $cluster and $cluster and defined $submit and $submit )
-	{
+	if ( defined $cluster and $cluster and defined $submit and $submit ) {
 		$self->logDebug("$$ Doing self->runOnCluster()");
 		($exitcode, $error) = $self->runOnCluster();
 		$self->logDebug("$$ self->runOnCluster() stage run exitcode", $exitcode);
 	}
 	#### RUN LOCALLY	
-	else
-	{
+	else {
 		$self->logDebug("$$ Doing self->runLocally()");
 		($exitcode, $error) = $self->runLocally();
 		$self->logDebug("$$ self->runLocally stage run exitcode (0 means OK)", $exitcode)  if defined $exitcode;
@@ -154,7 +152,7 @@ method run {
 	#### SET EMPTY IF UNDEFINED
 	$error = "" if not defined $error;
 	$exitcode = "" if not defined $exitcode;
-		
+	
 	return ($exitcode, $error);
 }
 
@@ -173,9 +171,6 @@ method runLocally {
 	my $arguments = $self->setArguments($stageparameters);
 	$self->logDebug("$$ arguments: @$arguments");
 
-	#### SET ENVIRONMENT VARIABLES AND EXECUTOR
-	my $executor = $self->envars()->{tostring};
-
 	#### ADD PERL5LIB FOR EXTERNAL SCRIPTS TO FIND Agua MODULES
 	my $aguadir = $self->conf()->getKey("agua", 'INSTALLDIR');
 	my $perl5lib = "$aguadir/lib";
@@ -184,11 +179,20 @@ method runLocally {
 	my $envars = $self->getEnvars();
 	my $exports = $envars->{tostring};
 	$self->logDebug("$$ exports", $exports);
+
+	my $prefix	=	"export PERL5LIB=$perl5lib; $exports ";
+	$self->logDebug("$$ prefix", $prefix);
 	
-	#### SET EXECUTOR
-	$executor	=	"export PERL5LIB=$perl5lib; $exports ";
-	$executor 	.= $self->executor() if $self->executor();
-	$self->logDebug("$$ self->executor(): " . $self->executor());
+	#### SET EXECUTOR AND FILE EXPORTS
+	my $executor = $self->executor();
+	if ( $executor =~ /^\S+\.sh\s+&&\s*/ ) {
+		my $file	=	$executor	=~ /^(\S+\.sh)/;
+		$executor	=~ s/^\S+\.sh\\s+&&\s*//;
+		my $fileexports	=	$self->getFileExports($file);
+		$prefix .= $fileexports if defined $fileexports;
+	}
+	$prefix .= $executor;
+	$self->logDebug("$$ self->prefix(): " . $prefix);
 	
 	#### PREFIX APPLICATION PATH WITH PACKAGE INSTALLATION DIRECTORY
 	my $application = $self->installdir() . "/" . $self->location();	
@@ -269,25 +273,39 @@ completed=''};
 	#### PAUSE FOR RESULT FILE TO BE WRITTEN 
 	sleep(3);
 	$self->logDebug("$$ Finished wait for command to complete");
-	my $resultfile = $self->resultfile();
-	open(RESULT, $resultfile);
-	my $result = <RESULT>;
+	my $exitcodefile = $self->resultfile();
+	open(RESULT, $exitcodefile);
+	my $exitcode = <RESULT>;
 	close(RESULT);
-	$self->logDebug("$$ resultfile", $resultfile);
-	$self->logDebug("$$ result", $result);
+	$self->logDebug("$$ exitcodefile", $exitcodefile);
+	$self->logDebug("$$ exitcode", $exitcode);
 	
-	#### SET STATUS TO 'error' IF result IS NOT ZERO
-	if ( defined $result and $result == 0 ) {
+	#### SET STATUS TO 'error' IF exitcode IS NOT ZERO
+	if ( defined $exitcode and $exitcode == 0 ) {
 		$self->setStatus('completed') ;
 	}
 	else {
-		$self->setStatus('error') if not defined $result;
+		$self->setStatus('error') if not defined $exitcode;
 	}
-	$self->logDebug("$$ Returning result", $result);
+	$exitcode	=~ 	s/\s+$// if defined $exitcode;
 
-	return $result;
+	$self->logDebug("$$ Returning exitcode", $exitcode);
+
+	return $exitcode;
 }
 
+method getFileExports ($file) {
+    open(FILE, $file) or die "Can't open file: $file: $!";
+
+	my $exports	=	"";
+    while ( <FILE> ) {
+		next if $_	=~ /^#/ or $_ =~ /^\s*$/;
+		chomp;
+		$exports .= "$_; ";
+    }
+
+	return $exports;
+}
 
 method runOnCluster {
 =head2

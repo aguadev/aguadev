@@ -6,7 +6,7 @@ APPLICATION 	test.t
 
 PURPOSE
 
-	Test Queue::Master module
+	Test Agua::Stage module
 	
 NOTES
 
@@ -18,11 +18,14 @@ NOTES
 
 =cut
 
-use Test::More 	tests =>	11;
+use Test::More 	tests => 4;
 use Getopt::Long;
 use FindBin qw($Bin);
 use lib "$Bin/../../../../../lib";	#### PACKAGE MODULES
 use lib "$Bin/../../../lib";		#### TEST MODULES
+
+use Conf::Yaml;
+
 BEGIN
 {
     my $installdir = $ENV{'installdir'} || "/agua";
@@ -34,9 +37,9 @@ my $outputsdir = "$Bin/outputs";
 `mkdir -p $outputsdir` if not -d $outputsdir;
 
 BEGIN {
-    use_ok('Test::Queue::Master');
+    use_ok('Test::Agua::Stage');
 }
-require_ok('Test::Queue::Master');
+require_ok('Test::Agua::Stage');
 
 #### SET CONF FILE
 my $installdir  =   $ENV{'installdir'} || "/agua";
@@ -65,31 +68,16 @@ my $conf	=	Conf::Yaml->new({
 	printlog	=>	$printlog
 });
 
-my $dumpfile	=	"$installdir/bin/sql/dump/agua/create-agua.dump";
-my $object = new Test::Queue::Master(
+my $object = new Test::Agua::Stage(
 	conf		=>	$conf,
     logfile     =>  $logfile,
-    dumpfile    =>  $dumpfile,
 	showlog     =>  $showlog,
 	printlog    =>  $printlog
 );
-isa_ok($object, "Test::Queue::Master", "object");
+isa_ok($object, "Test::Agua::Stage", "object");
 
-#### AUTOMATED
-#$object->testDownloadPercent();
-#$object->testParseUuid();
-#$object->testGetNumberQueuedJobs();
-$object->testHandleTopic();
-#$object->testGetSynapseStatus();
-#$object->testUpdateQueue();
-#$object->testUpdateSamples();
-#$object->testUpdateQueueSamples();
-
-##### INTERACTIVE
-#$object->testReceiveTopic();
-##$object->testListenTopics();
-##$object->testMaintainQueue();
-
+#### INTERACTIVE
+$object->testGetFileExports();
 
 #### SATISFY Agua::Logger::logError CALL TO EXITLABEL
 no warnings;
