@@ -186,7 +186,7 @@ method runLocally {
 	#### SET EXECUTOR AND FILE EXPORTS
 	my $executor = $self->executor();
 	if ( $executor =~ /^\S+\.sh\s+&&\s*/ ) {
-		my $file	=	$executor	=~ /^(\S+\.sh)/;
+		my ($file)	=	$executor	=~ /^(\S+\.sh)/;
 		$executor	=~ s/^\S+\.sh\\s+&&\s*//;
 		my $fileexports	=	$self->getFileExports($file);
 		$prefix .= $fileexports if defined $fileexports;
@@ -199,7 +199,7 @@ method runLocally {
 	$self->logDebug("$$ application", $application);
 	
 	#### SET SYSTEM CALL
-	my @system_call = ($executor, $application, @$arguments);
+	my @system_call = ($prefix, $application, @$arguments);
 
 	#### SET STDOUT AND STDERR FILES
 	my $stdoutfile = $self->stdoutfile;
@@ -208,6 +208,10 @@ method runLocally {
 	push @system_call, "2> $stderrfile" if defined $stderrfile;
 	$self->logDebug("$$ system_call: @system_call");
 
+	#### CLEAN UP BEFOREHAND
+	`rm $stdoutfile` if -f $stdoutfile;
+	`rm $stderrfile` if -f $stderrfile;
+	
     #### SET CHANGE DIR TO APPLICATION DIRECTORY, JUST IN CASE
     $self->logDebug("$$ application", $application);
     my ($changedir) = $application =~ /^(.+?)\/[^\/]+$/;

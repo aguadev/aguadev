@@ -98,7 +98,9 @@ method getBamForWork ($count) {
 	$self->logDebug("string", $string);
 
 	#`rm -fr $tempfile`;
-	my $samples;
+	my $samples = [];
+	return $samples if $string =~ /No more samples available/;
+	
 	@$samples = split "\n", $string;
 	shift @$samples;
 	

@@ -38,8 +38,10 @@ my $outputsdir = "$Bin/outputs";
 
 BEGIN {
     use_ok('Test::Queue::Worker');
+    use_ok('Test::Queue::Worker::Receive');
 }
 require_ok('Test::Queue::Worker');
+require_ok('Test::Queue::Worker::Receive');
 
 #### SET CONF FILE
 my $installdir  =   $ENV{'installdir'} || "/agua";
@@ -77,7 +79,7 @@ my $object1 = new Test::Queue::Worker::Receive(
 isa_ok($object1, "Test::Queue::Worker", "object1");
 
 #### INTERACTIVE
-$object1->testReceiveWorker();
+$object1->testReceiveTask();
 
 my $object2 = new Test::Queue::Worker(
 	conf		=>	$conf,
