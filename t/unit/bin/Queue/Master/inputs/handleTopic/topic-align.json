@@ -1,0 +1,19 @@
+{
+	"mode"		:	"updateJobStatus",
+	"username"	:	"syoung",
+	"project"	:	"PanCancer",
+	"workflow"	:	"Align",
+	"workflownumber"	:	"1",
+	"sample"	:	"a9012345678",
+	"stage"		:	"align",
+	"stagenumber":	"1",
+	"package"	:	"bioapps",
+	"version"	:	"0.8.0",
+	"installdir":	"/agua/apps/bioapps",
+	"location"	:	"bin/test/sleep.sh",
+	"host"		:	"10.0.2.15",
+	"time"		:	"2014-05-03 06:51:10",
+	"status"	:	"completed",
+	"stdout"	:	"ubuntu.example.com Sat May  3 06:53:26 UTC 2014 Completed",
+	"stderr"	:	""
+}

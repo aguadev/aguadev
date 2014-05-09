@@ -59,6 +59,10 @@ method testUpdateSamples {
 	
 	#### SET TEST DATABASE
 	$self->setUpTestDatabase();
+
+	#### FRESH START	
+	$self->db()->do("DELETE FROM provenance");
+	$self->db()->do("DELETE FROM queuesample");
 	
 	#### SET QUEUES
 	my $queues	=	[
@@ -82,17 +86,17 @@ method testUpdateSamples {
 	}];
 
 	my $tests	=	[
-	{
-		testname		=>	"empty table",
-		tsvfile			=>	"",
-		expectedfile	=>	"$Bin/inputs/updateSamples/expected.tsv"	
-	}
-	,
-	{
-		testname		=>	"already populated table - no duplicates",
-		tsvfile			=>	"$Bin/inputs/updateSamples/queuesample.tsv",
-		expectedfile	=>	"$Bin/inputs/updateSamples/expected-added.tsv"	
-	}
+		{
+			testname		=>	"empty table",
+			tsvfile			=>	"",
+			expectedfile	=>	"$Bin/inputs/updateSamples/expected.tsv"	
+		}
+		,
+		{
+			testname		=>	"already populated table - no duplicates",
+			tsvfile			=>	"$Bin/inputs/updateSamples/queuesample.tsv",
+			expectedfile	=>	"$Bin/inputs/updateSamples/expected-added.tsv"	
+		}
 	];
 
 	#### PRELOAD 'synapse' ENTRIES INTO FAKE Synapse.pm OBJECT
@@ -152,7 +156,7 @@ method fileToHasharray ($file, $fields) {
 	return $hasharray;
 }
 
-method testUpdateQueue {
+method testUpdateQueueSamples {
 	diag("updateQueue");
 
 	#### SET UP DATABASE
@@ -185,7 +189,7 @@ method testUpdateQueue {
 "stderr"	=>	""
 };
 
-	ok($self->updateQueue($data), "updated queuesample table");
+	ok($self->updateQueueSamples($data), "updated queuesample table");
 }
 
 method testGetSynapseStatus {
@@ -223,58 +227,66 @@ method testGetSynapseStatus {
 
 method testHandleTopic {
 	diag("handleTopic");
+
+	#### HANDLE SEQUENTIAL ADDITIONS TO THE provenance TABLE
 	
 	#### SET TEST DATABASE
 	$self->setUpTestDatabase();
-	
-	#my $installdir	=	$ENV{'installdir'} || "/agua";
-	#my $sqlfile		=	"$installdir/bin/sql/provenance";
 
 	#### SET UP DATABASE
 	my $database	=	$self->conf()->getKey("database:TESTDATABASE", undef);
 	$self->logDebug("database", $database);
 	$self->database($database);
 	$self->setTestDbh();
+	
+	my $tests	=	[
+		{
+			file	=>	"$Bin/inputs/handleTopic/topic-split.json",
+			testname=>	"split topic"
+		}
+		,
+		{
+			file	=>	"$Bin/inputs/handleTopic/topic-align.json",
+			testname=>	"align topic"
+		}
+	];
+
+	#### FRESH START	
 	$self->db()->do("DELETE FROM provenance");
 	$self->db()->do("DELETE FROM queuesample");
+		
+	my $expectedarray	=	[];
+	foreach my $test ( @$tests ) {
+		my $file		=	$test->{file};
+		my $testname	=	$test->{testname};
+		$self->logDebug("file", $file);
+		
+		#### GET TEST DATA
+		$self->logDebug("file not found: $file") and die if not -f $file;
+		my $json	=	$self->fileContents($file);
+		$self->logDebug("json length", length($json));
 	
-	#### INPUT DATA	
-	my $json 	=	qq{{
-"mode"		:	"jobStatus",
-"username"	:	"syoung",
-"project"	:	"PanCancer",
-"workflow"	:	"Align",
-"workflownumber"	:	"1",
-"sample"	:	"a9012345678",
-"stage"		:	"align",
-"stagenumber":	"1",
-"owner"		:	"syoung",
-"package"	:	"package",
-"version"	:	"0.8.0",
-"installdir":	"/agua/apps/bioapps",
-"location"	:	"bin/test/sleep.sh",
-"host"		:	"10.0.2.15",
-"queued"	:	"2014-05-03 06:49:30",
-"started"	:	"2014-05-03 06:49:30",
-"completed"	:	"2014-05-03 06:51:10",
-"status"	:	"completed",
-"stdout"	:	"ubuntu.example.com\\nSat May  3 06:53:26 UTC 2014\\nCompleted\\n",
-"stderr"	:	""
-}};
+		#### HANDLE TOPIC
+		$self->handleTopic($json);
 	
-	#### HANDLE TOPIC
-	$self->handleTopic($json);
+		#### SET EXPECTED
+		my $expected	=	$self->jsonparser()->decode($json);
+		delete $expected->{mode};
+		delete $expected->{number};
+		$self->logDebug("expected->owner", $expected->{owner});
+		$self->logDebug("expected", $expected);
+		
+		push (@$expectedarray, $expected);
+		
+		#### GET ACTUAL
+		my $query =	"SELECT * FROM provenance ORDER BY workflownumber DESC";
+		$self->logDebug("query", $query);
+		my $actualarray	=	 $self->db()->queryhasharray($query);
+		$self->logDebug("actualarray", $actualarray);
 
-	#### VERIFY
-	my $expected	=	$self->jsonparser()->decode($json);
-	delete $expected->{mode};
-	
-	my $query =	"SELECT * FROM provenance";
-	$self->logDebug("query", $query);
-	my $actual	=	$self->db()->queryhash($query);
-	$self->logDebug("actual", $actual);
-
-	is_deeply($actual, $expected, "loaded fields identical to input");	
+		#### COMPARE	
+		is_deeply($actualarray, $expectedarray, "$testname added to provenance table");	
+	}
 }
 
 method testReceiveTopic {
@@ -318,19 +330,55 @@ method testMaintainQueue {
 	#### TO DO: MOCK OUT QUEUE REPONSES
 }
 
+
 method testGetNumberQueuedJobs {
 	diag("getNumberQueuedJobs");
-	
-	#### OVERRIDE rabbitmqctl
-	$self->rabbitmqctl("$Bin/inputs/rabbitmqctl.pl");
-	my $rabbitmqctl	=	$self->rabbitmqctl();
-	$self->logDebug("rabbitmqctl", $rabbitmqctl);
 
-	my $queue	=	"syoung.1234567890.Align";
-	my $queuedjobs	=	$self->getNumberQueuedJobs($queue);
-	$self->logDebug("queuedjobs", $queuedjobs);
+	my $queuelist	=	 qq{amq.gen-dQQNw7zLy1jLpGMLpnue3g	0
+amq.gen-fbZhLQXxwwSxTp6z3Oj0BQ	0
+amq.gen-mv6DB2AzWKA9tt8txfcz5g	0
+amq.gen-p1uC9ZDwNUCmZr4stDBsEQ	0
+amq.gen-pWogrdvCMkSEvJgvBzvFcg	0
+amq.gen-pbszDnl91iOfUU0QBNd1Kw	0
+amq.gen-xXCpu19zUBC2sZWVXuPOHQ	0
+syoung.PanCancer.Align	8
+syoung.PanCancer.Download	9
+syoung.PanCancer.Split	10
+...done.
+};
+
+	my $tests =	[
+		{
+			testname=>	"align queue",
+			queue	=>	"syoung.PanCancer.Align",
+			expected	=>	8
+		},
+		{
+			testname=>	"download queue",
+			queue	=>	"syoung.PanCancer.Download",
+			expected	=>	9
+		},
+		{
+			testname=>	"split queue",
+			queue	=>	"syoung.PanCancer.Split",
+			expected	=>	10
+		},
+		{
+			testname=>	"queue not found - undef expected",
+			queue	=>	"syoung.PanCancer.QueueNotFound",
+			expected	=>	undef
+		}
+	];
 	
-	ok($queuedjobs == 12, "12 queued jobs");
+	foreach my $test ( @$tests ) {
+		my $queue		=	$test->{queue};
+		my $queuedjobs	=	$self->getNumberQueuedJobs($queuelist, $queue);
+		my $expected	=	$test->{expected};
+		$self->logDebug("queuedjobs", $queuedjobs);
+		$self->logDebug("expected", $expected);
+		
+		is_deeply($queuedjobs, $expected, $test->{testname});
+	}
 }
 
 method testWorkflowStatus {
@@ -406,6 +454,7 @@ method identicalFiles ($actualfile, $expectedfile) {
 
 
 method setSynapse {
+	$self->logDebug("");
 
 	my $synapse	= Test::Synapse->new({
 		conf		=>	$self->conf(),

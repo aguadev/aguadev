@@ -130,7 +130,6 @@ method testSendTopic {
 		"sample"	=>	"e9012345678",
 		"location"	=>	"bin/test/sleep.sh",
 		"executor"	=>	"",
-		"name"		=>	"sleep",
 		"username"	=>	"testuser",
 		"host"		=>	"10.0.2.15",
 		"workflow"	=>	"Sleep",

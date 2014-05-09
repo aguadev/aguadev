@@ -869,8 +869,8 @@ method getStageFields {
 		'name',
 		'number',
 		'location',
-		'executor',
-		'cluster',
+		'installdir',
+		'version',
 		'queued',
 		'started',
 		'completed'
@@ -886,7 +886,13 @@ method updateJobStatus ($stage, $status) {
 	foreach my $field ( @$fields ) {
 		$data->{$field}	=	$stage->$field();
 	}
-
+	
+	#### TIME
+	$data->{time}	=	$self->getMysqlTime();
+	
+	#### MODE
+	$data->{mode}	=	"updateJobStatus";
+	
 	#### ADD stage... TO NAME AND NUMBER
 	$data->{stage}	=	$stage->name();
 	$data->{stagenumber}	=	$stage->number();
@@ -901,8 +907,8 @@ method updateJobStatus ($stage, $status) {
 	my $stderr		=	"";
 	$stdout			=	$self->getFileContents($stage->stdoutfile()) if -f $stage->stdoutfile();
 	$stderr			=	$self->getFileContents($stage->stderrfile()) if -f $stage->stderrfile();
-	$data->{stderr}	=	$stderr;
-	$data->{stdout}	=	$stdout;
+	$data->{stderr}		=	$stderr;
+	$data->{stdout}		=	$stdout;
 	
 	#### SEND TOPIC	
 	$self->logDebug("$$ DOING worker->sendTopic");

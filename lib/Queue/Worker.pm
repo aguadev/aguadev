@@ -169,7 +169,7 @@ method shutdown {
 		datetime	=>	$datetime,
 		host		=>	$host,
 		status		=>	"shutdown",
-		mode		=>	"hostStatus"
+		mode		=>	"updateHostStatus"
 	};
 
 	#### REPORT HOST STATUS TO 

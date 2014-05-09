@@ -34,6 +34,7 @@ use Agua::Ops;
 
 #### Arrays
 has 'outputs'		=>  ( isa => 'ArrayRef|Undef', is => 'rw', default	=>	sub { return [] } );
+has 'inputs'		=>  ( isa => 'ArrayRef|Undef', is => 'rw', default	=>	sub { return [] } );
 
 use FindBin qw($Bin);
 use Test::More;
@@ -46,12 +47,27 @@ method getAssignments {
 	$self->returnOutput();
 }
 
+method getSampleLines {
+	$self->returnOutput();
+}
+
 method getWorkAssignment ($state) {
 	$self->returnOutput();
 }
 
 method latestVersion ($package) {
 	$self->returnOutput();
+}
+
+method change ($uuid, $state) {
+	$self->logDebug("uuid", $uuid);
+	$self->logDebug("state", $state);
+	
+	push @{$self->inputs()}, {
+		uuid	=>	$uuid,
+		state	=>	$state
+	};
+	
 }
 
 method returnOutput {

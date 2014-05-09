@@ -305,8 +305,9 @@ method newConnection {
         pass 	=>	$pass,
         vhost	=>	$vhost,
     );
-	$self->logDebug("AFTER my connnection = Net::RabbitFoot(). SLEEPING FOR 5 SECONDS");
-	sleep(1);
+	my $sleep	=	1;
+	$self->logDebug("AFTER my connnection = Net::RabbitFoot(). SLEEPING FOR $sleep SECONDS");
+	sleep($sleep);
 
 	#$self->logDebug("AFTER my connnection = Net::RabbitFoot()");
 

@@ -78,6 +78,7 @@ has 'scriptfile'	=>  ( isa => 'Str', is => 'rw', required => 1 );
 has 'stdoutfile'	=>  ( isa => 'Str', is => 'rw' );
 has 'stderrfile'	=>  ( isa => 'Str', is => 'rw' );
 has 'installdir'   	=>  ( isa => 'Str', is => 'rw', required => 1  );
+has 'version'   	=>  ( isa => 'Str', is => 'rw', required => 1  );
 has 'cluster'		=>  ( isa => 'Str|Undef', is => 'rw' );
 has 'qsub'			=>  ( isa => 'Str', is => 'rw' );
 has 'qstat'			=>  ( isa => 'Str', is => 'rw' );
@@ -187,7 +188,7 @@ method runLocally {
 	my $executor = $self->executor();
 	if ( $executor =~ /^\S+\.sh\s+&&\s*/ ) {
 		my ($file)	=	$executor	=~ /^(\S+\.sh)/;
-		$executor	=~ s/^\S+\.sh\\s+&&\s*//;
+		$executor	=~ s/^\S+\.sh\s+&&\s*//;
 		my $fileexports	=	$self->getFileExports($file);
 		$prefix .= $fileexports if defined $fileexports;
 	}
@@ -232,12 +233,10 @@ method runLocally {
 	
 	#### RUN APP BY FORKING
 	my $childpid = fork;
-	if ( $childpid ) #### ****** Parent ****** 
-	{
+	if ( $childpid ) { #### ****** Parent ****** 
 		$self->logDebug("$$ PARENT childpid", $childpid);
 	}
-	elsif ( defined $childpid ) #### ****** Child ******
-	{
+	elsif ( defined $childpid ) { #### ****** Child ******
 		#### SET InactiveDestroy ON DATABASE HANDLE
 		$self->db()->dbh()->{InactiveDestroy} = 1;
 		my $dbh = $self->db()->dbh();

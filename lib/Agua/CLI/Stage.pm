@@ -14,7 +14,7 @@ class Stage with (MooseX::Getopt, MooseX::LogDispatch) extends App {
     #### PRE-DECLARE CLASS TYPES
     #subtype ParameterX => as Object => where { $_->isa('ParameterX') };
     #subtype 'ParameterX' => as 'ParameterX' => where {} => message {'here'};
-     #enum 'RGB' => qw( red green blue );
+    #enum 'RGB' => qw( red green blue );
 
     ##### STORED VARIABLES
     has 'owner'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous' );
@@ -24,10 +24,12 @@ class Stage with (MooseX::Getopt, MooseX::LogDispatch) extends App {
     has 'location'	=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'submit'	=> ( isa => 'Maybe', is => 'rw', default => 0 );
     has 'executor'	=> ( isa => 'Str|Undef', is => 'rw', default => 0 );
+    has 'version'	=> ( isa => 'Str|Undef', is => 'rw', default => 0 );
+    has 'installdir'=> ( isa => 'Str|Undef', is => 'rw', default => 0 );
     has 'cluster'	=> ( isa => 'Str|Undef', is => 'rw', default => 0 );
-    has 'description'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
+    has 'description'=> ( isa => 'Str|Undef', is => 'rw', default => '' );
     has 'notes'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'parameters'	=> ( isa => 'ArrayRef[ParameterX]', is => 'rw', default => sub { [] } );
+    has 'parameters'=> ( isa => 'ArrayRef[ParameterX]', is => 'rw', default => sub { [] } );
     
     #### TRANSIENT VARIABLES
     has 'newname'	    => ( isa => 'Str', is => 'rw', required => 0 );
@@ -35,7 +37,7 @@ class Stage with (MooseX::Getopt, MooseX::LogDispatch) extends App {
     has 'field'	    => ( isa => 'Str', is => 'rw', required => 0 );
     has 'value'	    => ( isa => 'Str', is => 'rw', required => 0 );
     has 'fields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['owner', 'name', 'number', 'type', 'location', 'submit', 'executor', 'cluster', 'description', 'notes'] } );
-    has 'inputfile'=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
+    has 'inputfile'	=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
     has 'outputfile'=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
     has 'dbfile'    => ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'dbtype'    => ( isa => 'Str|Undef', is => 'rw', required => 0 );

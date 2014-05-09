@@ -87,8 +87,11 @@ method manage {
 	$self->listenTopics();
 
 	while ( not $shutdown eq "true" ) {
+		my $queuelist	=	$self->getQueueList();
+		$self->logDebug("queuelist", $queuelist);
+
 		foreach my $queue ( @$queues ) {
-			$self->maintainQueue($queues, $queue);
+			$self->maintainQueue($queues, $queuelist, $queue);
 		}
 
 		my $sleep	=	$self->sleep();
@@ -199,7 +202,7 @@ ORDER BY username, project, workflownumber};
 }
 
 #### MAINTAIN QUEUES
-method maintainQueue ($queues, $queuedata) {
+method maintainQueue ($queues, $queuelist, $queuedata) {
 	$self->logDebug("queuedata", $queuedata);
 	
 	my $queuename	=	$self->setQueueName($queuedata);
@@ -210,7 +213,7 @@ method maintainQueue ($queues, $queuedata) {
 	$self->logDebug("FINAL maxjobs", $maxjobs);
 
 	#### GET NUMBER OF QUEUED JOBS
-	my $numberqueued	=	$self->getNumberQueuedJobs($queuename) || 0;
+	my $numberqueued	=	$self->getNumberQueuedJobs($queuelist, $queuename) || 0;
 	$self->logDebug("numberqueued", $numberqueued);
 
 	#### ADD MORE JOBS TO QUEUE IF LESS THAN maxjobs
@@ -264,7 +267,7 @@ method getTasks ($queues, $queuedata, $limit) {
 		#### SET TIME QUEUED
 		$task->{queued}		=	$self->getMysqlTime();
 
-		$self->updateTaskStatus($task);
+		$self->updateJobStatus($task);
 	}
 	
 	return $tasks;
@@ -399,23 +402,25 @@ method handleTopic ($json) {
 	my $mode =	$data->{mode} || "";
 	$self->logDebug("mode", $mode);
 	
-	if ( $mode eq "hostStatus" ) {
-		$self->updateHostStatus($data);
+	if ( $self->can($mode) ) {
+		$self->$mode($data);
 	}
 	else {
-		$self->updateTaskStatus($data);
+		print "mode not supported: $mode\n";
+		$self->logDebug("mode not supported: $mode");
 	}
 }
 
-method updateTaskStatus ($data) {
+method updateJobStatus ($data) {
 	$self->logDebug("data", $data);
 	my $keys	=	[ "username", "project", "workflow", "workflownumber", "sample" ];
 	my $notdefined	=	$self->notDefined($data, $keys);	
 	$self->logDebug("notdefined", $notdefined) and return if @$notdefined;
 
 	#### ADD TO provenance TABLE
-	my $table	=	"provenance";
-	$self->_addToTable($table, $data, $keys);
+	my $table		=	"provenance";
+	my $fields		=	$self->db()->fields($table);
+	$self->_addToTable($table, $data, $keys, $fields);
 
 	#### UPDATE queuesamples TABLE
 	$self->updateQueueSamples($data);	
@@ -451,6 +456,7 @@ method getSynapseStatus ($data) {
 	my $sample	=	$data->{sample};
 	my $stage	=	lc($data->{workflow});
 	my $status	=	$data->{status};
+	$status		=~	s/^error.+$/error/;
 
 	$self->logDebug("sample", $sample);
 	$self->logDebug("stage", $stage);
@@ -462,7 +468,6 @@ method getSynapseStatus ($data) {
 
 	return $synapsestatus;	
 }
-
 
 method pushTask ($task) {
 	#### STORE UNQUEUED TASK IN queue TABLE
@@ -522,25 +527,34 @@ method getSampleFromSynapse ($maxjobs) {
 	return $samples;
 }
 
-method getNumberQueuedJobs ($queue) {
-	$self->logDebug("queue", $queue);
-	my $vhost	=	$self->conf()->getKey("queue:vhost", undef);
+method getQueueList {
+	
+	my $vhost		=	$self->conf()->getKey("queue:vhost", undef);
 	$self->logDebug("vhost", $vhost);
 	
 	my $rabbitmqctl	=	$self->rabbitmqctl();
 	$self->logDebug("rabbitmqctl", $rabbitmqctl);
 	
-	my $command	=	qq{$rabbitmqctl list_queues -p $vhost name messages};
+	my $command		=	qq{$rabbitmqctl list_queues -p $vhost name messages};
 	$self->logDebug("command", $command);
-	my $output	=	`$command`;
-	$self->logDebug("output", $output);
+
+	my $queuelist	=	`$command`;
+	$self->logDebug("queuelist", $queuelist);
+
+	return $queuelist;
+}
+
+method getNumberQueuedJobs ($queuelist, $queue) {
+	#$self->logDebug("queuelist", $queuelist);
+	$self->logDebug("queue", $queue);
 	
-	my ($jobs)	=	$output	=~ /^$queue\s+(\d+)\s*/ms;
+	my ($jobs)	=	$queuelist	=~ /^$queue\s+(\d+)\s*/ms;
 	$self->logDebug("jobs", $jobs);
 
 	return $jobs;
 }
 
+#### SEND TASK
 method sendTask ($task) {	
 	$self->logDebug("task", $task);
 	my $processid	=	$$;
@@ -778,6 +792,7 @@ method setNova {
 }
 
 method setSynapse {
+	$self->logDebug("");
 
 	my $synapse	= Synapse->new({
 		conf		=>	$self->conf(),

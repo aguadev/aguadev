@@ -76,7 +76,7 @@ my $object1 = new Test::Queue::Worker::Receive(
 	showlog     =>  $showlog,
 	printlog    =>  $printlog
 );
-isa_ok($object1, "Test::Queue::Worker", "object1");
+isa_ok($object1, "Test::Queue::Worker::Receive", "object1");
 
 #### INTERACTIVE
 $object1->testReceiveTask();
@@ -89,8 +89,8 @@ my $object2 = new Test::Queue::Worker(
 );
 isa_ok($object2, "Test::Queue::Worker", "object2");
 
-#### INTERACTIVE
-$object2->testHandleTask();
+##### INTERACTIVE
+#$object2->testHandleTask();
 #$object2->testSendTopic();
 #$object2->testVerifyShutdown();
 #$object2->testShutdown();

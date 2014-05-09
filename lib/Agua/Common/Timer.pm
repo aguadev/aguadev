@@ -10,6 +10,7 @@ use Moose::Role;
 		TIME-RELATED METHODS FOR Agua::Common
 		
 =cut
+
 sub localTime {
 	my $self		=	shift;
     my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday, $isdst) = localtime;
@@ -39,8 +40,6 @@ sub localTime {
     my $datetime = "$hour:$min$ampm, $date $month $year";
     return $datetime;
 }
-
-
 
 sub runtime {
 	my $self		=	shift;
@@ -167,6 +166,10 @@ sub datetimeToMysql {
 	$self->logNote("timezone", $timezone);
 	$self->logNote("month", $month);
     $month = $self->monthNumber($month);
+	$self->logNote("month number", $month);
+	
+	$date = "0" . $date if length($date) == 1;
+	
     my $mysql_datetime = "$year-$month-$date $hour:$minutes:$seconds";
     
     return $mysql_datetime;
