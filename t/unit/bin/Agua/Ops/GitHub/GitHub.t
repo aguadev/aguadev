@@ -29,7 +29,7 @@ my $configfile    =   "$installdir/conf/config.yaml";
 $Bin =~ s/^.+t\/bin/$installdir\/t\/bin/;
 
 #### SET LOG
-my $showlog     =   2;
+my $log     =   2;
 my $printlog    =   5;
 my $logfile     =   "$Bin/outputs/install.log";
 
@@ -42,7 +42,7 @@ my $password;
 my $keyfile;
 my $help;
 GetOptions (
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'login=s'       => \$login,
     'showreport=s'  => \$showreport,
@@ -81,7 +81,7 @@ elsif ( $whoami ne "root" ) {
 my $conf = Conf::Yaml->new(
     memory      =>  1,
     inputfile	=>	$configfile,
-    showlog     =>  2,
+    log     =>  2,
     printlog    =>  2,
     logfile     =>  $logfile
 );
@@ -89,7 +89,7 @@ my $conf = Conf::Yaml->new(
 my $username = $conf->getKey("database", "TESTUSER");
 
 my $object = new Test::Agua::Ops::GitHub (
-    showlog     =>  $showlog,
+    log			=>	$log,
     printlog    =>  $printlog,
     logfile     =>  $logfile,
     dumpfile    =>  $dumpfile,

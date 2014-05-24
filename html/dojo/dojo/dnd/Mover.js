@@ -67,8 +67,8 @@ return declare("dojo.dnd.Mover", [Evented], {
 		e.stopPropagation();
 	},
 	onMouseUp: function(e){
-		console.log("dojo.dnd.Mover.onMouseUp    e: " + e);
-		console.dir({e:e});
+		//console.log("dojo.dnd.Mover.onMouseUp    e: " + e);
+		//console.dir({e:e});
 		
 		if(has("webkit") && has("mac") && this.mouseButton == 2 ?
 				e.button == 0 : this.mouseButton == e.button){ // TODO Should condition be met for touch devices, too?
@@ -79,8 +79,8 @@ return declare("dojo.dnd.Mover", [Evented], {
 	},
 	// utilities
 	onFirstMove: function(e){
-		console.log("dojo.dnd.Mover.onFirstMove    e: " + e);
-		console.dir({e:e});
+		//console.log("dojo.dnd.Mover.onFirstMove    e: " + e);
+		//console.dir({e:e});
 		// summary:
 		//		makes the node absolute; it is meant to be called only once.
 		//		relative and absolutely positioned nodes are assumed to use pixel units

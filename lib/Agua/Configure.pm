@@ -46,7 +46,7 @@ use Agua::DBaseFactory;
 use Conf::Yaml;
 
 # Booleans
-has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'log'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
 has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );
 has 'validated'		=> ( isa => 'Int', is => 'rw', default => 0 );
 
@@ -102,7 +102,7 @@ method initialise {
 	$self->logDebug("json", $json);
 
  	#### SET CONF LOG
-	$self->conf()->showlog($self->showlog());
+	$self->conf()->log($self->log());
 	$self->conf()->printlog($self->printlog());	
 }
 
@@ -634,7 +634,7 @@ method setDbObject ($database, $user, $password) {
             user      	=>  $user,
             password  	=>  $password,
 			logfile		=>	$self->logfile(),
-			showlog		=>	2,
+			log		=>	2,
 			printlog	=>	2
         }
     ) or die "Can't create database object to create database: $database. $!\n";

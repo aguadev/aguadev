@@ -52,11 +52,11 @@ my $urlprefix  =   $ENV{'urlprefix'} || "agua";
 
 #### GET OPTIONS
 my $logfile 	= "$Bin/outputs/test.log";
-my $showlog     =   2;
+my $log     =   2;
 my $printlog    =   5;
 my $help;
 GetOptions (
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'logfile=s'     => \$logfile,
     'help'          => \$help
@@ -66,14 +66,14 @@ usage() if defined $help;
 my $configfile	=	"$installdir/conf/config.yaml";
 my $conf	=	Conf::Yaml->new({
 	inputfile	=>	$configfile,
-	showlog		=>	$showlog,
+	log			=>	$log,
 	printlog	=>	$printlog
 });
 
 my $object1 = new Test::Queue::Worker::Receive(
 	conf		=>	$conf,
     logfile     =>  $logfile,
-	showlog     =>  $showlog,
+	log			=>	$log,
 	printlog    =>  $printlog
 );
 isa_ok($object1, "Test::Queue::Worker::Receive", "object1");
@@ -84,7 +84,7 @@ $object1->testReceiveTask();
 my $object2 = new Test::Queue::Worker(
 	conf		=>	$conf,
     logfile     =>  $logfile,
-	showlog     =>  $showlog,
+	log			=>	$log,
 	printlog    =>  $printlog
 );
 isa_ok($object2, "Test::Queue::Worker", "object2");

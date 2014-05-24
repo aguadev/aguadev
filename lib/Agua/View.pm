@@ -140,7 +140,7 @@ use Agua::JBrowse;
 use Exchange;
 
 # Booleans
-has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 4 );  
+has 'log'		=>  ( isa => 'Int', is => 'rw', default => 4 );  
 has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Ints
@@ -227,7 +227,7 @@ method initialise ($json) {
 	#### SET CONF LOG (IN CASE View IS CALLED AS A COMPONENT
 	#### I.E., NOT VIA view.cgi)
 	$self->conf()->logfile($logfile) if not defined $self->conf()->logfile();
-	$self->conf()->showlog($self->showlog()) if not defined $self->conf()->showlog();
+	$self->conf()->log($self->log()) if not defined $self->conf()->log();
 	$self->conf()->printlog($self->printlog()) if not defined $self->conf()->printlog();
 	
 	#### SET DATABASE HANDLE
@@ -255,7 +255,7 @@ method setExchange () {
 	
 	my $exchange	=	Exchange->new({
 		logfile		=>	$self->logfile(),
-		showlog		=>	$self->showlog(),
+		log		=>	$self->log(),
 		printlog	=>	$self->printlog(),
 		conf		=>	$self->conf()
 	});
@@ -388,8 +388,8 @@ method notifyStatus ($data) {
 	$self->logDebug("connection", $connection);
 	sleep(1);
 	
-	$self->logDebug("DOING self->exchange()->sendData(data)");
-	return $self->exchange()->sendData($data);
+	$self->logDebug("DOING self->exchange()->sendSocket(data)");
+	return $self->exchange()->sendSocket($data);
 }
 
 method removeView {
@@ -1020,8 +1020,7 @@ method linkSpeciesDir {
 
 #### GENERATE FEATURES jbrowseFeatures (AROUND)
 around jbrowseFeatures {
-	$self->logDebug("Agua.View.jbrowseFeatures()");
-	$self->logDebug("env | grep SGE");
+	$self->logDebug("AROUND Agua::JBrowse::jbrowseFeatures()");
 
 	$self->logDebug("Doing self->getEnvars()");
 	$self->getEnvars();

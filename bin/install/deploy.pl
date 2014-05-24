@@ -32,8 +32,8 @@ sudo ./deploy.pl \
  [--pmfile String] \
  [--repository String] \
  [--logfile String] \
- [--showlog String] \
- [--printlog String] \
+ [--log String] \
+ [--PRINTLOG String] \
  [--help]
 
  --mode       :	deploy | bioapps | biorepo | ... options (see below)
@@ -45,8 +45,8 @@ sudo ./deploy.pl \
  --pmfile     :	Location of *.pm file containing installation instructions
  --repository :	Name of Git repository to be used as the code source
  --logfile    :	Location of log file
- --showlog    :	Print debug and other information to STDOUT (levels 1-5)
- --printlog   :	Print debug and other information to logfile (levels 1-5)
+ --log    :	Print debug and other information to STDOUT (levels 1-5)
+ --PRINTLOG   :	Print debug and other information to logfile (levels 1-5)
  --help       :	Print help info
 
 The 'mode' options are as follows:
@@ -102,6 +102,7 @@ my $configfile   =	"$Bin/../../conf/config.yaml";
 my $opsrepo;
 my $opsfile;
 my $pmfile;
+my $versionfile = "";
 my $s3bucket;
 my $package;
 my $version;
@@ -111,8 +112,8 @@ my $token;
 my $keyfile;
 my $password;
 my $logfile      =	"/tmp/agua-deploy.log";
-my $showlog      =	2;
-my $printlog     =	5;
+my $log      =	2;
+my $PRINTLOG     =	5;
 my $help;
 GetOptions (
     'mode=s'        => \$mode,
@@ -120,12 +121,13 @@ GetOptions (
     'opsrepo=s'  	=> \$opsrepo,
     'opsfile=s'  	=> \$opsfile,
     'pmfile=s'  	=> \$pmfile,
+    'versionfile=s' => \$versionfile,
     'package=s'  	=> \$package,
     'version=s'  	=> \$version,
     'repository=s'  => \$repository,
     'logfile=s'     => \$logfile,
-    'showlog=i'     => \$showlog,
-    'printlog=i'    => \$printlog,
+    'log=i'     => \$log,
+    'PRINTLOG=i'    => \$PRINTLOG,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
@@ -135,8 +137,8 @@ my $conf = Conf::Yaml->new(
     inputfile   =>  $configfile,
     backup      =>  1,
 
-    showlog     =>  $showlog,
-    printlog    =>  $printlog,
+    log			=>	$log,
+    printlog	=>	$printlog,
     logfile     =>  $logfile
 );
 
@@ -155,6 +157,7 @@ my $object = Agua::Deploy->new({
     opsrepo  	=>  $opsrepo,
     opsfile  	=>  $opsfile,
     pmfile  	=>  $pmfile,
+    versionfile =>  $versionfile,
     package  	=>  $package,
     version  	=>  $version,
     repository  =>  $repository,
@@ -163,8 +166,8 @@ my $object = Agua::Deploy->new({
     keyfile  	=>  $keyfile,
     password  	=>  $password,
 
-    showlog     =>  $showlog,
-    printlog    =>  $printlog,
+    log			=>	$log,
+    printlog	=>	$printlog,
     logfile     =>  $logfile
 });
 

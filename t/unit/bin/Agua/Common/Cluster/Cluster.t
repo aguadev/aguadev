@@ -21,7 +21,7 @@ my $outputsdir = "$Bin/outputs";
 use Test::Agua::Common::Cluster;
 use Conf::Yaml;
 
-my $showlog     = 3;
+my $log     = 3;
 my $printlog    = 3;
 my $logfile = "$Bin/outputs/testuser.cluster.log";
 
@@ -38,7 +38,7 @@ my $conf = Conf::Yaml->new(
 	separator	=>	"\t",
 	spacer		=>	"\\s\+",
     logfile     =>  $logfile,
-    showlog     =>  2,
+    log     =>  2,
     printlog    =>  2
 );
 
@@ -57,7 +57,7 @@ my $tester = new Test::Agua::Common::Cluster(
     username    =>  "testuser",
     project     =>  "Project1",
     workflow    =>  "Workflow1",
-    showlog     =>  $showlog,
+    log			=>	$log,
     printlog    =>  $printlog
 );
 

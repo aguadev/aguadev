@@ -1,0 +1,37 @@
+2014-05-09 16:00:39    [DEBUG]   	Test::Queue::Worker::Receive::testReceiveTask	35	PARENT childpid: 16724
+2014-05-09 16:02:12    [DEBUG]   	Test::Queue::Worker::Receive::testReceiveTask	35	PARENT childpid: 16920
+2014-05-09 16:02:12    [DEBUG]   	Test::Queue::Worker::Receive::sendTask	61	data: {"workflow":"Align","project":"1234567890","username":"syoung"}
+2014-05-09 16:02:12    [DEBUG]   	Test::Queue::Worker::Receive::sendTask	65	json: {"workflow":"Align","project":"1234567890","username":"syoung"}
+2014-05-09 16:02:12    [DEBUG]   	Exchange::newConnection	293	16919 host: 172.17.42.1
+2014-05-09 16:02:12    [DEBUG]   	Exchange::newConnection	294	16919 user: rabbituser
+2014-05-09 16:02:12    [DEBUG]   	Exchange::newConnection	295	16919 pass: runrabit%2
+2014-05-09 16:02:12    [DEBUG]   	Exchange::newConnection	296	16919 vhost: rabbitvhost
+2014-05-09 16:02:12    [DEBUG]   	Exchange::newConnection	299	BEFORE my connnection = Net::RabbitFoot()
+2014-05-09 16:02:12    [DEBUG]   	Exchange::newConnection	309	AFTER my connnection = Net::RabbitFoot(). SLEEPING FOR 1 SECONDS
+2014-05-09 16:02:13    [DEBUG]   	Test::Queue::Worker::Receive::sendTask	69	DOING connection->open_channel()
+2014-05-09 16:02:13    [DEBUG]   	Test::Queue::Worker::Receive::testReceiveTask	55	Sleeping 5 seconds
+2014-05-09 16:02:27    [DEBUG]   	Test::Queue::Worker::Receive::testReceiveTask	35	PARENT childpid: 16983
+2014-05-09 16:02:27    [DEBUG]   	Test::Queue::Worker::Receive::sendTask	61	data: {"workflow":"Align","project":"1234567890","username":"syoung"}
+2014-05-09 16:02:27    [DEBUG]   	Test::Queue::Worker::Receive::sendTask	65	json: {"workflow":"Align","project":"1234567890","username":"syoung"}
+2014-05-09 16:02:27    [DEBUG]   	Exchange::newConnection	293	16926 host: 172.17.42.1
+2014-05-09 16:02:27    [DEBUG]   	Exchange::newConnection	294	16926 user: rabbituser
+2014-05-09 16:02:27    [DEBUG]   	Exchange::newConnection	295	16926 pass: runrabit%2
+2014-05-09 16:02:27    [DEBUG]   	Exchange::newConnection	296	16926 vhost: rabbitvhost
+2014-05-09 16:02:27    [DEBUG]   	Exchange::newConnection	299	BEFORE my connnection = Net::RabbitFoot()
+2014-05-09 16:02:27    [DEBUG]   	Exchange::newConnection	309	AFTER my connnection = Net::RabbitFoot(). SLEEPING FOR 1 SECONDS
+2014-05-09 16:02:28    [DEBUG]   	Test::Queue::Worker::Receive::sendTask	69	DOING connection->open_channel()
+2014-05-09 16:02:28    [DEBUG]   	Test::Queue::Worker::Receive::testReceiveTask	55	Sleeping 5 seconds
+2014-05-09 16:27:23    [DEBUG]   	Agua::Workflow::executeWorkflow	229	16724 submit: undef
+2014-05-09 16:27:23    [DEBUG]   	Agua::Workflow::executeWorkflow	230	16724 username: syoung
+2014-05-09 16:27:23    [DEBUG]   	Agua::Workflow::executeWorkflow	231	16724 project: 1234567890
+2014-05-09 16:27:23    [DEBUG]   	Agua::Workflow::executeWorkflow	232	16724 workflow: Align
+2014-05-09 16:27:23    [DEBUG]   	Agua::Workflow::executeWorkflow	233	16724 workflownumber: undef
+2014-05-09 16:27:23    [DEBUG]   	Agua::Workflow::executeWorkflow	234	16724 cluster: 
+2014-05-09 16:27:23	[ERROR]   	Agua::Workflow::executeWorkflow	245	Cannot run workflow 1234567890.Align becuase of undefined values: workflownumber
+2014-05-09 16:28:15    [DEBUG]   	Agua::Workflow::executeWorkflow	229	16920 submit: undef
+2014-05-09 16:28:15    [DEBUG]   	Agua::Workflow::executeWorkflow	230	16920 username: syoung
+2014-05-09 16:28:15    [DEBUG]   	Agua::Workflow::executeWorkflow	231	16920 project: 1234567890
+2014-05-09 16:28:15    [DEBUG]   	Agua::Workflow::executeWorkflow	232	16920 workflow: Align
+2014-05-09 16:28:15    [DEBUG]   	Agua::Workflow::executeWorkflow	233	16920 workflownumber: undef
+2014-05-09 16:28:15    [DEBUG]   	Agua::Workflow::executeWorkflow	234	16920 cluster: 
+2014-05-09 16:28:15	[ERROR]   	Agua::Workflow::executeWorkflow	245	Cannot run workflow 1234567890.Align becuase of undefined values: workflownumber

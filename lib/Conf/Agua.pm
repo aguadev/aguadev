@@ -5,7 +5,7 @@ class Conf::Agua extends Conf::Ini {
 use Data::Dumper;
 
 # Integers
-has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'log'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
 has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings

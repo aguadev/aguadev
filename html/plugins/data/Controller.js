@@ -1,32 +1,41 @@
-dojo.provide("plugins.data.Controller");
-
-// OBJECT:  plugins.data.Controller
+// CLASS:  plugins.data.Controller
 // PURPOSE: LOAD, STORE AND PROVIDE ACCESS TO DATA
 
-// CONTAINER
-dojo.require("plugins.core.Common");
+define([
+	"dojo/_base/declare",
+	"plugins/core/Common",
+	"dijit/registry",
+],
 
-// GLOBAL VARIABLE
-//var Data = new Object;
+function (
+	declare,
+	Common,
+	registry
+) {
 
-// HAS
-//dojo.require("plugins.data.Data");
+///////}}}}}
 
-dojo.declare( "plugins.data.Controller",
-	[ plugins.core.Common ],
-{
+window.Agua = Agua;
 
-name : "plugins.data.Controller",
+return declare("plugins.login.Login",
+	[
+	Common
+], {
+
+name : "plugins_data_Controller",
 version : "0.01",
 description : "Load data from remote host",
 url : '',
 dependencies : [],
+
+loaded: false,
 
 // data : object
 // Hash for all data tables
 data: null,
 
 ////}}}
+
 // CONSTRUCTOR	
 constructor : function(args) {
 	console.log("data.Controller.constructor     plugins.data.Controller.constructor");
@@ -35,11 +44,13 @@ constructor : function(args) {
 startup : function () {
 	console.log("data.Controller.startup    Data.data: ");
 	console.dir({data:Data.data});
+
+	// SET ID
+	this.setId();
 	
 	if ( Data != null )
 	{
-		if ( Data.data != null )
-		{
+		if ( Data.data != null ) {
 			console.log("data.Controller.startup    Data.data: ");
 			console.dir({data:Data.data});
 
@@ -54,74 +65,63 @@ startup : function () {
 
 	Data = this;	
 },
+setId : function () {
+	if ( this.id ) {
+		console.log("data.Controller.startup    Returning existing this.id: " + this.id);
+		return this.id;
+	}
+	var name	=	this.name;
+	this.id 	= 	registry.getUniqueId(name);
+	console.log("data.Controller.startup    this.id: " + this.id);
+	console.log("data.Controller.startup    registry: ");
+	console.dir({registry:registry});
+	registry.add(this);
+	
+	return this.id;
+},
 getData : function() {
 // LOAD ALL DATA, INCLUDING SHARED PROJECT DATA
 	console.log("data.Controller.getData    plugins.data.Controller.getData()");		
 	console.log("data.Controller.getData    Agua.dataUrl: " + Agua.dataUrl);
 	
-    if ( Agua.dataUrl != null )	return this.fetchJsonData();
+    if ( Agua.dataUrl )	return this.fetchJsonData();
 
-	// GENERATE QUERY JSON FOR THIS WORKFLOW IN THIS PROJECT
-	var url = Agua.cgiUrl + "agua.cgi";
+	// SEND QUERY
 	var query = new Object;
-	query.username 		= 	Agua.cookie('username');
-	query.sessionid 	= 	Agua.cookie('sessionid');
-    if ( Agua.database )
-        query.database 	= Agua.database;
 	query.mode 			= 	"getData";
 	query.module 		= 	"Agua::Workflow";
-	
-	console.log("data.Controller.getta    query: ");
+	query.sourceid 		= 	this.id;
+	query.callback		=	"loadData",
+	console.log("data.Controller.getData    query: ");
 	console.dir({query:query});
 
-	if ( Data == null )
-		Data = new Object;
-
-
 	Agua.exchange.send(query);
-	
-	var thisObject = this;
-	dojo.xhrPut(
-		{
-			url: url,
-			putData: dojo.toJson(query),
-			handleAs: "json",
-			//handleAs: "json-comment-optional",
-			preventCache : true,
-			sync: true,
-			load: function(response, ioArgs) {
+},
+loadData : function (response) {
+	console.log("data.Controller.loadData    response:");
+	console.dir({response:response});
 
-				//console.log("data.Controller.getData    response: ", dojo.toJson(response));
-
-				if ( response.error )
-				{
-					Agua.error(response.error);
-				}
-				else
-				{
-					Data.data = response;
-					thisObject.data = response;
-					Agua.data = response;
-					console.log("data.Controller.getData    BEFORE thisObject.responseToData(response)");
-					//thisObject.responseToData(response);
-
-					// DISPLAY VERSION
-					Agua.displayVersion();
-				}
-			},
-			error: function(response, ioArgs) {
-				console.log("Error with JSON Post, response: " + dojo.toJson(response) + ", ioArgs: " + dojo.toJson(ioArgs));
-			}
-		}
-	);
-
-	// DISABLE 
-	if ( this.testing )
-	{
-		Agua.cgiUrl = "../";
+	console.log("data.Controller.loadData    this.loaded:" + this.loaded);
+	if ( this.loaded == true ) {
+		console.log("data.Controller.loadData    this.loaded is true. Returning.");
+		return;
 	}
+	
+	if ( response.error ) {
+		Agua.error(response.error);
+	}
+	else {
+		Agua.data = response.data;
 
-	return null;
+		// START LOAD PLUGINS
+		Agua.startPlugins();
+		
+		// SET loaded
+		this.loaded = true;
+
+		// DISPLAY VERSION
+		Agua.displayVersion();
+	}
 },
 fetchJsonData : function() {
 	console.log("data.Controller.fetchJsonData    plugins.data.Controller.fetchJsonData()");		
@@ -173,53 +173,15 @@ getTable : function(table) {
         return this.fetchJsonData();
     }
 
-	// GET URL 
-	var url = Agua.cgiUrl + "agua.cgi";
-	//console.log("data.Controller.getTable    url: " + url);		
-
-	// GENERATE QUERY JSON FOR THIS WORKFLOW IN THIS PROJECT
+	// SEND QUERY
 	var query = new Object;
-	query.username 		= 	Agua.cookie('username');
-	query.sessionid 	= 	Agua.cookie('sessionid');
-    if ( this.database != null )
-        query.database 	= this.database;
 	query.mode 			= 	"getTable";
 	query.module 		= 	"Agua::Workflow";
-	query.table 		= 	table;
-	console.log("data.Controller.getTable    query: " + dojo.toJson(query, true));
-
-	var thisObject = this;
-	dojo.xhrPut(
-		{
-			url: url,
-			putData: dojo.toJson(query),
-			handleAs: "json",
-			//handleAs: "json-comment-optional",
-			sync: true,
-			load: function(response, ioArgs) {
-				console.log("data.Controller.JSON Post worked.");
-				if ( response.error )
-				{
-					console.log("data.Controller.getTable    xhrPut error: " + response.error);
-				}
-				else
-				{
-					thisObject.responseToData(response);
-					//for ( var key in response )
-					//{
-					//	console.log("data.Controller.getTable    storing key: " + key);
-					//	thisObject[key] = response[key];
-					//}
-				}
-			},
-			error: function(response, ioArgs) {
-				console.log("data.Controller.Error with JSON Post, response: " + response + ", ioArgs: " + ioArgs);
-			}
-		}
-	);
-	//console.log("data.Controller.getTable    this.headings: " + dojo.toJson(this.headings));
+	query.sourceid 		= 	this.id;
+	query.callback		=	"handleTable",
+	Agua.exchange.send(query);
 },
-responseToData : function (response) {
+handleTable : function (response) {
 	console.log("data.Controller.responseToData    response: " + response);
 	console.log("data.Controller.responseToData    response: " + dojo.toJson(response));
 	var keys = this.hashkeysToArray(response);
@@ -234,6 +196,7 @@ destroyRecursive : function () {
 	dojo.destroy(this);
 }
 
+}); //	end declare
 
-}); // end of Controller
+});	//	end define
 

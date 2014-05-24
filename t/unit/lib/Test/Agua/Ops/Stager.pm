@@ -15,7 +15,7 @@ use Conf::Yaml;
 use FindBin qw($Bin);
 
 # Ints
-has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
+has 'log'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
 has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings
@@ -85,7 +85,7 @@ THIRD LINE
 		#versionfile     =>  $versionfile,
 		#releasename     =>  $releasename,
 		logfile     	=>   $logfile,
-		showlog     	=>   $self->showlog(),
+		log     	=>   $self->log(),
 		printlog   		=>   $self->printlog()
 	});
 

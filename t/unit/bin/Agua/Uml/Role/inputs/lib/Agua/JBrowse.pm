@@ -72,7 +72,7 @@ has 'compress'		=> ( isa => 'Bool|Undef', is => 'rw', default => 0 );
 # INTS
 has 'chunksize'		=> ( isa => 'Int|Undef', is => 'rw', default => 0 );
 has 'sortmem'		=> ( isa => 'Int|Undef', is => 'rw', default => 0 );
-has 'showlog'		=> ( isa => 'Int', is => 'rw', default => 4 );  
+has 'log'		=> ( isa => 'Int', is => 'rw', default => 4 );  
 has 'printlog'		=> ( isa => 'Int', is => 'rw', default => 5 );
 # STRINGS
 has 'configfile'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );

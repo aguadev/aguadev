@@ -44,12 +44,13 @@ WHERE username='$username'
 ORDER BY started,project,workflow};
 	$self->logDebug("$query");
 	my $project_workflows = $self->db()->queryhasharray($query);
+	$self->logDebug("projectworkflows", $project_workflows);
+	
 	$self->logError("{}") and exit if not defined $project_workflows;
 	
 	#### GET HISTORY FOR EACH PROJECT WORKFLOW
 	my $outputs;
-	foreach my $projecthash ( @$project_workflows )
-	{
+	foreach my $projecthash ( @$project_workflows ) {
 		my $project = $projecthash->{project};
 		my $workflow = $projecthash->{workflow};
 		my $query = qq{select project, workflow, number, name, status, started, completed FROM stage
@@ -63,11 +64,11 @@ ORDER BY number ASC};
 		push @$outputs, $stages if defined $stages;
 	}
 
-	#### PRINT HISTORY
-	use JSON -support_by_pp; 
-	my $jsonParser = JSON->new();
-	my $history = $jsonParser->allow_singlequote(1)->allow_nonref->loose(1)->pretty->encode($outputs);
-	print $history;
+	$self->notifyStatus({
+		status		=>	"ready",
+		error		=>	"",
+		data 		=> 	$outputs,
+	});	
 }
 
 

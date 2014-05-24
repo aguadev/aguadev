@@ -31,14 +31,14 @@ use Conf::Yaml;
 my $logfile = "$Bin/outputs/sge.log";
 
 #### GET OPTIONS
-my $showlog     =   2;
+my $log     =   2;
 my $printlog    =   5;
 my $login;
 my $token;
 my $keyfile;
 my $help;
 GetOptions (
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'login=s'       => \$login,
     'token=s'       => \$token,
@@ -65,7 +65,7 @@ print "Must run as root\n" and exit if $whoami ne "root";
 my $conf = Conf::Yaml->new(
     memory      =>  1,
     inputfile	=>	$configfile,
-    showlog     =>  2,
+    log     =>  2,
     printlog    =>  2,
     logfile     =>  $logfile
 );
@@ -74,7 +74,7 @@ my $conf = Conf::Yaml->new(
 my $username    =   $conf->getKey("database", "TESTUSER");
 
 my $object = new Test::Agua::Ops::Sge(
-    showlog     =>  $showlog,
+    log			=>	$log,
     printlog    =>  $printlog,
     logfile     =>  $logfile,
     dumpfile    =>  $dumpfile,

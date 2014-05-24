@@ -112,7 +112,7 @@ use Agua::Uml;
 
 #### GET OPTIONS
 my $logfile 		= 	"/tmp/uml.log";
-my $showlog     	=   2;
+my $log     	=   2;
 my $printlog    	=   5;
 my $mode;
 my $sourcefile;
@@ -129,7 +129,7 @@ GetOptions (
     'targetdir=s'   =>  \$targetdir,
     'outputfile=s'  =>  \$outputfile,
     'logfile=s'     =>  \$logfile,
-    'showlog=s'     =>  \$showlog,
+    'log=s'     =>  \$log,
     'printlog=s'    =>  \$printlog,
     'help'          =>  \$help
 ) or die "No options specified. Try '--help'\n";
@@ -143,7 +143,7 @@ my $object = Agua::Uml->new({
     targetdir       =>  $targetdir,
     outputfile      =>  $outputfile,
     logfile     	=>  $logfile,
-    showlog     	=>  $showlog,
+    log			=>	$log,
     printlog   		=>  $printlog
 });
 

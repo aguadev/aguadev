@@ -28,7 +28,7 @@ method getLoader {
 		username	=>	$self->username(),
 		database	=>	$self->database(),
 		logfile		=>	$self->logfile(),
-		showlog		=>	$self->showlog(),
+		log		=>	$self->log(),
 		printlog	=>	$self->printlog(),
 		conf		=>	$self->conf(),
 		db	        =>	$self->db()

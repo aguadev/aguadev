@@ -29,7 +29,7 @@ class Agua::Admin with (Agua::Common) {
 use Agua::Instance;
 
 # Ints
-has 'showlog'	=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'log'	=>  ( isa => 'Int', is => 'rw', default => 1 );  
 has 'printlog'	=>  ( isa => 'Int', is => 'rw', default => 1 );
 has 'validated'	=> ( isa => 'Int', is => 'rw', default => 0 );
 
@@ -63,7 +63,7 @@ has 'head' 	=> (
 	default	=>	sub {
 		Agua::Instance->new({
 			logfile		=>	"/tmp/admin.head.log",
-			showlog		=>	2,
+			log		=>	2,
 			printlog	=>	5
 		});
 	}
@@ -104,7 +104,7 @@ method initialise ($json) {
 	#### SET HEADNODE OPS LOG
 	if ( defined $self->logfile() ) {
 		$self->head()->ops()->logfile($self->logfile());
-		$self->head()->ops()->showlog($self->showlog());
+		$self->head()->ops()->log($self->log());
 		$self->head()->ops()->printlog($self->printlog());
 	}
 

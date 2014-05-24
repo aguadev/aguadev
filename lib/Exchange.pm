@@ -1,6 +1,7 @@
 package Exchange;
 use Moose::Role;
 use Method::Signatures::Simple;
+#use Method::Manual::MethodModifiers;
 
 ####////}}}}
 
@@ -11,6 +12,7 @@ use Coro;
 use Data::Dumper;
 
 #### Strings
+has 'sendtype'	=> 	( isa => 'Str|Undef', is => 'rw', default => "response" );
 has 'sourceid'	=>	( isa => 'Undef|Str', is => 'rw', default => "" );
 has 'callback'	=>	( isa => 'Undef|Str', is => 'rw', default => "" );
 has 'token'		=> ( isa => 'Str|Undef', is => 'rw' );
@@ -18,25 +20,46 @@ has 'user'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0 );
 has 'pass'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0 );
 has 'host'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0 );
 has 'vhost'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0 );
+has 'port'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0 );
 
 #### Objects
 has 'connection'=> ( isa => 'Net::RabbitFoot', is => 'rw', lazy	=> 1, builder => "openConnection" );
 has 'channel'	=> ( isa => 'Net::RabbitFoot::Channel', is => 'rw', lazy	=> 1, builder => "openConnection" );
 
 method notifyStatus ($data) {
-	$self->logDebug("data", $data);
-	#$self->logDebug("DOING self->openConnection() with data", $data);
+	$self->logDebug("");
+	#$self->logDebug("data", $data);
+
 	async {	
-		$self->logDebug("DOING self->openConnection()");
-		my $connection = $self->openConnection();
-		#$self->logDebug("connection", $connection);
-		sleep(1);
+		#$self->logDebug("DOING self->openConnection()");
+		#my $connection = $self->openConnection();
+		##$self->logDebug("connection", $connection);
+		#sleep(1);
 		
-		$self->logDebug("DOING self->sendData(data)");
-		print "Exchange::notifyStatus    DOING self->sendData(data)\n";
-		$self->sendData($data);
+		$self->logDebug("DOING self->sendSocket(data)");
+		print "Exchange::notifyStatus    DOING self->sendSocket(data)\n";
+		$self->sendSocket($data);
 	}
 }
+
+around logError => sub {
+	print "Exchange::around logError\n";
+	my $next = shift;
+    my $self = shift;
+	print "self: $self\n";
+	print "next: $next\n";
+
+    #$self->$next();
+    print "In Class!\n";
+    return;
+	#$self->logDebug("Around logError");
+
+
+	#$self->logDebug("data", $data);
+	#
+	##### 1.2 GENERATE FEATURES IN PARALLEL ON CLUSTER (Agua::JBrowse)
+	#$self->$orig();
+};
 
 method notifyError ($data, $error) {
 	$self->logDebug("error", $error);
@@ -58,137 +81,117 @@ method notify ($status, $error, $data) {
 	$self->notifyStatus($object);
 }
 
-
-method openConnection {
+#### SEND SOCKET
+method sendSocket ($data) {	
 	$self->logDebug("");
-	my $connection	=	$self->newConnection();
-	
-	#$self->logDebug("DOING connection->open_channel()");
-	my $channel = $connection->open_channel();
-	$self->channel($channel);
-	#$self->logDebug("BEFORE channel", $channel);
+	#$self->logDebug("$$    data", $data);
 
-	#### SET DEFAULT CHANNEL
-	$self->setChannel("chat", "fanout");	
-	$channel->declare_exchange(
-		exchange => 'chat',
-		type => 'fanout',
-	);
-	#$self->logDebug("channel", $channel);
-	
-	return $connection;
+	#### BUILD RESPONSE
+	my $response	=	{};
+	$response->{username}	=	$self->username();
+	$response->{sourceid}	=	$self->sourceid();
+	$response->{callback}	=	$self->callback();
+	$response->{token}		=	$self->token();
+	$response->{sendtype}	=	"response";
+	$self->logDebug("$$    response (PRE-ADD DATA)", $response);
+
+	#### ADD DATA
+	$response->{data}		=	$data;
+
+	$self->sendData($response);
 }
-method send ($args) {
-	
-	$self->logDebug("args", $args);
 
-	my $host = $args->{host};
-	my $port = $args->{port};
-	my $user = $args->{user};
-	my $pass = $args->{pass};
-	my $vhost = $args->{vhost};
-	my $message = $args->{message};
+method sendData ($data) {
+	#### CONNECTION
+	my $connection		=	$self->newSocketConnection($data);
+	my $channel 		=	$connection->open_channel();
+	my $exchange		=	$self->conf()->getKey("socket:exchange", undef);
+	my $exchangetype	=	$self->conf()->getKey("socket:exchangetype", undef);
+	#$self->logDebug("$$    exchange", $exchange);
+	#$self->logDebug("$$    exchangetype", $exchangetype);
 
-	my $exchange	=	$self->conf()->getKey("queue:test", undef);
-	my $type		=	'fanout';
-
-	my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
-		host => $host,
-		port => 5672,
-		user => $user,	
-		pass => $pass,
-		vhost => $vhost,
-	);
-	
-	my $channel = $conn->open_channel();
-	
 	$channel->declare_exchange(
-		exchange => $exchange,
-		type => $type,
+		exchange 	=> 	$exchange,
+		type 		=> 	$exchangetype,
 	);
+
+	my $jsonparser 	= 	JSON->new();
+	my $json 		=	$jsonparser->encode($data);
+	$self->logDebug("$$    json", substr($json, 0, 1500));
 	
 	$channel->publish(
 		exchange => $exchange,
 		routing_key => '',
-		body => $message,
+		body => $json,
 	);
-	
-	print " [x] Sent message [exchange: $exchange, host: $host, user: $user): $message\n";
-	
-	$conn->close();
 
-	#my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
-	#	host => 'localhost',
-	#	port => 5672,
-	#	user => 'guest',
-	#	pass => 'guest',
-	#	vhost => '/',
-	#);
-	#
-	#my $channel = $conn->open_channel();
-	#
-	#$channel->declare_exchange(
-	#	exchange => 'chat',
-	#	type => 'fanout',
-	#);
-	#
-	#my $msg = join(' ', @ARGV) || "info: Hello World!";
-	#
-	#$channel->publish(
-	#	exchange => 'chat',
-	#	routing_key => '',
-	#	body => $msg,
-	#);
-	#
-	#print " [x] Sent $msg\n";
-	#
-	#$conn->close();
-
+	my $host = $data->{host} || $self->conf()->getKey("socket:host", undef);
+	print "[*]   $$   [$host|$exchange|$exchangetype] Sent message: ", substr($json, 0, 1500), "\n";
+	
+	$connection->close();
 }
 
-method receive ($args) {
-	$self->logDebug("args", $args);
+method newSocketConnection ($args) {
+	$self->logDebug("");
+	#$self->logDebug("args", $args);
 
-	my $host = $args->{host};
-	my $port = $args->{port};
-	my $user = $args->{user};
-	my $pass = $args->{pass};
-	my $vhost = $args->{vhost};
+	my $host = $args->{host} || $self->conf()->getKey("socket:host", undef);
+	my $port = $args->{port} || $self->conf()->getKey("socket:port", undef);
+	my $user = $args->{user} || $self->conf()->getKey("socket:user", undef);
+	my $pass = $args->{pass} || $self->conf()->getKey("socket:pass", undef);
+	my $vhost = $args->{vhost} || $self->conf()->getKey("socket:vhost", undef);
+	$self->logDebug("host", $host);
+	$self->logDebug("port", $port);
+	$self->logDebug("user", $user);
+	$self->logDebug("pass", $pass);
+	$self->logDebug("host", $host);
 
-	my $exchange	=	$self->conf()->getKey("queue:test", undef);
-	my $exchangetype	=	"fanout";
-
-	my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
+	my $connection = Net::RabbitFoot->new()->load_xml_spec()->connect(
 		host => $host,
-		port => 5672,
+		port => $port,
 		user => $user,	
 		pass => $pass,
 		vhost => $vhost,
 	);
 	
-	my $channel = $conn->open_channel();
+	return $connection;	
+}
+
+method receiveSocket ($data, $handler) {
+
+	$data 	=	{}	if not defined $data;
+	$self->logDebug("data", $data);
+
+	my $connection	=	$self->newSocketConnection($data);
+	my $channel = $connection->open_channel();
 	
+	#### GET EXCHANGE INFO
+	my $exchange		=	$self->conf()->getKey("socket:exchange", undef);
+	my $exchangetype	=	$self->conf()->getKey("socket:exchangetype", undef);
+
 	$channel->declare_exchange(
-		exchange => $exchange,
-		type => $exchangetype,
+		exchange 	=> 	$exchange,
+		type 		=> 	$exchangetype,
 	);
 	
-	my $result = $channel->declare_queue( exclusive => 1, );
-	
+	my $result = $channel->declare_queue( exclusive => 1, );	
 	my $queuename = $result->{method_frame}->{queue};
 	
 	$channel->bind_queue(
-		exchange => $exchange,
-		queue => $queuename,
+		exchange 	=> 	$exchange,
+		queue 		=> 	$queuename,
 	);
-	
-	print " [*] [$host|$exchange|$exchangetype|$queuename] Waiting for logs. To exit press CTRL-C\n";
+
+	#### REPORT	
+	my $host = $data->{host} || $self->conf()->getKey("socket:host", undef);
+	$self->logDebug(" [*] [$host|$exchange|$exchangetype|$queuename] Waiting for RabbitJs socket traffic");
+	print " [*] [$host|$exchange|$exchangetype|$queuename] Waiting for RabbitJs socket traffic\n";
 	
 	sub callback {
 		my $var = shift;
 		my $body = $var->{body}->{payload};
 	
-		print " [x] Received message: $body \n";
+		print " [x] Received message: ", substr($body, 0, 500), "\n";
 	}
 	
 	$channel->consume(
@@ -200,102 +203,47 @@ method receive ($args) {
 	AnyEvent->condvar->recv;
 }
 
-method startRabbitJs {
-	my $command		=	"service rabbitjs restart";
-	$self->logDebug("command", $command);
+#### CONNECTION
+method getConnection {
+	return $self->connection() if defined $self->connection();
 	
-	my $childpid = fork;
-	if ( $childpid ) #### ****** Parent ****** 
-	{
-		$self->logDebug("PARENT childpid", $childpid);
-	}
-	elsif ( defined $childpid ) {
-		`$command`;
-	}
-}
-
-method stopRabbitJs {
-	my $command		=	"service rabbitjs stop";
-	$self->logDebug("command", $command);
-	
-	return `$command`;
-}
-
-method setChannel($name, $type) {
-	$self->channel()->declare_exchange(
-		exchange => $name,
-		type => $type,
-	);
-}
-
-method closeConnection {
-	$self->logDebug("self->connection()", $self->connection());
-	$self->connection()->close();
-}
-
-method sendMessage ($message) {
-	$self->logDebug("message", $message);
-
-	$self->openConnection() if not defined $self->connection();
-	
-	my $result = $self->channel()->publish(
-		exchange => 'chat',
-		routing_key => '',
-		body => $message,
-	);
-	$self->logDebug(" [x] Sent message", $message);
-
-	return $result;
-}
-
-method sendData ($data) {
-	my $processid	=	$$;
-	$self->logDebug("processid", $processid);
-	$data->{processid}	=	$processid;
-	#$self->logDebug("data", $data);
-
-	#### ADD UNIQUE IDENTIFIERS
-	$data	=	$self->addIdentifiers($data);
-
-	my $jsonparser = JSON->new();
-	my $json = $jsonparser->encode($data);
-	$self->logDebug("json", $json);
-
-	#$self->logDebug("BEFORE channel->publish, self->channel", $self->channel());
-	my $result = $self->channel()->publish(
-		exchange => 'chat',
-		routing_key => '',
-		body => $json,
-	);
-	$self->logDebug(" [x] Sent message", $json);
-	$self->logDebug(" [x] Sent message length", length($json));
-
-	return $result;
-}
-
-method addIdentifiers ($data) {
-	$data->{sourceid}	= 	$self->sourceid();
-	$data->{callback}	= 	$self->callback();
-	$data->{token}		=	$self->token();
-	my $internalip		=	$self->conf()->getKey("queue:selfinternalip", undef);
-	my $externalip		=	$self->conf()->getKey("queue:selfexternalip", undef);
-	$data->{selfinternalip}	=	$internalip if defined $internalip and $internalip ne "";
-	$data->{selfexternalip}	=	$externalip if defined $externalip and $externalip ne "";
-
-	return $data;	
-}
-
-method newConnection {
 	my $host		=	$self->host() || $self->conf()->getKey("queue:host", undef);
 	my $user		= 	$self->user() || $self->conf()->getKey("queue:user", undef);
-	my $pass	=	$self->pass() || $self->conf()->getKey("queue:pass", undef);
+	my $pass		=	$self->pass() || $self->conf()->getKey("queue:pass", undef);
 	my $vhost		=	$self->vhost() || $self->conf()->getKey("queue:vhost", undef);
 	$self->logDebug("$$ host", $host);
 	$self->logDebug("$$ user", $user);
 	$self->logDebug("$$ pass", $pass);
 	$self->logDebug("$$ vhost", $vhost);
 	
+	$self->logDebug("BEFORE my connection = Net::RabbitFoot()");
+    
+	my $connection = Net::RabbitFoot->new()->load_xml_spec()->connect(
+        host 	=>	$host,
+        port 	=>	5672,
+        user 	=>	$user,
+        pass 	=>	$pass,
+        vhost	=>	$vhost,
+    );
+	#my $sleep	=	1;
+	#$self->logDebug("AFTER my connnection = Net::RabbitFoot(). SLEEPING FOR $sleep SECONDS");
+	#sleep($sleep);
 
+	$self->connection($connection);
+
+	return $connection;	
+}
+
+method newConnection {
+	my $host		=	$self->conf()->getKey("queue:host", undef);
+	my $user		= 	$self->conf()->getKey("queue:user", undef);
+	my $pass		=	$self->conf()->getKey("queue:pass", undef);
+	my $vhost		=	$self->conf()->getKey("queue:vhost", undef);
+	$self->logDebug("$$ host", $host);
+	$self->logDebug("$$ user", $user);
+	$self->logDebug("$$ pass", $pass);
+	$self->logDebug("$$ vhost", $vhost);
+	
 	$self->logDebug("BEFORE my connnection = Net::RabbitFoot()");
     
 	my $connection = Net::RabbitFoot->new()->load_xml_spec()->connect(
@@ -305,9 +253,9 @@ method newConnection {
         pass 	=>	$pass,
         vhost	=>	$vhost,
     );
-	my $sleep	=	1;
-	$self->logDebug("AFTER my connnection = Net::RabbitFoot(). SLEEPING FOR $sleep SECONDS");
-	sleep($sleep);
+	#my $sleep	=	1;
+	#$self->logDebug("AFTER my connnection = Net::RabbitFoot(). SLEEPING FOR $sleep SECONDS");
+	#sleep($sleep);
 
 	#$self->logDebug("AFTER my connnection = Net::RabbitFoot()");
 
@@ -322,5 +270,82 @@ method newConnection {
 	return $connection;	
 }
 
+method openConnection {
+	$self->logDebug("");
+	my $connection	=	$self->newConnection();
+	
+	#$self->logDebug("DOING connection->open_channel()");
+	my $channel = $connection->open_channel();
+	$self->channel($channel);
+	#$self->logDebug("BEFORE channel", $channel);
+
+	#### GET EXCHANGE INFO
+	my $exchange		=	$self->conf()->getKey("socket:exchange", undef);
+	my $exchangetype	=	$self->conf()->getKey("socket:exchangetype", undef);
+
+	#### SET DEFAULT CHANNEL
+	$self->setChannel($exchange, $exchangetype);	
+	$channel->declare_exchange(
+		exchange => 'chat',
+		type => 'fanout',
+	);
+	#$self->logDebug("channel", $channel);
+	
+	return $connection;
+}
+
+#### UTILS
+method startRabbitJs {
+	my $command		=	"service rabbitjs restart";
+	$self->logDebug("command", $command);
+	
+	return `$command`;
+}
+
+method stopRabbitJs {
+	my $command		=	"service rabbitjs stop";
+	$self->logDebug("command", $command);
+	
+	return `$command`;
+}
+
+
+method setChannel($name, $type) {
+	$self->channel()->declare_exchange(
+		exchange => $name,
+		type => $type,
+	);
+}
+
+method closeConnection {
+	$self->logDebug("self->connection()", $self->connection());
+	$self->connection()->close();
+}
+
+
+#method sendData ($data) {
+#	my $processid	=	$$;
+#	$self->logDebug("processid", $processid);
+#	$data->{processid}	=	$processid;
+#	#$self->logDebug("data", $data);
+#
+#	#### SET TYPE response
+#	$data->{sendtype}	=	$self->sendtype();
+#	
+#	my $jsonparser = JSON->new();
+#	my $json = $jsonparser->encode($data);
+#	$self->logDebug("json", $json);
+#
+#	#$self->logDebug("BEFORE channel->publish, self->channel", $self->channel());
+#	my $result = $self->channel()->publish(
+#		exchange => 'chat',
+#		routing_key => '',
+#		body => $json,
+#	);
+#	$self->logDebug(" [x] Sent message", $json);
+#	$self->logDebug(" [x] Sent message length", length($json));
+#
+#	return $result;
+#}
 
 1;

@@ -21,10 +21,10 @@ OUTPUT
     SUBDIRS MIRRORING THE bin DIRECTORY
 
 
-USAGE		./Doc.t [Int --showlog] [Int --printlog]
+USAGE		./Doc.t [Int --log] [Int --printlog]
                             [String logfile] [--help]
 
-		--showlog		Displayed log level (1-5)	
+		--log		Displayed log level (1-5)	
 		--printlog		Logfile log level (1-5)	
 		--logfile		Location of logfile
 		--help			Show this message
@@ -54,11 +54,11 @@ my $logfile     = "$Bin/outputs/doc.log";
 
 
 #### GET OPTIONS
-my $showlog     =   2;
+my $log     =   2;
 my $printlog    =   5;
 my $help;
 GetOptions (
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'logfile=s'     => \$logfile,
     'help'          => \$help
@@ -70,7 +70,7 @@ use Test::Doc;
 
 my $object = new Test::Doc({
     logfile     =>  $logfile,
-    showlog     =>  $showlog,
+    log			=>	$log,
     printlog    =>  $printlog,
     basedir     =>  $Bin
 });

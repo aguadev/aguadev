@@ -43,14 +43,11 @@ constructor : function(args) {
 	// LOAD CSS
 	this.loadCSS();		
 },
-
 postCreate : function() {
 	//////console.log("Controller.postCreate    plugins.workflow.Controller.postCreate()");
 
 	this.startup();
 },
-
-
 // DO inherited, LOAD ARGUMENTS AND ATTACH THE MAIN TAB TO THE ATTACH NODE
 startup : function () {
 	//////console.log("History.startup    plugins.workflow.History.startup()");
@@ -67,7 +64,6 @@ startup : function () {
 	// GET WORKFLOW HISTORY AND DISPLAY IN HISTORY TAB
 	this.showHistory();
 },
-
 // GET WORKFLOW HISTORY AND DISPLAY IN HISTORY TAB
 showHistory : function () {
 	//console.log("History.showHistory    plugins.workflow.Workflow.showHistory()");
@@ -76,64 +72,52 @@ showHistory : function () {
 	//this.controlPane.selectChild(this.history);
 
 	// EMPTY CURRENT TABLE IF PRESENT
-	while ( this.historyTable.firstChild )
-	{
+	while ( this.historyTable.firstChild ) {
 		this.historyTable.removeChild(this.historyTable.firstChild);
 	}
-	
-	// GET URL 
-	var url = Agua.cgiUrl + "agua.cgi";
-	//console.log("History.showHistory    url: " + url);		
 
-	// GENERATE QUERY JSON FOR THIS WORKFLOW IN THIS PROJECT
+	// SEND QUERY
 	var query = new Object;
-	query.username = Agua.cookie('username');
-	query.sessionid = Agua.cookie('sessionid');
-	query.mode = "getHistory";
+	query.mode 			= 	"getHistory";
+	query.callback		=	"handleHistory",
 	query.module 		= 	"Agua::Workflow";
-	//console.log("History.showHistory    query: " + dojo.toJson(query));
-
-	var thisObject = this;
-	dojo.xhrPut(
-		{
-			url: url,
-			putData: dojo.toJson(query),
-			handleAs: "json",
-				//handleAs: "json-comment-optional",
-			sync: false,
-			handle: function(response)
-			{
-				////console.log("History.showHistory    response: " + dojo.toJson(response));
-				// BUILD TABLE
-				var table = document.createElement('table');
-				thisObject.historyTable.appendChild(table);
-				dojo.addClass(table, 'historyTable');
-		
-				// SET THE NODE CLASSES BASED ON STATUS
-				for ( var i = 0; i < response.length; i++ )
-				{
-					var tr = document.createElement('tr');
-					table.appendChild(tr);
-
-					var td = document.createElement('td');
-					tr.appendChild(td);
-
-					var project = response[i][0].project;
-					var workflow = response[i][0].workflow;
-					var historyPane = new plugins.workflow.HistoryPane(
-						{
-							project: project,
-							workflow : workflow,
-							rows: response[i]
-						}
-					);
-					td.appendChild(historyPane.domNode); 
-				}
-			}
-		}
-	);
+	query.sourceid 		= 	this.id;
+	Agua.exchange.send(query);
 },
+handleHistory : function (response) {
+	console.log("History.handleHistory    response: " + dojo.toJson(response));
 
+	// EMPTY CURRENT TABLE IF PRESENT
+	while ( this.historyTable.firstChild ) {
+		this.historyTable.removeChild(this.historyTable.firstChild);
+	}
+
+	// BUILD TABLE
+	var table = document.createElement('table');
+	thisObject.historyTable.appendChild(table);
+	dojo.addClass(table, 'historyTable');
+
+	// SET THE NODE CLASSES BASED ON STATUS
+	for ( var i = 0; i < response.length; i++ )
+	{
+		var tr = document.createElement('tr');
+		table.appendChild(tr);
+
+		var td = document.createElement('td');
+		tr.appendChild(td);
+
+		var project = response[i][0].project;
+		var workflow = response[i][0].workflow;
+		var historyPane = new plugins.workflow.HistoryPane(
+			{
+				project: project,
+				workflow : workflow,
+				rows: response[i]
+			}
+		);
+		td.appendChild(historyPane.domNode); 
+	}	
+},
 downloadHistory: function (event) {
 	// STOP EVENT
 	event.stopPropagation();

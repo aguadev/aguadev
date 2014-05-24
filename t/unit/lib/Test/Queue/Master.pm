@@ -458,7 +458,7 @@ method setSynapse {
 
 	my $synapse	= Test::Synapse->new({
 		conf		=>	$self->conf(),
-		showlog     =>  $self->showlog(),
+		log     =>  $self->log(),
 		printlog    =>  $self->printlog(),
 		logfile     =>  $self->logfile()
 	});

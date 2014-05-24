@@ -209,7 +209,7 @@ method installDependencies ($opsdir, $installdir) {
 			keyfile  	=>  $self->keyfile(),
 			password  	=>  $self->password(),
 		
-			showlog     =>  $self->showlog(),
+			log     =>  $self->log(),
 			printlog    =>  $self->printlog(),
 			logfile     =>  $self->logfile()
 		});
@@ -887,7 +887,7 @@ method startHtmlLog {
 	
 	#### SET LOGGER
 	$self->logDebug("self->logger", $self->logger());
-	$self->logger()->showlog(2);
+	$self->logger()->log(2);
 	$self->logger()->printlog(2);
 	$self->logDebug("Doing self->logger()->startLog($source)");
 	$self->logger()->startLog($source);
@@ -1000,7 +1000,7 @@ method loadConfig ($configfile, $mountpoint, $installdir) {
 
 	my $packageconf = Conf::Yaml->new({
 		inputfile	=>	$configfile,
-		showlog		=>	2
+		log		=>	2
 	});
 
 	$self->logNote("packageconf: $packageconf");
@@ -1046,13 +1046,13 @@ method updateConfig ($sourcefile, $targetfile) {
 
 	my $sourceconf = Conf::Yaml->new({
 		inputfile	=>	$sourcefile,
-		showlog		=>	2
+		log		=>	2
 	});
 	$self->logNote("sourcefile: $sourcefile");
 
 	my $targetconf = Conf::Yaml->new({
 		inputfile	=>	$targetfile,
-		showlog		=>	2
+		log		=>	2
 	});
 	$self->logNote("targetconf: $targetconf");
 
@@ -1276,9 +1276,9 @@ method setOpsInfo ($opsfile) {
 	my $opsinfo = Agua::OpsInfo->new({
 		inputfile	=>	$opsfile,
 		logfile		=>	$self->logfile(),
-		showlog		=>	4,
+		log		=>	4,
 		printlog	=>	4
-		#showlog		=>	$self->showlog(),
+		#log		=>	$self->log(),
 		#printlog	=>	$self->printlog()
 	});
 	#$self->logDebug("opsinfo", $opsinfo);

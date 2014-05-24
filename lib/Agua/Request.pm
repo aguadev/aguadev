@@ -11,7 +11,7 @@ use Agua::JBrowse;
 use Exchange;
 
 # Booleans
-has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 4 );  
+has 'log'		=>  ( isa => 'Int', is => 'rw', default => 4 );  
 has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Ints
@@ -42,8 +42,8 @@ method notifyStatus ($data) {
 	$self->logDebug("connection", $connection);
 	sleep(1);
 	
-	$self->logDebug("DOING self->exchange()->sendData(data)");
-	return $self->exchange()->sendData($data);
+	$self->logDebug("DOING self->exchange()->sendSocket(data)");
+	return $self->exchange()->sendSocket($data);
 }
 method notify ($status, $error, $data) {
 	#### NOTIFY CLIENT OF STATUS

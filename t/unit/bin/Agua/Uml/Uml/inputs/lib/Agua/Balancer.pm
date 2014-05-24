@@ -40,7 +40,7 @@ use Conf::Agua;
 use Agua::Instance::StarCluster
 
 # Booleans
-has 'showlog'			=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'log'			=>  ( isa => 'Int', is => 'rw', default => 1 );  
 has 'printlog'			=>  ( isa => 'Int', is => 'rw', default => 1 );
 
 # Ints

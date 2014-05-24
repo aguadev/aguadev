@@ -306,7 +306,7 @@ sub convertReferences {	#### CONVERT .fa REFERENCE FILES TO INDEXED *ebwt FILES
 	my $outputdir	=	shift;
 	my $subdirs		=	shift;
 	
-	$self->showlog(4);
+	$self->log(4);
 	
 	#### CHECK INPUTS
 	$self->logCritical("inputdir not defined ") and exit if not defined $inputdir;

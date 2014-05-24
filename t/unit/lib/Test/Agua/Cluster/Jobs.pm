@@ -14,7 +14,7 @@ use Agua::DBaseFactory;
 use Conf::Yaml;
 
 # Integers
-has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
+has 'log'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
 has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );
 has 'workflowpid'	=> ( isa => 'Int|Undef', is => 'rw', required => 0 );
 has 'workflownumber'=>  ( isa => 'Str', is => 'rw' );

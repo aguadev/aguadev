@@ -29,8 +29,10 @@ class Queue::Master with (Logger, Exchange, Agua::Common::Database, Agua::Common
 
 #####////}}}}}
 
+{
+
 # Integers
-has 'showlog'	=>  ( isa => 'Int', is => 'rw', default => 2 );
+has 'log'	=>  ( isa => 'Int', is => 'rw', default => 2 );
 has 'printlog'	=>  ( isa => 'Int', is => 'rw', default => 5 );
 has 'maxjobs'	=>  ( isa => 'Int', is => 'rw', default => 10 );
 has 'sleep'		=>  ( isa => 'Int', is => 'rw', default => 30 );
@@ -50,6 +52,8 @@ has 'nova'		=> ( isa => 'Openstack::Nova', is => 'rw', lazy	=>	1, builder	=>	"se
 has 'synapse'	=> ( isa => 'Synapse', is => 'rw', lazy	=>	1, builder	=>	"setSynapse" );
 has 'db'		=> ( isa => 'Agua::DBase::MySQL', is => 'rw', lazy	=>	1,	builder	=>	"setDbh" );
 has 'jsonparser'=> ( isa => 'JSON', is => 'rw', lazy	=>	1, builder	=>	"setJsonParser" );
+
+}
 
 use FindBin qw($Bin);
 use Test::More;
@@ -636,7 +640,7 @@ method setModules {
     
         my $object = $class->new({
             conf        =>  $self->conf(),
-            showlog     =>  $self->showlog(),
+            log     =>  $self->log(),
             printlog    =>  $self->printlog()
         });
         print "object: $object\n";
@@ -783,7 +787,7 @@ method setNova {
 
 	my $nova	= Openstack::Nova->new({
 	conf		=>	$self->conf(),
-    showlog     =>  $self->showlog(),
+    log     =>  $self->log(),
     printlog    =>  $self->printlog(),
     logfile     =>  $self->logfile()
 });
@@ -796,7 +800,7 @@ method setSynapse {
 
 	my $synapse	= Synapse->new({
 		conf		=>	$self->conf(),
-		showlog     =>  $self->showlog(),
+		log     =>  $self->log(),
 		printlog    =>  $self->printlog(),
 		logfile     =>  $self->logfile()
 	});

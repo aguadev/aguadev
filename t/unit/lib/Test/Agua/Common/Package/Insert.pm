@@ -33,7 +33,7 @@ method BUILD ($hash) {
 	if ( defined $self->logfile() ) {
 		$self->head()->ops()->logfile($self->logfile());
 		$self->head()->ops()->keyfile($self->keyfile());
-		$self->head()->ops()->showlog($self->showlog());
+		$self->head()->ops()->log($self->log());
 		$self->head()->ops()->printlog($self->printlog());
 	}
 }

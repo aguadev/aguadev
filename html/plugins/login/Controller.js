@@ -12,7 +12,7 @@ function (
 	LoginStatus
 ) {
 
-/////}}}}}
+///////}}}}}
 
 return declare("plugins.login.Controller",
 	[], {

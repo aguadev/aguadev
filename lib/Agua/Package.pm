@@ -44,7 +44,7 @@ use Agua::Instance;
 
 
 # Ints
-has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
+has 'log'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
 has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 has 'validated'		=> ( isa => 'Int', is => 'rw', default => 0 );
 
@@ -104,9 +104,9 @@ method initialise ($args) {
 	#### SET LOG
 	my $username 	=	$self->username() || $args->{username} || "agua";
 	my $logfile 	= 	$self->logfile();
-	$self->logDebug("logfile", $logfile);
+	#$self->logDebug("logfile", $logfile);
 	my $mode		=	$self->mode() || $args->{mode} || "package";
-	$self->logDebug("mode", $mode);
+	#$self->logDebug("mode", $mode);
 	if ( not defined $logfile or not $logfile and defined $mode) {
 		my $identifier 	= 	"package";
 		$self->setUserLogfile($username, $identifier, $mode);
@@ -114,7 +114,7 @@ method initialise ($args) {
 	}
 	
 	#### SET DATABASE HANDLE
-	$self->logDebug("Doing self->setDbh()");
+	#$self->logDebug("Doing self->setDbh()");
 	$self->setDbh() if not defined $self->db();
     
 #	#### VALIDATE

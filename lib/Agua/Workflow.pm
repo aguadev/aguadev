@@ -29,7 +29,7 @@ use MooseX::Declare;
 					...
 					|
 					|
-					-> $stage->run() 
+					-> $stage->run()
 						|
 						|
 						? DEFINED 'CLUSTER' AND 'SUBMIT'
@@ -46,7 +46,9 @@ use strict;
 use warnings;
 use Carp;
 
-class Agua::Workflow with Agua::Common {
+#class Agua::Workflow with (Logger) {
+class Agua::Workflow with (Logger, Exchange, Agua::Common) {
+#class Agua::Workflow with (Logger, Exchange) {
 
 #### EXTERNAL MODULES
 use Data::Dumper;
@@ -63,24 +65,25 @@ use Agua::Monitor::SGE;
 
 
 # Integers
-has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
-has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 4 );
-has 'workflowpid'	=> ( isa => 'Int|Undef', is => 'rw', required => 0 );
-has 'workflownumber'=>  ( isa => 'Str|Undef', is => 'rw' );
+#has 'log'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
+#has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 4 );
+has 'workflowpid'	=> 	( isa => 'Int|Undef', is => 'rw', required => 0 );
+has 'workflownumber'=>  ( isa => 'Int|Undef', is => 'rw' );
 has 'sample'     	=>  ( isa => 'Str|Undef', is => 'rw' );
 has 'start'     	=>  ( isa => 'Int|Undef', is => 'rw' );
 has 'stop'     		=>  ( isa => 'Int|Undef', is => 'rw' );
 has 'submit'  		=>  ( isa => 'Int|Undef', is => 'rw' );
-has 'validated'		=> ( isa => 'Int|Undef', is => 'rw', default => 0 );
-has 'qmasterport'	=> ( isa => 'Int', is  => 'rw' );
-has 'execdport'		=> ( isa => 'Int', is  => 'rw' );
+has 'validated'		=> 	( isa => 'Int|Undef', is => 'rw', default => 0 );
+has 'qmasterport'	=> 	( isa => 'Int', is  => 'rw' );
+has 'execdport'		=> 	( isa => 'Int', is  => 'rw' );
 
 # Strings
-has 'random'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
-has 'configfile'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
-has 'installdir'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
-has 'fileroot'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
-has 'qstat'			=> ( isa => 'Str|Undef', is => 'rw', default => '' );
+#has 'logfile'		=>  ( isa => 'Str', is => 'rw', default => 1 );  
+has 'random'		=> 	( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
+has 'configfile'	=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
+has 'installdir'	=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
+has 'fileroot'		=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
+has 'qstat'			=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'queue'			=>  ( isa => 'Str|Undef', is => 'rw', default => 'default' );
 has 'cluster'		=>  ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'whoami'  		=>  ( isa => 'Str', is => 'rw' );
@@ -89,28 +92,27 @@ has 'password'  	=>  ( isa => 'Str', is => 'rw' );
 has 'workflow'  	=>  ( isa => 'Str', is => 'rw' );
 has 'project'   	=>  ( isa => 'Str', is => 'rw' );
 has 'outputdir'		=>  ( isa => 'Str', is => 'rw' );
-has 'keypairfile'	=> ( is  => 'rw', 'isa' => 'Str|Undef', required	=>	0	);
-has 'keyfile'		=> ( isa => 'Str|Undef', is => 'rw'	);
-has 'instancetype'	=> ( isa => 'Str|Undef', is  => 'rw', required	=>	0	);
-has 'sgeroot'		=> ( isa => 'Str', is  => 'rw', default => "/opt/sge6"	);
-has 'sgecell'		=> ( isa => 'Str', is  => 'rw', required	=>	0	);
-has 'upgradesleep'	=> ( is  => 'rw', 'isa' => 'Int', default	=>	10	);
+has 'keypairfile'	=> 	( is  => 'rw', 'isa' => 'Str|Undef', required	=>	0	);
+has 'keyfile'		=> 	( isa => 'Str|Undef', is => 'rw'	);
+has 'instancetype'	=> 	( isa => 'Str|Undef', is  => 'rw', required	=>	0	);
+has 'sgeroot'		=> 	( isa => 'Str', is  => 'rw', default => "/opt/sge6"	);
+has 'sgecell'		=> 	( isa => 'Str', is  => 'rw', required	=>	0	);
+has 'upgradesleep'	=> 	( is  => 'rw', 'isa' => 'Int', default	=>	10	);
 
 # Objects
-has 'ssh'			=> ( isa => 'Agua::Ssh', is => 'rw', required	=>	0	);
-has 'opsinfo'		=> ( isa => 'Agua::OpsInfo', is => 'rw', required	=>	0	);
-has 'jsonparser'	=> ( isa => 'JSON', is => 'rw', lazy => 1, builder => "setJsonParser" );
-has 'json'			=> ( isa => 'HashRef', is => 'rw', required => 0 );
-has 'db'			=> ( isa => 'Agua::DBase::MySQL', is => 'rw', lazy	=>	1,	builder	=>	"setDbh" );
+has 'ssh'			=> 	( isa => 'Agua::Ssh', is => 'rw', required	=>	0	);
+has 'opsinfo'		=> 	( isa => 'Agua::OpsInfo', is => 'rw', required	=>	0	);	
+has 'jsonparser'	=> 	( isa => 'JSON', is => 'rw', lazy => 1, builder => "setJsonParser" );
+has 'json'			=> 	( isa => 'HashRef', is => 'rw', required => 0 );
+has 'db'			=> 	( isa => 'Agua::DBase::MySQL', is => 'rw', lazy	=>	1,	builder	=>	"setDbh" );
 has 'stages'		=> 	( isa => 'ArrayRef', is => 'rw', required => 0 );
 has 'stageobjects'	=> 	( isa => 'ArrayRef', is => 'rw', required => 0 );
 has 'conf'	=> ( isa => 'Conf::Yaml', is => 'rw', lazy => 1, builder => "setConf" );
-has 'starcluster'	=> ( isa => 'Agua::StarCluster', is => 'rw', lazy => 1, builder => "setStarCluster" );
+has 'starcluster'	=> 	( isa => 'Agua::StarCluster', is => 'rw', lazy => 1, builder => "setStarCluster" );
 has 'head'	=> ( isa => 'Agua::Instance', is => 'rw', lazy => 1, builder => "setHead" );
-has 'master'	=> ( isa => 'Agua::Instance', is => 'rw', lazy => 1, builder => "setMaster" );
-has 'monitor'	=> ( isa => 'Agua::Monitor::SGE', is => 'rw', lazy => 1, builder => "setMonitor" );
-has 'worker'	=> ( isa => 'Maybe', is => 'rw', required => 0 );
-
+has 'master'		=> 	( isa => 'Agua::Instance', is => 'rw', lazy => 1, builder => "setMaster" );
+has 'monitor'		=> 	( isa => 'Agua::Monitor::SGE', is => 'rw', lazy => 1, builder => "setMonitor" );
+has 'worker'		=> 	( isa => 'Maybe', is => 'rw', required => 0 );
 
 ####////}}}
 
@@ -134,40 +136,15 @@ method initialise ($json) {
 	$self->json($json);
 	if ( $json ) {
 		foreach my $key ( keys %{$json} ) {
-			$json->{$key} = $self->unTaint($json->{$key});
+			#$json->{$key} = $self->unTaint($json->{$key});
 			$self->$key($json->{$key}) if $self->can($key);
 		}
 	}
 	$self->logDebug("$$ json", $json);	
-		
-	#### SET CLUSTER INSTANCES LOG
-	$self->head()->logfile($logfile);
-	$self->head()->showlog($self->showlog());
-	$self->head()->printlog($self->printlog());
-	$self->master()->logfile($logfile);
-	$self->master()->showlog($self->showlog());
-	$self->master()->printlog($self->printlog());
-	
-	#### SET HEADNODE OPS LOG
-	$self->head()->ops()->logfile($logfile);	
-	$self->head()->ops()->showlog($self->showlog());
-	$self->head()->ops()->printlog($self->printlog());
-
-	#### SET HEADNODE OPS CONF
-	my $conf 	= 	$self->conf();
-	$self->head()->ops()->conf($conf);	
-
-	#### SET MASTER OPS LOG
-	$self->master()->ops()->logfile($logfile);	
-	$self->master()->ops()->showlog($self->showlog());
-	$self->master()->ops()->printlog($self->printlog());
-
-	#### SET MASTER OPS CONF
-	$self->master()->ops()->conf($conf);	
-	
+			
 	#### SET DATABASE HANDLE
 	$self->logDebug("$$ Doing self->setDbh");
-	$self->setDbh();
+	$self->setDbh() if not defined $self->db();
     
 	#### VALIDATE
 	$self->logDebug("$$ mode", $mode);
@@ -189,7 +166,7 @@ method setUserLogfile ($username, $identifier, $mode) {
 	return "$installdir/log/$username.$identifier.$mode.log";
 }
 
-#### EXECUTE WORKFLOW}
+#### EXECUTE WORKFLOW
 method executeWorkflow {
 =head2
 
@@ -446,7 +423,7 @@ method setStarCluster {
 	my $starcluster = Agua::StarCluster->new({
 		username	=>	$self->username(),
 		conf		=>	$self->conf(),
-        showlog     => 	$self->showlog(),
+        log     => 	$self->log(),
         printlog    =>  $self->printlog()
     });
 
@@ -496,7 +473,7 @@ method loadStarCluster ($username, $cluster) {
 	$clusterobject->{executable} = $executable;
 	
 	#### SET LOG
-	$clusterobject->{showlog} = $self->showlog();
+	$clusterobject->{log} = $self->log();
 	$clusterobject->{printlog} = $self->printlog();
 	
 	#### GET ENVARS
@@ -747,7 +724,7 @@ method setStages ($username, $cluster, $data, $project, $workflow, $workflownumb
 		$stage->{envars}		=  	$self->envars();
 
 		#### ADD LOG INFO
-		$stage->{showlog} 		=	$self->showlog();
+		$stage->{log} 		=	$self->log();
 		$stage->{printlog} 		=	$self->printlog();
 		$stage->{logfile} 		=	$self->logfile();
 
@@ -1267,7 +1244,7 @@ method setMonitor {
 		envars		=>	$self->envars(),
 
 		logfile		=>	$self->logfile(),
-		showlog		=>	$self->showlog(),
+		log		=>	$self->log(),
 		printlog	=>	$self->printlog()
 	});
 	
@@ -1286,7 +1263,7 @@ method updateMonitor {
 		cluster		=>	$self->cluster(),
 		envars		=>	$self->envars(),
 		logfile		=>	$self->logfile(),
-		showlog		=>	$self->showlog(),
+		log		=>	$self->log(),
 		printlog	=>	$self->printlog()
 	});
 
@@ -2032,7 +2009,7 @@ method generateClusterKeypair {
 			username	=>	$username,
 			keyname		=>	$keyname,
 			conf		=>	$self->conf(),
-			showlog		=>	$self->showlog(),
+			log		=>	$self->log(),
 			printlog	=>	$self->printlog(),
 			logfile		=>	$self->logfile()
 		}
@@ -2127,7 +2104,7 @@ method createConfigFile ($username, $cluster) {
 method setHead {
 	my $instance = Agua::Instance->new({
 		conf		=>	$self->conf(),
-		showlog		=>	$self->showlog(),
+		log		=>	$self->log(),
 		printlog	=>	$self->printlog()
 	});
 
@@ -2137,7 +2114,7 @@ method setHead {
 method setMaster {
 	my $instance = Agua::Instance->new({
 		conf		=>	$self->conf(),
-		showlog		=>	$self->showlog(),
+		log		=>	$self->log(),
 		printlog	=>	$self->printlog()
 	});
 
@@ -2147,3 +2124,24 @@ method setMaster {
 }	#### Agua::Workflow
 
 
+	#my $instance = Agua::Instance->new({
+	#	conf		=>	$self->conf(),
+	#	log		=>	$self->log(),
+	#	printlog	=>	$self->printlog()
+	#});
+	#
+	##### SET LOG
+	#$self->head()->logfile($logfile);
+	#$self->head()->log($self->log());
+	#$self->head()->printlog($self->printlog());
+	#
+	##### SET OPS LOG
+	#$self->head()->ops()->logfile($logfile);	
+	#$self->head()->ops()->log($self->log());
+	#$self->head()->ops()->printlog($self->printlog());
+	#
+	##### SET OPS CONF
+	#my $conf 	= 	$self->conf();
+	#$self->head()->ops()->conf($conf);	
+	#
+	#$self->head($instance);	

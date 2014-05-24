@@ -44,7 +44,7 @@ sudo ./install.pl \
  [--domainname String] \
  [--logfile String] \
  [--newlog] \
- [--showlog ] \ 
+ [--log ] \ 
  [--printlog ] \ 
  [--help]
 
@@ -70,7 +70,7 @@ sudo ./install.pl \
  --domainname    :  Domain name to use for CA certificate
  --logfile       :  Print log to this file
  --newlog        :  Flag to create new log file and backup old
- --showlog       :  Print log output to STDOUT (5 levels of increasing info: 1,2,3,4,5, default: 2, 'warning' and 'critical' info only)
+ --log       :  Print log output to STDOUT (5 levels of increasing info: 1,2,3,4,5, default: 2, 'warning' and 'critical' info only)
  --printlog      :  Print log output to logfile (5 levels of increasing info: 1,2,3,4,5, default: 5, all log output) 
  --help          :  Print help info
  
@@ -124,7 +124,7 @@ my $tempdir		=	"/tmp";
 my $database;
 my $domainname;
 my $newlog;
-my $showlog		=	2;
+my $log		=	2;
 my $printlog	=	5;
 my $help;
 GetOptions (
@@ -140,7 +140,7 @@ GetOptions (
     'logfile=s'     =>  \$logfile,
     'tempdir=s'     =>  \$tempdir,
     'newlog=s'      =>  \$newlog,
-    'showlog=s'     =>  \$showlog,
+    'log=s'     =>  \$log,
     'printlog=s'    =>  \$printlog,
     'help'          =>  \$help
 ) or die "No options specified. Try '--help'\n";
@@ -165,7 +165,7 @@ my $object = Agua::Install->new(
         logfile     =>  $logfile,
         tempdir     =>  $tempdir,
         newlog      =>  $newlog,
-        showlog     =>  $showlog,
+        log			=>	$log,
 		printlog    =>  $printlog
     }
 );

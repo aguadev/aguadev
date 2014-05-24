@@ -92,14 +92,14 @@ method roleUser {
 method _roleUser ($sourcefile, $targetfile, $outputfile) {
 	my $role = Agua::Uml::Role->new({
 		sourcefile 	=> 	$sourcefile,
-	    showlog    	=>  $self->showlog(),
+	    log    	=>  $self->log(),
 	    printlog   	=>  $self->printlog
 	});
 	$self->logDebug("role", $role);
 	
 	my $user = Agua::Uml::Class->new({
 		targetfile 	=> 	$targetfile,
-	    showlog    	=>  $self->showlog(),
+	    log    	=>  $self->log(),
 	    printlog   	=>  $self->printlog
 	});
 	$self->logDebug("user", $user);
@@ -126,7 +126,7 @@ method _roleUser ($sourcefile, $targetfile, $outputfile) {
 #
 #	my $role = Agua::Uml::Role->new({
 #		sourcefile 	=> 	$sourcefile,
-#	    showlog    	=>  $self->showlog(),
+#	    log    	=>  $self->log(),
 #	    printlog   	=>  $self->printlog
 #	});
 #	$self->logDebug("role", $role);
@@ -207,7 +207,7 @@ method _roleUser ($sourcefile, $targetfile, $outputfile) {
 #		my $class = Agua::Uml::Class->new({
 #			classfile 	=> 	$classfile,
 #			targetdir 	=> 	$targetdir,
-#			showlog    	=>  $self->showlog(),
+#			log    	=>  $self->log(),
 #			printlog   	=>  $self->printlog
 #		});
 #		$self->logDebug("class", $class);
@@ -257,7 +257,7 @@ method _roleUser ($sourcefile, $targetfile, $outputfile) {
 #		my $class = Agua::Uml::Role->new({
 #			classfile 	=> 	$classfile,
 #			sourcedir 	=> 	$sourcedir,
-#			showlog    	=>  $self->showlog(),
+#			log    	=>  $self->log(),
 #			printlog   	=>  $self->printlog
 #		});
 #		$self->logDebug("class", $class);

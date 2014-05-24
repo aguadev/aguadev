@@ -24,7 +24,7 @@ use Getopt::Simple;
 use Agua::Ops;
 
 # Booleans
-has 'showlog'			=>  ( isa => 'Int', is => 'rw', default => 0 );  
+has 'log'			=>  ( isa => 'Int', is => 'rw', default => 0 );  
 has 'printlog'			=>  ( isa => 'Int', is => 'rw', default => 0 );
 
 #### Int
@@ -85,8 +85,8 @@ method init($hash) {
 	$self->startLog($self->logfile()) if defined $self->logfile();
 	$self->logDebug("logfile: " . $self->logfile()) if defined $self->logfile();
 
-	#### SET ops showlog AND printlog
-	$self->ops()->showlog($self->showlog());
+	#### SET ops log AND printlog
+	$self->ops()->log($self->log());
 	$self->ops()->printlog($self->printlog());
 	
 	$self->load($hash) if defined $hash and $hash != {};
@@ -95,7 +95,7 @@ method init($hash) {
 method setOps () {
 	my $ops = Agua::Ops->new({
 		conf		=>	$self->conf(),
-		showlog		=>	$self->showlog(),
+		log		=>	$self->log(),
 		printlog	=>	$self->printlog()
 	});
 

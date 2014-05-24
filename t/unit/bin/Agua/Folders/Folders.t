@@ -31,7 +31,7 @@ $Bin =~ s/^.+t\/bin/$installdir\/t\/bin/;
 my $dumpfile    =   "$Bin/../../../dump/create.dump";
 
 #### SET LOG
-my $showlog     =   2;
+my $log     =   2;
 my $printlog    =   5;
 my $logfile = "$Bin/outputs/sync.log";
 
@@ -43,7 +43,7 @@ my $token;
 my $keyfile;
 my $help;
 GetOptions (
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'login=s'       => \$login,
     'owner=s'       => \$owner,
@@ -62,13 +62,13 @@ $keyfile = $ENV{'keyfile'} if not defined $keyfile;
 my $conf = Conf::Yaml->new(
     memory      =>  1,
     inputfile	=>	$configfile,
-    showlog     =>  2,
+    log     =>  2,
     printlog    =>  2,
     logfile     =>  $logfile
 );
 
 my $object = new Test::Agua::Folders(
-    showlog     =>  $showlog,
+    log			=>	$log,
     printlog    =>  $printlog,
     logfile     =>  $logfile,
     dumpfile    =>  $dumpfile,

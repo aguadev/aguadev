@@ -52,7 +52,7 @@ sub testGetSlots {
 	
 	my $expected = [
 		'printlog',
-		'showlog',
+		'log',
 		'conf',
 		'configfile',
 		'database',
@@ -91,9 +91,9 @@ sub testGetAncestorSlots {
 	
 	my $expected = [
 		'OLDprintlog',
-		'OLDshowlog',
+		'OLDlog',
 		'printlog',
-		'showlog',
+		'log',
 		'backup',
 		'errortype',
 		'errpid',
@@ -121,9 +121,9 @@ sub testGrandParentSlots {
 	
 	my $expected = [
 		'OLDprintlog',
-		'OLDshowlog',
+		'OLDlog',
 		'printlog',
-		'showlog',
+		'log',
 		'backup',
 		'conf',
 		'configfile',

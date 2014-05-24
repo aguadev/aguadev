@@ -20,13 +20,13 @@ use Queue::Master;
 
 #### SET LOG
 my $mode;
-my $showlog     =   2;
+my $log     =   2;
 my $printlog    =   4;
 my $logfile	=	"$installdir/log/master.log";
 my $help;
 GetOptions (
     'mode=s'        => \$mode,
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
@@ -36,7 +36,7 @@ my $configfile	=	"$installdir/conf/config.yaml";
 my $conf = Conf::Yaml->new(
     inputfile	=>	$configfile,
     backup		=>	1,
-    showlog     =>  2,
+    log     =>  2,
     printlog    =>  4,
 	logfile		=>	$logfile
 );
@@ -44,8 +44,8 @@ my $conf = Conf::Yaml->new(
 my $object      =  Queue::Master->new({
 	mode		=>	$mode,
     conf        =>  $conf,
-    showlog     =>  $showlog,
-    printlog    =>  $printlog,
+    log			=>	$log,
+    printlog	=>	$printlog,
 	logfile		=>	$logfile
 });
 

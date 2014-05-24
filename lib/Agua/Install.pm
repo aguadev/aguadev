@@ -28,7 +28,7 @@ use lib "$Bin/../../lib";
 use Conf::Yaml;
 
 # Integers
-has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
+has 'log'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
 has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings

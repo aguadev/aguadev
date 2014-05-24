@@ -52,7 +52,7 @@ my $user		=	'myuser';
 my $pass		=	'mypassword';
 my $vhost		=	'myvhost';
 my $message		=	"";
-my $showlog		=	2;
+my $log		=	2;
 my $printlog	=	2;
 my $help;
 
@@ -67,7 +67,7 @@ GetOptions (
     'pass=s'		=> \$pass,
     'message=s'		=> \$message,
     'vhost=s'		=> \$vhost,
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
@@ -78,15 +78,15 @@ my $conf = Conf::Yaml->new(
     inputfile   =>  $configfile,
     backup      =>  1,
 
-    showlog     =>  $showlog,
-    printlog    =>  $printlog,
+    log			=>	$log,
+    printlog	=>	$printlog,
     logfile     =>  $logfile
 );
 
 my $object = Queue::Manager->new({
 	conf		=>	$conf,
-    showlog     =>  $showlog,
-    printlog    =>  $printlog,
+    log			=>	$log,
+    printlog	=>	$printlog,
     logfile     =>  $logfile
 });
 

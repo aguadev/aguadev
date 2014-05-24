@@ -31,14 +31,15 @@ use Conf::Yaml;
 use Agua::Ops;
 
 # Booleans
-has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
-has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );
+has 'log'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 1 );
 
 # Strings
 has 's3bucket'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'configfile'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'opsfile'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'pmfile'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
+has 'versionfile'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'package'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'version'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'privacy'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
@@ -79,8 +80,8 @@ method initialise ($hash) {
 	my $conf 		= 	Conf::Yaml->new({inputfile=>"$Bin/../../conf/config.yaml"});
 	
 	#### SET CONF LOG
-	$self->conf()->showlog($self->showlog());
-	$self->conf()->printlog($self->printlog());	
+	$self->conf()->log($self->log());
+	$self->conf()->PRINTLOG($self->PRINTLOG());	
 }
 
 method deploy {
@@ -173,9 +174,8 @@ method setOps ($owner, $login, $username, $repository, $package, $privacy, $inst
 		privacy		=>	$privacy,
 		installdir	=>	$installdir,
 		logfile 	=>	$self->logfile(),
-		showlog		=>	$self->showlog(),
-		printlog	=>	$self->printlog()
-		,
+		log		=>	$self->log(),
+		PRINTLOG	=>	$self->PRINTLOG(),
 		conf		=>	$self->conf()
 	};
 	#$self->logDebug("args", $args);
@@ -355,6 +355,55 @@ $repository install \\
 
 #### GENERIC PACKAGE
 method install {
+	my $versionfile	=	$self->versionfile();
+	return $self->_install() if $versionfile eq "";
+
+	my $lines	=	$self->getLines($versionfile);
+	foreach my $line ( @$lines ) {
+		next if $line	=~	/^\s*$/;
+		next if $line	=~	/^#/;
+		my ($package, $version)	=	$line	=~ /^(\S+)\s+(\S+)/;
+		print "Package not defined at line: $line\n" and next if not defined $package;
+		print "Version not defined at line: $line\n" and next if not defined $version;
+		print "Installing package '$package' (version $version)\n";
+		$self->logDebug("Installing package '$package' (version $version)");
+		#### SET VARIABLES FROM OPS INFO
+		my $login 		=	$self->login() || "agua";
+		my $owner 		=	$self->owner();
+		my $privacy		=	$self->privacy() || "public";
+		my $repository 	=	$self->package();
+		my $installdir	= 	$self->installdir() || $self->conf()->getKey("agua", "INSTALLDIR");
+		my $opsrepo 	= 	$self->opsrepo() || $self->conf()->getKey("agua", "OPSREPO");
+		$self->logDebug("login", $login);
+		$self->logDebug("owner", $owner);
+		$self->logDebug("privacy", $privacy);
+		$self->logDebug("repository", $repository);
+
+		#### SET OPSDIR
+		my $basedir		= 	$self->conf()->getKey("agua", "INSTALLDIR");
+		my $aguauser	= 	$self->conf()->getKey("agua", "AGUAUSER");
+		my $opsdir		=	"$installdir/repos/$privacy/$aguauser/$opsrepo/$aguauser/$package";		
+		$self->logDebug("opsdir", $opsdir);	
+
+		#### SET OPSFILE AND PMFILE
+		my $opsfile		=	"$opsdir/$package.ops";
+		$self->logDebug("opsfile", $opsfile);
+		my $pmfile		=	"$opsdir/$package.pm";
+		$self->logDebug("pmfile", $pmfile);
+
+		#### SET USERNAME AND APPSDIR
+		my $username 	= 	$self->conf()->getKey("agua", "ADMINUSER");
+		my $appsdir		= 	$self->conf()->getKey("agua", "APPSDIR");
+
+		#### RESET INSTALLDIR
+		my $targetdir = "$installdir/$appsdir/$package";
+
+		my $success	=	$self->installApplication($owner, $login, $username, $repository, $package, $privacy, $targetdir, $pmfile, $opsdir, $version);	
+		$self->logDebug("success install package '$package' (version $version)", $success);
+	}
+}
+
+method _install {
     my $installdir	= 	$self->installdir() || $self->conf()->getKey("agua", "INSTALLDIR");
 	my $opsrepo 	= 	$self->opsrepo() || $self->conf()->getKey("agua", "OPSREPO");
 	my $appsdir		= 	$self->conf()->getKey("agua", "APPSDIR");
@@ -405,9 +454,9 @@ method install {
 	$self->logDebug("opsdir", $opsdir);
 
 	#### RESET INSTALLDIR
-	$installdir = "$installdir/$appsdir/$package";
+	my $targetdir = "$installdir/$appsdir/$package";
 	
-	return $self->installApplication($owner, $login, $username, $repository, $package, $privacy, $installdir, $pmfile, $opsdir, $version);	
+	return $self->installApplication($owner, $login, $username, $repository, $package, $privacy, $targetdir, $pmfile, $opsdir, $version);	
 }
 
 #### BIOAPPS

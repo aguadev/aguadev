@@ -30,7 +30,7 @@ class Queue::Worker with (Logger, Exchange, Agua::Common::Database, Agua::Common
 #####////}}}}}
 
 # Integers
-has 'showlog'	=>  ( isa => 'Int', is => 'rw', default => 4 );
+has 'log'	=>  ( isa => 'Int', is => 'rw', default => 4 );
 has 'printlog'	=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings
@@ -132,7 +132,7 @@ method handleTask ($json) {
 
 	$data->{start}		=  	1;
 	$data->{conf}		=   $self->conf();
-	$data->{showlog}	=   $self->showlog();
+	$data->{log}	=   $self->log();
 	$data->{logfile}	=   $self->logfile();
 	$data->{printlog}	=   $self->printlog();	
 	$data->{worker}		=	$self;

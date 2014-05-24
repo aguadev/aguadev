@@ -107,7 +107,7 @@ my $mode         = "config";
 my $database;
 my $configfile   = "$Bin/../../conf/config.yaml";
 my $logfile      = "/tmp/agua-config.log";
-my $showlog      =    2;
+my $log      =    2;
 my $printlog     =    5;
 my $help;
 GetOptions (
@@ -116,7 +116,7 @@ GetOptions (
     'configfile=s'  => \$configfile,
     'dumpfile=s'    => \$dumpfile,
     'logfile=s'     => \$logfile,
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
@@ -126,7 +126,7 @@ my $conf = Conf::Yaml->new(
     memory      =>  0,
     inputfile   =>  $configfile,
     backup      =>  1,
-    showlog     =>  2,
+    log     =>  2,
     printlog    =>  2,
     logfile     =>  $logfile
 );
@@ -138,7 +138,7 @@ my $object = Agua::Configure->new({
     configfile  =>  $configfile,
     logfile     =>  $logfile,
     dumpfile    =>  $dumpfile,
-    showlog     =>  $showlog,
+    log			=>	$log,
     printlog    =>  $printlog
 });
 

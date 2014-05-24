@@ -202,7 +202,7 @@ my $parallel;
 my $verbose;
 my $dot = 1;
 my $cleanup = undef;
-my $showlog = 0;
+my $log = 0;
 my $printlog = 0;
 
 my $help;
@@ -238,7 +238,7 @@ print "jbrowseFeatures.pl    Use option --help for usage instructions.\n" and ex
     'tempdir=s' 	=> \$tempdir,
     'cleanup=s' 	=> \$cleanup,
 
-    'showlog=i' 	=> \$showlog,
+    'log=i' 	=> \$log,
     'printlog=i' 	=> \$printlog,
 
     'help' 			=> \$help
@@ -310,8 +310,8 @@ $viewObject->initialise({
     cleanup     =>	$cleanup,
     qsub        =>	$qsub,
 
-    showlog     =>	$showlog,
-    printlog    =>	$printlog,
+    log			=>	$log,
+    printlog	=>	$printlog,
 
     conf        =>	$conf,
     command 	=>  \@arguments

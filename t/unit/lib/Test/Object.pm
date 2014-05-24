@@ -45,23 +45,23 @@ sub testGet {
 	diag("get");
 	
 	my $object = Logger->new({
-		showlog	=>	"TEST"
+		log	=>	"TEST"
 	});
 
-	my $showlog = $object->showlog();
-	is($showlog, "TEST", "get: $showlog");
+	my $log = $object->log();
+	is($log, "TEST", "get: $log");
 }
 
 sub testSet {
 	diag("set");
 
 	my $object = Logger->new({
-		showlog	=>	"TEST"
+		log	=>	"TEST"
 	});
 
-	$object->showlog("TEST2");
-	my $showlog = $object->showlog();
-	is($showlog, "TEST2", "set: TEST2");
+	$object->log("TEST2");
+	my $log = $object->log();
+	is($log, "TEST2", "set: TEST2");
 }
 
 #### END Object

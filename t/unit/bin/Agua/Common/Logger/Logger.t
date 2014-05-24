@@ -16,7 +16,7 @@ my $outputsdir = "$Bin/outputs";
 `mkdir -p $outputsdir` if not -d $outputsdir;
 
 #### SET LOG
-my $showlog     =   4;
+my $log     =   4;
 my $printlog    =   4;
 my $logfile = "$Bin/outputs/version.log";
 
@@ -26,7 +26,7 @@ my $token;
 my $keyfile;
 my $help;
 GetOptions (
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
@@ -39,7 +39,7 @@ BEGIN {
 require_ok('Test::Agua::Common::Logger');
 
 my $object = Test::Agua::Common::Logger->new(
-    showlog     =>  $showlog,
+    log			=>	$log,
     printlog    =>  $printlog
 );
 isa_ok($object, "Test::Agua::Common::Logger");

@@ -102,7 +102,7 @@ use File::Path;
 use Getopt::Simple;
 
 #### Boolean
-has 'showlog'			=>  ( isa => 'Int', is => 'rw', default => 4 );  
+has 'log'			=>  ( isa => 'Int', is => 'rw', default => 4 );  
 has 'printlog'			=>  ( isa => 'Int', is => 'rw', default => 4 );
 has 'help'			=> ( is  => 'rw', 'isa' => 'Bool', required	=>	0, documentation => "Print help message"	);
 
@@ -338,7 +338,7 @@ method isRunning {
 		cluster	    =>	$cluster,
 		executable	=>	$executable,
 		configfile	=>	$configfile,
-		showlog		=>	4
+		log		=>	4
 	});
 	
 	#my $clusterinstance = Agua::Instance::StarCluster->new(

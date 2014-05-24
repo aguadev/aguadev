@@ -37,7 +37,7 @@ use FindBin qw($Bin);
 use Conf::Yaml;
 
 #### SET LOG
-my $showlog     =   2;
+my $log     =   2;
 my $printlog    =   5;
 my $logfile = "$Bin/outputs/sync.log";
 
@@ -48,7 +48,7 @@ my $remotehost;
 my $keyfile;
 my $help;
 GetOptions (
-    'showlog=i'    	=> \$showlog,
+    'log=i'    	=> \$log,
     'printlog=i'    => \$printlog,
     'command=s'     => \$command,
     'remoteuser=s'  => \$remoteuser,
@@ -75,7 +75,7 @@ if ( not defined $remoteuser or not defined $remotehost or not $remotehost
 my $conf = Conf::Yaml->new(
     memory      =>  1,
     inputfile	=>	$configfile,
-    showlog     =>  2,
+    log     =>  2,
     printlog    =>  2,
     logfile     =>  $logfile
 );
@@ -84,7 +84,7 @@ my $conf = Conf::Yaml->new(
 my $username    =   $conf->getKey("database", "TESTUSER");
 
 my $object = new Test::Agua::Ssh(
-    showlog     =>  $showlog,
+    log			=>	$log,
     printlog    =>  $printlog,
     logfile     =>  $logfile,
     conf        =>  $conf,

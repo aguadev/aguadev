@@ -18,7 +18,7 @@ use File::Path;
 use Data::Dumper;
 
 # Booleans
-has 'showlog'			=>  ( isa => 'Int', is => 'rw', default => 0 );  
+has 'log'			=>  ( isa => 'Int', is => 'rw', default => 0 );  
 has 'printlog'			=>  ( isa => 'Int', is => 'rw', default => 0 );
 has 'running'		=> ( isa => 'Bool|Undef', is => 'rw', default => undef );
 

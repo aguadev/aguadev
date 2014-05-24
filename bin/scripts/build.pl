@@ -64,14 +64,14 @@ use Conf::Yaml;
 
 #### GET CONF
 #### SET LOG
-my $showlog		=	2;
+my $log		=	2;
 my $printlog	=	5;
 my $configfile = "$Bin/../../conf/config.yaml";
 my $logfile = "/tmp/agua-build.log";
 my $conf = Conf::Yaml->new(
     memory      =>  1,
     inputfile	=>	$configfile,
-    showlog     =>  2,
+    log     =>  2,
     printlog    =>  2,
     logfile     =>  $logfile
 );

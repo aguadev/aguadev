@@ -30,7 +30,7 @@ class Queue::Monitor with (Logger, Agua::Common::Util, Exchange) {
 #####////}}}}}
 
 # Integers
-has 'showlog'	=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);  
+has 'log'	=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);  
 has 'printlog'	=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);
 
 # Strings
@@ -82,7 +82,7 @@ method systemCommand {
 method runCommand ($command) {
 #### RUN COMMAND LOCALLY OR ON REMOTE HOST
 	#### ADD ENVIRONMENT VARIABLES IF EXIST
-	$self->showlog(4);
+	$self->log(4);
 	$self->logDebug("command", $command);
 
 	my $stdoutfile = "/tmp/$$.out";

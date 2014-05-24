@@ -48,7 +48,7 @@ use overload 'eq' => 'equal';
 use FindBin qw($Bin);
 
 # Booleans
-has 'showlog'			=>  ( isa => 'Int', is => 'rw', default => 0 );  
+has 'log'			=>  ( isa => 'Int', is => 'rw', default => 0 );  
 has 'printlog'			=>  ( isa => 'Int', is => 'rw', default => 0 );
 
 # Ints

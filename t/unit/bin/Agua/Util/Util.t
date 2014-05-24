@@ -26,12 +26,12 @@ $Bin =~ s/^.+t\/bin/$installdir\/t\/bin/;
 
 use Test::Agua::Util;
 
-my $showlog 	=	2;
+my $log 	=	2;
 my $printlog 	=	5;
 my $logfile = "/tmp/testuser.util.log";
 my $object = Test::Agua::Util->new(
     logfile     =>  $logfile,
-    showlog     =>  $showlog,
+    log			=>	$log,
     printlog    =>  $printlog
 );
 

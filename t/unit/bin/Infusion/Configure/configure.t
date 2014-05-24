@@ -21,7 +21,7 @@ use Getopt::Long;
 use Test::Illumina::WGS::Util::Configure;
 
 #### SET LOG
-my $showlog     =   2;
+my $log     =   2;
 my $printlog    =   2;
 my $logfile = "$Bin/outputs/sync.log";
 
@@ -32,7 +32,7 @@ my $testuser;
 my $tableorder  =   "sample,project";  #### FIRST FILES IN REVERSE ORDER
 my $help;
 GetOptions (
-    'showlog=i'         => \$showlog,
+    'log=i'         => \$log,
     'printlog=i'        => \$printlog,
     'rootpassword=s'    => \$rootpassword,
     'testdatabase=s'    => \$testdatabase,
@@ -48,7 +48,7 @@ my $configfile = "$Bin/../../../../../conf/config.yaml";
 my $conf = Conf::Yaml->new({
     configfile	=>  $configfile,
     backup	    =>  1,
-    showlog     =>  $showlog,
+    log			=>	$log,
     printlog    =>  $printlog    
 });
 
@@ -69,7 +69,7 @@ my $firsttables;
 @$firsttables = split ",", $tableorder;
 
 my $object = Test::Illumina::WGS::Util::Configure->new({
-    showlog         =>  $showlog,
+    log			=>	$log,
     printlog        =>  $printlog,
     rootpassword    =>  $rootpassword,
     testdatabase    =>  $testdatabase,

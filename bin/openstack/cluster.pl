@@ -50,7 +50,7 @@ my $username	=	"ubuntu";
 my $name;
 my $regex;
 my $command;
-my $showlog		=	2;
+my $log		=	2;
 my $printlog	=	2;
 my $logfile		=	"/tmp/pancancer-volume.$$.log";
 my $help;
@@ -60,7 +60,7 @@ GetOptions (
     'name=s'		=> \$name,
     'regex=s'		=> \$regex,
     'command=s'		=> \$command,
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
@@ -75,15 +75,15 @@ my $conf = Conf::Yaml->new(
     inputfile   =>  $configfile,
     backup      =>  1,
 
-    showlog     =>  $showlog,
-    printlog    =>  $printlog,
+    log			=>	$log,
+    printlog	=>	$printlog,
     logfile     =>  $logfile
 );
 
 my $object = Openstack::Nova->new({
 	conf		=>	$conf,
-    showlog     =>  $showlog,
-    printlog    =>  $printlog,
+    log			=>	$log,
+    printlog	=>	$printlog,
     logfile     =>  $logfile
 });
 

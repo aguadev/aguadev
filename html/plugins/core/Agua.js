@@ -26,6 +26,7 @@ define([
 	"dojo/_base/array",
 	"dojo/json",
 	"dojo/on",
+	'dojo/Deferred',
 	"dojo/when",
 	"dojo/_base/lang",
 	"dojo/dom-attr",
@@ -35,6 +36,7 @@ define([
 	"dijit/_Templated",
 	"plugins/core/Common",
 	"plugins/exchange/Exchange",
+	"plugins/data/Controller",
 	"plugins/core/Updater",
 	"plugins/core/Conf",
 
@@ -66,6 +68,9 @@ define([
 	"plugins/core/Agua/Workflow",
 	"plugins/core/PluginManager",
 
+	// Login
+	"plugins/login/Login",
+
 	// EXTERNAL MODULES
 	"dijit/Toolbar",
 	"dijit/layout/TabContainer",
@@ -78,6 +83,7 @@ function (
 	arrayUtil,
 	JSON,
 	on,
+	Deferred,
 	when,
 	lang,
 	domAttr,
@@ -87,6 +93,7 @@ function (
 	_Templated,
 	Common,
 	Exchange,
+	DataController,
 	Updater,
 	Conf,
 	AguaData,
@@ -114,7 +121,8 @@ function (
 	AguaUser,
 	AguaView,
 	AguaWorkflow,
-	PluginManager
+	PluginManager,
+	Login
 ) {
 ////}}}}}
 return declare("plugins.core.Agua",
@@ -157,8 +165,7 @@ dependencies : [],
 
 // PLUGINS TO LOAD (NB: ORDER IS IMPORTANT FOR CORRECT LAYOUT)
 pluginsList : [
-	"plugins.data.Controller"
-	, "plugins.files.Controller"
+	"plugins.files.Controller"
 	, "plugins.apps.Controller"
 	, "plugins.sharing.Controller"
 	, "plugins.folders.Controller"
@@ -213,6 +220,10 @@ testing: false,
 //		16-letter aA# used to uniquely identify this object for WebSocket traffic
 token : null,
 
+// doLogin : Boolean
+//		Call method 'login' if true, use false for testing
+doLogin : true,
+
 ////}}}}}}
 
 // CONSTRUCTOR
@@ -234,6 +245,10 @@ postCreate : function() {
 },
 startup : function () {
     console.group("Agua.startup");
+	
+	// SET GLOBAL Agua
+	window.Agua = this;
+	
 	console.log("Agua.startup    BEFORE loadCSS()");
 	this.loadCSS();
 	console.log("Agua.startup    AFTER loadCSS()");
@@ -254,30 +269,108 @@ startup : function () {
 
 	// SET EXCHANGE 
 	console.log("Agua.startup    BEFORE this.setExchange()");
-	this.exchange = this.setExchange(Exchange);
+	var thisObject = this;
+	this.setExchange(Exchange).then( function() {
+
+		// INITIALISE ELECTIVE UPDATER
+		thisObject.updater = new Updater();
+		console.log("Agua.startup    new plugins.core.Updater()");
+	
+		// SET LOADING PROGRESS STANDBY
+		console.log("Agua.startup    BEFORE thisObject.setStandby()");
+		thisObject.setStandby();
+		console.log("Agua.startup    AFTER thisObject.setStandby()");
+	
+		// SET CONF
+		console.log("Agua.startup    BEFORE thisObject.setConf()");
+		thisObject.setConf();
+		console.log("Agua.startup    AFTER thisObject.setConf()");
+		
+		// SET POPUP MESSAGE TOASTER
+		console.log("Agua.startup    BEFORE thisObject.setToaster()");
+		thisObject.setToaster();
+		console.log("Agua.startup    AFTER thisObject.setToaster()");
+	
+		// SHOW LOGIN
+		console.log("Agua.startup    BEFORE thisObject.doLogin()");
+		console.log("Agua.startup    Agua");
+		console.dir({Agua:Agua});
+	
+		thisObject.doLogin();
+		console.log("Agua.startup    AFTER thisObject.doLogin()");
+
+	});
+
 	console.log("Agua.startup    AFTER this.setExchange()");
 
-	// INITIALISE ELECTIVE UPDATER
-	this.updater = new Updater();
-	console.log("Agua.startup    new plugins.core.Updater()");
-
-	// SET LOADING PROGRESS STANDBY
-	console.log("Agua.startup    BEFORE this.setStandby()");
-	this.setStandby();
-	console.log("Agua.startup    AFTER this.setStandby()");
-
-    // SET CONF
-	console.log("Agua.startup    BEFORE this.setConf()");
-    this.setConf();
-	console.log("Agua.startup    AFTER this.setConf()");
-    
-	// SET POPUP MESSAGE TOASTER
-	console.log("Agua.startup    BEFORE this.setToaster()");
-	this.setToaster();
-	console.log("Agua.startup    AFTER this.setToaster()");
-
+	
     console.groupEnd("Agua.startup");
 },
+/**
+ * Run a function that will eventually resolve the named Deferred
+ * (milestone).
+ * @param {String} name the name of the Deferred
+ */
+_milestoneFunction : function( /**String*/ name, func ) {
+
+    console.log("Browser._milestoneFunction    name: " + name);
+    
+    var thisB = this;
+    var args = Array.prototype.slice.call( arguments, 2 );
+
+    var d = thisB._getDeferred( name );
+    args.unshift( d );
+    try {
+        func.apply( thisB, args ) ;
+    } catch(e) {
+        console.error( e, e.stack );
+        d.resolve({ success:false, error: e });
+    }
+
+    return d;
+},
+/**
+ * Fetch or create a named Deferred, which is how milestones are implemented.
+ */
+_getDeferred : function( name ) {
+    if( ! this._deferred )
+        this._deferred = {};
+    return this._deferred[name] = this._deferred[name] || new Deferred();
+},
+/**
+ * Attach a callback to a milestone.
+ */
+afterMilestone : function( name, func ) {
+    return this._getDeferred(name)
+        .then( function() {
+                   try {
+                       func();
+                   } catch( e ) {
+                       console.error( ''+e, e.stack, e );
+                   }
+               });
+},
+/**
+ * Indicate that we've reached a milestone in the initalization
+ * process.  Will run all the callbacks associated with that
+ * milestone.
+ */
+passMilestone : function( name, result ) {
+    return this._getDeferred(name).resolve( result );
+},
+/**
+ * Return true if we have reached the named milestone, false otherwise.
+ */
+reachedMilestone : function( name ) {
+    return this._getDeferred(name).fired >= 0;
+},
+/**
+ *  Load our configuration file(s) based on the parameters the
+ *  constructor was passed.  Does not return until all files are
+ *  loaded and merged in.
+ *  @returns nothing meaningful
+ */
+
 attachPane : function () {
 	// ATTACH THIS TEMPLATE TO attachPoint DIV ON HTML PAGE
 	var attachPoint = dojo.byId("attachPoint");
@@ -330,6 +423,12 @@ displayVersion : function () {
 	aguaVersion.innerHTML = version;
 		
 },
+// LOAD DATA
+loadData : function () {
+	console.log("Agua.loadData    DOING new DataController({})");
+	Agua.controllers["data"]	=	new DataController({});
+	console.log("Agua.loadData    AFTER new DataController({})");
+},
 // START PLUGINS
 startPlugins : function () {
 	console.log("Agua.startPlugins     plugins.core.Agua.startPlugins()");
@@ -376,6 +475,9 @@ onKeyDownHandler : function (event) {
 loadPlugins : function (pluginsList, pluginsArgs) {
 	console.log("Agua.loadPlugins    pluginsList: " + dojo.toJson(pluginsList));
 	console.log("Agua.loadPlugins    pluginsArgs: " + dojo.toJson(pluginsArgs));
+
+//console.log("Agua.loadPlugins    DEBUG RETURN");
+//return;
 
 	if ( pluginsList == null )	pluginsList = this.pluginsList;
 	if ( pluginsArgs == null )	pluginsArgs = this.pluginsArgs;
@@ -548,10 +650,9 @@ reload : function () {
 	//window.location.reload();
 },
 // LOGOUT
-logout : function () {
+doLogout : function () {
 	console.log("Agua.logout    Doing delete this.data");
 	delete this.data;
-
 
 	var buttons = Agua.toolbar.getChildren();
 	if ( ! buttons )	return;
@@ -582,11 +683,17 @@ logout : function () {
 		, htmlUrl : "../agua/"
 	});
 
+	console.log("Agua.logout    DOING Agua.login = new plugins.login.Login");
 	Agua.login = new plugins.login.Login();
 
 	
 	console.log("Agua.logout    COMPLETED");
+},
+doLogin : function () {
+	console.log("Agua.login    DOING Agua.login = new plugins.login.Login");
+	Agua.login = new Login();	
 }
+
 
 
 }); 	//	end declare

@@ -1,47 +1,113 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -w
 
-use strict;
-use warnings;
+=head2
 
-$|++;
+APPLICATION 	receive
+
+PURPOSE
+
+	1. Receive queues from a RabbitMQ queue
+	
+HISTORY
+
+	v0.01	Basic options to authenticate user and specify queue name
+
+USAGE
+
+$0 [--user String] [--host String] [--password String] [--vhost String] [--queue String]
+
+EXAMPLE
+
+# Receive queues sent to queue 'my.queue.name'
+./receive --queue "my.queue.name"
+
+=cut
+
+#### EXTERNAL MODULES
+use Term::ANSIColor qw(:constants);
+use Getopt::Long;
+use FindBin qw($Bin);
+use AnyEvent;
 use Net::RabbitFoot;
 
+#### USE LIBRARY
+use lib "$Bin/../../lib";	
+BEGIN {
+    my $installdir = $ENV{'installdir'} || "/agua";
+    unshift(@INC, "$installdir/lib");
+}
+
+my $installdir 	=	 $ENV{'installdir'} || "/agua";
+
+#### INTERNAL MODULES
+use Conf::Yaml;
+use Exchange;
+
+my $configfile	=	"$installdir/conf/config.yaml";
+
+my $conf = Conf::Yaml->new(
+    memory      =>  1,
+    inputfile   =>  $configfile,
+);
+
+my $key			=	"topic.default.key";
+my $message		=	"";
+my $host		=	$conf->getKey("queue:host", undef);
+my $port		=	$conf->getKey("queue:port", undef);
+my $user		=	$conf->getKey("queue:user", undef);
+my $pass		=	$conf->getKey("queue:pass", undef);
+my $vhost		=	$conf->getKey("queue:vhost", undef);
+my $exchange	=	$conf->getKey("queue:topicexchange", undef);
+my $help;
+
+GetOptions (
+    'exchange=s'	=> \$exchange,
+    'message=s'		=> \$message,
+    'key=s'			=> \$key,
+    'host=s'		=> \$host,
+    'port=s'		=> \$port,
+    'user=s'		=> \$user,
+    'pass=s'		=> \$pass,
+    'vhost=s'		=> \$vhost,
+    'help'          => \$help
+) or die "No options specified. Try '--help'\n";
+usage() if defined $help;
+
+#my $object	=	Exchange->new();
+
 my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
-#    host => 'localhost',
-#    port => 5672,
-#    user => 'myuser',
-#    pass => 'mypassword',
-#    vhost => 'myvhost',
-
-
-#    host => 'localhost',
-#    port => 5672,
-#    user => 'guest',
-#    pass => 'guest',
-#    vhost => '/',
-
-    host => 'localhost',
-    port => 5672,
-    user => 'myuser',	
-    pass => 'mypassword',
-    vhost => 'myvhost',
+    host 	=> 	$host,
+    port 	=> 	5672,
+    user 	=> 	$user,
+    pass 	=> 	$pass,
+    vhost 	=> 	$vhost,
 );
 
 my $channel = $conn->open_channel();
 
 $channel->declare_exchange(
-    exchange => 'chat',
-    type => 'fanout',
+    exchange => $exchange,
+    type => 'topic',
 );
-
-my $msg = join(' ', @ARGV) || "info: Hello World!";
 
 $channel->publish(
-    exchange => 'chat',
-    routing_key => '',
-    body => $msg,
+    exchange => $exchange,
+    routing_key => $key,
+    body => $message,
 );
 
-print " [x] Sent $msg\n";
+print " [x] Sent topic message to routing key $key: $message\n";
 
 $conn->close();
+
+
+exit 0;
+
+##############################################################
+
+sub usage {
+	print `perldoc $0`;
+	exit;
+}
+
+

@@ -29,7 +29,7 @@ use lib FindBin::Real::Bin() . "/lib";
 use Agua::JSON;
 
 # Integers
-has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'log'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
 has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 has 'validated'		=> ( isa => 'Int', is => 'rw', default => 0 );
 

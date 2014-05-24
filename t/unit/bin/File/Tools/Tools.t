@@ -43,7 +43,7 @@ use Test::File::Tools;
 use Conf::Yaml;
 
 my $logfile = "$Bin/outputs/testuser.filetools.log";
-my $showlog = 2;
+my $log = 2;
 my $printlog = 2;
 
 my $conf = Conf::Yaml->new(
@@ -52,13 +52,13 @@ my $conf = Conf::Yaml->new(
 	separator	=>	"\t",
 	spacer		=>	"\\s\+",
     logfile     =>  $logfile,
-	showlog     =>  $showlog,
+	log			=>	$log,
 	printlog    =>  $printlog	
 );
 
 my $filetool = Test::File::Tools->new({
     logfile     =>  $logfile,
-	showlog     =>  $showlog,
+	log			=>	$log,
 	printlog    =>  $printlog,
     conf        =>  $conf
 });

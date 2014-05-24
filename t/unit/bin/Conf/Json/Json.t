@@ -18,9 +18,9 @@ PURPOSE
 		
 		3. WRITE TO OUTFILE PRESERVING ORDER OF KEYS
 
-USAGE		./Configure.t [Int --showlog] [Int --printlog] [--help]
+USAGE		./Configure.t [Int --log] [Int --printlog] [--help]
 
-		--showlog		Displayed log level (1-5)	
+		--log		Displayed log level (1-5)	
 		--printlog		Logfile log level (1-5)	
 		--help			Show this message
 
@@ -56,11 +56,11 @@ use Test::Conf::Json;
 use Moose::Util qw( apply_all_roles );
 
 #### GET OPTIONS
-my $showlog     =   2;
+my $log     =   2;
 my $printlog    =   5;
 my $help;
 GetOptions (
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
@@ -74,7 +74,7 @@ my $object = Test::Conf::Json->new({
     logfile		=> $logfile,
 	inputfile	=>	$inputfile,
 	backup		=>	0,
-	showlog 	=> 	$showlog,
+	log			=>	$log,
 	printlog	=>	$printlog
 });
 

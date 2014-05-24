@@ -30,7 +30,7 @@ use Getopt::Long;
 use Test::Agua::Ops::S3;
 
 #### SET LOG
-my $showlog     =   0;
+my $log     =   0;
 my $printlog    =   4;
 my $logfile = "$Bin/outputs/version.log";
 
@@ -40,18 +40,17 @@ my $token;
 my $keyfile;
 my $help;
 GetOptions (
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
 
 my $object = new Test::Agua::Ops::S3(
-    showlog     =>  $showlog,
-    printlog    =>  $printlog,
+    log			=>	$log,
+    printlog	=>	$printlog,
     logfile     =>  $logfile
 );
-
 
 $object->testListFiles();
 #$object->testSyncfiles();
@@ -68,7 +67,7 @@ sub usage {
         
 OPTIONS:
 
---showlog     Integer from 1 (least) to 5 (most) to display log information
+--log     Integer from 1 (least) to 5 (most) to display log information
 --printlog    Integer from 1 (least) to 5 (most) to print log info to file
 
     };

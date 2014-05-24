@@ -27,7 +27,7 @@ use File::Copy;
 use Data::Dumper;
 
 # Integers
-has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'log'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
 has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 has 'username'  	=>  ( isa => 'Str', is => 'rw' );
 has 'logfile'  	    =>  ( isa => 'Str|Undef', is => 'rw' );

@@ -19,7 +19,7 @@ use Agua::DBaseFactory;
 use Data::Dumper;
 
 has 'database'	=> ( isa => 'Str|Undef', is => 'rw' );
-has 'db'                => ( isa => 'Agua::DBase::MySQL', is => 'rw', required => 0 );
+has 'db'        => ( isa => 'Agua::DBase::MySQL', is => 'rw', required => 0 );
 
 sub setDbh {
 	my $self		=	shift;
@@ -28,41 +28,41 @@ sub setDbh {
 	$self->logNote("args", $args);	
 	
 	my $database 	=	$args->{database} || $self->database();
-	my $user 		=	$args->{user};
-	my $password 	=	$args->{password};
+	my $dbuser 		=	$args->{dbuser};
+	my $dbpassword 	=	$args->{dbpassword};
 	my $dbtype 		=	$args->{dbtype};
 	my $dbfile 		=	$args->{dbfile};
 
 	my $logfile = $self->logfile();
-	my $showlog = $self->showlog();
+	my $log = $self->log();
 	my $printlog = $self->printlog();
 
 	$self->logNote("AFTER database", $database);
 	$self->logNote("AFTER dbtype", $dbtype);
-	$self->logNote("AFTER user", $user);
-	#$self->logNote("AFTER password", $password);
+	$self->logNote("AFTER dbuser", $dbuser);
+	#$self->logNote("AFTER dbpassword", $dbpassword);
 	
 	$dbfile 	=	$self->conf()->getKey('database', 'DBFILE') if not defined $dbfile;
 	$dbtype 	=	$self->conf()->getKey('database', 'DBTYPE') if not defined $dbtype;
 	if ( $self->can('isTestUser') and $self->isTestUser() ) {
-		$user 		=	$self->conf()->getKey('database', 'TESTUSER') if not defined $user;
-		$password 	=	$self->conf()->getKey('database', 'TESTPASSWORD') if not defined $password;
+		$dbuser 		=	$self->conf()->getKey('database', 'TESTUSER') if not defined $dbuser;
+		$dbpassword 	=	$self->conf()->getKey('database', 'TESTPASSWORD') if not defined $dbpassword;
 		$database	=	$self->conf()->getKey('database', 'TESTDATABASE') if not defined $database;
 	}
 	else {
-		$user 		=	$self->conf()->getKey('database', 'USER') if not defined $user;
-		$password 	=	$self->conf()->getKey('database', 'PASSWORD') if not defined $password;
+		$dbuser 		=	$self->conf()->getKey('database', 'USER') if not defined $dbuser;
+		$dbpassword 	=	$self->conf()->getKey('database', 'PASSWORD') if not defined $dbpassword;
 		$database	=	$self->conf()->getKey('database', 'DATABASE') if not defined $database;
 	}
 	
 	$self->logNote("AFTER database", $database);
 	$self->logNote("AFTER dbtype", $dbtype);
-	$self->logNote("AFTER user", $user);
-	#$self->logNote("AFTER password", $password);
+	$self->logNote("AFTER dbuser", $dbuser);
+	#$self->logNote("AFTER dbpassword", $dbpassword);
 	
 	$self->logError("dbtype not defined") and return if not $dbtype;
-	$self->logError("user not defined") and return if not $user;
-	$self->logError("password not defined") and return if not $password;
+	$self->logError("dbuser not defined") and return if not $dbuser;
+	$self->logError("dbpassword not defined") and return if not $dbpassword;
 	$self->logError("database not defined") and return if not $database;
 
 	#### SET DATABASE IF PROVIDED IN JSON
@@ -73,8 +73,8 @@ sub setDbh {
 
 	$self->logNote("FINAL database", $database);
 	$self->logNote("FINAL dbtype", $dbtype);
-	$self->logNote("FINAL user", $user);
-	#$self->logNote("FINAL password", $password);
+	$self->logNote("FINAL dbuser", $dbuser);
+	$self->logNote("FINAL dbpassword", $dbpassword);
 
 	##### CREATE DB OBJECT USING DBASE FACTORY
 	my $db = 	Agua::DBaseFactory->new(
@@ -82,10 +82,10 @@ sub setDbh {
 		{
 			dbfile		=>	$dbfile,
 			database	=>	$database,
-			user        =>  $user,
-			password    =>  $password,
+			dbuser      =>  $dbuser,
+			dbpassword  =>  $dbpassword,
 			logfile		=>	$logfile,
-			showlog		=>	$showlog,
+			log			=>	$log,
 			printlog	=>	$printlog,
 			parent		=>	$self
 		}
@@ -100,17 +100,17 @@ sub setDbh {
 sub grantPrivileges {
 	my $self			=	shift;
 	my $tempfile		=	shift;
-	my $rootpassword 	= 	shift;
+	my $rootdbpassword 	= 	shift;
     my $database       	=   shift;
-    my $user       		=   shift;
-    my $password   		=   shift;
+    my $dbuser       		=   shift;
+    my $dbpassword   		=   shift;
     my $privileges 		=   shift;
     my $host   			=   shift;
 	$self->logError("tempfile not defined") and return if not defined $tempfile;
-	$self->logError("rootpassword not defined") and return if not defined $rootpassword;
+	$self->logError("rootdbpassword not defined") and return if not defined $rootdbpassword;
 	$self->logError("database not defined") and return if not defined $database;
-	$self->logError("user not defined") and return if not defined $user;
-	$self->logError("password not defined") and return if not defined $password;
+	$self->logError("dbuser not defined") and return if not defined $dbuser;
+	$self->logError("dbpassword not defined") and return if not defined $dbpassword;
 	$self->logError("privileges not defined") and return if not defined $privileges;
 	$self->logError("host not defined") and return if not defined $host;
 
@@ -118,10 +118,10 @@ sub grantPrivileges {
     $self->logNote("tempfile", $tempfile);
 	my $create = qq{
 USE mysql;
-GRANT ALL PRIVILEGES ON $database.* TO $user\@localhost IDENTIFIED BY '$password';	
+GRANT ALL PRIVILEGES ON $database.* TO $dbuser\@localhost IDENTIFIED BY '$dbpassword';	
 FLUSH PRIVILEGES;};
 	`echo "$create" > $tempfile`;
-	my $command = "mysql -u root -p$rootpassword < $tempfile";
+	my $command = "mysql -u root -p$rootdbpassword < $tempfile";
 	$self->logNote("$command");
 	print `$command`;
 	`rm -fr $tempfile`;
@@ -132,14 +132,14 @@ sub inputRootPassword {
 	
     #### MASK TYPING FOR PASSWORD INPUT
     ReadMode 2;
-	my $rootpassword = $self->inputValue("Root password (will not appear on screen)");
+	my $rootdbpassword = $self->inputValue("Root dbpassword (will not appear on screen)");
 
     #### UNMASK TYPING
     ReadMode 0;
 
-	$self->rootpassword($rootpassword);
+	$self->rootdbpassword($rootdbpassword);
 
-	return $rootpassword;
+	return $rootdbpassword;
 }
 
 sub inputValue {

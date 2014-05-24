@@ -1,0 +1,293 @@
+* 92124d5 (HEAD, origin/master, origin/HEAD, master) One last parsing test for now.
+* 740c545 In fact while we're here, test all packet boundaries
+* 9e4b530 Test the the parser does not bork on incomplete headers or incomplete frames in general.
+* eed94b8 Get the arguments to copy in the right order, and update frameBuffer.used. The first bug only manifests with frames that must be sent over multiple packets; otherwise, a new frame buffer is cons'ed anyway. The second bug means that message bodies sent over more than one data packet were junk, since they were copied over the existing frame data; but worse, that frames never ended, since the number of data remaining for the frame is calculated from frameBuffer.used.
+* 362d31e pull in more recent changes
+* fc2625b Allocate the frame writing buffer once, since it gets allocated to max frame size anyway. (The parsing buffers vary in size)
+* 1fc2f0a Move this outside the parser constructor, since it has global effect anyway.
+* 8e6c757 Use Buffer#copy instead of inspecting every byte, and make the code a bit easier otherwise by using closures to encapsulate the parser state.
+*   c136497 Merge pull request #49 from whizz/master
+|\  
+| * 54dfade Remove references to sys, replace with console or util where appropriate
+* |   5766319 Merge pull request #54 from ivolo/master
+|\ \  
+| * | 480f600 adding message object to the subscribe callback to allow for specific message acknowledgements
+| * |   5897872 Merge https://github.com/postwait/node-amqp
+| |\ \  
+| |/ /  
+|/| |   
+* | |   5552e9b Merge branch 'master' of https://github.com/EqualMedia/node-amqp into json_error
+|\ \ \  
+| * | | 9a05b7e Catch JSON parse errors
+* | | |   e25a980 Merge branch 'patches/master' of https://github.com/cipriancraciun/node-amqp into qos-raw
+|\ \ \ \  
+| * | | | 5105488 Added support for `prefetchCount` option on `Queue.subscribeRaw`.
+* | | | |   cf9f850 Merge https://github.com/eng1neer/node-amqp into specfix
+|\ \ \ \ \  
+| * | | | | b6f1284 correct exchange_declare definition
+| | |_|_|/  
+| |/| | |   
+| | | | * 0d14097 fixes #14 by exposing prefetchCount as a subscribe parameter
+| |_|_|/  
+|/| | |   
+* | | |   2107ba4 Merge pull request #52 from kilianc/patch-1
+|\ \ \ \  
+| |/ / /  
+|/| | |   
+| * | | 8c6bb72 shutup npm warn `npm WARN amqp@0.1.1 package.json: bugs['web'] should probably be bugs['url']`
+|/ / /  
+* | | f09c56d make this work for node 0.6.x
+| |/  
+|/|   
+* |   988a469 Merge pull request #39 from squaremo/master
+|\ \  
+| * | 7b54f84 Correct some typos and restate some unclear doc
+* | |   0b6d063 Merge branch 'unsubscribe' of https://github.com/squaremo/node-amqp into unsub
+|\ \ \  
+| * | | e6192b5 (origin/unsubscribe) Test for unsubscribe
+| * | | 4638711 Clarification on ubsubscribe
+| * | | 14f7625 Note on unsubscribe in README
+| * | | a3d33a5 Pass the method args to promises, so that we can retrieve consumer tags. Provide Queue.unsubscribe.
+| |/ /  
+* | |   964856c unbreak the queue args dual connection
+|\ \ \  
+| * | | fc51442 queue arguments test cleanup
+| * | | 7406b80 queue arguments test compatible with RabbitMQ 2.6.1
+| * | |   66423bc Merge branch 'master' of https://github.com/postwait/node-amqp
+| |\ \ \  
+| * | | | 6443431 test for queue arguments
+| * | | | a35a5fa found the right place for queue arguments
+| * | | | eb2da06 exposing queue arguments
+* | | | |   6eb06b4 Merge branch 'queue-arguments' of https://github.com/codingforce/node-amqp into qargs
+|\ \ \ \ \  
+| |_|_|/ /  
+|/| | | |   
+| * | | | 0eddc54 test that queue arguments are actually set
+| * | | | 8bc3fda Test for queue arguments, based on work by Dušan Maliarik
+| * | | | f5d19b4 pass options.arguments in queue declaration (Dušan Maliarik)
+| | |/ /  
+| |/| |   
+* | | |   dfcee38 Merge branch 'allow_redeclare' of git://github.com/codingforce/node-amqp into allow_redclare
+|\ \ \ \  
+| * | | | 21ed939 fix test for queue redeclaration
+| * | | | 3a09786 allow queues and exchanges to be redeclared
+| |/ / /  
+* | | |   b011bce Merge pull request #31 from jerem/patch-1
+|\ \ \ \  
+| * | | | afb4979 Declare urlo as local variable, not global.
+| |/ / /  
+* | | | 8f7e31a fix from Jérémy Bethmont
+|/ / /  
+* | | b471cc1 cleaner and more manageable handling of server channel closes
+* | | 364e137 content type change and update changelog
+* | | f7ff76a support listening to basic-return messages on an exchange with on('basic-return'...)
+|/ /  
+* | 81febcc Changelog and 0.1.0 release
+* | 62ac315 update after discussion with squaremo
+* | 5c76983 allow specification of a default exchange. Default to the empty string (this is *NEW*)
+* |   97f1644 Merge branch 'empty_queue_names' of https://github.com/squaremo/node-amqp into eqn
+|\ \  
+| * | bb92085 (origin/empty_queue_names) Add test for empty name queue. This formerly made an entry in Connection.queues for '', rather than letting the queue make its own entry once it has a name.
+| * | 0badcba Call the callback instead of returning early
+* | |   50cf44f Merge pull request #10 from squaremo/amqp_url
+|\ \ \  
+| |/ /  
+|/| |   
+| * | 21d38e4 (origin/amqp_url) Make explicit options override those supplied in a URL. Tidy up example.
+| * | 735160f Support for connection URLs as per the Ruby clients (http://bit.ly/amqp-gem-and-connection-uris)
+|/ /  
+* | d58e596 support for all amqp message properties
+* |   ae27cd1 Merge branch 'master' into pristine-message
+|\ \  
+| * \   cc62933 Merge pull request #5 from codingforce/master
+| |\ \  
+| | * | ef4f5ec clarify docs for connection.exchange() and .queue()
+| |/ /  
+* | | b21668b use deepEqual for json tests
+* | | b9c25e5 updated wrong routingkey detection to new api
+* | | 525bb49 revise the implementation of pristine json payloads to be easier for users that need the old behavior
+* | |   828e068 Merge branch 'master' of https://github.com/postwait/node-amqp
+|\ \ \  
+| |/ /  
+| * | aa9a49d fix README to reflect require('amqp') rather than amqp-091
+| |/  
+| * 4c83a19 update to v0.0.7
+| * 58d604c Added tests for all supported kinds of data types in headers
+| * 45c1dbe data-type support from Vasili Sviridov's patches
+| * 4dfea19 novemberborn pointed out that throwError should be this.throwError
+| * 6fa4e87 bump this up and release a 0.0.6... let's get this party started
+| * 3ad2d55 The rocketpack changes assume you declare every exchange. In truth you can use exchanges that already exist without declaring them.  This fixes that and removes an odd dependency on "eyes" from one of the tests.
+| *   be9f1aa pull e06931e982da5ec04d02073030b992de4df2c9a3 from rocketpack
+| |\  
+| | * e06931e keep track of queues bound to exchange, so autodeleted exchanges are recreated
+| | * 032749f fix error in closeChannel
+| | * 47c19b8 channelClose is not an error
+| | * 9c89483 tests updated
+| | * f7d3b42 don't return buffers in table; serialize 32-bit int correctly
+| * | afb31a0 fix error in closeChannel
+| * | 363505b channelClose is not an error
+| * | e077c7e don't return buffers in table; serialize 32-bit int correctly
+| * |   c6841b8 merge cleanups
+| |\ \  
+| | * | 7a8c037 More cleanups
+| * | | 5d28d49 allow subverting errors in the AMQPParser
+| * | |   741628e Merge https://github.com/jonashuckestein/node-amqp into jonas
+| |\ \ \  
+| | * | | 105526c fixed problems with utf8-encoded json
+| | * | | 1aca296 remove deleted queues from connection.queues and handle queueDeleteOk method (somewhat clumsily)
+| | * | | 92e838a Fixing one more buffer write function for Node 0.3.0
+| | * | | e33fc89 update to use new buffer interfaces for node 0.3.0
+| * | | |   46b4f57 Merge https://github.com/vsviridov/node-amqp-091 into 0.9.1
+| |\ \ \ \  
+| | | |/ /  
+| | |/| |   
+| | * | | afae588 Removed debugger statement. Better error message in case of incorrect packet composition
+| | * | | 5480076 Added parsing for long and bit. Tweaked some parameters for exchange.establish. Added packet headers to the "message" event emitter
+| | * | | 9be6485 proper require location
+| | * | | 691de17 updated README based on npm published version and new package name
+| | * | | 99a0e59 version bump before upload to npmjs
+| | * | | 9449050 initial changes to implement version 0.9.1 of the AMQP specification
+| * | | |   1f658ae Merge https://github.com/fester/node-amqp into unbind
+| |\ \ \ \  
+| | * \ \ \   dcb0b9a Merge branch 'master' of github.com:fester/node-amqp
+| | |\ \ \ \  
+| | | * | | | be7fe09 Dumb Queue#unbind test
+| | * | | | | cde2a7c Dumb Queue#unbind test
+| | |/ / / /  
+| | * | | | ce71289 Added #unbind method to Queue
+| * | | | | b5d786a heartbeat support
+| * | | | |   09a9978 Merge https://github.com/flashingpumpkin/node-amqp into fpsm
+| |\ \ \ \ \  
+| | * | | | | 079bb10 Added automatic removal of channels from connection.channels, connection.queues and connection.exchanges after calling .close()
+| | * | | | | 3e8b730 Tests for:     .destroy()     .close()     delete connection.channels[id]
+| | * | | | |   ab1e9d0 MERGE
+| | |\ \ \ \ \  
+| | | * | | | | d941588 Allow channels (queues, exchanges) to be closed
+| | | * | | | | 184010d Support multiple consumers on a single connection. Previously, node-amqp would add subscribers to the listeners, which meant rather than the particular subscriber callback being called, every subscriber callback was called.  Now they are distinguished by consumer tag (we supply our own, so we don't have to wait for the server to tell us its generated one, which is awkward in CPS). You can still get the raw messages by listening for rawMessage rather than using subscribe*.
+| | | * | | | | 162a20f Give all message properties to the subscriber.  Also allow options to connection.publish, which seems to have been arbitrarily missed out.
+| | | * | | | | f3ab522 Update the readme after my changes; in particular wrt the default exchange. Pass the name in the queue creation callback, as it may have been generated and returned by the server.
+| | | * | | | | d89e428 Enable the ability to publish to the default exchange; that is, the exchange with the empty name that is used to publish directly to queues.
+| | | * | | | | 1538db1 Handle empty queue names (used to indicate that the server should generate a random name).
+| | | * | | | | e9bccd7 Fix a couple of mistakes brought to light to publisuing buffers. Namely: a one-off false alarm in serializeInt; and accidentally writing two bytes for a frame end, because 206 isn't an ascii char.
+| | | | |_|/ /  
+| | | |/| | |   
+| | * | | | | ccd3dcd Switched Connection.channels to be an object instead of an array. Enables getting rid of old / unused channels without messing up the tasks list.
+| | | |_|/ /  
+| | |/| | |   
+| * | | | | 4e7beec make this a whole lot simpler and add a test
+| * | | | |   a1dd641 Merge https://github.com/viirya/node-amqp into frame-end-safe
+| |\ \ \ \ \  
+| | * | | | | 1c3e668 fixed String encoding problem when sending a Buffer object.
+| | | |_|/ /  
+| | |/| | |   
+| * | | | |   96f90e8 vdesjardins's utf-8 json fixed
+| |\ \ \ \ \  
+| | * | | | | 7e436b8 Serialize JSON string to utf8 instead of ascii.
+| | |/ / / /  
+| * | | | | 2eb703e fix tests
+| * | | | |   01c4506 changes from rocketpack
+| |\ \ \ \ \  
+| | |/ / / /  
+| |/| | | /   
+| | | |_|/    
+| | |/| |     
+| | * | | d95964d callback with ready exchange/queue
+| | * | | d8db368 test suite working with new events
+| | * | | db3037c README updates for rocketpack's changes
+| | * | | 088b288 emit queueBindOk, basicConsumeOk, basicQosOk to allow consumers to wait to get ready; add callback to queue and exchange declarations to facilitate reuse of connections
+| | * | | 4a6b3ca better support for reusing connections (consumerTag); exchange destruction fix
+| | * | | 7558f78 test for exchange and queue deletion
+| | * | | 3c23107 handle queue destruction; use more unique consumerTag
+| | |/ /  
+* | | | 59a87cb Revert "return properties and routingKey etc. out of band"
+* | | | dc54ddf return properties and routingKey etc. out of band
+|/ / /  
+* | | 0f4574c handle out-of-order replies tests should use server from Makefile
+* | | 0274c34 handle queue destruction; use more unique consumerTag
+|/ /  
+* | ca1c1b3 update to use new buffer interfaces for node 0.3.0
+* | 7567383 queue.delete -> queue.destroy typo in docs
+|/  
+* b5ae1c4 (tag: v0.0.2) bump version
+* 3731fe7 Die on channel error
+* e227ddc Messages should not be acknowledged if ack=False is set.
+* cb35049 Don't declare amq. exchanges
+* 1f55b1a add optional support for application/json contentType
+* 56e0909 handle basicReturn when message could not be delivered
+* cd580c3 Fix header parsing
+* 5abe293 Ignore basicQosOk message
+* 1118757 Create connection from constructor properly
+* 45afe3d Expose 'Connection' class
+* 3618d4d Add package.json
+* 1427813 On 'end' event, close client side too
+* 878b081 (tag: v0.0.1) Fix docs again
+* 28894ce Doc clean up
+* 12c93ed Move Exchange docs to bottom
+* 4bda812 Allow for use without Exchange object, but defaulting to amq.topic
+* a498466 Instead of 'open' event on queue, just have a callback
+* e98883a Update README
+* 3c7cf4e rename subscribeJSON -> subscribe
+* 459696d Remove debug variable
+* ceac980 Report error instead of something else
+* 9677399 Add ack option and shift() for subscribeJSON()
+* 00c113b Update for Node v0.1.90
+* d148cb1 More docs
+* a25c56a missing semicolon
+* 375991b Add a few utility programs
+* 4f21689 Fix autoDelete and generally other boolean method arguments
+* 3c2fd89 changed calls to Connection.send to write().
+* 6589b2e Use sys.inherits instead of process.inherits
+* e33c3f1 Symlink index.js to amqp.js
+* 023b9d3 this->self
+* 18c2de9 Fix reconnect()
+* dc942c5 default exchange to 'amq.topic'
+* e8d2508 Add arguments to Queue's 'open' event
+* 45fe6b5 add exchange.delete
+* ccc39a8 Enqueue publish tasks - import promise.js for new node compat
+* f61f128 rename README to README.md for github
+* e12049a Documentation
+* a827068 initial implementation of queue.subscribeJSON
+* 48624ae queues and exchanges autodelete by default
+* 504458b Add a simple test, Makefile
+* 6120f22 Mix message properties into message object.
+* 7e73e58 Allow setting arbirary properties
+* ed961a0 fix serialization bug, basic publish works
+* 63e8056 Factor out serializeFields
+* 22a40c2 messages correctly emit 'end' now
+* 6033c96 Abstract parseFields out, improve parseHeader
+* 0a7889d Check for task in Queue._onMethod
+* 3840a3f fix publish bug. still not working though.
+* 21bf65d task queue for queues
+* fdb006f Fix copyright holder
+* f3c94a1 Add exchange type
+* 2d8d9ff simplify channel indexes
+* c9aa841 amqp.Connection subclass of net.Socket
+* aa6fcdc Change message API
+* 0c65e55 mit license
+* 67b340f Only use parseInt()
+* 08a9755 Add note about net2
+* eaf4c27 Update README
+* 1a7f26f Move some files around
+* 969b380 Use strings for parser states
+* 29aa876 reorganize files
+* 0c91404 Can now recv messages
+* 1f3d906 successfully handshaking
+* 9defbf5 Change XML parser - add new generated json file
+* f6467be correctly reset frameHeader
+* f3e250f Fix table serialization
+* 6df3d88 Now sending StartOk correctly
+* 970ad23 more work on parser
+* 13a1fe8 First attempt at parser. nothing works. (delete this commit)
+* f8f75d8 License
+* b25afcb Generate constants from AMQP XML spec
+* 8603b5d Remove puts and hardcoded queue names
+* f067b25 Can receive from a queue
+* 2e818e5 Can receive multiple frames in one receive
+* 9235b63 Consume/ConsumeOk
+* b46b6fc Declare a queue
+* 1ee12fc Respect options passed into createConnection
+* 402f4e3 Extract AMQP into a module, inherit it from EventEmitter
+* 48f9f3d Better file locations
+* a2f7ac8 Start switching to NodeJS modules
+* 6a9036b README
+* 9e996c6 Initial commit

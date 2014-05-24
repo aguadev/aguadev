@@ -17,7 +17,7 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::U
 
     #### LOGGER
     has 'logfile'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
-    has 'showlog'	=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);  
+    has 'log'	=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);  
     has 'printlog'	=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);
 
     #### STORED LOGISTICS VARIABLES
@@ -190,7 +190,7 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::U
     }
 
     method save {
-        $self->showlog(4);
+        $self->log(4);
         $self->logDebug("");
 
         $self->_getopts();
@@ -255,7 +255,7 @@ AND project='$project'
     }
 
     method saveWorkflow {
-        $self->showlog(4);
+        $self->log(4);
         $self->logDebug("");
 
         #### SET USERNAME AND OWNER
@@ -283,7 +283,7 @@ AND project='$project'
             project     =>  $project,
             username    =>  $self->username(),
             inputfile   =>  $workflowfile,
-            showlog     =>  $self->showlog(),
+            log     =>  $self->log(),
             printlog    =>  $self->printlog(),
             conf        =>  $self->conf(),
             db          =>  $self->db()

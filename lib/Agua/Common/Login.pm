@@ -1,7 +1,9 @@
 package Agua::Common::Login;
 use Moose::Role;
+use Method::Signatures::Simple;
 
 has 'mode'		=> ( isa => 'Str|Undef', is => 'rw' );
+#has 'token'		=> ( isa => 'Str|Undef', is => 'rw' );
 
 =head2
 
@@ -14,10 +16,12 @@ has 'mode'		=> ( isa => 'Str|Undef', is => 'rw' );
 =cut
 use Data::Dumper;
 
-####///}}}}
-##############################################################################
-#				LOGIN METHODS
-sub ldap {
+###///}}}}
+
+###########################################################################
+
+method ldap {
+
 =head2
 
     SUBROUTINE      ldap
@@ -39,9 +43,10 @@ sub ldap {
 		1. RETURN 1 ON SUCCESS, 0 ON FAILURE
 
 =cut
-	my $self		=	shift;
+
 	$self->logDebug("Agua::Common::Login::ldap()");
 
+	print "HERE\n";
 	use Net::LDAP;
 
 	my $conf 		=	$self->conf();
@@ -93,7 +98,7 @@ sub ldap {
 	return $result;
 }
 
-sub submitLogin {
+method submitLogin {
 =head2
 
     SUBROUTINE      login
@@ -125,7 +130,6 @@ sub submitLogin {
 		1. SESSION ID
 
 =cut
-	my $self		=	shift;
 
 	my $username	=	$self->username();
 	my $password 	=	$self->password();
@@ -148,27 +152,25 @@ sub submitLogin {
 	
 	#### VALIDATE USING LDAP IF EXISTS 'LDAP_SERVER' ENTRY IN CONF FILE
 	my $conf 		=	$self->conf();
-	my $ldap_server = $conf->getKey('agua', "LDAP_SERVER");
+	my $ldap_server = 	$conf->getKey('agua', "LDAP_SERVER");
 	my $match = 0;
 	$self->logDebug("LDAP SERVER", $ldap_server);
-	if ( not $is_admin and defined $ldap_server )
-	{
+	if ( not $is_admin and defined $ldap_server ) {
 		$self->logDebug("Doing LDAP authentication...");
 		$match = $self->ldap();
 		$self->logDebug("LDAP result", $match);
 	}
 
 	#### OTHERWISE, GET STORED PASSWORD FROM users TABLE
-	else
-	{
+	else {
 		my $query = qq{SELECT password FROM users
 	WHERE username='$username'};
 		$self->logDebug("$query");
 		my $stored_password = $self->db()->query($query);	
 	
 		#### CHECK FOR INPUT PASSWORD MATCHES STORED PASSWORD
-		#$self->logDebug("Stored_password", $stored_password) ;
-		#$self->logDebug("Passed password", $password);
+		$self->logDebug("Stored_password", $stored_password) ;
+		$self->logDebug("Passed password", $password);
 	
 		$match = $password =~ /^$stored_password$/ if defined $stored_password; 
 		$self->logDebug("Match", $match);
@@ -198,22 +200,13 @@ sub submitLogin {
 	}	
 	
 	$self->notifyStatus({
-		username	=>	$self->username(),
-		sourceid	=>	$self->sourceid(),
-		callback	=>	$self->callback(),
-		token		=>	$self->token(),
 		status		=>	$status,
 		error		=>	$error,
-		queue		=> 	"routing",
-		data 		=> {
-			sessionid => $sessionid,
-		}
+		sessionid 	=> $sessionid,
 	});
 }
 
-sub getSessionId {
-	my $self		=	shift;
-	my $username	=	shift;
+method getSessionId ($username) {
 
 	my $now = $self->db()->now();
 	$self->logDebug("now", $now);
@@ -276,8 +269,7 @@ VALUES
 	return $sessionid;	
 }
 
-sub cleanUpSessions {
-	my $self		=	shift;
+method cleanUpSessions {
 
 	# DELETE FROM sessions WHERE datetime < ADDDATE(NOW(), INTERVAL -48 HOUR)
 	# DELETE FROM sessions WHERE datetime < DATE_SUB(NOW(), INTERVAL 1 DAY)
@@ -294,9 +286,7 @@ WHERE timediff(sysdate(), datetime) > $timeout * 3600} if defined $dbtype and $d
 	$self->db()->do($delete_query);	
 }
 
-sub guestLogin {
-	my $self		=	shift;
-	
+method guestLogin {
 	my $username	=	$self->username();
 	$username		=	$self->requestor() if $self->requestor();
 	
@@ -313,7 +303,7 @@ sub guestLogin {
 	$self->logError("guestuser access denied") and exit if not $guestaccess;
 }
 
-sub newuser {
+method newuser {
 =head2
 
     SUBROUTINE      newuser
@@ -325,9 +315,7 @@ sub newuser {
         VALIDATED, CREATE A NEW USER IN THE users TABLE
         
 =cut
-	my $self		=	shift;
 	$self->logDebug("Agua::Common::Login::newuser()");
-
     
     my $json;
     if ( not $self->validate() )
@@ -372,15 +360,6 @@ sub newuser {
         $self->logStatus("Failed to create new user");
     }
 }
-
-
-
-
-
-
-
-
-
 
 
 

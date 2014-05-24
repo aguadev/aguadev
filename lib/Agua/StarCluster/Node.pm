@@ -18,7 +18,7 @@ use File::Path;
 use Data::Dumper;
 
 # Booleans
-has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 0 );  
+has 'log'		=>  ( isa => 'Int', is => 'rw', default => 0 );  
 has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 0 );
 has 'running'		=> ( isa => 'Bool|Undef', is => 'rw', default => undef );
 has 'exists'		=> ( isa => 'Bool|Undef', is => 'rw', default => undef );
@@ -92,7 +92,7 @@ method clear {
 
 	#### RESET TO DEFAULT OR CLEAR ALL ATTRIBUTES
 	foreach my $attribute ( @$attributes ) {
-        next if $attribute eq "showlog";
+        next if $attribute eq "log";
         next if $attribute eq "printlog";
         next if $attribute eq "db";
         

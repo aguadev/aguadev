@@ -9,7 +9,7 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
     use Data::Dumper;
 
     #### LOGGER
-    has 'showlog'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
+    has 'log'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
     has 'printlog'		=> ( isa => 'Int', is => 'rw', default 	=> 	5 	);
     has 'logfile'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
 

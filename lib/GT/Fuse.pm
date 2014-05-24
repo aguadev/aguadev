@@ -8,7 +8,7 @@ class GT::Fuse with Agua::Common::Logger {
 #####////}}}}}
 
 # Integers
-has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );
+has 'log'		=>  ( isa => 'Int', is => 'rw', default => 2 );
 has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings

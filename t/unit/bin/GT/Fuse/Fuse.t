@@ -46,11 +46,11 @@ $Bin =~ s/^.+\/bin/$installdir\/t\/unit\/bin/;
 
 #### GET OPTIONS
 my $logfile 	= "$Bin/outputs/gtfuse.log";
-my $showlog     =   2;
+my $log     =   2;
 my $printlog    =   5;
 my $help;
 GetOptions (
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'logfile=s'     => \$logfile,
     'help'          => \$help
@@ -59,7 +59,7 @@ usage() if defined $help;
 
 my $object = new Test::GT::Fuse(
     logfile     =>  $logfile,
-	showlog     =>  $showlog,
+	log			=>	$log,
 	printlog    =>  $printlog
 );
 isa_ok($object, "Test::GT::Fuse", "object");

@@ -34,7 +34,7 @@ use Conf::Yaml;
 use Agua::Ops;
 
 #### Integers
-has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );
+has 'log'		=>  ( isa => 'Int', is => 'rw', default => 2 );
 has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 has 'count'			=>  ( isa => 'Int', is => 'rw', default => 50 );
 
@@ -390,7 +390,7 @@ method latestVersion ($package) {
 method setConf {
 	my $conf 	= Conf::Yaml->new({
 		backup		=>	1,
-		showlog		=>	$self->showlog(),
+		log		=>	$self->log(),
 		printlog	=>	$self->printlog()
 	});
 	
@@ -400,7 +400,7 @@ method setConf {
 method setOps () {
 	my $ops = Agua::Ops->new({
 		conf		=>	$self->conf(),
-		showlog		=>	$self->showlog(),
+		log		=>	$self->log(),
 		printlog	=>	$self->printlog()
 	});
 

@@ -43,7 +43,7 @@ use Agua::Ops;
 
 if ( 1 ) {
 # Booleans
-has 'showlog'			=>  ( isa => 'Int', is => 'rw', default => 2 );  
+has 'log'			=>  ( isa => 'Int', is => 'rw', default => 2 );  
 has 'printlog'			=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 #### Ints
@@ -96,7 +96,7 @@ method BUILD ($hash) {
 
 	#### SET OPS TEMPDIR
 	$self->ops->tempdir($self->tempdir());
-	$self->ops->showlog($self->showlog());
+	$self->ops->log($self->log());
 	$self->ops->printlog($self->printlog());	
 }
 

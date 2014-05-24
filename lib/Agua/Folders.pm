@@ -151,7 +151,7 @@ use JSON -support_by_pp;
 use Agua::DBaseFactory;
 
 # Booleans
-has 'showlog'	=>  ( isa => 'Int', is => 'rw', default => 0 );  
+has 'log'	=>  ( isa => 'Int', is => 'rw', default => 0 );  
 has 'printlog'	=>  ( isa => 'Int', is => 'rw', default => 0 );
 has 'validated'	=> ( isa => 'Int', is => 'rw', default => 0 );
 

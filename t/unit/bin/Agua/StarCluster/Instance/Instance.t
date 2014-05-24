@@ -29,11 +29,11 @@ my $configfile  =   "$installdir/conf/config.yaml";
 $Bin =~ s/^.+t\/bin/$installdir\/t\/bin/;
 
 #### GET OPTIONS
-my $showlog = 3;
+my $log = 3;
 my $printlog = 5;
 my $help;
 GetOptions (
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
@@ -44,7 +44,7 @@ my $logfile = "$Bin/outputs/instance.log";
 my $conf = Conf::Yaml->new(
     memory      =>  1,
     inputfile	=>	$configfile,
-    showlog     =>  2,
+    log     =>  2,
     printlog    =>  2,
     logfile     =>  $logfile
 );
@@ -52,7 +52,7 @@ my $conf = Conf::Yaml->new(
 my $object = new Test::Agua::StarCluster::Instance(
     conf        =>  $conf,
     logfile     =>  $logfile,
-    showlog     =>  $showlog,
+    log			=>	$log,
     printlog    =>  $printlog
 );
 

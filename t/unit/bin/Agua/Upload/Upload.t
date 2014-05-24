@@ -52,11 +52,11 @@ $Bin =~ s/^.+\/bin/$installdir\/t\/bin/;
 
 #### GET OPTIONS
 my $logfile 	= "/tmp/testuser.upload.log";
-my $showlog     =   2;
+my $log     =   2;
 my $printlog    =   5;
 my $help;
 GetOptions (
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'logfile=s'     => \$logfile,
     'help'          => \$help
@@ -70,7 +70,7 @@ my $conf = Conf::Yaml->new(
     separator	=>	"\t",
     spacer	    =>	"\\s\+",
     logfile     =>  $logfile,
-	showlog     =>  2,
+	log     =>  2,
 	printlog    =>  2    
 );
 isa_ok($conf, "Conf::Yaml", "conf");
@@ -88,7 +88,7 @@ my $uploader = new Test::Agua::Upload(
     project     =>  "Project1",
     uploader    =>  "Workflow1",
     logfile     =>  $logfile,
-	showlog     =>  $showlog,
+	log			=>	$log,
 	printlog    =>  $printlog
 );
 isa_ok($uploader, "Test::Agua::Upload", "uploader");

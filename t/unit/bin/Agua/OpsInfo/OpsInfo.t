@@ -28,7 +28,7 @@ my $installdir  =   $ENV{'installdir'} || "/agua";
 $Bin =~ s/^.+bin/$installdir\/t\/bin/;
 
 my $logfile = "$Bin/outputs/opsinfo.log";
-my $showlog     =   2;
+my $log     =   2;
 my $printlog    =   5;
 
 my $inputfile =   "$Bin/inputs/fastqc.ops";
@@ -36,7 +36,7 @@ my $outputfile =   "$Bin/outputs/fastqc.ops";
 
 my $object = Test::Agua::OpsInfo->new(
     logfile         =>  $logfile,
-    showlog         =>  $showlog,
+    log			=>	$log,
     printlog        =>  $printlog,
     inputfile       =>  $inputfile,
     outputfile      =>  $outputfile
@@ -52,7 +52,7 @@ $object->testGenerate();
 
 my $object2 = Test::Agua::OpsInfo->new(
     logfile     =>  $logfile,
-    showlog     =>  $showlog,
+    log			=>	$log,
     printlog    =>  $printlog
 );
 

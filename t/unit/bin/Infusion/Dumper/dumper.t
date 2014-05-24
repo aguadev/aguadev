@@ -20,21 +20,21 @@ use Test::More  tests => 36;
 use Test::Illumina::WGS::Util::Dumper;
 
 #### SET LOG
-my $showlog     =   2;
+my $log     =   2;
 my $printlog    =   5;
 my $logfile     =   "$Bin/outputs/sync.log";
 
 #### GET OPTIONS
 my $help;
 GetOptions (
-    'showlog=i'         => \$showlog,
+    'log=i'         => \$log,
     'printlog=i'        => \$printlog,
     'help'              => \$help
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
 
 my $object = Test::Illumina::WGS::Util::Dumper->new({
-    showlog         => $showlog,
+    log			=>	$log,
     printlog        => $printlog,
     logfile         => $logfile
 });

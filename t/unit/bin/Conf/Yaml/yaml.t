@@ -12,11 +12,11 @@ use lib "$Bin/../../../lib";
 use lib "$Bin/../../../../lib";
 
 #### GET OPTIONS
-my $showlog = 3;
+my $log = 3;
 my $printlog = 3;
 my $help;
 GetOptions (
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 );
@@ -26,7 +26,7 @@ use lib "../../lib";
 use Conf::Yaml;
 
 my $object = Conf::Yaml->new({
-    showlog     =>  $showlog,
+    log			=>	$log,
     printlog    =>  $printlog
 });
 

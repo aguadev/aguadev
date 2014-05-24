@@ -27,6 +27,9 @@
 
 // GLOBAL VARIABLES
 var Agua = {};
+
+window.Agua = Agua;
+
 var Data = {};
 var dojoConfig = {
 	isDebug: true,
@@ -100,8 +103,11 @@ dojo.addOnLoad(function(){
 		cgiUrl : "../cgi-bin/aguadev/"
 		, htmlUrl : "../aguadev/"
 	});
-	Agua.login = new plugins.login.Login();
-	console.log("agua.html    Completed new plugins.login.Login()");
+	//Agua.login = new plugins.login.Login();
+	//console.log("agua.html    Completed new plugins.login.Login()");
+
+	window.Agua = Agua;
+
 });
 
 </script>

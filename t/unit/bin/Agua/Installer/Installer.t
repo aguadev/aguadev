@@ -55,11 +55,11 @@ $Bin =~ s/^.+\/bin/$installdir\/t\/bin/;
 
 #### GET OPTIONS
 my $logfile 	= 	"$Bin/outputs/installer.log";
-my $showlog     =   2;
+my $log     =   2;
 my $printlog    =   5;
 my $help;
 GetOptions (
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'logfile=s'     => \$logfile,
     'help'          => \$help
@@ -72,7 +72,7 @@ my $conf = Conf::Yaml->new(
     separator	=>	"\t",
     spacer	    =>	"\\s\+",
     logfile     =>  $logfile,
-	showlog     =>  2,
+	log     =>  2,
 	printlog    =>  5    
 );
 isa_ok($conf, "Conf::Yaml", "conf");

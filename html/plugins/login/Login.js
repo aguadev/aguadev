@@ -14,8 +14,9 @@ define([
 	"dijit/_WidgetsInTemplateMixin",
 	"plugins/core/Common",
 	"plugins/login/LoginStatus",
-	"dojo/domReady!",
-
+	//"dojo/domReady!"
+	//,
+	
 	"dojox/widget/Dialog",
 	"dijit/form/Button",
 	"dijit/form/TextBox",
@@ -32,7 +33,9 @@ function (
 	LoginStatus
 ) {
 
-/////}}}}}
+///////}}}}}
+
+window.Agua = Agua;
 
 return declare("plugins.login.Login",
 	[
@@ -41,6 +44,7 @@ return declare("plugins.login.Login",
 	_WidgetsInTemplate,
 	Common
 ], {
+
 
 // templateString : String
 //		The template of this widget. 
@@ -104,6 +108,7 @@ startup : function () {
     console.groupEnd("Login.startup");
 },
 debug : function () {
+	console.log("Login.debug    caller: " + this.debug.caller.nom);
 	
 	// GET USERNAME FROM URL IF PRESENT
 	var url = window.location.href;
@@ -152,11 +157,16 @@ debug : function () {
 	console.log("Login.debug    this.pluginsList: " + dojo.toJson(Agua.pluginsList));
 
 	// SET AGUA COOKIE
-	var data = {};
-	data.username = username;
-	data.sessionid = sessionid;
+	var response = {};
+	response.username 	= 	username;
+	response.sendtype	= 	"response";
+	response.data 		= 	{};
+	response.data.sessionid	=	"9999999999.9999.999";
+	response.type	= "response";
+	
+	console.log("Login.debug    Returning response: " + dojo.toJson(Agua.pluginsList));
 
-	return data;	
+	return response;	
 },
 setDialogListeners : function () {
 	// FOCUS ON PASSWORD INPUT IF 'RETURN' KEY PRESSED WHILE IN USERNAME INPUT
@@ -275,24 +285,18 @@ login : function () {
 	Agua.cookie("username", null); 
 	
 	// CREATE JSON QUERY
-	var query 			= 	new Object;
-	query.token			=	Agua.token;
+	var query 			= 	{};
 	query.sourceid		=	this.id;
 	query.callback		=	"handleResponse",
 	query.username 		= 	username;
 	query.password 		= 	password;
 	query.mode 			= 	"submitLogin";
 	query.module 		= 	"Agua::Workflow";
-	console.log("Login.login     query: " + dojo.toJson(query));
 	
-	var url = Agua.cgiUrl + "agua.pl";
-	console.log("Login.login     url: " + url);		
-
-	console.log("Login.login    Agua.cookie('username'): " + Agua.cookie('username'));
-	console.log("Login.login    Agua.cookie('sessionid'): " + Agua.cookie('sessionid'));
+	console.log("Login.login     query: " + dojo.toJson(query));
 
 	console.log("Login.login    BEFORE Agua.exchange.send(query)");
-	Agua.exchange.send(query);	
+	Agua.exchange.send(query);
 	console.log("Login.login    Agua.exchange.send(query)");
 },
 handleResponse : function (response) {
@@ -373,8 +377,22 @@ setLoading : function () {
 	this.message.innerHTML = "Loading...";
 },
 handleLogin : function (response) {
-	console.log("Login.handleLogin     xhrPut response Json: " + dojo.toJson(response));
+	console.log("Login.handleLogin    response: " + dojo.toJson(response));
+	console.log("Login.handleLogin    response.token " + response.token);
+	console.log("Login.handleLogin    Agua.token " + Agua.token);
+	console.log("Login.handleLogin    response.sendtype " + response.sendtype);
+
+// DEBUG COMMENT - UNCOMMENT AFTER	
+	//if ( response.token != Agua.token ) {
+	//	console.log("Login.handleLogin    response.token " + response.token + " != Agua.token " + Agua.token + ". Returning");
+	//	return;
+	//}
 	
+	if ( response.sendtype != "response" ) {
+		console.log("Login.handleLogin    response.sendtype not response 'response': " + response.sendtype + ". Returning");
+		return;
+	}
+
 	// SHOW PROGRESS BAR
 	this.showProgressBar();
 	
@@ -397,6 +415,8 @@ handleLogin : function (response) {
 	// IF NO ERROR, PROCESS LOGIN
 	else {
 		console.log("Login.handleLogin    Successful login");
+		console.log("Login.handleLogin    Successful Agua");
+		console.dir({Agua:Agua});
 		console.log("Login.handleLogin    response: " + dojo.toJson(response));
 
 		// SET sessionid AND username IN DOJO COOKIE
@@ -436,7 +456,7 @@ handleLogin : function (response) {
 		console.log("Login.handleLogin    DOING setTimeout( Agua.startPlugins(), 100)");
 		
 		setTimeout( function(thisObj){
-			Agua.startPlugins();
+			Agua.loadData();
 
 			console.log("Login.handleLogin    AFTER Agua.startPlugins(). DOING this.hideProgressBar()");
 			thisObj.hideProgressBar();
@@ -444,8 +464,6 @@ handleLogin : function (response) {
 			console.log("Login.handleLogin    AFTER Agua.startPlugins(). AFTER this.hideProgressBar()");
 			
 		}, 100, this);
-
-
 
 		console.log("Login.login    Setting this.logging to FALSE");
 		this.logging = false;
@@ -482,8 +500,10 @@ logout : function (e) {
 	this.statusBar.launcher.title = "Log In";
 
 	// CLEAR TOOLBAR, PANES AND USER DATA
-	Agua.logout();
+	Agua.doLogout();
 }
+
+
 
 }); //	end declare
 

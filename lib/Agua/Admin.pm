@@ -28,7 +28,7 @@ use Agua::Instance;
 use FindBin qw($Bin);
 
 # Ints
-has 'showlog'	=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'log'	=>  ( isa => 'Int', is => 'rw', default => 1 );  
 has 'printlog'	=>  ( isa => 'Int', is => 'rw', default => 1 );
 has 'validated'	=> ( isa => 'Int', is => 'rw', default => 0 );
 
@@ -69,7 +69,7 @@ method setInstance  {
 	my $installdir	=	$self->conf()->getKey("agua", "INSTALLDIR");
 	my $instance	=	Agua::Instance->new({
 		logfile		=>	"$installdir/log/admin.head.log",
-		showlog		=>	2,
+		log		=>	2,
 		printlog	=>	5
 	});	
 	
@@ -109,7 +109,7 @@ method initialise ($json) {
 	#### SET HEADNODE OPS LOG
 	if ( defined $self->logfile() ) {
 		$self->head()->ops()->logfile($self->logfile());
-		$self->head()->ops()->showlog($self->showlog());
+		$self->head()->ops()->log($self->log());
 		$self->head()->ops()->printlog($self->printlog());
 	}
 

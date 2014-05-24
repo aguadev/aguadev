@@ -29,7 +29,7 @@ use POSIX;
 use Data::Dumper;
 
 # Ints
-has 'showlog'	=>  ( isa => 'Int', is => 'rw', default => 2 );  
+has 'log'	=>  ( isa => 'Int', is => 'rw', default => 2 );  
 has 'printlog'	=>  ( isa => 'Int', is => 'rw', default => 2 );
 
 # Strings
@@ -51,9 +51,9 @@ method BUILD ($args) {
 
 method initialise ($args) {
 	my $database 	=	$args->{database};
-	my $user 		=	$args->{user};
-	my $password 	=	$args->{password};
-	$self->logNote("password", $password);
+	my $dbuser 		=	$args->{dbuser};
+	my $dbpassword 	=	$args->{dbpassword};
+	$self->logNote("dbpassword", $dbpassword);
 	
 	my $parent 		=	$args->{parent};
 	$self->logNote("ref parent", ref $parent);
@@ -61,21 +61,21 @@ method initialise ($args) {
 	#### CONNECT TO DATABASE
 	$database = $self->database() if not $database;
 	$database = "mysql" if not $database;
-	$user = $self->user() if not defined $user or not $user;
-	$password = $self->password() if not defined $password or not $password;
+	$dbuser = $self->dbuser() if not defined $dbuser or not $dbuser;
+	$dbpassword = $self->dbpassword() if not defined $dbpassword or not $dbpassword;
 	
-	$self->logNote("user not defined. Returning") and return if not defined $user;
-	$self->logNote("password not defined. Returning") and return if not defined $password;
+	$self->logNote("dbuser not defined. Returning") and return if not defined $dbuser;
+	$self->logNote("dbpassword not defined. Returning") and return if not defined $dbpassword;
 	
 	my $dsn = "DBI:mysql:$database;mysql_local_infile=1";
 
 	#$self->logNote("self", $self);
-	$self->logNote("user", $user);
-	$self->logNote("password not defined or empty") if not defined $password or not $password;
+	$self->logNote("dbuser", $dbuser);
+	$self->logNote("dbpassword not defined or empty") if not defined $dbpassword or not $dbpassword;
 	$self->logNote("database", $database);
 	$self->logNote("dsn", $dsn);
 	
-	my $dbh = DBI->connect($dsn, $user, $password, { 'PrintError' => 1, 'RaiseError' => 0, 'mysql_auto_reconnect' => 1 });
+	my $dbh = DBI->connect($dsn, $dbuser, $dbpassword, { 'PrintError' => 1, 'RaiseError' => 0, 'mysql_auto_reconnect' => 1 });
 	$self->logNote("dbh", $dbh);
 	#$self->logNote("dbh", $dbh);
 	

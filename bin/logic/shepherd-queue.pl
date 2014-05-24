@@ -58,7 +58,7 @@ my $max			=	0;
 my $sleep		=	10;
 my $commands;
 my $commandfile;
-my $showlog		=	2;
+my $log		=	2;
 my $printlog	=	2;
 my $logfile		=	"/tmp/agua-shepherd.log";
 my $help;
@@ -68,7 +68,7 @@ GetOptions (
     'message=s'  	=> \$message,
     'max=i'  		=> \$max,
     'sleep=i'  		=> \$sleep,
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
@@ -80,8 +80,8 @@ my $conf = Conf::Yaml->new(
     inputfile   =>  $configfile,
     backup      =>  1,
 
-    showlog     =>  $showlog,
-    printlog    =>  $printlog,
+    log			=>	$log,
+    printlog	=>	$printlog,
     logfile     =>  $logfile
 );
 
@@ -92,8 +92,8 @@ my $object = Logic::Shepherd::Queue->new({
     max			=>	$max,
     sleep		=>	$sleep,
 	conf		=>	$conf,
-    showlog     =>  $showlog,
-    printlog    =>  $printlog,
+    log			=>	$log,
+    printlog	=>	$printlog,
     logfile     =>  $logfile
 });
 

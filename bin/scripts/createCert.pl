@@ -86,7 +86,7 @@ my $installer = Agua::Install->new({
     installdir  =>  $installdir,
     domainname  =>  $domainname,
     logfile     =>  $logfile,
-    showlog     =>  5,
+    log     =>  5,
     printlog    =>  5
 });
 

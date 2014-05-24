@@ -6,8 +6,9 @@ define([
 	"dojo/_base/declare",
 	"dijit/_Widget",
 	"dijit/_TemplatedMixin",
-	"dijit/_WidgetsInTemplateMixin",
-	"dojo/domReady!",
+	"dijit/_WidgetsInTemplateMixin"
+	//,
+	//"dojo/domReady!"
 ],
 
 function (

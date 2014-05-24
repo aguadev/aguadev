@@ -16,17 +16,12 @@ use Data::Dumper;
 sub getAppHeadings {
 	my $self		=	shift;
 
-   	my $json			=	$self->json();
-
 	$self->logDebug("");
 
 	#### VALIDATE    
-    my $username = $json->{username};
+    my $username = $self->username();
 	$self->logError("User $username not validated") and return unless $self->validate($username);
 
-	#### CHECK REQUESTOR
-	print qq{ error: 'Agua::Common::App::getHeadings    Access denied to requestor: $json->{requestor}' } if defined $json->{requestor};
-	
 	my $headings = {
 		leftPane 	=>	["Parameters", "App", "Packages"],
 		middlePane 	=>	["Packages", "Parameters", "App"],
@@ -227,7 +222,7 @@ sub saveParameter {
     	my $json			=	$self->json();
 
 	#### GET DATA FOR PRIMARY KEYS FOR parameters TABLE:
-    my $username 	= 	$json->{username};
+    my $username 	= 	$self->username();
 	my $data 		= 	$json->{data};
 	my $appname 	= 	$data->{appname};
 	my $name 		= 	$data->{name};

@@ -16,7 +16,7 @@ class Agua::CLI::App with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::Statu
     
     #### LOGGER
     has 'logfile'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
-    has 'showlog'	=> ( isa => 'Int', is => 'rw', default 	=> 	4 	);  
+    has 'log'	=> ( isa => 'Int', is => 'rw', default 	=> 	4 	);  
     has 'printlog'	=> ( isa => 'Int', is => 'rw', default 	=> 	5 	);
 
     ##### STORED VARIABLES

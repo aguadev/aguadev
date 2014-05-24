@@ -33,11 +33,11 @@ use Test::Agua::Cluster::Jobs;
 use Conf::Yaml;
 
 #### GET OPTIONS
-my $showlog = 3;
+my $log = 3;
 my $printlog = 3;
 my $help;
 GetOptions (
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
@@ -52,7 +52,7 @@ my $conf = Conf::Yaml->new(
 	separator	=>	"\t",
 	spacer		=>	"\\s\+",
     logfile     =>  $logfile,
-    showlog     =>  2,
+    log     =>  2,
     printlog    =>  2
 );
 
@@ -66,7 +66,7 @@ my $object = Test::Agua::Cluster::Jobs->new({
     conf        =>  $conf,
     username    =>  "testuser",
     logfile     =>  $logfile,
-    showlog     =>  $showlog,
+    log			=>	$log,
     printlog    =>  $printlog
 });
 

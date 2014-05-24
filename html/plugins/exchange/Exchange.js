@@ -1,3 +1,5 @@
+console.log("plugins.exchange.Exchange    LOADING");
+
 define([
 	"dojo/_base/declare",
 	"dojo/_base/array",
@@ -63,6 +65,8 @@ setHost : function () {
 	this.host = host;
 },
 connect : function () {
+	console.log("Exchange.connect    caller: " + this.connect.caller.nom);
+
 	console.log("Exchange.connect    this.id: " + this.id);
 	console.log("Exchange.connect    io: " + io);
 	console.dir({io:io});
@@ -73,14 +77,14 @@ connect : function () {
 	console.dir({this_conn:this.conn});
 
 	// REMOVE LISTENERS
-	console.log("Exchange.connect    this.listeners: " + this.listeners);
+	//console.log("Exchange.connect    this.listeners: " + this.listeners);
 	console.dir({this_listeners:this.listeners});
 	for ( var i = 0; i < this.listeners.length; i++ ) {
 		connect.disconnect(this.listeners[i]);
 	}
 	this.listeners = [];
-	console.log("Exchange.connect    AFTER DISCONNECT, this.listeners: " + this.listeners);
-	console.dir({this_listeners:this.listeners});
+	//console.log("Exchange.connect    AFTER DISCONNECT, this.listeners: " + this.listeners);
+	//console.dir({this_listeners:this.listeners});
 	
 	// ADD LISTENER
 	var thisObject = this;
@@ -93,27 +97,60 @@ connect : function () {
 	return this.conn;
 },
 sendMessage : function (message) {
-	console.log("Exchange.sendMessage    this.id: " + this.id);
     console.log("Exchange.sendMessage    message: " + message);
-
+	console.dir({message:message});
+	
 	this.send({
 		message : message
 	});
 },
 send : function (data) {
+	console.log("Exchange.send    caller: " + this.send.caller.nom);
+
 	console.log("Exchange.send    this.id: " + this.id);
-    console.log("Exchange.send    data: " + data);
+    console.log("Exchange.send    data: ");
+	console.dir({data:data});
 	console.log("Exchange.send    this.conn: " + this.conn);
 	console.dir({this_conn:this.conn});
 
+	// SET TOKEN
+	data.token		=	Agua.token;
+	
+	// SET SENDTYPE
+	data.sendtype	=	"request";
+	
+	// SET DATABASE
+	data.database 	= 	data.database || Agua.database;
+
+	// SET USERNAME		
+	data.username 	= 	data.username || Agua.cookie('username');
+
+	// SET USERNAME		
+	data.sessionid 	= 	data.sessionid || Agua.cookie('sessionid');
+
+	//if ( ! this.conn ) {
+	//	console.log("Exchange.send    ! this.conn. REDOING this.connect()");
+	//	this.connect();
+	//}
+	
 	var json = JSON.stringify(data);
 	
-    this.conn.send(json);
+	var thisObject = this;
+	setTimeout(function () {
+		console.log("Exchange.send    DOING thisObject.conn.send(json)");
+	    thisObject.conn.send(json);
+	},
+	20);
+	
 },
 // OVERRIDE THIS TO FIRE callback WITH RECEIVED DATA
 onMessage : function (object) {
-	console.log("Exchange.onMessage    object: " + object);
+	console.log("YOU DID NOT OVERRIDE Exchange.onMessage    object: " + object);
 	console.dir({object:object});
+	if ( object && object.type && object.type == "request" ) {
+		console.log("Exchange.onMessage    object.type is 'request'. Returning");
+		return;
+	}
 	
 	this.callback(object);
 }
@@ -122,3 +159,5 @@ onMessage : function (object) {
 
 });		//	end define
 
+
+console.log("plugins.exchange.Exchange    COMPLETE");

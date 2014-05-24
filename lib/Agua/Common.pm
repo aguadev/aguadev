@@ -28,7 +28,6 @@ use File::Remove;
 use File::stat;
 use JSON;
 
-with 'Exchange';
 with 'Agua::Common::Access';
 with 'Agua::Common::Ami';
 with 'Agua::Common::App';
@@ -41,7 +40,6 @@ with 'Agua::Common::File';
 with 'Agua::Common::Group';
 with 'Agua::Common::History';
 with 'Agua::Common::Hub';
-with 'Agua::Common::Logger';
 with 'Agua::Common::Login';
 with 'Agua::Common::Package';
 with 'Agua::Common::Parameter';

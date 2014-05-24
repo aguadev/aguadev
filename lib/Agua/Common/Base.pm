@@ -50,8 +50,7 @@ sub getData {
 	$self->logNote("Common::getData()");
 	
 	#### DETERMINE IF USER IS ADMIN USER
-    my $json         	= $self->json();
-    my $username 		= $json->{username};
+    my $username 		= $self->username();
 	my $isadmin 		= $self->isAdminUser($username);
 
 	#### GET OUTPUT
@@ -59,10 +58,6 @@ sub getData {
 
 	### ADMIN-ONLY
 	$output->{users} 			= $self->getUsers();
-
-	$self->logDebug("DOING self->exchange()->sendData(data)");
-	return $self->notifyStatus($output);
-
 
 	$output->{packages} 		= $self->getPackages() if $isadmin;
     $output->{appheadings}    	= $self->getAppHeadings();
@@ -121,8 +116,7 @@ sub getData {
 	$output->{queries}			= $self->getQueries();
 	$output->{downloads}		= $self->getDownloads();
 
-
-	$self->logDebug("DOING self->exchange()->sendData(data)");
+	$self->logDebug("DOING self->exchange()->sendSocket(data)");
 	return $self->notifyStatus($output);
 }
 

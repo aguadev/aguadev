@@ -23,7 +23,7 @@ use Conf::Yaml;
 use FindBin qw($Bin);
 
 # Ints
-has 'showlog'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
+has 'log'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
 has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings
@@ -401,7 +401,7 @@ method testLoadConfig {
 	
 	my $conf = Conf::Yaml->new({
 		inputfile	=>	$inputfile,
-		showlog		=>	2
+		log		=>	2
 	});
 	$self->conf($conf);
 	

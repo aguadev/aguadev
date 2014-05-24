@@ -50,7 +50,7 @@ has 'help'		=> ( isa => 'Bool', is  => 'rw', required	=>	0, documentation => "Pr
 has 'backup'	=> ( isa => 'Bool', is  => 'rw', default	=>	0, documentation => "Automatically back up files before altering"	);
 
 # Ints
-has 'showlog'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
+has 'log'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
 has 'printlog'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);
 has 'sleep'			=> ( is  => 'rw', 'isa' => 'Int', default	=>	600	);
 has 'upgradesleep'	=> ( is  => 'rw', 'isa' => 'Int', default	=>	600	);
@@ -103,7 +103,7 @@ has 'logger' 	=> (
 ####/////}}}}
 
 method BUILD ($args) {
-	$self->logDebug("");
+	#$self->logDebug("");
 	$self->initialise($args);
 }
 
@@ -220,7 +220,7 @@ method runCommand ($command) {
 #### RUN COMMAND LOCALLY OR ON REMOTE HOST
 	#### ADD ENVIRONMENT VARIABLES IF EXIST
 	print "Agua::Ops::runCommand: $command\n";
-	$self->showlog(4);
+	$self->log(4);
 	
 	$command = $self->envars() . $command if defined $self->envars();
 	$command = "cd ".  $self->cwd() . "; " . $command if defined $self->cwd() and $self->cwd();
@@ -414,7 +414,7 @@ method setDbObject () {
             user      	=>  $user,
             password  	=>  $password,
 			logfile		=>	$self->logfile(),
-			showlog		=>	2,
+			log		=>	2,
 			printlog	=>	2
         }
     ) or die "Can't create database object to create database: $database. $!\n";

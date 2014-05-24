@@ -87,8 +87,8 @@ sub run {
     #### INSTALL CURL
     $self->installPackage("curl");
 
-	#### INSTALL PUPPET
-	$self->installPuppet();	
+	##### INSTALL PUPPET
+	#$self->installPuppet();	
 	
     ##### INSTALL cpanminus
 	$self->installCpanMinus();
@@ -187,13 +187,13 @@ sub installCpanMinus {
 sub installPerlMods {
     my $self		=	shift;
 
-#	$self->installPackage("perl-ExtUtils-MakeMaker");
-    
-	$self->installPackage("build-essential");
-	
-	#### centos
 	my $arch	=	$self->getArch();
+
+	#### centos
 	if ( $arch eq "centos" ) {
+		#### BUILD TOOLS
+		$self->installPackage("yum install gcc gcc-c++ make automake kernel-devel");
+		$self->installPackage("yum install -y perl-devel");
 
 		#### FOR XML::Parser
 		$self->installPackage("expat");
@@ -210,8 +210,12 @@ sub installPerlMods {
 		#### FOR ExtUtils::MakeMaker
 		$self->installPackage("perl-devel");
 	}
+	#### ubuntu
 	elsif ( $arch eq "ubuntu" ) {
-		#### INSTALL PERL DOC
+		#### BUILD TOOLS
+		$self->installPackage("build-essential");
+
+		#### PERL DOC
 		$self->installPackage("perl-doc");
 
 		#### FOR XML::Parser

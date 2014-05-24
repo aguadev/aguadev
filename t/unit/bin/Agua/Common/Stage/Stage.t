@@ -39,16 +39,16 @@ my $conf = Conf::Yaml->new(
 	separator	=>	"\t",
 	spacer		=>	"\\s\+",
     logfile     =>  $logfile,
-	showlog     =>  2,
+	log     =>  2,
 	printlog    =>  2
 );
 
 #### GET OPTIONS
-my $showlog = 2;
+my $log = 2;
 my $printlog = 5;
 my $help;
 GetOptions (
-    'showlog=i'     => \$showlog,
+    'log=i'     => \$log,
     'printlog=i'    => \$printlog,
     'dumpfile=s'    => \$dumpfile,
     'help'          => \$help
@@ -62,7 +62,7 @@ my $user        = $conf->getKey('database', 'TESTUSER');
 my $password    = $conf->getKey('database', 'TESTPASSWORD');
 my $object = new Test::Agua::Common::Stage(
     logfile     =>  $logfile,
-	showlog     =>  $showlog,
+	log			=>	$log,
 	printlog    =>  $printlog,
     conf        =>  $conf,
     dumpfile    =>  $dumpfile,

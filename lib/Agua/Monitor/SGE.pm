@@ -76,7 +76,7 @@ use FindBin qw($Bin);
 
 #### Boolean
 has 'loaded'		=> ( isa => 'Bool', is => 'rw', default => 0 );  
-has 'showlog'			=>  ( isa => 'Int', is => 'rw', default => 1 );  
+has 'log'			=>  ( isa => 'Int', is => 'rw', default => 1 );  
 has 'printlog'			=>  ( isa => 'Int', is => 'rw', default => 2 );
 
 #### Int
@@ -174,7 +174,7 @@ method clear {
 
 	#### RESET TO DEFAULT OR CLEAR ALL ATTRIBUTES
 	foreach my $attribute ( @$attributes ) {
-        next if $attribute eq "showlog";
+        next if $attribute eq "log";
         next if $attribute eq "printlog";
         next if $attribute eq "db";
         
@@ -229,15 +229,15 @@ method initialise () {
 
 	#### SET CLUSTER INSTANCES LOG
 	$self->head()->logfile($logfile);
-	$self->head()->showlog($self->showlog());
+	$self->head()->log($self->log());
 	$self->head()->printlog($self->printlog());
 	$self->master()->logfile($logfile);
-	$self->master()->showlog($self->showlog());
+	$self->master()->log($self->log());
 	$self->master()->printlog($self->printlog());
 	
 	#### SET HEADNODE OPS LOG
 	$self->head()->ops()->logfile($logfile);	
-	$self->head()->ops()->showlog($self->showlog());
+	$self->head()->ops()->log($self->log());
 	$self->head()->ops()->printlog($self->printlog());
 
 	#### SET HEADNODE OPS CONF
@@ -246,7 +246,7 @@ method initialise () {
 
 	#### SET MASTER OPS LOG
 	$self->master()->ops()->logfile($logfile);	
-	$self->master()->ops()->showlog($self->showlog());
+	$self->master()->ops()->log($self->log());
 	$self->master()->ops()->printlog($self->printlog());
 
 	#### SET MASTER OPS CONF

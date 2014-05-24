@@ -59,7 +59,7 @@ method setStarCluster {
 		username	=>	$self->username(),
 		cluster		=>  $self->cluster(),
 		conf		=>	$self->conf(),
-        showlog     => 	$self->showlog(),
+        log     => 	$self->log(),
         printlog    =>  $self->printlog()
     });
 

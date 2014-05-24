@@ -35,7 +35,7 @@ use Exchange;
 
 
 # Ints
-has 'showlog'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
+has 'log'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
 has 'printlog'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);
 has 'maxnamelength'	=> ( isa => 'Int', is => 'rw', default 	=> 	80 	);
 has 'validated'		=> ( isa => 'Int', is => 'rw', default => 0 );
@@ -70,7 +70,7 @@ has 'exchange'	=> ( isa => 'Exchange', is  => 'rw', required	=>	0, lazy	=> 1, bu
 #	default	=>	sub {
 #		Exchange->new({
 #			#logfile		=>	"$Bin/log/admin.head.log",
-#			showlog		=>	2
+#			log		=>	2
 #			#printlog	=>	5
 #		});
 #	}
@@ -101,7 +101,7 @@ method setExchange () {
 	
 	my $exchange	=	Exchange->new({
 		logfile		=>	$self->logfile(),
-		showlog		=>	$self->showlog(),
+		log		=>	$self->log(),
 		printlog	=>	$self->printlog(),
 		conf		=>	$self->conf()
 	});
@@ -224,8 +224,8 @@ method notifyStatus ($data) {
 	$self->logDebug("connection", $connection);
 	sleep(1);
 	
-	$self->logDebug("DOING self->exchange()->sendData(data)");
-	return $self->exchange()->sendData($data);
+	$self->logDebug("DOING self->exchange()->sendSocket(data)");
+	return $self->exchange()->sendSocket($data);
 }
 
 method parseFilename {

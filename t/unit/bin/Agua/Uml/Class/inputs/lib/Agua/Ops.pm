@@ -48,7 +48,7 @@ has 'help'		=> ( isa => 'Bool', is  => 'rw', required	=>	0, documentation => "Pr
 has 'backup'	=> ( isa => 'Bool', is  => 'rw', default	=>	0, documentation => "Automatically back up files before altering"	);
 
 # Ints
-has 'showlog'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
+has 'log'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
 has 'printlog'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);
 has 'sleep'			=> ( is  => 'rw', 'isa' => 'Int', default	=>	600	);
 
@@ -409,7 +409,7 @@ method setDbObject () {
             user      	=>  $user,
             password  	=>  $password,
 			logfile		=>	$self->logfile(),
-			showlog		=>	2,
+			log		=>	2,
 			printlog	=>	2
         }
     ) or die "Can't create database object to create database: $database. $!\n";

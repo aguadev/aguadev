@@ -30,23 +30,26 @@ class Queue::Daemon with (Logger, Exchange, Agua::Common::Util) {
 #####////}}}}}
 
 # Integers
-has 'showlog'	=>  ( isa => 'Int', is => 'rw', default => 2 );
-has 'printlog'	=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'log'		=>  ( isa => 'Int', is => 'rw', default => 2 );
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'time'			=>  ( isa => 'Int', is => 'rw' );
+has 'timeout'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings
-has 'novaclient'=> ( isa => 'Openstack::Nova', is => 'rw', lazy	=>	1, builder	=>	"setNovaClient" );
-has 'logfile'	=> ( isa => 'Str|Undef', is => 'rw'	);
+has 'novaclient'	=> ( isa => 'Openstack::Nova', is => 'rw', lazy	=>	1, builder	=>	"setNovaClient" );
+has 'logfile'		=> ( isa => 'Str|Undef', is => 'rw'	);
 
 # Objects
-has 'lastsent'	=> ( isa => 'HashRef|Undef', is => 'rw', required	=>	0 );
-has 'conf'		=> ( isa => 'Conf::Yaml', is => 'rw', required	=>	0 );
+has 'modules'		=> ( isa => 'HashRef|Undef', is => 'rw', lazy	=>	1, builder	=>	"setModules" );
+has 'lastsent'		=> ( isa => 'HashRef|Undef', is => 'rw', required	=>	0 );
+has 'conf'			=> ( isa => 'Conf::Yaml', is => 'rw', required	=>	0 );
+has 'lastreceived'	=>  ( isa => 'HashRef|Undef', is => 'rw' );
 
 use FindBin qw($Bin);
 use Test::More;
 
 use TryCatch;
 use Data::Dumper;
-
 
 #####////}}}}}
 
@@ -64,25 +67,24 @@ method initialise ($args) {
 	#### SET SLOTS
 	$self->setSlots($args);
 
-	#### LOAD MODULES
-	my $modules = $self->loadModules();
-
 	#### SET LISTENER
-	$self->setListener($modules);
+	$self->receiveFanout();
 }
 
-method loadModules {
-    my $modules;
-    my $installdir = $self->conf()->getKey("agua", "INSTALLDIR");
+method setModules {
+	$self->logDebug("");
     my $modulestring = $self->conf()->getKey("agua", "MODULES");
-
-	#$self->logDebug("modulestring", $modulestring);
+    my @modulenames = split ",", $modulestring;
 	#$modulestring = "Agua::Deploy";    
 	#$modulestring = "Agua::Workflow";    
 	#$modulestring 	=	"Queue::Monitor";
+	$self->logDebug("modulestring", $modulestring);
+	$self->logDebug("self->log()", $self->log());
 
-    my @modulenames = split ",", $modulestring;
-    foreach my $modulename ( @modulenames) {
+    my $installdir = $self->conf()->getKey("agua", "INSTALLDIR");
+
+	my $modules	=	{};
+    foreach my $modulename ( @modulenames ) {
         my $modulepath = $modulename;
         $modulepath =~ s/::/\//g;
         my $location    = "$installdir/lib/$modulepath.pm";
@@ -92,108 +94,173 @@ method loadModules {
     
         my $object = $class->new({
             conf        =>  $self->conf(),
-            showlog     =>  $self->showlog(),
+            log     =>  $self->log(),
             printlog    =>  $self->printlog()
         });
         print "object: $object\n";
         
         $modules->{$modulename} = $object;
     }
+	$self->modules($modules);
 
     return $modules; 
 }
 
-method receiveTopic ($modules) {
-
+method receiveFanout {
+	$self->logDebug("");
     $|++;
     
-	my $connection	=	$self->newConnection();
-    
+	my $connection	=	$self->newSocketConnection();
     my $channel = $connection->open_channel();
     my $exchange	=	"chat";
-	
     $channel->declare_exchange(
-        #exchange => 'logs',
-        exchange => $exchange,
-        type => 'fanout',
+        exchange	=>	$exchange,
+        type		=>	'fanout',
     );
     
     my $result = $channel->declare_queue( exclusive => 1, );
-    
-    my $queue_name = $result->{method_frame}->{queue};
-    
+    my $queuename = $result->{method_frame}->{queue};
     $channel->bind_queue(
-        #exchange => 'logs',
-        exchange => $exchange,
-        queue => $queue_name,
+        exchange	=>	$exchange,
+        queue		=>	$queuename,
     );
     
-    print " [*] $queue_name. Waiting for logs. To exit press CTRL-C\n";
+    print " [*] $queuename. Waiting for fanout\n";
     
 	no warnings;
-	my $handler	= *handleTopic;
+	my $handler	= *handleFanout;
 	use warnings;
 	my $this	=	$self;
     $channel->consume(
         on_consume => sub {
 			my $var = shift;
 			my $body = $var->{body}->{payload};
-		
-			#print " [x] $body\n";
-			print " [x] Incoming message\n";
-			&$handler($this, $modules, $body);
+			print " [x] Queue::Daemon::receiveFanout    Incoming message\n";
+			&$handler($this, $body);
 		},
-        queue => $queue_name,
+        queue => $queuename,
         no_ack => 1,
     );
     
     AnyEvent->condvar->recv;    
 }
 
-method setListener ($modules) {
+method timedOut {
+	$self->time(time) if not defined $self->time();
+	my $time	=	$self->time();
+	$self->logDebug("time", $time);
+	my $currenttime	=	time;
+	my $timeout	=	$self->timeout();
+	$self->logDebug("timeout", $timeout);
+	$self->logDebug("time", $time);
+	$self->logDebug("currenttime", $currenttime);
+	$self->logDebug("currenttime - time", $currenttime - $time);
+	
+	return 0 if $currenttime - $time < $timeout;
+	
+	#### TIMEOUT lastsent AND lastreceived
+	$self->logDebug("Cancelling lastsent AND lastreceived");
+	$self->lastsent({});
+	$self->lastreceived({});
+	
+	return 1;
+}
 
-    $|++;
+method handleFanout ($json) {	
+	$self->logDebug();
+
+    #### GET DATA
+    my $data = $self->parseJson($json);
+	$self->notifyError("mode not defined") and return if not defined $data;
+
+	if ( is_deeply($data, $self->lastreceived()) ) {
+		$self->logDebug("Duplicate query. Ignoring", $data);
+		return if not $self->timedOut();
+	}
+	#$self->logDebug("data", $data);
+
+	#### VERIFY TYPE IS request
+	my $sendtype	=	$data->{sendtype};
+	#$self->logDebug("sendtype", $sendtype);
+	$self->logDebug("Type is '$sendtype'. Returning") and return if $sendtype ne "request";
+	
+	#### GET MODE
+	my $mode	=	$data->{mode};
+	$self->logDebug("mode", $mode);
+    if ( not defined $mode ) {
+		$self->notifyError($data, "mode not defined");
+		return;
+	}
+	elsif ( $mode eq "" ) {
+		$self->notifyError($data, "mode is empty");
+		return;
+	}	
+	$self->logDebug("mode is sendSocket. Quitting") and return if $mode eq "sendSocket";
+
+	if ( defined $self->lastsent() ) {
+		$self->logDebug("Checking for match with self->lastsent()");
+		$self->logDebug("data", $data);
+		$self->logDebug("self->lastsent()", $self->lastsent());
+
+		return if Test::More::eq_hash($data, $self->lastsent());
+    }
+	$self->lastsent($data);
+
+	if ( defined $data->{processid} and $data->{processid} eq $$ ) {
+		$self->logDebug("processid matches self. Ignoring");
+		return;
+	}	
+	
+    #### SET WHOAMI
+    my $whoami = `whoami`;
+    chomp($whoami);
+    $data->{whoami} = $whoami;
     
-	my $connection	=	$self->newConnection();
-    
-    my $channel = $connection->open_channel();
-    
-    $channel->declare_exchange(
-        #exchange => 'logs',
-        exchange => 'chat',
-        type => 'fanout',
-    );
-    
-    my $result = $channel->declare_queue( exclusive => 1, );
-    
-    my $queue_name = $result->{method_frame}->{queue};
-    
-    $channel->bind_queue(
-        #exchange => 'logs',
-        exchange => 'chat',
-        queue => $queue_name,
-    );
-    
-    print " [*] $queue_name. Waiting for logs. To exit press CTRL-C\n";
-    
+    #### SET REQUIRED INPUTS
 	no warnings;
-	my $handler	= *handleTopic;
-	use warnings;
-	my $this	=	$self;
-    $channel->consume(
-        on_consume => sub {
-			my $var = shift;
-			my $body = $var->{body}->{payload};
-		
-			#print " [x] $body\n";
-			print " [x] Incoming message\n";
-			&$handler($this, $modules, $body);
-		},
-        queue => $queue_name,
-        no_ack => 1,
-    );
+    my $required = qw(whoami username mode module);
+    use warnings;
+	
+    ##### CLEAN INPUTS
+    #$self->cleanInputs($data, $required);
+    #
+    ##### CHECK INPUTS
+    #$self->checkInputs($data, $required);
+
+	#### SET object FROM MODULES
+	my $modules	=	$self->modules();
+	my $object	=   $self->getObject($modules, $data);
+	#$self->logDebug("object", $object);
+	$self->notifyError($data, "failed to create object") and return if not defined $object;
+
+    #### VERIFY MODULE SUPPORTS MODE
+    $self->notifyError($data, "mode not supported: $mode") and return if not $object->can($mode);
+	#print "{ error: 'mode not supported: $mode' }" and return if not $object->can($mode);
     
-    AnyEvent->condvar->recv;    
+	#### CHECK HOSTNAME
+	if ( defined $data->{hostname} and $data->{hostname} ne "" ) {
+		$self->logDebug("Checking hostname matches '$data->{hostname}'");
+		my $hostname	=	$self->getHostname();
+		if ( $hostname ne $data->{hostname} ) {
+		    $self->notifyError($data, "data->{hostname} '$data->{hostname}' failed to match hostname '$hostname'");
+			return;
+		}
+		
+		$self->logDebug("hostname matches data->{hostname}: $hostname");
+	}
+	
+    #### RUN QUERY
+	try {
+		no strict;
+		$object->$mode();
+		use strict;
+	}
+	catch ($error) {
+	    $self->notifyError($data, "failed to run mode '$mode': $error");
+	}
+    
+	#### HANDLE ANY EXIT CALLS IN THE MODULES    
+    EXITLABEL: { warn "EXIT\n"; };
 }
 
 method parseJson ($json) {
@@ -233,83 +300,6 @@ method checkInputs ($json, $keys) {
     foreach my $key ( @$keys ) {
         print "{ 'error' : 'agua.pl	JSON not defined' }" and return if not defined $json->{$key};
     }
-}
-
-method handleTopic ($modules, $json) {
-	
-	$self->logDebug();
-    #### GET DATA
-    my $data = $self->parseJson($json);
-	#$self->logDebug("data", $data);
-
-	return if not defined $data;
-
-	if ( $self->can('lastsent') ) {
-		$self->logDebug("Checking for match with self->lastsent()");
-		$self->logDebug("data", $data);
-		$self->logDebug("self->lastsent()", $self->lastsent());
-
-		return if Test::More::eq_hash($data, $self->lastsent());
-    }
-
-	if ( defined $data->{processid} and $data->{processid} eq $$ ) {
-		$self->logDebug("processid matches self. Ignoring");
-		return;
-	}	
-	
-    #### SET WHOAMI
-    my $whoami = `whoami`;
-    chomp($whoami);
-    $data->{whoami} = $whoami;
-    
-    #### SET REQUIRED INPUTS
-	no warnings;
-    my $required = qw(whoami username mode module);
-    use warnings;
-	
-    ##### CLEAN INPUTS
-    #$self->cleanInputs($data, $required);
-    #
-    ##### CHECK INPUTS
-    #$self->checkInputs($data, $required);
-
-	my $object	=   $self->getObject($modules, $data);
-	#$self->logDebug("object", $object);
-	$self->notifyError($data, "failed to create object") and return if not defined $object;
-
-	#### GET MODE
-	my $mode	=	$data->{mode};
-	$self->logDebug("mode", $mode);
-    $self->notifyError($data, "mode not defined") and return if not defined $mode;
-    
-    #### VERIFY MODULE SUPPORTS MODE
-    $self->notifyError($data, "mode not supported: $mode") and return if not $object->can($mode);
-	#print "{ error: 'mode not supported: $mode' }" and return if not $object->can($mode);
-    
-	#### CHECK HOSTNAME
-	if ( defined $data->{hostname} and $data->{hostname} ne "" ) {
-		$self->logDebug("Checking hostname matches '$data->{hostname}'");
-		my $hostname	=	$self->getHostname();
-		if ( $hostname ne $data->{hostname} ) {
-		    $self->notifyError($data, "data->{hostname} '$data->{hostname}' failed to match hostname '$hostname'");
-			return;
-		}
-		
-		$self->logDebug("hostname matches data->{hostname}: $hostname");
-	}
-	
-    #### RUN QUERY
-	try {
-		no strict;
-		$object->$mode();
-		use strict;
-	}
-	catch {
-	    $self->notifyError($data, "failed to run mode '$mode'");
-	}
-    
-	#### HANDLE ANY EXIT CALLS IN THE MODULES    
-    EXITLABEL: { warn "EXIT\n"; };
 }
 
 method getHostname {
@@ -364,25 +354,26 @@ method getObject ($modules, $data) {
 		#### GET MODULE
 		my $module = $data->{module};
 		
-		#### SET LOGFILE
-		my $logfile			=	$self->logfile();
-		if ( not defined $logfile or $logfile eq "" ) {
-			$self->logDebug("DOING self->setLogfile()");
-			$logfile     =   $self->setLogFile($username, $module);
-			$self->conf()->logfile($logfile);
-		}
+		##### SET LOGFILE
+		#my $logfile;
+		#$logfile	=	$self->logfile() if $self->can('logfile');
+		#if ( not defined $logfile or $logfile eq "" ) {
+		#	$self->logDebug("DOING self->setLogfile()");
+		#	$logfile     =   $self->setLogFile($username, $module);
+		#	$self->conf()->logfile($logfile) if defined $self->conf() and $self->conf()->can('logfile');
+		#}
 
 		#### GET OBJECT
 		my $object = $modules->{$module};
 		if ( not defined $object ) {
 			$data->{error}	=	"module $module not supported or failed to run mode: $mode";
-			$self->sendData($data);
+			$self->sendSocket($data);
 			return;
 		}
 		
 		#### SET OBJECT LOGFILE AND INITIALISE
 		#$self->logDebug("Doing object->logfile");
-		$object->logfile($logfile);
+		#$object->logfile($logfile) if $self->can('logfile');
 #		$self->logDebug("Doing object->initialise");
 		$object->initialise($data);
 	

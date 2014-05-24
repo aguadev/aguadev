@@ -248,33 +248,44 @@ checkFiles : function (files) {
 	if ( files == null )	files = this.fileStageParameters;
 	//console.log("GridStage.checkFiles    this.fileStageParameters: " + this.fileStageParameters.length);
 	//console.log("GridStage.checkFiles    'this.fileStageParameters': " + dojo.toJson(this.fileStageParameters, true));
-	//console.log("GridStage.checkFiles    BEFORE xhrPut this.isValid: " + this.isValid);
-	
-	// GET FILEINFO FROM REMOTE FILE SYSTEM
-	var url = Agua.cgiUrl + "agua.cgi";
+
+	// SEND QUERY
 	var query = new Object;
-	query.username = Agua.cookie('username');
-	query.sessionid = Agua.cookie('sessionid');
-	query.project = this.application.project;
-	query.workflow = this.application.workflow;
-	query.mode = "checkFiles";
+	query.mode 			= 	"checkFiles";
 	query.module 		= 	"Agua::Workflow";
-	query.files = files;
+	query.sourceid 		= 	this.id;
+	query.callback		=	"validateFiles",
+	query.project 		= 	this.application.project;
+	query.workflow 		= 	this.application.workflow;
+	query.files 		= 	files;
+	Agua.exchange.send(query);
+	
+	//// GET FILEINFO FROM REMOTE FILE SYSTEM
+	//var url = Agua.cgiUrl + "agua.cgi";
+	//var query = new Object;
+	//query.username = Agua.cookie('username');
+	//query.sessionid = Agua.cookie('sessionid');
+	//query.project = this.application.project;
+	//query.workflow = this.application.workflow;
+	//query.mode = "checkFiles";
+	//query.module 		= 	"Agua::Workflow";
+	//query.files = files;
+	//
+	//// SEND TO SERVER
+	//var thisObject = this;
+	//var xhrputReturn = dojo.xhrPut({
+	//	url: url,
+	//	contentType: "text",
+	//	sync : false,
+	//	handleAs: "json",
+	//	putData: dojo.toJson(query),
+	//	handle: function(fileinfos, ioArgs) {
+	//		thisObject.validateFiles(files, fileinfos);
+	//	}
+	//});	
+	//
+	////console.log("GridStage.checkFiles    BEFORE setting stageRow CSS, FINAL this.isValid: " + this.isValid);	
 
-	// SEND TO SERVER
-	var thisObject = this;
-	var xhrputReturn = dojo.xhrPut({
-		url: url,
-		contentType: "text",
-		sync : false,
-		handleAs: "json",
-		putData: dojo.toJson(query),
-		handle: function(fileinfos, ioArgs) {
-			thisObject.validateFiles(files, fileinfos);
-		}
-	});	
-
-	//console.log("GridStage.checkFiles    BEFORE setting stageRow CSS, FINAL this.isValid: " + this.isValid);	
 	if ( this.isValid == false || this.isValid == null ) this.setInvalid();
 	else this.setValid();
 	

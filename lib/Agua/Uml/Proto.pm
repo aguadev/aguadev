@@ -166,11 +166,11 @@ method setRoles ($contents, $basedir) {
 	my @array = sort keys %$roles;
 	$self->logDebug("BEFORE INSTANTIATED roles", \@array);
 	
-	my $showlog = $self->showlog();
-	$self->showlog(2);
+	my $log = $self->log();
+	$self->log(2);
 
 
-$self->showlog(5) if $self->modulename() eq "Agua::View";
+$self->log(5) if $self->modulename() eq "Agua::View";
 		
 	#### INSTANTIATE ROLES
 	#$self->logDebug("BEFORE INSTANTIATED keys \%roles", keys %$roles);
@@ -195,7 +195,7 @@ $self->showlog(5) if $self->modulename() eq "Agua::View";
 			stringindent	=>	$self->stringindent() . "\t",
 			sourcefile		=>	$path
 			,
-			showlog			=>	$self->showlog(),
+			log			=>	$self->log(),
 			printlog		=>	$self->printlog(),
 			indent			=>	$self->indent()
 		});
@@ -209,7 +209,7 @@ $self->showlog(5) if $self->modulename() eq "Agua::View";
 		$roles->{$rolename}->{object} = $role;
 	}
 
-	$self->showlog($showlog);
+	$self->log($log);
 
 
 	#$self->logDebug("AFTER INSTANTIATED keys \%roles", keys %$roles);

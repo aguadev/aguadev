@@ -373,7 +373,7 @@ method startHtmlLog () {
 	$self->logDebug("AFTER setHtmlLogTemplate()");
 	
 	#### CREATE LOGFILE
-	$self->showlog(2);
+	$self->log(2);
 	$self->printlog(2);
 	$self->logDebug("Doing self->startLog($source)");
 	$self->startLog($source);
@@ -454,7 +454,7 @@ method loadOpsInfo ($opsdir, $package) {
 method loadConfig ($configfile, $mountpoint) {
 	my $packageconf = Conf::Agua->new({
 		inputfile	=>	$configfile,
-		showlog		=>	2
+		log		=>	2
 	});
 	$self->logNote("packageconf: $packageconf");
 	
@@ -495,13 +495,13 @@ method updateConfig ($sourcefile, $targetfile) {
 
 	my $sourceconf = Conf::Agua->new({
 		inputfile	=>	$sourcefile,
-		showlog		=>	2
+		log		=>	2
 	});
 	$self->logNote("sourcefile: $sourcefile");
 
 	my $targetconf = Conf::Agua->new({
 		inputfile	=>	$targetfile,
-		showlog		=>	2
+		log		=>	2
 	});
 	$self->logNote("targetconf: $targetconf");
 
@@ -652,7 +652,7 @@ method setOpsInfo ($opsfile) {
 	my $opsinfo = Agua::OpsInfo->new({
 		inputfile	=>	$opsfile,
 		logfile		=>	$self->logfile(),
-		showlog		=>	$self->showlog(),
+		log		=>	$self->log(),
 		printlog	=>	$self->printlog()
 	});
 	#$self->logDebug("opsinfo", $opsinfo);

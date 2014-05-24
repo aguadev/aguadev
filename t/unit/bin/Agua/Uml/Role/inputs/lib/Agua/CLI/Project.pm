@@ -14,7 +14,7 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer) {
 
     #### LOGGER
     has 'logfile'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
-    has 'showlog'	=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);  
+    has 'log'	=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);  
     has 'printlog'	=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);
 
     #### STORED LOGISTICS VARIABLES

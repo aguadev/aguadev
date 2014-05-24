@@ -33,7 +33,7 @@ sub setDbh {
 	my $dbfile 		=	$args->{dbfile};
 
 	my $logfile = $self->logfile();
-	my $showlog = $self->showlog();
+	my $log = $self->log();
 	my $printlog = $self->printlog();
 
 	$self->logNote("AFTER database", $database);
@@ -84,7 +84,7 @@ sub setDbh {
 			user        =>  $user,
 			password    =>  $password,
 			logfile		=>	$logfile,
-			showlog		=>	$showlog,
+			log			=>	$log,
 			printlog	=>	$printlog,
 			parent		=>	$self
 		}

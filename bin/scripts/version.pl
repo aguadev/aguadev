@@ -125,13 +125,13 @@ $versionfile = "$repodir/VERSION" if not defined $versionfile;
 
 #### SET LOG
 my $logfile = "/tmp/agua-version.log";
-my $showlog     =   2;
+my $log     =   2;
 my $printlog    =   5;
 
 my $object = Agua::Ops->new({
     logfile     =>   $logfile,
-    showlog     =>   $showlog,
-    printlog    =>   $printlog,
+    log			=>	$log,
+    printlog	=>	$printlog,
     
     login       =>  $login
 });
@@ -139,6 +139,8 @@ my $object = Agua::Ops->new({
 #### SET VERSION IF DEFINED
 if ( defined $version ) {
     my ($result, $error) = $object->setVersion($versionformat, $repodir, $versionfile, $branch, $version, $description);
+    $object->addLocalTag($version, $description);
+    $object->commitRepo($repodir, "[$version] $description");
     print "\n\n$error\n\n" and exit if not $result;
     print "\nCreated new version: $version\n\n";
 }
