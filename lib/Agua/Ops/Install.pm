@@ -32,6 +32,7 @@ has 'opsfields'	=> ( isa => 'ArrayRef', is => 'rw', required	=>	0	, default	=>	s
 	"package",
 	"repository",
 	"version",
+	"treeish",
 	"branch",
 	"privacy",
 	"owner",
@@ -278,7 +279,7 @@ method runInstall ($opsdir, $installdir, $package, $version) {
 	
 	#### SET CONF
 	$self->logDebug("DOING setConfKey    version", $version);
-	$self->setConfKey($package, $version, $installdir, $self->opsinfo());
+	$self->setConfKey($installdir, $package, $version, $self->opsinfo());
 
 	#### REPORT VERSION
 	#$self->logger()->write("Completed installation, version: $version");
@@ -292,10 +293,10 @@ method runInstall ($opsdir, $installdir, $package, $version) {
 	#### E.G., DEBUG/TESTING
 	#return $self->logger->report();
 }
-method setConfKey ($package, $version, $installdir, $opsinfo) {
+method setConfKey ($installdir, $package, $version, $opsinfo) {
 	$self->logDebug("package", $package);
 	$self->logDebug("version", $version);
-	$self->logDebug("opsinfo", $opsinfo);
+	#$self->logDebug("opsinfo", $opsinfo);
 	print "Can't update config file - 'version' not defined\n" and exit if not defined $version;
 
 	my $current	=	$self->conf()->getKey("packages", $package);
@@ -322,6 +323,7 @@ method gitInstall ($installdir, $version) {
 
 	my $repository		=	$self->repository();
 	my $branch			=	$self->branch();
+	my $treeish			=	$self->treeish();
 	my $owner 			= 	$self->owner();
 	my $login			=	$self->login() || "";
 	my $keyfile			=	$self->keyfile() || "";
@@ -330,6 +332,8 @@ method gitInstall ($installdir, $version) {
 	my $username		=	$self->username();
 	my $hubtype			=	$self->hubtype();
 
+	$treeish	=	$version if not defined $treeish or $treeish eq "";
+	
 	#### ENSURE MINIMUM DATA IS AVAILABLE
 	$self->logCritical("repository not defined") and exit if not defined $repository;
 	$self->logCritical("owner not defined") and exit if not defined $owner;
@@ -383,12 +387,12 @@ method gitInstall ($installdir, $version) {
 	$self->logDebug("Doing changeToRepo installdir", "$targetdir");
 	my $change = $self->changeToRepo("$targetdir");
 	$self->logDebug("change", $change);
-	$self->checkoutTag("$targetdir", $version);
+	$self->checkoutTag($targetdir, $treeish);
 	#$self->logger()->write("Checked out version: $version");
 	$self->logDebug("checked out version", $version);
 	
 	#### VERIFY CHECKED OUT VERSION == DESIRED VERSION
-	$self->verifyVersion("$targetdir", $version) if $self->foundGitDir("$targetdir");
+	$self->verifyVersion($targetdir, $treeish) if $self->foundGitDir($targetdir);
 	$self->version($version);
 	
 	return 1;
@@ -753,14 +757,14 @@ method preInstall ($installdir, $version) {
 	#### CHECK INPUTS
 	$self->logCritical("installdir not defined", $installdir) and exit if not defined $installdir;
 }
-method doInstall ($installdir, $version) {
-	#### OVERRIDE THIS METHOD
-	$self->logDebug("installdir", $installdir);
-	$self->logDebug("version", $version);
-	#$self->logger()->write("Doing doInstall");
-	
-	return $self->gitInstall($installdir, $version);
-}
+#method doInstall ($installdir, $version) {
+#	#### OVERRIDE THIS METHOD
+#	$self->logDebug("installdir", $installdir);
+#	$self->logDebug("version", $version);
+#	#$self->logger()->write("Doing doInstall");
+#	
+#	return $self->gitInstall($installdir, $version);
+#}
 
 method postInstall ($installdir, $version) {
 	#### OVERRIDE THIS METHOD
@@ -999,7 +1003,7 @@ method loadOpsModule ($opsdir, $repository) {
 		my ($olddir) = `pwd` =~ /^(\S+)/;
 		$self->logDebug("olddir", $olddir);
 		chdir($opsdir);
-		eval "require $modulename";
+		print eval "require $modulename";
 		
 		Moose::Util::apply_all_roles($self, $modulename);
 	}
@@ -1041,7 +1045,7 @@ method loadOpsInfo ($opsdir, $package) {
 		foreach my $param ( @$params ) {
 			$self->$param($self->opsinfo()->$param())
 				if $self->can($param)
-				and not defined $self->$param()
+				#and not defined $self->$param()
 				and $self->opsinfo()->can($param)
 				and defined $self->opsinfo()->$param();
 		}

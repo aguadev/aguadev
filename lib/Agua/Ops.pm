@@ -87,6 +87,7 @@ has 'token'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
 has 'password'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
 has 'installdir'=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
 has 'version'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
+has 'treeish'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
 has 'branch'	=> ( isa => 'Str|Undef', is => 'rw', default	=>	"master");
 has 'keyfile'	=> ( isa => 'Str|Undef', is => 'rw', default	=>	''	);
 
@@ -220,8 +221,6 @@ method changeDir ($directory) {
 method runCommand ($command) {
 #### RUN COMMAND LOCALLY OR ON REMOTE HOST
 	#### ADD ENVIRONMENT VARIABLES IF EXIST
-	print "Agua::Ops::runCommand: $command\n";
-	$self->log(4);
 	
 	$command = $self->envars() . $command if defined $self->envars();
 	$command = "cd ".  $self->cwd() . "; " . $command if defined $self->cwd() and $self->cwd();

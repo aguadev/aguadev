@@ -108,6 +108,7 @@ has 'download'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'owner'			=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'login'			=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'repository'	=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
+has 'hubtype'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'privacy'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'package'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'type'			=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);

@@ -218,10 +218,22 @@ method getPrefix ($login, $hubtype, $keyfile, $privacy) {
 }
 
 method cloneRemoteRepo ($owner, $repository, $branch, $hubtype, $login, $privacy, $keyfile, $target) {
+	$self->logDebug("owner", $owner);
+	$self->logDebug("login", $login);
+	$self->logDebug("hubtype", $hubtype);
 	$self->logDebug("keyfile", $keyfile);
+
+
 	my $prefix = $self->getPrefix($login, $hubtype, $keyfile, $privacy);
-	my $command = "git clone --recursive https://github.com/$owner/$repository.git $target  2>&1 ";
-	$command = "$prefix git clone --recursive git\@github.com:$owner/$repository.git $target  2>&1" if $prefix;
+
+	my $repourl	=	"https://github.com/$owner/$repository.git";
+	$repourl		=	"git\@github.com:$owner/$repository.git" if $prefix;
+	$repourl	=	"https://bitbucket.org/$owner/$repository.git" if $hubtype eq "bitbucket";
+	$repourl	=	"git\@bitbucket.org/$owner/$repository.git" if $hubtype eq "bitbucket" and $prefix;
+	$self->logDebug("repourl", $repourl);
+	
+	my $command = "git clone --recursive $repourl $target  2>&1 ";
+	$command = "$prefix git clone --recursive $repourl $target  2>&1" if $prefix;
 	$self->logDebug("command", $command);
 
 	my ($output, $error) = $self->repoCommand($command);
