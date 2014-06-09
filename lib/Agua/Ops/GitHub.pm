@@ -217,7 +217,7 @@ method getPrefix ($login, $hubtype, $keyfile, $privacy) {
 	return $prefix;
 }
 
-method cloneRemoteRepo ($owner, $repository, $hubtype, $login, $privacy, $keyfile, $target) {
+method cloneRemoteRepo ($owner, $repository, $branch, $hubtype, $login, $privacy, $keyfile, $target) {
 	$self->logDebug("keyfile", $keyfile);
 	my $prefix = $self->getPrefix($login, $hubtype, $keyfile, $privacy);
 	my $command = "git clone --recursive https://github.com/$owner/$repository.git $target  2>&1 ";
@@ -233,16 +233,17 @@ method cloneRemoteRepo ($owner, $repository, $hubtype, $login, $privacy, $keyfil
 	return 1;
 }
 
-method fetchResetRemoteRepo ($owner, $repository, $hubtype, $login, $privacy, $keyfile) {
+method fetchResetRemoteRepo ($owner, $repository, $branch, $hubtype, $login, $privacy, $keyfile) {
 #### DO FETCH THEN HARD RESET (E.G., TO AVOID pull CONFLICTS)
 	$self->logDebug("owner", $owner);
 	$self->logDebug("repository", $repository);
+	$self->logDebug("branch", $branch);
 	$self->logDebug("hubtype", $hubtype);
 	$self->logDebug("login", $login);
 	$self->logDebug("keyfile", $keyfile);
 
 	my $prefix = $self->getPrefix($login, $hubtype, $keyfile, $privacy);
-	my $command = "git fetch git://github.com/$owner/$repository.git ";
+	my $command = "git fetch git://github.com/$owner/$repository.git $branch:$branch";
 	$command = "$prefix git fetch git\@github.com:$owner/$repository.git " if $prefix;
 	$self->logDebug("command", $command);
 

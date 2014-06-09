@@ -137,7 +137,7 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::U
         #print "CLI::Project::switch    ";
         foreach my $key ( keys %$switch ) {
             #print "$key \n" if not defined $switch->{$key};
-            print "CLI::Project::switch    $key : $switch->{$key}\n" if defined $switch->{$key};
+            #print "CLI::Project::switch    $key : $switch->{$key}\n" if defined $switch->{$key};
             $self->$key($switch->{$key}) if defined $switch->{$key};
         }
         #print "\n";
@@ -190,7 +190,6 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::U
     }
 
     method save {
-        $self->log(4);
         $self->logDebug("");
 
         $self->_getopts();

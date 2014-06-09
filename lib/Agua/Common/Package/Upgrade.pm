@@ -50,6 +50,10 @@ method upgrade {
 	#### SET OPSDIR
 	$opsdir = $self->setOpsDir($owner, $opsrepo, $privacy, $repository) if not $opsdir;
 	$self->logDebug("opsdir", $opsdir);
+
+	#### CREATE OPS DIR
+	`mkdir $opsdir` if not -d $opsdir;
+	$self->logError("can't create opsdir: $opsdir") if not -d $opsdir;
 	
 	#### SET INSTALLDIR
 	my $installdir = $self->setInstallDir($username, $owner, $repository, $privacy);

@@ -129,7 +129,7 @@ method testSetBioApps ($data) {
 	$data->{package} 	=	"bioapps";
 	$data->{owner} 		= 	$username;
 	$data->{opsdir} 	= 	$self->opsdir();
-	$data->{version} 	= 	$self->conf()->getKey('bioapps', "VERSION");	
+	$data->{version} 	= 	$self->conf()->getKey('bioapps', "VERSION") || "0.0.1";	
 	$data->{installdir} = 	$self->installdir();
 	$self->logDebug("data", $data);
 	

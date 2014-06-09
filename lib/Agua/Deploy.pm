@@ -19,7 +19,7 @@ use FindBin::Real;
 use lib FindBin::Real::Bin() . "/lib";
 use Data::Dumper;
 
-class Agua::Deploy with Agua::Common {
+class Agua::Deploy with (Logger, Agua::Common) {
 
 #### USE LIB
 use FindBin::Real;
@@ -32,9 +32,10 @@ use Agua::Ops;
 
 # Booleans
 has 'log'		=>  ( isa => 'Int', is => 'rw', default => 1 );  
-has 'PRINTLOG'		=>  ( isa => 'Int', is => 'rw', default => 1 );
+has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 1 );
 
 # Strings
+has 'methods'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 's3bucket'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'configfile'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'opsfile'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
@@ -44,7 +45,9 @@ has 'package'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'version'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'privacy'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'repository'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
+has 'branch'		=> ( isa => 'Str|Undef', is => 'rw', default => 'master' );
 has 'keyfile'		=> ( isa => 'Str|Undef', is => 'rw' );
+has 'token'			=> ( isa => 'Str|Undef', is => 'rw' );
 has 'logfile'		=> ( isa => 'Str|Undef', is => 'rw' );
 has 'dumpfile'		=> ( isa => 'Str|Undef', is => 'rw' );
 has 'database'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
@@ -67,12 +70,13 @@ has 'ops' 	=> (
 ####/////}
 
 method BUILD ($hash) {
-	$self->logDebug("Agua::Deploy::BUILD()");
+	$self->logDebug("");
 	#$self->logDebug("self", $self);
 	$self->initialise($hash);
 }
 
 method initialise ($hash) {	
+	$self->logDebug("");
     
 	#### SET SLOTS
 	$self->setSlots($hash);
@@ -81,7 +85,7 @@ method initialise ($hash) {
 	
 	#### SET CONF LOG
 	$self->conf()->log($self->log());
-	$self->conf()->PRINTLOG($self->PRINTLOG());	
+	$self->conf()->printlog($self->printlog());	
 }
 
 method deploy {
@@ -121,6 +125,9 @@ method biorepo {
     my $basedir		= 	$self->conf()->getKey("agua", "INSTALLDIR");
     my $installdir 	= 	"$basedir/repos/public/$owner/$opsrepo";
 
+
+	$self->username($username);
+	
 	print "Installing opsrepo: $opsrepo\n";
     $self->logDebug("opsrepo", $opsrepo);
     $self->logDebug("owner", $owner);
@@ -139,6 +146,11 @@ method biorepo {
 
 	my $pmfile	=	"$basedir/bin/install/resources/agua/$opsrepo.pm";
 	my $opsdir	=	"$basedir/bin/install/resources/agua";
+
+	#### SET DBH
+	$self->setDbh({
+		username	=>	$username
+	});
 
 	my $ops	=	$self->setOps($owner, $login, $username, $opsrepo, $opspackage, $privacy, $installdir, $pmfile, $opsdir, $version);
 	
@@ -174,8 +186,8 @@ method setOps ($owner, $login, $username, $repository, $package, $privacy, $inst
 		privacy		=>	$privacy,
 		installdir	=>	$installdir,
 		logfile 	=>	$self->logfile(),
-		log		=>	$self->log(),
-		PRINTLOG	=>	$self->PRINTLOG(),
+		log			=>	$self->log(),
+		printlog	=>	$self->printlog(),
 		conf		=>	$self->conf()
 	};
 	#$self->logDebug("args", $args);
@@ -367,6 +379,7 @@ method install {
 		print "Version not defined at line: $line\n" and next if not defined $version;
 		print "Installing package '$package' (version $version)\n";
 		$self->logDebug("Installing package '$package' (version $version)");
+
 		#### SET VARIABLES FROM OPS INFO
 		my $login 		=	$self->login() || "agua";
 		my $owner 		=	$self->owner();
@@ -579,6 +592,131 @@ method sge {
 	my $command = "cd $targetdir; wget --no-check-certificate $source; tar xvfz $sourcefile\n";
 	$self->logDebug("command", $command);
 	`$command`;
+}
+
+
+
+
+#### SKELETON
+method skel {
+	my $package		=	$self->package();
+	my $methods		=	$self->methods();
+	my $version		=	$self->version() || "0.0.1";
+	$self->logDebug("package", $package);
+	$self->logDebug("methods", $methods);
+	$self->logDebug("version", $version);
+	
+	print "Methods not defined\n" and return if not defined $methods;
+	$self->logDebug("methods", $methods);
+	
+	#### SET TARGET DIR	
+	my $targetdir	=	$self->getSkelTargetDir($package);
+	$self->logDebug("targetdir", $targetdir);
+	
+	#### QUIT IF TARGET DIR EXISTS
+	print "\n\nExited because targetdir already exists: $targetdir\n\n" and return 0 if -d $targetdir;
+
+	#### PRINT PM FILE
+	my $pm	=	$self->getSkelPm($package, $methods);
+	$self->logDebug("pm", $pm);
+	my $pmfile	=	"$targetdir/$package.pm";
+	$self->printToFile($pmfile, $pm);
+	
+	#### PRINT OPS FILE
+	my $ops	=	$self->getSkelOps($package, $version);
+	$self->logDebug("ops", $ops);
+	my $opsfile	=	"$targetdir/$package.ops";
+	$self->printToFile($opsfile, $ops);	
+}
+
+method getSkelOps ($package, $version) {
+
+	my $ops			=	qq{{
+    "package"		:	"$package",
+    "repository"	:	"$package",
+    "owner"			:	"",
+    "version"		:	"$version",
+    "privacy"		:	"private",
+    "description"	:	"",
+    "type"		:	"application",
+    "source"		:	"git",
+    "keywords"	:	[],
+    "url"			:	"",
+    "installtype"	:	"ops",
+    "licensefile"	:	"LICENSE",
+    "readmefile"	:	"README",
+    "authors"		:	[],
+    "website"		:	"",
+    "publication"	:	{},
+    "resources"	:	{}
+}};
+
+	return $ops;	
+}
+
+method getSkelTargetDir ($package) {
+	my $opsrepo 	= 	$self->opsrepo() || $self->conf()->getKey("agua", "OPSREPO");
+	my $owner		=	"agua";
+	my $privacy		=	"public";
+	my $opsdir		=	$self->setOpsDir($owner, $opsrepo, $privacy, $package);
+	$self->logDebug("opsdir", $opsdir);
+
+	my $installdir	=	$self->installdir() || $self->conf()->getKey("agua", "INSTALLDIR");
+	$self->logDebug("installdir", $installdir);
+	
+	my $basedir		=	"$installdir/repos/public/agua/$opsrepo/agua";
+	my $targetdir	=	"$basedir/$package";
+
+	return $targetdir;	
+}
+
+method getSkelPm ($package, $methods) {
+	my $template	=	$self->getSkelTemplate();
+	$self->logDebug("template", $template);
+	my $contents	=	$self->getFileContents($template);
+	$self->logDebug("contents", $contents);
+
+	my $subs		=	$self->getSkelSubs($methods);
+
+	$contents		=~	s/<PACKAGE>/$package/g;
+	my $subroutines	=	"";
+	foreach my $sub ( @$subs ) {
+		$subroutines	.=	"    return 0 if not \$self->$sub(\$installdir, \$version);\n";
+	}
+	$self->logDebug("subroutines", $subroutines);
+	
+	$contents		=~	s/<SUBROUTINES>/$subroutines/;
+	$self->logDebug("contents", $contents);
+	
+	return $contents;	
+}
+
+method getSkelTemplate {
+	my $opsrepo 	= 	$self->opsrepo() || $self->conf()->getKey("agua", "OPSREPO");
+	$self->logDebug("opsrepo", $opsrepo);
+	my $owner		=	"agua";
+	my $privacy		=	"public";
+	my $package		=	"biorepository";
+	my $opsdir		=	$self->setOpsDir($owner, $opsrepo, $privacy, $package);
+	$self->logDebug("opsdir", $opsdir);
+	
+	my $template	=	"$opsdir/templates/skel.pm";
+	$self->logDebug("template", $template);	
+
+	return $template;
+}
+
+method getSkelSubs ($methods) {
+	$self->logDebug("methods", $methods);
+	
+	my @array	=	split ",", $methods;
+	my $subs;
+	foreach my $entry ( @array ) {
+		push @$subs, $entry . "Install";
+	}
+	$self->logDebug("subs", $subs);
+
+	return $subs;	
 }
 
 

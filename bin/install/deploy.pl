@@ -33,7 +33,7 @@ sudo ./deploy.pl \
  [--repository String] \
  [--logfile String] \
  [--log String] \
- [--PRINTLOG String] \
+ [--printlog String] \
  [--help]
 
  --mode       :	deploy | bioapps | biorepo | ... options (see below)
@@ -46,7 +46,7 @@ sudo ./deploy.pl \
  --repository :	Name of Git repository to be used as the code source
  --logfile    :	Location of log file
  --log    :	Print debug and other information to STDOUT (levels 1-5)
- --PRINTLOG   :	Print debug and other information to logfile (levels 1-5)
+ --printlog   :	Print debug and other information to logfile (levels 1-5)
  --help       :	Print help info
 
 The 'mode' options are as follows:
@@ -102,6 +102,7 @@ my $configfile   =	"$Bin/../../conf/config.yaml";
 my $opsrepo;
 my $opsfile;
 my $pmfile;
+my $methods;
 my $versionfile = "";
 my $s3bucket;
 my $package;
@@ -111,12 +112,13 @@ my $login;
 my $token;
 my $keyfile;
 my $password;
-my $logfile      =	"/tmp/agua-deploy.log";
-my $log      =	2;
-my $PRINTLOG     =	5;
+my $logfile     =	"/tmp/agua-deploy.log";
+my $log      	=	2;
+my $printlog    =	5;
 my $help;
 GetOptions (
     'mode=s'        => \$mode,
+    'methods=s'  	=> \$methods,
     'configfile=s'  => \$configfile,
     'opsrepo=s'  	=> \$opsrepo,
     'opsfile=s'  	=> \$opsfile,
@@ -127,7 +129,7 @@ GetOptions (
     'repository=s'  => \$repository,
     'logfile=s'     => \$logfile,
     'log=i'     => \$log,
-    'PRINTLOG=i'    => \$PRINTLOG,
+    'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
@@ -153,6 +155,7 @@ $password 	= 	$ENV{'password'} if defined $ENV{'password'};
 my $object = Agua::Deploy->new({
     conf        =>  $conf,
     mode        =>  $mode,
+    methods  	=>  $methods,
     configfile  =>  $configfile,
     opsrepo  	=>  $opsrepo,
     opsfile  	=>  $opsfile,

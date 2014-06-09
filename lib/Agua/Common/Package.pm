@@ -214,9 +214,7 @@ method setOpsDir ($owner, $opsrepo, $privacy, $package) {
 	my $installdir = $self->conf()->getKey("agua", "INSTALLDIR");
 	my $opsdir = "$installdir/repos/$privacy/$owner/$opsrepo/$owner/$package";
 	$self->logDebug("opsdir", $opsdir);
-	File::Path::mkpath($opsdir);
-	$self->logError("can't create opsdir: $opsdir") if not -d $opsdir;
-	
+
 	return $opsdir;
 }
 

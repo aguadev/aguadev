@@ -32,6 +32,7 @@ has 'opsfields'	=> ( isa => 'ArrayRef', is => 'rw', required	=>	0	, default	=>	s
 	"package",
 	"repository",
 	"version",
+	"branch",
 	"privacy",
 	"owner",
 	"login",
@@ -320,6 +321,7 @@ WHERE package='$package'};
 method gitInstall ($installdir, $version) {
 
 	my $repository		=	$self->repository();
+	my $branch			=	$self->branch();
 	my $owner 			= 	$self->owner();
 	my $login			=	$self->login() || "";
 	my $keyfile			=	$self->keyfile() || "";
@@ -374,7 +376,7 @@ method gitInstall ($installdir, $version) {
 	$self->logDebug("Doing self->changeDir()");
 	$self->changeToRepo($installdir);
 	$self->logDebug("Doing self->cloneRemoteRepo()");
-	my $success = $self->cloneRemoteRepo($owner, $repository, $hubtype, $login, $privacy, $keyfile, $version);
+	my $success = $self->cloneRemoteRepo($owner, $repository, $branch, $hubtype, $login, $privacy, $keyfile, $version);
 	$self->logDebug("FAILED to clone repo    success: $success") and return 0 if not $success;
 	
 	##### CHECKOUT SPECIFIC VERSION
@@ -395,6 +397,7 @@ method gitInstall ($installdir, $version) {
 method gitUpdate ($installdir, $version) {
 
 	my $repository		=	$self->repository();
+	my $branch			=	$self->branch();
 	my $owner 			= 	$self->owner();
 	my $login			=	$self->login();
 	my $keyfile			=	$self->keyfile();
@@ -461,7 +464,7 @@ method gitUpdate ($installdir, $version) {
 		$self->changeToRepo($basedir);
 		$self->logDebug("keyfile", $keyfile);
 		$self->logDebug("Doing self->cloneRemoteRepo()");
-		$self->logDebug("FAILED to clone repo") and return 0 if not $self->cloneRemoteRepo($owner, $repository, $hubtype, $login, $privacy, $keyfile, $subdir);
+		$self->logDebug("FAILED to clone repo") and return 0 if not $self->cloneRemoteRepo($owner, $repository, $branch, $hubtype, $login, $privacy, $keyfile, $subdir);
 	}
 	
 	#### OTHERWISE, MOVE TO REPO AND PULL
@@ -474,7 +477,7 @@ method gitUpdate ($installdir, $version) {
 		$self->initRepo($installdir) if not $self->foundGitDir($installdir);
 	
 		#### fetch FROM REMOTE AND DO HARD RESET
-		$self->logDebug("FAILED to fetch repo") and return 0 if not $self->fetchResetRemoteRepo($owner, $repository, $hubtype, $login, $privacy, $keyfile);
+		$self->logDebug("FAILED to fetch repo") and return 0 if not $self->fetchResetRemoteRepo($owner, $repository, $branch, $hubtype, $login, $privacy, $keyfile);
 	
 		#### SAVE ANY CHANGES IN A SEPARATE BRANCH
 		$self->saveChanges($installdir, $version);
@@ -511,7 +514,7 @@ method zipInstall ($installdir, $version) {
 	if ( not $exists ) {
 		$self->logDebug("Remote file does not exist. Exiting");
 		print "Remote file does not exist: $fileurl\n";
-		exit;
+		return 0;
 	}
 	
 	#### DELETE DIRECTORY AND ZIPFILE IF EXIST
@@ -689,6 +692,39 @@ method confirmInstall ($installdir, $version) {
 	
 	return 1;
 }
+method perlInstall ($opsdir, $installdir) {
+#### PUT PERL MODS ONE PER LINE IN FILE perlmods.txt
+	$self->logDebug("opsdir", $opsdir);
+	$self->logDebug("installdir", $installdir);
+
+	$self->installCpanm();
+
+	my $arch = $self->getArch();
+	$self->logDebug("arch", $arch);
+	if ( $arch eq "centos" ){
+		$self->runCommand("yum install perl-devel");
+		$self->runCommand("yum -y install gd gd-devel");
+	}
+	elsif ( $arch eq "ubuntu" ) {
+		$self->runCommand("apt-get -y install libperl-dev");
+		$self->runCommand("apt-get -y install libgd2-xpm");
+		$self->runCommand("apt-get -y libgd2-xpm-dev");
+	}
+	else {
+		print "Architecture not supported: $arch\n" and exit;
+	}
+
+	my $modsfile	=	"$opsdir/perlmods.txt";
+	$self->logDebug("modsfile", $modsfile);
+	
+	my $perlmods =	$self->getLines($modsfile);
+	$self->logDebug("perlmods", $perlmods);
+	foreach my $perlmod ( @$perlmods ) {
+		next if $perlmod =~ /^#/;
+		$self->runCommand("cpanm install $perlmod");
+	}
+}
+
 method remoteFileExists ($url) {
 	$self->logDebug("url", $url);
 	my $checkurl	=	$self->opsinfo()->checkurl();
@@ -742,6 +778,25 @@ method terminalInstall ($installdir, $version) {
 }
 
 #### UTILS
+method installPackage ($package) {
+    $self->logDebug("package", $package);
+    return 0 if not defined $package or not $package;
+    $self->logDebug("package", $package);
+    
+    if ( -f "/usr/bin/apt-get" ) {
+    	$self->runCommand("rm -fr /var/lib/dpkg/lock");
+		$self->runCommand("dpkg --configure -a");
+		$self->runCommand("rm -fr /var/cache/apt/archives/lock");
+
+    	$ENV{'DEBIAN_FRONTEND'} = "noninteractive";
+    	$self->runCommand("/usr/bin/apt-get -q -y install $package");
+    }
+    elsif ( -f "/usr/bin/yum" ) {
+		$self->runCommand("rm -fr /var/run/yum.pid");
+		$self->runCommand("/usr/bin/yum -y install $package");
+    }    
+}
+
 method saveChanges ($installdir, $version) {
 	$self->changeToRepo($installdir);
 	my $stash = $self->stashSave("before upgrade to $version");
@@ -1287,5 +1342,18 @@ method setOpsInfo ($opsfile) {
 }
 
 
+
+method getFileExports ($file) {
+    open(FILE, $file) or die "Can't open file: $file: $!";
+
+	my $exports	=	"";
+    while ( <FILE> ) {
+		next if $_	=~ /^#/ or $_ =~ /^\s*$/;
+		chomp;
+		$exports .= "$_; ";
+    }
+
+	return $exports;
+}
 
 1;

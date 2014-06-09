@@ -10,9 +10,9 @@ TO DO
 
 	Use queues to communicate between master and nodes:
 	
-		WORKERS REPORT STATUS TO MANAGER
+		WORKERS REPORT STATUS TO MASTER
 	
-		MANAGER DIRECTS WORKERS TO:
+		MASTER DIRECTS WORKERS TO:
 		
 			- DEPLOY APPS
 			
@@ -332,9 +332,8 @@ method getPrevious ($queues, $queuedata) {
 method listenTopics {
 	$self->logDebug("");
 	my $childpid = fork;
-	if ( $childpid ) #### ****** Parent ****** 
-	{
-		$self->logDebug("PARENT childpid", $childpid);
+	if ( $childpid ) {
+		$self->logDebug("IN PARENT childpid", $childpid);
 	}
 	elsif ( defined $childpid ) {
 		$self->receiveTopic();

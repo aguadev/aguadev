@@ -22,32 +22,32 @@ use Test::More 	tests => 4;
 use Getopt::Long;
 use FindBin qw($Bin);
 use lib "$Bin/../../../lib";
+my $installdir;
 BEGIN
 {
-    my $installdir = $ENV{'installdir'} || "/agua";
+    $installdir = $ENV{'installdir'} || "/agua";
     unshift(@INC, "$installdir/lib");
-    unshift(@INC, "$installdir/lib/external/lib/perl5");
+    unshift(@INC, "$installdir/t/common/lib");
+    unshift(@INC, "$installdir/t/unit/lib");
 }
 
 #### CREATE OUTPUTS DIR
 my $outputsdir = "$Bin/outputs";
 `mkdir -p $outputsdir` if not -d $outputsdir;
 
-
 use_ok('Conf::Yaml');
 use_ok('Test::Agua::Deploy');
 
 
 #### SET CONF FILE
-my $installdir  =   $ENV{'installdir'} || "/agua";
 my $configfile	=   "$installdir/conf/config.yaml";
 
-#### SET $Bin
-$Bin =~ s/^.+\/bin/$installdir\/t\/bin/;
+##### SET $Bin
+#$Bin =~ s/^.+\/bin/$installdir\/t\/bin/;
 
 #### GET OPTIONS
-my $logfile 	= "/tmp/testuser.login.log";
-my $log     =   2;
+my $logfile 	= "$Bin/outputs/test.log";
+my $log     	=   2;
 my $printlog    =   5;
 my $help;
 GetOptions (
@@ -60,11 +60,12 @@ usage() if defined $help;
 
 my $conf = Conf::Yaml->new(
     inputfile	=>	$configfile,
+    memory	    =>	1,
     backup	    =>	1,
     separator	=>	"\t",
     spacer	    =>	"\\s\+",
     logfile     =>  $logfile,
-	log     =>  2,
+	log     	=>  2,
 	printlog    =>  5    
 );
 isa_ok($conf, "Conf::Yaml", "conf");
@@ -81,6 +82,10 @@ my $object = new Test::Agua::Deploy(
 isa_ok($object, "Test::Agua::Deploy", "object");
 
 #### TESTS
+$object->testGetSkelSubs();
+#$object->testGetSkelTemplate();
+$object->testSkel();
+
 
 #### SATISFY Agua::Common::Logger::logError CALL TO EXITLABEL
 no warnings;

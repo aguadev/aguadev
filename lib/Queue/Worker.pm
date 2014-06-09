@@ -32,6 +32,7 @@ class Queue::Worker with (Logger, Exchange, Agua::Common::Database, Agua::Common
 # Integers
 has 'log'	=>  ( isa => 'Int', is => 'rw', default => 4 );
 has 'printlog'	=>  ( isa => 'Int', is => 'rw', default => 5 );
+has 'sleep'		=>  ( isa => 'Int', is => 'rw', default => 300 );
 
 # Strings
 has 'database'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0 );
@@ -65,18 +66,53 @@ method initialise ($args) {
 }
 
 method listen {
+	#### LISTEN FOR TASKS SENT FROM MASTER
+	$self->listenTasks();
+
+	#### PERIODICALLY SEND 'HEARTBEAT' NODE STATUS INFO
+	my $shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
+	while ( not $shutdown eq "true" ) {
+		my $sleep	=	$self->sleep();
+		print "Queue::Master::manage    Sleeping $sleep seconds\n";
+		sleep($sleep);
+		$self->heartbeat();
+		
+		$shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
+
+	}	
+
+}
+
+method heartbeat {
+	my $key	=	"update.host.status";
+	my $data	=	{};
+	$data->{cpu}	=	$self->getCpu();
+	$data->{disk}	=	$self->getDisk();
+	$data->{memory}	=	$self->getMemory();
+	
+	$self->sendTopic($data, $key);
+}
+
+method getCpu {
+	
+}
+
+method getDisk {
+	return `df -ah`;
+}
+
+method listenTasks ($taskqueue) {
 	my $taskqueue =	$self->conf()->getKey("queue:taskqueue", undef);
 	$self->logDebug("$$ taskqueue", $taskqueue);
 
-	#my $childpid = fork;
-	#if ( $childpid ) #### ****** Parent ****** 
-	#{
-	#	$self->logDebug("$$ PARENT childpid", $childpid);
-	#}
-	#elsif ( defined $childpid ) {
-	
+	my $childpid = fork;
+	if ( $childpid ) #### ****** Parent ****** 
+	{
+		$self->logDebug("$$ PARENT childpid", $childpid);
+	}
+	elsif ( defined $childpid ) {
 		$self->receiveTask($taskqueue);	
-	#}	
+	}		
 }
 
 method receiveTask ($taskqueue) {
@@ -242,6 +278,7 @@ method sendTopic ($data, $key) {
 method setJsonParser {
 	return JSON->new->allow_nonref;
 }
+
 
 
 

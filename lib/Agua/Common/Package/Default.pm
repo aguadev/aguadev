@@ -73,16 +73,26 @@ method setPublicWorkflows ($data) {
 method setWorkflows ($data, $privacy) {
 	my $opsrepo = $self->conf()->getKey("agua", "OPSREPO");
 	my $username = $data->{username};
+	my $opsdir	=	$self->setOpsDir($username, $opsrepo, $privacy, "workflows");
+	`mkdir $opsdir` if not -d $opsdir;
+	$self->logError("can't create opsdir: $opsdir") if not -d $opsdir;
+	
 	$data->{package} 	=	"workflows";
-	$data->{opsdir} 	= 	$self->setOpsDir($username, $opsrepo, $privacy, "workflows");
+	$data->{opsdir} 	= 	$opsdir;
 	$data->{installdir} = 	$self->setInstallDir($username, $username, "workflows", $privacy);
 	$self->_addPackage($data);
-}method setPublicOpsRepo ($data) {
+}
+
+method setPublicOpsRepo ($data) {
 	my $opsrepo = $self->conf()->getKey("agua", "OPSREPO");
 	my $username = $data->{username};
 	my $privacy = "public";
+	my $opsdir	=	$self->setOpsDir($username, $opsrepo, $privacy, $opsrepo);
+	`mkdir $opsdir` if not -d $opsdir;
+	$self->logError("can't create opsdir: $opsdir") if not -d $opsdir;
+
 	$data->{package} 	=	$opsrepo;
-	$data->{opsdir} 	= 	$self->setOpsDir($username, $opsrepo, $privacy, $opsrepo);
+	$data->{opsdir} 	= 	$opsdir;
 	$data->{installdir} = 	$self->setInstallDir($username, $username, $opsrepo, $privacy);
 	$self->_addPackage($data);
 }
@@ -91,8 +101,12 @@ method setPrivateOpsRepo ($data) {
 	my $opsrepo = $self->conf()->getKey("agua", "PRIVATEOPSREPO");
 	my $username = $data->{username};
 	my $privacy = "private";
+	my $opsdir	=	$self->setOpsDir($username, $opsrepo, $privacy, $opsrepo);
+	`mkdir $opsdir` if not -d $opsdir;
+	$self->logError("can't create opsdir: $opsdir") if not -d $opsdir;
+	
 	$data->{package} 	=	$opsrepo;
-	$data->{opsdir} 	= 	$self->setOpsDir($username, $opsrepo, $privacy, $opsrepo);
+	$data->{opsdir} 	= 	$opsdir;
 	$data->{installdir} = 	$self->setInstallDir($username, $username, $opsrepo, $privacy);
 	$self->_addPackage($data);
 }
@@ -116,10 +130,14 @@ method setBioApps ($data) {
 	#### ADD bioapps
 	my $opsrepo = $self->conf()->getKey("agua", "OPSREPO");
 	my $author = $self->conf()->getKey('bioapps', "AUTHOR");
+	my $opsdir	=	$self->setOpsDir($author, $opsrepo, "public", "bioapps");
+	`mkdir $opsdir` if not -d $opsdir;
+	$self->logError("can't create opsdir: $opsdir") if not -d $opsdir;
+
 	$data->{package} 	=	"bioapps";
 	$data->{owner} 		= 	$author;
-	$data->{opsdir} 	= 	$self->setOpsDir($author, $opsrepo, "public", "bioapps");
-	$data->{version} 	= 	$self->conf()->getKey('bioapps', "VERSION");	
+	$data->{opsdir} 	= 	$opsdir;
+	$data->{version} 	= 	$self->conf()->getKey('bioapps', "VERSION") || "0.0.1";	
 	$data->{installdir} = 	$self->conf()->getKey('bioapps', "INSTALLDIR");
 	$self->logDebug("data", $data);
 
@@ -135,9 +153,13 @@ method setAgua ($data) {
 	#### ADD agua
 	my $opsrepo = $self->conf()->getKey("agua", "OPSREPO");
 	my $author = $self->conf()->getKey('agua', "AUTHOR");
+	my $opsdir	=	$self->setOpsDir($author, $opsrepo, "public", "agua");
+	`mkdir $opsdir` if not -d $opsdir;
+	$self->logError("can't create opsdir: $opsdir") if not -d $opsdir;
+
 	$data->{package} 	=	"agua";
 	$data->{owner} 		= 	$author;
-	$data->{opsdir} 	= 	$self->setOpsDir($author, $opsrepo, "public", "agua");
+	$data->{opsdir} 	= 	$opsdir;
 	$data->{version} 	= 	$self->conf()->getKey('agua', "VERSION");	
 	$data->{installdir} = 	$self->conf()->getKey('agua', "INSTALLDIR");
 	$self->logDebug("data", $data);
@@ -150,13 +172,17 @@ method _setAgua ($data) {
 	return $self->_addPackage($data);
 }
 
-method setPackageData($data, $username, $owner, $package, $discretion) {
+method setPackageData($data, $username, $owner, $package, $privacy) {
 	#### ADD PUBLIC AND PRIVATE apps
 	my $opsrepo = $self->conf()->getKey("agua", "OPSREPO");
+	my $opsdir	=	$self->setOpsDir($username, $opsrepo, $privacy, $package);
+	`mkdir $opsdir` if not -d $opsdir;
+	$self->logError("can't create opsdir: $opsdir") if not -d $opsdir;
+
 	$data->{owner} 		= 	$owner;
 	$data->{package} 	=	$package;
-	$data->{opsdir} 	= 	$self->setOpsDir($username, $opsrepo, $discretion, $package);
-	$data->{installdir} = 	$self->setInstallDir($username, $username, $package, $discretion);
+	$data->{opsdir} 	= 	$opsdir;
+	$data->{installdir} = 	$self->setInstallDir($username, $username, $package, $privacy);
 
 	$self->logDebug("data", $data);
 	return $data;
@@ -188,6 +214,7 @@ method addPackage () {
 }
 
 method _addPackage ($data) {
+	$self->logDebug("data", $data);
 	my $datetime		=	$self->db()->query("SELECT NOW()");
 	$data->{datetime}	=	$datetime;
 

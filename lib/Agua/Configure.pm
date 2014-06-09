@@ -31,7 +31,7 @@ use FindBin::Real;
 use lib FindBin::Real::Bin() . "/lib";
 use Data::Dumper;
 
-class Agua::Configure with Agua::Common {
+class Agua::Configure with (Logger, Agua::Common) {
 
 #### USE LIB
 use FindBin::Real;
@@ -968,12 +968,16 @@ method setTestUser {
     $self->testuser($testuser);
     $self->testpassword($testpassword);
 
+	#### SET TEST DATABASE HANDLE
+	$self->setDbh({
+		database	=>	$testdatabase,
+		dbuser		=>	$testuser,
+		dbpassword	=>	$testpassword
+	});
+	
 	#### ALLOW agua USER ACCESS TO TEST DATABASE
 	my $user		=	$self->conf()->getKey("database", "USER");
 	$self->grantAccess($testdatabase, $user);
-	
-	#### SET TEST DATABASE HANDLE
-	$self->setDbh({	database	=>	$testdatabase	});
 	
 	#### UPDATE TESTUSER PASSWORD IN TEST DATABASE
 	$self->updateUserPassword($testuser, $testpassword);
@@ -983,7 +987,9 @@ method setTestUser {
 
 	#### RESET DATABASE
 	my $database	=	$self->conf()->getKey("database", "DATABASE");
-	$self->setDbh({	database	=>	$database	});
+	$self->setDbh({
+		database	=>	$database,
+	});
 	
 	return $testuser, $testpassword;
 }
@@ -1041,6 +1047,7 @@ FLUSH PRIVILEGES;};
 }
 
 method grantAccess ($database, $user) {
+	
 	my $query = qq{GRANT ALL ON $database.* TO '$user'};
 	$self->logDebug("query", $query);
 	
@@ -1413,9 +1420,6 @@ method _getKey {
 }
 
     
-
-
-
 
 }
 

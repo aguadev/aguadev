@@ -47,6 +47,7 @@ with 'Agua::Common::Privileges';
 with 'Agua::Common::Project';
 with 'Agua::Common::Report';
 with 'Agua::Common::Request';
+with 'Agua::Common::Sample';
 with 'Agua::Common::SGE';
 with 'Agua::Common::Shared';
 with 'Agua::Common::Sharing';

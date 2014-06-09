@@ -44,15 +44,26 @@ method setUpFile ($sourcefile, $targetfile) {
 
 
 #### COMPARISON
-method diff ($sourcefile, $targetfile) {
-	$self->logNote("sourcefile not defined") and return 0 if not defined $sourcefile;
-	$self->logNote("targetfile not defined") and return 0 if not defined $targetfile;
-	$self->logNote("sourcefile not found") and return 0 if not -f $sourcefile;
-	$self->logNote("targetfile not defined") and return 0 if not -f $targetfile;
-	my $diff = `diff -wb $sourcefile $targetfile`;
+method diff ($actual, $expected) {
+	$self->logDebug("actual", $actual);
+	$self->logDebug("expected", $expected);
+	
+	#### CHECK INPUTS
+	$self->logNote("actual not defined") and return 0 if not defined $actual;
+	$self->logNote("expected not defined") and return 0 if not defined $expected;
+	
+	my $diff;
+	if ( -d $actual ) {
+		$diff	=	`diff -r $actual $expected`;
+	}
+	else {
+		$self->logNote("actual not found") and return 0 if not -f $actual;
+		$self->logNote("expected not defined") and return 0 if not -f $expected;
+		$diff = `diff -wb $actual $expected`;
+	}
+	$self->logDebug("diff", $diff);
 	
 	return 1 if $diff eq "";
-	
 	return 0;
 }
 

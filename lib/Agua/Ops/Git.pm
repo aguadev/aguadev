@@ -13,6 +13,7 @@ use JSON;
 =cut
 
 if ( 1 ) {
+
 has 'localrepo'	=> ( isa => 'Str|Undef', is => 'rw'	);
 
 use FindBin qw($Bin);

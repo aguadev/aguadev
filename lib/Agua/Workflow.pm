@@ -107,7 +107,7 @@ has 'json'			=> 	( isa => 'HashRef', is => 'rw', required => 0 );
 has 'db'			=> 	( isa => 'Agua::DBase::MySQL', is => 'rw', lazy	=>	1,	builder	=>	"setDbh" );
 has 'stages'		=> 	( isa => 'ArrayRef', is => 'rw', required => 0 );
 has 'stageobjects'	=> 	( isa => 'ArrayRef', is => 'rw', required => 0 );
-has 'conf'	=> ( isa => 'Conf::Yaml', is => 'rw', lazy => 1, builder => "setConf" );
+has 'conf'			=> ( isa => 'Conf::Yaml', is => 'rw', lazy => 1, builder => "setConf" );
 has 'starcluster'	=> 	( isa => 'Agua::StarCluster', is => 'rw', lazy => 1, builder => "setStarCluster" );
 has 'head'	=> ( isa => 'Agua::Instance', is => 'rw', lazy => 1, builder => "setHead" );
 has 'master'		=> 	( isa => 'Agua::Instance', is => 'rw', lazy => 1, builder => "setMaster" );

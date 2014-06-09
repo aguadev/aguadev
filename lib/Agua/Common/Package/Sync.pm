@@ -925,6 +925,10 @@ method _syncPackage ($resource, $privacy, $message) {
 	my $opsdir = $self->setOpsDir($username, $opsrepo, $privacy, $resource);
 	$self->logDebug("opsdir", $opsdir);
 
+	#### CREATE OPS DIR
+	`mkdir $opsdir` if not -d $opsdir;
+	$self->logError("can't create opsdir: $opsdir") if not -d $opsdir;
+
 	### SET RESOURCE DIR
 	my $resourcedir = $self->setResourceDir($opsdir, $username, $resource);
 	$self->logDebug("resourcedir", $resourcedir);
@@ -934,11 +938,6 @@ method _syncPackage ($resource, $privacy, $message) {
 	$self->logDebug("repodir", $repodir);
 	my $created = $self->createRepoDir($repodir);
 	$self->logError("Can't create repodir", $repodir) and exit if not $created;
-	
-	
-	$self->logDebug("DEBUG EXIT") and exit;
-	
-	
 	
 	#### CHECK IF REMOTE REPOSITORY ALREADY EXISTS
 	my $isrepo = $self->head()->ops()->isRepo($login, $opsrepo, $privacy);

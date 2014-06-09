@@ -33,15 +33,14 @@ has 'log'	=>  ( isa => 'Int', is => 'rw', default => 2 );
 has 'printlog'	=>  ( isa => 'Int', is => 'rw', default => 2 );
 
 # Strings
+has 'dbuser'	=> ( isa => 'Str|Undef', is => 'ro' );
+has 'dbpassword'=> ( isa => 'Str', is => 'rw', default => '' );
 has 'dbtype'	=> ( isa => 'Str|Undef', is => 'ro', default => 'mysql' );
 has 'database'	=> ( isa => 'Str', is => 'rw', default => '' );
 
 # Objects
 has 'dbh'		=> ( isa => 'Any', is => 'rw', default => '' );
 has 'parent'	=> ( isa => 'Any', is => 'rw', default => undef );
-
-#has 'user'		=> ( isa => 'Str', is => 'rw', default => '' );
-#has 'password'	=> ( isa => 'Str', is => 'rw', default => '' );
 
 ####////}}}
 
@@ -265,6 +264,8 @@ method tsvToHash ($tsvline, $fields) {
 
 method do ($query) {
 #### RETURN 1 IF COMMAND WAS SUCCESSFUL, OTHERWISE RETURN 0	
+	#$self->logCaller("");
+
 	$self->logNote("query", $query);
 	$self->dbh()->{RaiseError} = 0; # DISABLE TERMINATION ON ERROR
 	my $success = $self->dbh()->do($query); ### or warn "Query failed: $DBI::errstr ($DBI::err)\n";

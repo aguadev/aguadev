@@ -149,5 +149,10 @@ method testReceiveTask {
 
 
 
+method testHeartbeat {
+	$self->heartbeat($taskqueue);	
+}
+
+
 }
 

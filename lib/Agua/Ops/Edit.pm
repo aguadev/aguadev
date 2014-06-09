@@ -170,6 +170,7 @@ method fileContents ($file) {
 	
 	return $contents;
 }
+
 method addToFile ($file, $inserts, $nodups) {
 	my $lines = $self->fileLines($file);
 	$lines = $self->addNoDups($lines, $inserts) if defined $nodups;
