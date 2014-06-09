@@ -57,7 +57,6 @@ $| = 1;
 #### USE LIB
 use FindBin qw($Bin);
 use lib "$Bin/../../lib";
-use lib "$Bin/../../lib/external/lib/perl5";
 
 #### EXTERNAL MODULES
 use Getopt::Long;

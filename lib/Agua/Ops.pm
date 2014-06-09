@@ -412,10 +412,10 @@ method setDbObject () {
     my $db = Agua::DBaseFactory->new( 'MySQL',
         {
 			database	=>	$database,
-            user      	=>  $user,
-            password  	=>  $password,
+            dbuser      =>  $user,
+            dbpassword  =>  $password,
 			logfile		=>	$self->logfile(),
-			log		=>	2,
+			log			=>	2,
 			printlog	=>	2
         }
     ) or die "Can't create database object to create database: $database. $!\n";

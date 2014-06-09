@@ -37,22 +37,27 @@ sub setDbh {
 	my $log = $self->log();
 	my $printlog = $self->printlog();
 
-	$self->logNote("AFTER database", $database);
-	$self->logNote("AFTER dbtype", $dbtype);
-	$self->logNote("AFTER dbuser", $dbuser);
+	$self->logNote("ARGS database", $database);
+	$self->logNote("ARGS dbtype", $dbtype);
+	$self->logNote("ARGS dbuser", $dbuser);
 	#$self->logNote("AFTER dbpassword", $dbpassword);
 	
 	$dbfile 	=	$self->conf()->getKey('database', 'DBFILE') if not defined $dbfile;
 	$dbtype 	=	$self->conf()->getKey('database', 'DBTYPE') if not defined $dbtype;
+	#$database 	=	$self->conf()->getKey('database', undef) if not defined $database;
+	#$database 	=	$self->conf()->getKey('database:DATABASE', undef) if not defined $database;
+	$self->logDebug("database", $database);
+	$dbuser 		=	$self->conf()->getKey('database', 'USER') if not defined $dbuser;
+	$dbpassword 	=	$self->conf()->getKey('database', 'PASSWORD') if not defined $dbpassword;
+	$database	=	$self->conf()->getKey('database', 'DATABASE') if not defined $database or $database eq "";
+	$self->logNote("CONF database", $database);
+	$self->logNote("CONF dbtype", $dbtype);
+	$self->logNote("CONF dbuser", $dbuser);
+	
 	if ( $self->can('isTestUser') and $self->isTestUser() ) {
 		$dbuser 		=	$self->conf()->getKey('database', 'TESTUSER') if not defined $dbuser;
 		$dbpassword 	=	$self->conf()->getKey('database', 'TESTPASSWORD') if not defined $dbpassword;
 		$database	=	$self->conf()->getKey('database', 'TESTDATABASE') if not defined $database;
-	}
-	else {
-		$dbuser 		=	$self->conf()->getKey('database', 'USER') if not defined $dbuser;
-		$dbpassword 	=	$self->conf()->getKey('database', 'PASSWORD') if not defined $dbpassword;
-		$database	=	$self->conf()->getKey('database', 'DATABASE') if not defined $database;
 	}
 	
 	$self->logNote("AFTER database", $database);

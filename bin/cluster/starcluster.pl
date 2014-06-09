@@ -38,7 +38,6 @@ use strict;
 #### USE LIBS
 use FindBin qw($Bin);
 use lib "$Bin/../../lib";
-use lib "$Bin/../../lib/external/lib/perl5";
 
 my $configfile = "$Bin/../../conf/config.yaml";
 my $logfile = "/tmp/agua-starcluster.log";

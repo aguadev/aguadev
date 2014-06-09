@@ -421,7 +421,7 @@ method gitUpdate ($installdir, $version) {
 	$self->logDebug("hubtype", $hubtype);
 
 	#### SET DEFAULT KEYFILE
-	$keyfile = $self->setKeyfile($username, $hubtype) if not defined $keyfile or not $keyfile;
+	$keyfile = $self->setKeyfile($username, $hubtype) if not defined $keyfile or not $keyfile and $privacy eq "private";
 
 	#### VALIDATE VERSION IF SUPPLIED, OTHERWISE SET TO LATEST VERSION
 	if ( defined $version ) {
@@ -432,6 +432,9 @@ method gitUpdate ($installdir, $version) {
 		elsif ( $version ne "" ) {
 			$self->logDebug("Failed to validate version: $version'") and return 0 if not $self->validateVersion($login, $repository, $privacy, $version);
 		}
+	}
+	else {
+		$version	=	$self->getLatestVersion($login, $repository, $privacy, $version);
 	}
 	$self->logDebug("version", $version);
 
