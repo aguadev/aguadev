@@ -2,9 +2,6 @@ package biorepository;
 use Moose::Role;
 use Method::Signatures::Simple;
 
-print "BIOREPOSITORY HERE\n";
-#exit;
-
 has 'installdir'=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
 has 'version'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
 has 'repotype'	=> ( isa => 'Str|Undef', is => 'rw', default	=> 'github'	);

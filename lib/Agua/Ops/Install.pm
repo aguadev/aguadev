@@ -392,7 +392,7 @@ method gitInstall ($installdir, $version) {
 	$self->logDebug("checked out version", $version);
 	
 	#### VERIFY CHECKED OUT VERSION == DESIRED VERSION
-	$self->verifyVersion($targetdir, $treeish) if $self->foundGitDir($targetdir);
+	$self->verifyVersion($targetdir, $version) if $self->foundGitDir($targetdir) and defined $version and $version ne "";
 	$self->version($version);
 	
 	return 1;
@@ -640,7 +640,7 @@ method configInstall ($installdir, $version) {
 }
 
 method makeInstall ($installdir, $version) {
-	$self->logDebug("version", $version);
+	$self->logDebug("installdir", $installdir);
 	$self->logDebug("version", $version);
 
 	#### CHANGE DIR

@@ -113,6 +113,7 @@ has 'privacy'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'package'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'type'			=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'version'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
+has 'treeish'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'history'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'url'			=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 has 'checkurl'		=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0, default	=> "true"	);

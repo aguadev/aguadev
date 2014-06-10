@@ -41,7 +41,7 @@ method loadSamples ($username, $project, $workflow, $workflownumber, $file) {
 	
 	my $outputfile	=	$file;
 	$outputfile		=~	s/\.{2,3}$//;
-	$outputfile		.=	"-querysample.tsv";
+	$outputfile		.=	"-$table.tsv";
 	my $output	=	join "\n", @$tsv;
 	$self->logDebug("output", $output);
 
@@ -82,19 +82,18 @@ method loadSampleFiles ($username, $project, $workflow, $workflownumber, $file) 
 
 	my $tsv = [];
 	foreach my $line ( @$lines ) {
-		my ($sample)	=	$line	=~ 	/^(\S+)/;
+		my ($sample, $filename, $filesize)	=	$line	=~ 	/^(\S+)\s+(\S+)\s+(\S+)/;
 		#$self->logDebug("sample", $sample);
 		
-		my $out	=	"$username\t$project\t$workflow\t$workflownumber\t$sample\tnone";
+		my $out	=	"$username\t$project\t$workflow\t$workflownumber\t$sample\t$filename\t$filesize";
 		push @$tsv, $out;
 	}
 	
 	my $outputfile	=	$file;
 	$outputfile		=~	s/\.{2,3}$//;
-	$outputfile		.=	"-querysample.tsv";
+	$outputfile		.=	"-$table.tsv";
 	my $output	=	join "\n", @$tsv;
 	$self->logDebug("output", $output);
-
 
 	$self->printToFile($outputfile, $output);
 	
