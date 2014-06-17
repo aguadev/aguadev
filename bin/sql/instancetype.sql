@@ -8,5 +8,5 @@ CREATE TABLE IF NOT EXISTS instancetype
     disk       		INT(12),
     ephemeral      	INT(12),
     
-    PRIMARY KEY (username, cluster, instancetype, cpus, memory)
+    PRIMARY KEY (username, cluster)
 );

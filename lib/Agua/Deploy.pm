@@ -634,6 +634,7 @@ method getSkelOps ($package, $version) {
 	my $ops			=	qq{{
     "package"		:	"$package",
     "repository"	:	"$package",
+    "hubtype"		:	"github",
     "owner"			:	"",
     "version"		:	"$version",
     "privacy"		:	"private",

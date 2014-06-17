@@ -1,0 +1,10 @@
+testuser	testuser.CU.Download	download123456789	running	2014-06-12 20:41:15
+testuser	testuser.CU.Download	download234567891	running	2014-06-12 20:41:15
+testuser	testuser.CU.Download	download345678912	running	2014-06-12 20:41:15
+testuser	testuser.CU.Download	download456789123	running	2014-06-12 20:41:15
+testuser	testuser.CU.Bwa	bwa123456789	running	2014-06-12 20:41:15
+testuser	testuser.CU.Bwa	bwa234567891	running	2014-06-12 20:41:15
+testuser	testuser.CU.Bwa	bwa345678912	running	2014-06-12 20:41:15
+testuser	testuser.CU.Bwa	bwa456789123	running	2014-06-12 20:41:15
+testuser	testuser.CU.FreeBayes	freebayes123456789	running	2014-06-12 20:41:15
+testuser	testuser.CU.FreeBayes	freebayes234567891	running	2014-06-12 20:41:15

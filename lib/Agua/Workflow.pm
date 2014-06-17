@@ -62,6 +62,8 @@ use Agua::Stage;
 use Agua::StarCluster;
 use Agua::Instance;
 use Agua::Monitor::SGE;
+use TryCatch;
+use Virtual;
 
 
 # Integers
@@ -113,6 +115,7 @@ has 'head'	=> ( isa => 'Agua::Instance', is => 'rw', lazy => 1, builder => "setH
 has 'master'		=> 	( isa => 'Agua::Instance', is => 'rw', lazy => 1, builder => "setMaster" );
 has 'monitor'		=> 	( isa => 'Agua::Monitor::SGE', is => 'rw', lazy => 1, builder => "setMonitor" );
 has 'worker'		=> 	( isa => 'Maybe', is => 'rw', required => 0 );
+has 'virtual'		=> ( isa => 'Any', is => 'rw', lazy	=>	1, builder	=>	"setVirtual" );
 
 ####////}}}
 
@@ -140,7 +143,7 @@ method initialise ($json) {
 			$self->$key($json->{$key}) if $self->can($key);
 		}
 	}
-	$self->logDebug("$$ json", $json);	
+	#$self->logDebug("$$ json", $json);	
 			
 	#### SET DATABASE HANDLE
 	$self->logDebug("$$ Doing self->setDbh");
@@ -165,6 +168,239 @@ method setUserLogfile ($username, $identifier, $mode) {
 	
 	return "$installdir/log/$username.$identifier.$mode.log";
 }
+
+#### EXECUTE PROJECT
+method executeProject {
+	my $database 	=	$self->database();
+	my $username 	=	$self->username();
+	my $project 	=	$self->project();
+	$self->logDebug("$$ username", $username);
+	$self->logDebug("$$ project", $project);
+	
+	my $fields	=	["username", "project"];
+	my $data	=	{
+		username	=>	$username,
+		project		=>	$project
+	};
+	my $notdefined = $self->db()->notDefined($data, $fields);
+	$self->logError("undefined values: @$notdefined") and return 0 if @$notdefined;
+	
+	#### RETURN IF RUNNING
+	$self->logError("Project is already running: $project") and return if $self->projectIsRunning($username, $project);
+	
+	#### GET WORKFLOWS
+	my $workflows	=	$self->getWorkflowsByProject({
+		username	=>	$username,
+		name		=>	$project
+	});
+	$self->logDebug("workflows", $workflows);
+	
+	#### RUN WORKFLOWS
+	my $scheduler	=	$self->conf()->getKey("agua:SCHEDULER", undef);
+	$self->logDebug("SCHEDULER", $scheduler);
+
+	if ( $scheduler eq "siphon" ) {
+		return $self->runSiphon($username, $project, $workflows);
+	}
+	else {
+		return $self->runProjectWorkflows($username, $project, $workflows);
+	}
+}
+
+method runProjectWorkflows ($username, $project, $workflows) {
+	$self->logDebug("username", $username);
+	$self->logDebug("project", $project);
+
+	my $success	=	1;
+	foreach my $object ( @$workflows ) {
+		$self->logDebug("object", $object);
+		$self->username($username);
+		$self->project($project);
+		my $workflow	=	$object->{name};
+		$self->logDebug("workflow", $workflow);
+		$self->workflow($workflow);
+	
+		#### RUN 
+		try {
+			my $cluster	=	$self->getClusterByWorkflow($username, $project, $workflow);
+			$self->logDebug("cluster", $cluster);
+			
+			$success	=	$self->executeWorkflow();		
+			#$self->logError("Workflow $project.$workflow run error") and return 0 if not $success;
+		}
+		catch {
+			print "Workflow::runProjectWorkflows   ERROR\n";
+			$self->setProjectStatus("error");
+			#$self->notifyError($object, "failed to run workflow '$workflow': $@");
+			return 0;
+		}
+	}
+	$self->logGroupEnd("Agua::Project::executeProject");
+	
+	return $success;
+}
+
+method runSiphon ($username, $project, $workflows) {
+	$self->logDebug("username", $username);
+	$self->logDebug("project", $project);
+
+	my $success	=	1;
+	foreach my $workflowobject ( @$workflows ) {
+		$self->logDebug("workflowobject", $workflowobject);
+		$self->username($username);
+		$self->project($project);
+		my $workflow	=	$workflowobject->{name};
+		$workflowobject->{workflow}	=	$workflowobject->{name};
+		$self->logDebug("workflow", $workflow);
+		$self->workflow($workflow);
+
+		#### SET STATUS
+		#### (WILL BE PICKED UP BY MASTER, WHICH WILL LOAD WORKFLOW TASK QUEUES)
+		$self->setProjectStatus($username, $project, "running");
+	
+		#### RUN 
+		try {
+			my $cluster	=	$self->getClusterByWorkflow($username, $project, $workflow);
+			$self->logDebug("cluster", $cluster);
+			
+			if ( not defined $cluster or $cluster eq "" ) {
+				$success	=	$self->executeWorkflow();
+				$self->logDebug("success", $success);
+				$self->logError("Workflow $project.$workflow run error") and return 0 if not $success;
+			}
+			else {
+				$self->startSiphonWorkflow($username, $project, $workflow, $cluster, $workflowobject);
+				no warnings;
+				last;
+			}
+		}
+		catch {
+			$self->setProjectStatus($username, $project, "error");
+			$self->notifyError($workflowobject, "failed to run workflow '$workflow': $@");
+			return 0;
+		}
+	}
+	$self->logDebug("success", $success);
+	
+	use warnings;
+
+	$self->logGroupEnd("Agua::Project::executeProject");
+	
+	return $success;
+}
+
+method startSiphonWorkflow ($username, $project, $workflow, $cluster, $workflowobject) {
+	#	1. GET amiid, instancetype FOR cluster = username.project.workflow
+	my $clusterobject	=	$self->getCluster($username, $cluster);
+	my $amiid			=	$clusterobject->{amiid};
+	my $instancetype	=	$clusterobject->{instancetype};
+	my $maxnodes		=	$clusterobject->{maxnodes};
+	$self->logDebug("maxnodes", $maxnodes);
+	$self->logDebug("amiid", $amiid);
+	$self->logDebug("instancetype", $instancetype);
+	
+	#	2. PRINT USERDATA FILE
+	my $userdatafile	=	$self->printConfig($workflowobject);
+	
+	# 	3. PRINT OPENSTACK AUTHENTICATION *-openrc.sh FILE
+	my $virtualtype		=	$self->conf()->getKey("agua", "VIRTUALTYPE");
+	my $authfile;
+	if ( $virtualtype eq "openstack" ) {
+		$authfile	=	$self->printAuth($username);
+	}
+	$self->logDebug("authfile", $authfile);
+	
+	#	4. SPIN UP cluster.maxnodes OF VMs FOR FIRST WORKFLOW
+	my $name	=	$workflow;
+	my $success	=	$self->virtual()->launchNodes($authfile, $amiid, $maxnodes, $instancetype, $userdatafile, $name);
+	$self->logDebug("success", $success);
+	
+	#	5. SET WORKFLOW STATUS
+	$self->setWorkflowStatus($username, $project, $workflow, "running") if $success == 1;
+	$self->setWorkflowStatus($username, $project, $workflow, "error") if $success == 0;
+	$self->logDebug("success", $success);
+	
+	return $success;
+}
+
+method printAuth ($username) {
+	$self->logDebug("username", $username);
+	
+	#### SET TEMPLATE FILE	
+	my $installdir		=	$self->conf()->getKey("agua", "INSTALLDIR");
+	my $templatefile	=	"$installdir/bin/install/resources/openstack/openrc.sh";
+
+	#### GET OPENSTACK AUTH INFO
+	my $tenant		=	$self->getTenant($username);
+	$self->logDebug("tenant", $tenant);
+
+	#### SET TARGET FILE
+	my $targetdir	=	"$installdir/conf/.targetdir";
+	`mkdir -p $targetdir` if not -d $targetdir;
+	my $tenantname		=	$tenant->{os_tenant_name};
+	$self->logDebug("tenantname", $tenantname);
+	my $targetfile		=	"$targetdir/$tenantname-openrc.sh";
+	$self->logDebug("targetfile", $targetfile);
+
+	#### PRINT FILE
+	return	$self->virtual()->printAuthFile($tenant, $templatefile, $targetfile);
+}
+
+method printConfig ($workflowobject) {
+	#		GET PACKAGE INSTALLDIR
+	my $stages			=	$self->getStagesByWorkflow($workflowobject);
+	my $object			=	$$stages[0];
+	#$self->logDebug("stages[0]", $object);	
+
+	my $basedir			=	$self->conf()->getKey("agua", "INSTALLDIR");
+	$object->{basedir}	=	$basedir;
+	
+	my $version			=	$object->{version};
+	my $package			=	$object->{package};
+	
+	#		GET TEMPLATE
+	my $installdir		=	$object->{installdir};
+	my $templatefile	=	$self->setTemplateFile($installdir);
+	$self->logDebug("templatefile", $templatefile);
+	
+	#		PRINT TEMPLATE
+	my $username		=	$object->{username};
+	my $project			=	$object->{project};
+	my $workflow		=	$object->{workflow};
+	
+	my $virtualtype		=	$self->conf()->getKey("agua", "VIRTUALTYPE");
+	my $targetfile		= 	undef;
+	if ( $virtualtype eq "openstack" ) {
+		my $targetdir	=	"$basedir/conf/.openstack";
+		`mkdir -p $targetdir` if not -d $targetdir;
+		$targetfile		=	"$targetdir/$username.$project.$workflow.sh";
+	}
+	elsif ( $virtualtype eq "vagrant" ) {
+		my $targetdir	=	"$basedir/conf/.vagrant/$username.$project.$workflow";
+		`mkdir -p $targetdir` if not -d $targetdir;
+		$targetfile		=	"$targetdir/Vagrantfile";
+	}
+	$self->logDebug("targetfile", $targetfile);
+	
+	$self->virtual()->createConfigFile($object, $templatefile, $targetfile);
+	
+	return $targetfile;
+}
+
+method setTemplateFile ($installdir) {
+	$self->logDebug("installdir", $installdir);
+	
+	return "$installdir/data/userdata.tmpl";
+}
+method getTenant ($username) {
+	my $query	=	qq{SELECT *
+FROM tenant
+WHERE username='$username'};
+	$self->logDebug("query", $query);
+
+	return $self->db()->queryhash($query);
+}
+
 
 #### EXECUTE WORKFLOW
 method executeWorkflow {
@@ -245,13 +481,20 @@ method executeWorkflow {
 	my $stages = $self->setStages($username, $cluster, $data, $project, $workflow, $workflownumber, $sample);
 
 	#### RUN LOCALLY OR ON CLUSTER
+	my $scheduler	=	$self->conf()->getKey("agua:SCHEDULER", undef);
+	$self->logDebug("scheduler", $scheduler);
+	my $success;
 	if ( not $submit or not defined $cluster or not $cluster ) {
 		$self->logDebug("$$ DOING self->runLocally");
-		$self->runLocally($stages);
+		$success	=	$self->runLocally($stages);
 	}
-	else {
-		$self->logDebug("$$ DOING self->runOnCluster");
-		$self->runOnCluster($stages, $username, $project, $workflow, $workflownumber, $cluster);
+	elsif ( $scheduler eq "sge" ) {
+		$self->logDebug("$$ DOING self->runSge");
+		$success	=	$self->runSge($stages, $username, $project, $workflow, $workflownumber, $cluster);
+	}
+	elsif ( $scheduler eq "starcluster" ) {
+		$self->logDebug("$$ DOING self->runStarCluster");
+		$success	=	$self->runStarCluster($stages, $username, $project, $workflow, $workflownumber, $cluster);
 	}
 
 	$self->logGroupEnd("Agua::Workflow::executeWorkflow");
@@ -262,16 +505,57 @@ method executeWorkflow {
     EXITLABEL: { warn "EXIT\n"; };
 }
 
+#### RUN STAGES 
 method runLocally ($stages) {
+
 	$self->logDebug("$$ no. stages", scalar(@$stages));
 
 	#### RUN STAGES
-	$self->logDebug("$$ BEFORE runStages()\n");
-	$self->runStages($stages);
-	$self->logDebug("$$ AFTER runStages()\n");
+	return $self->runStages($stages);
 }
 
-method runOnCluster ($stages, $username, $project, $workflow, $workflownumber, $cluster) {
+method runSge ($stages, $username, $project, $workflow, $workflownumber, $cluster) {	
+#### RUN STAGES ON SUN GRID ENGINE
+
+	#### CREATE UNIQUE QUEUE FOR WORKFLOW
+	my $envars = $self->getEnvars($username, $cluster);
+	$self->logDebug("$$ envars", $envars);
+	$self->createQueue($username, $cluster, $project, $workflow, $envars);
+	
+	#### SET CLUSTER WORKFLOW STATUS TO 'running'
+	$self->updateClusterWorkflow($username, $cluster, $project, $workflow, 'running');
+	
+	#### SET WORKFLOW STATUS TO 'running'
+	$self->updateWorkflowStatus($username, $cluster, $project, $workflow, 'running');
+	
+	### RELOAD DBH
+	$self->setDbh();
+	
+	#### RUN STAGES
+	$self->logDebug("$$ BEFORE runStages()\n");
+	my $success	=	$self->runStages($stages);
+	$self->logDebug("$$ AFTER runStages    success: $success\n");
+	
+	#### RESET DBH JUST IN CASE
+	$self->setDbh();
+	
+	if ( $success == 0 ) {
+		#### SET CLUSTER WORKFLOW STATUS TO 'completed'
+		$self->updateClusterWorkflow($username, $cluster, $project, $workflow, 'error');
+		
+		#### SET WORKFLOW STATUS TO 'completed'
+		$self->updateWorkflowStatus($username, $cluster, $project, $workflow, 'error');
+	}
+	else {
+		#### SET CLUSTER WORKFLOW STATUS TO 'completed'
+		$self->updateClusterWorkflow($username, $cluster, $project, $workflow, 'completed');
+	
+		#### SET WORKFLOW STATUS TO 'completed'
+		$self->updateWorkflowStatus($username, $cluster, $project, $workflow, 'completed');
+	}	
+	
+}
+method runStarCluster ($stages, $username, $project, $workflow, $workflownumber, $cluster) {
 #### 1. LOAD STARCLUSTER
 #### 2. CREATE CONFIG FILE
 #### 3. START CLUSTER IF NOT RUNNING
@@ -295,7 +579,7 @@ method runOnCluster ($stages, $username, $project, $workflow, $workflownumber, $
 	$self->updateWorkflowStatus($username, $cluster, $project, $workflow, 'pending');
 	
 	#### START STARCLUSTER IF NOT RUNNING
-	return if not $self->ensureStarClusterRunning($username, $cluster);
+	return 0 if not $self->ensureStarClusterRunning($username, $cluster);
 	
 	### DELETE DEFAULT master -- ALREADY TAKEN CARE OF BY sge.py
 	$self->deleteDefaultMaster();
@@ -307,10 +591,10 @@ method runOnCluster ($stages, $username, $project, $workflow, $workflownumber, $
 	$self->setMasterInfo($username, $cluster, $qmasterport, $execdport);
 	
 	#### START BALANCER IF NOT RUNNING
-	return if not $self->ensureBalancerRunning($username, $cluster);
+	return 0 if not $self->ensureBalancerRunning($username, $cluster);
 	
 	#### START SGE IF NOT RUNNING
-	return if not $self->ensureSgeRunning($username, $cluster, $project, $workflow);
+	return 0 if not $self->ensureSgeRunning($username, $cluster, $project, $workflow);
 	
 	#### CREATE UNIQUE QUEUE FOR WORKFLOW
 	my $envars = $self->getEnvars($username, $cluster);
@@ -328,27 +612,39 @@ method runOnCluster ($stages, $username, $project, $workflow, $workflownumber, $
 	
 	#### RUN STAGES
 	$self->logDebug("$$ BEFORE runStages()\n");
-	$self->runStages($stages);
-	$self->logDebug("$$ AFTER runStages()\n");
+	my $success	=	$self->runStages($stages);
+	$self->logDebug("$$ AFTER runStages    success: $success\n");
 	
 	#### RESET DBH JUST IN CASE
 	$self->setDbh();
 	
-	#### SET CLUSTER WORKFLOW STATUS TO 'completed'
-	$self->updateClusterWorkflow($username, $cluster, $project, $workflow, 'completed');
+	if ( $success == 0 ) {
+		#### SET CLUSTER WORKFLOW STATUS TO 'completed'
+		$self->updateClusterWorkflow($username, $cluster, $project, $workflow, 'error');
+		
+		#### SET WORKFLOW STATUS TO 'completed'
+		$self->updateWorkflowStatus($username, $cluster, $project, $workflow, 'error');
+	}
+	else {
+		#### SET CLUSTER WORKFLOW STATUS TO 'completed'
+		$self->updateClusterWorkflow($username, $cluster, $project, $workflow, 'completed');
 	
-	#### SET WORKFLOW STATUS TO 'completed'
-	$self->updateWorkflowStatus($username, $cluster, $project, $workflow, 'completed');
+		#### SET WORKFLOW STATUS TO 'completed'
+		$self->updateWorkflowStatus($username, $cluster, $project, $workflow, 'completed');
+	}	
 	
 	#### RETURN IF OTHER WORKFLOWS ARE RUNNING
 	my $clusterbusy = $self->clusterIsBusy($username, $cluster);
 	$self->logDebug("$$ clusterbusy", $clusterbusy);
-	return if $clusterbusy;
-	
-	#### OTHERWISE, SET CLUSTER FOR TERMINATION
-	$self->markForTermination($username, $cluster);
+
+	if ( not $clusterbusy ) {
+		#### SET CLUSTER FOR TERMINATION
+		$self->markForTermination($username, $cluster);
+	}
 	
 	$self->logDebug("$$ COMPLETED");
+	
+	return $success;
 }
 
 method ensureStarClusterRunning ($username, $cluster) {
@@ -2121,27 +2417,29 @@ method setMaster {
 	$self->master($instance);	
 }
 
+#### SET VIRTUALISATION PLATFORM
+method setVirtual {
+	my $virtualtype		=	$self->conf()->getKey("agua", "VIRTUALTYPE");
+	$self->logDebug("virtualtype", $virtualtype);
+
+	#### RETURN IF TYPE NOT SUPPORTED	
+	$self->logDebug("virtualtype not supported: $virtualtype") and return if $virtualtype !~	/^(openstack|vagrant)$/;
+
+   #### CREATE DB OBJECT USING DBASE FACTORY
+    my $virtual = Virtual->new( $virtualtype,
+        {
+			conf		=>	$self->conf(),
+            username	=>  $self->username(),
+			
+			logfile		=>	$self->logfile(),
+			log			=>	$self->log(),
+			printlog	=>	$self->printlog()
+        }
+    ) or die "Can't create virtualtype: $virtualtype. $!\n";
+	$self->logDebug("virtual: $virtual");
+
+	$self->virtual($virtual);
+}
+
+
 }	#### Agua::Workflow
-
-
-	#my $instance = Agua::Instance->new({
-	#	conf		=>	$self->conf(),
-	#	log		=>	$self->log(),
-	#	printlog	=>	$self->printlog()
-	#});
-	#
-	##### SET LOG
-	#$self->head()->logfile($logfile);
-	#$self->head()->log($self->log());
-	#$self->head()->printlog($self->printlog());
-	#
-	##### SET OPS LOG
-	#$self->head()->ops()->logfile($logfile);	
-	#$self->head()->ops()->log($self->log());
-	#$self->head()->ops()->printlog($self->printlog());
-	#
-	##### SET OPS CONF
-	#my $conf 	= 	$self->conf();
-	#$self->head()->ops()->conf($conf);	
-	#
-	#$self->head($instance);	

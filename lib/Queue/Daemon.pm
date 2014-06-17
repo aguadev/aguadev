@@ -30,13 +30,12 @@ class Queue::Daemon with (Logger, Exchange, Agua::Common::Util) {
 #####////}}}}}
 
 # Integers
-has 'log'		=>  ( isa => 'Int', is => 'rw', default => 2 );
+has 'log'			=>  ( isa => 'Int', is => 'rw', default => 2 );
 has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 has 'time'			=>  ( isa => 'Int', is => 'rw' );
 has 'timeout'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 # Strings
-has 'novaclient'	=> ( isa => 'Openstack::Nova', is => 'rw', lazy	=>	1, builder	=>	"setNovaClient" );
 has 'logfile'		=> ( isa => 'Str|Undef', is => 'rw'	);
 
 # Objects
@@ -44,6 +43,7 @@ has 'modules'		=> ( isa => 'HashRef|Undef', is => 'rw', lazy	=>	1, builder	=>	"s
 has 'lastsent'		=> ( isa => 'HashRef|Undef', is => 'rw', required	=>	0 );
 has 'conf'			=> ( isa => 'Conf::Yaml', is => 'rw', required	=>	0 );
 has 'lastreceived'	=>  ( isa => 'HashRef|Undef', is => 'rw' );
+has 'virtual'		=> ( isa => 'Virtual', is => 'rw', lazy	=>	1, builder	=>	"setVirtual" );
 
 use FindBin qw($Bin);
 use Test::More;
@@ -306,7 +306,7 @@ method getHostname {
 
 	#### GET OPENSTACK HOST NAME
 	#### E.G., split.v2-5.hd800-real-de2e4a8b-7034-4525-ab3e-33fc993797f8.novalocal
-	my $hostname	=	$self->novaclient()->getMetaData("hostname");
+	my $hostname	=	$self->virtual()->getMetaData("hostname");
 	$hostname		=~	s/\.novalocal\s*$//;
 	$self->logDebug("hostname", $hostname);
 	
@@ -320,11 +320,11 @@ method getHostname {
 }
 
 method getInternalIp {
-	return	$self->novaclient()->getMetaData("local-ipv4");
+	return	$self->virtual()->getMetaData("local-ipv4");
 }
 
 method getExternalIp {
-	return	$self->novaclient()->getMetaData("public-ipv4");
+	return	$self->virtual()->getMetaData("public-ipv4");
 }
 
 method updateIps {
@@ -392,6 +392,30 @@ method setLogFile ($username, $module) {
 	return $logfile;
 }
 
+
+
+method setVirtual {
+	my $type	=	$self->virtualtype();
+	$self->logDebug("type", $type);
+
+	#### RETURN IF TYPE NOT SUPPORTED	
+	$self->logDebug("virtual type not supported: $type") and return if $type !~	/^(openstack|vagrant)$/;
+
+   #### CREATE DB OBJECT USING DBASE FACTORY
+    my $virtual = Virtual->new( $type,
+        {
+			conf		=>	$self->conf(),
+            username	=>  $self->username(),
+			
+			logfile		=>	$self->logfile(),
+			log			=>	2,
+			printlog	=>	2
+        }
+    ) or die "Can't create virtual of type: $type. $!\n";
+	$self->logDebug("virtual", $virtual);
+$self->logDebug("DEBUG EXIT") and exit;
+	$self->virtual($virtual);
+}
 
 
 }

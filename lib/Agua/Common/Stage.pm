@@ -121,7 +121,7 @@ sub getStagesByWorkflow {
 	my $where = $self->db()->where($workflowobject, $required);
 	my $query = qq{SELECT * FROM stage
 $where};
-	#$self->logDebug("$$ $query");
+	$self->logDebug("$$ $query");
 
 	my $stages = $self->db()->queryhasharray($query);
 	$stages = [] if not defined $stages;

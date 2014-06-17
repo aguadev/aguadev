@@ -1,8 +1,6 @@
 package Agua::Common::Workflow;
 use Moose::Role;
-use Moose::Util::TypeConstraints;
-
-#has 'json'			=> ( isa => 'HashRef', is => 'rw', required => 0 );
+use Method::Signatures::Simple;
 
 =head2
 
@@ -14,14 +12,35 @@ use Moose::Util::TypeConstraints;
 	
 =cut
 
-use Data::Dumper;
+method setWorkflowStatus ($username, $project, $workflow, $status) {
+	my $data	=	{
+		username	=>	$username,
+		project		=>	$project,
+		name		=>	$workflow
+	};
+	
+	#### CHECK REQUIRED FIELDS
+	my $table = "workflow";
+	my $required_fields = ["username", "project", "name"];
+	my $not_defined = $self->db()->notDefined($data, $required_fields);
+    $self->logError("undefined values: @$not_defined") and exit if @$not_defined;
 
-sub getWorkflow {
-	my $self		=	shift;
-	my $username	=	shift;
-	my $project		=	shift;
-	my $workflow	=	shift;
+	#### UPDATE
+	my $query	=	qq{UPDATE workflow
+SET status='$status'
+WHERE username='$username'
+AND project='$project'
+AND name='$workflow'};
+	$self->logDebug("query", $query);
+	my $success = $self->db()->do($query);	
+	$self->logDebug("success", $success);
+	
+	return $success;	
+}
 
+method getWorkflow ($username, $project, $workflow) {
+	$self->logDebug("username", $username);
+	
 	my $query = qq{SELECT * FROM workflow
 WHERE username='$username'
 AND project='$project'
@@ -31,18 +50,13 @@ AND name='$workflow'};
 	return $self->db()->queryhash($query);
 }
 
-sub getWorkflows {
-	my $self		=	shift;
-	
+method getWorkflows {
     #### VALIDATE
     my $username = $self->username();
 	return $self->_getWorkflows($username);
 }
 
-sub _getWorkflows {
-	my $self		=	shift;
-	my $username	=	shift;
-	
+method _getWorkflows ($username) {
 	#### GET ALL SOURCES
 	my $query = qq{SELECT * FROM workflow
 WHERE username='$username'
@@ -60,10 +74,8 @@ ORDER BY project, number, name};
 	return $workflows;
 }
 
-sub getWorkflowsByProject {
-	my $self			=	shift;
-	my $projectdata		=	shift;
-	#$self->logDebug("projectdata", $projectdata);
+method getWorkflowsByProject ($projectdata) {
+	$self->logDebug("projectdata", $projectdata);
 	
 	my $username = $projectdata->{username};
 	my $project = $projectdata->{name};
@@ -83,18 +95,7 @@ ORDER BY number};
 	return $workflows;
 }
 
-sub addWorkflow {
-=head2
-
-	SUBROUTINE		addWorkflow
-	
-	PURPOSE
-
-		ADD A WORKFLOW TO THE workflow TABLE
-        
-=cut
-
-	my $self		=	shift;
+method addWorkflow {
     my $data 		=	$self->json();
  	$self->logDebug("data", $data);
 
@@ -104,11 +105,8 @@ sub addWorkflow {
 	$self->logStatus("Added workflow $data->{name} to project $data->{project}");
 }
 
-sub _addWorkflow {
-#### ADD A WORKFLOW TO workflow, stage AND stageparameter
-	my $self		=	shift;
-    my $data 		=	shift;
-	
+method _addWorkflow ($data) {
+#### ADD A WORKFLOW TO workflow, stage AND stageparameter	
 	$self->logDebug("data", $data);
 	
 	#### SET TABLE AND REQUIRED FIELDS	
@@ -155,8 +153,7 @@ sub _addWorkflow {
 	return 1;
 }
 
-sub removeWorkflow {
- 	my $self		=	shift;
+method removeWorkflow {
     my $data	=	$self->json();
  	$self->logDebug("data", $data);
 
@@ -179,9 +176,7 @@ sub removeWorkflow {
 	$self->logStatus("Removed workflow $data->{name} from project $data->{project}");
 }
 
-sub _removeWorkflow {
-	my $self		=	shift;
-	my $data		=	shift;
+method _removeWorkflow ($data) {
 	$self->logCaller("");
 	$self->logDebug("data", $data);
 	
@@ -223,13 +218,10 @@ sub _removeWorkflow {
 	return 1;
 }
 
-sub renameWorkflow {
+method renameWorkflow {
 #### RENAME A WORKFLOW IN workflow, stage AND stageparameter
-	my $self		=	shift;
-    $self->logDebug("Common::renameWorkflow()");
-    
-        my $json 			=	$self->json();
-
+    $self->logDebug("");
+	my $json 		=	$self->json();
     $self->logDebug("json", $json);
 
 	#### GET NEW NAME
@@ -307,10 +299,9 @@ AND name='$newname'};
 	
 }	#### renameWorkflow
 
-sub moveWorkflow {
+method moveWorkflow {
 #### MOVE A WORKFLOW WITHIN A PROJECT
-	my $self		=	shift;
-	
+	$self->logDebug("");
 	my $workflowobject = $self->{json};
 	$self->logDebug("workflowobject", $workflowobject);
 	my $newnumber = $workflowobject->{newnumber};
@@ -415,9 +406,7 @@ WHERE username = '$username' AND project = '$projectname' AND number = $$workflo
 
 =cut
 
-sub _defaultWorkflows {
-	my $self		=	shift;
-	
+method _defaultWorkflows {
     #### VALIDATE    
     $self->logError("User session not validated") and exit unless $self->validate();
 
@@ -462,9 +451,8 @@ ORDER BY project, name};
                  echo '{"sourceuser":"admin","targetuser":"syoung","sourceworkflow":"Workflow0","sourceproject":"Project1","targetworkflow":"Workflow9","targetproject":"Project1","username":"syoung","sessionid":"1234567890.1234.123","mode":"copyWorkflow"}' |  ./workflow.cgi
                 
 =cut
-sub copyWorkflow {
-	my $self			=	shift;
-        my $json 			=	$self->json();
+method copyWorkflow {
+	my $json 			=	$self->json();
  	$self->logDebug("Common::copyWorkflow()");
     $self->logError("No data provided")
         if not defined $json;
@@ -550,14 +538,7 @@ AND project = '$targetproject'};
     $self->logStatus("Completed copy to $targetworkflow");
 }
 
-sub _copyWorkflow {
-    my $self            =   shift;
-	my $workflowobject  =   shift;
-    my $targetuser      =   shift;
-    my $targetproject   =   shift;
-    my $targetworkflow  =   shift;
-	my $date			=	shift;
-    
+method _copyWorkflow ($workflowobject, $targetuser, $targetproject, $targetworkflow, $date) {    
 	my $sourceuser      =   $workflowobject->{username};
 	my $sourceworkflow  =   $workflowobject->{name};
 	my $sourceproject   =   $workflowobject->{project};
@@ -644,13 +625,8 @@ AND project='$sourceproject'};
     $self->insertViews($views); 
 }
 
-sub copyFilesystem {
+method copyFilesystem ($username, $source, $target) {
 #### COPY DIRECTORY
-    my $self    	=   shift;
-	my $username	=	shift;
-    my $source  	=   shift;
-    my $target  	=   shift;
-    
 	require File::Copy::Recursive;
     $self->logDebug("Copying...");
     $self->logDebug("FROM", $source);
@@ -667,9 +643,7 @@ sub copyFilesystem {
 	
 	PURPOSE
 	
-       THIS SUBROUTINE HAS TWO ROLES:
-       
-       1. COPY A PROJECT TO A (NON-EXISTING) DESTINATION PROJECT:
+		COPY A PROJECT TO A (NON-EXISTING) DESTINATION PROJECT:
        
 			1. ADD PROJECT TO project TABLE
             
@@ -677,13 +651,13 @@ sub copyFilesystem {
 			
 			2. OPTIONALLY, COPY THE PROJECT DIRECTORY
 
+	EXAMPLE
+	
 echo '{"sourceuser":"admin","targetuser":"syoung","sourceproject":"Project1","targetproject":"Project1","username":"syoung","sessionid":"1234567890.1234.123","mode":"copyProject"}' |  ./workflow.cgi
                 
 =cut
 
-sub copyProject {
-	my $self		=	shift;
-
+method copyProject {
     my $json 		=	$self->json();
  	$self->logDebug("Common::copyProject()");
     $self->logError("No data provided")
@@ -715,10 +689,7 @@ AND name = '$targetproject'};
 	$self->logStatus("Copied to project $sourceproject to $targetproject") ;    
 }
 
-sub _copyProject {
-	my $self			=	shift;
-	my $data			=	shift;
-
+method _copyProject ($data) {
 	$self->logDebug("data", $data);
 	
 	my $sourceuser 		= $data->{sourceuser};
@@ -790,13 +761,7 @@ AND project='$sourceproject'};
 	return 1;    
 }
 
-
-
-sub setProvenance {
-	my $self		=	shift;
-	my $object		=	shift;
-	my $date		=	shift;
-
+method setProvenance ($object, $date) {
 	#### GET PROVENANCE
 	require JSON; 
 	my $jsonparser = new JSON;
@@ -820,14 +785,11 @@ sub setProvenance {
 	return $object;
 }
 
-sub insertViews {
-    my $self        =   shift;
-    my $hasharray   =   shift;
-	$self->logDebug("Agua::Common::Workflow::insertViews(hasharray)");
+method insertViews ($hasharray) {
 	$self->logDebug("hasharray", $hasharray);
     
 	#### SET TABLE AND REQUIRED FIELDS	
-    	my $table       =   "view";
+	my $table       =   "view";
 	my $required_fields = ["username", "project"];
 	my $inserted_fields = $self->db()->fields($table);
 
@@ -844,11 +806,9 @@ sub insertViews {
     }
 }
 
-sub insertReports {
-    my $self        =   shift;
-    my $hasharray   =   shift;
-	#### SET TABLE AND REQUIRED FIELDS	
-    	my $table       =   "report";
+method insertReports ($hasharray) {
+#### SET TABLE AND REQUIRED FIELDS	
+	my $table       =   "report";
 	my $required_fields = ["username", "project", "name", "number"];
 	my $inserted_fields = $self->db()->fields($table);
 
@@ -865,9 +825,7 @@ sub insertReports {
     }
 }
 
-sub insertStageParameters {
-    my $self        =   shift;
-    my $stageparameters   =   shift;
+method insertStageParameters ($stageparameters) {
 	#### SET TABLE AND REQUIRED FIELDS	
     	my $table       =   "stageparameter";
 	my $required_fields = ["username", "project", "workflow", "appname", "appnumber", "name"];
@@ -885,11 +843,9 @@ sub insertStageParameters {
     }
 }
 
-sub insertStages {
-    my $self        =   shift;
-    my $stages   =   shift;
-	#### SET TABLE AND REQUIRED FIELDS	
-    	my $table       =   "stage";
+method insertStages ($stages) {
+#### SET TABLE AND REQUIRED FIELDS	
+	my $table       =   "stage";
 	my $required_fields = ["username", "project", "workflow", "number"];
     my $inserted_fields = $self->db()->fields($table);    
     
@@ -906,30 +862,23 @@ sub insertStages {
     }
 }
 
-sub insertWorkflow {
-    my $self            =   shift;
-    my $workflowObject  =   shift;
-	#### SET TABLE AND REQUIRED FIELDS	
-    	my $table       =   "workflow";
+method insertWorkflow ($workflowobject) {
+#### SET TABLE AND REQUIRED FIELDS	
+	my $table       =   "workflow";
 	my $required_fields = ["username", "project", "name", "number"];
 	my $inserted_fields = $self->db()->fields($table);
 
     #### CHECK REQUIRED FIELDS ARE DEFINED
-    my $not_defined = $self->db()->notDefined($workflowObject, $required_fields);
+    my $not_defined = $self->db()->notDefined($workflowobject, $required_fields);
     $self->logError("undefined values: @$not_defined") and exit if @$not_defined;
 
     #### DO ADD
     $self->logDebug("Doing _addToTable(table, json, required_fields)");
-    my $success = $self->_addToTable($table, $workflowObject, $required_fields, $inserted_fields);	
+    my $success = $self->_addToTable($table, $workflowobject, $required_fields, $inserted_fields);	
     $self->logDebug("_addToTable(stage info) success", $success);
 }
 
-sub workflowIsRunning {
-	my $self		=	shift;
-	my $username	=	shift;
-	my $project		=	shift;
-	my $workflow	=	shift;
-	
+method workflowIsRunning ($username, $project, $workflow) {
 	$self->logDebug("username", $username);
 	$self->logDebug("project", $project);
 	$self->logDebug("workflow", $workflow);

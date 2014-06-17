@@ -287,6 +287,42 @@ CREATE TABLE `hub` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `instance`
+--
+
+DROP TABLE IF EXISTS `instance`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `instance` (
+  `username` varchar(30) NOT NULL,
+  `queue` varchar(30) NOT NULL,
+  `instanceid` varchar(20) NOT NULL DEFAULT '',
+  `status` varchar(20) DEFAULT NULL,
+  `time` datetime DEFAULT NULL,
+  PRIMARY KEY (`username`,`queue`,`instanceid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `instancetype`
+--
+
+DROP TABLE IF EXISTS `instancetype`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `instancetype` (
+  `username` varchar(30) NOT NULL,
+  `cluster` varchar(30) NOT NULL,
+  `instancetype` varchar(20) DEFAULT NULL,
+  `cpus` int(12) DEFAULT NULL,
+  `memory` int(12) DEFAULT NULL,
+  `disk` int(12) DEFAULT NULL,
+  `ephemeral` int(12) DEFAULT NULL,
+  PRIMARY KEY (`username`,`cluster`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `package`
 --
 
@@ -445,6 +481,25 @@ CREATE TABLE `queuesample` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `samplefile`
+--
+
+DROP TABLE IF EXISTS `samplefile`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `samplefile` (
+  `username` varchar(30) NOT NULL,
+  `project` varchar(40) NOT NULL,
+  `workflow` varchar(40) NOT NULL,
+  `workflownumber` int(8) NOT NULL,
+  `sample` varchar(40) NOT NULL,
+  `filename` varchar(40) NOT NULL,
+  `filesize` int(40) NOT NULL,
+  PRIMARY KEY (`username`,`project`,`workflow`,`workflownumber`,`sample`,`filename`,`filesize`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `sessions`
 --
 
@@ -545,6 +600,24 @@ CREATE TABLE `stageparameter` (
   `paramFunction` text,
   `chained` int(1) DEFAULT NULL,
   PRIMARY KEY (`username`,`project`,`workflow`,`workflownumber`,`appnumber`,`name`,`paramtype`,`ordinal`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `tenant`
+--
+
+DROP TABLE IF EXISTS `tenant`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tenant` (
+  `username` varchar(30) NOT NULL,
+  `os_username` varchar(40) NOT NULL,
+  `os_auth_url` varchar(40) NOT NULL,
+  `os_password` varchar(40) NOT NULL,
+  `os_tenant_id` varchar(40) NOT NULL,
+  `os_tenant_name` varchar(40) NOT NULL,
+  PRIMARY KEY (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -660,4 +733,4 @@ CREATE TABLE `workflow` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-05-09 13:42:54
+-- Dump completed on 2014-06-16 20:42:16

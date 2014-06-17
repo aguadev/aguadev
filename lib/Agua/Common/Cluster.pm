@@ -1,5 +1,6 @@
 package Agua::Common::Cluster;
 use Moose::Role;
+use Method::Signatures::Simple;
 
 =head2
 
@@ -34,7 +35,7 @@ use Conf::StarCluster;
 has 'configfile'	=> ( is  => 'rw', 'isa' => 'Str|Undef', required	=>	0	);
 has 'privatekey'	=> ( is  => 'rw', 'isa' => 'Str|Undef', required	=>	0, lazy	=> 1, builder => "getEc2PrivateFile" );
 has 'publiccert'	=> ( is  => 'rw', 'isa' => 'Str|Undef', required	=>	0, lazy	=> 1, builder => "getEc2PublicFile"	);
-has 'instancetypeslots' =>  ( isa => 'HashRef', is => 'ro', default => sub {
+has 'instancetypeslots' =>  ( isa => 'HashRef', is => 'ro', default => method {
 	{
 		"t1.micro"	=>	1,
 		"m1.small"	=>  1,
@@ -52,8 +53,7 @@ has 'instancetypeslots' =>  ( isa => 'HashRef', is => 'ro', default => sub {
 #### http://aws.amazon.com/ec2/instance-types
 
 #### BALANCER
-sub setBalancerFile {
-	my $self		=	shift;
+method setBalancerFile {
 	$self->logCaller("");
 
 	my $username	=	$self->username();
@@ -70,9 +70,7 @@ sub setBalancerFile {
 }
 
 #### CLUSTER
-sub setStarClusterDir {
-	my $self		=	shift;
-	my $username	=	shift;
+method setStarClusterDir ($username) {
 	$self->logDebug("username", $username);
 	
 	#### GET USERDIR AND AGUADIR
@@ -106,10 +104,7 @@ sub setStarClusterDir {
 	$self->outputdir($outputdir);
 }
 
-sub clusterIsBusy {
-	my $self		=	shift;
-	my $username	=	shift;
-	my $cluster		=	shift;
+method clusterIsBusy ($username, $cluster) {
 	$self->logDebug("Agua::Common::Cluster::clusterIsBusy(username, cluster)");
 	$self->logDebug("username", $username);
 	$self->logDebug("cluster", $cluster);
@@ -125,10 +120,8 @@ AND status='running'};
 	return 0;
 }
 
-sub getClusterVars {
-	my $self		=	shift;
-	my $username	=	shift;
-	my $cluster		=	shift;
+method getClusterVars ($username, $cluster) {
+	$self->logDebug("username", $username);
 	
 	my $query = qq{SELECT * FROM clustervars
 WHERE username='$username'
@@ -137,10 +130,7 @@ AND cluster='$cluster'};
 	return $self->db()->queryhash($query);
 }
 
-sub getClusterStatus {
-	my $self		=	shift;
-	my $username 	=	shift;
-	my $cluster 	=	shift;
+method getClusterStatus ($username, $cluster) {
  	$self->logError("username not defined") and return if not defined $username;
  	$self->logError("cluster not defined") and return if not defined $cluster;
 
@@ -153,12 +143,8 @@ AND cluster='$cluster'};
 	return $self->db()->queryhash($query);
 }
 
-sub getAdminKey {
-	my $self		=	shift;
-	my $username	=	shift;
- 	
+method getAdminKey ($username) { 	
 	$self->logCaller("username", $username);
-	
 	$self->logError("username not defined") and return if not defined $username;
 
 	return $self->adminkey() if $self->can('adminkey') and defined $self->adminkey();
@@ -178,10 +164,7 @@ sub getAdminKey {
 	return $adminkey;
 }
 
-sub setConfigFile {
-	my $self		=	shift;
-	my $username	=	shift;
-	my $cluster		=	shift;
+method setConfigFile ($username, $cluster) {
 	$self->logCaller();
 	$self->logDebug("username", $username);
 	$self->logDebug("cluster", $cluster);	
@@ -216,8 +199,7 @@ sub setConfigFile {
 	return $configfile;
 }
 
-sub updateClusterNodes {
-	my $self		=	shift;
+method updateClusterNodes {
  	$self->logDebug("");
 	
     my $json 			=	$self->json();
@@ -249,10 +231,8 @@ AND cluster='$json->{cluster}'
 	$self->logStatus("Successful insert of cluster $json->{cluster} into cluster table") if $success;
 }
 
-sub _createPluginsDir {
-	my $self		=	shift;
-	my $username	=	shift;
-	my $cluster		=	shift;
+method _createPluginsDir ($username, $cluster) {
+	$self->logDebug("username", $username);
 	
 	my $installdir 	=	$self->conf()->getKey("agua", "INSTALLDIR");
 	my $userdir		=	$self->conf()->getKey("agua", "USERDIR");
@@ -276,11 +256,8 @@ sub _createPluginsDir {
 	}
 }
 
-sub _isCluster {
-	my $self		=	shift;
-	my $username 	= 	shift;
-	my $cluster 	= 	shift;
- 	$self->logDebug("Cluster::_isCluster(username, cluster)");
+method _isCluster ($username, $cluster) {
+ 	$self->logDebug("username", $username);
 
 	my $json = $self->json();
 	my $query = qq{SELECT 1 FROM cluster
@@ -293,9 +270,8 @@ AND cluster='$cluster'};
 	return 1;
 }
 
-sub _addCluster {
-	my $self		=	shift;
-        my $json 			=	$self->json();
+method _addCluster {
+	my $json 			=	$self->json();
 	
 	#### SET TABLE AND REQUIRED FIELDS	
 	my $table = "cluster";
@@ -322,9 +298,8 @@ $where};
 	return $success;
 }
 
-sub _createCellDir {
-	my $self		=	shift;
- 	$self->logDebug("Cluster::_createCellDir()");	;
+method _createCellDir {
+ 	$self->logDebug("");	;
     my $json 			=	$self->json();
 	
 	#### SET TABLE AND REQUIRED FIELDS	
@@ -351,9 +326,7 @@ sub _createCellDir {
 	return $success;
 }
 
-sub getCellDir {
-	my $self 		=	shift;
-	
+method getCellDir {
 	my $json		=	$self->json();	
 	my $cluster = $json->{cluster};
 	my $sgeroot = $self->conf()->getKey('cluster', 'SGEROOT');
@@ -361,21 +334,16 @@ sub getCellDir {
 	return "$sgeroot/$cluster";	
 }
 
-sub getDefaultCellDir {
-	my $self 		=	shift;
-
+method getDefaultCellDir {
 	my $json		=	$self->json();	
 	my $sgeroot = $self->conf()->getKey('cluster', 'SGEROOT');
 
 	return "$sgeroot/default";
 }
 
-sub removeCluster  {
-#### REMOVE A CLUSTER FROM THE cluster TABLE
-	my $self		=	shift;
- 	$self->logDebug("Common::removeCluster()");
-    
-        my $json 			=	$self->json();
+method removeCluster  {
+ 	$self->logDebug("");
+	my $json 			=	$self->json();
 
 	#### REMOVE FROM cluster
 	my $success = $self->_removeCluster();
@@ -399,10 +367,8 @@ sub removeCluster  {
 	
 }	#### removeCluster
 
-sub _removeCluster {
-	my $self		=	shift;
-    
-        my $json 			=	$self->json();
+method _removeCluster {
+	my $json 			=	$self->json();
 
 	#### SET CLUSTER, TABLE AND REQUIRED FIELDS	
 	my $cluster = $json->{cluster};
@@ -431,8 +397,8 @@ sub _removeCluster {
 	return 1;
 }
 
-sub _removeCellDir {
-	my $self		=	shift;
+method _removeCellDir {
+	$self->logDebug("");
 	
 	my $celldir = $self->getCellDir();
 	$self->logDebug("Deleting celldir", $celldir);
@@ -450,13 +416,11 @@ sub _removeCellDir {
 	return $success;
 }	#### _removeCellDir
 
-sub getClusters {
+method getClusters {
 #### RETURN AN ARRAY OF cluster HASHES
-	my $self		=	shift;
-	$self->logDebug("Common::getClusters()");
+	$self->logDebug("");
 
-    	my $json			=	$self->json();
-
+	my $json		=	$self->json();
 	my $username	=	$self->username();
 
 	#### GET ALL SOURCES
@@ -472,10 +436,8 @@ ORDER BY maxnodes ASC, cluster};
 	return $clusters;
 }
 
-sub runningClusters {
-	my $self		=	shift;
-	my $username	=	shift;
-    $self->logDebug("Workflow::runningClusters()");
+method runningClusters ($username) {
+    $self->logDebug("username", $username);
 
 	my $query = qq{SELECT * FROM clusterstatus
 WHERE status ='running'};
@@ -489,11 +451,8 @@ WHERE status ='running'};
 	return $clusters;	
 }
 
-sub getCluster {
-	my $self		=	shift;
-	my $username	=	shift;
-	my $cluster		=	shift;
-	$self->logDebug("Common::getCluster()");
+method getCluster ($username, $cluster) {
+	$self->logDebug("username", $username);
 
 	#### GET ALL SOURCES
 	my $query = qq{SELECT * FROM cluster
@@ -504,12 +463,8 @@ AND cluster='$cluster'};
 	return $self->db()->queryhash($query);
 }
 
-sub getClusterWorkflow {
+method getClusterWorkflow ($username, $project, $workflow) {
 #### RETURN AN ARRAY OF clusterworkflow HASHES
-	my $self		=	shift;
-	my $username	=	shift;
-	my $project		=	shift;
-	my $workflow	=	shift;
 
 	$self->logDebug("username", $username);
 	$self->logDebug("project", $project);
@@ -527,11 +482,10 @@ AND workflow='$workflow'};
 	return $clusterworkflow;
 }
 
-sub getClusterWorkflows {
+method getClusterWorkflows {
 #### RETURN AN ARRAY OF clusterworkflow HASHES
-	my $self		=	shift;
-	$self->logDebug("Common::getClusterWorkflows()");
-        my $json	=	$self->json();
+	$self->logDebug("");
+	my $json	=	$self->json();
 	my $username 	=	$self->username();
 	$self->logDebug("username", $username);
 	$username = $json->{username} if not defined $username and not $username and defined $json;
@@ -549,17 +503,12 @@ ORDER BY project, workflow};
 	return $clusters;
 }
 
-sub getClusterByWorkflow {
+method getClusterByWorkflow ($username, $project, $workflow) {
 #### RETURN THE CLUSTER FOR A GIVEN PROJECT WORKFLOW
-	my $self		=	shift;
-	my $username	=	shift;
-	my $project		=	shift;
-	my $workflow	=	shift;
 	$self->logError("username not defined") and return if not defined $username;
 	$self->logError("project not defined") and return if not defined $project;
 	$self->logError("workflow not defined") and return if not defined $workflow;
 	
-    
 	#### GET ALL SOURCES
 	my $query = qq{SELECT cluster FROM clusterworkflow
 WHERE username='$username'
@@ -572,13 +521,11 @@ AND workflow='$workflow'};
 	return $cluster;
 }
 
-
-sub saveClusterWorkflow {
+method saveClusterWorkflow {
 #### ADD AN ENTRY OR UPDATE AN EXISTING ENTRY IN clusterworkflow TABLE
-	my $self		=	shift;
- 	$self->logDebug("whoami: " . `whoami`);
+ 	$self->logDebug("");
 	
-        my $json 			=	$self->json();
+	my $json 			=	$self->json();
 
 	#### GET OLD CLUSTER WORKFLOW IF EXISTS
 	my $username = $self->username();
@@ -660,9 +607,7 @@ sub saveClusterWorkflow {
 	$self->logStatus("Added workflow $workflow to cluster $json->{cluster}");
 }
 
-sub _addClusterWorkflow {
-	my $self		=	shift;
-
+method _addClusterWorkflow {
 	my $json 			=	$self->json();
 	$self->logDebug("json", $json);
     
@@ -678,9 +623,8 @@ sub _addClusterWorkflow {
 	return $self->_addToTable($table, $json, $required_fields);	
 }
 
-sub _removeClusterWorkflow {
-	my $self		=	shift;
- 	$self->logDebug("Common::_removeClusterWorkflow()");
+method _removeClusterWorkflow {
+ 	$self->logDebug("");
 
     my $json 			=	$self->json();
     
@@ -696,11 +640,7 @@ sub _removeClusterWorkflow {
 	return $self->_removeFromTable($table, $json, $required_fields);
 }	#### _removeClusterWorkflow
 
-
-sub getMonitor {
-	my $self		=	shift;
-	my $clustertype	=	shift;
-	$self->logDebug("(clustertype)");
+method getMonitor ($clustertype) {
 	$self->logDebug("clustertype", $clustertype);
 
 	return $self->monitor() if $self->monitor();
@@ -724,10 +664,8 @@ $self->logDebug("Instantiating my monitor = $module->new(...)");
 	return $monitor;
 }
 
-sub setSlotNumber {
+method setSlotNumber ($instancetype) {
 #### LOOK UP SLOTS BASED ON INSTANCETYPE
-	my $self		=	shift;
-	my $instancetype=	shift;
 	$self->logDebug("instancetype", $instancetype);
 
 	my $slots = $self->instancetypeslots()->{$instancetype};
@@ -736,10 +674,7 @@ sub setSlotNumber {
 	return $slots;
 }
 
-sub getMasterId {
-	my $self		=	shift;
-	my $username	=	shift;
-	my $cluster		=	shift;
+method getMasterId ($username, $cluster) {
 	$self->logDebug("username", $username);
 
 	#### GET CLUSTER LIST
@@ -753,10 +688,7 @@ sub getMasterId {
 	return $masterid;
 }
 
-sub getMasterExternalFqdn {
-	my $self		=	shift;
-	my $username	=	shift;
-	my $cluster		=	shift;
+method getMasterExternalFqdn ($username, $cluster) {
 	$self->logDebug("username", $username);
 	$self->logDebug("cluster", $cluster);
 
@@ -771,10 +703,8 @@ sub getMasterExternalFqdn {
 	return $externalfqdn;
 }
 
-sub getClusterList {
-	my $self		=	shift;
-	my $username	=	shift;
-	my $cluster		=	shift;
+method getClusterList ($username, $cluster) {
+	$self->logDebug("username", $username);
 
 	#### SET CONFIG FILE
 	my $configfile = $self->setConfigFile($username, $cluster);
@@ -793,10 +723,7 @@ sub getClusterList {
 	return $clusterlist;
 }
 
-sub getMasterInstanceInfo {
-	my $self		=	shift;
-	my $username	=	shift;
-	my $cluster		=	shift;
+method getMasterInstanceInfo ($username, $cluster) {
 	$self->logDebug("username", $username);
 	$self->logDebug("cluster", $cluster);
 	
@@ -811,11 +738,8 @@ sub getMasterInstanceInfo {
 	return $instanceinfo;
 }
 
-sub getQmasterIps {
+method getQmasterIps ($username, $cluster) {
 #### RETRIEVE MASTER IP INFO FROM SGE_ROOT/qmaster_info FILE
-	my $self		=	shift;
-	my $username	=	shift;
-	my $cluster		=	shift;
 	$self->logDebug("username", $username);
 	$self->logDebug("cluster", $cluster);
 	
@@ -836,21 +760,14 @@ sub getQmasterIps {
 	return $1, $2, $3;
 }
 
-sub getHeadnodeInternalIp {
+method getHeadnodeInternalIp {
 #### GET HEADNODE SHORT INTERNAL IP
-	my $self		=	shift;
 
 	return `curl -s http://169.254.169.254/latest/meta-data/local-ipv4`;
 }
 
-sub getInternalIps {
+method getInternalIps ($username, $cluster, $privatekey, $publiccert) {
 #### RETRIEVE THE INTERNAL IPS FOR ALL EXECUTION NODES IN THE CLUSTER 
-	my $self		=	shift;
-	my $username	=	shift;
-	my $cluster		=	shift;
-	my $privatekey	=	shift;
-	my $publiccert	=	shift;
-
 	$self->logDebug("username", $username);
 	$self->logDebug("cluster", $cluster);
 	$self->logDebug("privatekey", $privatekey);
@@ -869,7 +786,7 @@ sub getInternalIps {
 	return $internalips;
 }
 
-sub clusterNodesInfo {
+method clusterNodesInfo ($username, $cluster, $privatekey, $publiccert) {
 =head2
 
 	SUBROUTINE		clusterNodesInfo
@@ -902,12 +819,7 @@ sub clusterNodesInfo {
 		2. LOOK UP INSTANCE INFO USING ec2-describe-instances
 		
 =cut
-	my $self		=	shift;
-	my $username	=	shift;
-	my $cluster		=	shift;
-	my $privatekey	=	shift;
-	my $publiccert	=	shift;
-	$self->logDebug("Common::Cluster::clusterNodesInfo(username, cluster, privatekey, publiccert)");
+
 	$self->logDebug("username", $username);
 	$self->logDebug("cluster", $cluster);
 	$self->logDebug("privatekey", $privatekey);
@@ -949,8 +861,7 @@ sub clusterNodesInfo {
 	return $clusternodesinfo;
 }
 
-
-sub getClusterInstanceIds {
+method getClusterInstanceIds {
 =head2
 
 	SUBROUTINE		getClusterInstanceIds
@@ -986,8 +897,6 @@ sub getClusterInstanceIds {
 		
 =cut
 
-	my $self		=	shift;
-	$self->logDebug("Common::Cluster::getClusterInstanceIds()");
 	#### 1. GET LIST OF NODES FOR THIS CLUSTER	
     #### -----------------------------------------------
     #### smallcluster (security group: @sc-smallcluster)
@@ -999,6 +908,8 @@ sub getClusterInstanceIds {
     ####      master running i-9edc26f3 ec2-174-129-54-141.compute-1.amazonaws.com 
     ####     node001 running i-98dc26f5 ec2-75-101-225-244.compute-1.amazonaws.com 
 
+	$self->logDebug("");
+	
 	my $command = "starcluster -c ". $self->configfile() ." listclusters " . $self->cluster();
 	$self->logDebug("command", $command);
 	my $list = `$command`;
@@ -1019,7 +930,7 @@ sub getClusterInstanceIds {
 	return $instanceids;
 }
 
-sub describeInstances {
+method describeInstances ($username, $cluster, $privatekey, $publiccert) {
 =head2
 
 	SUBROUTINE		describeInstances
@@ -1045,12 +956,6 @@ sub describeInstances {
 			INSTANCE        i-6921d205      ami-a5c42dcc    ec2-67-202-9-15.compute-1.amazonaws.com ip-10-124-247-224.ec2.internal  running id_rsa-admin-key        0   m1.large 2011-01-06T14:11:09+0000        us-east-1a      aki-fd15f694    ari-7b739e12            monitoring-disabled     67.202.9.15     10.124.247.224      instance-store
 
 =cut
-	my $self		=	shift;
-	my $username	=	shift;
-	my $cluster		=	shift;
-	my $privatekey	=	shift;
-	my $publiccert	=	shift;
-	$self->logDebug("StarCluster::describeInstances(username, cluster, privatekey, publiccert)");
 	$self->logDebug("username", $username);
 	$self->logDebug("cluster", $cluster);
 	$self->logDebug("privatekey", $privatekey);
@@ -1082,8 +987,7 @@ sub describeInstances {
 	return $nodes;
 }
 
-
-sub getInstanceInfo {
+method getInstanceInfo ($instanceid) {
 =head2
 
 	SUBROUTINE 		getInstanceInfo
@@ -1100,9 +1004,6 @@ sub getInstanceInfo {
 		BLOCKDEVICE     /dev/sdh        vol-266dc84e    2010-12-24T23:03:04.000Z
 		BLOCKDEVICE     /dev/sdi        vol-fa6dc892    2010-12-24T23:05:50.000Z
 =cut
-
-	my $self		=	shift;
-	my $instanceid	=	shift;
 	
 	my $privatekey = $self->privatekey();
 	my $publiccert = $self->publiccert();
@@ -1121,9 +1022,7 @@ $instanceid};
 	return $self->parseInstanceInfo($reservation);
 }
 
-sub parseInstanceInfo {
-	my $self		=	shift;
-	my $info		=	shift;
+method parseInstanceInfo ($info) {
 	$self->logDebug("info", $info);
 
 	my $instancekeys = {

@@ -1,0 +1,52 @@
+#### DO NOT ADD THESE FILES AND DIRECTORIES TO THE REPO
+apps/*
+bioapps
+repos
+private
+!apps/rabbit.js
+!apps/perl
+
+#### SQL
+bin/sql/createDb.pl
+bin/sql/createDb.sql
+
+#### LOG
+log
+!log/.dummy
+
+#### HTML
+html/builds
+html/log/*
+html/plugins/view/jbrowse/species
+html/plugins/view/jbrowse/users
+html/getData.*
+!html/log/.dummy
+
+#### CONF
+conf
+!conf/.dummy
+!bin/install/resources/agua/conf
+!bin/install/resources/apache2/centos/conf
+
+#### BIN
+bin/install/resources/agua/setup.log
+
+#### LIB
+lib/Agua/Monitor/LSF.pm
+lib/Agua/Monitor/PBS.pm
+
+#### STARCLUSTER
+apps/starcluster
+apps/bioapps
+!apps/.dummy
+
+#### TESTS
+t/*/bin/*/*/outputs/*
+!t/*/bin/*/*/*/.dummy
+t/*/bin/*/*/outputs/*
+!t/*/bin/*/*/*/.dummy
+t/*/bin/*/*/*/outputs/*
+!t/*/bin/*/*/*/*/.dummy
+t/*/bin/*/*/*/*/outputs/*
+!t/*/bin/*/*/*/*/*/.dummy
+t/*/html/plugins/request/request/data-*

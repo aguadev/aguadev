@@ -378,8 +378,7 @@ AND project='$project'
         $self->setStarted();
         $self->logDebug("starting workflow ")  . $self->name()  . "': " . $self->started() . "'\n";
         
-        for ( my $i = $start - 1; $i < $stop; $i++ )
-        {
+        for ( my $i = $start - 1; $i < $stop; $i++ ) {
             my $workflow = $$workflows[$i];
             $self->logDebug("Running app '") . $workflow->name() . "'\n";
             $workflow->logfh($self->logfh());

@@ -39,8 +39,6 @@ has 'inputs'		=>  ( isa => 'ArrayRef|Undef', is => 'rw', default	=>	sub { return
 use FindBin qw($Bin);
 use Test::More;
 
-use Openstack::Nova;
-
 #####////}}}}}
 
 method getAssignments {

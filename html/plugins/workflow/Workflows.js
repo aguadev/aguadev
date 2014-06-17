@@ -1618,8 +1618,7 @@ confirmDelete : function (args) {
 
 	// SET CALLBACKS
 	var thisObject = this;
-	var yesCallback = function()
-	{
+	var yesCallback = function() {
 		thisObject.commitDelete(args);
 	};
 	var noCallback = function(){};

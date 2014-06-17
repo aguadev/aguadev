@@ -6,9 +6,15 @@ use warnings;
 class Test::Queue::Master extends Queue::Master with (Test::Agua::Common::Database, Agua::Common::Util) {
 
 use Test::Synapse;
+use Test::Virtual;
 
 has 'logfile'	=> 	( isa => 'Str|Undef', is => 'rw', required => 1 );
 has 'dumpfile'	=> 	( isa => 'Str|Undef', is => 'rw', required => 1 );
+has 'authurl'	=> 	( isa => 'Str|Undef', is => 'rw');
+has 'password'	=> 	( isa => 'Str|Undef', is => 'rw');
+has 'tenantid'	=> 	( isa => 'Str|Undef', is => 'rw');
+has 'tenantname'=> 	( isa => 'Str|Undef', is => 'rw');
+has 'username'	=> 	( isa => 'Str|Undef', is => 'rw');
 
 has 'synapse'	=> ( isa => 'Test::Synapse', is => 'rw', lazy	=>	1, builder	=>	"setSynapse" );
 
@@ -17,6 +23,811 @@ use FindBin qw($Bin);
 use Test::More;
 
 #####////}}}}}
+
+method testGetInstances {
+	diag("getInstances");
+	
+	#### SET TEST DATABASE
+	$self->setUpTestDatabase();
+
+	my $tests	=	[
+		{
+			testname		=>	"instances for all queues",
+			project			=>	"CU",
+			tables			=>	[
+				"project",
+				"provenance",
+				"cluster",
+				"instance",
+				"instancetype",
+				"queuesample"
+			],
+			expected		=>	{
+				"testuser.CU.Download"	=>	{
+					"memory"		=>	"64",
+					"cluster"		=>	"testuser.CU.Download",
+					"disk"			=>	"20",
+					"instancetype"	=>	"bcf.8c.64g",
+					"cpus"			=>	"8",
+					"ephemeral"		=>	"0",
+					"username"		=>	"testuser"
+				},
+				"testuser.CU.Bwa"	=>	{
+					"memory"		=>	"64",
+					"cluster"		=>	"testuser.CU.Bwa",
+					"disk"			=>	"20",
+					"instancetype"	=>	"bcf.8c.64g",
+					"cpus"			=>	"8",
+					"ephemeral"		=>	"0",
+					"username"		=>	"testuser"
+				},
+				"testuser.CU.FreeBayes"	=>	{
+					"memory"		=>	"64",
+					"cluster"		=>	"testuser.CU.FreeBayes",
+					"disk"			=>	"20",
+					"instancetype"	=>	"bcf.8c.64g",
+					"cpus"			=>	"8",
+					"ephemeral"		=>	"0",
+					"username"		=>	"testuser"
+				}
+			}
+		}
+	];
+
+	foreach my $test ( @$tests ) {
+		my $tables			=	$test->{tables};
+		my $project			=	$test->{project};
+		my $testname		=	$test->{testname};
+		my $expected		=	$test->{expected};
+		
+		#### LOAD TABLES
+		foreach my $table ( @$tables ) {
+			#$self->logDebug("loading table: $table");
+			my $query	=	qq{DELETE FROM $table};
+			$self->db()->do($query);
+			my $tsvfile		=	"$Bin/inputs/duration/$table.tsv";
+			$self->loadTsvFile($table, $tsvfile);
+		}
+
+		my $queues		=	$self->getDistinctQueues($project);
+		my $instances	=	$self->getInstances($queues);
+		$self->logDebug("instances", $instances);
+
+		is_deeply($instances, $expected, $testname)
+	}		
+}
+
+method testBalanceQueues {
+	diag("balanceQueues");
+	
+	#### SET TEST DATABASE
+	$self->setUpTestDatabase();
+
+	my $tests	=	[
+		{
+			testname		=>	"for all running queues",
+			instancecounts	=>	{
+				"testuser.CU.Download"	=>	"4",
+				"testuser.CU.Bwa"		=>	"4",
+				"testuser.CU.FreeBayes"	=>	"2"
+			},
+			project			=>	"CU",
+			metric			=>	"cpus",
+			tables			=>	[
+				"project",
+				"provenance",
+				"cluster",
+				"instance",
+				"instancetype",
+				"queuesample"
+			],
+			expectedinstances		=> [23,79],
+			expectedcounts			=> ["178.571428571429","321.428571428571"]	
+		}
+	];
+
+	*getResourceQuota 	=	sub {
+		my $self		=	shift;	
+		my $username	=	shift;
+		my $metric		=	shift;
+		
+		$self->logDebug("username", $username);
+		#print "Test::Queue::Master::testBalanceQueues    OVERRIDE getResourceQuota\n";
+		#print "Test::Queue::Master::testBalanceQueues    username: $username\n";
+		
+		return 500;
+	};
+	
+	my $virtual		=	$self->virtual();
+	
+	foreach my $test ( @$tests ) {
+		my $tables			=	$test->{tables};
+		my $project			=	$test->{project};
+		my $testname		=	$test->{testname};
+		my $expectedinstances	=	$test->{expectedinstances};
+		my $expectedcounts		=	$test->{expectedcounts};
+		
+		#### LOAD TABLES
+		foreach my $table ( @$tables ) {
+			$self->logDebug("loading table: $table");
+			my $query	=	qq{DELETE FROM $table};
+			$self->db()->do($query);
+			my $tsvfile		=	"$Bin/inputs/duration/$table.tsv";
+			$self->loadTsvFile($table, $tsvfile);
+		}
+		
+		my $queues		=	$self->getDistinctQueues($project);
+		
+		my $counts		=	$self->balanceQueues($queues);
+		$self->logDebug("counts", $counts);
+		is_deeply($counts, $expectedcounts, $testname . " (resourcecounts)");
+	
+	}	
+}
+
+method testGetResourceCounts {
+	diag("getResourceCounts");
+	
+	#### SET TEST DATABASE
+	$self->setUpTestDatabase();
+
+	my $tests	=	[
+		{
+			testname		=>	"for all running queues",
+			instancecounts	=>	{
+				"testuser.CU.Download"	=>	"4",
+				"testuser.CU.Bwa"		=>	"4",
+				"testuser.CU.FreeBayes"	=>	"2"
+			},
+			project			=>	"CU",
+			metric			=>	"cpus",
+			queues			=>	[
+				{
+					"workflownumber"	=>	"1",
+					"workflow"			=>	"Download",
+					"project"			=>	"CU",
+					"username"			=>	"testuser"
+				},
+				{
+					"workflownumber"	=>	"2",
+					"workflow"			=>	"Bwa",
+					"project"			=>	"CU",
+					"username"			=>	"testuser"
+				},
+				{
+					"workflownumber"	=>	"3",
+					"workflow"			=>	"FreeBayes",
+					"project"			=>	"CU",
+					"username"			=>	"testuser"
+				}
+			],
+			durations		=> {
+				"testuser.CU.Download"	=>	"200",
+				"testuser.CU.Bwa"		=>	"720",
+				"testuser.CU.FreeBayes"	=>	"2100"
+			},
+			tables			=>	[
+				"project",
+				"provenance",
+				"cluster",
+				"instance",
+				"instancetype",
+				"queuesample"
+			],
+			expectedinstances		=> [23,79],
+			expectedcounts			=> ["178.571428571429","321.428571428571"]	
+		}
+	];
+
+	*getResourceQuota 	=	sub {
+		my $self		=	shift;	
+		my $username	=	shift;
+		my $metric		=	shift;
+		
+		$self->logDebug("username", $username);
+		#print "Test::Queue::Master::testGetResourceCounts    OVERRIDE getResourceQuota\n";
+		#print "Test::Queue::Master::testGetResourceCounts    username: $username\n";
+		
+		return 500;
+	};
+	
+	my $virtual		=	$self->virtual();
+	
+	foreach my $test ( @$tests ) {
+		my $tables			=	$test->{tables};
+		#my $queues			=	$test->{queues};
+		#my $durations		=	$test->{durations};
+		my $project			=	$test->{project};
+		my $metric			=	$test->{metric};
+		#my $instancecounts	=	$test->{instancecounts};
+		my $testname		=	$test->{testname};
+		my $expectedinstances	=	$test->{expectedinstances};
+		my $expectedcounts		=	$test->{expectedcounts};
+		
+		#### LOAD TABLES
+		foreach my $table ( @$tables ) {
+			$self->logDebug("loading table: $table");
+			my $query	=	qq{DELETE FROM $table};
+			$self->db()->do($query);
+			my $tsvfile		=	"$Bin/inputs/duration/$table.tsv";
+			$self->loadTsvFile($table, $tsvfile);
+		}
+		
+		my $queues		=	$self->getDistinctQueues($project);
+		my $durations	=	$self->getDurations($queues);
+		my $instances	=	$self->getInstances($queues);
+		
+		my $counts		=	$self->getResourceCounts($queues, $durations, $instances);
+		$self->logDebug("counts", $counts);
+		is_deeply($counts, $expectedcounts, $testname . " (resourcecounts)");
+	
+		my $instancecounts	=	$self->getInstanceCounts($queues, $instances, $counts);
+		$self->logDebug("instancecounts", $instancecounts);
+		is_deeply($instancecounts, $expectedinstances, $testname . " (instancecounts)");
+	}	
+}
+
+method testGetTenants {
+	diag("getTenants");
+	
+	#### SET TEST DATABASE
+	$self->setUpTestDatabase();
+
+	my $tests	=	[
+		{
+			testname		=>	"retrieved tenants",
+			expected		=>	[
+				{
+					username	=>	"testuser",
+					osusername	=>	"OSUSERNAME",
+					osauthurl	=>	"http://10.2.16.Us64:5000/v2.0",
+					ospassword	=>	"OSPASSWORD",
+					ostenantid	=>	"OSTENANTID",
+					ostenantname=>	"OSTENANTNAME"
+				}
+			],
+			tables			=>	[
+				"tenant"
+			]
+		}
+	];
+
+	foreach my $test ( @$tests ) {
+		my $tables			=	$test->{tables};
+		my $testname		=	$test->{testname};
+		my $expected		=	$test->{expected};
+		
+		#### LOAD TABLES
+		foreach my $table ( @$tables ) {
+			$self->logDebug("loading table: $table");
+			my $query	=	qq{DELETE FROM $table};
+			$self->db()->do($query);
+			my $tsvfile		=	"$Bin/inputs/duration/$table.tsv";
+			$self->loadTsvFile($table, $tsvfile);
+		}
+		
+		my $tenants	=	$self->getTenants();
+		$self->logDebug("tenants", $tenants);
+		
+		is_deeply($tenants, $expected, "$testname")
+	}	
+}
+
+method testGetQueueTasks {
+	diag("getQueueTasks");
+	
+	#### SET TEST DATABASE
+	$self->setUpTestDatabase();
+	
+	my $expected	=	{
+		"testuser.CU.Download"	=>	"8",
+		"testuser.CU.Bwa"		=>	"4",
+		"testuser.CU.FreeBayes"	=>	"0",
+		"testuser.Sleep.Sleep1"	=>	"2",
+		"testuser.Sleep.Sleep2"	=>	"2"
+	};
+	
+	*getQueueTaskList =	sub	{
+		return qq{Listing queues ...
+testuser.CU.Download	8
+testuser.CU.Bwa	4
+testuser.CU.FreeBayes	0
+testuser.Sleep.Sleep1	2
+testuser.Sleep.Sleep2	2
+...done.};
+	};
+	
+	my $tasks	=	$self->getQueueTasks();
+	$self->logDebug("tasks", $tasks);
+	
+	is_deeply($tasks, $expected, "queue tasks hash");
+}
+
+method testManage {
+	diag("manage");
+	
+	#### SET TEST DATABASE
+	$self->setUpTestDatabase();
+
+	my $tests	=	[
+		{
+			testname		=>	"latest index",
+			queue			=>	{
+				username	=>	"testuser",
+				project		=>	"CU",
+				workflow	=>	"Download"
+			},
+			tables			=>	[
+				"project",
+				"provenance",
+				"cluster",
+				"instancetype",
+				"queuesample"
+			],
+			expected			=>	1
+		}
+	];
+
+	
+	foreach my $test ( @$tests ) {
+		my $tables			=	$test->{tables};
+		my $sample			=	$test->{sample};
+		my $workflow		=	$test->{workflow};
+		my $testname		=	$test->{testname};
+		my $expected		=	$test->{expected};
+		my $queue			=	$test->{queue};
+		
+		#### LOAD TABLES
+		foreach my $table ( @$tables ) {
+			$self->logDebug("loading table: $table");
+			my $query	=	qq{DELETE FROM $table};
+			$self->db()->do($query);
+			my $tsvfile		=	"$Bin/inputs/duration/$table.tsv";
+			$self->loadTsvFile($table, $tsvfile);
+		}
+		
+		my $success	=	$self->manage();
+		$self->logDebug("success", $success);
+		
+		ok($success == $expected, "$testname: $success")
+	}	
+
+}
+method testGetLatestCompleted {
+	diag("getLatestCompleted");
+
+	#### SET TEST DATABASE
+	$self->setUpTestDatabase();
+
+	my $tests	=	[
+		{
+			testname		=>	"latest index",
+			project			=>	"CU",
+			queue			=>	{
+				username	=>	"testuser",
+				project		=>	"CU",
+				workflow	=>	"Download"
+			},
+			tables			=>	[
+				"project",
+				"provenance",
+				"cluster",
+				"instancetype",
+				"queuesample"
+			],
+			expected			=>	1
+		}
+	];
+
+	foreach my $test ( @$tests ) {
+		my $tables			=	$test->{tables};
+		my $project			=	$test->{project};
+		my $sample			=	$test->{sample};
+		my $workflow		=	$test->{workflow};
+		my $testname		=	$test->{testname};
+		my $expected		=	$test->{expected};
+		my $queue			=	$test->{queue};
+		
+		#### LOAD TABLES
+		foreach my $table ( @$tables ) {
+			$self->logDebug("loading table: $table");
+			my $query	=	qq{DELETE FROM $table};
+			$self->db()->do($query);
+			my $tsvfile		=	"$Bin/inputs/duration/$table.tsv";
+			$self->loadTsvFile($table, $tsvfile);
+		}
+		
+		my $queues		=	$self->getDistinctQueues($project);
+
+		my $latestindex	=	$self->getLatestCompleted($queues);
+		$self->logDebug("latestindex", $latestindex);
+		
+		ok($latestindex == $expected, "$testname: $latestindex")
+	}	
+}
+method testGetLatestStarted {
+	diag("getLatestStarted");
+
+	#### SET TEST DATABASE
+	$self->setUpTestDatabase();
+
+	my $tests	=	[
+		{
+			testname		=>	"latest index",
+			project			=>	"CU",
+			queue			=>	{
+				username	=>	"testuser",
+				project		=>	"CU",
+				workflow	=>	"Download"
+			},
+			tables			=>	[
+				"project",
+				"provenance",
+				"cluster",
+				"instancetype",
+				"queuesample"
+			],
+			expected			=>	2
+		}
+	];
+
+	foreach my $test ( @$tests ) {
+		my $tables			=	$test->{tables};
+		my $project			=	$test->{project};
+		my $sample			=	$test->{sample};
+		my $workflow		=	$test->{workflow};
+		my $testname		=	$test->{testname};
+		my $expected		=	$test->{expected};
+		my $queue			=	$test->{queue};
+		
+		#### LOAD TABLES
+		foreach my $table ( @$tables ) {
+			$self->logDebug("loading table: $table");
+			my $query	=	qq{DELETE FROM $table};
+			$self->db()->do($query);
+			my $tsvfile		=	"$Bin/inputs/duration/$table.tsv";
+			$self->loadTsvFile($table, $tsvfile);
+		}
+		
+		my $queues		=	$self->getDistinctQueues($project);
+
+		my $latestindex	=	$self->getLatestStarted($queues);
+		$self->logDebug("latestindex", $latestindex);
+		
+		ok($latestindex == $expected, "$testname: $latestindex")
+	}		
+}
+method testGetRunningUserProjects {
+	diag("getRunningUserProjects");
+	
+	#### SET TEST DATABASE
+	$self->setUpTestDatabase();
+
+	my $tests	=	[
+		{
+			testname		=>	"retrieved running projects",
+			queue			=>	{
+				username	=>	"testuser",
+				project		=>	"CU",
+				workflow	=>	"Download"
+			},
+			tables			=>	[
+				"project",
+				"provenance",
+				"cluster",
+				"instancetype",
+				"queuesample"
+			],
+			expected			=>	["CU","Test"]
+		}
+	];
+
+	foreach my $test ( @$tests ) {
+		my $tables			=	$test->{tables};
+		my $sample			=	$test->{sample};
+		my $workflow		=	$test->{workflow};
+		my $testname		=	$test->{testname};
+		my $expected		=	$test->{expected};
+		my $queue			=	$test->{queue};
+		my $username		=	$queue->{username};
+		
+		#### LOAD TABLES
+		foreach my $table ( @$tables ) {
+			$self->logDebug("loading table: $table");
+			my $query	=	qq{DELETE FROM $table};
+			$self->db()->do($query);
+			my $tsvfile		=	"$Bin/inputs/duration/$table.tsv";
+			$self->loadTsvFile($table, $tsvfile);
+		}
+		
+		my $projects	=	$self->getRunningUserProjects($username);
+		$self->logDebug("projects", $projects);
+		
+		is_deeply($projects,  $expected, "$testname")
+	}		
+}
+
+method testGetQueueInstance {
+	diag("getQueueInstance");
+	
+	#### SET TEST DATABASE
+	$self->setUpTestDatabase();
+
+	my $tests	=	[
+		{
+			testname		=>	"instance for queue",
+			queue			=>	{
+				username	=>	"testuser",
+				project		=>	"CU",
+				workflow	=>	"Download"
+			},
+			tables			=>	[
+				"project",
+				"provenance",
+				"cluster",
+				"instancetype",
+				"queuesample"
+			],
+			expected			=>	{
+				"memory"		=>	"64",
+				"cluster"		=>	"testuser.CU.Download",
+				"disk"			=>	"20",
+				"instancetype"	=>	"bcf.8c.64g",
+				"cpus"			=>	"8",
+				"ephemeral"		=>	"0",
+				"username"		=>	"testuser"
+			}
+		}
+	];
+
+	foreach my $test ( @$tests ) {
+		my $tables			=	$test->{tables};
+		my $sample			=	$test->{sample};
+		my $workflow		=	$test->{workflow};
+		my $testname		=	$test->{testname};
+		my $expected		=	$test->{expected};
+		my $queue			=	$test->{queue};
+		
+		#### LOAD TABLES
+		foreach my $table ( @$tables ) {
+			$self->logDebug("loading table: $table");
+			my $query	=	qq{DELETE FROM $table};
+			$self->db()->do($query);
+			my $tsvfile		=	"$Bin/inputs/duration/$table.tsv";
+			$self->loadTsvFile($table, $tsvfile);
+		}
+		my $instance	=	$self->getQueueInstance($queue);
+		is_deeply($instance, $expected, "$testname: $expected->{cluster}")
+	}	
+}
+
+
+method testGetDurations {
+	diag("getDurations");
+	
+	#### SET TEST DATABASE
+	$self->setUpTestDatabase();
+
+	my $tests	=	[
+		{
+			testname		=>	"average durations for queues",
+			tables			=>	[
+				"project",
+				"provenance",
+				"queuesample"
+			],
+			project			=>	"CU",
+			expected		=>	{
+				"testuser.CU.Download"	=>	"200",
+				"testuser.CU.Bwa"		=>	"720",
+				"testuser.CU.FreeBayes"	=>	"2100"
+			}
+		}
+	];
+
+	foreach my $test ( @$tests ) {
+		my $tables			=	$test->{tables};
+		my $project			=	$test->{project};
+		my $expected		=	$test->{expected};
+		my $testname		=	$test->{testname};
+		
+		#### LOAD TABLES
+		foreach my $table ( @$tables ) {
+			$self->logDebug("loading table: $table");
+			my $query	=	qq{DELETE FROM $table};
+			$self->db()->do($query);
+			my $tsvfile		=	"$Bin/inputs/duration/$table.tsv";
+			$self->loadTsvFile($table, $tsvfile);
+		}
+
+		my $queues		=	$self->getDistinctQueues($project);
+		$self->logDebug("queues", $queues);
+		
+		my $durations	=	$self->getDurations($queues);
+		$self->logDebug("durations", $durations);
+		
+		is_deeply($durations, $expected, $testname)
+	}
+}
+
+method testGetSampleDurations {
+	diag("getSampleDurations");
+
+	#### SET TEST DATABASE
+	$self->setUpTestDatabase();
+
+	my $tests	=	[
+		{
+			testname		=>	"durations for sample",
+			sample			=>	"4a438e25-4fa0-4cb4-aa55-591f1f004cfe",
+			workflow		=>	"Download",
+			tables			=>	[
+				"project",
+				"provenance",
+				"queuesample"
+			],
+			expected		=>	[ 360, 360 ]
+		}
+	];
+
+	foreach my $test ( @$tests ) {
+		my $tables			=	$test->{tables};
+		my $sample			=	$test->{sample};
+		my $workflow		=	$test->{workflow};
+		my $testname		=	$test->{testname};
+		my $expected		=	$test->{expected};
+		
+		#### LOAD TABLES
+		foreach my $table ( @$tables ) {
+			$self->logDebug("loading table: $table");
+			my $query	=	qq{DELETE FROM $table};
+			$self->db()->do($query);
+			my $tsvfile		=	"$Bin/inputs/duration/$table.tsv";
+			$self->loadTsvFile($table, $tsvfile);
+		}
+
+		my $query		=	qq{SELECT * FROM provenance
+WHERE sample='$sample'
+AND workflow='$workflow'
+ORDER BY time};
+		$self->logDebug("query", $query);
+		my $rows		=	$self->db()->queryhasharray($query);
+		my $durations	=	$self->getSampleDurations($rows);
+		$self->logDebug("durations", $durations);
+		$self->logDebug("expected", $expected);
+
+		is_deeply($durations, $expected, "$testname: $sample")
+	}
+
+}
+
+method testGetQueueDuration {
+	diag("getQueueDuration");
+
+	#### SET TEST DATABASE
+	$self->setUpTestDatabase();
+
+	my $tests	=	[
+		{
+			testname		=>	"average duration for queue",
+			tables			=>	[
+				"project",
+				"provenance",
+				"queuesample"
+			],
+			expected		=>	[200, 720, 2100, 0]
+		}
+	];
+
+	foreach my $test ( @$tests ) {
+		my $tables			=	$test->{tables};
+		my $expected		=	$test->{expected};
+		my $testname		=	$test->{testname};
+		
+		#### LOAD TABLES
+		foreach my $table ( @$tables ) {
+			$self->logDebug("loading table: $table");
+			my $query	=	qq{DELETE FROM $table};
+			$self->db()->do($query);
+			my $tsvfile		=	"$Bin/inputs/duration/$table.tsv";
+			$self->loadTsvFile($table, $tsvfile);
+		}
+
+		my $queues		=	$self->getDistinctQueues();
+		#$self->logDebug("queues", $queues);
+		
+		my $durations	=	[];
+		for ( my $i = 0; $i < @$queues; $i++ ) {
+			my $queue = $$queues[$i];
+			my $duration	=	$self->getQueueDuration($queue);
+			#$self->logDebug("average queue duration", $duration);
+			push @$durations, $duration;
+			
+			ok($duration == $$expected[$i], "$testname $queue->{workflow}: $duration")
+		}
+	}
+}
+
+method testParseDate {
+	diag("parseDate");
+	
+	my $date		=	"2014-06-12 10:41:15";
+	my $seconds		=	$self->parseDate($date);
+	$self->logDebug("seconds", $seconds);
+	my $expected	=	1402594875;
+
+	ok($seconds == $expected, "correct seconds for date: $date");
+}
+
+method testGetQueues {
+	diag("getQueues");
+
+	#### SET TEST DATABASE
+	$self->setUpTestDatabase();
+
+	my $tests	=	[
+		{
+			testname		=>	"return queues for 'running' projects only",
+			projectfile		=>	"$Bin/inputs/getQueues/project.tsv",
+			queuesamplefile	=>	"$Bin/inputs/getQueues/queuesample.tsv",
+			expectedfile	=>	"$Bin/inputs/getQueues/expected.tsv",
+			addedfile		=>	"$Bin/inputs/getQueues/expected-add-Test.tsv"	
+		}
+	];
+
+	foreach my $test ( @$tests ) {
+		my $projectfile		=	$test->{projectfile};
+		my $queuesamplefile	=	$test->{queuesamplefile};
+		my $expectedfile	=	$test->{expectedfile};
+		my $addedfile		=	$test->{addedfile};
+		my $testname		=	$test->{testname};
+		
+		#### CLEAR TABLES
+		my $query	=	qq{DELETE FROM queuesample};
+		$self->logDebug("query", $query);
+		$self->db()->do($query);
+		$query	=	qq{DELETE FROM project};
+		$self->logDebug("query", $query);
+		$self->db()->do($query);
+
+		#### LOAD TSVFILES
+		$self->logDebug("BEFORE load tsvfiles");
+		$self->loadTsvFile("queuesample", $queuesamplefile);
+		$self->loadTsvFile("project", $projectfile);
+		$self->logDebug("AFTER load tsvfiles");
+
+		#### SET STATUS TO COMPLETED
+		my $username	=	"testuser";
+		my $project		=	"Test";
+		$self->setProjectStatus($username, $project, "completed");
+		
+		#### GET EXPECTED
+		my $fields		=	$self->db()->fields("queuesample");
+		my $expected	=	$self->fileToHasharray($expectedfile, $fields);
+		$self->logDebug("expected", $expected);
+		
+		#### GET QUEUES
+		my $actual		=	$self->getQueues();
+		$self->logDebug("actual", $actual);
+		
+		#### VERIFY	
+		is_deeply($actual, $expected, $testname);
+
+		#### SET STATUS TO RUNNING
+		$self->setProjectStatus($username, $project, "running");
+		
+		#### GET EXPECTED
+		$expected	=	$self->fileToHasharray($addedfile, $fields);
+		$self->logDebug("expected", $expected);
+		
+		#### GET QUEUES
+		$actual		=	$self->getQueues();
+		$self->logDebug("actual", $actual);
+		
+		#### VERIFY	
+		is_deeply($actual, $expected, "$testname - added");
+	}
+}
 
 method testUpdateQueueSamples {
 	diag("updateQueueSamples");
@@ -157,7 +968,7 @@ method fileToHasharray ($file, $fields) {
 }
 
 method testUpdateQueueSamples {
-	diag("updateQueue");
+	diag("updateQueueSamples");
 
 	#### SET UP DATABASE
 	my $database	=	$self->conf()->getKey("database:TESTDATABASE", undef);
@@ -382,6 +1193,8 @@ syoung.PanCancer.Split	10
 }
 
 method testWorkflowStatus {
+	diag("workflowStatus");
+	
 	my $configfile	=	"$Bin/inputs/config.yaml";
 	$self->conf()->inputfile($configfile);
 
@@ -390,6 +1203,7 @@ method testWorkflowStatus {
 
 method testDownloadPercent {
 	diag("downloadPercent");
+	
 	my $status		=	q{Status:  195 GB downloaded (40.401% complete) current rate:        /s
 };
 	my $expected	=	"40.401";
@@ -400,6 +1214,7 @@ method testDownloadPercent {
 
 method testParseUuid {
 	diag("parseUuid");
+	
 	my $contents	=	qq{root     18375  0.0  0.0   4400   604 ?        S    Apr12   0:00 sh -c time /usr/bin/gtdownload \?--max-children 8 \?-c /home/ubuntu/annai-cghub.key \?-v -d \?eba7900a-2e1d-4a55-a3ba-e900be55642e \?-l syslog:full?
 root     18376  0.0  0.0   4168   348 ?        S    Apr12   0:00 time /usr/bin/gtdownload --max-children 8 -c /home/ubuntu/annai-cghub.key -v -d eba7900a-2e1d-4a55-a3ba-e900be55642e -l syslog:full
 root     18377  0.0  0.0 156940 11796 ?        S    Apr12   0:23 /usr/bin/gtdownload --max-children 8 -c /home/ubuntu/annai-cghub.key -v -d eba7900a-2e1d-4a55-a3ba-e900be55642e -l syslog:full
@@ -464,6 +1279,30 @@ method setSynapse {
 	});
 
 	$self->synapse($synapse);
+}
+
+
+method setVirtual {
+	my $virtualtype		=	$self->conf()->getKey("agua", "VIRTUALTYPE");
+	$self->logDebug("virtualtype", $virtualtype);
+
+	#### RETURN IF TYPE NOT SUPPORTED	
+	$self->logDebug("virtual virtualtype not supported: $virtualtype") and return if $virtualtype !~	/^(openstack|vagrant)$/;
+
+   #### CREATE DB OBJECT USING DBASE FACTORY
+    my $virtual = Test::Virtual->new( $virtualtype,
+        {
+			conf		=>	$self->conf(),
+            username	=>  $self->username(),
+			
+			logfile		=>	$self->logfile(),
+			log			=>	2,
+			printlog	=>	2
+        }
+    ) or die "Can't create virtual of type: $virtualtype. $!\n";
+	#$self->logDebug("virtual", $virtual);
+
+	$self->virtual($virtual);
 }
 
 

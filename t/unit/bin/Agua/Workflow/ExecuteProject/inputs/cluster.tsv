@@ -1,0 +1,5 @@
+testuser	testuser.Project1.Download	5	30	bcf.8c.64g	3666c5eb-1677-45a2-b348-4c9b0bd40ea8	8 CPUs, 64 GB RAM
+testuser	testuser.Project1.Bwa	bcf.8c.64g	5	30	bcf.8c.64g	3666c5eb-1677-45a2-b348-4c9b0bd40ea8	8 CPUs, 64 GB RAM
+testuser	testuser.Project1.FreeBayes	bcf.8c.64g	5	30	bcf.8c.64g	3666c5eb-1677-45a2-b348-4c9b0bd40ea8	8 CPUs, 64 GB RAM
+testuser	testuser.Project1.Upload	bcf.8c.64g	5	30	bcf.8c.64g	3666c5eb-1677-45a2-b348-4c9b0bd40ea8	8 CPUs, 64 GB RAM
+testuser	testuser.Project1.Download	0	1	t1.micro	3666c5eb-1677-45a2-b348-4c9b0bd40ea8		Test cluster	2011-08-28 01:07:45

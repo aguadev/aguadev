@@ -14,6 +14,7 @@ class Agua::Ops with (Agua::Ops::Ec2,
 	Agua::Ops::Edit,
 	Agua::Ops::Files,
 	Agua::Ops::Git,
+	Agua::Ops::GitHub,
 	Agua::Ops::Install,
 	Agua::Ops::Nfs,
 	Agua::Ops::Sge,
@@ -67,11 +68,10 @@ has 'logfile'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
 has 'envfile'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
 has 'hostname'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
 has 'username'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
-#has 'sessionid'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
 has 'cwd'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
 has 'envars'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
 has 'tempdir'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
-has 'hubtype'	=> ( isa => 'Str|Undef', is => 'rw', default	=>	"github" );
+has 'hubtype'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0 	);
 has 'remote'	=> ( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
 
 #### Objects
@@ -121,14 +121,13 @@ method initialise ($args) {
 
 	$self->setSsh();
 	
-	$self->setHubType($self->hubtype());
+	$self->applyRoles();
 
 	$self->setDbObject() if not defined $self->db() and $self->can('setDbObject') and defined $self->database() and not $self->database();
 }
 
-method setHubType ($hubtype) {
-	return if not $hubtype;
-	apply_all_roles($self, 'Agua::Ops::GitHub') if $hubtype eq "github";
+method applyRoles {
+	apply_all_roles($self, 'Agua::Ops::GitHub');
 }
 
 method setSsh () {

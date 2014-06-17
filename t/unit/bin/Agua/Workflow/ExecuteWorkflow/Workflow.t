@@ -49,7 +49,7 @@ my $conf = Conf::Yaml->new(
 	separator	=>	"\t",
 	spacer		=>	"\\s\+",
     logfile     =>  $logfile,
-    log     =>  2,
+    log     	=>  2,
     printlog    =>  2
 );
 

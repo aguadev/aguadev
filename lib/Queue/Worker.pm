@@ -44,7 +44,7 @@ has 'modulestring'	=> ( isa => 'Str|Undef', is => 'rw', default	=> "Agua::Workfl
 
 # Objects
 has 'conf'		=> ( isa => 'Conf::Yaml', is => 'rw', required	=>	0 );
-has 'nova'		=> ( isa => 'Openstack::Nova', is => 'rw', lazy	=>	1, builder	=>	"setNova" );
+has 'nova'		=> ( isa => 'Virtual::Openstack', is => 'rw', lazy	=>	1, builder	=>	"setNova" );
 has 'synapse'	=> ( isa => 'Synapse', is => 'rw', lazy	=>	1, builder	=>	"setSynapse" );
 has 'jsonparser'=> ( isa => 'JSON', is => 'rw', lazy	=>	1, builder	=>	"setJsonParser" );
 has 'db'	=> ( isa => 'Agua::DBase::MySQL|Undef', is => 'rw', required	=>	0 );
@@ -52,7 +52,7 @@ has 'db'	=> ( isa => 'Agua::DBase::MySQL|Undef', is => 'rw', required	=>	0 );
 use FindBin qw($Bin);
 use Test::More;
 
-use Openstack::Nova;
+use Virtual::Openstack;
 use Agua::Workflow;
 
 #####////}}}}}

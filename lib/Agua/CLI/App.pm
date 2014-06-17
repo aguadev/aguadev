@@ -84,7 +84,14 @@ class Agua::CLI::App with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::Statu
     has 'password'  => ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'force'     => ( isa => 'Maybe', is => 'rw', required => 0 );
     has 'logfh'     => ( isa => 'FileHandle', is => 'rw', required => 0 );
-    
+
+    has 'conf' 	=> (
+		is 		=>	'rw',
+		isa 	=> 	'Conf::Yaml',
+		lazy	=>	1,
+		builder	=>	"setConf"
+	);
+ 
 ####//}}
 
 method BUILD ($hash) { 
@@ -1165,4 +1172,20 @@ method _toString () {
     
     return $output;
 }
+method setConf {
+    my $installdir  =   $ENV{'installdir'} || "/agua";
+    my $configfile  =   "$installdir/conf/config.yaml";
+    my $logfile     =   "$installdir/log/app.$$.log";
+    
+    my $conf    =   Conf::Yaml->new({
+        inputfile   =>  $configfile,
+        logfile     =>  $configfile,
+        log         =>  $self->log(),
+        printlog    =>  $self->printlog()
+    });
+    
+    return $self->conf($conf);
+}
+
+
 }

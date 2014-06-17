@@ -15,10 +15,8 @@ use JSON;
 has 'sleep'		=> ( is  => 'rw', 'isa' => 'Int', default	=>	600	);
 
 # Strings
-has 'hubtype'	=> ( isa => 'Str|Undef', is => 'rw', default	=> 'github'	);
-has 'username'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
-#has 'tempdir'	=> ( isa => 'Str|Undef', is => 'rw', default	=>	"/tmp"	);
-has 'repository'=> ( isa => 'Str|Undef', is => 'rw'	);
+#has 'username'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
+#has 'repository'=> ( isa => 'Str|Undef', is => 'rw'	);
 has 'apiroot'	=> ( isa => 'Str|Undef', is => 'rw', default	=>	"https://api.github.com"	);
 has 'githubapi'	=> ( isa => 'Str|Undef', is => 'rw', default	=>	"https://api.github.com"	);
 has 'credentials'	=> ( is  => 'rw', 'isa' => 'Str|Undef', default	=> "" );

@@ -412,9 +412,6 @@ sub logError {
 	#### 
 	#### EXITLABEL:{ warn "We have skipped to the end of the program\n"; };
 	
-	goto EXITLABEL;
-
-
 	return $line;
 }
 

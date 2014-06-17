@@ -8,7 +8,7 @@ has 'remoteroot'	=> ( isa => 'Str|Undef', is => 'rw', default	=> "https://api.gi
 has 'package'		=> ( isa => 'Str|Undef', is => 'rw', default	=> '' );
 has 'installdir'	=> ( isa => 'Str|Undef', is => 'rw', default	=> '' );
 has 'privacy'		=> ( isa => 'Str|Undef', is => 'rw', default	=> 'public');
-has 'hubtype'		=> ( isa => 'Str|Undef', is => 'rw', default	=> "github" );
+has 'hubtype'		=> ( isa => 'Str|Undef', is => 'rw' );
 has 'version'		=> ( isa => 'Str|Undef', is => 'rw' );
 has 'build'			=> ( isa => 'Str|Undef', is => 'rw' );
 has 'type'			=> ( isa => 'Str|Undef', is => 'rw' );

@@ -1,27 +1,18 @@
-use MooseX::Declare;
+package Virtual::Openstack::Nova;
+use Moose::Role;
+use Method::Signatures::Simple;
 
 =head2
 
 
 =cut
 
-class Openstack::Nova with Logger {
-
 #####////}}}}}
 
-use Conf::Yaml;
-use Agua::Ssh;
-
 #### Integers
-has 'log'		=>  ( isa => 'Int', is => 'rw', default => 2 );
-has 'printlog'		=>  ( isa => 'Int', is => 'rw', default => 5 );
 
 #### Strings
 
-#### Objects
-has 'conf'			=> ( isa => 'Conf::Yaml', is => 'rw', required	=>	0 );
-has 'jsonparser'	=> ( isa => 'JSON', is => 'rw', lazy	=>	1, builder	=>	"setJsonParser"	);
-has 'ssh'			=> ( isa => 'Agua::Ssh', is => 'rw', lazy	=>	1, builder	=>	"setSsh"	);
 
 use FindBin qw($Bin);
 
@@ -121,7 +112,7 @@ method formatVolume ($device) {
 }
 
 method detach ($instanceid, $volumeid, $device, $size, $type, $mountpoint) {
-	print "Openstack::Nova::detach    volumeid not defined. Exiting\n" and exit if not defined $volumeid;
+	print "Virtual::Openstack::detach    volumeid not defined. Exiting\n" and exit if not defined $volumeid;
 	$self->logDebug("volumeid", $volumeid);
 
 	$instanceid	=	$self->getInstanceId() if not defined $instanceid;
@@ -399,5 +390,6 @@ method usage {
 	exit;
 }
 
-}
 
+
+1;

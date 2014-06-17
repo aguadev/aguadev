@@ -1,6 +1,6 @@
 package Agua::Common::Project;
 use Moose::Role;
-use Moose::Util::TypeConstraints;
+use Method::Signatures::Simple;
 
 =head2
 
@@ -13,7 +13,31 @@ use Moose::Util::TypeConstraints;
 =cut
 use Data::Dumper;
 
-sub saveProject {
+method setProjectStatus ($username, $project, $status) {
+	my $data	=	{
+		username	=>	$username,
+		name		=>	$project
+	};
+	
+	#### CHECK REQUIRED FIELDS
+	my $table = "project";
+	my $required_fields = ["username", "name"];
+	my $not_defined = $self->db()->notDefined($data, $required_fields);
+    $self->logError("undefined values: @$not_defined") and exit if @$not_defined;
+
+	#### UPDATE
+	my $query	=	qq{UPDATE project
+SET status='$status'
+WHERE username='$username'
+AND name='$project'};
+	$self->logDebug("query", $query);
+	my $success = $self->db()->do($query);	
+	$self->logDebug("success", $success);
+	
+	return $success;	
+}
+
+method saveProject {
 =head2
 
 	SUBROUTINE		saveProject
@@ -24,7 +48,6 @@ sub saveProject {
         
 =cut
 
-	my $self		=	shift;
     my $json 		=	$self->json();
 
  	$self->logDebug("Common::saveProject()");
@@ -34,7 +57,7 @@ sub saveProject {
 	$self->logStatus("Successful insert of project $json->{project} into project table") if $success;
 }
 
-sub addProject {
+method addProject {
 =head2
 
 	SUBROUTINE		addProject
@@ -45,7 +68,6 @@ sub addProject {
         
 =cut
 
-	my $self		=	shift;
     my $data 		=	$self->json();
 
  	$self->logDebug("Common::addProject()");
@@ -57,7 +79,7 @@ sub addProject {
 	$self->logStatus("Created/updated project $data->{name}") if $success;
 }
 
-sub _addProject {
+method _addProject ($data) {
 =head2
 
 	SUBROUTINE		_addProject
@@ -67,8 +89,7 @@ sub _addProject {
 		ADD A PROJECT TO THE project TABLE
         
 =cut
-	my $self		=	shift;
-    my $data 		=	shift;
+
  	$self->logDebug("data", $data);
 
 	#### SET TABLE AND REQUIRED FIELDS	
@@ -100,7 +121,7 @@ sub _addProject {
 	
 	return 1;
 }
-sub _removeProject {
+method _removeProject ($data) {
 =head2
 
 	SUBROUTINE		_removeProject
@@ -113,8 +134,6 @@ sub _removeProject {
       
 =cut
 
-	my $self		=	shift;
-    my $data 		=	shift;
  	$self->logDebug("data", $data);
 
 	#### CHECK REQUIRED FIELDS ARE DEFINED
@@ -127,7 +146,7 @@ sub _removeProject {
 	return $self->_removeFromTable($table, $data, $required_fields);
 }
 
-sub removeProject {
+method removeProject {
 =head2
 
 	SUBROUTINE		removeProject
@@ -140,9 +159,7 @@ sub removeProject {
       
 =cut
 
-	my $self		=	shift;
-
-        my $json 			=	$self->json();
+	my $json 			=	$self->json();
 
     #### VALIDATE
     $self->logError("User session not validated") and exit unless $self->validate();
@@ -200,10 +217,7 @@ sub removeProject {
 }	#### removeProject
 
 
-
-
-
-sub getProjects {
+method getProjects {
 =head2
 
     SUBROUTINE:     getProjects
@@ -225,10 +239,8 @@ sub getProjects {
 
 =cut
 
-	my $self		=	shift;
-
-	$self->logDebug("Common::getProjects()");
-    	my $json			=	$self->json();
+	$self->logDebug("");
+	my $json			=	$self->json();
 
     #### VALIDATE
     $self->logError("User session not validated") and exit unless $self->validate();
@@ -246,10 +258,8 @@ sub getProjects {
 }
 
 
-sub _getProjects {
+method _getProjects ($username) {
 #### GET PROJECTS FOR THIS USER
-    my $self        =   shift;
-    my $username    =   shift;    
     
     $self->logDebug("username", $username);
 	my $query = qq{SELECT * FROM project
@@ -260,7 +270,7 @@ ORDER BY name};
 	return $self->db()->queryhasharray($query);
 }
 
-sub _defaultProject {
+method _defaultProject {
 =head2
 
 	SUBROUTINE		_defaultProject
@@ -273,8 +283,7 @@ sub _defaultProject {
 		
 =cut
 
-	my $self		=	shift;
-	$self->logDebug("Common::_defaultProject()");
+	$self->logDebug("");
 	
     my $json         =	$self->json();
 
@@ -300,5 +309,22 @@ ORDER BY name};
 	return $projects;
 }
 
+
+method projectIsRunning ($username, $project) {
+	
+	$self->logDebug("username", $username);
+	$self->logDebug("project", $project);
+
+	my $query = qq{SELECT 1 from project
+WHERE username='$username'
+AND name='$project'
+AND status='running'
+};
+	$self->logDebug("query", $query);
+    my $result =  $self->db()->query($query) || 0;
+	$self->logDebug("Returning result", $result);
+	
+	return $result
+}
 
 1;

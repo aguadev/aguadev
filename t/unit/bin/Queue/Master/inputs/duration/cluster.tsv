@@ -1,0 +1,4 @@
+testuser	testuser.CU.Download	10	30	bcf.8c.64g	3666c5eb-1677-45a2-b348-4c9b0bd40ea8	8 CPUs, 64 GB RAM
+testuser	testuser.CU.Bwa	10	30	bcf.8c.64g	3666c5eb-1677-45a2-b348-4c9b0bd40ea8	8 CPUs, 64 GB RAM
+testuser	testuser.CU.FreeBayes	10	30	bcf.8c.64g	3666c5eb-1677-45a2-b348-4c9b0bd40ea8	8 CPUs, 64 GB RAM
+testuser	testuser.CU.Upload	10	30	bcf.8c.64g	3666c5eb-1677-45a2-b348-4c9b0bd40ea8	8 CPUs, 64 GB RAM

@@ -1,0 +1,69 @@
+#!/bin/bash
+
+#### VARIABLES
+USERNAME=<USERNAME>
+PROJECT=<PROJECT>
+WORKFLOW=<WORKFLOW>
+BASEDIR=<BASEDIR>
+PACKAGE=<PACKAGE>
+VERSION=<VERSION>
+INSTALLDIR=<INSTALLDIR>
+
+#### START LOG
+logfile="${HOME}/worker.log"
+sudo rm -fr logfile
+exec > $logfile 2>&1
+echo "[DATETIME] " `date`
+
+echo "updateagua.sh    #### UPDATE agua"
+cd $BASEDIR;
+sudo git stash save changes 
+sudo git pull origin master 
+
+echo "Updating package: $PACKAGE" 
+cd $INSTALLDIR;
+sudo git stash save changes 
+sudo git checkout master
+if [[ ! `sudo git remote -v` ]]; then echo 'sudo git remote add bit $URL'; fi
+sudo git pull bit master 
+
+#### FIX HOST NAME
+$INSTALLDIR/data/fixhostname.sh
+
+#### MOUNT NFS
+$INSTALLDIR/data/mountnfs.sh
+
+#### ADD NOVA API
+$INSTALLDIR/data/addapiroute.sh
+
+#### UPDATE PACKAGE
+$INSTALLDIR/data/updatepackage.sh $PACKAGE https://bitbucket.org/annaisystems/$PACKAGE
+
+#### SET HOST'S queue:taskqueue
+$INSTALLDIR/data/taskqueue.sh $USERNAME $PROJECT $WORKFLOW
+
+##########################################
+##########################################
+#### BELOW THIS LINE IS FOR DEBUGGING ONLY
+#### (WORKFLOW AND DATA LOADING IS DONE ON PACKAGE INSTALL)
+
+#### LOAD WORKFLOWS AND DATA
+$INSTALLDIR/data/loaddata.sh $BASEDIR $INSTALLDIR $PROJECT $USERNAME
+
+#### LOAD WORKFLOWS
+$INSTALLDIR/data/loadworkflows.sh $BASEDIR $INSTALLDIR $PROJECT $USERNAME
+
+#### ABOVE THIS LINE IS FOR DEBUGGING ONLY
+##########################################
+##########################################
+
+#### CLEAN LOGS
+sudo rm -fr /agua/log/*
+
+#### START AGUA SERVICES
+/agua/bin/install/resources/agua/install/worker.sh
+sudo service worker restart
+/agua/bin/install/resources/agua/install/agua.sh
+sudo service rabbitjs start
+sudo service master stop
+

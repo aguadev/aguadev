@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS stageparameter
     format          VARCHAR(40),
     description     TEXT, 
     args            TEXT,
-    inputParams          TEXT,
+    inputParams     TEXT,
     paramFunction   TEXT,
 
     chained         INT(1),

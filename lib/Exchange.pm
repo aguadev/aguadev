@@ -43,22 +43,27 @@ method notifyStatus ($data) {
 }
 
 around logError => sub {
-	print "Exchange::around logError\n";
-	my $next = shift;
-    my $self = shift;
+	my $orig	=	shift;
+    my $self 	= 	shift;
+	my $error	=	shift;
+	
+	$self->logCaller("");
+	print "Exchange::around logError    orig: $orig\n" ;
 	print "self: $self\n";
-	print "next: $next\n";
 
-    #$self->$next();
-    print "In Class!\n";
-    return;
-	#$self->logDebug("Around logError");
+	$self->logDebug("Around logError");
 
+	#### DO logError
+	$self->$orig($error);
+	
+	print "AFTER DO logError\n";
 
-	#$self->logDebug("data", $data);
-	#
-	##### 1.2 GENERATE FEATURES IN PARALLEL ON CLUSTER (Agua::JBrowse)
-	#$self->$orig();
+	#### SEND EXCHANGE MESSAGE
+	my $data	=	{
+		error	=>	$error,
+		status	=>	"error"
+	};
+	$self->sendSocket($data);
 };
 
 method notifyError ($data, $error) {

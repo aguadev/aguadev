@@ -73,11 +73,11 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
     has 'db'		=> ( isa => 'Agua::DBase::MySQL', is => 'rw', required => 0 );
     has 'logfh'     => ( isa => 'FileHandle', is => 'rw', required => 0 );
     has 'conf' 	=> (
-	is =>	'rw',
-	isa => 'Conf::Yaml'
-#    ,
-#	default	=>	sub { Conf::Yaml->new(	memory	=>	1	);	}
-);
+		is 		=>	'rw',
+		isa 	=> 	'Conf::Yaml',
+		lazy	=>	1,
+		builder	=>	"setConf"
+	);
     
 ####//}}    
     
@@ -163,8 +163,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         $self->setStarted();
         $self->logDebug("starting workflow ")  . $self->name()  . "': " . $self->started() . "'\n";
         
-        for ( my $i = $start - 1; $i < $stop; $i++ )
-        {
+        for ( my $i = $start - 1; $i < $stop; $i++ ) {
             my $app = $$apps[$i];
             $self->logDebug("Running app '") . $app->name() . "'\n";
             $app->logfh($self->logfh());

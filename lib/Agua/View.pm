@@ -1020,6 +1020,7 @@ method linkSpeciesDir {
 
 #### GENERATE FEATURES jbrowseFeatures (AROUND)
 around jbrowseFeatures {
+	my $orig	=	shift;
 	$self->logDebug("AROUND Agua::JBrowse::jbrowseFeatures()");
 
 	$self->logDebug("Doing self->getEnvars()");

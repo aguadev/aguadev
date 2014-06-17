@@ -1,0 +1,6 @@
+anonymous	CU	0.0.2	/agua/apps/cu/0.0.2	testuser	Project1	Upload	5		upload	1	uploader	bin/upload.pl			0			0000-00-00 00:00:00	0000-00-00 00:00:00	0000-00-00 00:00:00	0	0	0
+anonymous	CU	0.0.2	/agua/apps/cu/0.0.2	testuser	Project1	FreeBayes	4		freebayes	1	variant	bin/freebayes.pl			0			0000-00-00 00:00:00	0000-00-00 00:00:00	0000-00-00 00:00:00	0	0	0
+anonymous	CU	0.0.2	/agua/apps/cu/0.0.2	testuser	Project1	Download	2		download	1	downloader	bin/download.pl			0			0000-00-00 00:00:00	0000-00-00 00:00:00	0000-00-00 00:00:00	0	0	0
+anonymous	CU	0.0.2	/agua/apps/cu/0.0.2	testuser	Project1	Bwa	3		align	1	aligner	bin/bwa.pl			0			0000-00-00 00:00:00	0000-00-00 00:00:00	0000-00-00 00:00:00	0	0	0
+anonymous	agua	0.8.0-beta.2+build.57	/agua	testuser	Project1	LoadSamples	1		loadSampleFiles	2	loader	bin/samples/loadSampleFiles.pl			0			0000-00-00 00:00:00	0000-00-00 00:00:00	0000-00-00 00:00:00	0	0	0
+anonymous	agua	0.8.0-beta.2+build.57	/agua	testuser	Project1	LoadSamples	1		loadSampleIds	1	loader	bin/samples/loadSamples.pl			0			0000-00-00 00:00:00	0000-00-00 00:00:00	0000-00-00 00:00:00	0	0	0

@@ -168,6 +168,7 @@ method installDependencies ($opsdir, $installdir) {
 	foreach my $missed ( @$missing ) {
 		my $package	=	$missed->{package};
 		my $version	=	$missed->{version};
+		my $treeish	=	$missed->{treeish} || $version;
 		my $targetdir;
 		$self->logDebug("package", $package);
 		$self->logDebug("version", $version);
@@ -200,6 +201,7 @@ method installDependencies ($opsdir, $installdir) {
 			installdir	=>	$targetdir,
 			package  	=>  $package,
 			version  	=>  $version,
+			treeish  	=>  $treeish,
 			opsfile  	=>  $opsfile,
 			pmfile  	=>  $pmfile,
 			dependents	=>	$dependents,
@@ -655,6 +657,25 @@ method makeInstall ($installdir, $version) {
 	$self->logDebug("err", $err);
 }
 
+method perlmakeInstall ($installdir, $version) {
+	$self->logDebug("installdir", $installdir);
+	$self->logDebug("version", $version);
+
+	#### CHANGE DIR
+    $self->changeDir("$installdir/$version");
+	
+	#### MAKE
+	my ($out, $err) = $self->runCommand("perl Makefile.PL");
+	$self->logDebug("out", $out);
+	$self->logDebug("err", $err);
+	($out, $err) = $self->runCommand("make");
+	$self->logDebug("out", $out);
+	$self->logDebug("err", $err);
+	($out, $err) = $self->runCommand("make install");
+	$self->logDebug("out", $out);
+	$self->logDebug("err", $err);
+}
+
 method confirmInstall ($installdir, $version) {
 	$self->logDebug("version", $version);
 	$self->logDebug("installdir", $installdir);
@@ -967,7 +988,7 @@ method setHtmlLogTemplate ($package, $version) {
 	return qq{
 <html>
 <head>
-	<title>$package upgrade log</title>
+	<title>$package upgrade log</title>$self->logDebug("DEBUG EXIT") and exit;
 </head>
 <body>
 <center>
@@ -998,12 +1019,13 @@ method loadOpsModule ($opsdir, $repository) {
 	$self->logDebug("pmfile: $pmfile");
 	
 	if ( -f $pmfile ) {
-		$self->logDebug("\nFound modulefile: $pmfile\nDoing require $modulename");
+		$self->logDebug("Found modulefile: $pmfile");
+		$self->logDebug("Doing require $modulename");
 		unshift @INC, $opsdir;
 		my ($olddir) = `pwd` =~ /^(\S+)/;
 		$self->logDebug("olddir", $olddir);
 		chdir($opsdir);
-		print eval "require $modulename";
+		eval "require $modulename";
 		
 		Moose::Util::apply_all_roles($self, $modulename);
 	}
@@ -1043,11 +1065,16 @@ method loadOpsInfo ($opsdir, $package) {
 		#### SET PARAMS
 		my $params = $self->opsfields();
 		foreach my $param ( @$params ) {
-			$self->$param($self->opsinfo()->$param())
-				if $self->can($param)
-				#and not defined $self->$param()
+			$self->logDebug("param", $param);
+			$self->logDebug("self->$param()", $self->$param());
+			if ( $self->can($param)
+				and (not defined $self->$param()
+					or  $self->$param() eq "" )
 				and $self->opsinfo()->can($param)
-				and defined $self->opsinfo()->$param();
+				and defined $self->opsinfo()->$param() ) {
+				$self->logDebug("Setting self->$param using opsinfo->$param", $self->opsinfo()->$param());
+				$self->$param($self->opsinfo()->$param())
+			}
 		}
 	}
 	else {
@@ -1056,6 +1083,10 @@ method loadOpsInfo ($opsdir, $package) {
 		
 		print "Opsfile not found: $opsfile\n";
 	}
+	
+	#### SET GITHUB AS DEFAULT HUB TYPE
+	$self->hubtype("github") if not defined $self->hubtype() or $self->hubtype() eq "";
+	
 }
 
 method loadConfig ($configfile, $mountpoint, $installdir) {

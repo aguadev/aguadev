@@ -1,0 +1,22 @@
+testuser	testuser	Project1	Bwa	0	align	1	outputdir	0	0	input	id	String	--outputdir	/data/input			Unique identifier for the sample				0
+testuser	testuser	Project1	Bwa	0	align	1	reference	0	0	input	id	String	--reference	/data/reference/genome.fa.gz			Stubbed location of bwa genome index files (e.g., /reference/genome.fa.gz)				0
+testuser	testuser	Project1	Bwa	0	align	1	uuid	0	0	input	id	String	--uuid	<SAMPLEID>			Unique identifier for the sample				0
+testuser	testuser	Project1	Bwa	0	align	1	version	0	0	input	id	String	--version	0.7.7			Unique identifier for the sample				0
+testuser	testuser	Project1	Download	0	download	1	uuid	2	0	input	id	String		<SAMPLEID>	required		Unique identifier for the sample				0
+testuser	testuser	Project1	Download	0	download	1	volume	1	0	input	directory	String		/data/input	required		Path to the base directory containing input file subfolders				0
+testuser	testuser	Project1	FreeBayes	0	freebayes	1	outputdir	0	0	input	id	String	--outputdir	/data/input			Unique identifier for the sample				0
+testuser	testuser	Project1	FreeBayes	0	freebayes	1	reference	0	0	input	id	String	--reference	/data/reference/genome.fa.gz			Stubbed location of bwa genome index files (e.g., /reference/genome.fa.gz)				0
+testuser	testuser	Project1	FreeBayes	0	freebayes	1	uuid	1	0	input	id	String		<SAMPLEID>			Unique identifier for the sample				0
+testuser	testuser	Project1	FreeBayes	0	freebayes	1	version	0	0	input	id	String	--version	0.7.7			Unique identifier for the sample				0
+testuser	testuser	Project1	LoadSamples	0	loadSampleIds	1	file	0	0		file		--file	/agua/apps/cu/data/samples.tsv			Location of file containing list of unique identifiers each sample				0
+testuser	testuser	Project1	LoadSamples	0	loadSampleIds	1	project	0	0		project		--project	CU			Location of project containing list of unique identifiers each sample				0
+testuser	testuser	Project1	LoadSamples	0	loadSampleIds	1	username	0	0		username		--username	/agua/apps/cu/data/samples.tsv			Location of username containing list of unique identifiers each sample				0
+testuser	testuser	Project1	LoadSamples	0	loadSampleIds	1	workflow	0	0		workflow		--workflow	loadSamples			Location of workflow containing list of unique identifiers each sample				0
+testuser	testuser	Project1	LoadSamples	0	loadSampleIds	1	workflownumber	0	0		workflownumber		--workflownumber	1			Location of workflownumber containing list of unique identifiers each sample				0
+testuser	testuser	Project1	LoadSamples	0	loadSampleFiles	2	file	0	0		file		--file	/agua/apps/cu/data/samples.tsv			Location of file containing rows with tab-separated fields: unique identifier, filesize, filename				0
+testuser	testuser	Project1	LoadSamples	0	loadSampleFiles	2	project	0	0		project		--project	CU			Location of project containing list of unique identifiers each sample				0
+testuser	testuser	Project1	LoadSamples	0	loadSampleFiles	2	username	0	0		username		--username	/agua/apps/cu/data/samples.tsv			Location of username containing list of unique identifiers each sample				0
+testuser	testuser	Project1	LoadSamples	0	loadSampleFiles	2	workflow	0	0		workflow		--workflow	loadSamples			Location of workflow containing list of unique identifiers each sample				0
+testuser	testuser	Project1	LoadSamples	0	loadSampleFiles	2	workflownumber	0	0		workflownumber		--workflownumber	1			Location of workflownumber containing list of unique identifiers each sample				0
+testuser	testuser	Project1	Upload	0	upload	1	uuid	2	0	input	id	String		<SAMPLEID>			Unique identifier for the sample				0
+testuser	testuser	Project1	Upload	0	upload	1	volume	1	0	input	directory	String		/pancanfs			Path to the base directory containing output file subfolders				0
