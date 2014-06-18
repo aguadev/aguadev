@@ -46,15 +46,17 @@ PURPOSE
 
 #Boolean
 has 'backup' 	=> ( isa => 'Int', 		is => 'rw', default => 0 );
+
 # Ints
-has 'log'	=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);  
+has 'log'		=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);  
 has 'printlog'	=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);
-has 'oldlog'=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);  
+has 'oldlog'	=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);  
 has 'oldprintlog'=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);
 has 'errpid' 	=> ( isa => 'Int', 		is => 'rw', required => 0 );
 has 'indent'	=> ( isa => 'Int', 		is => 'rw', default	=>	4 );
 
 # Strings
+has 'logtype'	=> ( isa => 'Str', 		is => 'rw', default	=> 	"json"	);  
 has 'logfile'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'username' 	=> ( isa => 'Str|Undef', 		is => 'rw', required => 0 );
 
@@ -392,16 +394,35 @@ sub logCaller {
 }
 
 sub logError {
-    my ($self, $message) = @_;
+    my ($self, $message, $variable) = @_;
+
 	$message = '' if not defined $message;
     $self->appendLog($self->logfile()) if not defined $self->logfh();   
+
+	my $text = $variable;
+	if ( not defined $variable and $#_ == 2 )	{
+		$text = "undef";
+	}
+	elsif ( ref($variable) )	{
+		$text = $self->objectToJson($variable);
+	}
+
     my ($package, $filename, $linenumber) = caller;
     my $timestamp = $self->logTimestamp();
 	my $callingsub = (caller 1)[3];
     my $line = "$timestamp\t[ERROR]   \t$callingsub\t$linenumber\t$message\n";
     print { $self->logfh() } $line if defined $self->logfh() and $self->printlog() > 0;
 
-    print qq{{"error":"$message","subroutine":"$callingsub","linenumber":"$linenumber","filename":"$filename","timestamp":"$timestamp"}\n};
+	my $logtype	=	$self->logtype();
+	if ( $logtype eq "json" ) {
+	    print qq{{"error":"$message","subroutine":"$callingsub","linenumber":"$linenumber","filename":"$filename","timestamp":"$timestamp"}\n};
+	}
+	else {
+		my $indent = $self->indent();
+		my $spacer = " " x $indent;
+		my $line = "$timestamp$spacer" . "[ERROR]   \t$callingsub\t$linenumber\t$message\n";
+		$line = "$timestamp$spacer" . "[ERROR]   \t$callingsub\t$linenumber\t$message: $text\n" if $#_ == 2;
+	}
 	
 	#### FOR FASTCGI: SKIP TO END OF SCRIPT WITHOUT EXITING
 	#### NB: MUST PUT THIS AT END OF SCRIPT:

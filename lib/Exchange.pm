@@ -48,15 +48,12 @@ around logError => sub {
 	my $error	=	shift;
 	
 	$self->logCaller("");
-	print "Exchange::around logError    orig: $orig\n" ;
-	print "self: $self\n";
-
-	$self->logDebug("Around logError");
+	$self->logDebug("self->logtype", $self->logtype());
 
 	#### DO logError
 	$self->$orig($error);
 	
-	print "AFTER DO logError\n";
+	warn "Error: $error" and return if $self->logtype() eq "cli";
 
 	#### SEND EXCHANGE MESSAGE
 	my $data	=	{

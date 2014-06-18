@@ -799,8 +799,10 @@ method getStructure ($table) {
 }
 
 method load ($table, $file, $extra) {
+	#$self->logDebug("table", $table);
+	
 #### LOAD DATA FROM .TSV FILE INTO TABLE
-	my $query = qq{LOAD DATA INFILE '$file' INTO TABLE $table};
+	my $query = qq{LOAD DATA LOCAL INFILE '$file' INTO TABLE $table};
     if ( defined $extra )   {   $query .= " $extra";    }
 	$self->logNote("Query", $query);
 

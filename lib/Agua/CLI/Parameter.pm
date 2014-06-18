@@ -18,7 +18,7 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
     has 'param'	    	=> ( isa => 'Str|Undef', is => 'rw', default => '', required => 1, documentation => q{Name of the parameter}  );
     has 'owner'	    	=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous', documentation => q{Owner of this object} );
     has 'argument'		=> ( isa => 'Str|Undef', is => 'rw', default => '', required => 0 );
-    has 'paramtype'	    => ( isa => 'Str', is => 'rw', default => '', required => 0, documentation => q{Three possible param types: input, resource or output} );
+    has 'paramtype'	    => ( isa => 'Str', is => 'rw', default => '', default	=> 'input', documentation => q{Three possible param types: input, resource or output} );
     has 'valuetype'	    => ( isa => 'Str', is => 'rw', default => '', required => 0, documentation => q{Possible types: file, files, directory, directories, integer, string or flag} );
     has 'category'		=> ( isa => 'Str', is => 'rw', default => '', required => 0, documentation => q{User-defined category for parameter to be used with input/output chaining} );
     has 'ordinal'		=> ( isa => 'Str|Undef', is => 'rw', default => 0, required => 0, documentation => q{Set order of appearance: 1, 2, ..., N} );

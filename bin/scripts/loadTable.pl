@@ -64,17 +64,25 @@ use File::Path;
 use File::Copy;
 use Getopt::Long;
 
+#### SET LOG
+my $logfile 	= 	"/tmp/loadtable.$$.log";
+my $log 		= 	2;
+my $printlog 	= 	5;
+
+
 #### GET OPTIONS
 my $db;
-my $dumpfile;
+my $table;
 my $tsvfile;	
 my $help;
 GetOptions (
-	'db=s'		=> \$db,
-	'dumpfile=s' => \$dumpfile,
-	'dumpfile=s' => \$dumpfile,
-	'dumpfile=s' => \$dumpfile,
-	'tsvfile=s' => \$tsvfile,
+	'db=s'			=> \$db,
+	'table=s' 		=> \$table,
+	'tsvfile=s' 	=> \$tsvfile,
+
+	'log=s'			=> \$log,
+	'printlog=s' 	=> \$printlog,
+
 	'help' => \$help) or die "No options specified. Try '--help'\n";
 if ( defined $help )	{	usage();	}
 
@@ -86,23 +94,19 @@ die "Database not defined (option --db)\n" if not defined $db;
 die "Table not defined (option --table)\n" if not defined $table;
 die "Output directory not defined (option --tsvfile)\n" if not defined $tsvfile; 
 
-#### SET LOG
-my $logfile = "/tmp/dumpdb.log";
-my $log 	= 	2;
-my $printlog 	= 	5;
-
 #### GET CONF
 my $configfile = "$Bin/../../conf/config.yaml";
 my $conf = Conf::Yaml->new({
 	inputfile 	=> $configfile,
 	logfile		=>	$logfile,
-	log		=>	2,
-	printlog	=>	5
+	log			=>	$log,
+	printlog	=>	$printlog
 });
 
 #### CREATE OUTPUT DIRECTORY
-File::Path::mkpath($tsvfile) if not -d $tsvfile;
-die "Can't create output directory: $tsvfile\n" if not -d $tsvfile;
+my ($outputdir)	=	$tsvfile	=~	/^(.+?)\/[^\/]+$/;
+File::Path::mkpath($outputdir) if not -d $outputdir;
+die "Can't create output directory: $outputdir\n" if not -d $outputdir;
 
 my $object = Agua::Configure->new({
 	conf		=>	$conf,
@@ -114,7 +118,7 @@ my $object = Agua::Configure->new({
 });
 
 $object->setDbh();
-$object->loadTable($table, $tsvfile);
+$object->db()->load($table, $tsvfile, undef);
 
 #### PRINT RUN TIME
 my $runtime = Timer::runtime( $time, time() );

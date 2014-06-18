@@ -531,9 +531,10 @@ method stageParameterToDatabase ($username, $package, $installdir, $stage, $para
 	#$self->logNote("parameter", $parameter);
 	
 	my $paramdata = $parameterobject->exportData();
-	#$self->logDebug("BEFORE paramdata", $paramdata);
+	$self->logDebug("BEFORE paramdata", $paramdata);
 	$paramdata->{project}		=	$project;
 	$paramdata->{workflow}		=	$workflow;
+	$paramdata->{workflownumber}=	$workflownumber;
 	$paramdata->{name}			=	$paramdata->{param};
 	$paramdata->{number}		=	$paramnumber;
 	$paramdata->{appnumber}		=	$stagenumber,

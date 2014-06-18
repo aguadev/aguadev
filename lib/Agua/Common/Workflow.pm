@@ -75,7 +75,7 @@ ORDER BY project, number, name};
 }
 
 method getWorkflowsByProject ($projectdata) {
-	$self->logDebug("projectdata", $projectdata);
+	#$self->logDebug("projectdata", $projectdata);
 	
 	my $username = $projectdata->{username};
 	my $project = $projectdata->{name};
@@ -83,12 +83,12 @@ method getWorkflowsByProject ($projectdata) {
 	$self->logCritical("project not defined") and exit if not defined $project;
 	
 	#### GET ALL SOURCES
-	my $query = qq{SELECT * FROM workflow
+	my $query = qq{SELECT *, name AS workflow, number AS workflownumber FROM workflow
 WHERE username='$username'
 AND project='$project'
 ORDER BY number};
 	#$self->logDebug("self->db()", $self->db());
-	$self->logDebug("$query");
+	#$self->logDebug($query);
 	my $workflows = $self->db()->queryhasharray($query);
 	$workflows = [] if not defined $workflows;
 	

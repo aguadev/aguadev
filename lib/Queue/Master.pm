@@ -23,7 +23,7 @@ PURPOSE
 use strict;
 use warnings;
 
-class Queue::Master with (Logger, Exchange, Agua::Common::Database, Agua::Common::Timer, Agua::Common::Project, Agua::Common::Stage) {
+class Queue::Master with (Logger, Exchange, Agua::Common::Database, Agua::Common::Timer, Agua::Common::Project, Agua::Common::Stage, Agua::Common::Workflow) {
 
 #####////}}}}}
 
@@ -111,25 +111,32 @@ method manage {
 				$self->logDebug("project", $project);
 	
 				#### GET CURRENT QUEUE SAMPLES
-				my $queues	=	$self->getDistinctQueues($project);
-				$self->logDebug("queues", $queues);
-		
-				#### GET QUEUE TASK COUNTS LIST FROM RABBITMQ
-				my $queuetasks	=	$self->getQueueTasks();
-				$self->logDebug("queuetasks", $queuetasks);
+				my $workflows	=	$self->getWorkflowsByProject({
+					name		=>	$project,
+					username	=>	$username
+				});
+				#$self->logDebug("workflows", $workflows);
+				
+				next if not defined $workflows or not @$workflows;
+				
+				##### ADD QUEUES IF QUEUES NOT DEFINED
+				#$workflows		=	$self->addFirstQueues($username, $project) if not defined $workflows;
 		
 				#### 1. DECIDE JOB THRESHOLD FOR EACH QUEUE BASED ON THROUGHPUT
 				#    AND AVAILABLE RESOURCES (CPU, MEMORY)
 				#
 				#### 2. ADJUST maxjobs THRESHOLD IN CONFIG FILE
 				#
-				$self->balanceQueues($queues);
-		
 				#### 3. ADD/REMOVE VMS TO/FROM QUEUES BASED ON JOB THRESHOLDS
+
+#### DEBUG
 				#
-				#### 4. REPLENISH NUMBER OF JOBS IN EACH QUEUE IF BELOW THRESHOLD
-				#
-				$self->maintainQueues($queues, $queuetasks);
+				#$self->balanceInstances($workflows);
+#### DEBUG
+
+		
+				#### 4. REPLENISH NUMBER OF JOBS IN EACH QUEUE IF BELOW THRESHOLD		
+				$self->maintainQueues($workflows);
 			}
 			
 		}
@@ -142,6 +149,20 @@ method manage {
 	}
 	
 	return 1;
+}
+
+method addFirstQueues ($username, $project) {
+	$self->logDebug("username", $username);
+	$self->logDebug("project", $project);
+	
+	my $workflows	=	$self->getWorkflowsByProject({
+		username	=>	$username,
+		name		=>	$project
+	});
+	$self->logDebug("workflows", $workflows);
+	
+	#foreach my $queue
+	
 }
 
 method updateShutdown {
@@ -164,29 +185,41 @@ method pause {
 	sleep($sleep);
 }
 
-#### MAINTAIN QUEUES
 method getProjects ($username) {
 	return if not defined $username;
 	return $self->db()->queryarray("SELECT * FROM project WHERE username='$username'");
 }
-method maintainQueues($queues, $queuelist) {
-	foreach my $queue ( @$queues ) {
-		$self->maintainQueue($queues, $queuelist, $queue);
+#### MAINTAIN QUEUES
+method maintainQueues($workflows) {
+
+	#### GET QUEUE TASK COUNTS LIST FROM RABBITMQ
+	#my $queuelist	=	$self->getQueueTasks();
+	#$self->logDebug("queuelist", $queuelist);
+	
+#### DEBUG
+my $queuelist	=	{};
+
+	foreach my $workflow ( @$workflows ) {
+		$self->maintainQueue($workflows, $queuelist, $workflow);
 	}
 }
 
-method maintainQueue ($queues, $queuelist, $queuedata) {
-	$self->logDebug("queuedata", $queuedata);
+method maintainQueue ($workflows, $queuelist, $workflowdata) {
+	$self->logDebug("workflowdata", $workflowdata);
 	
-	my $queuename	=	$self->setQueueName($queuedata);
+	my $queuename	=	$self->setQueueName($workflowdata);
 	$self->logDebug("queuename", $queuename);
 	
+	$self->logDebug("Skipping completed queue", $queuename) and return if $self->workflowCompleted($workflowdata);
+	
 	#### GET MAX JOBS
-	my $maxjobs		=	$self->maxJobsForQueue($queuedata);
+	my $maxjobs		=	$self->maxJobsForQueue($workflowdata);
 	$self->logDebug("FINAL maxjobs", $maxjobs);
 
 	#### GET NUMBER OF QUEUED JOBS
-	my $numberqueued	=	$self->getNumberQueuedJobs($queuelist, $queuename) || 0;
+	my $queuedjobs	=	$self->getQueuedJobs($workflowdata);
+	my $numberqueued=	scalar(@$queuedjobs);
+	#my $numberqueued	=	$self->getNumberQueuedJobs($queuelist, $queuename) || 0;
 	$self->logDebug("numberqueued", $numberqueued);
 
 	#### ADD MORE JOBS TO QUEUE IF LESS THAN maxjobs
@@ -196,13 +229,12 @@ method maintainQueue ($queues, $queuelist, $queuedata) {
 	return 0 if $limit <= 0;
 
 	#### QUEUE UP ADDITIONAL SAMPLES
-	my $tasks	=	$self->getTasks($queues, $queuedata, $limit);
+	my $tasks	=	$self->getTasks($workflows, $workflowdata, $limit);
 	$self->logDebug("tasks", $tasks);
 
 	if ( $numberqueued == 0 and not @$tasks ) {
-		$self->logDebug("Setting workflow $queuedata->{workflow} status to 'completed'");
-		$queuedata->{name}	=	$queuedata->{workflow};
-		$self->setWorkflowStatus($queuedata, "completed");
+		$self->logDebug("Setting workflow $workflowdata->{workflow} status to 'completed'");
+		$self->setWorkflowStatus($workflowdata, "completed");
 	}
 	elsif ( @$tasks ) {
 		foreach my $task ( @$tasks ) {
@@ -211,6 +243,17 @@ method maintainQueue ($queues, $queuelist, $queuedata) {
 	}
 	
 	return 1;
+}
+
+method workflowCompleted ($workflowdata) {
+	my $query	=	qq{SELECT 1 FROM workflow
+WHERE username='$workflowdata->{username}'
+AND project='$workflowdata->{project}'
+AND name='$workflowdata->{name}'
+AND status='completed'};
+	#$self->logDebug("query", $query);
+	
+	return $self->db()->query($query);
 }
 
 method getTasks ($queues, $queuedata, $limit) {
@@ -285,121 +328,127 @@ method getPrevious ($queues, $queuedata) {
 	$self->logDebug("workflownumber", $workflownumber);
 	
 	my $previous	=	{};
-	if ( $workflownumber == 1 ) {
-		$previous->{status}		=	"none";
-		$previous->{username}	=	$queuedata->{username};
-		$previous->{project}	=	$queuedata->{project};
-		$previous->{workflow}	=	$queuedata->{workflow};
-		$previous->{workflownumber}	=	$queuedata->{workflownumber};
-	}
-	else {
+	#if ( $workflownumber == 1 ) {
+	#	$previous->{status}		=	"none";
+	#	$previous->{username}	=	$queuedata->{username};
+	#	$previous->{project}	=	$queuedata->{project};
+	#	$previous->{workflow}	=	$queuedata->{workflow};
+	#	$previous->{workflownumber}	=	$queuedata->{workflownumber};
+	#}
+	#else {
 		my $previousdata		=	$$queues[$workflownumber - 2];
 		$previous->{status}		=	"completed";
 		$previous->{username}	=	$previousdata->{username};
 		$previous->{project}	=	$previousdata->{project};
 		$previous->{workflow}	=	$previousdata->{workflow};
 		$previous->{workflownumber}	=	$previousdata->{workflownumber};
-	}
+	#}
 
 	return $previous;	
 }
 
-#### BALANCE
-method balanceQueues ($queues) {
-	$self->logDebug("queues", $queues);
+#### BALANCE INSTANCES
+method balanceInstances ($workflows) {
+	$self->logDebug("workflows", $workflows);
+
+	my $username	=	$$workflows[0]->{username};
+	$self->logDebug("username", $username);
 
 	# 1. CALCULATE AVERAGE DURATION OF completed SAMPLES IN EACH WORKFLOW/QUEUE
 	#
-	my $durations	=	$self->getDurations($queues);
+	my $durations	=	$self->getDurations($workflows);
+	$self->logDebug("durations", $durations);
 
 	#### NARROW DOWN TO ONLY QUEUES WITH CLUSTERS
-	$queues	=	$self->clusterQueuesOnly($queues);	
+	$workflows	=	$self->clusterWorkflows($workflows);	
+	$self->logDebug("cluster only workflows", $workflows);
+
+	#### GET CURRENT COUNTS OF QUEUES
+	my $currentcounts	=	$self->getCurrentCounts($username);
 
 	#### GET REQUIRED RESOURCES FOR QUEUE INSTANCES (CPUs, RAM, ETC.)
-	my $instances	=	$self->getInstances($queues);
+	my $instances	=	$self->getInstances($workflows);
 	$self->logDebug("instances", $instances);
-	
+
 	# 3. IF LATEST RUNNING WORKFLOW HAS NO COMPLETED JOBS, SET
-	#	INSTANCE COUNT FOR LAST WORKFLOW TO cluster->minnodes
-	my $latestcompleted =	$self->getLatestCompleted($queues);
+	#	INSTANCE COUNT FOR NEXT WORKFLOW TO cluster->minnodes
+	my $latestcompleted =	$self->getLatestCompleted($workflows);
 	$self->logDebug("latestcompleted", $latestcompleted);
-	
-	if ( not defined $latestcompleted) {
 
-	
-	
-	#### SET FIRST NODES TO MAX NO SAMPLES COMPLETED
-	my $firstqueuename		=	$self->getQueueName($$queues[0]);
-	$self->logDebug("firstqueuename", $firstqueuename);
-	my $instance		=	$instances->{$firstqueuename};
-	$self->logDebug("instance", $instance);
-	my $metric	=	$self->metric();
-	my $firstresource	=	$instance->{$metric};
-	
+	# 4. GET TOTAL QUOTA FOR RESOURCE (DEFAULT: NO. CPUS)
+	#my $quota	=	$self->getResourceQuota($username, $metric);
 
+#### DEBUG
+my $quota		=	20;
+$self->logDebug("quota", $quota);
 
-		my $firstcluster	=	$self->getQueueCluster($$queues[0]);
-		$self->logDebug("firstcluster", $firstcluster);
-		my $maxnodes		=	$firstcluster->{maxnodes};
-		$self->logDebug("maxnodes", $maxnodes);
+	my $resourcecounts	=	[];
+	my $instancecounts	=	[];
+	#### SET DEFAULT INSTANCE COUNTS FOR FIRST WORKFLOW IF:
+	#### 1. PROJECT WORKFLOWS HAVE JUST STARTED RUNNING, OR
+	#### 2. SAMPLES HAVE JUST BEEN LOADED
+	#### 
+	if ( not defined $latestcompleted ) {
 		
-		my $resourcecount 	=	$firstresource * $maxnodes;
+		my $resourcecount	=	$self->getDefaultResource($$workflows[0], $instances, $quota);
 		$self->logDebug("resourcecount", $resourcecount);
 
-		my $username	=	$$queues[0]->{username};
-		my $quota	=	$self->getResourceQuota($username, $metric);
-		$self->logDebug("quota", $quota);
+		my $metric	=	$self->metric();
+
+		my $queuename	=	$self->getQueueName($$workflows[0]);
+		my $resource	=	$instances->{$queuename}->{$metric};
+		my $instancecount	=	ceil($resourcecount/$resource);
+		$instancecount		=	1 if $instancecount < 1;
+		$self->logDebug("instancecount", $instancecount);
 		
-		if ( $resourcecount > $quota ) {
-			#code
+		$resourcecounts	=	[ $resourcecount ];
+		$instancecounts	=	[ $instancecount ];
+	}
+	else {
+		##### GET CURRENT COUNT OF VMS PER QUEUE (queueample STATUS 'started')
+		##### ASSUMES ONE VM PER TASK
+		#my $currentcounts=	$self->getCurrentCounts();
+		#$self->logDebug("currentcounts", $currentcounts);
+		
+		# 2. BALANCE COUNTS BASED ON DURATION
+		#
+		$resourcecounts	=	$self->getResourceCounts($workflows, $durations, $instances, $quota);
+		$instancecounts	=	$self->getInstanceCounts($workflows, $instances, $resourcecounts);
+		$self->logDebug("instancecounts", $instancecounts);
+
+		#### SET DEFAULT INSTANCE COUNTS FOR NEXT WORKFLOW IF IT HAS NO
+		#### COMPLETED JOBS TO PROVIDE DURATION INFO
+		if ( $latestcompleted < scalar(@$workflows) - 1) {
+			$instancecounts	=	$self->adjustCounts($workflows, $resourcecounts, $latestcompleted);
 		}
-		
-		
-		#my $resourcecount 	=	$firstresource * $maxnodes;
-		#$self->logDebug("resourcecount", $resourcecount);
 	}
+	$self->logDebug("resourcecounts", $resourcecounts);
 	
-$self->logDebug("DEBUG EXIT") and exit;
-
-	#### GET CURRENT COUNT OF VMS PER QUEUE (queuesample STATUS 'started')
-	#### ASSUMES ONE VM PER TASK
-	my $currentcounts=	$self->getCurrentCounts();
-	$self->logDebug("currentcounts", $currentcounts);
-	
-	# 2. BALANCE COUNTS BASED ON DURATION
-	#
-	my $resourcecounts	=	$self->getResourceCounts($queues, $durations, $instances);
-	my $instancecounts	=	$self->getInstanceCounts($queues, $instances, $resourcecounts);
-	$self->logDebug("instancecounts", $instancecounts);
-	
-
-	
-	if ( $latestcompleted < scalar(@$queues) - 1) {
-		$instancecounts	=	$self->adjustCounts($queues, $resourcecounts, $latestcompleted);
-	}
-	$self->logDebug("instancecounts", $instancecounts);
 	
 	for ( my $i = 0; $i < @$instancecounts; $i++ ) {
 		my $instancecount =	$$instancecounts[$i];
 		$self->logDebug("instancecount", $instancecount);
 
-		my $queue	=	$$queues[$i];
-		$self->logDebug("queue", $queue);
-		my $queuename	=	$self->getQueueName($queue);
+		my $queuename	=	$self->getQueueName($$workflows[$i]);
 		$self->logDebug("queuename", $queuename);
 		
-		my $currentcount =	$currentcounts->{$queuename};
+		my $currentcount =	$currentcounts->{$queuename} || 0;
 		$self->logDebug("currentcount", $currentcount);
 		
 		my $difference	=	$instancecount - $currentcount;
 		$self->logDebug("difference	= $instancecount - $currentcount");
 		$self->logDebug("difference", $difference);
 		
+
+#### DEBUG
+$self->logDebug("DEBUG NEXT") and next;
+
+
 		if ( $difference > 0 ) {
-			$self->addNodes($queue, $difference);
+			$self->addNodes($$workflows[$i], $difference);
 		}
 		elsif ( $difference < 0 ) {
-			$self->removeNodes($queue, $difference);
+			$self->removeNodes($$workflows[$i], $difference);
 		}
 	}
 
@@ -407,17 +456,58 @@ $self->logDebug("DEBUG EXIT") and exit;
 	#   NB: maxJobs <= NUMBER OF REMAINING SAMPLES FOR THE WORKFLOW
 }
 
-method clusterQueuesOnly ($queues) {
-	my $firstcluster	=	$self->getQueueCluster($$queues[0]);
-	$self->logDebug("firstcluster", $firstcluster);
-	while ( not defined $firstcluster ) {
-		splice @$queues, 0, 1;		
-		$firstcluster	=	$self->getQueueCluster($$queues[0]);
-		$self->logDebug("firstcluster", $firstcluster);
-	}
-	$self->logDebug("CLUSTER ONLY queues", $queues);
 
-	return $queues;
+method getDefaultResource ($queue, $instances, $quota) {
+	$self->logDebug("queue", $queue);
+
+	#### SET FIRST NODES TO MAX NO SAMPLES COMPLETED
+	my $queuename		=	$self->getQueueName($queue);
+	my $instance		=	$instances->{$queuename};
+	my $metric			=	$self->metric();
+	my $resource	=	$instance->{$metric};
+	$self->logDebug("queuename", $queuename);
+	$self->logDebug("resource", $resource);
+	$self->logDebug("instance", $instance);
+	$self->logDebug("instance", $instance);
+
+	#### SET RESOURCE QUOTA
+	my $resourcequota	=	$quota * $resource;
+	$self->logDebug("resourcequota", $resourcequota);
+
+	my $cluster	=	$self->getQueueCluster($queue);
+	$self->logDebug("cluster", $cluster);
+	my $maxnodes		=	$cluster->{maxnodes};
+	$self->logDebug("maxnodes", $maxnodes);
+	
+	my $resourcecount 	=	$resource * $maxnodes;
+	$self->logDebug("resourcecount", $resourcecount);
+
+	my $username		=	$queue->{username};
+	
+	if ( $resourcecount > $resourcequota ) {
+		$self->logDebug("resourcecount $resourcecount > resourcequota $resourcequota. Setting to resourcequota ($resourcequota)");
+		$resourcecount = $resourcequota;
+	}
+	$self->logDebug("resourcecount", $resourcecount);
+	
+	return $resourcecount;
+}
+
+
+method clusterWorkflows ($workflows) {
+	#$self->logDebug("workflows", $workflows);
+
+	my $clusterworkflows	=	[];
+	for ( my $i = 0; $i < @$workflows; $i++ ) {
+		my $cluster	=	$self->getQueueCluster($$workflows[$i]);
+		#$self->logDebug("cluster", $cluster);
+		if ( defined $cluster ) {
+			push @$clusterworkflows, $$workflows[$i];			
+		}
+	}
+	#$self->logDebug("CLUSTER ONLY clusterworkflows", $clusterworkflows);
+
+	return $clusterworkflows;
 }
 
 method addNodes ($queue, $nodes) {
@@ -472,7 +562,7 @@ method printConfig ($workflowobject) {
 	
 	#		GET TEMPLATE
 	my $installdir		=	$object->{installdir};
-	my $templatefile	=	$self->setTemplateFile($installdir);
+	my $templatefile	=	$self->setTemplateFile($installdir, $version);
 	$self->logDebug("templatefile", $templatefile);
 	
 	#		PRINT TEMPLATE
@@ -494,15 +584,15 @@ method printConfig ($workflowobject) {
 	}
 	$self->logDebug("targetfile", $targetfile);
 	
-	$self->virtual()->createConfigFile($object, $templatefile, $targetfile);
+	$self->virtual()->createConfig($object, $templatefile, $targetfile);
 	
 	return $targetfile;
 }
 
-method setTemplateFile ($installdir) {
+method setTemplateFile ($installdir, $version) {
 	$self->logDebug("installdir", $installdir);
 	
-	return "$installdir/data/userdata.tmpl";
+	return "$installdir/$version/data/userdata.tmpl";
 }
 
 method getTenant ($username) {
@@ -550,7 +640,7 @@ method adjustCounts ($queues, $resourcecounts, $latestcompleted) {
 	return $self->getInstanceCounts($queues, $instances, $resourcecounts);
 }
 
-method getResourceCounts ($queues, $durations, $instances) {
+method getResourceCounts ($queues, $durations, $instances, $quota) {
 =doc
 
 =head2	ALGORITHM
@@ -578,7 +668,6 @@ method getResourceCounts ($queues, $durations, $instances) {
 
 	my $username	=	$$queues[0]->{username};
 	my $metric	=	$self->metric();
-	my $quota	=	$self->getResourceQuota($username, $metric);
 	
 	$self->logDebug("username", $username);
 	$self->logDebug("queues", $queues);
@@ -590,14 +679,12 @@ method getResourceCounts ($queues, $durations, $instances) {
 	my $latestcompleted =	$self->getLatestCompleted($queues);
 	$self->logDebug("latestcompleted", $latestcompleted);
 
-	my $totalresource	=	$self->getResourceQuota($username, $metric);
 	my $firstqueue		=	$self->getQueueName($$queues[0]);
 	$self->logDebug("firstqueue", $firstqueue);
 	my $instance		=	$instances->{$firstqueue};
 	$self->logDebug("instance", $instance);
 	my $firstresource	=	$instance->{$metric};
 	my $firstduration	=	$durations->{$firstqueue} * $firstresource;
-	$self->logDebug("totalresource", $totalresource );
 	$self->logDebug("firstresource", $firstresource);
 	
 	#$self->logDebug("firstqueue", $firstqueue);
@@ -628,7 +715,7 @@ method getResourceCounts ($queues, $durations, $instances) {
 	}
 	#$self->logDebug("FINAL terms", $terms);
 	
-	my $firstcount	=	$totalresource / $terms;
+	my $firstcount	=	$quota / $terms;
 	#$self->logDebug("firstcount", $firstcount);
 
 	my $firstthroughput	=	($firstduration/3600) * $firstcount;
@@ -689,7 +776,7 @@ method getInstanceCounts ($queues, $instances, $resourcecounts) {
 	my $metric	=	$self->metric();
 	$self->logDebug("metric", $metric);
 
-	my $counts	=	[];
+	my $instancecounts	=	[];
 	my $resourcetotal	=	0;
 	my $integertotal	=	0;
 	for ( my $i = 0; $i < @$resourcecounts; $i++ ) {
@@ -702,20 +789,20 @@ method getInstanceCounts ($queues, $instances, $resourcecounts) {
 		$resourcetotal		+=	$$resourcecounts[$i];
 
 		if ( $i == scalar(@$resourcecounts) - 1) {
-			push @$counts, int( ($resourcetotal - $integertotal) / $resource );
+			push @$instancecounts, int( ($resourcetotal - $integertotal) / $resource );
 		}
 		else {
-			my $count	=	ceil($$resourcecounts[$i]/$resource);
-			$count		=	1 if $count < 1;
+			my $instancecount	=	ceil($$resourcecounts[$i]/$resource);
+			$instancecount		=	1 if $instancecount < 1;
 
 			#### STASH RUNNING INTEGER COUNT
-			$integertotal	+=	$count * $resource;
+			$integertotal	+=	$instancecount * $resource;
 
-			push @$counts, $count;
+			push @$instancecounts, $instancecount;
 		}
 	}
 	
-	return $counts;
+	return $instancecounts;
 }
 
 method getQueueNames ($queues) {
@@ -735,26 +822,67 @@ method getQueueNames ($queues) {
 }
 
 method getResourceQuota ($username, $metric) {
+	$self->logCaller("");
 	$self->logDebug("username", $username);
 	$self->logDebug("metric", $metric);
-	
+
 	my $quota	=	$self->getQuota($username);
 	$self->logDebug("quota", $quota);
 	
 	if ( $metric eq "cpus" ) {
-		my $quota	=	$self->getQuota($username);
+		$quota	=	$self->getQuota($username);
 		$self->logDebug("quota", $quota);
+		
 	}
-	
+
+	return $quota;	
 }
 
 method getQuota ($username) {
+	$self->logCaller("");
 	$self->logDebug("username", $username);
 	my $tenant	=	$self->getTenant($username);
 	$self->logDebug("tenant", $tenant);
+	my $authfile	=	$self->getAuthFile($username, $tenant);
+	$self->printAuth($username) if not -f $authfile;
+	$self->logDebug("authfile", $authfile);
 	
+	my $quota	=	$self->virtual()->getQuota($authfile, $tenant->{os_tenant_id});
+	$self->logDebug("quota", $quota);
 	
+	return $quota;
+}
+
+method printAuth ($username) {
+	$self->logDebug("username", $username);
 	
+	#### SET TEMPLATE FILE	
+	my $installdir		=	$self->conf()->getKey("agua", "INSTALLDIR");
+	my $templatefile	=	"$installdir/bin/install/resources/openstack/openrc.sh";
+
+	#### GET OPENSTACK AUTH INFO
+	my $tenant		=	$self->getTenant($username);
+	$self->logDebug("tenant", $tenant);
+
+	#### GET AUTH FILE
+	my $authfile		=	$self->getAuthFile($username, $tenant);
+
+	#### PRINT FILE
+	return	$self->virtual()->printAuthFile($tenant, $templatefile, $authfile);
+}
+
+method getAuthFile ($username, $tenant) {
+	$self->logDebug("username", $username);
+	
+	my $installdir		=	$self->conf()->getKey("agua", "INSTALLDIR");
+	my $targetdir	=	"$installdir/conf/.targetdir";
+	`mkdir -p $targetdir` if not -d $targetdir;
+	my $tenantname		=	$tenant->{os_tenant_name};
+	$self->logDebug("tenantname", $tenantname);
+	my $authfile		=	"$targetdir/$tenantname-openrc.sh";
+	$self->logDebug("authfile", $authfile);
+
+	return	$authfile;
 }
 
 method getInstances ($queues) {
@@ -762,14 +890,28 @@ method getInstances ($queues) {
 	foreach my $queue ( @$queues ) {
 		#$self->logDebug("queue", $queue);
 		my $queuename	=	$self->getQueueName($queue);
-		#$self->logDebug("queuename", $queuename);
+		$self->logDebug("queuename", $queuename);
 		
 		my $instance	=	$self->getQueueInstance($queue);
 		$instances->{$queuename}	= $instance;
 	}
-	#$self->logDebug("instances", $instances);
+	$self->logDebug("instances", $instances);
 	
 	return $instances;
+}
+
+method getQueueInstance ($queue) {
+	#$self->logDebug("queue", $queue);
+	my $queuename	=	$self->getQueueName($queue);
+	#$self->logDebug("queuename", $queuename);
+	my $query	=	qq{SELECT * FROM instancetype
+WHERE username='$queue->{username}'
+AND cluster='$queuename'};
+	#$self->logDebug("query", $query);
+	my $instance	=	$self->db()->queryhash($query);
+	$self->logDebug("instance", $instance);	
+	
+	return $instance;
 }
 
 method getThroughputs ($queues, $durations, $instancecounts) {
@@ -803,9 +945,10 @@ method getQueueName ($queue) {
 	return $queue->{username} . "." . $queue->{project} . "." . $queue->{workflow};
 }
 
-method getCurrentCounts {
+method getCurrentCounts ($username) {
 	my $query	=	qq{SELECT queue, COUNT(*) AS count
 FROM instance
+WHERE username='$username'
 GROUP BY queue};
 	$self->logDebug("query", $query);
 	my $entries	=	$self->db()->queryhasharray($query);
@@ -893,29 +1036,15 @@ ORDER BY sample};
 
 	return $samples;	
 }
-method getQueueInstance ($queue) {
-	#$self->logDebug("queue", $queue);
-	my $queuename	=	$self->getQueueName($queue);
-	$self->logDebug("queuename", $queuename);
-	my $query	=	qq{SELECT * FROM instancetype
-WHERE username='$queue->{username}'
-AND cluster='$queuename'};
-	#$self->logDebug("query", $query);
-	my $instance	=	$self->db()->queryhash($query);
-	#$self->logDebug("instance", $instance);	
-	
-	return $instance;
-}
-
 method getQueueCluster ($queue) {
-	$self->logDebug("queue", $queue);
+	#$self->logDebug("queue", $queue);
 	my $queuename	=	$self->getQueueName($queue);
 	my $query	=	qq{SELECT * FROM cluster
 WHERE username='$queue->{username}'
 AND cluster='$queuename'};
-	$self->logDebug("query", $query);
+	#$self->logDebug("query", $query);
 	my $instance	=	$self->db()->queryhash($query);
-	$self->logDebug("instance", $instance);
+	#$self->logDebug("instance", $instance);
 	
 	return $instance;
 }
@@ -940,6 +1069,7 @@ method getQueueDuration ($queue) {
 	#$self->logDebug("queue", $queue);
 
 	my $provenance	=	$self->getQueueProvenance($queue);
+	return 0 if not defined $provenance or not @$provenance;
 	#$self->logDebug("provenance", $provenance);
 	
 	#### COUNT ALL NON-ERROR start-completed DURATIONS
@@ -1286,10 +1416,10 @@ method updateJobStatus ($data) {
 	#### UPDATE queuesamples TABLE
 	$self->updateQueueSamples($data);	
 
-	#### UPDATE SYNAPSE
-	my $synapsestatus	=	$self->getSynapseStatus($data);
-	my $sample	=	$data->{sample};
-	$self->synapse()->change($sample, $synapsestatus);
+	##### UPDATE SYNAPSE
+	#my $synapsestatus	=	$self->getSynapseStatus($data);
+	#my $sample	=	$data->{sample};
+	#$self->synapse()->change($sample, $synapsestatus);
 }
 
 method updateQueueSamples ($data) {
@@ -1420,6 +1550,8 @@ method getQueueTaskList {
 	return $queuelist;
 }
 
+
+#### DEPRECATE: IN FAVOUR OF getQueuedJobs
 method getNumberQueuedJobs ($queuelist, $queue) {
 	#$self->logDebug("queuelist", $queuelist);
 	$self->logDebug("queue", $queue);
@@ -1428,6 +1560,17 @@ method getNumberQueuedJobs ($queuelist, $queue) {
 	$self->logDebug("jobs", $jobs);
 
 	return $jobs;
+}
+
+method getQueuedJobs ($workflowdata) {
+	my $query	=	qq{SELECT * FROM queuesample
+WHERE username='$workflowdata->{username}'
+AND project='$workflowdata->{project}'
+AND workflow='$workflowdata->{workflow}'
+AND status='queued'};
+	$self->logDebug("query", $query);
+	
+	return $self->db()->queryhasharray($query) || [];
 }
 
 #### SEND TASK
@@ -1713,8 +1856,8 @@ method setVirtual {
 			printlog	=>	2
         }
     ) or die "Can't create virtual of type: $virtualtype. $!\n";
-	$self->logDebug("virtual", $virtual);
-$self->logDebug("DEBUG EXIT") and exit;
+	$self->logDebug("virtual: $virtual");
+
 	$self->virtual($virtual);
 }
 

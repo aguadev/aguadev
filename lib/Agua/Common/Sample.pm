@@ -35,7 +35,7 @@ method loadSamples ($username, $project, $workflow, $workflownumber, $file) {
 		my ($sample)	=	$line	=~ 	/^(\S+)/;
 		#$self->logDebug("sample", $sample);
 		
-		my $out	=	"$username\t$project\t$workflow\t$workflownumber\t$sample\tnone";
+		my $out	=	"$username\t$project\t$workflow\t$workflownumber\t$sample\tcompleted";
 		push @$tsv, $out;
 	}
 	

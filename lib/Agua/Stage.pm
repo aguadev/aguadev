@@ -489,11 +489,13 @@ method setArguments ($stageparameters) {
 	#### GET FILEROOT
 	my $username 	= $self->username();
 	my $cluster 	= $self->cluster();
+	my $version 	= $self->version();
 	my $fileroot 	= $self->getFileroot($username);
 	$self->logNote("username", $username);
 	$self->logNote("cluster", $cluster);
 	$self->logNote("fileroot", $fileroot);
-
+	$self->logDebug("version", $version);
+	
 	#### SORT BY ORDINALS
 	@$stageparameters = sort { $a->{ordinal} cmp $b->{ordinal} } @$stageparameters;
 	#$self->logDebug("SORTED stageparameters", $stageparameters);
@@ -514,6 +516,8 @@ method setArguments ($stageparameters) {
 		if ( defined $sample and $sample ne "" ) {
 			$value	=~	s/<SAMPLEID>/$sample/g;
 		}
+		
+		$value	=~	s/<VERSION>/$version/g;
 		
 		$clustertype = 1 if $name eq "clustertype";
 

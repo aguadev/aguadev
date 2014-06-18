@@ -92,11 +92,11 @@ sub getStages {
 
 	my $self		=	shift;
 	my $data		=	shift;
-	$self->logDebug("$$ ");
+	#$self->logDebug("$$ ");
 
 	#### SET OWNER 
 	my $owner = $data->{username};
-	$self->logDebug("$$ owner", $owner);
+	#$self->logDebug("$$ owner", $owner);
 
 	my $query = qq{SELECT * FROM stage
 WHERE username='$owner'\n};
@@ -104,10 +104,10 @@ WHERE username='$owner'\n};
 	$query .= qq{AND workflow='$data->{workflow}'\n} if defined $data->{workflow};
 	$query .= qq{AND workflownumber='$data->{workflownumber}'\n} if defined $data->{workflownumber};
 	$query .= qq{ORDER BY project, workflow, number};
-	$self->logDebug("$$ $query");
+	#$self->logDebug("$$ $query");
 	my $stages = $self->db()->queryhasharray($query);
 	$stages = [] if not defined $stages;
-	$self->logNote("stages", $stages);
+	#$self->logNote("stages", $stages);
 	
 	return $stages;
 }

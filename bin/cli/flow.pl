@@ -126,7 +126,7 @@ elsif ( $file =~ /\.app$/ ) {
     $app->getopts();
     $app->$mode();    
 }
-elsif ( $file =~ /\.wk$/ )
+elsif ( $file =~ /(\.wk|\.work)$/ )
 {
     my $workflow = Agua::CLI::Workflow->new(
         wkfile      =>  $file,
@@ -147,7 +147,7 @@ elsif ( $file =~ /\.proj$/ )
 }
 else
 {
-    print "flow.pl    file type '$file' not recognised (must be .proj, .wk, .app or .param)\n";
+    print "flow.pl    file type '$file' not recognised (must be .proj, .work, .wk, .app or .param)\n";
 }
 
 

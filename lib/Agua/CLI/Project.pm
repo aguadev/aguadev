@@ -4,7 +4,7 @@ use Getopt::Simple;
 use FindBin qw($Bin);
 use lib "$Bin/../..";
 
-class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::Util, Agua::Common::Database) {
+class Agua::CLI::Project with (Logger, Agua::CLI::Timer, Agua::CLI::Util, Agua::Common::Database) {
 
     use File::Path;
     use JSON;
@@ -16,22 +16,23 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::U
     use Agua::DBaseFactory;
 
     #### LOGGER
+    has 'logtype'	=> ( isa => 'Str|Undef', is => 'rw', default	=>	"cli"	);
     has 'logfile'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
-    has 'log'	=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);  
+    has 'log'		=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);  
     has 'printlog'	=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);
 
     #### STORED LOGISTICS VARIABLES
     has 'owner'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous' );
-    has 'username'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous' );
-    has 'database'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous' );
-    has 'name'	=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
-    has 'workflow'	    => ( isa => 'Str|Undef', is => 'rw', required => 0 );
+    has 'username'	=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous' );
+    has 'database'	=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous' );
+    has 'name'		=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
+    has 'workflow'	=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'number'	=> ( isa => 'Int|Undef', is => 'rw', default    =>  1	);
     has 'type'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, documentation => q{User-defined workflow type} );
-    has 'description'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
+    has 'description'=> ( isa => 'Str|Undef', is => 'rw', default => '' );
     has 'notes'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
     has 'ordinal'	=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0, documentation => q{Set order of appearance: 1, 2, ..., N} );
-    has 'workflows'	    => ( isa => 'ArrayRef[Agua::CLI::Workflow]', is => 'rw', default => sub { [] } );
+    has 'workflows'	 => ( isa => 'ArrayRef[Agua::CLI::Workflow]', is => 'rw', default => sub { [] } );
     has 'provenance'=> ( isa => 'Str|Undef', is => 'rw', required	=>	0, default => '');
     
     #### STORED STATUS VARIABLES
@@ -56,7 +57,7 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::U
     has 'appFile'	=> ( isa => 'Str', is => 'rw', required => 0 );
     has 'field'	    => ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'value'	    => ( isa => 'Str|Undef', is => 'rw', required => 0 );
-    has 'fields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['username', 'database', 'name', 'number', 'owner', 'description', 'notes', 'outputdir', 'field', 'value', 'projfile', 'wkfile', 'outputfile', 'cmdfile', 'start', 'stop', 'ordinal', 'from', 'to', 'status', 'started', 'stopped', 'duration', 'epochqueued', 'epochstarted', 'epochstopped', 'epochduration'] } );
+    has 'fields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['username', 'database', 'name', 'number', 'workflow', 'owner', 'description', 'notes', 'outputdir', 'field', 'value', 'projfile', 'wkfile', 'outputfile', 'cmdfile', 'start', 'stop', 'ordinal', 'from', 'to', 'status', 'started', 'stopped', 'duration', 'epochqueued', 'epochstarted', 'epochstopped', 'epochduration', 'log'] } );
     has 'savefields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['name', 'number', 'owner', 'description', 'notes', 'status', 'started', 'stopped', 'duration', 'locked'] } );
     has 'exportfields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['name', 'number', 'owner', 'description', 'notes', 'status', 'started', 'stopped', 'duration', 'provenance'] } );
     has 'inputfile' => ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
@@ -120,7 +121,7 @@ class Agua::CLI::Project with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::U
     }
 
     method _getopts {
-        $self->logDebug("Agua::CLI::Project::_getopts    \@ARGV: @ARGV");
+        #$self->logDebug("Agua::CLI::Project::_getopts    \@ARGV: @ARGV");
         my @temp = @ARGV;
         my $args = $self->args();
         
@@ -253,8 +254,54 @@ AND project='$project'
         print "Project '$project' deleted from database '$database'\n";
     }
 
+    method runWorkflow {
+		#$self->log(4);
+        $self->logDebug("");
+
+		#### GET OPTS (E.G., WORKFLOW)
+		$self->_getopts();
+		
+        #### SET USERNAME AND OWNER
+        my $username    =   $self->setUsername();
+        my $owner       =   $username;
+        my $project     =   $self->name();
+        my $workflow	=	$self->workflow();
+		$self->logDebug("username", $username);
+        $self->logDebug("project", $project);
+        $self->logDebug("workflow", $workflow);
+
+		my $data	=	$self->getWorkflow($username, $project, $workflow);		
+		$data->{workflow}	=	$data->{name};
+		$data->{workflownumber}	=	$data->{number};
+		$data->{start}	=	1;
+		
+		$data->{logtype}	=	$self->logtype();
+		$data->{logfile}	=	$self->logfile();
+		$data->{log}		=	$self->log();
+		$data->{printlog}	=	$self->printlog();
+		
+		$self->logDebug("data", $data);
+		
+		$data->{conf}	=	$self->conf();
+		$data->{db}	=	$self->db();
+
+		require Agua::Workflow;
+        my $object	= Agua::Workflow->new($data);
+		#$self->logDebug("object", $object);
+		$object->executeWorkflow();
+		
+		$self->logDebug("completed");
+    }
+	
+	method getWorkflow ($username, $project, $workflow) {
+		$self->logDebug("username", $username);
+		$self->logDebug("project", $project);
+		$self->logDebug("workflow", $workflow);
+	
+        return   $self->db()->queryhash("SELECT * FROM workflow WHERE project='$project' and name='$workflow'");
+	}
+	
     method saveWorkflow {
-        $self->log(4);
         $self->logDebug("");
 
         #### SET USERNAME AND OWNER

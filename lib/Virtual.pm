@@ -14,7 +14,7 @@ sub new {
     my $type = shift;
     
     $type = uc(substr($type, 0, 1)) . substr($type, 1);
-    print "Virtual::new    type: $type\n";
+    #print "Virtual::new    type: $type\n";
     
     my $location    = "Virtual/$type.pm";
     $class          = "Virtual::$type";

@@ -346,6 +346,20 @@ method printAuth ($username) {
 	return	$self->virtual()->printAuthFile($tenant, $templatefile, $targetfile);
 }
 
+method getAuthFile ($username, $tenant) {
+	$self->logDebug("username", $username);
+	
+	my $installdir		=	$self->conf()->getKey("agua", "INSTALLDIR");
+	my $targetdir	=	"$installdir/conf/.targetdir";
+	`mkdir -p $targetdir` if not -d $targetdir;
+	my $tenantname		=	$tenant->{os_tenant_name};
+	$self->logDebug("tenantname", $tenantname);
+	my $authfile		=	"$targetdir/$tenantname-openrc.sh";
+	$self->logDebug("authfile", $authfile);
+
+	return	$authfile;
+}
+
 method printConfig ($workflowobject) {
 	#		GET PACKAGE INSTALLDIR
 	my $stages			=	$self->getStagesByWorkflow($workflowobject);
@@ -486,7 +500,7 @@ method executeWorkflow {
 	my $success;
 	if ( not $submit or not defined $cluster or not $cluster ) {
 		$self->logDebug("$$ DOING self->runLocally");
-		$success	=	$self->runLocally($stages);
+		$success	=	$self->runLocally($stages, $username, $project, $workflow, $workflownumber, $cluster);
 	}
 	elsif ( $scheduler eq "sge" ) {
 		$self->logDebug("$$ DOING self->runSge");
@@ -497,21 +511,29 @@ method executeWorkflow {
 		$success	=	$self->runStarCluster($stages, $username, $project, $workflow, $workflownumber, $cluster);
 	}
 
-	$self->logGroupEnd("Agua::Workflow::executeWorkflow");
-
-	$self->logDebug("$$ COMPLETED");
+	$self->logGroupEnd("$$ Agua::Workflow::executeWorkflow    COMPLETED");
 
 	#### HANDLE ANY EXIT CALLS IN THE MODULES    
-    EXITLABEL: { warn "EXIT\n"; };
+    EXITLABEL: { warn "EXITLABEL\n"; };
 }
 
 #### RUN STAGES 
-method runLocally ($stages) {
-
+method runLocally ($stages, $username, $project, $workflow, $workflownumber, $cluster) {
 	$self->logDebug("$$ no. stages", scalar(@$stages));
 
 	#### RUN STAGES
-	return $self->runStages($stages);
+	$self->logDebug("$$ BEFORE runStages()\n");
+	my $success	=	$self->runStages($stages);
+	$self->logDebug("$$ AFTER runStages    success: $success\n");
+	
+	if ( $success == 0 ) {
+		#### SET WORKFLOW STATUS TO 'error'
+		$self->updateWorkflowStatus($username, $cluster, $project, $workflow, 'error');
+	}
+	else {
+		#### SET WORKFLOW STATUS TO 'completed'
+		$self->updateWorkflowStatus($username, $cluster, $project, $workflow, 'completed');
+	}
 }
 
 method runSge ($stages, $username, $project, $workflow, $workflownumber, $cluster) {	
@@ -949,7 +971,7 @@ method setStages ($username, $cluster, $data, $project, $workflow, $workflownumb
 
 	#### GET STAGE PARAMETERS FOR THESE STAGES
 	$stages = $self->setStageParameters($stages, $data);
-
+	
 	#### SET START AND STOP
 	my ($start, $stop) = $self->setStartStop($stages, $data);
 	
@@ -986,7 +1008,7 @@ method setStages ($username, $cluster, $data, $project, $workflow, $workflownumb
 	my $stageobjects = [];    
 	for ( my $counter = $start; $counter < $stop + 1; $counter++ ) {
 		my $stage = $$stages[$counter];
-		$self->logDebug("$$ stage", $stage);
+		#$self->logDebug("$$ stage", $stage);
 		
 		#### QUIT IF NO STAGE PARAMETERS
 		$self->logError("stageparameters not defined for stage $stage->{name}") and exit if not defined $stage->{stageparameters};
@@ -1183,6 +1205,9 @@ method updateJobStatus ($stage, $status) {
 	$data->{stderr}		=	$stderr;
 	$data->{stdout}		=	$stdout;
 	
+	#### RETURN IF CLI
+	return if not defined $self->worker();
+	
 	#### SEND TOPIC	
 	$self->logDebug("$$ DOING worker->sendTopic");
 	my $key = "update.job.status";
@@ -1252,7 +1277,7 @@ method checkPrevious ($stages, $json) {
 
 method setStageParameters ($stages, $data) {
 	#### GET THE PARAMETERS FOR THE STAGES WE WANT TO RUN
-	$self->logDebug("$$ stages", $stages);
+	#$self->logDebug("$$ stages", $stages);
 	$self->logDebug("$$ data", $data);
 	
 	#### GET THE PARAMETERS FOR THE STAGES WE WANT TO RUN
@@ -1265,7 +1290,7 @@ method setStageParameters ($stages, $data) {
 		my $where = $self->db()->where($$stages[$i], $keys);
 		my $query = qq{SELECT * FROM stageparameter
 $where AND paramtype='input'};
-		$self->logDebug("$$ query", $query);
+		#$self->logDebug("$$ query", $query);
 
 		my $stageparameters = $self->db()->queryhasharray($query);
 		$self->logNote("stageparameters", $stageparameters);
@@ -2045,6 +2070,8 @@ method clusterStatus {
 
 #### UPDATE
 method updateWorkflowStatus ($username, $cluster, $project, $workflow, $status) {
+	$self->logDebug("status", $status);
+
 	my $table ="workflow";
 	my $hash = {
 		username	=>	$username,
@@ -2061,7 +2088,7 @@ method updateWorkflowStatus ($username, $cluster, $project, $workflow, $status) 
 	my $set_fields = ["status"];
 	
 	my $success = $self->db()->_updateTable($table, $hash, $required_fields, $set_hash, $set_fields);
-	$self->logDebug("$$ success", $success);
+	#$self->logDebug("$$ success", $success);
 	
 	return $success;
 }
@@ -2168,7 +2195,7 @@ AND cluster='$cluster'};
 		#### DO THE ADD
 		my $inserted_fields = $self->db()->fields("clusterstatus");
 		$success = $self->_addToTable("clusterstatus", $object, $required_fields, $inserted_fields);
-		$self->logDebug("$$ insert success", $success)  if defined $success;
+		#$self->logDebug("$$ insert success", $success)  if defined $success;
 	}
 
 	return 1 if defined $success and $success;

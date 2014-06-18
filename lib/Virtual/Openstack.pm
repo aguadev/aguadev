@@ -107,6 +107,28 @@ $workflow};
 	return 1;
 }
 
+
+method addNode {
+	
+	my $nodeid;
+	
+	return $nodeid;
+}
+
+method deleteNode ($nodeid) {
+	
+}
+
+method getQuota ($authfile, $tenantid) {
+	$self->logDebug("authfile", $authfile);
+	$self->logDebug("tenantid", $tenantid);
+	
+	my $command	=	". $authfile && nova quota-show $tenantid";
+	$self->logDebug("command", $command);
+	
+	return `$command`;
+}
+
 method printToFile ($file, $text) {
 	$self->logDebug("file", $file);
 	$self->logDebug("text", substr($text, 0, 100));
