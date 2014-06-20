@@ -168,7 +168,7 @@ method setConfigFile ($username, $cluster) {
 	$self->logCaller();
 	$self->logDebug("username", $username);
 	$self->logDebug("cluster", $cluster);	
-	$self->logDebug("self->conf()", $self->conf());
+	#$self->logDebug("self->conf()", $self->conf());
 
 	$username = $self->username() if not defined $username;
 	$cluster	= $self->cluster() if not defined $cluster;
@@ -298,16 +298,12 @@ $where};
 	return $success;
 }
 
-method _createCellDir {
- 	$self->logDebug("");	;
-    my $json 			=	$self->json();
-	
-	#### SET TABLE AND REQUIRED FIELDS	
-	my $username = $json->{username};
-	my $cluster = $json->{cluster};
+method _createCellDir ($username, $cluster) {
+ 	$self->logDebug("username", $username);
+	$self->logDebug("cluster", $cluster);
 
 	#### ADD NEW CELL DIRECTORY TO HEAD NODE
-	my $celldir = $self->getCellDir();
+	my $celldir = $self->getCellDir($cluster);
 	my $defaultdir = $self->getDefaultCellDir();
 	$self->logDebug("celldir", $celldir);
 	my $copy = "cp -pr $defaultdir $celldir";
@@ -326,16 +322,13 @@ method _createCellDir {
 	return $success;
 }
 
-method getCellDir {
-	my $json		=	$self->json();	
-	my $cluster = $json->{cluster};
+method getCellDir($cluster) {
 	my $sgeroot = $self->conf()->getKey('cluster', 'SGEROOT');
 	
 	return "$sgeroot/$cluster";	
 }
 
 method getDefaultCellDir {
-	my $json		=	$self->json();	
 	my $sgeroot = $self->conf()->getKey('cluster', 'SGEROOT');
 
 	return "$sgeroot/default";
@@ -670,6 +663,16 @@ method setSlotNumber ($instancetype) {
 
 	my $slots = $self->instancetypeslots()->{$instancetype};
 	$self->logDebug("slots", $slots);
+	
+	if ( not defined $slots ) {
+		my $username	=	$self->username();
+		my $query	=	qq{SELECT * FROM instancetype
+WHERE username='$username'
+AND instancetype='$instancetype'};
+		$self->logDebug("query", $query);
+		my $instance	=	$self->db()->queryhash($query);
+		$slots	=	$instance->{cpus};
+	}
 
 	return $slots;
 }

@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS cluster
 (
     username        VARCHAR(40) NOT NULL,
-    cluster         VARCHAR(40) NOT NULL,
+    cluster         VARCHAR(80) NOT NULL,
     minnodes        INT(12),
     maxnodes        INT(12),
     instancetype    VARCHAR(40),

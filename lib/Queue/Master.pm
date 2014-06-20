@@ -757,6 +757,13 @@ method printConfig ($workflowobject) {
 	my $templatefile	=	$self->setTemplateFile($installdir, $version);
 	$self->logDebug("templatefile", $templatefile);
 	
+	#		SET EXTRA
+	my $queuename		=	$self->getQueueName($workflow);
+	$self->logDebug("queuename", $queuename);
+	my $extra			=	qq{\n
+sudo /agua/bin/openstack/config.pl --mode setKey --section "queue:taskqueue" --value "syoung.CU.Download"
+\n};
+	
 	#		PRINT TEMPLATE
 	my $username		=	$object->{username};
 	my $project			=	$object->{project};
@@ -776,7 +783,7 @@ method printConfig ($workflowobject) {
 	}
 	$self->logDebug("targetfile", $targetfile);
 	
-	$self->virtual()->createConfig($object, $templatefile, $targetfile);
+	$self->virtual()->createConfig($object, $templatefile, $targetfile, $extra);
 	
 	return $targetfile;
 }

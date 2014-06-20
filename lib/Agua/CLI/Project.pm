@@ -35,6 +35,7 @@ class Agua::CLI::Project with (Logger, Agua::CLI::Timer, Agua::CLI::Util, Agua::
     has 'workflows'	 => ( isa => 'ArrayRef[Agua::CLI::Workflow]', is => 'rw', default => sub { [] } );
     has 'provenance' => ( isa => 'Str|Undef', is => 'rw', required	=>	0, default => '');
     has 'scheduler'	 => ( isa => 'Str|Undef', is => 'rw', required	=>	0);
+    has 'samplestring' => ( isa => 'Str|Undef', is => 'rw', required => 0 );
     
     #### STORED STATUS VARIABLES
     has 'status'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
@@ -58,7 +59,7 @@ class Agua::CLI::Project with (Logger, Agua::CLI::Timer, Agua::CLI::Util, Agua::
     has 'appFile'	=> ( isa => 'Str', is => 'rw', required => 0 );
     has 'field'	    => ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'value'	    => ( isa => 'Str|Undef', is => 'rw', required => 0 );
-    has 'fields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['username', 'database', 'name', 'number', 'workflow', 'owner', 'description', 'notes', 'outputdir', 'field', 'value', 'projfile', 'wkfile', 'outputfile', 'cmdfile', 'start', 'stop', 'ordinal', 'from', 'to', 'status', 'started', 'stopped', 'duration', 'epochqueued', 'epochstarted', 'epochstopped', 'epochduration', 'log', 'scheduler'] } );
+    has 'fields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['username', 'database', 'name', 'number', 'workflow', 'owner', 'description', 'notes', 'outputdir', 'field', 'value', 'projfile', 'wkfile', 'outputfile', 'cmdfile', 'start', 'stop', 'ordinal', 'from', 'to', 'status', 'started', 'stopped', 'duration', 'epochqueued', 'epochstarted', 'epochstopped', 'epochduration', 'log', 'scheduler', 'samplestring'] } );
     has 'savefields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['name', 'number', 'owner', 'description', 'notes', 'status', 'started', 'stopped', 'duration', 'locked'] } );
     has 'exportfields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['name', 'number', 'owner', 'description', 'notes', 'status', 'started', 'stopped', 'duration', 'provenance'] } );
     has 'inputfile' => ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
@@ -207,6 +208,9 @@ class Agua::CLI::Project with (Logger, Agua::CLI::Timer, Agua::CLI::Util, Agua::
         my $loader      =   $self->getLoader();        
     	$loader->logDebug("loader->db->database", $loader->db()->database());
 		$loader->projectToDatabase($username, $self);
+
+		my $database    =   $self->db()->database();
+		print "Project '", $self->name(), "' saved to database '$database'\n";
     }
 
     method delete {
@@ -284,18 +288,39 @@ AND project='$project'
 		#$self->logDebug("Number of samples", scalar(@$sampledata));
 		print "Number of samples: ", scalar(@$sampledata), "\n" if defined $sampledata;
 	
-		if ( defined $sampledata ) {
+		my $samplestring	=	$self->samplestring();
+		$self->logDebug("samplestring", $samplestring);
+		if ( defined $samplestring ) {
+			my $samplehash		=	$self->convertSamplehash($samplestring);
+			$self->_runWorkflow($workflowhash, $samplehash);
+		}
+		elsif ( defined $sampledata ) {
 			foreach my $samplehash ( @$sampledata ) {
 				$self->logDebug("Running workflow with samplehash", $samplehash);
-				print "Running workflow $workflow using sample: ", $samplehash->{sample}, "\n";
+				#print "Running workflow $workflow using sample: ", $samplehash->{sample}, "\n";
 				$self->_runWorkflow($workflowhash, $samplehash);
+				#print "Completed workflow $workflow\n";
 			}
 		}
 		else {
+			#print "Running workflow $workflow\n";
 			$self->_runWorkflow($workflowhash, undef);
+			#print "Completed workflow $workflow\n";
 		}
 	}
 	
+	method convertSamplehash ($samplehash) {
+		my @entries	=	split "\\|", $samplehash;
+		$self->logDebug("entries", \@entries);
+		
+		my $hash	=	{};
+		foreach my $entry ( @entries ) {
+			my ($key, $value)	=	$entry	=~ /^([^:]+):(.+)$/;
+			$hash->{$key}	=	$value;
+		}
+		
+		return $hash;
+	}
 	method _runWorkflow ($workflowhash, $samplehash) {
 		$workflowhash->{start}		=	1;
 		$workflowhash->{workflow}	=	$workflowhash->{name};
@@ -395,6 +420,9 @@ AND sample !=""};
         
         #### SAVE TO DATABASE
         $workflow->save();
+
+		my $database    =   $self->db()->database();
+		print "Workflow '", $workflow->name(), "' saved to project '$project' in database '$database'\n";
     }
 
     method _saveWorkflow ($workflowobject) {

@@ -218,12 +218,12 @@ method BUILD ($args) {
 }
 
 method loadArgs ($args) {
-	$self->logDebug("args", $args);
+	#$self->logDebug("args", $args);
 
 	#### IF HASH IS DEFINED, ADD VALUES TO SLOTS
 	if ( defined $args ) {
 		my @keys = keys %{$args};
-		$self->logDebug("keys", \@keys);
+		#$self->logDebug("keys", \@keys);
 		
 		foreach my $key ( keys %{$args} ) {
 			#$self->logDebug("CHECKING key $key");

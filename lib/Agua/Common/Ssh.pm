@@ -43,12 +43,16 @@ sub setKeypairFile {
 #### SET SSH COMMAND IF KEYPAIRFILE, ETC. ARE DEFINED
 	my $self		=	shift;
 	my $username	=	shift;
+
+	$self->logCaller("username: $username");
+
+
 	$username = $self->username() if not defined $username;
 	$self->logError("username not defined") and exit if not defined $username;
 
 	my $keyname 	= 	"$username-key";
 	my $conf 		= 	$self->conf();
-	$self->logDebug("conf", $conf);
+	#$self->logDebug("conf", $conf);
 	my $userdir 	= 	$conf->getKey('agua', "USERDIR");
 	$self->logCaller("userdir not defined") and exit if not defined $userdir;
 

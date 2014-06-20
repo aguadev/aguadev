@@ -727,8 +727,9 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
     }
 
     method _toExportHash ($fields) {
-        #$self->logCaller("");
-        #$self->logDebug("fields: @$fields");
+		#$self->log(4);s
+		#$self->logCaller("");
+        $self->logDebug("fields: @$fields");
 
         my $hash;
         foreach my $field ( @$fields )
@@ -737,7 +738,8 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
             next if ref($self->$field) eq "ARRAY";
             $hash->{$field} = $self->$field();
         }
-
+		#$self->logDebug("hash", $hash);
+		
         #### DO PARAMETERS
         my $apps = $self->apps();
         my $applications = [];
@@ -745,7 +747,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         {
             push @$applications, $app->exportData();
         }
-        #$self->logDebug("apps:");
+        #$self->logDebug("apps");
         #print Dumper $apps;
 
         $hash->{apps} = $applications;

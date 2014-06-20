@@ -49,7 +49,7 @@ method initialise ($args) {
 	$self->logDebug("");
 }
 
-method createConfig ($object, $templatefile, $targetfile) {
+method createConfig ($object, $templatefile, $targetfile, $extra) {
 	$self->logDebug("object", $object);
 	$self->logDebug("templatefile", $templatefile);
 	$self->logDebug("targetfile", $targetfile);
@@ -62,6 +62,8 @@ method createConfig ($object, $templatefile, $targetfile) {
 		#$self->logDebug("substituting key $key value '$value' into template");
 		$template	=~ s/<$templatekey>/$value/msg;
 	}
+	
+	$template		.=	$extra;
 	
 	# PRINT TEMPLATE
 	$self->printToFile($targetfile, $template);

@@ -482,8 +482,12 @@ method executeWorkflow {
 	
 	$self->logError("No AWS credentials for username $username") and return if $submit and not defined $self->_getAws($username);
 	
-	# SKIP REPORT
-	#$self->logStatus("Running workflow $project.$workflow");
+	print "Running workflow $project.$workflow\n";
+
+	#### GET CLUSTER
+	$cluster		=	$self->getClusterByWorkflow($username, $project, $workflow) if $cluster eq "";
+	$self->logDebug("cluster", $cluster);	
+	$self->logDebug("submit", $submit);	
 	
 	#### SET STAGES
 	$self->logDebug("$$ DOING self->setStages");
@@ -503,23 +507,27 @@ method executeWorkflow {
 	$self->logDebug("scheduler", $scheduler);
 
 	my $success;
-	if ( not $submit or not defined $cluster or not $cluster ) {
+	if ( not defined $cluster or not $cluster ) {
 		$self->logDebug("$$ DOING self->runLocally");
 		$success	=	$self->runLocally($stages, $username, $project, $workflow, $workflownumber, $cluster);
 	}
-	elsif ( $scheduler eq "sge" ) {
-		$self->logDebug("$$ DOING self->runSge");
-		$success	=	$self->runSge($stages, $username, $project, $workflow, $workflownumber, $cluster);
+	else {
+		if ( $scheduler eq "sge" ) {
+			$self->logDebug("$$ DOING self->runSge");
+			$success	=	$self->runSge($stages, $username, $project, $workflow, $workflownumber, $cluster);
+		}
+		elsif ( $scheduler eq "starcluster" ) {
+			$self->logDebug("$$ DOING self->runStarCluster");
+			$success	=	$self->runStarCluster($stages, $username, $project, $workflow, $workflownumber, $cluster);
+		}
 	}
-	elsif ( $scheduler eq "starcluster" ) {
-		$self->logDebug("$$ DOING self->runStarCluster");
-		$success	=	$self->runStarCluster($stages, $username, $project, $workflow, $workflownumber, $cluster);
-	}
+
+	print "Completed workflow $project.$workflow\n";
 
 	$self->logGroupEnd("$$ Agua::Workflow::executeWorkflow    COMPLETED");
 
-	#### HANDLE ANY EXIT CALLS IN THE MODULES    
-    EXITLABEL: { warn "EXITLABEL\n"; };
+#	#### HANDLE ANY EXIT CALLS IN THE MODULES    
+#    EXITLABEL: { warn "EXITLABEL\n"; };
 }
 
 #### RUN STAGES 
@@ -543,6 +551,11 @@ method runLocally ($stages, $username, $project, $workflow, $workflownumber, $cl
 
 method runSge ($stages, $username, $project, $workflow, $workflownumber, $cluster) {	
 #### RUN STAGES ON SUN GRID ENGINE
+
+	my $sgeroot	=	$self->conf()->getKey("cluster", "SGEROOT");
+	my $celldir	=	"$sgeroot/$workflow";
+	$self->logDebug("celldir", $celldir);
+	$self->_newCluster($username, $workflow) if not -d $celldir;
 
 	#### CREATE UNIQUE QUEUE FOR WORKFLOW
 	my $envars = $self->getEnvars($username, $cluster);
@@ -579,9 +592,9 @@ method runSge ($stages, $username, $project, $workflow, $workflownumber, $cluste
 	
 		#### SET WORKFLOW STATUS TO 'completed'
 		$self->updateWorkflowStatus($username, $cluster, $project, $workflow, 'completed');
-	}	
-	
+	}
 }
+#### STARCLUSTER
 method runStarCluster ($stages, $username, $project, $workflow, $workflownumber, $cluster) {
 #### 1. LOAD STARCLUSTER
 #### 2. CREATE CONFIG FILE
@@ -739,7 +752,6 @@ method ensureSgeRunning ($username, $cluster, $project, $workflow) {
 	}
 }
 
-#### STARCLUSTER
 method setStarCluster {
 	$self->logCaller("");
 
@@ -804,7 +816,7 @@ method loadStarCluster ($username, $cluster) {
 	$clusterobject->{envars} = $envars;
 	
 	#### SET JSON (LEGACY FOR ROLE METHODS)
-	$clusterobject->{json} = $self->json();
+	#$clusterobject->{json} = $self->json();
 	
 	#### SET CLUSTER STARTUP WAIT TIME (SECONDS)
 	$clusterobject->{tailwait} = 1200;
@@ -961,6 +973,63 @@ method stopStarCluster {
 }
 
 #### STAGES
+method runStages ($stages) {
+	$self->logDebug("$$ no. stages", scalar(@$stages));
+
+	for ( my $stage_counter = 0; $stage_counter < @$stages; $stage_counter++ ) {
+		my $stage = $$stages[$stage_counter];
+		my $stage_number = $stage->number();
+		my $stage_name = $stage->name();
+		
+		my $mysqltime	=	$self->getMysqlTime();
+		$stage->queued($mysqltime);
+		$stage->started($mysqltime);
+		
+		#### REPORT STARTING STAGE
+		$self->updateJobStatus($stage, "started");
+		
+		print "Running stage $stage_number: $stage_name\n";
+
+		####  RUN STAGE
+		$self->logDebug("$$ Running stage $stage_number", $stage_name);
+	
+		my ($exitcode, $error) = $stage->run();
+		$self->logDebug("$$ exitcode", $exitcode);
+		$self->logDebug("$$ error", $error);
+		$self->logDebug("$$ Ended running stage $stage_counter", $exitcode);
+
+		#### STOP IF THIS STAGE DIDN'T COMPLETE SUCCESSFULLY
+		#### ALL APPLICATIONS MUST RETURN '0' FOR SUCCESS)
+		if ( $exitcode == 0 ) {
+			$self->logDebug("$$ Stage $stage_number: '$stage_name' completed successfully");
+			$stage->setStatus('completed');
+			
+			my $status	=	"completed";
+			if ( defined $self->worker() ) {
+				$self->logDebug("$$ DOING self->updateJobStatus: $status");
+				$self->updateJobStatus($stage, $status);
+			}
+		}
+		else {
+			my $status	=	"error: $exitcode";
+			$stage->setStatus('error');
+
+			if ( defined $self->worker() ) {
+				$self->updateJobStatus($stage, $status);
+			}
+			else {
+				$self->logDebug("$$ Setting status to 'error'");
+				$self->logDebug("$$ After setting status");
+				$self->logError("Stage $stage_number. $stage_name failed. code: $exitcode. error: $error");
+			}
+			
+			return 0;
+		}
+	}    
+	
+	return 1;
+}
+
 method setStages ($username, $cluster, $data, $project, $workflow, $workflownumber, $samplehash) {
 	$self->logGroup("Agua::Workflow::setStages");
 	$self->logDebug("$$ username", $username);
@@ -1006,7 +1075,8 @@ method setStages ($username, $cluster, $data, $project, $workflow, $workflownumb
 	$self->logDebug("$$ scheduler", $scheduler);
 	$self->logDebug("$$ BEFORE monitor = self->updateMonitor()");
 	my $monitor	= 	undef;
-	$monitor = $self->updateMonitor() if $scheduler eq "sge" or $scheduler eq "starcluster";
+	#$monitor = $self->updateMonitor() if $scheduler eq "sge" or $scheduler eq "starcluster";
+	$monitor = $self->updateMonitor();
 	$self->logDebug("$$ AFTER monitor = self->updateMonitor()");
 
 	#### LOAD STAGE OBJECT FOR EACH STAGE TO BE RUN
@@ -1085,65 +1155,6 @@ method setFileDirs ($fileroot, $project, $workflow) {
 	$self->logError("Cannot create directory stderrdir: $stderrdir") and exit if not -d $stderrdir;		
 
 	return $scriptsdir, $stdoutdir, $stderrdir;
-}
-
-method runStages ($stages) {
-	$self->logDebug("$$ no. stages", scalar(@$stages));
-
-	for ( my $stage_counter = 0; $stage_counter < @$stages; $stage_counter++ ) {
-		my $stage = $$stages[$stage_counter];
-		my $stage_number = $stage->number();
-		my $stage_name = $stage->name();
-		
-		my $mysqltime	=	$self->getMysqlTime();
-		$stage->queued($mysqltime);
-		$stage->started($mysqltime);
-		
-		#### REPORT STARTING STAGE
-		$self->updateJobStatus($stage, "started");
-		
-		####  RUN STAGE
-		$self->logDebug("$$ Running stage $stage_number", $stage_name);
-	
-		my ($exitcode, $error) = $stage->run();
-		$self->logDebug("$$ exitcode", $exitcode);
-		$self->logDebug("$$ error", $error);
-		$self->logDebug("$$ Ended running stage $stage_counter", $exitcode);
-
-	$self->logDebug("DEBUG NEXT") and next;
-	
-	
-		
-		#### STOP IF THIS STAGE DIDN'T COMPLETE SUCCESSFULLY
-		#### ALL APPLICATIONS MUST RETURN '0' FOR SUCCESS)
-		if ( $exitcode == 0 ) {
-			$self->logDebug("$$ Stage $stage_number: '$stage_name' completed successfully");
-			$stage->setStatus('completed');
-			
-			my $status	=	"completed";
-			if ( defined $self->worker() ) {
-				$self->logDebug("$$ DOING self->updateJobStatus: $status");
-				$self->updateJobStatus($stage, $status);
-			}
-		}
-		else {
-			my $status	=	"error: $exitcode";
-			$stage->setStatus('error');
-
-			if ( defined $self->worker() ) {
-				$self->updateJobStatus($stage, $status);
-			}
-			else {
-				$self->logDebug("$$ Setting status to 'error'");
-				$self->logDebug("$$ After setting status");
-				$self->logError("Stage $stage_number. $stage_name failed. code: $exitcode. error: $error");
-			}
-			
-			return 0;
-		}
-	}    
-	
-	return 1;
 }
 
 method getStageApp ($stage) {
@@ -1449,8 +1460,10 @@ method createQueue ($username, $cluster, $project, $workflow, $envars) {
 	
 	#### SET INSTANCETYPE
 	my $clusterobject = $self->getCluster($username, $cluster);
+	$self->logDebug("clusterobject", $clusterobject);
 	my $instancetype = $clusterobject->{instancetype};
 	$self->logDebug("$$ instancetype", $instancetype);
+
 	$self->instancetype($instancetype);
 	
 	#### CREATE QUEUE
@@ -2356,23 +2369,36 @@ method generateClusterKeypair {
 ### NEW/ADD CLUSTER
 method newCluster {
 #### CREATE NEW CELL DIR
-	$self->logDebug("$$ ");
-    my $json 		=	$self->json();
-	my $username 	=	$json->{username};
-	my $cluster 	=	$json->{cluster};
-	$self->logError("Cluster $cluster already exists") and return if $self->_isCluster($username, $cluster);
+	my $username 	=	$self->username();
+	my $cluster 	=	$self->cluster();
+	$self->logDebug("$$ username", $username);
+	$self->logDebug("$$ cluster", $cluster);
+	
+	#### CREATE DIR
+	$self->_newCluster($username, $cluster);
+}
+
+method _newCluster ($username, $cluster) {
+	#$self->logError("Cluster $cluster already exists") and return if $self->_isCluster($username, $cluster);
 	my $success = $self->_addCluster();
-	$self->logError("Could not add cluster $json->{cluster} into cluster table. Returning") and return if not defined $success or not $success;
+	#$self->logError("Could not add cluster $json->{cluster} into cluster table. Returning") and return if not defined $success or not $success;
 
 	$self->setSgePorts();
 	
 	#### ENSURE DB HANDLE STAYS ALIVE
 	$self->setDbh();
 
+	#### CREATE CELLDIR
+	$self->logDebug("$$ Creating celldir");
+	$self->_createCellDir($username, $cluster);	
+
 	#### CREATE STARCLUSTER config FILE
-	$self->logDebug("$$ Creating configfile and copying celldir");
-	$self->createConfigFile($username, $cluster);	
-	$self->_createCellDir();	
+	my $scheduler	=	$self->conf()->getKey("scheduler", undef);
+	$self->logDebug("scheduler", $scheduler);
+	if ( $scheduler eq "starcluster" ) {
+		$self->logDebug("$$ Creating configfile");
+		$self->createConfigFile($username, $cluster);	
+	}	
 }
 
 method addCluster {

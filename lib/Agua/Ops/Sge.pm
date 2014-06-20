@@ -75,6 +75,14 @@ method getSgeBinRoot {
 #### 	Return the CPU architecture-dependent path to the SGE binaries
 ####	NB: Assumes 64-bit system
 
+	
+	
+	#### LATER: FIX THIS
+	return $self->conf()->getKey("cluster", "SGEBIN");
+	
+	
+	
+	
 	$self->logNote("Getting SGE bin root on MASTER");
 	my $command = "grep vendor_id	/proc/cpuinfo";
 	$self->logNote("command", $command);

@@ -456,9 +456,11 @@ method saveWorkflowToDatabase ($workflowobject) {
 	$self->logDebug("No. stageobjects", scalar(@$stageobjects));
 	foreach my $stageobject ( @$stageobjects ) {
 		#$self->logDebug("stageobject", $stageobject);
-		my $stagenumber = $stageobject->{number};
-		my $package	=	$stageobject->{package};
-		my $installdir	=	$stageobject->{installdir};
+		$self->logDebug("stageobject->submit()", $stageobject->submit());
+
+		my $stagenumber 	= $stageobject->{number};
+		my $package			=	$stageobject->{package};
+		my $installdir		=	$stageobject->{installdir};
 		
 		#### ADD STAGE	
 		$self->stageToDatabase($username, $stageobject, $projectname, $workflowname, $workflownumber, $stagenumber);
@@ -511,8 +513,8 @@ method stageToDatabase ($username, $stageobject, $project, $workflow, $workflown
 	$stagedata->{workflow} 		= $workflow;
 	$stagedata->{workflownumber} = $workflownumber;
 	$stagedata->{number} 		= $number;
-	#$self->logDebug("stagedata", $stagedata);
-	
+	$self->logDebug("stagedata", $stagedata);
+
 	#### GET STAGE PARAMETERS DATA
 	my $parametersdata = $stagedata->{parameters};
 	

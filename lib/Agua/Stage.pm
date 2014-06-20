@@ -515,21 +515,21 @@ method setArguments ($stageparameters) {
 		my $samplehash	=	$self->samplehash();
 		#$self->logDebug("samplehash", $samplehash);
 
+		$value	=~	s/<VERSION>/$version/g if defined $version;
+
 		if ( defined $samplehash ) {
 			foreach my $key ( keys %$samplehash ) {
 				my $match	=	uc($key);
-				$value	=	$samplehash->{$key};
+				my $mate	=	$samplehash->{$key};
 				#$self->logDebug("key", $key);
 				#$self->logDebug("match", $match);
-				#$self->logDebug("value", $value);
-				#$self->logDebug("DOING MATCH $match / $value");
-				$value	=~	s/<$match>/$value/g;
+				#$self->logDebug("mate", $mate);
+				#$self->logDebug("DOING MATCH $match / $mate");
+				$value	=~	s/<$match>/$mate/g;
+				#$self->logDebug("AFTER MATCH value: $value");
 			}
 		}
-		else {
-			$value	=~	s/<VERSION>/$version/g if defined $version;
-		}
-		
+	
 		$clustertype = 1 if $name eq "clustertype";
 
 		$self->logNote("name", $name);

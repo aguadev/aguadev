@@ -287,7 +287,18 @@ method qacct ($username, $cluster, $jobid) {
 	my $sgeroot = $self->conf()->getKey("cluster", 'SGEROOT');
 	$self->_setSsh("root", $masterip, $keypairfile);
 	my $sgebin = $self->master()->ops()->getSgeBinRoot();
-	my ($qacct) = $self->ssh()->execute("$envars $sgebin/qacct -j $jobid");
+
+	my $scheduler	=	$self->conf()->getKey("agua", "SCHEDULER");
+	$self->logDebug("scheduler", $scheduler);
+	my $command 	=	"$envars $sgebin/qacct -j $jobid";
+	my $qacct;
+	if ( $scheduler eq "starcluster" ) {
+		($qacct) = $self->ssh()->execute($command);
+	}
+	else {
+		$qacct 	= 	`$command`;
+		$qacct	=~	s/\s+$//;
+	}
 	
 	return $qacct;
 }

@@ -663,7 +663,8 @@ sub getEnvars {
 	my $workflow	=	$self->workflow();
 	my $sgecell 	= 	$cluster if defined $cluster;
 	$sgecell = '' if not defined $sgecell;
-
+	$self->logDebug("sgecell", $sgecell);
+	
 	#### IF THE INITIAL (PARENT) WORKFLOW JOB WAS RUN LOCALLY MUST PICK UP THE SGE 
 	#### ENVIRONMENT VARIABLES FROM THE SHELL IN ORDER TO IDENTIFY WHERE TO SUBMIT JOBS TO
 	$self->logNote("Retrieving environment variables from shell");
@@ -684,7 +685,7 @@ sub getEnvars {
 	$self->sessionid($sessionid) if not $self->sessionid();
 	$self->cluster($sgecell) if not $self->cluster();
 	$self->queue($queue) if not $self->queue();
-
+	
 	#### THIS JOB IS THE INITIAL (PARENT) WORKFLOW JOB LAUNCHED BY THE SYSTEM.
 	#### IT RETRIEVES THE SGE PORT VARIABLES FROM THE DB
 	if ( defined $username and $username
@@ -696,9 +697,11 @@ sub getEnvars {
 FROM clustervars
 WHERE username = '$username'
 AND cluster = '$sgecell'};
-		$self->logNote("$query");
+		$self->logDebug("$query");
 		$qmasterport 	= 	$self->db()->query($query);
 		$execdport 		= 	$qmasterport + 1 if defined $qmasterport;
+		$self->logDebug("qmasterport", $qmasterport);
+		$self->logDebug("execdport", $execdport);
 	}
 
 	#### IF project AND workflow ARE NOT DEFINED, USE SLOTS IF FILLED
