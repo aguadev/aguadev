@@ -60,7 +60,7 @@ GetOptions (
     'state=s'		=> \$state,
     'target=s'		=> \$target,
     'uuid=s'		=> \$uuid,
-    'log=i'     => \$log,
+    'log=i'     	=> \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";

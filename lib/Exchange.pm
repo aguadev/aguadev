@@ -133,9 +133,35 @@ method sendData ($data) {
 	$connection->close();
 }
 
+method addIdentifiers ($data) {
+	$self->logDebug("data", $data);
+	
+	#### SET TOKEN
+	$data->{token}		=	$self->token();
+	
+	#### SET SENDTYPE
+	$data->{sendtype}	=	"data";
+	
+	#### SET DATABASE
+	$data->{database} 	= 	$self->db()->database() || "";
+
+	#### SET USERNAME		
+	$data->{username} 	= 	$data->{username};
+
+	#### SET SOURCE ID
+	$data->{sourceid} 	= 	$self->sourceid();
+	
+	#### SET CALLBACK
+	$data->{callback} 	= 	$self->callback();
+	
+	$self->logDebug("Returning data", $data);
+
+	return $data;
+}
+
 method newSocketConnection ($args) {
-	$self->logDebug("");
-	#$self->logDebug("args", $args);
+	$self->logCaller("");
+	$self->logDebug("args", $args);
 
 	my $host = $args->{host} || $self->conf()->getKey("socket:host", undef);
 	my $port = $args->{port} || $self->conf()->getKey("socket:port", undef);

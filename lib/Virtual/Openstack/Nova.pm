@@ -373,11 +373,11 @@ method setUsername {
 	return $self->conf()->getKey("openstack:username", undef);
 }
 
-method runCommand ($command) {
-	$self->logDebug("command", $command);
-	
-	return `$command`;
-}
+#method runCommand ($command) {
+#	$self->logDebug("command", $command);
+#	
+#	return `$command`;
+#}
 
 
 

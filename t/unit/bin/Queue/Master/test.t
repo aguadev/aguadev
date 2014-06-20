@@ -95,7 +95,7 @@ isa_ok($object1, "Test::Queue::Master", "object1");
 #$object1->testManage();
 #$object1->testParseDate();
 #$object1->testGetSampleDurations();
-######$object1->testGetDuration();
+#####$object1->testGetDuration();
 #$object1->testGetQueueDuration();
 #$object1->testGetQueueInstance();
 #$object1->testGetLatestCompleted();
@@ -104,9 +104,11 @@ isa_ok($object1, "Test::Queue::Master", "object1");
 #$object1->testGetRunningUserProjects();
 #$object1->testGetQueueTasks();
 #$object1->testGetDurations();
-#$object1->testGetInstances();
+#$object1->testGetInstanceTypes();
 #$object1->testGetResourceCounts();
-$object1->testBalanceQueues();
+#$object1->testBalanceInstances();
+#$object1->testRandomHexadecimal();
+$object1->testRandomHostname();
 
 ##### INTERACTIVE
 #$object1->testReceiveTopic();

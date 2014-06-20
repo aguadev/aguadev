@@ -1,0 +1,5 @@
+!#/bin/bash
+
+echo "userdata"
+echo `hostname`
+echo "end"

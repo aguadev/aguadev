@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS heartbeat
+(
+    host    	VARCHAR(20),
+	cpu			TEXT,
+	io			TEXT,
+	disk		TEXT,
+	memory		TEXT,
+    time		DATETIME,
+	
+    PRIMARY KEY (host, time)
+);

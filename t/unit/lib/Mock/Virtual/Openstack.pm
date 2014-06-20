@@ -1,35 +1,20 @@
 use MooseX::Declare;
-=head2
-
-	PACKAGE		Virtual::Openstack
-	
-    VERSION:        0.01
-
-    PURPOSE
-  
-        1. UTILITY FUNCTIONS TO ACCESS A MYSQL DATABASE
-
-=cut 
 
 use strict;
 use warnings;
-use Carp;
 
 #### INTERNAL MODULES
 use FindBin qw($Bin);
 use lib "$Bin/../../";
 use Agua::DBase;
 
-class Virtual::Openstack with (Logger, Virtual::Openstack::Nova) {
+class Mock::Virtual::Openstack extends Virtual::Openstack {
 
 #### EXTERNAL MODULES
 use Conf::Yaml;
-use Agua::Ssh;
-
 
 # Ints
-has 'sleep'		=>  ( isa => 'Int', is => 'rw', default => 4 );  
-has 'log'		=>  ( isa => 'Int', is => 'rw', default => 2 );  
+has 'log'	=>  ( isa => 'Int', is => 'rw', default => 2 );  
 has 'printlog'	=>  ( isa => 'Int', is => 'rw', default => 2 );
 
 # Strings
@@ -49,7 +34,7 @@ method initialise ($args) {
 	$self->logDebug("");
 }
 
-method createConfig ($object, $templatefile, $targetfile) {
+method createConfigFile ($object, $templatefile, $targetfile) {
 	$self->logDebug("object", $object);
 	$self->logDebug("templatefile", $templatefile);
 	$self->logDebug("targetfile", $targetfile);
@@ -88,143 +73,11 @@ method printAuthFile ($tenant, $templatefile, $targetfile) {
 	return $targetfile;
 }
 
-method launchNode ($authfile, $amiid, $maxnodes, $instancetype, $userdatafile, $keypair, $workflow) {
+method launchNodes ($authfile, $amiid, $maxnodes, $instancetype, $userdatafile, $workflow) {
 	$self->logDebug("authfile", $authfile);
 	$self->logDebug("amiid", $amiid);
 	
-	my $command	=	qq{. $authfile && \\
-nova boot \\
---image $amiid \\
---flavor $instancetype \\
---key-name $keypair \\
---user-data $userdatafile \\
-$workflow};
-	$self->logDebug("command", $command);
-
-	my ($out, $err) 	=	$self->runCommand($command);
-	$self->logDebug("out", $out);
-	$self->logDebug("err", $err);
-
-	my $id	=	$self->parseNovaBoot($out);
-	$self->logDebug("id", $id);
-	
-	return $id;
-}
-
-method parseNovaBoot ($output) {
-	#$self->logDebug("output", $output);
-	my ($id)	=	$output	=~ /\n\|\s+id\s+\|\s+(\S+)/ms;
-	#$self->logDebug("id", $id);
-	
-	return $id;
-}
-
-method getNovaList ($authfile) {
-	$self->logDebug("authfile", $authfile);
-	
-	my $command		=	qq{. $authfile && nova list};
-	my ($out, $err)	=	$self->runCommand($command);
-	$self->logDebug("out", $out);
-	$self->logDebug("err", $err);
-	
-	return $self->parseNovaList($out);
-}
-
-method parseNovaList ($output) {
-	#$self->logDebug("output", $output);
-	return if not defined $output or $output eq "";
-
-	my @lines	=	split "\n", $output;
-	my $hash		=	{};
-	
-	my $columns	=	$self->parseOutputColumns($output);
-	foreach my $column ( @$columns ) {
-		$column	=	lc($column);
-		$column	=~	s/\s+//g;
-	}
-	#$self->logDebug("columns", $columns);
-	
-	foreach my $line ( @lines ) {
-		next if $line =~ /^\+/ or $line	=~	/^\\|\s+ID/;
-		
-		my $entries	=	$self->splitOutputLine($line);	
-		#$self->logDebug("entries", $entries);
-		my $record	=	{};
-		for ( my $i = 0; $i < @$columns; $i++ ) {
-			$record->{$$columns[$i]}	=	$$entries[$i];
-		}
-		#$self->logDebug("record", $record);
-		my $id	=	$$entries[0];
-		$hash->{$id}	= $record;	
-	}
-	
-	return $hash;
-}
-
-method parseOutputColumns ($output) {
-	#$self->logDebug("output", $output);
-	my ($line)	=	$output	=~ /^.+?(\|\s+ID[^\n]+)/msg;
-	$self->logDebug("line", $line);
-
-	return	$self->splitOutputLine($line);
-}
-
-method splitOutputLine ($line) {
-	#$self->logDebug("line", $line);
-	
-	my @entries	=	split "\\|", $line;
-	shift @entries;
-	foreach my $entry ( @entries ) {
-		$entry	=~	s/^\s+//;
-		$entry	=~	s/\s+$//;
-	}
-	#$self->logDebug("entries", \@entries);
-	
-	return \@entries;	
-}
-
-method addNode {
-	
-	my $nodeid;
-	
-	return $nodeid;
-}
-
-method _deleteNode ($authfile, $id) {
-	$self->logDebug("authfile", $authfile);
-	$self->logDebug("id", $id);
-	
-	my $command		=	qq{. $authfile && nova delete $id};
-	my ($out, $err)	=	$self->runCommand($command);
-	$self->logDebug("out", $out);
-	$self->logDebug("err", $err);
-	
-	return $self->parseNovaList($out);
-}
-
-method deleteNode ($authfile, $id) {
-	$self->_deleteNode($authfile, $id);
-	
-	my $novalist	=	$self->getNovaList($authfile);
-	
-	my $taskstate	=	$novalist->{$id}->{taskstate};	
-	$self->logDebug("taskstate", $taskstate);
-	
-	my $success = 0;
-	$success = 1 if not defined $taskstate;
-	$success = 1 if $taskstate eq "deleting";
-
-	return $success;
-}
-
-method getQuota ($authfile, $tenantid) {
-	$self->logDebug("authfile", $authfile);
-	$self->logDebug("tenantid", $tenantid);
-	
-	my $command	=	". $authfile && nova quota-show $tenantid";
-	$self->logDebug("command", $command);
-	
-	return `$command`;
+	return 1;
 }
 
 method printToFile ($file, $text) {
@@ -248,7 +101,7 @@ method getFileContents ($file) {
 	return $contents;
 }
 
-method runCommand ($command) {
+method ($command) {
 	$self->logDebug("command", $command);
 	my $stdoutfile = "/tmp/$$.out";
 	my $stderrfile = "/tmp/$$.err";

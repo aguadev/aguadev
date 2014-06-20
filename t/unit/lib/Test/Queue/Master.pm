@@ -24,8 +24,8 @@ use Test::More;
 
 #####////}}}}}
 
-method testGetInstances {
-	diag("getInstances");
+method testGetInstanceTypes {
+	diag("getInstanceTypes");
 	
 	#### SET TEST DATABASE
 	$self->setUpTestDatabase();
@@ -44,20 +44,20 @@ method testGetInstances {
 			],
 			expected		=>	{
 				"testuser.CU.Download"	=>	{
-					"memory"		=>	"64",
+					"memory"		=>	"32",
 					"cluster"		=>	"testuser.CU.Download",
 					"disk"			=>	"20",
-					"instancetype"	=>	"bcf.8c.64g",
+					"instancetype"	=>	"bcf.8c.32g",
 					"cpus"			=>	"8",
 					"ephemeral"		=>	"0",
 					"username"		=>	"testuser"
 				},
 				"testuser.CU.Bwa"	=>	{
-					"memory"		=>	"64",
+					"memory"		=>	"32",
 					"cluster"		=>	"testuser.CU.Bwa",
 					"disk"			=>	"20",
-					"instancetype"	=>	"bcf.8c.64g",
-					"cpus"			=>	"8",
+					"instancetype"	=>	"bcf.4c.32g",
+					"cpus"			=>	"4",
 					"ephemeral"		=>	"0",
 					"username"		=>	"testuser"
 				},
@@ -65,8 +65,8 @@ method testGetInstances {
 					"memory"		=>	"64",
 					"cluster"		=>	"testuser.CU.FreeBayes",
 					"disk"			=>	"20",
-					"instancetype"	=>	"bcf.8c.64g",
-					"cpus"			=>	"8",
+					"instancetype"	=>	"bcf.1c.64g",
+					"cpus"			=>	"1",
 					"ephemeral"		=>	"0",
 					"username"		=>	"testuser"
 				}
@@ -90,14 +90,14 @@ method testGetInstances {
 		}
 
 		my $queues		=	$self->getDistinctQueues($project);
-		my $instances	=	$self->getInstances($queues);
-		$self->logDebug("instances", $instances);
+		my $instancetypes	=	$self->getInstanceTypes($queues);
+		$self->logDebug("instancetypes", $instancetypes);
 
-		is_deeply($instances, $expected, $testname)
+		is_deeply($instancetypes, $expected, $testname)
 	}		
 }
 
-method testBalanceQueues {
+method testBalanceInstances {
 	diag("balanceQueues");
 	
 	#### SET TEST DATABASE
@@ -158,7 +158,7 @@ method testBalanceQueues {
 		
 		my $queues		=	$self->getDistinctQueues($project);
 		
-		my $counts		=	$self->balanceQueues($queues);
+		my $counts		=	$self->balanceInstance($queues);
 		$self->logDebug("counts", $counts);
 		is_deeply($counts, $expectedcounts, $testname . " (resourcecounts)");
 	
@@ -255,13 +255,13 @@ method testGetResourceCounts {
 		
 		my $queues		=	$self->getDistinctQueues($project);
 		my $durations	=	$self->getDurations($queues);
-		my $instances	=	$self->getInstances($queues);
+		my $instancetypes	=	$self->getInstanceTypes($queues);
 		
-		my $counts		=	$self->getResourceCounts($queues, $durations, $instances);
+		my $counts		=	$self->getResourceCounts($queues, $durations, $instancetypes);
 		$self->logDebug("counts", $counts);
 		is_deeply($counts, $expectedcounts, $testname . " (resourcecounts)");
 	
-		my $instancecounts	=	$self->getInstanceCounts($queues, $instances, $counts);
+		my $instancecounts	=	$self->getInstanceCounts($queues, $instancetypes, $counts);
 		$self->logDebug("instancecounts", $instancecounts);
 		is_deeply($instancecounts, $expectedinstances, $testname . " (instancecounts)");
 	}	
@@ -1239,6 +1239,24 @@ ubuntu   20482  0.0  0.0   8112   920 pts/1    S+   13:50   0:00 grep /usr/bin/g
 	ok($uuid eq $expected, "uuid");	
 }
 
+
+method testRandomHostname {
+	my $randomname	=	$self->randomHostname("testnode");
+	$self->logDebug("randomname", $randomname);
+	
+	my $success	=	$self->hostExists($randomname);
+	$self->logDebug("success", $success);
+	
+	ok($success == 0, "random host name does not exist already");
+}
+
+
+method testRandomHexadecimal {
+	my $random	=	$self->randomHexadecimal(12);
+	$self->logDebug("random", $random);
+	
+}
+
 method fileContents ($file) {
 	$self->logNote("file", $file);
 	return undef if not -f $file;
@@ -1304,6 +1322,8 @@ method setVirtual {
 
 	$self->virtual($virtual);
 }
+
+
 
 
 }

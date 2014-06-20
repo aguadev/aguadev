@@ -33,7 +33,8 @@ class Agua::CLI::Project with (Logger, Agua::CLI::Timer, Agua::CLI::Util, Agua::
     has 'notes'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
     has 'ordinal'	=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0, documentation => q{Set order of appearance: 1, 2, ..., N} );
     has 'workflows'	 => ( isa => 'ArrayRef[Agua::CLI::Workflow]', is => 'rw', default => sub { [] } );
-    has 'provenance'=> ( isa => 'Str|Undef', is => 'rw', required	=>	0, default => '');
+    has 'provenance' => ( isa => 'Str|Undef', is => 'rw', required	=>	0, default => '');
+    has 'scheduler'	 => ( isa => 'Str|Undef', is => 'rw', required	=>	0);
     
     #### STORED STATUS VARIABLES
     has 'status'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
@@ -57,7 +58,7 @@ class Agua::CLI::Project with (Logger, Agua::CLI::Timer, Agua::CLI::Util, Agua::
     has 'appFile'	=> ( isa => 'Str', is => 'rw', required => 0 );
     has 'field'	    => ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'value'	    => ( isa => 'Str|Undef', is => 'rw', required => 0 );
-    has 'fields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['username', 'database', 'name', 'number', 'workflow', 'owner', 'description', 'notes', 'outputdir', 'field', 'value', 'projfile', 'wkfile', 'outputfile', 'cmdfile', 'start', 'stop', 'ordinal', 'from', 'to', 'status', 'started', 'stopped', 'duration', 'epochqueued', 'epochstarted', 'epochstopped', 'epochduration', 'log'] } );
+    has 'fields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['username', 'database', 'name', 'number', 'workflow', 'owner', 'description', 'notes', 'outputdir', 'field', 'value', 'projfile', 'wkfile', 'outputfile', 'cmdfile', 'start', 'stop', 'ordinal', 'from', 'to', 'status', 'started', 'stopped', 'duration', 'epochqueued', 'epochstarted', 'epochstopped', 'epochduration', 'log', 'scheduler'] } );
     has 'savefields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['name', 'number', 'owner', 'description', 'notes', 'status', 'started', 'stopped', 'duration', 'locked'] } );
     has 'exportfields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['name', 'number', 'owner', 'description', 'notes', 'status', 'started', 'stopped', 'duration', 'provenance'] } );
     has 'inputfile' => ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
@@ -270,28 +271,77 @@ AND project='$project'
         $self->logDebug("project", $project);
         $self->logDebug("workflow", $workflow);
 
-		my $data	=	$self->getWorkflow($username, $project, $workflow);		
-		$data->{workflow}	=	$data->{name};
-		$data->{workflownumber}	=	$data->{number};
-		$data->{start}	=	1;
+		#### VERIFY INPUTS
+		print "username not defined\n" and exit if not defined $username;
+		print "project not defined\n" and exit if not defined $project;
+		print "workflow not defined\n" and exit if not defined $workflow;
 		
-		$data->{logtype}	=	$self->logtype();
-		$data->{logfile}	=	$self->logfile();
-		$data->{log}		=	$self->log();
-		$data->{printlog}	=	$self->printlog();
-		
-		$self->logDebug("data", $data);
-		
-		$data->{conf}	=	$self->conf();
-		$data->{db}	=	$self->db();
+		#### GET WORKFLOW
+		my $workflowhash=	$self->getWorkflow($username, $project, $workflow);		
 
+		#### GET SAMPLES
+		my $sampledata	=	$self->getSampleData($username, $project);
+		#$self->logDebug("Number of samples", scalar(@$sampledata));
+		print "Number of samples: ", scalar(@$sampledata), "\n" if defined $sampledata;
+	
+		if ( defined $sampledata ) {
+			foreach my $samplehash ( @$sampledata ) {
+				$self->logDebug("Running workflow with samplehash", $samplehash);
+				print "Running workflow $workflow using sample: ", $samplehash->{sample}, "\n";
+				$self->_runWorkflow($workflowhash, $samplehash);
+			}
+		}
+		else {
+			$self->_runWorkflow($workflowhash, undef);
+		}
+	}
+	
+	method _runWorkflow ($workflowhash, $samplehash) {
+		$workflowhash->{start}		=	1;
+		$workflowhash->{workflow}	=	$workflowhash->{name};
+		$workflowhash->{workflownumber}	=	$workflowhash->{number};
+		$workflowhash->{samplehash}	=	$samplehash;
+
+		#### LOG INFO		
+		$workflowhash->{logtype}	=	$self->logtype();
+		$workflowhash->{logfile}	=	$self->logfile();
+		$workflowhash->{log}		=	$self->log();
+		$workflowhash->{printlog}	=	$self->printlog();
+
+		$workflowhash->{conf}		=	$self->conf();
+		$workflowhash->{db}			=	$self->db();
+		$workflowhash->{scheduler}	=	$self->scheduler();
+
+		
 		require Agua::Workflow;
-        my $object	= Agua::Workflow->new($data);
+        my $object	= Agua::Workflow->new($workflowhash);
 		#$self->logDebug("object", $object);
 		$object->executeWorkflow();
 		
 		$self->logDebug("completed");
     }
+	
+	method getSampleData ($username, $project) {
+		my $query		=	qq{SELECT sampletable FROM sampletable
+WHERE username='$username'
+AND project='$project'};
+		#$self->logDebug("query", $query);
+
+		my $table	=	$self->db()->query($query);
+		$self->logDebug("table", $table);
+		return if not defined $table;
+		
+		$query			=	qq{SELECT * FROM $table
+WHERE username='$username'
+AND project='$project'
+AND sample !=""};
+		#$self->logDebug("query", $query);
+
+		my $sampledata	=	$self->db()->queryhasharray($query);
+		#$self->logDebug("sampledata", $sampledata);
+		
+		return $sampledata;
+	}
 	
 	method getWorkflow ($username, $project, $workflow) {
 		$self->logDebug("username", $username);

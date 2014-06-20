@@ -634,14 +634,14 @@ method getSkelOps ($package, $version) {
 	my $ops			=	qq{{
     "package"		:	"$package",
     "repository"	:	"$package",
-    "hubtype"		:	"github",
+    "hubtype"		:	"bitbucket",
     "owner"			:	"",
     "version"		:	"$version",
     "privacy"		:	"private",
     "description"	:	"",
-    "type"		:	"application",
+    "type"			:	"application",
     "source"		:	"git",
-    "keywords"	:	[],
+    "keywords"		:	[],
     "url"			:	"",
     "installtype"	:	"ops",
     "licensefile"	:	"LICENSE",
@@ -649,7 +649,7 @@ method getSkelOps ($package, $version) {
     "authors"		:	[],
     "website"		:	"",
     "publication"	:	{},
-    "resources"	:	{}
+    "resources"		:	{}
 }};
 
 	return $ops;	

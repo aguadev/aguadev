@@ -1,6 +1,7 @@
 #!/usr/bin/perl -w
 
 =head2
+
 	
 APPLICATION 	test.t
 
@@ -21,16 +22,16 @@ NOTES
 use Test::More 	tests => 23;
 use Getopt::Long;
 use FindBin qw($Bin);
-use lib "$Bin/../../../../../lib";	#### PACKAGE MODULES
-use lib "$Bin/../../../lib";		#### TEST MODULES
-
-use Conf::Yaml;
 
 BEGIN
 {
     my $installdir = $ENV{'installdir'} || "/agua";
     unshift(@INC, "$installdir/lib");
+    unshift(@INC, "$installdir/t/common/lib");
+    unshift(@INC, "$installdir/t/unit/lib");
 }
+
+use Conf::Yaml;
 
 #### CREATE OUTPUTS DIR
 my $outputsdir = "$Bin/outputs";
@@ -52,11 +53,11 @@ my $urlprefix  =   $ENV{'urlprefix'} || "agua";
 
 #### GET OPTIONS
 my $logfile 	= "$Bin/outputs/test.log";
-my $log     =   2;
+my $log     	=   2;
 my $printlog    =   5;
 my $help;
 GetOptions (
-    'log=i'     => \$log,
+    'log=i'     	=> \$log,
     'printlog=i'    => \$printlog,
     'logfile=s'     => \$logfile,
     'help'          => \$help
@@ -79,7 +80,7 @@ my $object1 = new Test::Queue::Worker::Receive(
 isa_ok($object1, "Test::Queue::Worker::Receive", "object1");
 
 #### INTERACTIVE
-$object1->testReceiveTask();
+#$object1->testReceiveTask();
 
 my $object2 = new Test::Queue::Worker(
 	conf		=>	$conf,
@@ -89,11 +90,13 @@ my $object2 = new Test::Queue::Worker(
 );
 isa_ok($object2, "Test::Queue::Worker", "object2");
 
+#$object2->testHeartbeat();
+
 ##### INTERACTIVE
 #$object2->testHandleTask();
 #$object2->testSendTopic();
 #$object2->testVerifyShutdown();
-#$object2->testShutdown();
+$object2->testShutdown();
 
 #### SATISFY Agua::Logger::logError CALL TO EXITLABEL
 no warnings;

@@ -81,7 +81,8 @@ has 'execdport'		=> 	( isa => 'Int', is  => 'rw' );
 
 # Strings
 #has 'logfile'		=>  ( isa => 'Str', is => 'rw', default => 1 );  
-has 'random'		=> 	( isa => 'Str|Undef', is => 'rw', required	=> 	0	);
+has 'scheduler'	 	=> 	( isa => 'Str|Undef', is => 'rw', required	=>	0);
+has 'random'		=> 	( isa => 'Str|Undef', is => 'rw', required	=> 	0);
 has 'configfile'	=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'installdir'	=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'fileroot'		=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
@@ -102,6 +103,7 @@ has 'sgecell'		=> 	( isa => 'Str', is  => 'rw', required	=>	0	);
 has 'upgradesleep'	=> 	( is  => 'rw', 'isa' => 'Int', default	=>	10	);
 
 # Objects
+has 'samplehash'	=> 	( isa => 'HashRef|Undef', is => 'rw', required	=>	0	);
 has 'ssh'			=> 	( isa => 'Agua::Ssh', is => 'rw', required	=>	0	);
 has 'opsinfo'		=> 	( isa => 'Agua::OpsInfo', is => 'rw', required	=>	0	);	
 has 'jsonparser'	=> 	( isa => 'JSON', is => 'rw', lazy => 1, builder => "setJsonParser" );
@@ -450,7 +452,7 @@ method executeWorkflow {
 	my $project 	=	$self->project();
 	my $workflow 	=	$self->workflow();
 	my $workflownumber=	$self->workflownumber();
-	my $sample 		=	$self->sample();
+	my $samplehash 	=	$self->samplehash();
 	my $start 		=	$self->start();
 	my $submit 		= 	$self->submit();
 	$self->logDebug("$$ submit", $submit);
@@ -469,7 +471,7 @@ method executeWorkflow {
 		$error .= "workflownumber, " if not defined $workflownumber;
 		$error .= "start, " if not defined $start;
 		$error =~ s/,\s+$//;
-		$self->logError("Cannot run workflow $project.$workflow becuase of undefined values: $error") and return;
+		$self->logError("Cannot run workflow $project.$workflow because of undefined values: $error") and return;
 	}
 
 	##### QUIT IF RUNNING ALREADY
@@ -490,13 +492,16 @@ method executeWorkflow {
 		project		=>	$project,
 		workflow	=>	$workflow,
 		workflownumber	=> $workflownumber,
-		sample		=>	$sample
+		start		=>	$start,
+		samplehash	=>	$samplehash
 	};
-	my $stages = $self->setStages($username, $cluster, $data, $project, $workflow, $workflownumber, $sample);
-
+	my $stages = $self->setStages($username, $cluster, $data, $project, $workflow, $workflownumber, $samplehash);
+	$self->logDebug("no. stages", scalar(@$stages));
+	
 	#### RUN LOCALLY OR ON CLUSTER
-	my $scheduler	=	$self->conf()->getKey("agua:SCHEDULER", undef);
+	my $scheduler	=	$self->scheduler() || $self->conf()->getKey("agua:SCHEDULER", undef);
 	$self->logDebug("scheduler", $scheduler);
+
 	my $success;
 	if ( not $submit or not defined $cluster or not $cluster ) {
 		$self->logDebug("$$ DOING self->runLocally");
@@ -956,7 +961,7 @@ method stopStarCluster {
 }
 
 #### STAGES
-method setStages ($username, $cluster, $data, $project, $workflow, $workflownumber, $sample) {
+method setStages ($username, $cluster, $data, $project, $workflow, $workflownumber, $samplehash) {
 	$self->logGroup("Agua::Workflow::setStages");
 	$self->logDebug("$$ username", $username);
 	$self->logDebug("$$ cluster", $cluster);
@@ -1001,7 +1006,7 @@ method setStages ($username, $cluster, $data, $project, $workflow, $workflownumb
 	$self->logDebug("$$ scheduler", $scheduler);
 	$self->logDebug("$$ BEFORE monitor = self->updateMonitor()");
 	my $monitor	= 	undef;
-	$monitor = $self->updateMonitor() if $scheduler eq "sge";
+	$monitor = $self->updateMonitor() if $scheduler eq "sge" or $scheduler eq "starcluster";
 	$self->logDebug("$$ AFTER monitor = self->updateMonitor()");
 
 	#### LOAD STAGE OBJECT FOR EACH STAGE TO BE RUN
@@ -1032,7 +1037,7 @@ method setStages ($username, $cluster, $data, $project, $workflow, $workflownumb
 		$stage->{fileroot}		=  	$fileroot;
 
 		$stage->{queue}			=  	$queue;
-		$stage->{sample}		=  	$sample;
+		$stage->{samplehash}	=  	$samplehash;
 		#### LATER: REPLACE
 		#$stage->{queue_options}	=  	$queue_options;
 
@@ -1042,7 +1047,7 @@ method setStages ($username, $cluster, $data, $project, $workflow, $workflownumb
 		$stage->{envars}		=  	$self->envars();
 
 		#### ADD LOG INFO
-		$stage->{log} 		=	$self->log();
+		$stage->{log} 			=	$self->log();
 		$stage->{printlog} 		=	$self->printlog();
 		$stage->{logfile} 		=	$self->logfile();
 
@@ -1099,11 +1104,16 @@ method runStages ($stages) {
 		
 		####  RUN STAGE
 		$self->logDebug("$$ Running stage $stage_number", $stage_name);
+	
 		my ($exitcode, $error) = $stage->run();
 		$self->logDebug("$$ exitcode", $exitcode);
 		$self->logDebug("$$ error", $error);
 		$self->logDebug("$$ Ended running stage $stage_counter", $exitcode);
 
+	$self->logDebug("DEBUG NEXT") and next;
+	
+	
+		
 		#### STOP IF THIS STAGE DIDN'T COMPLETE SUCCESSFULLY
 		#### ALL APPLICATIONS MUST RETURN '0' FOR SUCCESS)
 		if ( $exitcode == 0 ) {
@@ -1160,7 +1170,7 @@ method getStageFields {
 		'project',
 		'workflow',
 		'workflownumber',
-		'sample',
+		'samplehash',
 		'name',
 		'number',
 		'location',
@@ -1172,7 +1182,7 @@ method getStageFields {
 	];
 }
 method updateJobStatus ($stage, $status) {
-	$self->logDebug("$$ stage: $stage");
+	$self->logDebug("$$ stage", $stage->name());
 	$self->logDebug("$$ status", $status);
 
 	#### POPULATE FIELDS
@@ -1584,7 +1594,7 @@ method updateMonitor {
 		cluster		=>	$self->cluster(),
 		envars		=>	$self->envars(),
 		logfile		=>	$self->logfile(),
-		log		=>	$self->log(),
+		log			=>	$self->log(),
 		printlog	=>	$self->printlog()
 	});
 

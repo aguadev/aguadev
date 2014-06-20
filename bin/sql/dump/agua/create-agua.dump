@@ -268,6 +268,24 @@ CREATE TABLE `groups` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `heartbeat`
+--
+
+DROP TABLE IF EXISTS `heartbeat`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `heartbeat` (
+  `host` varchar(20) NOT NULL DEFAULT '',
+  `cpus` text,
+  `io` text,
+  `disk` text,
+  `memory` text,
+  `time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`host`,`time`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `hub`
 --
 
@@ -296,10 +314,11 @@ DROP TABLE IF EXISTS `instance`;
 CREATE TABLE `instance` (
   `username` varchar(30) NOT NULL,
   `queue` varchar(30) NOT NULL,
-  `instanceid` varchar(20) NOT NULL DEFAULT '',
+  `host` varchar(40) NOT NULL DEFAULT '',
+  `id` varchar(40) DEFAULT NULL,
   `status` varchar(20) DEFAULT NULL,
   `time` datetime DEFAULT NULL,
-  PRIMARY KEY (`username`,`queue`,`instanceid`)
+  PRIMARY KEY (`username`,`queue`,`host`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -733,4 +752,4 @@ CREATE TABLE `workflow` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-06-16 20:42:16
+-- Dump completed on 2014-06-18 23:00:18

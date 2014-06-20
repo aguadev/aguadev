@@ -15,7 +15,8 @@ use Test::More;
 #####////}}}}}
 
 method testShutdown {
-	$self->logDebug("");
+	$self->log(4);
+	$self->logDebug("DOING self->shutdown()");
 	$self->shutdown();	
 }
 
@@ -23,9 +24,9 @@ method testVerifyShutdown {
 	diag("verifyShutdown");
 
 	my $shuttingdown	=	"false";
-	#*shutdown = sub {
-	#	$shuttingdown	=	"true";
-	#};
+	*shutdown = sub {
+		$shuttingdown	=	"true";
+	};
 	
 	#### ENABLE SHUTDOWN	
 	$self->conf()->memory(1);
@@ -148,9 +149,8 @@ method testReceiveTask {
 }
 
 
-
 method testHeartbeat {
-	$self->heartbeat($taskqueue);	
+	$self->heartbeat();	
 }
 
 

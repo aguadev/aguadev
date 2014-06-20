@@ -67,7 +67,6 @@ has 'location'		=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'username'  	=>  ( isa => 'Str', is => 'rw', required => 1  );
 has 'workflow'  	=>  ( isa => 'Str', is => 'rw', required => 1  );
 has 'requestor'		=> 	( isa => 'Str', is => 'rw', required	=>	0	);
-has 'sample'   		=>  ( isa => 'Str|Undef', is => 'rw', required => 0  );
 has 'project'   	=>  ( isa => 'Str', is => 'rw', required => 1  );
 has 'name'   		=>  ( isa => 'Str', is => 'rw', required => 1  );
 has 'queue'			=>  ( isa => 'Str', is => 'rw', required => 1  );
@@ -90,9 +89,10 @@ has 'completed'		=>  ( isa => 'Str', is => 'rw' );
 # OBJECTS
 has 'envars'		=> ( isa => 'HashRef', is => 'rw', required => 1 );
 has 'conf'			=> ( isa => 'Conf::Yaml', is => 'rw', required => 1 );
-has 'db'		=> ( isa => 'Agua::DBase::MySQL', is => 'rw', required => 0 );
+has 'db'			=> ( isa => 'Agua::DBase::MySQL', is => 'rw', required => 0 );
 has 'monitor'		=> 	( isa => 'Maybe', is => 'rw', required => 0 );
 has 'stageparameters'=> ( isa => 'ArrayRef', is => 'rw', required => 1 );
+has 'samplehash'   	=>  ( isa => 'HashRef|Undef', is => 'rw', required => 0  );
 
 ####////}
 
@@ -512,12 +512,23 @@ method setArguments ($stageparameters) {
 		my $valuetype 	=	$stageparameter->{valuetype};
 		my $discretion 	=	$stageparameter->{discretion};
 
-		my $sample		=	$self->sample();
-		if ( defined $sample and $sample ne "" ) {
-			$value	=~	s/<SAMPLEID>/$sample/g;
+		my $samplehash	=	$self->samplehash();
+		#$self->logDebug("samplehash", $samplehash);
+
+		if ( defined $samplehash ) {
+			foreach my $key ( keys %$samplehash ) {
+				my $match	=	uc($key);
+				$value	=	$samplehash->{$key};
+				#$self->logDebug("key", $key);
+				#$self->logDebug("match", $match);
+				#$self->logDebug("value", $value);
+				#$self->logDebug("DOING MATCH $match / $value");
+				$value	=~	s/<$match>/$value/g;
+			}
 		}
-		
-		$value	=~	s/<VERSION>/$version/g;
+		else {
+			$value	=~	s/<VERSION>/$version/g if defined $version;
+		}
 		
 		$clustertype = 1 if $name eq "clustertype";
 
@@ -526,7 +537,7 @@ method setArguments ($stageparameters) {
 		$self->logNote("value", $value);
 		$self->logNote("valuetype", $valuetype);
 		$self->logNote("discretion", $discretion);
-		
+
 		#### SKIP EMPTY FLAG OR ADD 'checked' FLAG
 		if ( $valuetype eq "flag" )
 		{

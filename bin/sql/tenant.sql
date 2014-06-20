@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS tenant
     os_password		VARCHAR(40) NOT NULL,
     os_tenant_id	VARCHAR(40) NOT NULL,
     os_tenant_name	VARCHAR(40) NOT NULL,
+	keypair			VARCHAR(40) NOT NULL,
  
     PRIMARY KEY  (username)
 );

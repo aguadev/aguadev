@@ -93,13 +93,17 @@ method manage {
 	####### USE FIRST QUEUE FOR username, project AND workflow INFO
 	###$self->updateSamples($queues);
 
+	#my $shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
+	#$self->logDebug("shutdown", $shutdown);
+	#$self->listenTopics() if not $shutdown eq "true";
+
 	#### LISTEN FOR REPORTS FROM WORKERS
-	my $shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
-	$self->logDebug("shutdown", $shutdown);
-	$self->listenTopics() if not $shutdown eq "true";
+	$self->listenTopics();
 
 	#### 
-	while ( not $shutdown eq "true" ) {
+	#while ( not $shutdown eq "true" ) {
+	while ( 1 ) {
+	
 		my $tenants		=	$self->getTenants();
 		$self->logDebug("tenants", $tenants);
 		foreach my $tenant ( @$tenants ) {
@@ -130,10 +134,9 @@ method manage {
 				#### 3. ADD/REMOVE VMS TO/FROM QUEUES BASED ON JOB THRESHOLDS
 
 #### DEBUG
-				#
-				#$self->balanceInstances($workflows);
+				
+				$self->balanceInstances($workflows);
 #### DEBUG
-
 		
 				#### 4. REPLENISH NUMBER OF JOBS IN EACH QUEUE IF BELOW THRESHOLD		
 				$self->maintainQueues($workflows);
@@ -144,8 +147,8 @@ method manage {
 		#### PAUSE
 		$self->pause();
 
-		#### GET SYSTEM SHUTDOWN (USE FOR TESTING)
-		$shutdown	=	$self->updateShutdown();
+		##### GET SYSTEM SHUTDOWN (USE FOR TESTING)
+		#$shutdown	=	$self->updateShutdown();
 	}
 	
 	return 1;
@@ -191,20 +194,35 @@ method getProjects ($username) {
 }
 #### MAINTAIN QUEUES
 method maintainQueues($workflows) {
-
-	#### GET QUEUE TASK COUNTS LIST FROM RABBITMQ
-	#my $queuelist	=	$self->getQueueTasks();
-	#$self->logDebug("queuelist", $queuelist);
-	
-#### DEBUG
-my $queuelist	=	{};
-
-	foreach my $workflow ( @$workflows ) {
-		$self->maintainQueue($workflows, $queuelist, $workflow);
+	$self->logDebug("");
+	for ( my $i = 0; $i < @$workflows; $i++ ) {
+		my $workflow	=	$$workflows[$i];
+		
+		if ( $i != 0 ) {
+			$self->logDebug("NO COMPLETED JOBS in previous queue") and next if $self->noCompletedJobs($$workflows[$i - 1]);
+		}
+		
+		$self->maintainQueue($workflows, $workflow);
 	}
 }
 
-method maintainQueue ($workflows, $queuelist, $workflowdata) {
+method noCompletedJobs ($workflow) {
+	my $query	=	qq{SELECT COUNT(*) FROM queuesample
+WHERE username='$workflow->{username}'
+AND project='$workflow->{project}'
+AND workflow='$workflow->{workflow}'
+AND workflownumber='$workflow->{workflownumber}'
+AND status='completed'};
+	$self->logDebug("query", $query);
+	
+	my $completed	=	$self->db()->query($query);
+	$self->logDebug("completed", $completed);
+	
+	return 1 if $completed == 0;
+	return 0;
+}
+
+method maintainQueue ($workflows, $workflowdata) {
 	$self->logDebug("workflowdata", $workflowdata);
 	
 	my $queuename	=	$self->setQueueName($workflowdata);
@@ -219,7 +237,6 @@ method maintainQueue ($workflows, $queuelist, $workflowdata) {
 	#### GET NUMBER OF QUEUED JOBS
 	my $queuedjobs	=	$self->getQueuedJobs($workflowdata);
 	my $numberqueued=	scalar(@$queuedjobs);
-	#my $numberqueued	=	$self->getNumberQueuedJobs($queuelist, $queuename) || 0;
 	$self->logDebug("numberqueued", $numberqueued);
 
 	#### ADD MORE JOBS TO QUEUE IF LESS THAN maxjobs
@@ -234,7 +251,7 @@ method maintainQueue ($workflows, $queuelist, $workflowdata) {
 
 	if ( $numberqueued == 0 and not @$tasks ) {
 		$self->logDebug("Setting workflow $workflowdata->{workflow} status to 'completed'");
-		$self->setWorkflowStatus($workflowdata, "completed");
+		$self->setWorkflowStatus($workflowdata->{username}, $workflowdata->{project}, $workflowdata->{workflow}, "completed");
 	}
 	elsif ( @$tasks ) {
 		foreach my $task ( @$tasks ) {
@@ -363,12 +380,12 @@ method balanceInstances ($workflows) {
 	$workflows	=	$self->clusterWorkflows($workflows);	
 	$self->logDebug("cluster only workflows", $workflows);
 
-	#### GET CURRENT COUNTS OF QUEUES
+	#### GET CURRENT COUNTS OF RUNNING INSTANCES PER QUEUE
 	my $currentcounts	=	$self->getCurrentCounts($username);
 
 	#### GET REQUIRED RESOURCES FOR QUEUE INSTANCES (CPUs, RAM, ETC.)
-	my $instances	=	$self->getInstances($workflows);
-	$self->logDebug("instances", $instances);
+	my $instancetypes	=	$self->getInstanceTypes($workflows);
+	$self->logDebug("instancetypes", $instancetypes);
 
 	# 3. IF LATEST RUNNING WORKFLOW HAS NO COMPLETED JOBS, SET
 	#	INSTANCE COUNT FOR NEXT WORKFLOW TO cluster->minnodes
@@ -379,7 +396,7 @@ method balanceInstances ($workflows) {
 	#my $quota	=	$self->getResourceQuota($username, $metric);
 
 #### DEBUG
-my $quota		=	20;
+my $quota		=	2;
 $self->logDebug("quota", $quota);
 
 	my $resourcecounts	=	[];
@@ -390,13 +407,13 @@ $self->logDebug("quota", $quota);
 	#### 
 	if ( not defined $latestcompleted ) {
 		
-		my $resourcecount	=	$self->getDefaultResource($$workflows[0], $instances, $quota);
+		my $resourcecount	=	$self->getDefaultResource($$workflows[0], $instancetypes, $quota);
 		$self->logDebug("resourcecount", $resourcecount);
 
 		my $metric	=	$self->metric();
 
 		my $queuename	=	$self->getQueueName($$workflows[0]);
-		my $resource	=	$instances->{$queuename}->{$metric};
+		my $resource	=	$instancetypes->{$queuename}->{$metric};
 		my $instancecount	=	ceil($resourcecount/$resource);
 		$instancecount		=	1 if $instancecount < 1;
 		$self->logDebug("instancecount", $instancecount);
@@ -412,8 +429,8 @@ $self->logDebug("quota", $quota);
 		
 		# 2. BALANCE COUNTS BASED ON DURATION
 		#
-		$resourcecounts	=	$self->getResourceCounts($workflows, $durations, $instances, $quota);
-		$instancecounts	=	$self->getInstanceCounts($workflows, $instances, $resourcecounts);
+		$resourcecounts	=	$self->getResourceCounts($workflows, $durations, $instancetypes, $quota);
+		$instancecounts	=	$self->getInstanceCounts($workflows, $instancetypes, $resourcecounts);
 		$self->logDebug("instancecounts", $instancecounts);
 
 		#### SET DEFAULT INSTANCE COUNTS FOR NEXT WORKFLOW IF IT HAS NO
@@ -439,16 +456,11 @@ $self->logDebug("quota", $quota);
 		$self->logDebug("difference	= $instancecount - $currentcount");
 		$self->logDebug("difference", $difference);
 		
-
-#### DEBUG
-$self->logDebug("DEBUG NEXT") and next;
-
-
 		if ( $difference > 0 ) {
 			$self->addNodes($$workflows[$i], $difference);
 		}
 		elsif ( $difference < 0 ) {
-			$self->removeNodes($$workflows[$i], $difference);
+			$self->deleteNodes($$workflows[$i], $difference);
 		}
 	}
 
@@ -456,19 +468,238 @@ $self->logDebug("DEBUG NEXT") and next;
 	#   NB: maxJobs <= NUMBER OF REMAINING SAMPLES FOR THE WORKFLOW
 }
 
+method addNodes ($workflow, $number) {
+	my $username	=	$workflow->{username};
+	my $project		=	$workflow->{project};
+	my $name		=	$workflow->{workflow};
+	
+	my ($authfile, $amiid, $instancetype, $userdatafile, $keypair)	=	$self->getVirtualInputs($workflow);
+	
+	for ( my $i = 0; $i < $number; $i++ ) {
 
-method getDefaultResource ($queue, $instances, $quota) {
+		my $hostname	=	$self->randomHostname($name);
+		$self->logDebug("hostname", $hostname);
+	
+		my $id	=	$self->virtual()->launchNode($authfile, $amiid, $number, $instancetype, $userdatafile, $keypair, $hostname);
+
+		my $success	=	0;
+		$success	=	1 if defined $id;
+		$success	=	1 if $id =~ /^[0-9a-z\-]+$/;
+
+		$self->logError("failed to add node") and return 0 if not $success;
+		
+		$self->addHostInstance($workflow, $hostname, $id);
+	}
+	
+	return 1;
+}
+
+method addHostInstance ($workflow, $hostname, $id) {
+	$self->logDebug("workflow", $workflow);
+	$self->logDebug("hostname", $hostname);
+	$self->logDebug("id", $id);
+	
+	my $time			=	$self->getMysqlTime();
+
+	my $data	=	{};
+	$data->{username}	=	$workflow->{username};
+	$data->{queue}		=	$self->getQueueName($workflow);
+	$data->{host}		=	$hostname;
+	$data->{instanceid}	=	$id;
+	$data->{status}		=	"running";
+	$data->{time}		=	$time;
+	$self->logDebug("data", $data);
+	
+	my $keys	=	[ "username", "queue", "host" ];
+	my $notdefined	=	$self->notDefined($data, $keys);	
+	$self->logDebug("notdefined", $notdefined) and return if @$notdefined;
+
+	#### ADD TO TABLE
+	my $table		=	"instance";
+	my $fields		=	$self->db()->fields($table);
+	$self->_addToTable($table, $data, $keys, $fields);
+}
+
+method randomHostname ($name) {
+	
+	my $length	=	10;
+	my $random	=	$self->randomHexadecimal($length);	
+	my $randomname	=	$name . "-" . $random;
+	#$self->logDebug("randomname", $randomname);
+	while ( $self->hostExists($randomname) ) {
+		$random	=	$self->randomHexadecimal($length);	
+		$randomname	=	$name . "-" . $random;
+	}
+
+	return $randomname;	
+}
+
+method hostExists ($host) {
+	my $query	=	qq{SELECT 1 FROM heartbeat
+WHERE host='$host'};
+	#$self->logDebug("query", $query);
+	
+	my $success	=	$self->db()->query($query);
+	#$self->logDebug("success", $success);
+	
+	return 0 if not defined $success;
+	return 1;
+}
+
+method randomHexadecimal ($length) {
+	#$self->logDebug("length", $length);
+	
+	my $random	=	"";
+	for ( 0 .. $length ) {
+		$random .= sprintf "%01X", rand(0xf);
+	}
+	$random	=	lc($random);
+	#$self->logDebug("random", $random);
+	
+	return $random;
+}
+
+method getVirtualInputs ($workflow) {
+	my $username	=	$workflow->{username};
+	
+	my $cluster		=	$self->getQueueName($workflow);
+
+	#	1. GET amiid, instancetype FOR cluster = username.project.workflow
+	my $clusterobject	=	$self->getQueueCluster($workflow);
+	my $amiid			=	$clusterobject->{amiid};
+	my $instancetype	=	$clusterobject->{instancetype};
+	$self->logDebug("amiid", $amiid);
+	$self->logDebug("instancetype", $instancetype);
+	
+	#	2. PRINT USERDATA FILE
+	my $userdatafile	=	$self->printConfig($workflow);
+	
+	# 	3. PRINT OPENSTACK AUTHENTICATION *-openrc.sh FILE
+	my $virtualtype		=	$self->conf()->getKey("agua", "VIRTUALTYPE");
+	my $authfile;
+	if ( $virtualtype eq "openstack" ) {
+		$authfile	=	$self->printAuth($username);
+	}
+	$self->logDebug("authfile", $authfile);
+	
+	#### GET OPENSTACK AUTH INFO
+	my $tenant		=	$self->getTenant($username);
+	$self->logDebug("tenant", $tenant);
+	my $keypair		=	$tenant->{keypair};
+	
+	return ($authfile, $amiid, $instancetype, $userdatafile, $keypair);
+}
+
+method deleteNodes ($workflow, $number) {
+	my $username	=	$workflow->{username};
+	my $project		=	$workflow->{project};
+	my $name		=	$workflow;
+	
+	my $shutdowns	=	$self->shutdownInstances($workflow, $number);
+	
+	my ($authfile, $amiid, $instancetype, $userdatafile, $keypair)	=	$self->getVirtualInputs($workflow);
+
+	for ( my $i = 0; $i < $number; $i++ ) {
+		my $success	=	$self->virtual()->deleteNode($authfile, $amiid, $number, $instancetype, $userdatafile, $keypair, $name);
+
+		$self->logError("failed to delete node") and return 0 if not $success;
+		
+		my $id	=	$self->getVmId();
+		
+		$self->updateVms($id)
+	}
+
+	return 1;
+}
+
+method shutdownInstances ($workflow, $number) {
+	my $queuename	=	$self->getQueueName($workflow);
+	my $username	=	$workflow->{username};
+	my $query	=	qq{SELECT id FROM instance
+WHERE username='$username'
+AND queue='$queuename'
+AND status='running'};
+	$self->logDebug("query", $query);
+	
+	my $ids		=	$self->db()->queryarray($query);
+	foreach my $id ( @$ids ) {
+		my $success		=	$self->shutdownInstance($id);
+		$self->logDebug("success", $success);
+	}
+}
+
+method shutdownInstance ($id) {
+	$self->logDebug("id", $id);
+	
+	my $data	=	{
+		host	=>	$id,
+		mode	=>	"doShutdown"
+	};
+	
+	my $key	=	"update.host.status";
+	$self->sendTopic($data, $id);
+}
+
+method sendTopic ($data, $key) {
+	$self->logDebug("$$ data", $data);
+	$self->logDebug("$$ key", $key);
+
+	my $exchange	=	$self->conf()->getKey("queue:topicexchange", undef);
+	$self->logDebug("$$ exchange", $exchange);
+
+	my $host		=	$self->host() || $self->conf()->getKey("queue:host", undef);
+	my $user		= 	$self->user() || $self->conf()->getKey("queue:user", undef);
+	my $pass	=	$self->pass() || $self->conf()->getKey("queue:pass", undef);
+	my $vhost		=	$self->vhost() || $self->conf()->getKey("queue:vhost", undef);
+	$self->logNote("$$ host", $host);
+	$self->logNote("$$ user", $user);
+	$self->logNote("$$ pass", $pass);
+	$self->logNote("$$ vhost", $vhost);
+	
+    my $connection = Net::RabbitFoot->new()->load_xml_spec()->connect(
+        host 	=>	$host,
+        port 	=>	5672,
+        user 	=>	$user,
+        pass 	=>	$pass,
+        vhost	=>	$vhost,
+    );
+
+	$self->logNote("$$ connection: $connection");
+	$self->logNote("$$ DOING connection->open_channel");
+	my $channel 	= 	$connection->open_channel();
+	$self->channel($channel);
+
+	$self->logNote("$$ DOING channel->declare_exchange");
+
+	$channel->declare_exchange(
+		exchange => $exchange,
+		type => 'topic',
+	);
+	
+	my $json	=	$self->jsonparser()->encode($data);
+	$self->logDebug("$$ json", $json);
+	$self->channel()->publish(
+		exchange => $exchange,
+		routing_key => $key,
+		body => $json,
+	);
+	
+	print "$$ [x] Sent topic with key '$key'\n";
+
+	$connection->close();
+}
+
+method getDefaultResource ($queue, $instancetypes, $quota) {
 	$self->logDebug("queue", $queue);
 
 	#### SET FIRST NODES TO MAX NO SAMPLES COMPLETED
 	my $queuename		=	$self->getQueueName($queue);
-	my $instance		=	$instances->{$queuename};
+	my $instancetype		=	$instancetypes->{$queuename};
 	my $metric			=	$self->metric();
-	my $resource	=	$instance->{$metric};
+	my $resource	=	$instancetype->{$metric};
 	$self->logDebug("queuename", $queuename);
 	$self->logDebug("resource", $resource);
-	$self->logDebug("instance", $instance);
-	$self->logDebug("instance", $instance);
+	$self->logDebug("instancetype", $instancetype);
 
 	#### SET RESOURCE QUOTA
 	my $resourcequota	=	$quota * $resource;
@@ -493,7 +724,6 @@ method getDefaultResource ($queue, $instances, $quota) {
 	return $resourcecount;
 }
 
-
 method clusterWorkflows ($workflows) {
 	#$self->logDebug("workflows", $workflows);
 
@@ -508,44 +738,6 @@ method clusterWorkflows ($workflows) {
 	#$self->logDebug("CLUSTER ONLY clusterworkflows", $clusterworkflows);
 
 	return $clusterworkflows;
-}
-
-method addNodes ($queue, $nodes) {
-	my $username	=	$queue->{username};
-	my $project		=	$queue->{project};
-	my $workflow	=	$queue->{workflow};
-	
-	my $cluster		=	$self->getQueueName($queue);
-
-	#	1. GET amiid, instancetype FOR cluster = username.project.workflow
-	my $clusterobject	=	$self->getQueueCluster($queue);
-	my $amiid			=	$clusterobject->{amiid};
-	my $instancetype	=	$clusterobject->{instancetype};
-	$self->logDebug("amiid", $amiid);
-	$self->logDebug("instancetype", $instancetype);
-	
-	#	2. PRINT USERDATA FILE
-	my $userdatafile	=	$self->printConfig($queue);
-	
-	# 	3. PRINT OPENSTACK AUTHENTICATION *-openrc.sh FILE
-	my $virtualtype		=	$self->conf()->getKey("agua", "VIRTUALTYPE");
-	my $authfile;
-	if ( $virtualtype eq "openstack" ) {
-		$authfile	=	$self->printAuth($username);
-	}
-	$self->logDebug("authfile", $authfile);
-	
-	#	4. SPIN UP cluster.maxnodes OF VMs FOR FIRST WORKFLOW
-	my $name	=	$workflow;
-	my $success	=	$self->virtual()->launchNodes($authfile, $amiid, $nodes, $instancetype, $userdatafile, $name);
-	$self->logDebug("success", $success);
-	
-	#	5. SET WORKFLOW STATUS
-	$self->setWorkflowStatus($username, $project, $workflow, "running") if $success == 1;
-	$self->setWorkflowStatus($username, $project, $workflow, "error") if $success == 0;
-	$self->logDebug("success", $success);
-	
-	return $success;
 }
 
 method printConfig ($workflowobject) {
@@ -615,11 +807,11 @@ method adjustCounts ($queues, $resourcecounts, $latestcompleted) {
 	my $min			=	$cluster->{minnodes};
 	$self->logDebug("min", $min);
 
-	my $instances	=	$self->getInstances($queues);
-	my $instance	=	$instances->{$nextqueuename};
-	$self->logDebug("instance", $instance);
+	my $instancetypes	=	$self->getInstanceTypes($queues);
+	my $instancetype	=	$instancetypes->{$nextqueuename};
+	$self->logDebug("instancetype", $instancetype);
 	my $metric		=	$self->metric();
-	my $resource	=	$instance->{$metric};
+	my $resource	=	$instancetype->{$metric};
 	
 	my $total	=	0;
 	foreach my $resourcecount ( @$resourcecounts ) {
@@ -637,10 +829,10 @@ method adjustCounts ($queues, $resourcecounts, $latestcompleted) {
 	$self->logDebug("resourcecounts", $resourcecounts);
 	push @$resourcecounts, $latestcount;
 	
-	return $self->getInstanceCounts($queues, $instances, $resourcecounts);
+	return $self->getInstanceCounts($queues, $instancetypes, $resourcecounts);
 }
 
-method getResourceCounts ($queues, $durations, $instances, $quota) {
+method getResourceCounts ($queues, $durations, $instancetypes, $quota) {
 =doc
 
 =head2	ALGORITHM
@@ -672,7 +864,7 @@ method getResourceCounts ($queues, $durations, $instances, $quota) {
 	$self->logDebug("username", $username);
 	$self->logDebug("queues", $queues);
 	$self->logDebug("durations", $durations);
-	$self->logDebug("instances", $instances);
+	$self->logDebug("instancetypes", $instancetypes);
 	$self->logDebug("metric", $metric);
 	
 	#### GET INDEX OF LATEST RUNNING WORKFLOW
@@ -681,9 +873,9 @@ method getResourceCounts ($queues, $durations, $instances, $quota) {
 
 	my $firstqueue		=	$self->getQueueName($$queues[0]);
 	$self->logDebug("firstqueue", $firstqueue);
-	my $instance		=	$instances->{$firstqueue};
-	$self->logDebug("instance", $instance);
-	my $firstresource	=	$instance->{$metric};
+	my $instancetype		=	$instancetypes->{$firstqueue};
+	$self->logDebug("instancetype", $instancetype);
+	my $firstresource	=	$instancetype->{$metric};
 	my $firstduration	=	$durations->{$firstqueue} * $firstresource;
 	$self->logDebug("firstresource", $firstresource);
 	
@@ -701,9 +893,9 @@ method getResourceCounts ($queues, $durations, $instances, $quota) {
 		my $duration	=	$durations->{$queuename};
 		#$self->logDebug("duration", $duration);
 
-		my $instance	=	$instances->{$queuename};
-		#$self->logDebug("instance", $instance);
-		my $resource	=	$instance->{$metric};
+		my $instancetype	=	$instancetypes->{$queuename};
+		#$self->logDebug("instancetype", $instancetype);
+		my $resource	=	$instancetype->{$metric};
 		#$self->logDebug("resource ($metric)", $resource);
 
 		my $adjustedduration	=	$duration * $resource;
@@ -732,9 +924,9 @@ method getResourceCounts ($queues, $durations, $instances, $quota) {
 		my $duration	=	$durations->{$queuename};
 		#$self->logDebug("duration", $duration);
 
-		my $instance	=	$instances->{$queuename};
-		#$self->logDebug("instance", $instance);
-		my $resource	=	$instance->{$metric};
+		my $instancetype	=	$instancetypes->{$queuename};
+		#$self->logDebug("instancetype", $instancetype);
+		my $resource	=	$instancetype->{$metric};
 		#$self->logDebug("resource ($metric)", $resource);
 
 		my $adjustedduration	=	$duration * $resource;
@@ -772,7 +964,7 @@ method getResourceCounts ($queues, $durations, $instances, $quota) {
 	return $resourcecounts;
 }
 
-method getInstanceCounts ($queues, $instances, $resourcecounts) {
+method getInstanceCounts ($queues, $instancetypes, $resourcecounts) {
 	my $metric	=	$self->metric();
 	$self->logDebug("metric", $metric);
 
@@ -781,7 +973,7 @@ method getInstanceCounts ($queues, $instances, $resourcecounts) {
 	my $integertotal	=	0;
 	for ( my $i = 0; $i < @$resourcecounts; $i++ ) {
 		my $queuename	=	$self->getQueueName($$queues[$i]);
-		my $resource	=	$instances->{$queuename}->{$metric};
+		my $resource	=	$instancetypes->{$queuename}->{$metric};
 		$self->logDebug("resource", $resource);
 		my $resourcecount 	=	$$resourcecounts[$i] / $resource;
 		
@@ -885,19 +1077,19 @@ method getAuthFile ($username, $tenant) {
 	return	$authfile;
 }
 
-method getInstances ($queues) {
-	my $instances	=	{};
+method getInstanceTypes ($queues) {
+	my $instancetypes	=	{};
 	foreach my $queue ( @$queues ) {
 		#$self->logDebug("queue", $queue);
 		my $queuename	=	$self->getQueueName($queue);
 		$self->logDebug("queuename", $queuename);
 		
-		my $instance	=	$self->getQueueInstance($queue);
-		$instances->{$queuename}	= $instance;
+		my $instancetype	=	$self->getQueueInstance($queue);
+		$instancetypes->{$queuename}	= $instancetype;
 	}
-	$self->logDebug("instances", $instances);
+	$self->logDebug("instancetypes", $instancetypes);
 	
-	return $instances;
+	return $instancetypes;
 }
 
 method getQueueInstance ($queue) {
@@ -908,10 +1100,10 @@ method getQueueInstance ($queue) {
 WHERE username='$queue->{username}'
 AND cluster='$queuename'};
 	#$self->logDebug("query", $query);
-	my $instance	=	$self->db()->queryhash($query);
-	$self->logDebug("instance", $instance);	
+	my $instancetype	=	$self->db()->queryhash($query);
+	$self->logDebug("instancetype", $instancetype);	
 	
-	return $instance;
+	return $instancetype;
 }
 
 method getThroughputs ($queues, $durations, $instancecounts) {
@@ -949,6 +1141,7 @@ method getCurrentCounts ($username) {
 	my $query	=	qq{SELECT queue, COUNT(*) AS count
 FROM instance
 WHERE username='$username'
+AND status='running'
 GROUP BY queue};
 	$self->logDebug("query", $query);
 	my $entries	=	$self->db()->queryhasharray($query);
@@ -1043,10 +1236,10 @@ method getQueueCluster ($queue) {
 WHERE username='$queue->{username}'
 AND cluster='$queuename'};
 	#$self->logDebug("query", $query);
-	my $instance	=	$self->db()->queryhash($query);
+	my $instancetype	=	$self->db()->queryhash($query);
 	#$self->logDebug("instance", $instance);
 	
-	return $instance;
+	return $instancetype;
 }
 
 
@@ -1328,7 +1521,6 @@ method listenTopics {
 	}
 }
 
-
 method receiveTopic {
 	$self->logDebug("");
 	
@@ -1420,6 +1612,18 @@ method updateJobStatus ($data) {
 	#my $synapsestatus	=	$self->getSynapseStatus($data);
 	#my $sample	=	$data->{sample};
 	#$self->synapse()->change($sample, $synapsestatus);
+}
+
+method updateHeartbeat ($data) {
+	$self->logDebug("data", $data);
+	my $keys	=	[ "host", "time" ];
+	my $notdefined	=	$self->notDefined($data, $keys);	
+	$self->logDebug("notdefined", $notdefined) and return if @$notdefined;
+
+	#### ADD TO TABLE
+	my $table		=	"heartbeat";
+	my $fields		=	$self->db()->fields($table);
+	$self->_addToTable($table, $data, $keys, $fields);
 }
 
 method updateQueueSamples ($data) {
@@ -1585,7 +1789,7 @@ method sendTask ($task) {
 	$task->{queue}		=	$queuename;	
 	
 	#### ADD UNIQUE IDENTIFIERS
-	$task	=	$self->addIdentifiers($task);
+	$task	=	$self->addTaskIdentifiers($task);
 
 	my $jsonparser = JSON->new();
 	my $json = $jsonparser->encode($task);
@@ -1613,6 +1817,30 @@ method sendTask ($task) {
 	print " [x] Sent TASK: '$json'\n";
 }
 
+method addTaskIdentifiers ($task) {
+	
+	#### SET TOKEN
+	$task->{token}		=	$self->token();
+	
+	#### SET SENDTYPE
+	$task->{sendtype}	=	"task";
+	
+	#### SET DATABASE
+	$task->{database} 	= 	$self->db()->database() || "";
+
+	#### SET USERNAME		
+	$task->{username} 	= 	$task->{username};
+
+	#### SET SOURCE ID
+	$task->{sourceid} 	= 	$self->sourceid();
+	
+	#### SET CALLBACK
+	$task->{callback} 	= 	$self->callback();
+	
+	$self->logDebug("Returning task", $task);
+	
+	return $task;
+}
 method setQueueName ($task) {
 	#### VERIFY VALUES
 	my $notdefined	=	$self->notDefined($task, ["username", "project", "workflow"]);
@@ -1737,7 +1965,6 @@ method getDownloadUuid ($ip) {
 	
 	return $uuid;
 }
-
 method workflowStatus ($ip) {
 	$self->logDebug("ip", $ip);
 	my $command =	qq{ssh -o "StrictHostKeyChecking no" -t ubuntu(), "\@", $self->ip "tail -n1 ~/worker.log"};
@@ -1852,8 +2079,8 @@ method setVirtual {
             username	=>  $self->username(),
 			
 			logfile		=>	$self->logfile(),
-			log			=>	2,
-			printlog	=>	2
+			log			=>	$self->log(),
+			printlog	=>	$self->printlog()
         }
     ) or die "Can't create virtual of type: $virtualtype. $!\n";
 	$self->logDebug("virtual: $virtual");

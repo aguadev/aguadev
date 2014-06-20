@@ -28,12 +28,12 @@ my $DEBUG = 0;
 
     USAGE
 	
-		./loadSamples.pl <--username String> <--project String> <--workflow String> <--workflownumber String> <--file String> [-h] 
+		./loadSamples.pl <--username String> <--project String> <--table String> <--tablenumber String> <--file String> [-h] 
 
     --username	  :   Name of user (e.g., admin)
     --project	  :   Name of project (e.g., AlignBams)
-    --username	  :   Name of workflow (e.g., loadSamples)
-    --username	  :   Number of workflow (e.g., 1)
+    --username	  :   Name of table (e.g., loadSamples)
+    --username	  :   Number of table (e.g., 1)
     --file	  :   Location of *.tsv file
     --help        :   print this help message
 
@@ -42,7 +42,7 @@ my $DEBUG = 0;
 
     EXAMPLE
 
-perl loadSamples.pl --username agua --project AlignBams --workflow loadSamples --workflownumber 1 --file /path/to/data/samplefile.tsv
+perl loadSamples.pl --username agua --project AlignBams --table loadSamples --tablenumber 1 --file /path/to/data/samplefile.tsv
 
 =cut
 
@@ -63,30 +63,31 @@ my $logfile 	= "/tmp/$script.$$.log";
 #### GET OPTIONS
 my $log 		= 	2;
 my $printlog 	= 	5;
+
 my $username;
 my $project;
-my $workflow;
-my $workflownumber;
-my $file;	
+my $table;
+my $sqlfile;	
+my $tsvfile;	
 my $help;
 GetOptions (
-	'log=i' 		=> \$log,
-	'printlog=i' 	=> \$printlog,
-
 	'username=s' 	=> \$username,
 	'project=s' 	=> \$project,
-	'workflow=s' 	=> \$workflow,
-	'workflownumber=s' => \$workflownumber,
-	'file=s' 		=> \$file,
+	'table=s' 		=> \$table,
+	'sqlfile=s' 	=> \$sqlfile,
+	'tsvfile=s' 	=> \$tsvfile,
+
+	'log=i' 		=> \$log,
+	'printlog=i' 	=> \$printlog,
 	'help' => \$help) or die "No options specified. Try '--help'\n";
 if ( defined $help )	{	usage();	}
 
 #### CHECK INPUTS
 die "username not defined (option --username)\n" if not defined $username;
 die "project not defined (option --project)\n" if not defined $project;
-die "workflow not defined (option --workflow)\n" if not defined $workflow;
-die "workflownumber not defined (option --workflownumber)\n" if not defined $workflownumber;
-die "file not defined (option --file)\n" if not defined $file; 
+die "table not defined (option --table)\n" if not defined $table;
+die "sqlfile not defined (option --sqlfile)\n" if not defined $sqlfile; 
+die "tsvfile not defined (option --tsvfile)\n" if not defined $tsvfile; 
 
 #### GET CONF
 my $configfile = "$Bin/../../conf/config.yaml";
@@ -105,7 +106,7 @@ my $object = Agua::Workflow->new({
 	printlog	=>	$printlog
 });
 
-$object->loadSamples($username, $project, $workflow, $workflownumber, $file);
+$object->loadSamples($username, $project, $table, $sqlfile, $tsvfile);
 
 #:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 #									SUBROUTINES

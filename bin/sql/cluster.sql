@@ -1,12 +1,13 @@
 CREATE TABLE IF NOT EXISTS cluster
 (
-    username        VARCHAR(30) NOT NULL,
-    cluster         VARCHAR(30) NOT NULL,
+    username        VARCHAR(40) NOT NULL,
+    cluster         VARCHAR(40) NOT NULL,
     minnodes        INT(12),
     maxnodes        INT(12),
-    instancetype    VARCHAR(20),
-    amiid           VARCHAR(20),
-    availzone       VARCHAR(20),
+    instancetype    VARCHAR(40),
+	
+    amiid           VARCHAR(40),
+    availzone       VARCHAR(40),
     description     TEXT,
     datetime        DATETIME NOT NULL,
     

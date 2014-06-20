@@ -13,6 +13,7 @@ use Method::Signatures::Simple;
 =cut
 
 method setWorkflowStatus ($username, $project, $workflow, $status) {
+	$self->logDebug("workflow", $workflow);
 	my $data	=	{
 		username	=>	$username,
 		project		=>	$project,
