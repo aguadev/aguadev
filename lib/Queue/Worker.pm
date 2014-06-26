@@ -226,12 +226,12 @@ method handleTask ($json) {
 	$self->logDebug("new Agua::Workflow object: $workflow");
 
 	#### SET STATUS TO running
-	$self->conf()->setKey("agua:STATUS", "running");
+	$self->conf()->setKey("agua", "STATUS", "running");
 
 	$workflow->executeWorkflow();	
 
 	#### SET STATUS TO completed
-	$self->conf()->setKey("agua:STATUS", "completed");
+	$self->conf()->setKey("agua", "STATUS", "completed");
 
 	#### SHUT DOWN TASK LISTENER IF SPECIFIED IN config.yaml
 	$self->verifyShutdown();

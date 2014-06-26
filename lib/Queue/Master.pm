@@ -396,7 +396,7 @@ method balanceInstances ($workflows) {
 	#my $quota	=	$self->getResourceQuota($username, $metric);
 
 #### DEBUG
-my $quota		=	2;
+my $quota		=	1;
 $self->logDebug("quota", $quota);
 
 	my $resourcecounts	=	[];
@@ -640,6 +640,7 @@ method shutdownInstance ($id) {
 	$self->sendTopic($data, $id);
 }
 
+#### SEND TOPIC
 method sendTopic ($data, $key) {
 	$self->logDebug("$$ data", $data);
 	$self->logDebug("$$ key", $key);
@@ -758,9 +759,12 @@ method printConfig ($workflowobject) {
 	$self->logDebug("templatefile", $templatefile);
 	
 	#		SET EXTRA
-	my $queuename		=	$self->getQueueName($workflow);
+	my $queuename		=	$self->getQueueName($workflowobject);
 	$self->logDebug("queuename", $queuename);
-	my $extra			=	qq{\n
+	my $extrafile		=	"$installdir/$version/data/sh/extra";
+	my $extra			=	$self->getFileContents($extrafile);
+
+	$extra	=	qq{\n
 sudo /agua/bin/openstack/config.pl --mode setKey --section "queue:taskqueue" --value "syoung.CU.Download"
 \n};
 	
@@ -791,7 +795,7 @@ sudo /agua/bin/openstack/config.pl --mode setKey --section "queue:taskqueue" --v
 method setTemplateFile ($installdir, $version) {
 	$self->logDebug("installdir", $installdir);
 	
-	return "$installdir/$version/data/userdata.tmpl";
+	return "$installdir/$version/data/tmpl/userdata.tmpl";
 }
 
 method getTenant ($username) {
@@ -1793,7 +1797,8 @@ method sendTask ($task) {
 
 	#### SET QUEUE
 	my $queuename		=	$self->setQueueName($task);
-	$task->{queue}		=	$queuename;	
+	$task->{queue}		=	$queuename;
+	$self->logDebug("queuename", $queuename);
 	
 	#### ADD UNIQUE IDENTIFIERS
 	$task	=	$self->addTaskIdentifiers($task);

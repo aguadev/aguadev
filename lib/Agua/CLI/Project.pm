@@ -20,6 +20,7 @@ class Agua::CLI::Project with (Logger, Agua::CLI::Timer, Agua::CLI::Util, Agua::
     has 'logfile'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
     has 'log'		=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);  
     has 'printlog'	=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);
+    has 'maxjobs'	=> ( isa => 'Int', is => 'rw', default 	=> 	10 	);
 
     #### STORED LOGISTICS VARIABLES
     has 'owner'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous' );
@@ -292,14 +293,26 @@ AND project='$project'
 		$self->logDebug("samplestring", $samplestring);
 		if ( defined $samplestring ) {
 			my $samplehash		=	$self->convertSamplehash($samplestring);
-			$self->_runWorkflow($workflowhash, $samplehash);
+			my $success	=	$self->_runWorkflow($workflowhash, $samplehash);
+			$self->logDebug("success", $success);
 		}
 		elsif ( defined $sampledata ) {
-			foreach my $samplehash ( @$sampledata ) {
-				$self->logDebug("Running workflow with samplehash", $samplehash);
-				#print "Running workflow $workflow using sample: ", $samplehash->{sample}, "\n";
-				$self->_runWorkflow($workflowhash, $samplehash);
-				#print "Completed workflow $workflow\n";
+			my $maxjobs  =	5;
+			if ( not defined $maxjobs ) {
+			
+				foreach my $samplehash ( @$sampledata ) {
+					$self->logDebug("Running workflow with samplehash", $samplehash);
+					#print "Running workflow $workflow using sample: ", $samplehash->{sample}, "\n";
+					$self->_runWorkflow($workflowhash, $samplehash);
+					my $success	=	$self->_runWorkflow($workflowhash, $samplehash);
+					$self->logDebug("success", $success);
+				}
+			}
+			else {
+				$self->logDebug("DOING _runSampleWorkflow");
+				my $success	=	$self->_runSampleWorkflow($workflowhash, $sampledata);
+				$self->logDebug("success", $success);
+				$self->logDebug("DEBUG EXIT") and exit;
 			}
 		}
 		else {
@@ -308,6 +321,40 @@ AND project='$project'
 			#print "Completed workflow $workflow\n";
 		}
 	}
+	
+	method _runSampleWorkflow ($workflowhash, $sampledata) {
+		$self->logDebug("workflowhash", $workflowhash);
+		$workflowhash->{start}		=	1;
+		$workflowhash->{workflow}	=	$workflowhash->{name};
+		$workflowhash->{workflownumber}	=	$workflowhash->{number};
+
+		#### MAX JOBS
+		$workflowhash->{maxjobs}	=	$self->maxjobs();
+		
+		#### LOG INFO		
+		$workflowhash->{logtype}	=	$self->logtype();
+		$workflowhash->{logfile}	=	$self->logfile();
+		$workflowhash->{log}		=	$self->log();
+		$workflowhash->{printlog}	=	$self->printlog();
+		$self->logDebug("workflowhash", $workflowhash);
+		
+		
+		$workflowhash->{conf}		=	$self->conf();
+		$workflowhash->{db}			=	$self->db();
+		$workflowhash->{scheduler}	=	$self->scheduler();
+
+		require Agua::Workflow;
+        my $object	= Agua::Workflow->new($workflowhash);
+		
+		#### RUN JOBS IN PARALLEL
+		$object->runInParallel($workflowhash, $sampledata);
+	}
+	
+	method getSampleJobs ($workflowhash, $sampledata) {
+		$self->logDebug("workflowhash", $workflowhash);
+		
+	}
+	
 	
 	method convertSamplehash ($samplehash) {
 		my @entries	=	split "\\|", $samplehash;
@@ -321,6 +368,7 @@ AND project='$project'
 		
 		return $hash;
 	}
+
 	method _runWorkflow ($workflowhash, $samplehash) {
 		$workflowhash->{start}		=	1;
 		$workflowhash->{workflow}	=	$workflowhash->{name};
@@ -336,14 +384,11 @@ AND project='$project'
 		$workflowhash->{conf}		=	$self->conf();
 		$workflowhash->{db}			=	$self->db();
 		$workflowhash->{scheduler}	=	$self->scheduler();
-
 		
 		require Agua::Workflow;
         my $object	= Agua::Workflow->new($workflowhash);
 		#$self->logDebug("object", $object);
-		$object->executeWorkflow();
-		
-		$self->logDebug("completed");
+		return $object->executeWorkflow();
     }
 	
 	method getSampleData ($username, $project) {

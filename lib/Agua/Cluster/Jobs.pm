@@ -23,8 +23,8 @@ has 'walltime'	=> ( isa => 'Str|Undef', is => 'rw', default => 24 );
 has 'cpus'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'qstat'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'qsub'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
-has 'maxjobs'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
-has 'sleep'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
+has 'maxjobs'	=> ( isa => 'Str|Undef', is => 'rw'	);
+has 'sleep'		=> ( isa => 'Str|Undef', is => 'rw', default => 10 );
 has 'cleanup'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'dot'		=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'verbose'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
@@ -460,7 +460,7 @@ sub executeCluster {
 	$sleep = 3 if not defined $sleep;
 	
 	#### QUIT IF maxjobs NOT DEFINED
-	$self->logCritical("maxjobs not defined. Exiting") and exit if not defined $maxjobs;
+	$self->logCritical("maxjobs not defined. Exiting") and return if not defined $maxjobs;
 
 	my $jobids = [];
 	my $scriptfiles = [];
@@ -484,56 +484,6 @@ sub executeCluster {
 		
 			#### MOVE TO OUTPUT DIRECTORY
 			chdir($outputdir) or die "Can't move to output subdir: $outputdir/$counter\n";	
-			
-			##### execute COMMANDS IN SERIES LOCALLY IF cluster NOT DEFINED
-			#if ( not defined $cluster )
-			#{
-			#	$self->logDebug("cluster not defined. executening commands locally");
-			#	my $commands = $job->{commands};
-			#
-			#	#### REDIRECT STDOUT AND STDERR IF stdoutfile DEFINED
-			#	my $stdoutfile = $job->{stdoutfile};
-			#	my $stderrfile = $job->{stderrfile};
-			#	my $lockfile = $job->{lockfile};
-			#	my $oldout;
-			#	my $olderr;
-			#	if ( defined $stdoutfile )
-			#	{
-			#		$self->logDebug("diverting STDOUT to", $stdoutfile);
-			#		open my $oldout, ">&STDOUT"  or die "Can't duplicate STDOUT: $!";
-			#		open my $olderr, ">&STDERR"  or die "Can't duplicate STDERR: $!";
-			#		#open OLDERR,     ">&", \*STDERR or die "Can't dup STDERR: $!";					
-			#		open(STDOUT, ">$stdoutfile") or die "Can't redirect STDOUT to file: $stdoutfile" if defined $stdoutfile;
-			#		open(STDERR, ">$stderrfile") or die "Can't redirect STDOUT to file: $stderrfile" if defined $stderrfile;
-			#		open(STDERR, ">>$stdoutfile") or die "Can't redirect STDERR to file: $stdoutfile\n" if defined $stdoutfile and not defined $stderrfile;
-			#		
-			#		#### ALTERNATELY, DO THIS
-			#		##push @system_call, "1> $stdoutfile" if defined $stdoutfile;
-			#		##push @system_call, "2> $stderrfile" if defined $stderrfile;
-			#		##push @system_call, "2> $stdoutfile" if not defined $stderrfile and defined $stdoutfile;
-			#	}
-			#
-			#	#### execute COMMANDS
-			#	print `date > $lockfile`;
-			#	foreach my $command ( @$commands )
-			#	{
-			#		$self->logDebug("command", $command);
-			#		print `$command`;
-			#		$self->logDebug("Completed command");
-			#	}
-			#	print `unlink $lockfile`;
-			#
-			#	#### END REDIRECTION OF STDOUT AND STDERR
-			#	if ( defined $stdoutfile )
-			#	{
-			#		open STDOUT, ">&", $oldout if defined $stdoutfile;
-			#		open STDERR, ">&", $olderr if defined $stderrfile;
-			#	}
-			#}
-			#
-			##### IF cluster IS DEFINED, execute JOBS CONCURRENTLY ON CLUSTER
-			#else
-			#{
 				#### GET FILES
 				my $label = $job->{label};
 				my $batch = $job->{batch};
@@ -549,7 +499,7 @@ sub executeCluster {
 #				$self->logDebug("scriptfile", $scriptfile);
 				
 				#### SUBMIT AND GET THE JOB ID 
-				$self->logDebug("Doing scriptfile", $scriptfile);
+				#$self->logDebug("Doing scriptfile", $scriptfile);
 				$self->logDebug("Doing monitor->submitJob()");
 				my $jobid = $monitor->submitJob(
 					{
@@ -576,7 +526,6 @@ sub executeCluster {
 				$date =~ s/\s+$//;
 				$self->logDebug("date", $date);
 				$self->logDebug("No. jobs: ", scalar(@$jobids));
-				$self->logDebug("maxjobs", $maxjobs);
 				
 				#### CHECK TO MAKE SURE WE HAVEN'T REACHED
 				#### THE LIMIT OF MAX CONCURRENT JOBS
@@ -635,6 +584,7 @@ sub setJob {
 	my $stdoutfile		=	shift;
 	my $stderrfile		=	shift;
 	my $lockfile		=	shift;
+	$self->logDebug("label", $label);
 	$self->logDebug("outputdir", $outputdir);
 
 	#### SET DIRS
@@ -803,10 +753,10 @@ sub printScriptfile {
 
 	my $self		=	shift;
 
-	$self->logDebug("Agua::Cluster::Jobs::printScriptfile(splitfiles)");
+	$self->logNote("");
 
 	my $clustertype =  $self->conf()->getKey('agua', 'CLUSTERTYPE');
-	$self->logDebug("clustertype", $clustertype);
+	$self->logNote("clustertype", $clustertype);
 	return $self->printPbsScriptfile(@_) if $clustertype eq "PBS";
 	return $self->printLsfScriptfile(@_) if $clustertype eq "LSF";
 	return $self->printSgeScriptfile(@_) if $clustertype eq "SGE";
@@ -842,13 +792,14 @@ sub printSgeScriptfile {
 	my $stderrfile	=	shift;
 	my $lockfile	=	shift;
 
+	$self->logDebug("scriptfile", $scriptfile);
+
 	my $queue = $self->queue();
 	my $cpus = $self->cpus();
 	$cpus = 1 if not defined $cpus or not $cpus;
-	$self->logDebug("Agua::Cluster::Jobs::printLsfScriptfile(scriptfile, commands, label, stdoutfile, stderrfile)");
-	$self->logDebug("stdoutfile", $stdoutfile);
-	$self->logDebug("stderrfile", $stderrfile);
-	$self->logDebug("cpus", $cpus);
+	$self->logNote("stdoutfile", $stdoutfile);
+	$self->logNote("stderrfile", $stderrfile);
+	$self->logNote("cpus", $cpus);
 
 	open(SHFILE, ">$scriptfile") or die "Can't open script file: $scriptfile\n";
 	print SHFILE qq{#!/bin/bash\n\n};
@@ -926,7 +877,7 @@ echo QUEUE:    	       	\$QUEUE
 	close(SHFILE);
 	chmod(0777, $scriptfile);
 	#or die "Can't chmod 0777 script file: $scriptfile\n";
-	$self->logDebug("scriptfile printed", $scriptfile);
+	$self->logNote("scriptfile printed", $scriptfile);
 }
 
 

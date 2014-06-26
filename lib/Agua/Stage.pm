@@ -41,8 +41,8 @@ class Agua::Stage with (Agua::Common::Base, Agua::Common::Logger, Agua::Common::
 #### EXTERNAL MODULES
 use IO::Pipe;
 use Data::Dumper;
-use overload '==' => 'identical';
-use overload 'eq' => 'equal';
+#use overload '==' => 'identical';
+#use overload 'eq' => 'equal';
 
 use FindBin qw($Bin);
 
@@ -60,24 +60,26 @@ has 'start'     	=>  ( isa => 'Int', is => 'rw' );
 has 'submit'     	=>  ( isa => 'Int|Undef', is => 'rw' );
 
 # Strings
+has 'username'  	=>  ( isa => 'Str', is => 'rw', required => 1  );
+has 'workflow'  	=>  ( isa => 'Str', is => 'rw', required => 1  );
+has 'project'   	=>  ( isa => 'Str', is => 'rw', required => 1  );
+has 'name'   		=>  ( isa => 'Str', is => 'rw', required => 1  );
+has 'queue'			=>  ( isa => 'Str', is => 'rw', required => 1  );
+has 'outputdir'		=>  ( isa => 'Str', is => 'rw', required => 1  );
+has 'scriptfile'	=>  ( isa => 'Str', is => 'rw', required => 1 );
+has 'installdir'   	=>  ( isa => 'Str', is => 'rw', required => 1  );
+has 'version'   	=>  ( isa => 'Str', is => 'rw', required => 1  );
+
 has 'clustertype'	=>  ( isa => 'Str|Undef', is => 'rw', default => "SGE" );
 has 'fileroot'		=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'executor'		=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'location'		=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
-has 'username'  	=>  ( isa => 'Str', is => 'rw', required => 1  );
-has 'workflow'  	=>  ( isa => 'Str', is => 'rw', required => 1  );
-has 'requestor'		=> 	( isa => 'Str', is => 'rw', required	=>	0	);
-has 'project'   	=>  ( isa => 'Str', is => 'rw', required => 1  );
-has 'name'   		=>  ( isa => 'Str', is => 'rw', required => 1  );
-has 'queue'			=>  ( isa => 'Str', is => 'rw', required => 1  );
-has 'queue_options'	=>  ( isa => 'Str|Undef', is => 'rw', default => '' );
-has 'outputdir'		=>  ( isa => 'Str', is => 'rw', required => 1  );
+
 has 'setuid'		=>  ( isa => 'Str|Undef', is => 'rw', default => '' );
-has 'scriptfile'	=>  ( isa => 'Str', is => 'rw', required => 1 );
+has 'queue_options'	=>  ( isa => 'Str|Undef', is => 'rw', default => '' );
+has 'requestor'		=> 	( isa => 'Str', is => 'rw', required	=>	0	);
 has 'stdoutfile'	=>  ( isa => 'Str', is => 'rw' );
 has 'stderrfile'	=>  ( isa => 'Str', is => 'rw' );
-has 'installdir'   	=>  ( isa => 'Str', is => 'rw', required => 1  );
-has 'version'   	=>  ( isa => 'Str', is => 'rw', required => 1  );
 has 'cluster'		=>  ( isa => 'Str|Undef', is => 'rw' );
 has 'qsub'			=>  ( isa => 'Str', is => 'rw' );
 has 'qstat'			=>  ( isa => 'Str', is => 'rw' );
@@ -89,6 +91,7 @@ has 'completed'		=>  ( isa => 'Str', is => 'rw' );
 # OBJECTS
 has 'envars'		=> ( isa => 'HashRef', is => 'rw', required => 1 );
 has 'conf'			=> ( isa => 'Conf::Yaml', is => 'rw', required => 1 );
+
 has 'db'			=> ( isa => 'Agua::DBase::MySQL', is => 'rw', required => 0 );
 has 'monitor'		=> 	( isa => 'Maybe', is => 'rw', required => 0 );
 has 'stageparameters'=> ( isa => 'ArrayRef', is => 'rw', required => 1 );
@@ -308,6 +311,99 @@ method getFileExports ($file) {
     }
 
 	return $exports;
+}
+
+method setStageJob {
+
+=head2
+
+	SUBROUTINE		setStageJob
+	
+	PURPOSE
+	
+		RETURN THE JOB HASH FOR THIS STAGE:
+		
+			command		:	Command line system call,
+			label		:	Unique name for job (e.g., to be used by SGE)
+			outputfile	:	Location of outputfile
+
+=cut
+	$self->logDebug();
+
+	#### CLUSTER MONITOR
+	my $monitor		=	$self->monitor();	
+	#### GET MAIN PARAMS
+	my $username 	= $self->username();
+	my $project 	= $self->project();
+	my $workflownumber 	= $self->workflownumber();
+	my $workflow 	= $self->workflow();
+	my $number 		= $self->number();
+	my $queue 		= $self->queue();
+	my $cluster		= $self->cluster();
+	my $qstat		= $self->qstat();
+	my $qsub		= $self->qsub();
+	my $workflowpid = $self->workflowpid();
+    $self->logDebug("$$ cluster", $cluster);
+
+	#### SET DEFAULTS
+	$queue = '' if not defined $queue;
+
+	#### GET AGUA DIRECTORY FOR CREATING STDOUTFILE LATER
+	my $aguadir 	= $self->conf()->getKey("agua", 'AGUADIR');
+
+	#### GET FILE ROOT
+	my $fileroot = $self->getFileroot($username);
+
+	#### GET ARGUMENTS ARRAY
+    my $stageparameters =	$self->stageparameters();
+    #$self->logDebug("$$ Arguments", $stageparameters);
+    $stageparameters =~ s/\'/"/g;
+	my $arguments = $self->setArguments($stageparameters);    
+
+	#### GET PERL5LIB FOR EXTERNAL SCRIPTS TO FIND Agua MODULES
+	my $installdir = $self->conf()->getKey("agua", 'INSTALLDIR');
+	my $perl5lib = "$installdir/lib";
+	
+	#### SET EXECUTOR
+	my $executor	.=	"export PERL5LIB=$perl5lib; ";
+	$executor 		.= 	$self->executor() if $self->executor();
+	$self->logDebug("$$ self->executor(): " . $self->executor());
+
+	#### SET APPLICATION
+	my $application = $self->installdir() . "/" . $self->location();	
+	$self->logDebug("$$ application", $application);
+
+	#### ADD THE INSTALLDIR IF THE LOCATION IS NOT AN ABSOLUTE PATH
+	$self->logDebug("$$ installdir", $installdir);
+	if ( $application !~ /^\// and $application !~ /^[A-Z]:/i ) {
+		$application = "$installdir/bin/$application";
+		$self->logDebug("$$ Added installdir to stage_arguments->{location}: " . $application);
+	}
+
+	#### SET SYSTEM CALL
+	my @system_call = ($application, @$arguments);
+	my $command = "$executor @system_call";
+	
+    #### GET OUTPUT DIR
+    my $outputdir = $self->outputdir();
+    $self->logDebug("$$ outputdir", $outputdir);
+
+	#### SET JOB NAME AS project-workflow-number
+	my $label =	$project;
+	$label .= "-" . $workflownumber;
+	$label .= "-" . $workflow;
+	$label .= "-" . $number;
+    $self->logDebug("$$ label", $label);
+	
+	my $samplehash	=	$self->samplehash();
+	$self->logDebug("samplehash", $samplehash);
+	if ( defined $samplehash ) {
+		my $id		=	$samplehash->{sample};
+		$label		=	"sample-$id.$label";
+	}
+
+	#### SET JOB 
+	return $self->setJob([$command], $label, $outputdir);
 }
 
 method runOnCluster {

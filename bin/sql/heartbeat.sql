@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS heartbeat
 (
-    host    	VARCHAR(20),
+    host    	VARCHAR(40),
 	cpu			TEXT,
 	io			TEXT,
 	disk		TEXT,

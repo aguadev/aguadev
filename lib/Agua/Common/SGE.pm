@@ -34,7 +34,7 @@ use File::Path;
 sub sgeBinCommand {
 	my $self		=	shift;
 	my $host		=	shift;
-	$self->logDebug("host", $host);
+	#$self->logDebug("host", $host);
 	$self->logError("host is not master|head") and exit if not $host =~ /^(head|master)$/;
 
 	return $self->headbinroot() if $host eq "head" and defined $self->headbinroot();
@@ -50,7 +50,7 @@ sub sgeBinCommand {
 	$sgebin = $self->head()->ops()->getSgeBinRoot() if $host eq "head";
 	$sgebin = $self->master()->ops()->getSgeBinRoot() if $host eq "master";
 
-	$self->logDebug("sgebin", $sgebin);
+	$self->logNote("sgebin", $sgebin);
 	#$self->logDebug("DEBUG EXIT") and exit;
   
     my $command;	

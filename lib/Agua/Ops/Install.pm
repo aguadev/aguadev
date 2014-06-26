@@ -289,8 +289,8 @@ method runInstall ($opsdir, $installdir, $package, $version) {
 	#### TERMINAL INSTALL
 	#$self->logger()->write("BEFORE terminalInstall method");
 	$version = $self->version();
-	$report = $self->terminalInstall($installdir, $version);
-	$self->updateReport([$report]) if defined $report and $report;
+	return 0 if not $self->terminalInstall($installdir, $version);
+	#$self->updateReport([$report]) if defined $report and $report;
 	
 	#### E.G., DEBUG/TESTING
 	#return $self->logger->report();

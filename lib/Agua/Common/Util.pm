@@ -18,6 +18,27 @@ has 'sessionid'     => ( isa => 'Str|Undef', is => 'rw' );
 use FindBin qw($Bin);
 use lib "$Bin/../../";
 
+#### DISPLAY
+sub bigDisplayBegin {
+	my $self	=	shift;
+	my $message	=	shift;
+	print qq{
+##########################################################################
+#### $message
+};
+	
+}
+
+sub bigDisplayEnd {
+	my $self	=	shift;
+	my $message	=	shift;
+	print qq{
+#### $message
+##########################################################################
+};
+	
+}
+
 #### SLOTS
 sub setSlots {
 	my $self		=	shift;

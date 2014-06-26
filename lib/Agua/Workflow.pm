@@ -78,6 +78,7 @@ has 'submit'  		=>  ( isa => 'Int|Undef', is => 'rw' );
 has 'validated'		=> 	( isa => 'Int|Undef', is => 'rw', default => 0 );
 has 'qmasterport'	=> 	( isa => 'Int', is  => 'rw' );
 has 'execdport'		=> 	( isa => 'Int', is  => 'rw' );
+has 'maxjobs'		=> 	( isa => 'Int', is => 'rw'	);
 
 # Strings
 #has 'logfile'		=>  ( isa => 'Str', is => 'rw', default => 1 );  
@@ -89,7 +90,7 @@ has 'fileroot'		=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'qstat'			=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'queue'			=>  ( isa => 'Str|Undef', is => 'rw', default => 'default' );
 has 'cluster'		=>  ( isa => 'Str|Undef', is => 'rw', default => '' );
-has 'whoami'  		=>  ( isa => 'Str', is => 'rw' );
+has 'whoami'  		=>  ( isa => 'Str', is => 'rw', lazy	=>	1, builder => "setWhoami" );
 has 'username'  	=>  ( isa => 'Str', is => 'rw' );
 has 'password'  	=>  ( isa => 'Str', is => 'rw' );
 has 'workflow'  	=>  ( isa => 'Str', is => 'rw' );
@@ -318,9 +319,10 @@ method startSiphonWorkflow ($username, $project, $workflow, $cluster, $workflowo
 	$self->logDebug("success", $success);
 	
 	#	5. SET WORKFLOW STATUS
-	$self->setWorkflowStatus($username, $project, $workflow, "running") if $success == 1;
-	$self->setWorkflowStatus($username, $project, $workflow, "error") if $success == 0;
-	$self->logDebug("success", $success);
+	my $status	=	"running";
+	$status		=	"error" if $success == 0;
+	$self->bigDisplay("$project.$workflow    $status");
+	$self->setWorkflowStatus($username, $project, $workflow, $status) ;
 	
 	return $success;
 }
@@ -418,7 +420,7 @@ WHERE username='$username'};
 }
 
 
-#### EXECUTE WORKFLOW
+#### EXECUTE WORKFLOW IN SERIES
 method executeWorkflow {
 =head2
 
@@ -528,6 +530,94 @@ method executeWorkflow {
 
 #	#### HANDLE ANY EXIT CALLS IN THE MODULES    
 #    EXITLABEL: { warn "EXITLABEL\n"; };
+}
+
+#### EXECUTE SAMPLE WORKFLOWS IN PARALLEL
+method runInParallel ($workflowhash, $sampledata) {
+=head2
+
+	SUBROUTINE		executeCluster
+	
+	PURPOSE
+	
+		executeCluster A LIST OF JOBS CONCURRENTLY UP TO A MAX NUMBER
+		
+		OF CONCURRENT JOBS
+
+=cut
+
+	my $username 	=	$self->username();
+	my $cluster 	=	$self->cluster();
+	my $project 	=	$self->project();
+	my $workflow 	=	$self->workflow();
+	my $workflownumber=	$self->workflownumber();
+	my $start 		=	$self->start();
+	my $submit 		= 	$self->submit();
+	$self->logDebug("$$ submit", $submit);
+	$self->logDebug("$$ username", $username);
+	$self->logDebug("$$ project", $project);
+	$self->logDebug("$$ workflow", $workflow);
+	$self->logDebug("$$ workflownumber", $workflownumber);
+	$self->logDebug("$$ cluster", $cluster);
+		
+	print "Running workflow $project.$workflow\n";
+
+	#### GET CLUSTER
+	$cluster		=	$self->getClusterByWorkflow($username, $project, $workflow) if $cluster eq "";
+	$self->logDebug("cluster", $cluster);	
+	$self->logDebug("submit", $submit);	
+	
+	#### RUN LOCALLY OR ON CLUSTER
+	my $scheduler	=	$self->scheduler() || $self->conf()->getKey("agua:SCHEDULER", undef);
+	$self->logDebug("scheduler", $scheduler);
+
+	
+	my $stages	=	$self->setStages($username, $cluster, $workflowhash, $project, $workflow, $workflownumber, undef);
+	$self->logDebug("no. stages", scalar(@$stages));
+	#$self->logDebug("stages", $stages);
+
+	#### GET FILEROOT
+	my $fileroot = $self->getFileroot($username);	
+	$self->logDebug("$$ fileroot", $fileroot);
+
+	#### GET OUTPUT DIR
+	my $outputdir =  "$fileroot/$project/$workflow/";
+	
+	#### GET MONITOR
+	my $monitor	=	$self->updateMonitor();
+
+
+	#### SET FILE DIRS
+	my ($scriptsdir, $stdoutdir, $stderrdir) = $self->setFileDirs($fileroot, $project, $workflow);
+	$self->logDebug("$$ scriptsdir", $scriptsdir);
+	
+	#### WORKFLOW PROCESS ID
+	my $workflowpid = $self->workflowpid();
+
+	foreach my $stage ( @$stages )  {
+		#$self->logDebug("stage", $stage);
+		my $installdir		=	$stage->installdir();
+		$self->logDebug("installdir", $installdir);
+
+		my $jobs	=	[];
+		foreach my $samplehash ( @$sampledata ) {
+			$stage->{samplehash}	=	$samplehash;
+			
+			push @$jobs, $stage->setStageJob();
+		}
+		$self->logDebug("no. jobs", scalar(@$jobs));
+
+		#### SET LABEL
+		my $stagename	=	$stage->name();
+		$self->logDebug("stagename", $stagename);
+		my $label	=	"$project.$workflow.$stagename";
+
+		$stage->runJobs($jobs, $label);
+	}
+
+	print "Completed workflow $project.$workflow\n";
+
+	$self->logDebug("$$ COMPLETED");
 }
 
 #### RUN STAGES 
@@ -981,28 +1071,30 @@ method runStages ($stages) {
 		my $stage_number = $stage->number();
 		my $stage_name = $stage->name();
 		
+		my $project		=	$stage->project();
+		my $workflow		=	$stage->workflow();
+		
 		my $mysqltime	=	$self->getMysqlTime();
 		$stage->queued($mysqltime);
 		$stage->started($mysqltime);
 		
 		#### REPORT STARTING STAGE
 		$self->updateJobStatus($stage, "started");
+		$self->bigDisplayBegin("'$project.$workflow' stage $stage_number $stage_name status: RUNNING");
 		
-		print "Running stage $stage_number: $stage_name\n";
-
 		####  RUN STAGE
 		$self->logDebug("$$ Running stage $stage_number", $stage_name);
 	
 		my ($exitcode, $error) = $stage->run();
-		$self->logDebug("$$ exitcode", $exitcode);
-		$self->logDebug("$$ error", $error);
-		$self->logDebug("$$ Ended running stage $stage_counter", $exitcode);
+		$self->logDebug("$$ Stage $stage_number-$stage_name exitcode", $exitcode);
+		$self->logDebug("$$ Stage $stage_number-$stage_name error", $error);
 
 		#### STOP IF THIS STAGE DIDN'T COMPLETE SUCCESSFULLY
 		#### ALL APPLICATIONS MUST RETURN '0' FOR SUCCESS)
 		if ( $exitcode == 0 ) {
 			$self->logDebug("$$ Stage $stage_number: '$stage_name' completed successfully");
 			$stage->setStatus('completed');
+		$self->bigDisplayEnd("'$project.$workflow' stage $stage_number $stage_name status: COMPLETED");
 			
 			my $status	=	"completed";
 			if ( defined $self->worker() ) {
@@ -1013,6 +1105,7 @@ method runStages ($stages) {
 		else {
 			my $status	=	"error: $exitcode";
 			$stage->setStatus('error');
+		$self->bigDisplayEnd("'$project.$workflow' stage $stage_number $stage_name status: ERROR");
 
 			if ( defined $self->worker() ) {
 				$self->updateJobStatus($stage, $status);
@@ -1079,12 +1172,20 @@ method setStages ($username, $cluster, $data, $project, $workflow, $workflownumb
 	$monitor = $self->updateMonitor();
 	$self->logDebug("$$ AFTER monitor = self->updateMonitor()");
 
+	#### MAX JOBS
+	my $maxjobs	=	$self->maxjobs();
+	$self->logDebug("maxjobs", $maxjobs);
+	
 	#### LOAD STAGE OBJECT FOR EACH STAGE TO BE RUN
 	my $stageobjects = [];    
 	for ( my $counter = $start; $counter < $stop + 1; $counter++ ) {
 		my $stage = $$stages[$counter];
 		#$self->logDebug("$$ stage", $stage);
-		
+	
+		my $stagenumber	=	$stage->{number};
+		my $stagename	=	$stage->{name};
+		my $id			=	$samplehash->{sample};
+	
 		#### QUIT IF NO STAGE PARAMETERS
 		$self->logError("stageparameters not defined for stage $stage->{name}") and exit if not defined $stage->{stageparameters};
 		
@@ -1097,14 +1198,26 @@ method setStages ($username, $cluster, $data, $project, $workflow, $workflownumb
 		$stage->{envars} = $envars;
 		
         #### SET SCRIPT, STDOUT AND STDERR FILES
-		$stage->{scriptfile} 	=	"$scriptsdir/$stage->{number}-$stage->{name}.sh";
-        $stage->{stdoutfile} 	=	"$stdoutdir/$stage->{number}-$stage->{name}.stdout";
-        $stage->{stderrfile} 	= 	"$stderrdir/$stage->{number}-$stage->{name}.stderr";
+
+		$stage->{scriptfile} 	=	"$scriptsdir/$stagenumber-$stagename.sh";
+		$stage->{stdoutfile} 	=	"$stdoutdir/$stagenumber-$stagename.stdout";
+		$stage->{stderrfile} 	= 	"$stderrdir/$stagenumber-$stagename.stderr";
+
+		if ( defined $id ) {
+			$stage->{scriptfile} 	=	"$scriptsdir/$stagenumber-$stagename-$id.sh";
+			$stage->{stdoutfile} 	=	"$stdoutdir/$stagenumber-$stagename-$id.stdout";
+			$stage->{stderrfile} 	= 	"$stderrdir/$stagenumber-$stagename-$id.stderr";
+		}
+
 		$stage->{cluster}		=  	$cluster;
 		$stage->{workflowpid}	=	$workflowpid;
 		$stage->{db}			=	$self->db();
 		$stage->{conf}			=  	$self->conf();
 		$stage->{fileroot}		=  	$fileroot;
+
+		#### MAX JOBS
+		$stage->{maxjobs}		=	$self->maxjobs();
+
 
 		$stage->{queue}			=  	$queue;
 		$stage->{samplehash}	=  	$samplehash;
@@ -1299,7 +1412,7 @@ method checkPrevious ($stages, $json) {
 method setStageParameters ($stages, $data) {
 	#### GET THE PARAMETERS FOR THE STAGES WE WANT TO RUN
 	#$self->logDebug("$$ stages", $stages);
-	$self->logDebug("$$ data", $data);
+	#$self->logDebug("$$ data", $data);
 	
 	#### GET THE PARAMETERS FOR THE STAGES WE WANT TO RUN
 	my $start = $data->{start} || 1;
@@ -2502,6 +2615,16 @@ method setVirtual {
 	$self->logDebug("virtual: $virtual");
 
 	$self->virtual($virtual);
+}
+
+
+#### SET WHOAMI
+method setWhoami {
+	my $whoami	=	`whoami`;
+	$whoami		=~	s/\s+$//;
+	$self->logDebug("whoami", $whoami);
+	
+	return $whoami;
 }
 
 
