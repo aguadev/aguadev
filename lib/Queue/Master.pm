@@ -23,7 +23,7 @@ PURPOSE
 use strict;
 use warnings;
 
-class Queue::Master with (Logger, Exchange, Agua::Common::Database, Agua::Common::Timer, Agua::Common::Project, Agua::Common::Stage, Agua::Common::Workflow) {
+class Queue::Master with (Logger, Exchange, Agua::Common::Database, Agua::Common::Timer, Agua::Common::Project, Agua::Common::Stage, Agua::Common::Workflow, Agua::Common::Util) {
 
 #####////}}}}}
 
@@ -50,7 +50,8 @@ has 'conf'		=> ( isa => 'Conf::Yaml', is => 'rw', required	=>	0 );
 has 'synapse'	=> ( isa => 'Synapse', is => 'rw', lazy	=>	1, builder	=>	"setSynapse" );
 has 'db'		=> ( isa => 'Agua::DBase::MySQL', is => 'rw', lazy	=>	1,	builder	=>	"setDbh" );
 has 'jsonparser'=> ( isa => 'JSON', is => 'rw', lazy	=>	1, builder	=>	"setJsonParser" );
-has 'virtual'=> ( isa => 'Any', is => 'rw', lazy	=>	1, builder	=>	"setVirtual" );
+has 'virtual'	=> ( isa => 'Any', is => 'rw', lazy	=>	1, builder	=>	"setVirtual" );
+has 'duplicate'	=> ( isa => 'HashRef|Undef', is => 'rw');
 
 }
 
@@ -761,13 +762,9 @@ method printConfig ($workflowobject) {
 	#		SET EXTRA
 	my $queuename		=	$self->getQueueName($workflowobject);
 	$self->logDebug("queuename", $queuename);
-	my $extrafile		=	"$installdir/$version/data/sh/extra";
-	my $extra			=	$self->getFileContents($extrafile);
+	my $extra			=	$self->getExtra($installdir, $version);
+	$self->logDebug("extra", $extra);
 
-	$extra	=	qq{\n
-sudo /agua/bin/openstack/config.pl --mode setKey --section "queue:taskqueue" --value "syoung.CU.Download"
-\n};
-	
 	#		PRINT TEMPLATE
 	my $username		=	$object->{username};
 	my $project			=	$object->{project};
@@ -790,6 +787,25 @@ sudo /agua/bin/openstack/config.pl --mode setKey --section "queue:taskqueue" --v
 	$self->virtual()->createConfig($object, $templatefile, $targetfile, $extra);
 	
 	return $targetfile;
+}
+
+method getExtra ($installdir, $version) {
+	my $extrafile		=	"$installdir/$version/data/sh/extra";
+	$self->logDebug("extrafile", $extrafile);
+	
+	return "" if not -f $extrafile;
+	
+	my $extra			=	$self->getFileContents($extrafile);
+
+	$extra	=	qq{\n
+
+#### TEST 
+echo "TEST EXTRA DATA"
+
+"
+\n};
+
+	return $extra;
 }
 
 method setTemplateFile ($installdir, $version) {
@@ -1588,10 +1604,19 @@ method receiveTopic {
 }
 
 method handleTopic ($json) {
-	$self->logDebug("json", $json);
+	$self->logDebug("json", substr($json, 0, 200));
 
 	my $data = $self->jsonparser()->decode($json);
 	#$self->logDebug("data", $data);
+
+	my $duplicate	=	$self->duplicate();
+	if ( defined $duplicate and not is_deeply($data, $duplicate) ) {
+		$self->logDebug("Skipping duplicate message");
+		return;
+	}
+	else {
+		$self->duplicate($data);
+	}
 
 	my $mode =	$data->{mode} || "";
 	$self->logDebug("mode", $mode);
@@ -1626,7 +1651,8 @@ method updateJobStatus ($data) {
 }
 
 method updateHeartbeat ($data) {
-	$self->logDebug("data", $data);
+	$self->logDebug("host $data->{host} [$data->{time}]");
+	#$self->logDebug("data", $data);
 	my $keys	=	[ "host", "time" ];
 	my $notdefined	=	$self->notDefined($data, $keys);	
 	$self->logDebug("notdefined", $notdefined) and return if @$notdefined;

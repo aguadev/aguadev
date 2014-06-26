@@ -25,6 +25,7 @@ sub bigDisplayBegin {
 	print qq{
 ##########################################################################
 #### $message
+####
 };
 	
 }
@@ -33,6 +34,7 @@ sub bigDisplayEnd {
 	my $self	=	shift;
 	my $message	=	shift;
 	print qq{
+####
 #### $message
 ##########################################################################
 };
@@ -361,7 +363,7 @@ sub getFiles {
 		my $filepath = "$directory/$$files[$i]";
 		if ( not -f $filepath ) {
 			splice @$files, $i, 1;
-			$i--;
+			$i-- 
 		}
 	}
 
@@ -423,6 +425,7 @@ sub printToFile {
 	my $self		=	shift;
 	my $file		=	shift;
 	my $text		=	shift;
+	$self->logDebug("file", $file);
 
 	$self->createParentDir($file);
 	

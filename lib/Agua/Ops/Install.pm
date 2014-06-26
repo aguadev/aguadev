@@ -352,11 +352,12 @@ method gitInstall ($installdir, $version) {
  	$self->logDebug("privacy", $privacy);
 	$self->logDebug("keyfile", $keyfile);
 
-	if ( not defined $version ) {
+	if ( not defined $version or $version eq "max" ) {
 		$version	=	$self->latestVersion($owner, $repository, $privacy, $hubtype);
 		$self->logDebug("version", $version);
 		$self->version($version);
 	}	
+	print "Installing version '$version' from repository '$repository'\n";
 
 	#### MAKE INSTALL DIRECTORY
 	$self->makeDir($installdir) if not -d $installdir;	

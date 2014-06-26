@@ -17,7 +17,7 @@ has 'sleep'		=> ( is  => 'rw', 'isa' => 'Int', default	=>	600	);
 # Strings
 #has 'username'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
 #has 'repository'=> ( isa => 'Str|Undef', is => 'rw'	);
-has 'apiroot'	=> ( isa => 'Str|Undef', is => 'rw', default	=>	"https://api.github.com"	);
+has 'apiroot'	=> ( isa => 'Str|Undef', is => 'rw', lazy	=>	1, builder	=>	"getApiRoot"	);
 has 'githubapi'	=> ( isa => 'Str|Undef', is => 'rw', default	=>	"https://api.github.com"	);
 has 'credentials'	=> ( is  => 'rw', 'isa' => 'Str|Undef', default	=> "" );
 has 'gitssh'	=> ( is  => 'rw', 'isa' => 'Str|Undef' );
@@ -53,6 +53,15 @@ use JSON;
 ####/////}}}
 
 #### REMOTE COMMANDS
+method getApiRoot {
+	my $apiroot	=	"https://api.github.com/repos";	
+	my $hubtype	=	$self->hubtype();
+	$self->logDebug("hubtype", $hubtype);
+	$apiroot	=	"https://bitbucket.org/api/1.0/repositories" if $hubtype eq "bitbucket";
+	$self->logDebug("apiroot", $apiroot);
+	
+	return $apiroot;
+}
 method curlCommand ($command) {
 	$self->logCaller("");
 	$self->logDebug("PASSED command", $command);
@@ -384,7 +393,7 @@ method repoFileContents ($login, $repository, $sha) {
 method searchRepos ($repository) {
 	$self->logDebug("repository", $repository);
 	my $apiroot = $self->apiroot();
-	return $self->curlCommand("curl $apiroot/repos/search/$repository");
+	return $self->curlCommand("curl $apiroot/search/$repository");
 }
 
 method getRepo ($login, $repository, $privacy) {
@@ -395,7 +404,7 @@ method getRepo ($login, $repository, $privacy) {
 	
 	$self->setCredentials() if $privacy eq "private";
 	my $apiroot = $self->apiroot();
-	my $command = "$apiroot/repos/$login/$repository";
+	my $command = "$apiroot/$login/$repository";
 	my ($json) = $self->curlCommand($command);
 	
 	return $self->decodeJson($json);
@@ -414,7 +423,7 @@ method forkPublicRepo ($login, $repository) {
 	my $credentials = $self->setCredentials();
 	my $apiroot = $self->apiroot();
 	
-	my $command = "curl -X POST $credentials $apiroot/repos/$login/$repository/forks";
+	my $command = "curl -X POST $credentials $apiroot/$login/$repository/forks";
 	$self->logDebug("command", $command);
 	
 	my ($json) = $self->runCommand($command);
@@ -451,7 +460,7 @@ method getRemoteTagsTimeout ($login, $repository, $timeout) {
 
 	#### RUN COMMAND
 	my $apiroot 	= 	$self->apiroot();
-	my $command = "curl --connect-timeout $timeout -K $curlfile $apiroot/repos/$login/$repository/tags";
+	my $command = "curl --connect-timeout $timeout -K $curlfile $apiroot/$login/$repository/tags";
 	$self->logDebug("command", $command);
 	my ($json, $error) = $self->runCommand($command);
 	$self->logDebug("json", $json);
@@ -474,10 +483,10 @@ method getRemoteTags ($login, $repository, $privacy) {
 	
 	#### RUN COMMAND
 	my $apiroot 	= $self->apiroot();
-	my $command 	= "curl $apiroot/repos/$login/$repository/tags";
+	my $command 	= "curl $apiroot/$login/$repository/tags";
 	$self->logDebug("command", $command);
-	my ($json) 		= $self->runCommand($command);	
-	#$self->logDebug("json", $json);
+	my ($json, $error) 		= $self->runCommand($command);	
+	$self->logDebug("json", $json);
 
 	return $self->parseTags($json);
 }
@@ -489,7 +498,7 @@ method getPrivateRemoteTags ($login, $repository, $token) {
 
 	#### RUN COMMAND
 	my $apiroot = $self->apiroot();
-	my $command = "curl -K $curlfile $apiroot/repos/$login/$repository/tags";
+	my $command = "curl -K $curlfile $apiroot/$login/$repository/tags";
 	$self->logDebug("command", $command);
 	my ($json) = $self->runCommand($command);	
 	$self->logDebug("json", $json);
@@ -503,18 +512,29 @@ method getPrivateRemoteTags ($login, $repository, $token) {
 
 method parseTags ($json) {
 	my $objects = $self->decodeJson($json);
-	#$self->logDebug("objects", $objects);
-	#$self->logDebug("ref objects", ref($objects));
+	$self->logDebug("objects", $objects);
+	$self->logDebug("ref objects", ref($objects));
 	return [] if not defined $objects;
-	return [] if ref($objects) ne "ARRAY";
 	
 	my $tags = [];
-	foreach my $object ( @$objects ) {
-		push @$tags, {
-			name 	=>	$object->{name},
-			sha		=>  $object->{commit}->{sha}
-		};
+	if ( ref($objects) eq "ARRAY" ) {
+		foreach my $object ( @$objects ) {
+			push @$tags, {
+				name 	=>	$object->{name},
+				sha		=>  $object->{commit}->{sha}
+			};
+		}
 	}
+	elsif ( ref($objects) eq "HASH" ) {
+		foreach my $key ( keys %$objects ) {
+			$self->logDebug("key $key object", $objects->{$key});
+			push @$tags, {
+				name	=>	$key,
+				sha	=>	$objects->{$key}->{raw_node}
+			};
+		}
+	}
+	
 	$self->logDebug("tags", $tags);
 
 	return $tags;
@@ -523,7 +543,7 @@ method parseTags ($json) {
 #### FORKERS/USERS
 method getForkers ($login, $repository) {
 	my $apiroot = $self->apiroot();
-	my $json = $self->curlCommand("$apiroot/repos/fork/$login/$repository/network");
+	my $json = $self->curlCommand("$apiroot/fork/$login/$repository/network");
 	my $result = $self->decodeJson($json);
 	return $result->{network};	
 }
@@ -615,7 +635,7 @@ method deleteRepo ($login, $repository) {
 	my $curlfile = $self->createCurlFile($login, $contents);
 
 	#### DELETE /repos/:user/:repo
-	my $command = "curl -X DELETE -K $curlfile $apiroot/repos/$login/$repository";
+	my $command = "curl -X DELETE -K $curlfile $apiroot/$login/$repository";
 	$self->logDebug("command", $command);
 	my ($result) = $self->runCommand($command);
 	$self->logDebug("result", $result);
@@ -637,7 +657,7 @@ method setPrivate ($login, $repository) {
 	$self->logError("credentials is empty") and exit if not $self->credentials();
 
 	my $apiroot = $self->apiroot();
-	my $command = qq{curl -X PATCH $credentials $apiroot/repos/$login/$repository -d '{"name":"$repository","private":true}'};
+	my $command = qq{curl -X PATCH $credentials $apiroot/$login/$repository -d '{"name":"$repository","private":true}'};
 	$self->logDebug("command", $command);
 	
 	return $self->runCommand($command);	
@@ -652,7 +672,7 @@ method setPublic ($login, $repository) {
 	$self->logError("credentials is empty") and exit if not $self->credentials();
 
 	my $apiroot = $self->apiroot();
-	my $command = qq{curl -X PATCH $credentials $apiroot/repos/$login/$repository -d '{"name":"$repository","private":false}'};
+	my $command = qq{curl -X PATCH $credentials $apiroot/$login/$repository -d '{"name":"$repository","private":false}'};
 	$self->logDebug("command", $command);
 
 	return $self->runCommand($command);	
