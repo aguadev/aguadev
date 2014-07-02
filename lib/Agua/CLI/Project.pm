@@ -260,6 +260,139 @@ AND project='$project'
         print "Project '$project' deleted from database '$database'\n";
     }
 
+	method runProject {
+		$self->log(4);
+        $self->logDebug("");
+		
+		#### GET OPTS (E.G., WORKFLOW)
+		$self->_getopts();
+		
+        #### SET USERNAME AND OWNER
+        my $username    =   $self->setUsername();
+        my $owner       =   $username;
+        my $project     =   $self->name();
+
+		#### VERIFY INPUTS
+		print "username not defined\n" and exit if not defined $username;
+		print "project not defined\n" and exit if not defined $project;
+
+		my $workflowhashes		=	$self->getWorkflows($username, $project);
+		$self->logDebug("workflowhashes", $workflowhashes);
+
+		my $samplehash			=	$self->getSampleHash($username, $project);
+		$self->logDebug("samplehash", $samplehash);
+
+		#### GET SAMPLES
+		my $sampledata	=	$self->getSampleData($username, $project);
+		print "Number of samples: ", scalar(@$sampledata), "\n" if defined $sampledata;
+
+		if ( defined $samplehash ) {
+
+			foreach my $workflowhash ( @$workflowhashes ) {
+				$self->_runWorkflow($workflowhash, $samplehash);
+				
+				$self->logDebug("DEBUG EXIT") and exit;
+			}
+		}
+		elsif ( defined $sampledata ) {
+			#my $maxjobs  =	5;
+			#if ( not defined $maxjobs ) {
+			#
+				foreach my $samplehash ( @$sampledata ) {
+					$self->logDebug("Running workflow with samplehash", $samplehash);
+					print "Doing _runWorkflow using sample: ", $samplehash->{sample}, "\n";
+						foreach my $workflowhash ( @$workflowhashes ) {
+							print "Doing workflow: ", $workflowhash->{workflow}, "\n";
+							$self->_runWorkflow($workflowhash, $samplehash);
+							my $success	=	$self->_runWorkflow($workflowhash, $samplehash);
+							$self->logDebug("success", $success);
+					}
+				}
+			#}
+			#else {
+				#foreach my $workflowhash ( @$workflowhashes ) {
+				#	$self->logDebug("DOING _runSampleWorkflow");
+				#	my $success	=	$self->_runSampleWorkflow($workflowhash, $sampledata);
+				#	$self->logDebug("success", $success);
+				#}
+			#}
+		}
+		else {
+			#print "Running workflow $workflow\n";
+			foreach my $workflowhash ( @$workflowhashes ) {
+				$self->_runWorkflow($workflowhash, undef);
+			}
+			#print "Completed workflow $workflow\n";
+		}
+	}
+
+	method getSampleHash ($username, $project) {
+		$self->logDebug("username", $username);
+		$self->logDebug("project", $project);
+		
+		#### GET SAMPLES
+		my $sampledata	=	$self->getSampleData($username, $project);
+		#$self->logDebug("Number of samples", scalar(@$sampledata));
+		print "Number of samples: ", scalar(@$sampledata), "\n" if defined $sampledata;
+	
+		my $samplestring	=	$self->samplestring();
+		$self->logDebug("samplestring", $samplestring);
+		if ( defined $samplestring ) {
+			return	$self->convertSamplehash($samplestring);
+		}
+
+		return undef;
+	}
+	
+	method convertSamplehash ($samplehash) {
+		my @entries	=	split "\\|", $samplehash;
+		$self->logDebug("entries", \@entries);
+		
+		my $hash	=	{};
+		foreach my $entry ( @entries ) {
+			my ($key, $value)	=	$entry	=~ /^([^:]+):(.+)$/;
+			$hash->{$key}	=	$value;
+		}
+		
+		return $hash;
+	}
+
+	method getSampleData ($username, $project) {
+		my $query		=	qq{SELECT sampletable FROM sampletable
+WHERE username='$username'
+AND project='$project'};
+		#$self->logDebug("query", $query);
+
+		my $table	=	$self->db()->query($query);
+		$self->logDebug("table", $table);
+		return if not defined $table;
+		
+		$query			=	qq{SELECT * FROM $table
+WHERE username='$username'
+AND project='$project'
+AND sample !=""};
+		#$self->logDebug("query", $query);
+
+		my $sampledata	=	$self->db()->queryhasharray($query);
+		#$self->logDebug("sampledata", $sampledata);
+		
+		return $sampledata;
+	}
+	
+	method getWorkflows ($username, $project) {
+			#### GET ALL SOURCES
+			my $query = qq{SELECT *, name AS workflow, number AS workflownumber FROM workflow
+WHERE username='$username'
+AND project='$project'
+ORDER BY number};
+		#$self->logDebug("self->db()", $self->db());
+		#$self->logDebug($query);
+		my $workflows = $self->db()->queryhasharray($query);
+		$workflows = [] if not defined $workflows;
+		
+		return $workflows;
+	}
+
     method runWorkflow {
 		#$self->log(4);
         $self->logDebug("");
@@ -356,19 +489,6 @@ AND project='$project'
 	}
 	
 	
-	method convertSamplehash ($samplehash) {
-		my @entries	=	split "\\|", $samplehash;
-		$self->logDebug("entries", \@entries);
-		
-		my $hash	=	{};
-		foreach my $entry ( @entries ) {
-			my ($key, $value)	=	$entry	=~ /^([^:]+):(.+)$/;
-			$hash->{$key}	=	$value;
-		}
-		
-		return $hash;
-	}
-
 	method _runWorkflow ($workflowhash, $samplehash) {
 		$workflowhash->{start}		=	1;
 		$workflowhash->{workflow}	=	$workflowhash->{name};
@@ -390,28 +510,6 @@ AND project='$project'
 		#$self->logDebug("object", $object);
 		return $object->executeWorkflow();
     }
-	
-	method getSampleData ($username, $project) {
-		my $query		=	qq{SELECT sampletable FROM sampletable
-WHERE username='$username'
-AND project='$project'};
-		#$self->logDebug("query", $query);
-
-		my $table	=	$self->db()->query($query);
-		$self->logDebug("table", $table);
-		return if not defined $table;
-		
-		$query			=	qq{SELECT * FROM $table
-WHERE username='$username'
-AND project='$project'
-AND sample !=""};
-		#$self->logDebug("query", $query);
-
-		my $sampledata	=	$self->db()->queryhasharray($query);
-		#$self->logDebug("sampledata", $sampledata);
-		
-		return $sampledata;
-	}
 	
 	method getWorkflow ($username, $project, $workflow) {
 		$self->logDebug("username", $username);

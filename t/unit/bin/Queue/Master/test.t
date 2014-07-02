@@ -108,7 +108,9 @@ isa_ok($object1, "Test::Queue::Master", "object1");
 #$object1->testGetResourceCounts();
 #$object1->testBalanceInstances();
 #$object1->testRandomHexadecimal();
-$object1->testRandomHostname();
+#$object1->testRandomHostname();
+#$object1->testSendTask();
+$object1->testGetSampleDurations();
 
 ##### INTERACTIVE
 #$object1->testReceiveTopic();
@@ -130,8 +132,8 @@ my $object2 = new Test::Queue::Master::Manage(
 	log			=>	$log,
 	printlog    =>  $printlog
 );
-isa_ok($object2, "Test::Queue::Master::Manage", "object2");
 
+#isa_ok($object2, "Test::Queue::Master::Manage", "object2");
 #$object2->testManage();
 
 

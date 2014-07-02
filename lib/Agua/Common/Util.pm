@@ -342,10 +342,43 @@ sub getFileDirs {
 	return $filedirs;	
 }
 
+sub createParentDir {
+	my $self		=	shift;
+	my $file		=	shift;
+	
+	#### CREATE DIR IF NOT PRESENT
+	my ($directory) = $file =~ /^(.+?)\/[^\/]+$/;
+	$self->logDebug("directory", $directory);
+	`mkdir -p $directory` if $directory and not -d $directory;
+	
+	return -d $directory;
+}
+
+#### FILES
+sub getFilesByRegex {
+	my $self		=	shift;
+	my $directory	=	shift;
+	my $regex		=	shift;
+	
+	
+	my $files	=	$self->getFiles($directory);
+	#$self->logDebug("files", $files);
+	
+	for ( my $i = 0; $i < @$files; $i++ ) {
+		if ( $$files[$i] !~ /$regex/ ) {
+			splice (@$files, $i, 1);
+			$i--;
+		}
+	}
+	#$self->logDebug("Returning files", $files);
+	
+	return $files;
+}
+
 sub getFiles {
 	my $self		=	shift;
 	my $directory	=	shift;
-	$self->logDebug("directory", $directory);
+	#$self->logDebug("directory", $directory);
 
 	opendir(DIR, $directory) or $self->logDebug("Can't open directory", $directory);
 	my $files;
@@ -370,18 +403,6 @@ sub getFiles {
 	return $files;
 }
 
-sub createParentDir {
-	my $self		=	shift;
-	my $file		=	shift;
-	
-	#### CREATE DIR IF NOT PRESENT
-	my ($directory) = $file =~ /^(.+?)\/[^\/]+$/;
-	$self->logDebug("directory", $directory);
-	`mkdir -p $directory` if $directory and not -d $directory;
-	
-	return -d $directory;
-}
-
 sub getFileContents {
 	my $self		=	shift;
 	my $file		=	shift;
@@ -397,45 +418,7 @@ sub getFileContents {
 	return $contents;
 }
 
-#### LINE METHODS
-sub getLines {
-	my $self	=	shift;
-	my $file	=	shift;
-	$self->logDebug("file", $file);
-	$self->logWarning("file not defined") and return if not defined $file;
-	my $temp = $/;
-	$/ = "\n";
-	open(FILE, $file) or $self->logCritical("Can't open file: $file\n") and exit;
-	my $lines;
-	@$lines = <FILE>;
-	close(FILE) or $self->logCritical("Can't close file: $file\n") and exit;
-	$/ = $temp;
-	
-	for ( my $i = 0; $i < @$lines; $i++ ) {
-		if ( $$lines[$i] =~ /^\s*$/ ) {
-			splice @$lines, $i, 1;
-			$i--;
-		}
-	}
-	
-	return $lines;
-}
 
-sub printToFile {
-	my $self		=	shift;
-	my $file		=	shift;
-	my $text		=	shift;
-	$self->logDebug("file", $file);
-
-	$self->createParentDir($file);
-	
-	#### PRINT TO FILE
-	open(OUT, ">$file") or $self->logCaller() and $self->logCritical("Can't open file: $file") and exit;
-	print OUT $text;
-	close(OUT) or $self->logCaller() and $self->logCritical("Can't close file: $file") and exit;	
-}
-
-#### FILES
 sub setPermissions {
 	my $self		=	shift;
 	my $username 	=	shift;
@@ -529,6 +512,44 @@ sub fileTail {
 	}
 
 	return 0;
+}
+
+#### LINE METHODS
+sub getLines {
+	my $self	=	shift;
+	my $file	=	shift;
+	$self->logDebug("file", $file);
+	$self->logWarning("file not defined") and return if not defined $file;
+	my $temp = $/;
+	$/ = "\n";
+	open(FILE, $file) or $self->logCritical("Can't open file: $file\n") and exit;
+	my $lines;
+	@$lines = <FILE>;
+	close(FILE) or $self->logCritical("Can't close file: $file\n") and exit;
+	$/ = $temp;
+	
+	for ( my $i = 0; $i < @$lines; $i++ ) {
+		if ( $$lines[$i] =~ /^\s*$/ ) {
+			splice @$lines, $i, 1;
+			$i--;
+		}
+	}
+	
+	return $lines;
+}
+
+sub printToFile {
+	my $self		=	shift;
+	my $file		=	shift;
+	my $text		=	shift;
+	$self->logDebug("file", $file);
+
+	$self->createParentDir($file);
+	
+	#### PRINT TO FILE
+	open(OUT, ">$file") or $self->logCaller() and $self->logCritical("Can't open file: $file") and exit;
+	print OUT $text;
+	close(OUT) or $self->logCaller() and $self->logCritical("Can't close file: $file") and exit;	
 }
 
 #### I/O
@@ -822,6 +843,27 @@ sub setConf {
 	});
 	
 	$self->conf($conf);
+}
+
+
+
+sub sortByRegex {
+	my $self		=	shift;
+	my $array		=	shift;
+	my $regex		=	shift;
+	
+	return if not defined $array;
+	
+	@$array = sort byRegex @$array;
+	
+	return $array;
+}
+
+sub byRegex {
+	my ($aa) = $a =~ /(\d+)/;
+	my ($bb) = $b =~ /(\d+)/;
+	
+	$aa <=> $bb;
 }
 
 

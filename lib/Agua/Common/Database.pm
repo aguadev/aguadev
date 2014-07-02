@@ -265,9 +265,9 @@ sub _addToTable {
 	my $values_csv = $self->db()->fieldsToCsv($inserted_fields, $hash);
 	my $query = qq{INSERT INTO $table ($fields_csv)
 VALUES ($values_csv)};           
-	$self->logDebug("$query");
+	$self->logNote("$query");
 	my $result = $self->db()->do($query);
-	$self->logDebug("result", $result);
+	$self->logNote("result", $result);
 	
 	return $result;
 }

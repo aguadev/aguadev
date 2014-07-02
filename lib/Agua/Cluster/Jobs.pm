@@ -625,7 +625,10 @@ sub setJob {
 	$job->{stdoutfile} = $stdoutfile;
 	$job->{stderrfile} = $stderrfile;
 	$job->{lockfile} = $lockfile;
-
+	
+	$self->logDebug("job", $job);
+	
+	
 	return $job;
 }
 
@@ -647,7 +650,7 @@ sub setBatchJob {
 	my $label			=	shift;
 	my $outputdir		=	shift;
 	my $number			=	shift;
-$self->logDebug("Agua::Cluster::Jobs::setBatchJob(commands, label, outputdir, number)");
+	$self->logDebug("Agua::Cluster::Jobs::setBatchJob(commands, label, outputdir, number)");
 
 	$self->logCritical("commands not defined. Exiting...") and exit if not defined $commands;
 	$self->logCritical("label not defined. Exiting...") and exit if not defined $label;
@@ -705,7 +708,7 @@ $self->logDebug("Agua::Cluster::Jobs::setBatchJob(commands, label, outputdir, nu
 	$job->{batch} = "-t 1-$number" if $clustertype eq "SGE";
 	
 	$self->logDebug("job", $job);
-
+	
 	return $job;
 }
 

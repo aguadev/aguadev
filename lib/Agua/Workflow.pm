@@ -1258,6 +1258,7 @@ method setFileDirs ($fileroot, $project, $workflow) {
 	my $scriptsdir = $self->createDir("$fileroot/$project/$workflow/scripts");
 	my $stdoutdir = $self->createDir("$fileroot/$project/$workflow/stdout");
 	my $stderrdir = $self->createDir("$fileroot/$project/$workflow/stdout");
+	$self->logDebug("$$ scriptsdir", $scriptsdir);
 
 	#### CREATE DIRS	
 	`mkdir -p $scriptsdir` if not -d $scriptsdir;

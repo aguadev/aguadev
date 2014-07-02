@@ -267,12 +267,12 @@ method newConnection {
 	my $user		= 	$self->conf()->getKey("queue:user", undef);
 	my $pass		=	$self->conf()->getKey("queue:pass", undef);
 	my $vhost		=	$self->conf()->getKey("queue:vhost", undef);
-	$self->logDebug("$$ host", $host);
-	$self->logDebug("$$ user", $user);
-	$self->logDebug("$$ pass", $pass);
-	$self->logDebug("$$ vhost", $vhost);
+	$self->logNote("$$ host", $host);
+	$self->logNote("$$ user", $user);
+	$self->logNote("$$ pass", $pass);
+	$self->logNote("$$ vhost", $vhost);
 	
-	$self->logDebug("BEFORE my connnection = Net::RabbitFoot()");
+	$self->logNote("BEFORE my connnection = Net::RabbitFoot()");
     
 	my $connection = Net::RabbitFoot->new()->load_xml_spec()->connect(
         host 	=>	$host,

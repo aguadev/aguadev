@@ -89,6 +89,9 @@ use Data::Dumper;
 #### INTERNAL MODULES
 use Agua::Ops;
 
+#### SET LOG
+my $logfile     = "/tmp/version.$$.log";
+
 #### GET OPTIONS
 my $branch          =   "master";
 my $login;
@@ -99,8 +102,12 @@ my $versiontype;
 my $repodir;
 my $releasename;
 my $versionfile;
+my $log         =   2;
+my $printlog    =   5;
 my $help;
 GetOptions (
+    'log=i'             =>  \$log,
+    'printlog=i'        =>  \$printlog,
     'branch=s'          =>  \$branch,
     'version=s'         =>  \$version,
     'login=s'           =>  \$login,
@@ -121,11 +128,6 @@ print "version.pl    releasename must be 'alpha', 'beta', or 'rc'\n" and exit if
 
 #### SET DEFAULT VERSION FILE
 $versionfile = "$repodir/VERSION" if not defined $versionfile;
-
-#### SET LOG
-my $logfile = "/tmp/agua-version.log";
-my $log     =   2;
-my $printlog    =   5;
 
 my $object = Agua::Ops->new({
     logfile     =>   $logfile,

@@ -24,6 +24,31 @@ use Test::More;
 
 #####////}}}}}
 
+
+method testSendTask {
+	my $task		=	{
+		"mode"		=>	"executeWorkflow",
+		"status"	=>	"queued",
+		"project"	=>	"CU",
+		"sendtype"	=>	"task",
+		"sample"	=>	"0daf2e9a-2a4f-4572-ac83-859f842680de",
+		"token"		=>	 undef,
+		"module"	=>	"Agua::Workflow",
+		"workflownumber"	=>	"2",
+		"processid"	=>	"2251",
+		"username"	=>	"syoung",
+		"workflow"	=>	"Download",
+		"database"	=>	"agua",
+		"sourceid"	=>	"",
+		"callback"	=>	"",
+		"queue"		=>	"syoung.CU.Download",
+		"queued"	=>	"2014-06-26 18:12:28"
+	};
+	
+	$self->sendTask($task);	
+}
+
+
 method testGetInstanceTypes {
 	diag("getInstanceTypes");
 	
@@ -746,6 +771,74 @@ method testGetQueueDuration {
 			ok($duration == $$expected[$i], "$testname $queue->{workflow}: $duration")
 		}
 	}
+}
+
+method testGetSampleDurations {
+	diag("getSampleDurations");
+	my $rows	= [
+		{
+			"username"		=>	"syoung",
+			"project"		=>	"CU",
+			"workflow"		=>	"Download",
+			"workflownumber"=>	"2",
+			"sample"		=>	"2ae8b6c3-99bd-4fe9-a97b-a9026155259f",
+			"time"			=>	"2014-06-27 01:27:56",
+			"status"		=>	"queued",
+			"stdout"		=>	"",
+			"location"		=>	"",
+			"version"		=>	"",
+			"installdir"	=>	"",
+			"stagenumber"	=>	"0",
+			"package"		=>	"",
+			"host"			=>	"",
+			"stage"			=>	"",
+			"stderr"		=>	""
+		}
+		,
+		{
+			"username"		=>	"syoung",
+			"project"		=>	"CU",
+			"workflow"		=>	"Download",
+			"workflownumber"=>	"2",
+			"sample"		=>	"2ae8b6c3-99bd-4fe9-a97b-a9026155259f",
+			"time"			=>	"2014-06-27 01:27:56",
+			"status"		=>	"started",
+			"stdout"		=>	"",
+			"location"		=>	"",
+			"version"		=>	"",
+			"installdir"	=>	"",
+			"stagenumber"	=>	"0",
+			"package"		=>	"",
+			"host"			=>	"",
+			"stage"			=>	"",
+			"stderr"		=>	""
+		}
+		,
+		{
+			"username"		=>	"syoung",
+			"project"		=>	"CU",
+			"workflow"		=>	"Download",
+			"workflownumber"=>	"2",
+			"sample"		=>	"2ae8b6c3-99bd-4fe9-a97b-a9026155259f",
+			"time"			=>	"2014-06-27 01:36:56",
+			"status"		=>	"completed",
+			"stdout"		=>	"",
+			"location"		=>	"",
+			"version"		=>	"",
+			"installdir"	=>	"",
+			"stagenumber"	=>	"0",
+			"package"		=>	"",
+			"host"			=>	"",
+			"stage"			=>	"",
+			"stderr"		=>	""
+		}
+	];
+	
+	my $expected	=	[540];
+	my $durations	=	$self->getSampleDurations($rows);
+	$self->logDebug("durations", $durations);
+	
+	is_deeply($durations, $expected, "sample durations");
 }
 
 method testParseDate {

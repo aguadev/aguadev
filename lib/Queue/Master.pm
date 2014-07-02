@@ -294,6 +294,9 @@ method getTasks ($queues, $queuedata, $limit) {
 	return if not defined $tasks;
 
 	#### DIRECT THE TASK TO EXECUTE A WORKFLOW
+	my $sampletable	=	$self->getSampleTable($queuedata);
+	$self->logDebug("sampletable", $sampletable);
+	
 	foreach my $task ( @$tasks ) {
 		$task->{module}		=	"Agua::Workflow";
 		$task->{mode}		=	"executeWorkflow";
@@ -308,10 +311,38 @@ method getTasks ($queues, $queuedata, $limit) {
 		#### SET TIME QUEUED
 		$task->{queued}		=	$self->getMysqlTime();
 
+		#### SET SAMPLE HASH
+		$task->{samplehash}	=	$self->getTaskSampleHash($task, $sampletable) if defined $sampletable;
+		#$self->logDebug("task", $task);
+		
 		$self->updateJobStatus($task);
 	}
 	
 	return $tasks;
+}
+
+method getSampleTable ($queuedata) {
+	my $username	=	$queuedata->{username};
+	my $project		=	$queuedata->{project};
+	my $query		=	qq{SELECT sampletable FROM sampletable
+WHERE username='$username'
+AND project='$project'};
+	$self->logDebug("query", $query);
+	
+	return $self->db()->query($query);
+}
+
+method getTaskSampleHash ($task, $sampletable) {
+	my $username	=	$task->{username};
+	my $project		=	$task->{project};
+	my $sample		=	$task->{sample};
+	my $query		=	qq{SELECT * FROM $sampletable
+WHERE username='$username'
+AND project='$project'
+AND sample='$sample'};
+	$self->logDebug("query", $query);
+	
+	return $self->db()->queryhash($query);
 }
 
 method pullTasks ($queues, $queuedata, $limit) {
@@ -797,21 +828,13 @@ method getExtra ($installdir, $version) {
 	
 	my $extra			=	$self->getFileContents($extrafile);
 
-	$extra	=	qq{\n
-
-#### TEST 
-echo "TEST EXTRA DATA"
-
-"
-\n};
-
 	return $extra;
 }
 
 method setTemplateFile ($installdir, $version) {
 	$self->logDebug("installdir", $installdir);
 	
-	return "$installdir/$version/data/tmpl/userdata.tmpl";
+	return "$installdir/data/tmpl/userdata.tmpl";
 }
 
 method getTenant ($username) {
@@ -906,64 +929,64 @@ method getResourceCounts ($queues, $durations, $instancetypes, $quota) {
 	my $firstduration	=	$durations->{$firstqueue} * $firstresource;
 	$self->logDebug("firstresource", $firstresource);
 	
-	#$self->logDebug("firstqueue", $firstqueue);
-	#$self->logDebug("firstresource", $firstresource);
-	#$self->logDebug("firstduration", $firstduration);
+	$self->logDebug("firstqueue", $firstqueue);
+	$self->logDebug("firstresource", $firstresource);
+	$self->logDebug("firstduration", $firstduration);
 	
 	my $terms	=	1;
 	for ( my $i = 1; $i < $latestcompleted + 1; $i++ ) {
 		my $queue	=	$$queues[$i];
-		#$self->logDebug("queue $i", $queue);
+		$self->logDebug("queue $i", $queue);
 		my $queuename	=	$self->getQueueName($queue);
-		#$self->logDebug("queuename", $queuename);
+		$self->logDebug("queuename", $queuename);
 
 		my $duration	=	$durations->{$queuename};
-		#$self->logDebug("duration", $duration);
+		$self->logDebug("duration", $duration);
 
 		my $instancetype	=	$instancetypes->{$queuename};
-		#$self->logDebug("instancetype", $instancetype);
+		$self->logDebug("instancetype", $instancetype);
 		my $resource	=	$instancetype->{$metric};
-		#$self->logDebug("resource ($metric)", $resource);
+		$self->logDebug("resource ($metric)", $resource);
 
 		my $adjustedduration	=	$duration * $resource;
 		
 		my $term	=	$adjustedduration/$firstduration;
-		#$self->logDebug("term", $term);
+		$self->logDebug("term", $term);
 		
 		$terms		+=	$term;
 	}
-	#$self->logDebug("FINAL terms", $terms);
+	$self->logDebug("FINAL terms", $terms);
 	
 	my $firstcount	=	$quota / $terms;
-	#$self->logDebug("firstcount", $firstcount);
+	$self->logDebug("firstcount", $firstcount);
 
 	my $firstthroughput	=	($firstduration/3600) * $firstcount;
-	#$self->logDebug("firstthroughput", $firstthroughput);
+	$self->logDebug("firstthroughput", $firstthroughput);
 
 	my $queuenames	=	$self->getQueueNames($queues);
-	#$self->logDebug("queuenames", $queuenames);
+	$self->logDebug("queuenames", $queuenames);
 
 	my $resourcecounts	=	[];
 	for ( my $i = 0; $i < $latestcompleted + 1; $i++ ) {
 		my $queuename	=	$$queuenames[$i];
-		#$self->logDebug("queuename", $queuename);
+		$self->logDebug("queuename", $queuename);
 
 		my $duration	=	$durations->{$queuename};
-		#$self->logDebug("duration", $duration);
+		$self->logDebug("duration", $duration);
 
 		my $instancetype	=	$instancetypes->{$queuename};
-		#$self->logDebug("instancetype", $instancetype);
+		$self->logDebug("instancetype", $instancetype);
 		my $resource	=	$instancetype->{$metric};
-		#$self->logDebug("resource ($metric)", $resource);
+		$self->logDebug("resource ($metric)", $resource);
 
 		my $adjustedduration	=	$duration * $resource;
-		#$self->logDebug("adjustedduration", $adjustedduration);
+		$self->logDebug("adjustedduration", $adjustedduration);
 		
 		my $resourcecount	=	($firstcount * $adjustedduration) / $firstduration;
-		#$self->logDebug("resourcecount", $resourcecount);
+		$self->logDebug("resourcecount", $resourcecount);
 
 		my $throughput	=	(3600/$adjustedduration) * $resourcecount;
-		#$self->logDebug("throughput", $throughput);
+		$self->logDebug("throughput", $throughput);
 
 		push @$resourcecounts, $resourcecount;
 	}
@@ -1114,7 +1137,7 @@ method getInstanceTypes ($queues) {
 		my $instancetype	=	$self->getQueueInstance($queue);
 		$instancetypes->{$queuename}	= $instancetype;
 	}
-	$self->logDebug("instancetypes", $instancetypes);
+	#$self->logDebug("instancetypes", $instancetypes);
 	
 	return $instancetypes;
 }
@@ -1128,7 +1151,7 @@ WHERE username='$queue->{username}'
 AND cluster='$queuename'};
 	#$self->logDebug("query", $query);
 	my $instancetype	=	$self->db()->queryhash($query);
-	$self->logDebug("instancetype", $instancetype);	
+	#$self->logDebug("instancetype", $instancetype);	
 	
 	return $instancetype;
 }
@@ -1170,14 +1193,14 @@ FROM instance
 WHERE username='$username'
 AND status='running'
 GROUP BY queue};
-	$self->logDebug("query", $query);
+	#$self->logDebug("query", $query);
 	my $entries	=	$self->db()->queryhasharray($query);
 	$self->logDebug("entries", $entries);
 	my $counts	=	{};
 	foreach my $entry ( @$entries ) {
 		$counts->{$entry->{queue}}	=	$entry->{count}
 	}
-	$self->logDebug("counts", $counts);
+	#$self->logDebug("counts", $counts);
 
 	return $counts;
 }
@@ -1275,10 +1298,9 @@ method getDurations ($queues) {
 	foreach my $queue ( @$queues ) {
 		#$self->logDebug("queue", $queue);
 		my $queuename	=	$queue->{username} . "." . $queue->{project} . "." . $queue->{workflow};
-		#$self->logDebug("queuename", $queuename);
-
-		#last if $self->queueNotRunning($queue);
 		my $duration	=	$self->getQueueDuration($queue);
+		#$self->logDebug("duration", $duration);
+
 		$durations->{$queuename}	= $duration;
 	}		
 
@@ -1592,8 +1614,10 @@ method receiveTopic {
         on_consume => sub {
 			my $var = shift;
 			my $body = $var->{body}->{payload};
-		
-			print " [x] Received message: $body\n";
+			
+			my $excerpt	=	substr($body, 0, 200);
+			
+			print " [x] Received message: $excerpt\n";
 			&$handler($this, $body);
 		},
 		no_ack => 1,
@@ -1610,7 +1634,7 @@ method handleTopic ($json) {
 	#$self->logDebug("data", $data);
 
 	my $duplicate	=	$self->duplicate();
-	if ( defined $duplicate and not is_deeply($data, $duplicate) ) {
+	if ( defined $duplicate and not $self->deeplyIdentical($data, $duplicate) ) {
 		$self->logDebug("Skipping duplicate message");
 		return;
 	}
@@ -2127,6 +2151,39 @@ method setVirtual {
 }
 
 
+method deeplyIdentical ($a, $b) {
+    if (not defined $a)        { return not defined $b }
+    elsif (not defined $b)     { return 0 }
+    elsif (not ref $a)         { $a eq $b }
+    elsif ($a eq $b)           { return 1 }
+    elsif (ref $a ne ref $b)   { return 0 }
+    elsif (ref $a eq 'SCALAR') { $$a eq $$b }
+    elsif (ref $a eq 'ARRAY')  {
+        if (@$a == @$b) {
+            for (0..$#$a) {
+                my $rval;
+                return $rval unless ($rval = $self->deeplyIdentical($a->[$_], $b->[$_]));
+            }
+            return 1;
+        }
+        else { return 0 }
+    }
+    elsif (ref $a eq 'HASH')   {
+        if (keys %$a == keys %$b) {
+            for (keys %$a) {
+                my $rval;
+                return $rval unless ($rval = $self->deeplyIdentical($a->{$_}, $b->{$_}));
+            }
+            return 1;
+        }
+        else { return 0 }
+    }
+    elsif (ref $a eq ref $b)   { warn 'Cannot test '.(ref $a)."\n"; undef }
+    else                       { return 0 }
+}
+	
+	
+	
 }
 
 

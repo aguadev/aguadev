@@ -119,7 +119,7 @@ method heartbeat {
 		time	=>	$time,
 		mode	=>	"updateHeartbeat"
 	};
-	$self->logDebug("data", $data);
+	#$self->logDebug("data", $data);
 	
 	$self->sendTopic($data, $key);
 }
@@ -159,7 +159,7 @@ method listenTasks {
 }
 
 method receiveTask ($taskqueue) {
-	$self->logDebug("$$ queue", $taskqueue);
+	$self->logDebug("$$ taskqueue", $taskqueue);
 	
 	#### OPEN CONNECTION
 	my $connection	=	$self->newConnection();	
@@ -388,11 +388,11 @@ method getHostName {
 }
 
 method sendTopic ($data, $key) {
-	$self->logDebug("$$ data", $data);
-	$self->logDebug("$$ key", $key);
+	#$self->logDebug("$$ data", $data);
+	#$self->logDebug("$$ key", $key);
 
 	my $exchange	=	$self->conf()->getKey("queue:topicexchange", undef);
-	$self->logDebug("$$ exchange", $exchange);
+	#$self->logDebug("$$ exchange", $exchange);
 
 	my $host		=	$self->host() || $self->conf()->getKey("queue:host", undef);
 	my $user		= 	$self->user() || $self->conf()->getKey("queue:user", undef);
@@ -424,7 +424,7 @@ method sendTopic ($data, $key) {
 	);
 	
 	my $json	=	$self->jsonparser()->encode($data);
-	$self->logDebug("$$ json", $json);
+	#$self->logDebug("$$ json", $json);
 	$self->channel()->publish(
 		exchange => $exchange,
 		routing_key => $key,

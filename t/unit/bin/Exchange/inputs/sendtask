@@ -7,30 +7,33 @@ $|++;
 use Net::RabbitFoot;
 
 my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
+
     host => "10.2.24.103",
     port => 5672,
     user => 'rabbituser',
     pass => 'runrabit%2',
-    vhost => 'rabbitvhost',
+    vhost => 'rabbitvhost'
+	
 );
 
+my $taskqueue	=	"syoung.CU.Download";
+print "sendtask    taskqueue: $taskqueue\n";
 
 my $chan = $conn->open_channel();
 
 $chan->declare_queue(
-    queue => 'task_queue',
+    queue => $taskqueue,
     durable => 1,
 );
 
-my $msg = join(' ', @ARGV) || "Hello World!";
+my $msg = join(' ', @ARGV) || "info: Hello World!";
 
 $chan->publish(
     exchange => '',
-    routing_key => 'task_queue',
+    routing_key => $taskqueue,
     body => $msg,
 );
 
 print " [x] Sent '$msg'\n";
 
 $conn->close();
-

@@ -1,0 +1,37 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+$|++;
+use Net::RabbitFoot;
+
+my $host    =   "10.2.24.103";
+
+my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
+
+    host => $host,
+    port => 5672,
+    user => 'rabbituser',
+    pass => 'runrabit%2',
+    vhost => 'rabbitvhost'
+
+);
+
+
+my $chan = $conn->open_channel();
+
+my $msg = join(' ', @ARGV) || "info: Hello World!";
+my $exchange	=	'topicexchange';
+my $routingkey	=	"syoung.CU.Download";
+
+$chan->publish(
+    exchange => $exchange,
+    routing_key => $routingkey,
+    body => $msg,
+);
+
+print " [x] Sent topic (exchange: $exchange, routing_key: $routingkey): '$msg'\n";
+
+$conn->close();
+

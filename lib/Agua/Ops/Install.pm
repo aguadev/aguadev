@@ -354,6 +354,8 @@ method gitInstall ($installdir, $version) {
 
 	if ( not defined $version or $version eq "max" ) {
 		$version	=	$self->latestVersion($owner, $repository, $privacy, $hubtype);
+		$treeish	=	$version if not defined $treeish or $treeish eq "";
+
 		$self->logDebug("version", $version);
 		$self->version($version);
 	}	
