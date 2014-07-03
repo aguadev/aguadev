@@ -287,11 +287,8 @@ AND project='$project'
 		print "Number of samples: ", scalar(@$sampledata), "\n" if defined $sampledata;
 
 		if ( defined $samplehash ) {
-
 			foreach my $workflowhash ( @$workflowhashes ) {
 				$self->_runWorkflow($workflowhash, $samplehash);
-				
-				$self->logDebug("DEBUG EXIT") and exit;
 			}
 		}
 		elsif ( defined $sampledata ) {
