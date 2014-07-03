@@ -185,7 +185,7 @@ method runLocally {
 	$self->logDebug("$$ exports", $exports);
 
 	my $prefix	=	"export PERL5LIB=$perl5lib; $exports ";
-	$self->logDebug("$$ prefix", $prefix);
+	#$self->logDebug("$$ prefix", $prefix);
 	
 	#### SET EXECUTOR AND FILE EXPORTS
 	my $executor = $self->executor();
@@ -196,11 +196,11 @@ method runLocally {
 		$prefix .= $fileexports if defined $fileexports;
 	}
 	$prefix .= $executor;
-	$self->logDebug("$$ self->prefix(): " . $prefix);
+	#$self->logDebug("$$ self->prefix(): " . $prefix);
 	
 	#### PREFIX APPLICATION PATH WITH PACKAGE INSTALLATION DIRECTORY
 	my $application = $self->installdir() . "/" . $self->location();	
-	$self->logDebug("$$ application", $application);
+	#$self->logDebug("$$ application", $application);
 	
 	#### SET SYSTEM CALL
 	my @system_call = ($prefix, $application, @$arguments);

@@ -303,6 +303,8 @@ AND project='$project'
 							$self->_runWorkflow($workflowhash, $samplehash);
 							my $success	=	$self->_runWorkflow($workflowhash, $samplehash);
 							$self->logDebug("success", $success);
+							
+							return if $success == 0;
 					}
 				}
 			#}

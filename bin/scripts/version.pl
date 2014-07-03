@@ -140,8 +140,8 @@ my $object = Agua::Ops->new({
 #### SET VERSION IF DEFINED
 if ( defined $version ) {
     my ($result, $error) = $object->setVersion($versionformat, $repodir, $versionfile, $branch, $version, $description);
-    $object->addLocalTag($version, $description);
     $object->commitRepo($repodir, "[$version] $description");
+    $object->addLocalTag($version, $description);
     print "\n\n$error\n\n" and exit if not $result;
     print "\nCreated new version: $version\n\n";
 }
