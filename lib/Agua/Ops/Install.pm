@@ -334,8 +334,6 @@ method gitInstall ($installdir, $version) {
 	my $username		=	$self->username();
 	my $hubtype			=	$self->hubtype();
 
-	$treeish	=	$version if not defined $treeish or $treeish eq "";
-	
 	#### ENSURE MINIMUM DATA IS AVAILABLE
 	$self->logCritical("repository not defined") and exit if not defined $repository;
 	$self->logCritical("owner not defined") and exit if not defined $owner;
@@ -351,15 +349,27 @@ method gitInstall ($installdir, $version) {
 	$self->logDebug("hubtype", $hubtype);
  	$self->logDebug("privacy", $privacy);
 	$self->logDebug("keyfile", $keyfile);
-
-	if ( not defined $version or $version eq "max" ) {
+	
+	my $tag		=	$treeish;
+	$tag		=	$version if not defined $tag or $tag eq "";
+	if ( not defined $tag ) {
 		$version	=	$self->latestVersion($owner, $repository, $privacy, $hubtype);
-		$treeish	=	$version if not defined $treeish or $treeish eq "";
+		$version	=	$treeish if not defined $version;
+		$tag	=	$version;
+	}
+	elsif ( $tag eq "max" ) {
+		$version	=	$self->latestVersion($owner, $repository, $privacy, $hubtype);
+		$version	=	$treeish if not defined $version;
+	}
 
-		$self->logDebug("version", $version);
-		$self->version($version);
-	}	
-	print "Installing version '$version' from repository '$repository'\n";
+	#### SET VERSION
+	$self->version($version);
+
+	$self->logDebug("tag", $tag);
+	$self->logDebug("version", $version);
+
+	print "Installing version '$version' from repository '$repository'\n" if $tag ne "max";
+	print "Installing latest build of version '$version' from repository '$repository'\n" if $tag eq "max";
 
 	#### MAKE INSTALL DIRECTORY
 	$self->makeDir($installdir) if not -d $installdir;	
@@ -384,21 +394,28 @@ method gitInstall ($installdir, $version) {
 	#### CLONE REPO
 	$self->logDebug("Doing self->changeDir()");
 	$self->changeToRepo($installdir);
-	$self->logDebug("Doing self->cloneRemoteRepo()");
+	$self->logDebug("Doing self->cloneRemoteRepo($keyfile, $version)");
 	my $success = $self->cloneRemoteRepo($owner, $repository, $branch, $hubtype, $login, $privacy, $keyfile, $version);
-	$self->logDebug("FAILED to clone repo    success: $success") and return 0 if not $success;
+	$self->logDebug("success", $success);
+	$self->logDebug("FAILED to clone repo. Returning 0") and return 0 if not $success;
 	
 	##### CHECKOUT SPECIFIC VERSION
-	$self->logDebug("Doing changeToRepo installdir", "$targetdir");
-	my $change = $self->changeToRepo("$targetdir");
-	$self->logDebug("change", $change);
-	$self->checkoutTag($targetdir, $treeish);
-	#$self->logger()->write("Checked out version: $version");
-	$self->logDebug("checked out version", $version);
-	
-	#### VERIFY CHECKED OUT VERSION == DESIRED VERSION
-	$self->verifyVersion($targetdir, $version) if $self->foundGitDir($targetdir) and defined $version and $version ne "";
-	$self->version($version);
+	if ( $tag eq "max") {
+		print "Skipping checkout so repo is at latest commit\n";
+		$self->logDebug("Skipping checkout as tag is 'max'");
+	}
+	else {
+		$self->logDebug("Doing changeToRepo targetdir", "$targetdir");
+		my $change = $self->changeToRepo($targetdir);
+		$self->logDebug("change", $change);
+		$self->checkoutTag($targetdir, $tag);
+		#$self->logger()->write("Checked out version: $version");
+		$self->logDebug("checked out version", $version);
+
+		#### VERIFY CHECKED OUT VERSION == DESIRED VERSION
+		$self->verifyVersion($targetdir, $version) if $self->foundGitDir($targetdir) and defined $version and $version ne "";
+		$self->version($version);
+	}	
 	
 	return 1;
 }
