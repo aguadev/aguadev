@@ -99,7 +99,7 @@ usage() if not @arguments;
 #### GET FILE
 my $file = shift @ARGV;
 usage() if $file =~ /^-h$/ or $file =~ /^--help$/;
-print "flow.pl    Can't find file: $file\n" and exit if not -f $file;
+#print "flow.pl    Can't find file: $file\n" and exit if not -f $file;
 #print "flow.pl    file: $file\n";
 
 #### GET MODE
@@ -129,7 +129,7 @@ elsif ( $file =~ /\.app$/ ) {
 elsif ( $file =~ /(\.wk|\.work)$/ )
 {
     my $workflow = Agua::CLI::Workflow->new(
-        wkfile      =>  $file,
+        inputfile      =>  $file,
         conf        =>  $conf
     );
     $workflow->getopts();

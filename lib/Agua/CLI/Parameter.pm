@@ -12,29 +12,30 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
     has 'log'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
     has 'printlog'		=> ( isa => 'Int', is => 'rw', default 	=> 	5 	);
     has 'logfile'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
+    has 'force'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
 
     #### RUN CONFIGURATION VARIABLES
     has 'locked'		=> ( isa => 'Undef|Int', is => 'rw', required	=>	0	);
-    has 'param'	    	=> ( isa => 'Str|Undef', is => 'rw', default => '', required => 1, documentation => q{Name of the parameter}  );
+    has 'param'	    	=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 1, documentation => q{Name of the parameter}  );
     has 'owner'	    	=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous', documentation => q{Owner of this object} );
-    has 'argument'		=> ( isa => 'Str|Undef', is => 'rw', default => '', required => 0 );
-    has 'paramtype'	    => ( isa => 'Str', is => 'rw', default => '', default	=> 'input', documentation => q{Three possible param types: input, resource or output} );
-    has 'valuetype'	    => ( isa => 'Str', is => 'rw', default => '', required => 0, documentation => q{Possible types: file, files, directory, directories, integer, string or flag} );
-    has 'category'		=> ( isa => 'Str', is => 'rw', default => '', required => 0, documentation => q{User-defined category for parameter to be used with input/output chaining} );
-    has 'ordinal'		=> ( isa => 'Str|Undef', is => 'rw', default => 0, required => 0, documentation => q{Set order of appearance: 1, 2, ..., N} );
-    has 'value'	    	=> ( isa => 'Str|Undef', is => 'rw', default => '', required => 0 );
-    has 'discretion'	=> ( isa => 'Str|Undef', is => 'rw', default => '', required => 0, documentation => q{Three options: essential (e.g., file must be present), required, or optional} );
-    has 'format'		=> ( isa => 'Str|Undef', is => 'rw', default => '', required => 0, documentation => q{File format, e.g., text, fasta, fastq} );
-    has 'description'	=> ( isa => 'Str|Undef', is => 'rw', default => '', required => 0 );
+    has 'argument'		=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0 );
+    has 'paramtype'	    => ( isa => 'Str|Undef', is => 'rw', default => undef, default	=> 'input', documentation => q{Three possible param types: input, resource or output} );
+    has 'valuetype'	    => ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0, documentation => q{Possible types: file, files, directory, directories, integer, string or flag} );
+    has 'category'		=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0, documentation => q{User-defined category for parameter to be used with input/output chaining} );
+    has 'ordinal'		=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0, documentation => q{Set order of appearance: 1, 2, ..., N} );
+    has 'value'	    	=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0 );
+    has 'discretion'	=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0, documentation => q{Three options: essential (e.g., file must be present), required, or optional} );
+    has 'format'		=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0, documentation => q{File format, e.g., text, fasta, fastq} );
+    has 'description'	=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0 );
     
     #### CONSTANTS
     has 'indent'    	=> ( isa => 'Int', is => 'ro', default => 15);
     
     #### CHAINING VARIABLES
-    has 'chained'	    => ( isa => 'Int|Undef', is => 'rw', default => 0 );
-    has 'args'	    	=> ( isa => 'Str|Undef', is => 'rw', default => '', required => 0 );
-    has 'inputParams'	=> ( isa => 'Str', is => 'rw', default => '', required => 0 );
-    has 'paramFunction'	=> ( isa => 'Str|Undef', is => 'rw', default => '', required => 0);
+    has 'chained'	    => ( isa => 'Int|Undef', is => 'rw', default => undef );
+    has 'args'	    	=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0 );
+    has 'inputParams'	=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0 );
+    has 'paramFunction'	=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0);
 
     #### TRANSIENT VARIABLES
     has 'newname'		=> ( isa => 'Str', is => 'rw', required => 0 );
@@ -42,12 +43,12 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
     has 'to'			=> ( isa => 'Str', is => 'rw', required => 0 );
     has 'field'	    	=> ( isa => 'Str', is => 'rw', required => 0 );
     has 'fields'    	=> ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { ['param', 'paramtype', 'valuetype', 'category', 'ordinal', 'argument', 'value', 'discretion', 'format', 'description', 'args', 'inputParams', 'paramFunction', 'paramfile', 'newname', 'inputfile', 'outputfile', 'outputdir', 'from', 'to', 'field', 'ordinal', 'locked', 'chained'] } );
-    has 'savefields'    => ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { ['param', 'paramtype', 'valuetype', 'category', 'ordinal', 'argument', 'value', 'discretion', 'format', 'description', 'args', 'inputParams', 'paramFunction', 'paramfile', 'locked', 'chained'] } );
+    has 'savefields'    => ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { ['param', 'paramtype', 'valuetype', 'category', 'ordinal', 'argument', 'value', 'discretion', 'format', 'description', 'args', 'inputParams', 'paramFunction', 'locked', 'chained'] } );
     has 'exportfields'  => ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { [ 'param', 'paramtype', 'valuetype', 'category', 'ordinal', 'argument', 'value', 'discretion', 'format', 'description', 'args', 'inputParams', 'paramFunction', 'locked', 'chained'] } );
-    has 'paramfile'		=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
-    has 'inputfile'		=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
-    has 'outputfile'	=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
-    has 'outputdir'		=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
+    has 'paramfile'		=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => undef );
+    has 'inputfile'		=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => undef );
+    has 'outputfile'	=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => undef );
+    has 'outputdir'		=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => undef );
     has 'location'		=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
 
 ####///}}}
@@ -58,7 +59,7 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
     }
     
     method initialise () {
-        $self->owner("anonymous") if not defined $self->owner();
+        #$self->owner("anonymous") if not defined $self->owner();
         $self->inputfile($self->paramfile()) if defined $self->paramfile() and $self->paramfile();
         #$self->logDebug("self->inputfile(): "), $self->inputfile(), "\n";
         $self->logDebug("inputfile must end in '.param'") and exit
@@ -202,11 +203,21 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
     
 
     method create () {
-        $self->logDebug("Parameter::create()");
+        $self->log(4);
+		$self->getopts();
+		$self->logDebug();
+		
+        my $outputfile 	= $self->outputfile();
+		$outputfile		=	$self->paramfile() if not defined $outputfile;
 
-        my $outputfile = $self->outputfile;
+		my $param		=	$self->param();
+		if ( not defined $param ) {
+			($param)			=	$outputfile	=~ /^(.+)\.param/;
+			$self->param($param);
+		}
+		
         $self->_confirm("Outputfile already exists. Overwrite?") if -f $outputfile and not defined $self->force();
-
+		
         $self->_write();        
     }
 
@@ -234,6 +245,9 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
         {
             #$self->logDebug("field", $field);
             next if ref($self->$field) eq "ARRAY";
+
+			next if not defined $self->$field();
+			
             $hash->{$field} = $self->$field();
         }
 
@@ -263,10 +277,12 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
     }
 
     method _toExportHash ($fields) {
+		$self->logDebug("fields", $fields);
         my $hash;
-        foreach my $field ( @$fields )
-        {
+        foreach my $field ( @$fields ) {
             next if ref($self->$field) eq "ARRAY";
+
+			next if not defined $self->$field();
             $hash->{$field} = $self->$field();
         }
 
@@ -293,8 +309,8 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
     
     method _write() {
         my $json = $self->toJson();
-        #$self->logDebug("json:");
-        #print Dumper  $json;
+        $self->logDebug("json:");
+        print Dumper  $json;
 
         my $outputfile = $self->outputfile;
         $outputfile = $self->inputfile if not defined $outputfile or not $outputfile;

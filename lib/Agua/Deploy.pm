@@ -383,7 +383,7 @@ method install {
 		#### SET VARIABLES FROM OPS INFO
 		my $login 		=	$self->login() || "agua";
 		my $owner 		=	$self->owner();
-		my $privacy		=	$self->privacy() || "public";
+		my $privacy		=	$self->privacy();
 		my $repository 	=	$self->package();
 		my $installdir	= 	$self->installdir() || $self->conf()->getKey("agua", "INSTALLDIR");
 		my $opsrepo 	= 	$self->opsrepo() || $self->conf()->getKey("agua", "OPSREPO");
@@ -395,7 +395,10 @@ method install {
 		#### SET OPSDIR
 		my $basedir		= 	$self->conf()->getKey("agua", "INSTALLDIR");
 		my $aguauser	= 	$self->conf()->getKey("agua", "AGUAUSER");
-		my $opsdir		=	"$installdir/repos/$privacy/$aguauser/$opsrepo/$aguauser/$package";		
+		
+		my $defaultdir	=	"public";
+		$defaultdir		=	$privacy if defined $privacy;
+		my $opsdir		=	"$installdir/repos/$defaultdir/$aguauser/$opsrepo/$aguauser/$package";		
 		$self->logDebug("opsdir", $opsdir);	
 
 		#### SET OPSFILE AND PMFILE
@@ -435,7 +438,7 @@ method _install {
 	#### SET VARIABLES FROM OPS INFO
 	my $login 		=	$self->login() || "agua";
 	my $owner 		=	$self->owner();
-	my $privacy		=	$self->privacy() || "public";
+	my $privacy		=	$self->privacy();
 	my $repository 	=	$self->repository();
 	$self->logDebug("login", $login);
 	$self->logDebug("owner", $owner);
@@ -450,7 +453,10 @@ method _install {
 	}
 	else {
 		my $aguauser	= 	$self->conf()->getKey("agua", "AGUAUSER");
-		$opsdir		=	"$installdir/repos/$privacy/$aguauser/$opsrepo/$aguauser/$package";		
+
+		my $defaultdir	=	"public";
+		$defaultdir		=	$privacy if defined $privacy and $privacy ne "";
+		$opsdir		=	"$installdir/repos/$defaultdir/$aguauser/$opsrepo/$aguauser/$package";		
 	}
 	$self->logDebug("opsdir", $opsdir);	
 	

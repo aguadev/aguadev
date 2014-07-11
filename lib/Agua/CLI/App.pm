@@ -20,9 +20,9 @@ class Agua::CLI::App with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::Statu
     has 'printlog'	=> ( isa => 'Int', is => 'rw', default 	=> 	5 	);
 
     ##### STORED VARIABLES
-    has 'localonly'	=> ( isa => 'Bool|Undef', is => 'rw', default    => 0, documentation => q{Set to 1 if application should only be run locally, i.e., not executed on the cluster} );
+    has 'localonly'	=> ( isa => 'Bool|Undef', is => 'rw', default    => undef, documentation => q{Set to 1 if application should only be run locally, i.e., not executed on the cluster} );
 
-    has 'owner'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous', documentation => q{Owner of this object} );
+    has 'owner'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, default =>  undef );
     has 'package'	=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'version'	=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'installdir'=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
@@ -33,31 +33,31 @@ class Agua::CLI::App with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::Statu
     has 'url'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, documentation => q{URL of application website} );
     has 'linkurl'	=> ( isa => 'Str|Undef', is => 'rw', required => 0, documentation => q{URL for application usage information (e.g., man pages, help)} );
     has 'location'	=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
-    has 'executor'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'description'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'notes'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
+    has 'executor'	=> ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'description'	=> ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'notes'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
     has 'submit'	=> ( isa => 'Maybe', is => 'rw', default => undef );
     has 'parameters'=> ( isa => 'ArrayRef[Agua::CLI::Parameter]', is => 'rw', default => sub { [] } );
-    has 'ordinal'	=> ( isa => 'Int|Undef', is => 'rw', default => 0, required => 0, documentation => q{Set order of appearance: 1, 2, ..., N} );
+    has 'ordinal'	=> ( isa => 'Int|Undef', is => 'rw', default => undef, required => 0, documentation => q{Set order of appearance: 1, 2, ..., N} );
     has 'scrapefile'=> ( isa => 'Str|Undef', is => 'rw', default => undef );
     has 'usagefile'	=> ( isa => 'Str|Undef', is => 'rw', default => undef );
     has 'stdoutfile'=> ( isa => 'Str|Undef', is => 'rw', default => undef );
     has 'stderrfile'	=> ( isa => 'Str|Undef', is => 'rw', default => undef );
     
     #### STORED STATUS VARIABLES
-    has 'status'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'locked'	    => ( isa => 'Int|Undef', is => 'rw', default => 0 );
-    has 'queued'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'started'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'completed'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'duration'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'epochqueued'	=> ( isa => 'Maybe', is => 'rw', default => 0 );
-    has 'epochstarted'	=> ( isa => 'Int|Undef', is => 'rw', default => 0 );
-    has 'epochstopped'  => ( isa => 'Int|Undef', is => 'rw', default => 0 );
-    has 'epochduration'	=> ( isa => 'Int|Undef', is => 'rw', default => 0 );
-    has 'stagepid'	    => ( isa => 'Int|Undef', is => 'rw', default => 0 );
-    has 'stagejobid'	=> ( isa => 'Int|Undef', is => 'rw', default => 0 );
-    has 'workflowpid'	=> ( isa => 'Int|Undef', is => 'rw', default => 0 );
+    has 'status'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'locked'	    => ( isa => 'Int|Undef', is => 'rw', default => undef );
+    has 'queued'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'started'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'completed'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'duration'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'epochqueued'	=> ( isa => 'Maybe', is => 'rw', default => undef );
+    has 'epochstarted'	=> ( isa => 'Int|Undef', is => 'rw', default => undef );
+    has 'epochstopped'  => ( isa => 'Int|Undef', is => 'rw', default => undef );
+    has 'epochduration'	=> ( isa => 'Int|Undef', is => 'rw', default => undef );
+    has 'stagepid'	    => ( isa => 'Int|Undef', is => 'rw', default => undef );
+    has 'stagejobid'	=> ( isa => 'Int|Undef', is => 'rw', default => undef );
+    has 'workflowpid'	=> ( isa => 'Int|Undef', is => 'rw', default => undef );
 
     #### CONSTANTS
     has 'indent'    => ( isa => 'Int', is => 'ro', default => 15);
@@ -99,7 +99,7 @@ method BUILD ($hash) {
 }
 
 method initialise () {
-    $self->owner("anonymous") if not defined $self->owner();
+    #$self->owner("anonymous") if not defined $self->owner();
     $self->inputfile($self->appfile()) if defined $self->appfile() and $self->appfile();
     $self->logDebug("inputfile must end in '.app'") and exit
         if defined $self->inputfile()
@@ -134,6 +134,7 @@ method getopts () {
     
     #$self->logDebug("self->location(): "), $self->location(), "\n" if defined $self->location();
     
+    $self->log(4);
     foreach my $key ( keys %$switch ){
         #$self->logDebug("key", $key);
         $self->$key($switch->{$key}) if defined $switch->{$key};
@@ -696,7 +697,7 @@ method addParam () {
     use Agua::CLI::Parameter;
     my $parameter = Agua::CLI::Parameter->new();
     $parameter->getopts();
-    $parameter->_loadFile if $parameter->paramfile();
+    $parameter->_loadFile() if $parameter->paramfile();
     
     my $inputfile = $self->inputfile();
     #$self->logDebug("self", $self);
@@ -878,18 +879,30 @@ method edit () {
     #print $self->toString();
 
     $self->outputfile($self->inputfile());
-    $self->_write() if $self->outputfile();
+    $self->_write($self->outputfile()) if $self->outputfile();
     
     return 1;
 }
 
 method create () {
-    $self->logDebug("App::create()");
-
+    $self->getopts();
+    
+    $self->logDebug("");    
+    
     my $outputfile = $self->outputfile;
+    $outputfile     =   $self->appfile() if not defined $outputfile;
+    $self->logDebug("outputfile", $outputfile);
+    my $name        =   $self->name();
+    $self->logDebug("name", $name);
+    if ( not defined $name ) {
+        ($name)   =   $self->appfile()  =~  /^(.+)\.app$/;
+        $self->name($name);
+    }
+    $self->logDebug("name", $name);
+    
     $self->_confirm("Outputfile already exists. Overwrite?") if -f $outputfile and not defined $self->force();
 
-    $self->_write();        
+    $self->_write($outputfile);        
 }
 
 method copy () {
@@ -911,9 +924,11 @@ method _toExportHash ($fields) {
     #$self->logDebug("fields", $fields);
     my $hash;
     foreach my $field ( @$fields ) {
-        #$self->logDebug("field $field: self->$field()", $self->$field() );
+        next if not defined $self->$field();
+        $self->logDebug("field $field: self->$field()", $self->$field() );
         next if ref($self->$field) eq "ARRAY";
-        $hash->{$field} = $self->$field();
+        $hash->{$field} = $self->$field() if defined $self->$field();
+        #$self->logDebug("DONE hash->{$field}", $self->$field() );
     }
     #$self->logDebug("hash", $hash);
 

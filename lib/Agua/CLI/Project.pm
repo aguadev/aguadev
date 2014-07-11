@@ -260,6 +260,23 @@ AND project='$project'
         print "Project '$project' deleted from database '$database'\n";
     }
 
+	method newProject {
+		#### GET OPTS (E.G., WORKFLOW)
+		$self->_getopts();
+		
+		my $project		=	$self->name();
+		my $inputfile	=	$self->inputfile();
+		$self->logDebug("inputfile", $inputfile);
+		($project)		=	$inputfile	=~ /^(.+)\.proj$/ if not defined $project;		
+		$self->name($project);
+		#$self->logDebug("project", $project);
+		print "Project name not defined. Did you provide a project file name?\n" and exit if not defined $project;
+		my $description	=	$self->description();
+		#$self->logDebug("description", $description);
+		
+		$self->_write();
+		print "Project file printed: $inputfile\n";
+	}
 	method runProject {
 		$self->log(4);
         $self->logDebug("");
@@ -1060,7 +1077,6 @@ ORDER BY number};
 
 
     method edit () {
-        #$self->logDebug("Project::edit()");
         #$self->logDebug("self->toString():");
         #print $self->toString(), "\n";
 
@@ -1069,17 +1085,17 @@ ORDER BY number};
         
         my $field = $self->field();
         my $value = $self->value();
-        #$self->logDebug("field is not supported. Exiting") if not $self->field();
-        #$self->logDebug("field: **$field**");
-        #$self->logDebug("value: **$value**");
+        $self->logDebug("field is not defined. Exiting") if not $self->field();
+
+        $self->logDebug("field: **$field**");
+        $self->logDebug("value: **$value**");
 
         $self->_loadFile() if defined $self->inputfile();
         
         my $present = 0;
         #$self->logDebug("field: **$field**");
         #$self->logDebug("value: **$value**");
-        foreach my $currentfield ( @{$self->fields()} )
-        {
+        foreach my $currentfield ( @{$self->fields()} ) {
             #$self->logDebug("currentfield: **$currentfield**");
             $present = 1 if $field eq $currentfield;
             last if $field eq $currentfield;
@@ -1100,8 +1116,8 @@ ORDER BY number};
     method create () {
         #$self->logDebug("Project::create()");
         my $inputfile = $self->inputfile;
-        $self->logDebug("inputfile must end in '.wk'") and exit
-            if not $inputfile =~ /\.wk$/;
+        $self->logDebug("inputfile must end in '.proj'") and exit
+            if not $inputfile =~ /\.proj$/;
         $self->logDebug("inputfile not defined") and exit
             if not defined $inputfile
             or not $inputfile;
@@ -1112,15 +1128,14 @@ ORDER BY number};
         $self->_confirm("Outputfile already exists. Overwrite?") if -f $inputfile and not defined $self->force();
 
         $self->getopts();
-        if ( not $self->name() )
-        {
-            my ($name) = $self->inputfile() =~ /([^\/^\\]+)\.wk/;
+        if ( not $self->name() ) {
+            my ($name) = $self->inputfile() =~ /([^\/^\\]+)\.proj/;
             $self->name($name);
         }
         
         $self->_write();        
    
-        $self->logDebug("Created workflow ");
+        $self->logDebug("Created project ");
         $self->logDebug("self->name: '" . $self->name() . "'") if $self->name();
         $self->logDebug(": " . $self->inputfile() . "\n\n");
     }

@@ -2,6 +2,8 @@ package Agua::Ops::GitHub;
 use Moose::Role;
 use Method::Signatures::Simple;
 use JSON;
+use TryCatch;
+
 =head2
 
 	PACKAGE		Agua::Ops::GitHub
@@ -71,13 +73,6 @@ method curlCommand ($command) {
 	my ($output, $error) = $self->runCommand($command);
 	return '', $error if $output =~ /"message": "Not Found"/;
 	return $output, $error;
-}
-
-method decodeJson ($json) {
-	#$self->logDebug("json", $json);
-	$self->logError("json not defined") and exit if not defined $json;	
-	return if $json eq '';
-	return $self->parser()->decode($json);
 }
 
 method setCredentials () {
@@ -229,14 +224,29 @@ method cloneRemoteRepo ($owner, $repository, $branch, $hubtype, $login, $privacy
 	$self->logDebug("login", $login);
 	$self->logDebug("hubtype", $hubtype);
 	$self->logDebug("keyfile", $keyfile);
+	$self->logDebug("target", $target);
 
+	#### FIX ERROR: The authenticity of host 'xxx' can't be established
+	$self->disableHostKeyChecking();
 
 	my $prefix = $self->getPrefix($login, $hubtype, $keyfile, $privacy);
 
-	my $repourl	=	"https://github.com/$owner/$repository.git";
-	$repourl		=	"git\@github.com:$owner/$repository.git" if $prefix;
-	$repourl	=	"https://bitbucket.org/$owner/$repository.git" if $hubtype eq "bitbucket";
-	$repourl	=	"git\@bitbucket.org/$owner/$repository.git" if $hubtype eq "bitbucket" and $prefix;
+	my $repourl;
+	if ( $hubtype eq "bitbucket" ) {
+		if ( $target eq "latest" or $prefix ) {
+			$repourl	=	"git\@bitbucket.org:$owner/$repository.git";
+		}
+		else {
+			$repourl	=	"https://bitbucket.org/$owner/$repository.git";
+		}
+	}
+	elsif ( $hubtype eq "github" ) {
+		$repourl	=	"https://github.com/$owner/$repository.git";
+		$repourl		=	"git\@github.com:$owner/$repository.git" if $prefix;
+	}
+	else {
+		print "Ops::GitHub::cloneRemoteRepo    hubtype not supported: $hubtype\n" and exit;
+	}
 	$self->logDebug("repourl", $repourl);
 	
 	my $command = "git clone --recursive $repourl $target  2>&1 ";
@@ -250,6 +260,24 @@ method cloneRemoteRepo ($owner, $repository, $branch, $hubtype, $login, $privacy
 	return 0 if $output =~ /ERROR: Repository not found/ms
 		or $output =~ /fatal: The remote end hung up unexpectedly/;
 	return 1;
+}
+
+method disableHostKeyChecking {
+	my $homedir		=	$ENV{'HOME'};
+	my $sshconfig	=	"$homedir/.ssh/config";
+	my $found	=	"";
+	if ( -f $sshconfig ) {
+		$self->logDebug("Doing check sshconfig: $sshconfig");
+		my $command	=	qq{grep -Pzo "Host github.com\\n\\tStrictHostKeyChecking no\\n" $sshconfig};
+		($found)	=	$self->runCommand($command);
+	}
+	$self->logDebug("found", $found);
+
+	if ( $found eq "" ) {
+		my $command	=	qq{echo "Host github.com\\n\\tStrictHostKeyChecking no\\n" >> $sshconfig};
+		$self->logDebug("command", $command);
+		`$command`;
+	}
 }
 
 method fetchResetRemoteRepo ($owner, $repository, $branch, $hubtype, $login, $privacy, $keyfile) {
@@ -538,6 +566,22 @@ method parseTags ($json) {
 	$self->logDebug("tags", $tags);
 
 	return $tags;
+}
+
+method decodeJson ($json) {
+	$self->logDebug("json", $json);
+	$self->logError("json not defined") and exit if not defined $json;	
+	return if $json eq '';
+	my $data;
+	try {
+		$data 	=	$self->parser()->decode($json);
+	}
+	catch {
+		$self->logDebug("Bad JSON string", $json);
+	}
+	$self->logDebug("data", $data);
+	
+	return $data;
 }
 
 #### FORKERS/USERS

@@ -592,7 +592,8 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
     }
 
     method getopts () {
-        #$self->logDebug("Agua::CLI::Workflow::getopts()");
+		$self->log(4);
+        $self->logDebug("");
         $self->_getopts();    
         $self->initialise();
     }
@@ -688,31 +689,39 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
     }
     
     method create () {
-        #$self->logDebug("Workflow::create()");
-        my $inputfile = $self->inputfile;
+		print "here\n";
+		$self->_getopts();
+        $self->logDebug("Workflow::create()");
+        my $inputfile = $self->inputfile();
         $self->logDebug("inputfile must end in '.wk'") and exit
             if not $inputfile =~ /\.wk$/;
         $self->logDebug("inputfile not defined") and exit
             if not defined $inputfile
             or not $inputfile;
         
-        my $name = $self->name;
-        $self->logDebug("Please supply 'name' argument") and exit if not $self->name();
+        my $workflow = $self->name;
+		$self->logDebug("inputfile", $inputfile);
+		($workflow)		=	$inputfile	=~ /^(.+)\.(wk|work)$/ if not defined $workflow;		
+		$self->name($workflow);
+		#$self->logDebug("workflow", $workflow);
+		print "Workflow name not defined. Perhaps input file is not *.wk?\n" and exit if not defined $workflow;
         
         $self->_confirm("Outputfile already exists. Overwrite?") if -f $inputfile and not defined $self->force();
 
-        $self->getopts();
+        #$self->getopts();
         if ( not $self->name() )
         {
             my ($name) = $self->inputfile() =~ /([^\/^\\]+)\.wk/;
             $self->name($name);
         }
         
-        $self->_write();        
+        $self->_write($inputfile);
    
         $self->logDebug("Created workflow ");
         $self->logDebug("self->name: '" . $self->name() . "'") if $self->name();
         $self->logDebug(": " . $self->inputfile() . "\n\n");
+		
+		return 1;
     }
 
     method copy () {

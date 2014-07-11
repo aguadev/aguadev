@@ -362,24 +362,47 @@ method gitInstall ($installdir, $version) {
 		$version	=	$treeish if not defined $version;
 	}
 
+	#### REASONS WHY VERSION NOT DEFINED:
+	#### 	1. USER DID NOT PROVIDE VERSION (OR JUST PROVIDED 'max'), AND
+	#### 	2. latestVersion METHOD CAN'T ACCESS API TO GET TAGS
+	####		E.G., REPO IS PRIVATE, CLONING WITH DEPLOY KEY
+	####
+	#### IF VERSION NOT DEFINED:
+	#### 	1. CLONE REPO TO DIRECTORY latest 
+	#### 	2. GET LATEST VERSION FROM CLONED REPO
+	####	3. rm EXISTING "LATEST VERSION" DIRECTORY
+	####	4. mv DIRECTORY latest TO LATEST VERSION
+
 	#### SET VERSION
-	$self->version($version);
+	$self->version($version) if defined $version;
 
 	$self->logDebug("tag", $tag);
 	$self->logDebug("version", $version);
 
-	print "Installing version '$version' from repository '$repository'\n" if $tag ne "max";
-	print "Installing latest build of version '$version' from repository '$repository'\n" if $tag eq "max";
-
+	if ( not defined $version ) {
+		print "Installing max version of repository '$repository' (version not defined)\n";
+	}
+	elsif ( $tag ne "max" ) {
+		print "Installing version '$version' from repository '$repository'\n";
+	}
+	else {
+		print "Installing latest build of version '$version' from repository '$repository'\n";
+	}
+	
 	#### MAKE INSTALL DIRECTORY
 	$self->makeDir($installdir) if not -d $installdir;	
 	$self->logCritical("Can't create installdir", $installdir) and return 0 if not -d $installdir;
 
 	#### SET DEFAULT KEYFILE
 	$keyfile = $self->setKeyfile($username, $hubtype) if $privacy ne "public" and $keyfile eq "";
+	$self->logDebug("keyfile", $keyfile);
+	
+	#### SET CLONE DIR target
+	my $target	=	$version;
+	$target		=	"latest" if not defined $version;
 	
 	#### DELETE DIRECTORY IF EXISTS
-	my $targetdir = "$installdir/$version";
+	my $targetdir = "$installdir/$target";
 	`rm -fr $targetdir`;
 	$self->logCritical("Can't delete targetdir: $targetdir") and return 0 if -d $targetdir;
 	
@@ -388,19 +411,36 @@ method gitInstall ($installdir, $version) {
 	$self->logDebug("login", $login);
 	
 	#### UPDATE REPORT
-	$self->updateReport(["Cloning from remote repo: $repository (owner: $owner, login: $login)"]);
-	$self->logDebug("Cloning from remote repo");
+	#$self->updateReport(["Cloning from remote repo: $repository (owner: $owner, login: $login)"]);
+	$self->logDebug("Cloning from remote repo: $repository");
 	
 	#### CLONE REPO
 	$self->logDebug("Doing self->changeDir()");
 	$self->changeToRepo($installdir);
-	$self->logDebug("Doing self->cloneRemoteRepo($keyfile, $version)");
-	my $success = $self->cloneRemoteRepo($owner, $repository, $branch, $hubtype, $login, $privacy, $keyfile, $version);
+	$self->logDebug("Doing self->cloneRemoteRepo()");
+	my $success = $self->cloneRemoteRepo($owner, $repository, $branch, $hubtype, $login, $privacy, $keyfile, $target);
 	$self->logDebug("success", $success);
 	$self->logDebug("FAILED to clone repo. Returning 0") and return 0 if not $success;
 	
 	##### CHECKOUT SPECIFIC VERSION
-	if ( $tag eq "max") {
+	if ( not defined $version ) {
+		print "Version not defined. Getting latest version from cloned repo\n";
+		$self->logDebug("Doing changeToRepo targetdir", "$targetdir");
+		my $change = $self->changeToRepo($targetdir);
+		$self->logDebug("change", $change);
+		$version		=	$self->currentLocalTag();
+		$self->logDebug("version", $version);
+		$self->version($version);
+		
+		#### IF DEFINED VERSION, CHANGE TARGET DIRECTORY NAME FROM latest TO version
+		if ( defined $version ) {
+			my $command	=	"mv $targetdir $installdir/$version";
+			$self->logDebug("command", $command);
+			$self->runCommand($command);
+			$self->changeToRepo("$installdir/$version");
+		}
+	}
+	elsif ( $tag eq "max") {
 		print "Skipping checkout so repo is at latest commit\n";
 		$self->logDebug("Skipping checkout as tag is 'max'");
 	}

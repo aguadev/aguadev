@@ -137,6 +137,7 @@ method currentLocalTag () {
 	my $command = "git describe --abbrev=0 --tags";
 	$self->logDebug("command", $command);
 	my ($output) = $self->repoCommand($command);
+	$output	=~	s/\s+$//;
 	$self->logDebug("output", $output);
 	return $output;
 }
