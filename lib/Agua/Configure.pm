@@ -319,7 +319,7 @@ print "\n\n\n";
 	$self->_addLinuxUser($object);
 
 print "\n\n\n";
-print "*********    admin USER ACCOUNT SUCCESSFULLY CREATED   *********\n";
+print "*************    admin LINUX USER ACCOUNT CREATED   ************\n";
 print "****************************************************************\n";
 print "\n\n\n";
 

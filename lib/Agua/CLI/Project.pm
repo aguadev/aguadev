@@ -432,6 +432,7 @@ ORDER BY number};
 		
 		#### GET WORKFLOW
 		my $workflowhash=	$self->getWorkflow($username, $project, $workflow);		
+		print "Information for workflow not found: $workflow\n" and exit if not defined $workflowhash;
 
 		#### GET SAMPLES
 		my $sampledata	=	$self->getSampleData($username, $project);

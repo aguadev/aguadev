@@ -434,10 +434,12 @@ method gitInstall ($installdir, $version) {
 		
 		#### IF DEFINED VERSION, CHANGE TARGET DIRECTORY NAME FROM latest TO version
 		if ( defined $version ) {
-			my $command	=	"mv $targetdir $installdir/$version";
-			$self->logDebug("command", $command);
+			my $versiondir	=	"$installdir/$version";
+			my $command	=	"rm -fr $versiondir";
 			$self->runCommand($command);
-			$self->changeToRepo("$installdir/$version");
+			$command	=	"mv $targetdir $versiondir";
+			$self->runCommand($command);
+			$self->changeToRepo($versiondir);
 		}
 	}
 	elsif ( $tag eq "max") {

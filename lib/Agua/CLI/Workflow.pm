@@ -118,7 +118,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
 		$loader->saveWorkflowToDatabase($self);
     }
    
-    method run() {
+    method run {
         $self->logDebug("");
 
         $self->_loadFile();
@@ -195,7 +195,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         return 1;
     }
 
-    method setLogFile () {
+    method setLogFile {
         return $self->logfile() if $self->logfile();
         my $logfile = '';
         $logfile .= $self->outputdir() . "/" if $self->outputdir();
@@ -214,7 +214,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         $self->logfile($logfile);
     }
     
-    method loadCmd () {
+    method loadCmd {
         #$self->logDebug("App::loadCmd()");
         
         $self->_loadFile();
@@ -245,7 +245,55 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         return 1;
     }
 
-    method app() {
+    method loadScript {
+		$self->log(4);
+        $self->logDebug("");
+        
+        #$self->_loadFile();
+
+        my $cmdfile = $self->cmdfile();
+        open(FILE, $cmdfile) or die "Can't open cmdfile: $cmdfile\n";
+        $/ = undef;
+        my $content = <FILE>;
+        close(FILE) or die "Can't close cmdfile: $cmdfile\n";
+        $/ = "\n";
+        $content =~ s/,\\\n/,/gms;
+		#$self->logDebug("content", $content);
+
+		my $counter = 0;
+		my $sections;
+        #@$sections = split "\\#\\d+\\s+", $content;
+        @$sections = split "#\\s\\d+\\s", $content;
+		shift @$sections;
+		$self->logDebug("sections[0]", $$sections[0]);
+		$self->logDebug("no. sections", scalar(@$sections));
+
+        foreach my $section ( @$sections ) {
+			
+            next if $section =~ /^\s*$/;
+			
+			$counter++;
+			$self->logDebug("section $counter", $section);
+
+            require Agua::CLI::App;
+            my $app = Agua::CLI::App->new();
+            $app->getopts();
+            $app->_loadScript($section);
+            #$self->logDebug("app:");
+            #print $app->toString(), "\n";
+            $self->_addApp($app);
+
+$self->logDebug("DEBUG EXIT") and exit;
+
+
+        }
+        
+        $self->_write();
+        
+        return 1;
+    }
+
+    method app {
         #$self->logDebug("App::app()");
         $self->_loadFile() if $self->wkfile();
     
@@ -283,7 +331,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         return $return;
     }
 
-    method replace () {
+    method replace {
         $self->logDebug("Agua::CLI::Workflow::replace()");
         
         $self->_loadFile() if defined $self->appfile() and $self->appfile();
@@ -320,7 +368,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         return 1;
     }
 
-    method addApp () {
+    method addApp {
         #$self->logDebug("Workflow::addApp()");
         
         #$self->initialise();
@@ -386,7 +434,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         return $index;
     }
 
-    method moveApp () {
+    method moveApp {
         $self->logDebug("Workflow::moveApp(app)");
 
         $self->_loadFile();
@@ -417,7 +465,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
     }
 
 
-    method deleteApp () {
+    method deleteApp {
         #$self->logDebug("Workflow::deleteApp(app)");
         #$self->logDebug("app:");
         #print Dumper $app;
@@ -525,7 +573,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         $self->_write();
     }
 
-    method desc () {
+    method desc {
         $self->logDebug("Workflow::desc()");
         $self->_loadFile();
         
@@ -537,7 +585,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         return 1;
     }
 
-    method wiki () {
+    method wiki {
         #$self->logDebug("Workflow::wiki()");
         $self->_loadFile() if $self->wkfile();
 
@@ -547,7 +595,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
     }
 
 
-    method _wiki () {
+    method _wiki {
         #$self->logDebug("Workflow::_wiki()");
         my $wiki = '';
         $wiki .= "\nWorkflow:\t" . $self->name() . "\n";
@@ -570,7 +618,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
 
 
 
-    method initialise () {
+    method initialise {
         #$self->logDebug("Agua::CLI::Workflow::initialise()");
 
         $self->owner("anonymous") if not defined $self->owner();
@@ -591,14 +639,14 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
             and not $self->outputfile() =~ /\.work$/;
     }
 
-    method getopts () {
+    method getopts {
 		$self->log(4);
         $self->logDebug("");
         $self->_getopts();    
         $self->initialise();
     }
 
-    method _getopts () {
+    method _getopts {
         #$self->logDebug("Agua::CLI::Workflow::getopts()");
         my @temp = @ARGV;
         my $args = $self->args();
@@ -621,7 +669,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         @ARGV = @temp;
     }
 
-    method args() {
+    method args {
         my $meta = $self->meta();
 
         my %option_type_map = (
@@ -650,7 +698,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         return $args;
     }
 
-    method edit () {
+    method edit {
         #$self->logDebug("Workflow::edit()");
         #$self->logDebug("self->toString():");
         #print $self->toString(), "\n";
@@ -688,7 +736,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         $self->_write();
     }
     
-    method create () {
+    method create {
 		print "here\n";
 		$self->_getopts();
         $self->logDebug("Workflow::create()");
@@ -724,7 +772,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
 		return 1;
     }
 
-    method copy () {
+    method copy {
         #$self->logDebug("Workflow::copy()");
         $self->_loadFile();
         $self->name($self->newname());
@@ -763,7 +811,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         return $hash;
     }
     
-    method toHash() {
+    method toHash {
         my $hash;
         #$self->logDebug("self->started(): "), $self->started(), "\n";
         foreach my $field ( @{$self->savefields()} )
@@ -789,7 +837,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         return $hash;
     }
     
-    method toJson() {
+    method toJson {
         my $hash = $self->toHash();
         my $jsonParser = JSON->new();
     	my $json = $jsonParser->pretty->indent->encode($hash);
@@ -840,11 +888,11 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
     }
 
     
-    method read () {
+    method read {
         $self->_loadFile();
     }
     
-    method _loadFile () {
+    method _loadFile {
         #$self->logDebug("Workflow::_loadFile()");
 
         my $inputfile = $self->inputfile();
@@ -893,7 +941,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         $self->initialise();
     }
 
-    method _loadDb () {
+    method _loadDb {
         $self->logDebug("Workflow::_loadDb()");
 
         my $dbtype = $self->dbtype();
@@ -929,7 +977,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         else {	return;	}
     }    
 
-    method toString (){
+    method toString{
         return $self->_toString();
         #$self->logDebug("$output");
     }
@@ -952,7 +1000,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         close(OUT) or die "Can't close outputfile: $outputfile\n";
     }
 
-    method _toExport () {
+    method _toExport {
         my $hash = $self->exportData();
         #foreach my $field ( @{$self->exportfields()} )
         #{
@@ -980,7 +1028,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         return $json;    
     }
 
-    method _toString () {
+    method _toString {
         my $json = $self->toJson() . "\n";
         my $output = "\n\nWorkflow:\n";
         foreach my $field ( @{$self->savefields()} )
@@ -999,7 +1047,7 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         return $output;
     }
     
-    method _orderApps () {
+    method _orderApps {
     #### REDUNDANT: DEPRECATE LATER
         #$self->logDebug("Workflow::_orderApps()");
     

@@ -424,7 +424,7 @@ sub _addStage {
 	
 	#### SET TABLE AND REQUIRED FIELDS	
 	my $table = "stage";
-	my $required_fields = ["username", "owner", "project", "workflow", "workflownumber", "name", "number", "type"];
+	my $required_fields = ["username", "project", "workflow", "workflownumber", "name", "number", "type"];
 	
 	my $inserted_fields = $self->db()->fields($table);
 

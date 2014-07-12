@@ -416,6 +416,97 @@ method _loadCmd ($content) {
     
     return 1;
 }
+
+method _loadScript ($content) {
+    $self->logDebug("content", $content);
+
+	my ($name)	=	$content	=~	/^\s*(\S+)/;
+	$self->logDebug("name", $name);
+	$content	=~	s/^\s*\S+\s*\n//;
+	my $executor	=	"";
+	my $executable	=	"";
+	if ( $content =~ /^(.+?java\s+\-jar)\s+(.+?\.jar)/) {
+		$executor	=	$1;
+		$executable	=	$2;
+		$content	=~	s/^.+?java\s+\-jar\s+.+?\.jar//;
+	}
+	$self->logDebug("executor", $executor);
+	$self->logDebug("executable", $executable);
+	
+	my $tokens;
+	@$tokens	=	split " ", $content;
+	$self->logDebug("tokens", $tokens);	
+
+$self->logDebug("DEBUG EXIT") and exit;
+
+    $executable = shift @$tokens;
+	if ( $$tokens[0] =~	/^[^\-][^=]+/ ) {
+		my $param	=	"subCommand";
+		my $value	=	shift @$tokens;
+		my $ordinal	=	1;
+		my $argument	=	undef;
+		
+        my $parameter = Agua::CLI::Parameter->new(
+            param       =>  $param,
+            argument    =>  $argument,
+            value       =>  $value,
+            ordinal     =>  $ordinal
+        );
+        
+        $self->_addParam($parameter);
+	}
+	
+#    #$self->logDebug("location", $location);
+#    #$location =~ s/\s*\\s*$//;
+#    $location =~ s/^\s+//;
+#    $location =~ s/\s+$//;
+#    $location =~ s/\\$//;
+#    
+#    $self->location($location);
+##$self->logDebug("location", $location);
+#
+#    $self->logDebug("location is empty. Exiting")
+#        and exit if not $self->location();
+#    if ( not $self->name() ) {
+#        my ($name) = $location =~ /([^\/^\\]+)$/;
+#        $self->name($name);
+#    }
+#    $self->logDebug("name is empty. Exiting")
+#        and exit if not $self->name();
+#
+#    my $ordinal = scalar(@{$self->parameters()}) + 1;
+#    foreach my $line ( @lines ) {
+#        next if $line =~ /^#/ or $line =~ /^>/
+#            or $line =~ /^rem/ or $line =~ /^\s*$/;
+#        $line =~ s/^\s+//;
+#        $line =~ s/\s+$//;
+#        $line =~ s/\\$//;
+#
+#        my ($argument, $value) = $line =~ /^(\S+)\s*(.*)$/;
+#        my $param = $argument;
+#        $param =~ s/^\-+// if $param;
+#        $self->logDebug("param", $param);
+#        $self->logDebug("value", $value);
+#
+#        my $parameter = Agua::CLI::Parameter->new(
+#            param       =>  $param,
+#            argument    =>  $argument,
+#            value       =>  $value,
+#            ordinal     =>  $ordinal
+#        );
+#        
+#        $self->_addParam($parameter);
+#        
+#        $ordinal++;
+#    }
+#    $self->_orderParams();
+#
+#    $self->outputfile($self->inputfile());
+#    $self->_write() if $self->outputfile();
+    
+    return 1;
+}
+
 method loadUsage () {
 #### CONVERT '--help' USAGE OUTPUT OF APPLICATION TO PARAMS LIST
     my $usagefile = $self->usagefile();
