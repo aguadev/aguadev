@@ -50,9 +50,10 @@ where the default INSTALLDIR is "/agua".
 To install Agua with the default settings, run AS ROOT the following three scripts in succession:
 
 cd /agua/bin/scripts
+./preinstall.pl
 ./install.pl
-./config.pl
-./deploy.pl
+./configure.pl
+./deploy.pl --mode biorepo
 
 
 For details on custom options for these scripts, see the following sections.
@@ -91,12 +92,12 @@ EXAMPLE
 sudo install.pl --installdir /path/to/installdir
 
 
-2.4.2 config.pl    Configures items including the database and load balancer monitor
+2.4.2 configure.pl  Configures items including the database and load balancer monitor
                     and creates the 'admin' user.
 
 USAGE
 
-sudo ./config.pl \
+sudo ./configure.pl \
     [--mode String] 
 
     --mode config   Default 'config' mode: do all the following config tasks
@@ -106,7 +107,7 @@ sudo ./config.pl \
 
 EXAMPLE
 
-sudo ./config.pl --mode mysql
+sudo ./configure.pl --mode mysql
 
 
 2.4.3 deploy.pl    Deploys Agua dependencies (e.g., StarCluster, BioApps)
@@ -132,6 +133,12 @@ The 'mode' options are as follows:
 	--mode sge         Install the SGE (Sun Grid Engine) package
 	--mode starcluster Install the StarCluster package
 	--mode deploy      (DEFAULT) Do all of the above
+
+The script can also be used to install other, non-essential packages:
+
+	--mode install --package packagename
+                       Install the 'packagename' package
+
 
 EXAMPLE
 -------
