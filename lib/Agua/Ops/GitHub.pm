@@ -234,7 +234,7 @@ method cloneRemoteRepo ($owner, $repository, $branch, $hubtype, $login, $privacy
 
 	my $repourl;
 	if ( $hubtype eq "bitbucket" ) {
-		if ( $target eq "latest" or $prefix ) {
+		if ( $target eq "latest" or $prefix or $privacy eq "private" ) {
 			$repourl	=	"git\@bitbucket.org:$owner/$repository.git";
 		}
 		else {
