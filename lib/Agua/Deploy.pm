@@ -600,9 +600,6 @@ method sge {
 	`$command`;
 }
 
-
-
-
 #### SKELETON
 method skel {
 	my $package		=	$self->package();
@@ -637,25 +634,25 @@ method skel {
 
 method getSkelOps ($package, $version) {
 
-	my $ops			=	qq{{
-    "package"		:	"$package",
-    "repository"	:	"$package",
-    "hubtype"		:	"bitbucket",
-    "owner"			:	"",
-    "version"		:	"$version",
-    "privacy"		:	"private",
-    "description"	:	"",
-    "type"			:	"application",
-    "source"		:	"git",
-    "keywords"		:	[],
-    "url"			:	"",
-    "installtype"	:	"ops",
-    "licensefile"	:	"LICENSE",
-    "readmefile"	:	"README",
-    "authors"		:	[],
-    "website"		:	"",
-    "publication"	:	{},
-    "resources"		:	{}
+    my $ops            =    qq{{
+    "package"        :    "$package",
+    "repository"     :    "$package",
+    "hubtype"        :    "bitbucket",
+    "owner"          :    "",
+    "version"        :    "$version",
+    "privacy"        :    "private",
+    "description"    :    "",
+    "type"           :    "application",
+    "source"         :    "git",
+    "keywords"       :    [],
+    "url"            :    "",
+    "installtype"    :    "ops",
+    "licensefile"    :    "LICENSE",
+    "readmefile"     :    "README",
+    "authors"        :    [],
+    "website"        :    "",
+    "publication"    :    {},
+    "resources"      :    {}
 }};
 
 	return $ops;	

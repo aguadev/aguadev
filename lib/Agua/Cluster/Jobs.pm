@@ -296,13 +296,17 @@ sub execute {
 
 	$self->logDebug("execute(jobs, label)");
 
-	my $username = $self->username();
 	my $cluster = $self->cluster();
 	my $submit = $self->submit();
+	$self->logDebug("cluster", $cluster);
+	$self->logDebug("submit", $submit);
+
+	my $username = $self->username();
 	my $envars = $self->getEnvars($username, $cluster);
+	$self->logDebug("envars", $envars);
 
 	#### execute COMMANDS IN SERIES LOCALLY IF cluster NOT DEFINED
-	if ( not defined $envars or not $submit or not $cluster )
+	if ( not defined $envars or not defined $submit or not $cluster )
 	{
 		$self->logDebug("Doing executeLocal(jobs, label)");
 		$self->executeLocal($jobs, $label);
@@ -584,8 +588,14 @@ sub setJob {
 	my $stdoutfile		=	shift;
 	my $stderrfile		=	shift;
 	my $lockfile		=	shift;
-	$self->logDebug("label", $label);
-	$self->logDebug("outputdir", $outputdir);
+	#$self->logDebug("label", $label);
+	#$self->logDebug("outputdir", $outputdir);
+	#$self->logDebug("commands: @$commands");
+
+	#### SANITY CHECK
+	$self->logCritical("commands not defined") and exit if not defined $commands;
+	$self->logCritical("label not defined") and exit if not defined $label;
+	$self->logCritical("outputdir not defined") and exit if not defined $outputdir;
 
 	#### SET DIRS
 	my $scriptdir = "$outputdir/scripts";
@@ -605,17 +615,7 @@ sub setJob {
 	$stdoutfile = "$stdoutdir/$label.out" if not defined $stdoutfile;
 	$stderrfile = "$stdoutdir/$label.err" if not defined $stderrfile;
 	$lockfile = "$lockdir/$label.lock" if not defined $lockfile;
-
-	$self->logDebug("Agua::Cluster::Jobs::setJob(commands, $label, $outputdir)");
-	$self->logDebug("commands: @$commands");
-	$self->logDebug("label", $label);
-	$self->logDebug("outputdir", $outputdir);
 	
-	#### SANITY CHECK
-	$self->logCritical("commands not defined") and exit if not defined $commands;
-	$self->logCritical("label not defined") and exit if not defined $label;
-	$self->logCritical("outputdir not defined") and exit if not defined $outputdir;
-
 	#### SET JOB LABEL, COMMANDS, ETC.
 	my $job;
 	$job->{label} = $label;
@@ -626,8 +626,7 @@ sub setJob {
 	$job->{stderrfile} = $stderrfile;
 	$job->{lockfile} = $lockfile;
 	
-	$self->logDebug("job", $job);
-	
+	#$self->logDebug("job", $job);	
 	
 	return $job;
 }

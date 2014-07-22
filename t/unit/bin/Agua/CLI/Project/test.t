@@ -8,7 +8,8 @@ BEGIN
 {
     my $installdir = $ENV{'installdir'} || "/agua";
     unshift(@INC, "$installdir/lib");
-    unshift(@INC, "$installdir/lib/external/lib/perl5");
+    unshift(@INC, "$installdir/t/common/lib");
+    unshift(@INC, "$installdir/t/unit/lib");
 }
 
 #### CREATE OUTPUTS DIR
@@ -92,8 +93,11 @@ $object->startLog($object->logfile());
 #### SAVE WORKFLOW
 #$object->testSaveWorkflow();
 
-#### DELETE
-$object->testDelete();
+##### DELETE
+#$object->testDelete();
 
-#### CLEAN UP
-`rm -fr $Bin/outputs/*`
+#### LOAD SCRIPT
+$object->testLoadScript();
+
+##### CLEAN UP
+#`rm -fr $Bin/outputs/*`

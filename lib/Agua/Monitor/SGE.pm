@@ -345,6 +345,8 @@ method submitJob ($job) {
 	$batch = '' if not defined $batch;
 	my $scriptfile 	= 	$job->{scriptfile};
 	my $qsub 		=	$job->{qsub};
+	#$self->logDebug("qsub", $qsub);
+	
 	my $walltime 	=	$job->{walltime};
 
 	#### CHECK INPUTS

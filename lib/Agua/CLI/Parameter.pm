@@ -9,17 +9,17 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
     use Data::Dumper;
 
     #### LOGGER
-    has 'log'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
+    has 'log'			=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
     has 'printlog'		=> ( isa => 'Int', is => 'rw', default 	=> 	5 	);
     has 'logfile'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
-    has 'force'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
+    has 'force'			=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
 
     #### RUN CONFIGURATION VARIABLES
     has 'locked'		=> ( isa => 'Undef|Int', is => 'rw', required	=>	0	);
     has 'param'	    	=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 1, documentation => q{Name of the parameter}  );
     has 'owner'	    	=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous', documentation => q{Owner of this object} );
     has 'argument'		=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0 );
-    has 'paramtype'	    => ( isa => 'Str|Undef', is => 'rw', default => undef, default	=> 'input', documentation => q{Three possible param types: input, resource or output} );
+    has 'paramtype'	    => ( isa => 'Str|Undef', is => 'rw', default => undef, documentation => q{Three possible param types: input, resource or output} );
     has 'valuetype'	    => ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0, documentation => q{Possible types: file, files, directory, directories, integer, string or flag} );
     has 'category'		=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0, documentation => q{User-defined category for parameter to be used with input/output chaining} );
     has 'ordinal'		=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0, documentation => q{Set order of appearance: 1, 2, ..., N} );
@@ -42,7 +42,7 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
     has 'from'			=> ( isa => 'Str', is => 'rw', required => 0 );
     has 'to'			=> ( isa => 'Str', is => 'rw', required => 0 );
     has 'field'	    	=> ( isa => 'Str', is => 'rw', required => 0 );
-    has 'fields'    	=> ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { ['param', 'paramtype', 'valuetype', 'category', 'ordinal', 'argument', 'value', 'discretion', 'format', 'description', 'args', 'inputParams', 'paramFunction', 'paramfile', 'newname', 'inputfile', 'outputfile', 'outputdir', 'from', 'to', 'field', 'ordinal', 'locked', 'chained'] } );
+    has 'fields'    	=> ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { ['ordinal', 'param', 'paramtype', 'valuetype', 'category', 'argument', 'value', 'discretion', 'format', 'description', 'args', 'inputParams', 'paramFunction', 'paramfile', 'newname', 'inputfile', 'outputfile', 'outputdir', 'from', 'to', 'field', 'locked', 'chained'] } );
     has 'savefields'    => ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { ['param', 'paramtype', 'valuetype', 'category', 'ordinal', 'argument', 'value', 'discretion', 'format', 'description', 'args', 'inputParams', 'paramFunction', 'locked', 'chained'] } );
     has 'exportfields'  => ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { [ 'param', 'paramtype', 'valuetype', 'category', 'ordinal', 'argument', 'value', 'discretion', 'format', 'description', 'args', 'inputParams', 'paramFunction', 'locked', 'chained'] } );
     has 'paramfile'		=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => undef );
@@ -58,7 +58,7 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
         $self->initialise();
     }
     
-    method initialise () {
+    method initialise {
         #$self->owner("anonymous") if not defined $self->owner();
         $self->inputfile($self->paramfile()) if defined $self->paramfile() and $self->paramfile();
         #$self->logDebug("self->inputfile(): "), $self->inputfile(), "\n";
@@ -73,7 +73,7 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
             and not $self->outputfile() =~ /\.param$/;
     }
     
-    method getopts () {
+    method getopts {
         #$self->logDebug("Agua::CLI::Parameter::getopts()");
         #$self->logDebug("Agua::CLI::Parameter::getopts    ARGV: @ARGV");
         my @temp = @ARGV;
@@ -102,7 +102,7 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
     }
 
 
-    method arguments() {
+    method arguments {
         my $meta = $self->meta();
 
         my %option_type_map = (
@@ -133,7 +133,7 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
 
 
 
-    method desc () {
+    method desc {
         $self->logDebug("Parameter::desc()");
         $self->_loadFile();
         
@@ -146,7 +146,7 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
         $self->logDebug("$field: ") , $self->$field(), "\n";
     }
 
-    method edit () {
+    method edit {
         $self->logDebug("Agua::CLI::Parameter::edit()");
         $self->logDebug("self->toString() :");
         print $self->toString() ;
@@ -177,7 +177,7 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
 		return 1;
     }
 
-    method replace () {
+    method replace {
         $self->logDebug("Parameter::replace()");
         
         my $from = $self->from();
@@ -202,7 +202,7 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
     }
     
 
-    method create () {
+    method create {
         $self->log(4);
 		$self->getopts();
 		$self->logDebug();
@@ -221,7 +221,7 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
         $self->_write();        
     }
 
-    method copy () {
+    method copy {
         #$self->logDebug("Parameter::copy()");
         
         $self->_loadFile();
@@ -239,7 +239,7 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
         $self->_write();        
     }
 
-    method toHash() {
+    method toHash {
         my $hash;
         foreach my $field ( @{$self->savefields()} )
         {
@@ -254,11 +254,17 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
         return $hash;
     }
 
-    method _exportParam() {
+    method _exportParam {
+		#$self->log(4);
+		#$self->logDebug("");
+		
         my $hash;
-        foreach my $field ( @{$self->exportfields()} )
-        {
+        foreach my $field ( @{$self->exportfields()} ) {
+			#$self->logDebug("self->$field()", $self->$field());
             next if ref($self->$field) eq "ARRAY";
+
+			next if not defined $self->$field();
+			
             $hash->{$field} = $self->$field();
         }
 
@@ -277,7 +283,7 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
     }
 
     method _toExportHash ($fields) {
-		$self->logDebug("fields", $fields);
+		#$self->logDebug("fields", $fields);
         my $hash;
         foreach my $field ( @$fields ) {
             next if ref($self->$field) eq "ARRAY";
@@ -289,7 +295,7 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
         return $hash;
     }
     
-    method toJson() {
+    method toJson {
         my $hash = $self->toHash();
         my $jsonParser = JSON->new();
     	my $json = $jsonParser->pretty->indent->encode($hash);
@@ -307,7 +313,7 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
         return $first . $spaces . $second;
     }
     
-    method _write() {
+    method _write {
         my $json = $self->toJson();
         $self->logDebug("json:");
         print Dumper  $json;
@@ -323,7 +329,7 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
         close(OUT) or die "Can't close outputfile: $outputfile\n";
     }
 
-    method _loadFile () {
+    method _loadFile {
         #$self->logDebug("Parameter::_loadFile()");
         #$self->logDebug("self->toString()");
         #print $self->toString(), "\n";
@@ -371,12 +377,12 @@ class Agua::CLI::Parameter with (Agua::CLI::Logger) {
         else {	return;	}
     }    
 
-    method toString (){
+    method toString{
         return $self->_toString();
         #$self->logDebug("$output");
     }
 
-    method _toString () {
+    method _toString {
         my $json = $self->toJson() . "\n";
         my $output = "\n  Parameter:\n";
         foreach my $field ( @{$self->fields()} )

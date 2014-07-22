@@ -2,7 +2,7 @@ use MooseX::Declare;
 use Method::Signatures::Simple;
 
 class Test::Agua::CLI::Project with (Test::Agua::Common::Database,
-	Test::Common,
+	Test::Agua::Common::Util,
 	Agua::Common::Database,
 	Agua::Common::Base,
 	Agua::Common::Package,
@@ -111,6 +111,34 @@ method setInstallDir ($username, $owner, $package, $type) {
 }
 
 #### WORKFLOWS
+
+method testLoadScript {
+	my $inputdir	=	"$Bin/inputs/conf";
+	my $outputdir	=	"$Bin/outputs/conf";
+	`rm -fr $outputdir` if -d $outputdir;
+	`mkdir $outputdir`;
+	
+	my $inputdatadir	=	"$Bin/inputs/data";
+	my $outputdatadir	=	"$Bin/outputs/data";
+	`rm -fr $outputdatadir` if -d $outputdatadir;
+	`cp -r $inputdatadir $outputdatadir`;
+
+	my $inputfile	=	"$Bin/outputs/conf/NRC.proj";
+	my $cmdfile		=	"$Bin/outputs/data/sh/script.sh";
+	my $name		=	"NRC";
+	my $description	=	"National Research Council (Canada) ovarian cancer analysis pipeline";
+	$self->inputfile($inputfile);
+	$self->cmdfile($cmdfile);
+	$self->name($name);
+	$self->description($description);
+	
+	$self->loadScript();
+	my $diff	=	$self->diff($inputdir, $outputdir);
+	$self->logDebug("diff", $diff);
+	
+	ok($diff, "*.proj and *.work files created");
+}
+
 method testDelete {
 	
 	##### INCOMPLETE ######

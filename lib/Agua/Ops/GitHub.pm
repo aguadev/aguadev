@@ -227,9 +227,10 @@ method cloneRemoteRepo ($owner, $repository, $branch, $hubtype, $login, $privacy
 	$self->logDebug("target", $target);
 
 	#### FIX ERROR: The authenticity of host 'xxx' can't be established
-	$self->disableHostKeyChecking();
+	$self->disableHostKeyChecking($hubtype);
 
 	my $prefix = $self->getPrefix($login, $hubtype, $keyfile, $privacy);
+	$self->logDebug("prefix", $prefix);
 
 	my $repourl;
 	if ( $hubtype eq "bitbucket" ) {
@@ -262,7 +263,12 @@ method cloneRemoteRepo ($owner, $repository, $branch, $hubtype, $login, $privacy
 	return 1;
 }
 
-method disableHostKeyChecking {
+method disableHostKeyChecking ($hubtype) {
+	$self->logDebug("hubtype", $hubtype);
+	
+	my $host		=	"github.com";
+	$host			=	"bitbucket.org" if $hubtype eq "bitbucket";
+	
 	my $homedir		=	$ENV{'HOME'};
 	my $sshconfig	=	"$homedir/.ssh/config";
 	my $found	=	"";

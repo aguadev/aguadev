@@ -7,11 +7,9 @@ use Moose::Role;
 	
 	PURPOSE
 	
-		CLUSTER METHODS FOR Agua::Common
+		SUN GRID ENGINE METHODS FOR Agua::Common
 		
 =cut
-#our $LOG = 0;
-##$LOG = 1;
 
 # STRINGS
 has 'project'	=> ( isa => 'Str|Undef', is => 'rw', required => 0 );

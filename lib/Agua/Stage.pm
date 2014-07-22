@@ -175,6 +175,13 @@ method runLocally {
 	my $arguments = $self->setArguments($stageparameters);
 	$self->logDebug("$$ arguments: @$arguments");
 
+	#### ADD USAGE COMMAND
+	my $usagefile	=	$self->stdoutfile();
+	$usagefile		=~	s/stdout$/usage/;
+	my $usagecommand	=	qq{time /usr/bin/time \\
+-o $usagefile \\
+-f "%Uuser %Ssystem %Eelapsed %PCPU (%Xtext+%Ddata %Mmax)k "};
+
 	#### ADD PERL5LIB FOR EXTERNAL SCRIPTS TO FIND Agua MODULES
 	my $aguadir = $self->conf()->getKey("agua", 'INSTALLDIR');
 	my $perl5lib = "$aguadir/lib";
@@ -189,26 +196,33 @@ method runLocally {
 	
 	#### SET EXECUTOR AND FILE EXPORTS
 	my $executor = $self->executor();
-	if ( $executor =~ /^\S+\.sh\s+&&\s*/ ) {
+	$self->logDebug("executor", $executor);
+	if ( $executor =~ /^\S+\.sh\s+&+\s*/ ) {
 		my ($file)	=	$executor	=~ /^(\S+\.sh)/;
-		$executor	=~ s/^\S+\.sh\s+&&\s*//;
+		$self->logDebug("file", $file);
+		$executor	=~ s/^\S+\.sh\s+&+\s*//;
 		my $fileexports	=	$self->getFileExports($file);
 		$prefix .= $fileexports if defined $fileexports;
 	}
 	$prefix .= $executor;
-	#$self->logDebug("$$ self->prefix(): " . $prefix);
+	$self->logDebug("$$ self->prefix(): " . $prefix);
 	
+#$self->logDebug("DEBUG EXIT") and exit;
+
 	#### PREFIX APPLICATION PATH WITH PACKAGE INSTALLATION DIRECTORY
 	my $application = $self->installdir() . "/" . $self->location();	
 	#$self->logDebug("$$ application", $application);
 	
 	#### SET SYSTEM CALL
-	my @system_call = ($prefix, $application, @$arguments);
+	my @system_call = ($prefix, $usagecommand, $application, @$arguments);
 
+	####
+	my $redirection	=	$self->containsRedirection(\@system_call);
+	
 	#### SET STDOUT AND STDERR FILES
 	my $stdoutfile = $self->stdoutfile;
 	my $stderrfile = $self->stderrfile;
-	push @system_call, "1> $stdoutfile" if defined $stdoutfile;
+	push @system_call, "1> $stdoutfile" if defined $stdoutfile and not $redirection;
 	push @system_call, "2> $stderrfile" if defined $stderrfile;
 	$self->logDebug("$$ system_call: @system_call");
 
@@ -268,7 +282,7 @@ method runLocally {
 	my $set = qq{
 	status='running',
 started=$now,
-queued='',
+queued=$now,
 completed=''};
 	$self->setFields($set);
 	
@@ -291,13 +305,23 @@ completed=''};
 		$self->setStatus('completed') ;
 	}
 	else {
-		$self->setStatus('error') if not defined $exitcode;
+		$self->setStatus('error');
 	}
 	$exitcode	=~ 	s/\s+$// if defined $exitcode;
 
 	$self->logDebug("$$ Returning exitcode", $exitcode);
 
 	return $exitcode;
+}
+
+method containsRedirection ($arguments) {
+	return if not defined $arguments or not @$arguments;
+	
+	foreach my $argument ( @$arguments ) {
+		return 1 if $argument eq ">";
+	}
+	
+	return 0;
 }
 
 method getFileExports ($file) {
@@ -328,7 +352,6 @@ method setStageJob {
 			outputfile	:	Location of outputfile
 
 =cut
-	$self->logDebug();
 
 	#### CLUSTER MONITOR
 	my $monitor		=	$self->monitor();	
@@ -343,7 +366,7 @@ method setStageJob {
 	my $qstat		= $self->qstat();
 	my $qsub		= $self->qsub();
 	my $workflowpid = $self->workflowpid();
-    $self->logDebug("$$ cluster", $cluster);
+    #$self->logDebug("$$ cluster", $cluster);
 
 	#### SET DEFAULTS
 	$queue = '' if not defined $queue;
@@ -367,17 +390,17 @@ method setStageJob {
 	#### SET EXECUTOR
 	my $executor	.=	"export PERL5LIB=$perl5lib; ";
 	$executor 		.= 	$self->executor() if $self->executor();
-	$self->logDebug("$$ self->executor(): " . $self->executor());
+	#$self->logDebug("$$ self->executor(): " . $self->executor());
 
 	#### SET APPLICATION
 	my $application = $self->installdir() . "/" . $self->location();	
-	$self->logDebug("$$ application", $application);
+	#$self->logDebug("$$ application", $application);
 
 	#### ADD THE INSTALLDIR IF THE LOCATION IS NOT AN ABSOLUTE PATH
-	$self->logDebug("$$ installdir", $installdir);
+	#$self->logDebug("$$ installdir", $installdir);
 	if ( $application !~ /^\// and $application !~ /^[A-Z]:/i ) {
 		$application = "$installdir/bin/$application";
-		$self->logDebug("$$ Added installdir to stage_arguments->{location}: " . $application);
+		#$self->logDebug("$$ Added installdir to stage_arguments->{location}: " . $application);
 	}
 
 	#### SET SYSTEM CALL
@@ -386,17 +409,17 @@ method setStageJob {
 	
     #### GET OUTPUT DIR
     my $outputdir = $self->outputdir();
-    $self->logDebug("$$ outputdir", $outputdir);
+    #$self->logDebug("$$ outputdir", $outputdir);
 
 	#### SET JOB NAME AS project-workflow-number
 	my $label =	$project;
 	$label .= "-" . $workflownumber;
 	$label .= "-" . $workflow;
 	$label .= "-" . $number;
-    $self->logDebug("$$ label", $label);
+    #$self->logDebug("$$ label", $label);
 	
 	my $samplehash	=	$self->samplehash();
-	$self->logDebug("samplehash", $samplehash);
+	$self->logNote("samplehash", $samplehash);
 	if ( defined $samplehash ) {
 		my $id		=	$samplehash->{sample};
 		$label		=	"sample-$id.$label";
@@ -590,11 +613,11 @@ method setArguments ($stageparameters) {
 	$self->logNote("username", $username);
 	$self->logNote("cluster", $cluster);
 	$self->logNote("fileroot", $fileroot);
-	$self->logDebug("version", $version);
+	$self->logNote("version", $version);
 	
 	#### SORT BY ORDINALS
 	@$stageparameters = sort { $a->{ordinal} cmp $b->{ordinal} } @$stageparameters;
-	#$self->logDebug("SORTED stageparameters", $stageparameters);
+	#$self->logNote("SORTED stageparameters", $stageparameters);
 	
 	#### GENERATE ARGUMENTS ARRAY
 	#$self->logNote("Generating arguments array...");
@@ -609,7 +632,7 @@ method setArguments ($stageparameters) {
 		my $discretion 	=	$stageparameter->{discretion};
 
 		my $samplehash	=	$self->samplehash();
-		#$self->logDebug("samplehash", $samplehash);
+		#$self->logNote("samplehash", $samplehash);
 
 		$value	=~	s/<VERSION>/$version/g if defined $version;
 
@@ -617,12 +640,12 @@ method setArguments ($stageparameters) {
 			foreach my $key ( keys %$samplehash ) {
 				my $match	=	uc($key);
 				my $mate	=	$samplehash->{$key};
-				#$self->logDebug("key", $key);
-				#$self->logDebug("match", $match);
-				#$self->logDebug("mate", $mate);
-				#$self->logDebug("DOING MATCH $match / $mate");
+				#$self->logNote("key", $key);
+				#$self->logNote("match", $match);
+				#$self->logNote("mate", $mate);
+				#$self->logNote("DOING MATCH $match / $mate");
 				$value	=~	s/<$match>/$mate/g;
-				#$self->logDebug("AFTER MATCH value: $value");
+				#$self->logNote("AFTER MATCH value: $value");
 			}
 		}
 	
@@ -682,9 +705,13 @@ method setArguments ($stageparameters) {
 				$value = join ",", @subvalues;
 			}
 
-			#### SINGLE '-' OPTIONS (E.G., -i)
-			if ( $argument =~ /^\-[^\-]/ )
-			{
+			#### 'X=' OPTIONS
+			if ( $argument =~ /=$/ ) {
+				push @$arguments, qq{$argument$value};
+			}
+
+			#### '-' OPTIONS (E.G., -i)
+			elsif ( $argument =~ /^\-[^\-]/ ) {
 				push @$arguments, qq{$argument $value};
 			}
 			
@@ -713,7 +740,7 @@ method setArguments ($stageparameters) {
 		}
 	}
 
-	$self->logDebug("arguments", $arguments);
+	$self->logNote("arguments", $arguments);
 
 	return $arguments;
 }

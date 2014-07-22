@@ -23,32 +23,32 @@ class Agua::CLI::Project with (Logger, Agua::CLI::Timer, Agua::CLI::Util, Agua::
     has 'maxjobs'	=> ( isa => 'Int', is => 'rw', default 	=> 	10 	);
 
     #### STORED LOGISTICS VARIABLES
-    has 'owner'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous' );
-    has 'username'	=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous' );
-    has 'database'	=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => 'anonymous' );
+    has 'owner'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => undef );
+    has 'username'	=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => undef );
+    has 'database'	=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => undef );
     has 'name'		=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'workflow'	=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'number'	=> ( isa => 'Int|Undef', is => 'rw', default    =>  1	);
     has 'type'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, documentation => q{User-defined workflow type} );
-    has 'description'=> ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'notes'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
+    has 'description'=> ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'notes'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
     has 'ordinal'	=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0, documentation => q{Set order of appearance: 1, 2, ..., N} );
     has 'workflows'	 => ( isa => 'ArrayRef[Agua::CLI::Workflow]', is => 'rw', default => sub { [] } );
-    has 'provenance' => ( isa => 'Str|Undef', is => 'rw', required	=>	0, default => '');
+    has 'provenance' => ( isa => 'Str|Undef', is => 'rw', required	=>	0, default => undef);
     has 'scheduler'	 => ( isa => 'Str|Undef', is => 'rw', required	=>	0);
     has 'samplestring' => ( isa => 'Str|Undef', is => 'rw', required => 0 );
     
     #### STORED STATUS VARIABLES
-    has 'status'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'locked'	    => ( isa => 'Int|Undef', is => 'rw', default => 0 );
-    has 'queued'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'started'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'stopped'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'duration'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'epochqueued'	=> ( isa => 'Maybe', is => 'rw', default => 0 );
-    has 'epochstarted'	=> ( isa => 'Int|Undef', is => 'rw', default => 0 );
-    has 'epochstopped'  => ( isa => 'Int|Undef', is => 'rw', default => 0 );
-    has 'epochduration'	=> ( isa => 'Int|Undef', is => 'rw', default => 0 );
+    has 'status'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'locked'	    => ( isa => 'Int|Undef', is => 'rw', default => undef );
+    has 'queued'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'started'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'stopped'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'duration'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'epochqueued'	=> ( isa => 'Maybe', is => 'rw', default => undef );
+    has 'epochstarted'	=> ( isa => 'Int|Undef', is => 'rw', default => undef );
+    has 'epochstopped'  => ( isa => 'Int|Undef', is => 'rw', default => undef );
+    has 'epochduration'	=> ( isa => 'Int|Undef', is => 'rw', default => undef );
     
     #### CONSTANTS
     has 'indent'    => ( isa => 'Int', is => 'ro', default => 15);
@@ -101,7 +101,7 @@ class Agua::CLI::Project with (Logger, Agua::CLI::Timer, Agua::CLI::Util, Agua::
     method initialise {
         $self->logCaller("");
 
-        $self->owner("anonymous") if not defined $self->owner();
+        $self->owner($self->username()) if not defined $self->owner();
         $self->inputfile($self->projfile()) if defined $self->projfile() and $self->projfile() ne "";
         
         $self->logDebug("Doing self->setDbh");
@@ -115,7 +115,7 @@ class Agua::CLI::Project with (Logger, Agua::CLI::Timer, Agua::CLI::Util, Agua::
             if $self->outputfile()
             and not $self->outputfile() =~ /\.proj$/;
 
-        $self->read();
+        #$self->read();
     }
 
     method getopts {
@@ -215,6 +215,9 @@ class Agua::CLI::Project with (Logger, Agua::CLI::Timer, Agua::CLI::Util, Agua::
     }
 
     method delete {
+        #### READ INPUTFILE
+        $self->read();
+
         #### REMOVE PROJECT FROM ALL DATABASE TABLES
         my $username    =   $self->setUsername();
         my $owner       =   $username;
@@ -277,10 +280,74 @@ AND project='$project'
 		$self->_write();
 		print "Project file printed: $inputfile\n";
 	}
+
+    method loadScript {
+		$self->log(4);
+        $self->logDebug("");
+
+        my $cmdfile = $self->cmdfile();
+		$self->logDebug("cmdfile", $cmdfile);
+        open(FILE, $cmdfile) or die "Can't open cmdfile: $cmdfile\n";
+        $/ = undef;
+        my $content = <FILE>;
+        close(FILE) or die "Can't close cmdfile: $cmdfile\n";
+        $/ = "\n";
+        $content =~ s/,\\\n/,/gms;
+		#$self->logDebug("content", $content);
+
+		my $sections;
+        @$sections = split "####\\s+", $content;
+		shift @$sections;
+		$self->logDebug("sections[0]", $$sections[0]);
+		$self->logDebug("no. sections", scalar(@$sections));
+
+		#### SET OUTPUT DIR		
+		my $inputfile	=	$self->inputfile();
+		my ($outputdir)	=	$inputfile	=~	/^(.+?)\/[^\/]+$/;
+		$outputdir		=	"." if not defined $outputdir;
+
+		my $number		=	0;
+		for ( my $i = 0; $i < @$sections; $i++ ) {
+
+			my $section =	$$sections[$i];
+			
+            next if $section =~ /^\s*$/;
+			
+			$number++;
+			$self->logDebug("section $number", $section);
+
+			my ($name)	=	$section	=~	/^(\S+)/;
+			$self->logDebug("name", $name);
+			
+            require Agua::CLI::Workflow;
+            my $workflow = Agua::CLI::Workflow->new({
+				name	=>	$name,
+				number	=>	$number
+			});
+
+            $workflow->_loadScript($section);
+	        $workflow->_write("$outputdir/$number-$name.work");
+		
+            #$self->logDebug("workflow:");
+            #print $workflow->toString(), "\n";
+            $self->_addWorkflow($workflow);
+        }
+        
+		#$self->logDebug("outputfile", $self->inputfile());
+        $self->_write();
+        
+		print "Printed project file: ", $self->inputfile(), "\n";
+
+        return 1;
+    }
+
 	method runProject {
 		$self->log(4);
         $self->logDebug("");
 		
+        #### READ INPUTFILE
+        $self->read();
+
 		#### GET OPTS (E.G., WORKFLOW)
 		$self->_getopts();
 		
@@ -301,17 +368,19 @@ AND project='$project'
 
 		#### GET SAMPLES
 		my $sampledata	=	$self->getSampleData($username, $project);
-		print "Number of samples: ", scalar(@$sampledata), "\n" if defined $sampledata;
-
+		print "*** NUMBER SAMPLES ***", scalar(@$sampledata), "\n" if defined $sampledata;
+		print "**** ZERO SAMPLES ****\n" if not defined $sampledata;
+	
+	
 		if ( defined $samplehash ) {
 			foreach my $workflowhash ( @$workflowhashes ) {
 				$self->_runWorkflow($workflowhash, $samplehash);
 			}
 		}
 		elsif ( defined $sampledata ) {
-			#my $maxjobs  =	5;
-			#if ( not defined $maxjobs ) {
-			#
+			my $maxjobs  =	2;
+			if ( not defined $maxjobs ) {
+			
 				foreach my $samplehash ( @$sampledata ) {
 					$self->logDebug("Running workflow with samplehash", $samplehash);
 					print "Doing _runWorkflow using sample: ", $samplehash->{sample}, "\n";
@@ -324,14 +393,14 @@ AND project='$project'
 							return if $success == 0;
 					}
 				}
-			#}
-			#else {
-				#foreach my $workflowhash ( @$workflowhashes ) {
-				#	$self->logDebug("DOING _runSampleWorkflow");
-				#	my $success	=	$self->_runSampleWorkflow($workflowhash, $sampledata);
-				#	$self->logDebug("success", $success);
-				#}
-			#}
+			}
+			else {
+				foreach my $workflowhash ( @$workflowhashes ) {
+					$self->logDebug("DOING _runSampleWorkflow");
+					my $success	=	$self->_runSampleWorkflow($workflowhash, $sampledata);
+					$self->logDebug("success", $success);
+				}
+			}
 		}
 		else {
 			#print "Running workflow $workflow\n";
@@ -346,11 +415,6 @@ AND project='$project'
 		$self->logDebug("username", $username);
 		$self->logDebug("project", $project);
 		
-		#### GET SAMPLES
-		my $sampledata	=	$self->getSampleData($username, $project);
-		#$self->logDebug("Number of samples", scalar(@$sampledata));
-		print "Number of samples: ", scalar(@$sampledata), "\n" if defined $sampledata;
-	
 		my $samplestring	=	$self->samplestring();
 		$self->logDebug("samplestring", $samplestring);
 		if ( defined $samplestring ) {
@@ -362,7 +426,7 @@ AND project='$project'
 	
 	method convertSamplehash ($samplehash) {
 		my @entries	=	split "\\|", $samplehash;
-		$self->logDebug("entries", \@entries);
+		#$self->logDebug("entries", \@entries);
 		
 		my $hash	=	{};
 		foreach my $entry ( @entries ) {
@@ -374,10 +438,13 @@ AND project='$project'
 	}
 
 	method getSampleData ($username, $project) {
+		$self->logDebug("username", $username);
+		$self->logDebug("project", $project);
+
 		my $query		=	qq{SELECT sampletable FROM sampletable
 WHERE username='$username'
 AND project='$project'};
-		#$self->logDebug("query", $query);
+		$self->logDebug("query", $query);
 
 		my $table	=	$self->db()->query($query);
 		$self->logDebug("table", $table);
@@ -385,9 +452,8 @@ AND project='$project'};
 		
 		$query			=	qq{SELECT * FROM $table
 WHERE username='$username'
-AND project='$project'
-AND sample !=""};
-		#$self->logDebug("query", $query);
+AND project='$project'};
+		$self->logDebug("query", $query);
 
 		my $sampledata	=	$self->db()->queryhasharray($query);
 		#$self->logDebug("sampledata", $sampledata);
@@ -412,6 +478,9 @@ ORDER BY number};
     method runWorkflow {
 		#$self->log(4);
         $self->logDebug("");
+
+        #### READ INPUTFILE
+        $self->read();
 
 		#### GET OPTS (E.G., WORKFLOW)
 		$self->_getopts();
@@ -539,6 +608,9 @@ ORDER BY number};
     method saveWorkflow {
         $self->logDebug("");
 
+        #### READ INPUTFILE
+        $self->read();
+
         #### SET USERNAME AND OWNER
         my $username    =   $self->setUsername();
         my $owner       =   $username;
@@ -618,7 +690,7 @@ ORDER BY number};
             $self->_saveWorkflow($workflowobject);
         }
     }
-    method run() {
+    method run {
         $self->logDebug("Project::run(app)");
 
         $self->_loadFile();
@@ -695,7 +767,7 @@ ORDER BY number};
         return 1;
     }
 
-    method setLogFile () {
+    method setLogFile {
         return $self->logfile() if $self->logfile();
         my $logfile = '';
         $logfile .= $self->outputdir() . "/" if $self->outputdir();
@@ -714,7 +786,7 @@ ORDER BY number};
         $self->logfile($logfile);
     }
     
-    method loadCmd () {
+    method loadCmd {
         #$self->logDebug("Workflow::loadCmd()");
         
         $self->_loadFile();
@@ -745,7 +817,7 @@ ORDER BY number};
         return 1;
     }
 
-    method app() {
+    method app {
         $self->logDebug("Workflow::app()");
    
 =HEAD2
@@ -789,7 +861,7 @@ ORDER BY number};
 
     }
 
-    method replace () {
+    method replace {
         $self->logDebug("Agua::CLI::Project::replace()");
         
         $self->_loadFile() if defined $self->workflowfile() and $self->workflowfile();
@@ -813,6 +885,10 @@ ORDER BY number};
     }
 
     method loadWorkflow ($workflow) {
+
+		#### READ INPUTFILE
+        $self->read();
+
         $self->logDebug("");        
         $self->_addWorkflow($workflow);
         my $name = $workflow->name();
@@ -893,8 +969,8 @@ ORDER BY number};
         return $index;
     }
 
-    method moveWorkflow () {
-        $self->logDebug("Project::moveWorkflow(app)");
+    method moveWorkflow {
+        $self->logDebug("Project::moveWorkflow(workflow, index)");
 
         $self->_loadFile();
 
@@ -924,7 +1000,7 @@ ORDER BY number};
     }
 
 
-    method deleteWorkflow () {
+    method deleteWorkflow {
         #$self->logDebug("Project::deleteWorkflow(app)");
         #$self->logDebug("app:");
         #print Dumper $workflow;
@@ -1032,7 +1108,7 @@ ORDER BY number};
         $self->_write();
     }
 
-    method desc () {
+    method desc {
         $self->logDebug("Project::desc()");
         $self->_loadFile();
         
@@ -1044,7 +1120,7 @@ ORDER BY number};
         return 1;
     }
 
-    method wiki () {
+    method wiki {
         #$self->logDebug("Project::wiki()");
         $self->_loadFile() if $self->projfile();
 
@@ -1054,7 +1130,7 @@ ORDER BY number};
     }
 
 
-    method _wiki () {
+    method _wiki {
         #$self->logDebug("Project::_wiki()");
         my $wiki = '';
         $wiki .= "\nProject:\t" . $self->name() . "\n";
@@ -1077,7 +1153,7 @@ ORDER BY number};
 
 
 
-    method edit () {
+    method edit {
         #$self->logDebug("self->toString():");
         #print $self->toString(), "\n";
 
@@ -1114,7 +1190,7 @@ ORDER BY number};
         $self->_write();
     }
     
-    method create () {
+    method create {
         #$self->logDebug("Project::create()");
         my $inputfile = $self->inputfile;
         $self->logDebug("inputfile must end in '.proj'") and exit
@@ -1141,7 +1217,7 @@ ORDER BY number};
         $self->logDebug(": " . $self->inputfile() . "\n\n");
     }
 
-    method copy () {
+    method copy {
         #$self->logDebug("Project::copy()");
         $self->_loadFile();
         $self->name($self->newname());
@@ -1177,34 +1253,34 @@ ORDER BY number};
         return $hash;
     }
     
-    method toHash() {
+    method toHash {
         my $hash;
         #$self->logDebug("self->started(): "), $self->started(), "\n";
         foreach my $field ( @{$self->savefields()} )
         {
-            #$self->logDebug("field '$field' value: "), $self->$field(), "\n";
-            if ( ref($self->$field) ne "ARRAY" )
-            {
-                $hash->{$field} = $self->$field();
-            }
+			next if not defined $self->$field();
+
+            next if ref($self->$field) eq "ARRAY";
+
+			$hash->{$field} = $self->$field();
         }
 
         #### DO WORKFLOWS
-        #### DO WORKFLOWS
         my $workflows = $self->workflows();
+		$self->logDebug("no. workflows", scalar(@$workflows));
+
         my $workflowsdata = [];
-        foreach my $workflow ( @$workflows )
-        {
+        foreach my $workflow ( @$workflows ) {
+#			print "workflow->toString():\n";
+#            print $workflow->toString(), "\n";
             push @$workflowsdata, $workflow->exportData();
         }
-        #$self->logDebug("workflowsdata:");
-        #print Dumper $workflowsdata;
 
         $hash->{workflows} = $workflowsdata;
         return $hash;
     }
     
-    method toJson() {
+    method toJson {
         my $hash = $self->toHash();
         my $jsonParser = JSON->new();
     	my $json = $jsonParser->pretty->indent->encode($hash);
@@ -1239,7 +1315,7 @@ ORDER BY number};
         return;
     }
     
-    method _write() {
+    method _write {
         my $outputfile = $self->outputfile;
         $outputfile = $self->inputfile if not defined $outputfile or not $outputfile;
         $self->logDebug("outputfile", $outputfile);
@@ -1253,11 +1329,11 @@ ORDER BY number};
         close(OUT) or die "Can't close outputfile: $outputfile\n";
     }
 
-    method read () {
+    method read {
         $self->_loadFile();
     }
     
-    method _loadFile () {
+    method _loadFile {
         $self->logDebug("");
         my $inputfile = $self->inputfile();
         $self->logDebug("inputfile not specified") and exit if not defined $inputfile;
@@ -1358,7 +1434,7 @@ ORDER BY number};
         return $workflowfiles;        
     }
     
-    method _loadDb () {
+    method _loadDb {
         $self->logDebug("Project::_loadDb()");
 
         my $dbtype = $self->dbtype();
@@ -1393,7 +1469,7 @@ ORDER BY number};
         else {	return;	}
     }    
 
-    method toString (){
+    method toString{
         return $self->_toString();
         #$self->logDebug("$output");
     }
@@ -1414,7 +1490,7 @@ ORDER BY number};
         close(OUT) or die "Can't close outputfile: $outputfile\n";
     }
 
-    method _toExport () {
+    method _toExport {
         my $hash;
         foreach my $field ( @{$self->exportfields()} )
         {
@@ -1442,7 +1518,7 @@ ORDER BY number};
         return $json;    
     }
 
-    method _toString () {
+    method _toString {
         my $json = $self->toJson() . "\n";
         my $output = "\n\nProject:\n";
         foreach my $field ( @{$self->savefields()} )
@@ -1461,7 +1537,7 @@ ORDER BY number};
         return $output;
     }
     
-    method _orderWorkflows () {
+    method _orderWorkflows {
     #### REDUNDANT: DEPRECATE LATER
         #$self->logDebug("Project::_orderWorkflows()");
     

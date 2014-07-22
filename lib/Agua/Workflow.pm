@@ -651,7 +651,7 @@ method runSge ($stages, $username, $project, $workflow, $workflownumber, $cluste
 	my $envars = $self->getEnvars($username, $cluster);
 	$self->logDebug("$$ envars", $envars);
 	$self->createQueue($username, $cluster, $project, $workflow, $envars);
-	
+
 	#### SET CLUSTER WORKFLOW STATUS TO 'running'
 	$self->updateClusterWorkflow($username, $cluster, $project, $workflow, 'running');
 	
@@ -1637,7 +1637,8 @@ method deleteQueue ($project, $workflow, $username, $cluster, $envars) {
 
 #### QUEUE
 method setQueue ($queue, $qmasterport, $execdport) {
-	$self->logDebug("$$ DOING slots = self->setSlotNumber(self->instancetype())");
+
+	$self->logDebug("$$ DOING self->setSlotNumber, self->instancetype()", $self->instancetype());
 	my $slots = $self->setSlotNumber($self->instancetype());
 	$slots = 1 if not defined $slots;
 	$self->logDebug("$$ slots", $slots);
@@ -1671,6 +1672,7 @@ method setPE ($pe, $queue) {
  	$self->logDebug("$$ pe", $pe);
  	$self->logDebug("$$ queue", $queue);
 
+	$self->logDebug("$$ DOING self->setSlotNumber, self->instancetype()", $self->instancetype());
 	my $slots = $self->setSlotNumber($self->instancetype());
 	$self->logDebug("$$ slots", $slots); 
 

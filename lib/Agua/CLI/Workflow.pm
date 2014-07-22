@@ -12,29 +12,29 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
 
     #### LOGGER
     has 'logfile'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
-    has 'log'	=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);  
+    has 'log'		=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);  
     has 'printlog'	=> ( isa => 'Int', is => 'rw', default 	=> 	0 	);
 
     #### STORED LOGISTICS VARIABLES
-    has 'owner'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
+    has 'owner'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, default => undef );
     has 'package'	=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'project'	=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'name'	    => ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'number'	=> ( isa => 'Int|Undef', is => 'rw', default	=>	1	);
     has 'type'	    => ( isa => 'Str|Undef', is => 'rw', required => 0, documentation => q{User-defined application type} );
-    has 'description'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'notes'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
+    has 'description'	=> ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'notes'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
     has 'ordinal'	=> ( isa => 'Str|Undef', is => 'rw', default => undef, required => 0, documentation => q{Set order of appearance: 1, 2, ..., N} );
     has 'apps'	    => ( isa => 'ArrayRef[Agua::CLI::App]', is => 'rw', default => sub { [] } );
     has 'provenance'=> ( isa => 'Str|Undef', is => 'rw', required	=>	0, default => '');
     
     #### STORED STATUS VARIABLES
-    has 'status'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'locked'	    => ( isa => 'Int|Undef', is => 'rw', default => 0 );
-    has 'queued'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'started'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'stopped'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
-    has 'duration'	    => ( isa => 'Str|Undef', is => 'rw', default => '' );
+    has 'status'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'locked'	    => ( isa => 'Int|Undef', is => 'rw', default => undef );
+    has 'queued'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'started'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'stopped'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'duration'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
     has 'epochqueued'	=> ( isa => 'Maybe', is => 'rw', default => 0 );
     has 'epochstarted'	=> ( isa => 'Int|Undef', is => 'rw', default => 0 );
     has 'epochstopped'  => ( isa => 'Int|Undef', is => 'rw', default => 0 );
@@ -246,8 +246,8 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
     }
 
     method loadScript {
-		$self->log(4);
-        $self->logDebug("");
+#		$self->log(4);
+#        $self->logDebug("");
         
         #$self->_loadFile();
 
@@ -260,15 +260,32 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
         $content =~ s/,\\\n/,/gms;
 		#$self->logDebug("content", $content);
 
+		$self->_loadScript($content);
+
+		$self->outputfile($self->inputfile());
+        $self->_write($self->outputfile());
+        
+		print "Printed workflow file: ", $self->outputfile(), "\n";
+
+	}
+	
+	method _loadScript ($content) {
+		$self->log(4);
+        $self->logDebug("");
+
 		my $counter = 0;
 		my $sections;
         #@$sections = split "\\#\\d+\\s+", $content;
         @$sections = split "#\\s\\d+\\s", $content;
-		shift @$sections;
+		#shift @$sections;
 		$self->logDebug("sections[0]", $$sections[0]);
 		$self->logDebug("no. sections", scalar(@$sections));
 
-        foreach my $section ( @$sections ) {
+		for ( my $i = 0; $i < @$sections; $i++ ) {
+
+			#next if $i != 9;
+
+			my $section =	$$sections[$i];
 			
             next if $section =~ /^\s*$/;
 			
@@ -277,18 +294,12 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
 
             require Agua::CLI::App;
             my $app = Agua::CLI::App->new();
-            $app->getopts();
+            #$app->getopts();
             $app->_loadScript($section);
             #$self->logDebug("app:");
             #print $app->toString(), "\n";
             $self->_addApp($app);
-
-$self->logDebug("DEBUG EXIT") and exit;
-
-
         }
-        
-        $self->_write();
         
         return 1;
     }
@@ -621,7 +632,7 @@ $self->logDebug("DEBUG EXIT") and exit;
     method initialise {
         #$self->logDebug("Agua::CLI::Workflow::initialise()");
 
-        $self->owner("anonymous") if not defined $self->owner();
+        $self->owner($self->username()) if not defined $self->owner();
         $self->inputfile($self->wkfile()) if defined $self->wkfile() and $self->wkfile();
         #$self->logDebug("self->wkfile: "), $self->wkfile(), "\n";
         #$self->logDebug("self->inputfile: "), $self->inputfile(), "\n";
@@ -640,8 +651,8 @@ $self->logDebug("DEBUG EXIT") and exit;
     }
 
     method getopts {
-		$self->log(4);
-        $self->logDebug("");
+#		$self->log(4);
+#        $self->logDebug("");
         $self->_getopts();    
         $self->initialise();
     }
@@ -661,8 +672,7 @@ $self->logDebug("DEBUG EXIT") and exit;
         #$self->logDebug("options->{switch}:");
         #print Dumper $options->{switch};
         my $switch = $options->{switch};
-        foreach my $key ( keys %$switch )
-        {
+        foreach my $key ( keys %$switch ) {
             $self->$key($switch->{$key}) if defined $switch->{$key};
         }
 
@@ -784,15 +794,17 @@ $self->logDebug("DEBUG EXIT") and exit;
     }
 
     method _toExportHash ($fields) {
-		#$self->log(4);s
+		#$self->log(4);
 		#$self->logCaller("");
-        $self->logDebug("fields: @$fields");
+        #$self->logDebug("fields: @$fields");
 
         my $hash;
-        foreach my $field ( @$fields )
-        {
+        foreach my $field ( @$fields ) {
             #$self->logDebug("field", $field);
             next if ref($self->$field) eq "ARRAY";
+	
+			next if not defined $self->$field();
+
             $hash->{$field} = $self->$field();
         }
 		#$self->logDebug("hash", $hash);
@@ -814,9 +826,11 @@ $self->logDebug("DEBUG EXIT") and exit;
     method toHash {
         my $hash;
         #$self->logDebug("self->started(): "), $self->started(), "\n";
-        foreach my $field ( @{$self->savefields()} )
-        {
+        foreach my $field ( @{$self->savefields()} ) {
             #$self->logDebug("field '$field' value: "), $self->$field(), "\n";
+
+			next if not defined $self->$field();
+
             if ( ref($self->$field) ne "ARRAY" )
             {
                 $hash->{$field} = $self->$field();

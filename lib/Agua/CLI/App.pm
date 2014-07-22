@@ -16,7 +16,7 @@ class Agua::CLI::App with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::Statu
     
     #### LOGGER
     has 'logfile'	=> ( isa => 'Str|Undef', is => 'rw', required	=>	0	);
-    has 'log'	=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
+    has 'log'		=> ( isa => 'Int', is => 'rw', default 	=> 	2 	);  
     has 'printlog'	=> ( isa => 'Int', is => 'rw', default 	=> 	5 	);
 
     ##### STORED VARIABLES
@@ -98,7 +98,7 @@ method BUILD ($hash) {
     $self->initialise();
 }
 
-method initialise () {
+method initialise {
     #$self->owner("anonymous") if not defined $self->owner();
     $self->inputfile($self->appfile()) if defined $self->appfile() and $self->appfile();
     $self->logDebug("inputfile must end in '.app'") and exit
@@ -111,14 +111,15 @@ method initialise () {
         and $self->outputfile()
         and not $self->outputfile() =~ /\.app$/;
     
+	$self->logDebug("AFTER initialise");
     #### SET DEFAULT DESCRIPTION AND NOTES (MYSQL 'TEXT' FIELDS)
     #$self->logDebug("self->description", $self->description());
     #$self->logDebug("self->notes", $self->notes());
-    $self->description('') if not defined $self->description();
-    $self->notes('') if not defined $self->notes();
+    #$self->description('') if not defined $self->description();
+    #$self->notes('') if not defined $self->notes();
 }
 
-method getopts () {
+method getopts {
     my @temp = @ARGV;
 
     my $args = $self->args();
@@ -146,7 +147,7 @@ method getopts () {
 }
 
 
-method args() {
+method args {
     my $meta = $self->meta();
 
     my %option_type_map = (
@@ -261,11 +262,11 @@ method run {
     return $self->status();
 }
 
-method command () {
+method command {
     print $self->_command(), "\n";
 }
 
-method _command () {
+method _command {
     #### GENERATE RUN COMMAND
     $self->_orderParams();
     my $command = '';
@@ -283,7 +284,7 @@ method _command () {
     return $command;
 }
 
-method param() {
+method param {
     $self->logDebug("App::param()");
     $self->_loadFile() if $self->appfile();
 
@@ -316,7 +317,7 @@ method param() {
     return 1;
 }
 
-method replace () {
+method replace {
     $self->logDebug("Agua::CLI::App::replace()");
     
     $self->_loadFile() if defined $self->appfile() and $self->appfile();
@@ -342,7 +343,7 @@ method replace () {
     return 1;
 }
 
-method loadCmd () {
+method loadCmd {
     $self->logDebug("App::loadCmd()");
 
     $self->logDebug("self:");
@@ -418,32 +419,38 @@ method _loadCmd ($content) {
 }
 
 method _loadScript ($content) {
+	#$self->log(4);
     $self->logDebug("content", $content);
 
 	my ($name)	=	$content	=~	/^\s*(\S+)/;
 	$self->logDebug("name", $name);
+	$self->name($name);
+	
 	$content	=~	s/^\s*\S+\s*\n//;
-	my $executor	=	"";
-	my $executable	=	"";
-	if ( $content =~ /^(.+?java\s+\-jar)\s+(.+?\.jar)/) {
+	my $executor	=	undef;
+	my $executable	=	undef;
+	if ( $content =~ /^(.+?java\s+.+?\-jar)\s+(.+?\.jar)/) {
 		$executor	=	$1;
 		$executable	=	$2;
-		$content	=~	s/^.+?java\s+\-jar\s+.+?\.jar//;
+		$content	=~	s/^.+?java\s+.+?\-jar\s+.+?\.jar//;
 	}
 	$self->logDebug("executor", $executor);
 	$self->logDebug("executable", $executable);
-	
+
 	my $tokens;
 	@$tokens	=	split " ", $content;
 	$self->logDebug("tokens", $tokens);	
 
-$self->logDebug("DEBUG EXIT") and exit;
-
-    $executable = shift @$tokens;
-	if ( $$tokens[0] =~	/^[^\-][^=]+/ ) {
+    $executable = shift @$tokens if not defined $executable;
+	$self->location($executable);
+	
+	my $ordinal	=	0;
+	if ( defined $$tokens[0] and $$tokens[0] !~	/^[\-]+[^=]+/ ) {
+		#$self->logDebug("\$\$tokens[0]", $$tokens[0]);
+		#$self->logDebug("DOING subCommand");
 		my $param	=	"subCommand";
 		my $value	=	shift @$tokens;
-		my $ordinal	=	1;
+		$ordinal	=	1;
 		my $argument	=	undef;
 		
         my $parameter = Agua::CLI::Parameter->new(
@@ -452,62 +459,81 @@ $self->logDebug("DEBUG EXIT") and exit;
             value       =>  $value,
             ordinal     =>  $ordinal
         );
-        
         $self->_addParam($parameter);
+		#$self->logDebug("parameter", $parameter->toString());
+		#$self->logDebug("parameter", $parameter);
+	}
+
+	$ordinal++;
+	
+	for ( my $i = 0; $i < @$tokens; $i++ ) {
+		#$self->logDebug("tokens[$i]", $$tokens[$i]);
+		if ( $$tokens[$i]	=~	/^\-+.+$/ ) {
+			my $argument	=	$$tokens[$i];
+			my ($param)		=	$argument	=~ /^\-+(.+)$/;
+			my $value		=	undef;
+			if ( $i < scalar(@$tokens) - 1
+				and $$tokens[$i + 1] !~	/^\-+.+$/ ) {
+				$value	=	$$tokens[$i + 1];
+				$i++;
+			}
+			
+			my $parameter = Agua::CLI::Parameter->new(
+				param      	=>  $param,
+				argument    =>  $argument,
+				value       =>  $value,
+				ordinal     =>  $ordinal,
+				log			=>	$self->log(),
+				printlog	=>	$self->printlog(),
+				logfile		=>	$self->logfile()
+			);
+			#$self->logDebug("parameter", $parameter->toString());
+	        $self->_addParam($parameter);
+		}
+		elsif ( $$tokens[$i]	=~	/^.+\=.+/ ) {
+			my ($argument, $value)	=	$$tokens[$i]	=~	/^(.+\=)(.+)/;	
+			my ($param)	=	$argument	=~	/^(.+?)=$/;
+			my $parameter = Agua::CLI::Parameter->new(
+				param      	=>  $param,
+				argument    =>  $argument,
+				value       =>  $value,
+				ordinal     =>  $ordinal,
+				log			=>	$self->log(),
+				printlog	=>	$self->printlog(),
+				logfile		=>	$self->logfile()
+			);
+			#$self->logDebug("parameter", $parameter->toString());
+	        $self->_addParam($parameter);
+		}
+		else {
+			my $parameter = Agua::CLI::Parameter->new(
+				param      	=>  "parameter." . $ordinal,
+				value       =>  $$tokens[$i],
+				ordinal     =>  $ordinal,
+				log			=>	$self->log(),
+				printlog	=>	$self->printlog(),
+				logfile		=>	$self->logfile()
+			);
+			#$self->logDebug("parameter", $parameter->toString());
+		    $self->_addParam($parameter);
+		}
+		
+		$ordinal++;
 	}
 	
-#    #$self->logDebug("location", $location);
-#    #$location =~ s/\s*\\s*$//;
-#    $location =~ s/^\s+//;
-#    $location =~ s/\s+$//;
-#    $location =~ s/\\$//;
-#    
-#    $self->location($location);
-##$self->logDebug("location", $location);
-#
-#    $self->logDebug("location is empty. Exiting")
-#        and exit if not $self->location();
-#    if ( not $self->name() ) {
-#        my ($name) = $location =~ /([^\/^\\]+)$/;
-#        $self->name($name);
-#    }
-#    $self->logDebug("name is empty. Exiting")
-#        and exit if not $self->name();
-#
-#    my $ordinal = scalar(@{$self->parameters()}) + 1;
-#    foreach my $line ( @lines ) {
-#        next if $line =~ /^#/ or $line =~ /^>/
-#            or $line =~ /^rem/ or $line =~ /^\s*$/;
-#        $line =~ s/^\s+//;
-#        $line =~ s/\s+$//;
-#        $line =~ s/\\$//;
-#
-#        my ($argument, $value) = $line =~ /^(\S+)\s*(.*)$/;
-#        my $param = $argument;
-#        $param =~ s/^\-+// if $param;
-#        $self->logDebug("param", $param);
-#        $self->logDebug("value", $value);
-#
-#        my $parameter = Agua::CLI::Parameter->new(
-#            param       =>  $param,
-#            argument    =>  $argument,
-#            value       =>  $value,
-#            ordinal     =>  $ordinal
-#        );
-#        
-#        $self->_addParam($parameter);
-#        
-#        $ordinal++;
-#    }
-#    $self->_orderParams();
-#
-#    $self->outputfile($self->inputfile());
-#    $self->_write() if $self->outputfile();
+	#print $self->toString();
+	#$self->logDebug("parameters:");
+	#foreach my $parameter ( @{$self->parameters()} ) {
+	#	print $parameter->toString();
+	#}
+
+    $self->outputfile($self->inputfile()) if not defined $self->outputfile();
+    $self->_write() if $self->outputfile();
     
     return 1;
 }
 
-method loadUsage () {
+method loadUsage {
 #### CONVERT '--help' USAGE OUTPUT OF APPLICATION TO PARAMS LIST
     my $usagefile = $self->usagefile();
     $self->logDebug("usagefile", $usagefile);
@@ -599,7 +625,7 @@ method _loadUsage ($usagefile) {
     return $self;
 }
 
-method loadScrape () {
+method loadScrape {
     #### CONVERT SCRAPE OF '--help' OUTPUT OF APPLICATION TO PARAMS LIST
     my $scrapefile = $self->scrapefile();
     #$self->logDebug("scrapefile", $scrapefile);
@@ -782,7 +808,7 @@ method loadParam ($args) {
     $self->_write() if $self->appfile();
 }
 
-method addParam () {
+method addParam {
     $self->logDebug("App::addParam()");
 
     use Agua::CLI::Parameter;
@@ -823,7 +849,7 @@ method _addParam ($parameter) {
     push @{$self->parameters()}, $parameter;
 }
 
-method deleteParam () {
+method deleteParam {
     $self->logDebug("App::deleteParam()");
     
     my $inputfile = $self->inputfile;
@@ -899,7 +925,7 @@ method _editParam ($parameter, $field, $value) {
     $self->_write();
 }
 
-method desc () {
+method desc {
     $self->logDebug("App::desc()");
     $self->_loadFile() if $self->inputfile();
     
@@ -913,7 +939,7 @@ method desc () {
 }
 
 
-method wiki () {
+method wiki {
     $self->_loadFile() if $self->appfile();
 
     my $wiki = $self->_wiki();
@@ -923,7 +949,7 @@ method wiki () {
 }
 
 
-method _wiki () {
+method _wiki {
     #$self->logDebug("Workflow::_wiki()");
     my $wiki = '';
     $wiki .= "\n\tApplication";
@@ -943,7 +969,7 @@ method _wiki () {
 }
 
 
-method edit () {
+method edit {
     #$self->logDebug("App::edit()");
     #$self->logDebug("self->toString():");
     #print $self->toString(), "\n";
@@ -975,7 +1001,7 @@ method edit () {
     return 1;
 }
 
-method create () {
+method create {
     $self->getopts();
     
     $self->logDebug("");    
@@ -996,7 +1022,7 @@ method create () {
     $self->_write($outputfile);        
 }
 
-method copy () {
+method copy {
     $self->logDebug("App::copy()");
     
     $self->_loadFile();
@@ -1015,8 +1041,9 @@ method _toExportHash ($fields) {
     #$self->logDebug("fields", $fields);
     my $hash;
     foreach my $field ( @$fields ) {
+        #$self->logDebug("field $field: self->$field()", $self->$field() );
         next if not defined $self->$field();
-        $self->logDebug("field $field: self->$field()", $self->$field() );
+
         next if ref($self->$field) eq "ARRAY";
         $hash->{$field} = $self->$field() if defined $self->$field();
         #$self->logDebug("DONE hash->{$field}", $self->$field() );
@@ -1025,14 +1052,16 @@ method _toExportHash ($fields) {
 
     #### DO APPS
     my $parameters = $self->parameters();
+
     my $params = [];
     foreach my $parameter ( @$parameters ) {
+	#    $self->logDebug("parameter", $parameter);
         push @$params, $parameter->_exportParam();
     }
     
     $hash->{parameters} = $params;
     $self->logDebug("Returning hash", $hash);
-    
+
     return $hash;
 }
 
@@ -1096,7 +1125,7 @@ method _paramIndex ($parameter) {
     return;
 }
 
-method _orderParams () {
+method _orderParams {
 
     sub ordinalOrAbc (){
         #### ORDER BY ordinal IF PRESENT
@@ -1159,7 +1188,7 @@ method read {
     return $self->_loadFile();
 }
 
-method _loadFile () {
+method _loadFile {
     #$self->logDebug("App::_loadFile()");
 
     my $inputfile = $self->inputfile;
@@ -1210,7 +1239,7 @@ method _loadFile () {
     #print Dumper $self;
 }
 
-method _loadDb () {
+method _loadDb {
     $self->logDebug("App::_loadDb()");
 
     my $dbtype = $self->dbtype();
@@ -1246,12 +1275,12 @@ method _confirm ($message){
     else {	return;	}
 }    
 
-method toString (){
+method toString{
     return $self->_toString();
     #$self->logDebug("$output");
 }
 
-method _toString () {
+method _toString {
     my $json = $self->toJson() . "\n";
     my $output = "\n  Application:\n";
     foreach my $field ( @{$self->savefields()} )

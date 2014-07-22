@@ -3,6 +3,7 @@ use Moose::Role;
 use Moose::Util::TypeConstraints;
 
 use Data::Dumper;
+
 ##########################        USAGE METHODS        #########################
 
 #### METHODS usageStats AND printUsage REQUIRE Jobs::getIndex

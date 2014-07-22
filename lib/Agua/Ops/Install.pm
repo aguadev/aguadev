@@ -611,14 +611,16 @@ method zipInstall ($installdir, $version) {
 
 	#### GET ZIPTYPE
 	my $ziptype = 	"tar";
+	$ziptype	=	"tgz" if $filename =~ /\.tgz$/;
 	$ziptype	=	"bz" if $filename =~ /\.bz2$/;
 	$ziptype	=	"zip" if $filename =~ /\.zip$/;
 	$self->logDebug("ziptype", $ziptype);
 
 	#### GET UNZIPPED FOLDER NAME
-	my ($unzipped)	=	$filename	=~ /^(.+)\.tar\.gz/;
-	($unzipped)	=	$filename	=~ /^(.+)\.tar\.bz2/ if $ziptype eq "bz";
-	($unzipped)	=	$filename	=~ /^(.+)\.zip/ if $ziptype eq "zip";
+	my ($unzipped)	=	$filename	=~ /^(.+)\.tar\.gz$/;
+	($unzipped)	=	$filename	=~ /^(.+)\.tgz$/ if $ziptype eq "tgz";
+	($unzipped)	=	$filename	=~ /^(.+)\.tar\.bz2$/ if $ziptype eq "bz";
+	($unzipped)	=	$filename	=~ /^(.+)\.zip$/ if $ziptype eq "zip";
 	if ( defined $self->opsinfo()->unzipped() ) {
 		$unzipped	=	$self->opsinfo()->unzipped();
 		$unzipped	=~ s/\$version\s*/$version/g;
@@ -630,7 +632,7 @@ method zipInstall ($installdir, $version) {
 
 	#### SET UNZIP COMMAND
     $self->changeDir($installdir);
-	my $command	=	"tar xvfz $filename";
+	my $command	=	"tar xvfz $filename"; # tar.gz AND tgz
 	$command	=	"tar xvfj $filename" if $ziptype eq "bz";
 	$command	=	"unzip $filename" if $ziptype eq "zip";
 	$self->logDebug("command", $command);
