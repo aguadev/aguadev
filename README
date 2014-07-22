@@ -155,7 +155,11 @@ If you'd like to tweak, fix, customize or otherwise improve Agua, please visit t
 4. Resources
 ============
 
-A comprehensive list of resource files is located at $INSTALLDIR/$VERSION/bin/scripts/resources. The resource files contain configuration information for Agua itself, to be used in the installation process, and/or information needed to configure third-party components (e.g., Apache, StarCluster). The format for the list is as follows:
+Resource files are used for installing and configuring Agua and its dependencies, and are located here:
+
+$INSTALLDIR/bin/scripts/resources
+
+The resource files contain configuration information for Agua itself, to be used in the installation process, and/or information needed to configure third-party components (e.g., Apache, StarCluster). The format for the list is as follows:
 
 dirname:
     resource.txt

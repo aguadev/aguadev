@@ -379,43 +379,105 @@ method install {
 		print "Version not defined at line: $line\n" and next if not defined $version;
 		print "Installing package '$package' (version $version)\n";
 		$self->logDebug("Installing package '$package' (version $version)");
-
-		#### SET VARIABLES FROM OPS INFO
-		my $login 		=	$self->login() || "agua";
-		my $owner 		=	$self->owner();
-		my $privacy		=	$self->privacy();
-		my $repository 	=	$self->package();
-		my $installdir	= 	$self->installdir() || $self->conf()->getKey("agua", "INSTALLDIR");
-		my $opsrepo 	= 	$self->opsrepo() || $self->conf()->getKey("agua", "OPSREPO");
-		$self->logDebug("login", $login);
-		$self->logDebug("owner", $owner);
-		$self->logDebug("privacy", $privacy);
-		$self->logDebug("repository", $repository);
-
-		#### SET OPSDIR
-		my $basedir		= 	$self->conf()->getKey("agua", "INSTALLDIR");
-		my $aguauser	= 	$self->conf()->getKey("agua", "AGUAUSER");
 		
-		my $defaultdir	=	"public";
-		$defaultdir		=	$privacy if defined $privacy;
-		my $opsdir		=	"$installdir/repos/$defaultdir/$aguauser/$opsrepo/$aguauser/$package";		
-		$self->logDebug("opsdir", $opsdir);	
+		$self->installPackageVersion($package, $version);
+	}
+}
 
-		#### SET OPSFILE AND PMFILE
-		my $opsfile		=	"$opsdir/$package.ops";
-		$self->logDebug("opsfile", $opsfile);
-		my $pmfile		=	"$opsdir/$package.pm";
-		$self->logDebug("pmfile", $pmfile);
+method installPackageVersion ($package, $version) {
+	$self->logDebug("package", $package);
+	$self->logDebug("version", $version);
+	
+	#### SET VARIABLES FROM OPS INFO
+	my $login 		=	$self->login() || "agua";
+	my $owner 		=	$self->owner();
+	my $privacy		=	$self->privacy();
+	my $repository 	=	$self->package();
+	my $installdir	= 	$self->installdir() || $self->conf()->getKey("agua", "INSTALLDIR");
+	my $opsrepo 	= 	$self->opsrepo() || $self->conf()->getKey("agua", "OPSREPO");
+	$self->logDebug("login", $login);
+	$self->logDebug("owner", $owner);
+	$self->logDebug("privacy", $privacy);
+	$self->logDebug("repository", $repository);
 
-		#### SET USERNAME AND APPSDIR
-		my $username 	= 	$self->conf()->getKey("agua", "ADMINUSER");
-		my $appsdir		= 	$self->conf()->getKey("agua", "APPSDIR");
+	#### SET OPSDIR
+	my $basedir		= 	$self->conf()->getKey("agua", "INSTALLDIR");
+	my $aguauser	= 	$self->conf()->getKey("agua", "AGUAUSER");
+	
+	my $defaultdir	=	"public";
+	$defaultdir		=	$privacy if defined $privacy;
+	my $opsdir		=	"$installdir/repos/$defaultdir/$aguauser/$opsrepo/$aguauser/$package";		
+	$self->logDebug("opsdir", $opsdir);	
 
-		#### RESET INSTALLDIR
-		my $targetdir = "$installdir/$appsdir/$package";
+	#### SET OPSFILE AND PMFILE
+	my $opsfile		=	"$opsdir/$package.ops";
+	$self->logDebug("opsfile", $opsfile);
+	my $pmfile		=	"$opsdir/$package.pm";
+	$self->logDebug("pmfile", $pmfile);
 
-		my $success	=	$self->installApplication($owner, $login, $username, $repository, $package, $privacy, $targetdir, $pmfile, $opsdir, $version);	
-		$self->logDebug("success install package '$package' (version $version)", $success);
+	#### SET USERNAME AND APPSDIR
+	my $username 	= 	$self->conf()->getKey("agua", "ADMINUSER");
+	my $appsdir		= 	$self->conf()->getKey("agua", "APPSDIR");
+
+	#### RESET INSTALLDIR
+	my $targetdir = "$installdir/$appsdir/$package";
+
+	my $success	=	$self->installApplication($owner, $login, $username, $repository, $package, $privacy, $targetdir, $pmfile, $opsdir, $version);	
+	$self->logDebug("success install package '$package' (version $version)", $success);	
+}
+
+method list {
+	#### GET INSTALLED PACKAGES WITH VERSIONS
+	my $query			=	qq{SELECT package, version FROM package};
+	$self->logDebug("query", $query);
+	$self->setDbh();
+	my $packages		=	$self->db()->queryhasharray($query);
+	if ( not defined $packages ) {
+		print "\n\nNo packages currently installed\n\n";
+	}
+	else {
+		print "\n\nList of installed packages:\n\n";
+		foreach my $package ( @$packages ) {
+			print "$package->{package}\t$package->{version}\n";
+		}
+	}
+	
+	my $versionfile		=	$self->getVersionFile();	
+	my $lines			=	$self->getLines($versionfile);
+	print "Can't open versionfile: $versionfile\n" and return if not defined $lines;
+	print "No content in versionfile: $versionfile\n" and return if not @$lines;
+
+	print "\n\nLatest versions of available packages:\n\n";
+	print @$lines;
+	print "\n\n";
+}
+
+method getVersionFile {
+	#### GET LATEST AVAILABLE PACKAGE VERSIONS
+	my $installdir		=	$self->conf()->getKey("agua", "INSTALLDIR");
+	my $opsrepo			=	$self->conf()->getKey("agua", "OPSREPO");
+	my $user			=	$self->conf()->getKey("agua", "AGUAUSER");
+	my $versionfile		=	"$installdir/repos/public/$user/$opsrepo/$user/$opsrepo/versions.tsv";
+	$self->logDebug("versionfile", $versionfile);
+	print "Can't find versionfile: $versionfile" and return if not -f $versionfile;
+
+	return $versionfile;	
+}
+
+method all {
+	my $versionfile		=	$self->getVersionFile();	
+
+	my $lines	=	$self->getLines($versionfile);
+	foreach my $line ( @$lines ) {
+		next if $line	=~	/^\s*$/;
+		next if $line	=~	/^#/;
+		my ($package, $version)	=	$line	=~ /^(\S+)\s+(\S+)/;
+		print "Package not defined at line: $line\n" and next if not defined $package;
+		print "Version not defined at line: $line\n" and next if not defined $version;
+		print "Installing package '$package' (version $version)\n";
+		$self->logDebug("Installing package '$package' (version $version)");
+
+		$self->installPackageVersion($package, $version);
 	}
 }
 
