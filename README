@@ -139,6 +139,14 @@ The script can also be used to install other, non-essential packages:
 	--mode install --package packagename
                        Install the 'packagename' package
 
+Alternately, show the full list of installed packages and the latest versions of available packages:
+
+    --mode list
+    
+Or, install all of the listed packages:
+
+    --mode all
+
 
 EXAMPLE
 -------
