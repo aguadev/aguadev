@@ -294,7 +294,8 @@ sub execute {
 	my $jobs		=	shift;
 	my $label 		=	shift;
 
-	$self->logDebug("execute(jobs, label)");
+	$self->logDebug("label", $label);
+	$self->logDebug("no. jobs", scalar(@$jobs));
 
 	my $cluster = $self->cluster();
 	my $submit = $self->submit();

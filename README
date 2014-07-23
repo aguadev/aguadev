@@ -134,10 +134,10 @@ The 'mode' options are as follows:
 	--mode starcluster Install the StarCluster package
 	--mode deploy      (DEFAULT) Do all of the above
 
-The script can also be used to install other, non-essential packages:
+The script can also be used to install other packages, for example, analysis tools for workflows:
 
-	--mode install --package packagename
-                       Install the 'packagename' package
+	--mode install --package packagename --version 0.0.4
+                       Install version 0.0.4 of package 'packagename' 
 
 Alternately, show the full list of installed packages and the latest versions of available packages:
 
@@ -150,8 +150,8 @@ Or, install all of the listed packages:
 
 EXAMPLE
 -------
-sudo ./deploy.pl --mode aguatest
 
+sudo /agua/bin/install/deploy.pl --mode install --package samtools --version 0.1.19
 
 
 3. Developers

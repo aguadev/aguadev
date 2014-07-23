@@ -571,7 +571,11 @@ method runInParallel ($workflowhash, $sampledata) {
 	my $scheduler	=	$self->scheduler() || $self->conf()->getKey("agua:SCHEDULER", undef);
 	$self->logDebug("scheduler", $scheduler);
 
-	
+	#### CREATE UNIQUE QUEUE FOR WORKFLOW
+	my $envars = $self->getEnvars($username, $cluster);
+	$self->logDebug("$$ envars", $envars);
+	$self->createQueue($username, $cluster, $project, $workflow, $envars);
+
 	my $stages	=	$self->setStages($username, $cluster, $workflowhash, $project, $workflow, $workflownumber, undef);
 	$self->logDebug("no. stages", scalar(@$stages));
 	#$self->logDebug("stages", $stages);
@@ -585,7 +589,6 @@ method runInParallel ($workflowhash, $sampledata) {
 	
 	#### GET MONITOR
 	my $monitor	=	$self->updateMonitor();
-
 
 	#### SET FILE DIRS
 	my ($scriptsdir, $stdoutdir, $stderrdir) = $self->setFileDirs($fileroot, $project, $workflow);

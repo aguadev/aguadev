@@ -147,7 +147,7 @@ sub _removeStageParameter {
 
 	#### SET TABLE AND REQUIRED FIELDS	
 	my $table = "stageparameter";
-	my $required_fields = ["username", "project", "workflow", "appname", "appnumber", "name", "paramtype"];
+	my $required_fields = ["username", "project", "workflow", "appname", "appnumber", "name"];
 
 	#### CHECK REQUIRED FIELDS ARE DEFINED
 	my $not_defined = $self->db()->notDefined($data, $required_fields);
@@ -165,8 +165,11 @@ sub _addStageParameter {
 
 	#### SET TABLE AND REQUIRED FIELDS	
 	my $table = "stageparameter";
-	my $required_fields = ["username", "project", "workflow", "appname", "appnumber", "name", "paramtype"];
+	my $required_fields = ["username", "project", "workflow", "appname", "appnumber", "name"];
 
+	#### DEFAULT PARAMTYPE IS 'input'
+	$data->{paramtype}	=	"input" if not defined $data->{paramtype};
+	
 	#### CHECK REQUIRED FIELDS ARE DEFINED
 	my $not_defined = $self->db()->notDefined($data, $required_fields);
     $self->logError("undefined values: @$not_defined") and return if @$not_defined;
