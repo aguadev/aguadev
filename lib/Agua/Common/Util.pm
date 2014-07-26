@@ -733,10 +733,14 @@ sub getEnvars {
 	
 	#### THIS JOB IS THE INITIAL (PARENT) WORKFLOW JOB LAUNCHED BY THE SYSTEM.
 	#### IT RETRIEVES THE SGE PORT VARIABLES FROM THE DB
-	if ( defined $username and $username
-		and defined $sgecell and $sgecell
-		and defined $self->db()
-		and defined $self->db()->dbh() ) {
+	if ( not defined $qmasterport
+		or (
+			defined $username and $username
+			and defined $sgecell and $sgecell
+			and defined $self->db()
+			and defined $self->db()->dbh()			
+		)
+	) {
 		$self->logNote("Retrieving environment variables from database");
 		my $query = qq{SELECT qmasterport
 FROM clustervars

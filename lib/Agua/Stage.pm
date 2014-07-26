@@ -178,23 +178,22 @@ method runLocally {
 	#### ADD USAGE COMMAND
 	my $usagefile	=	$self->stdoutfile();
 	$usagefile		=~	s/stdout$/usage/;
-	my $usagecommand	=	qq{time /usr/bin/time \\
+	my $usage		=	qq{time /usr/bin/time \\
 -o $usagefile \\
 -f "%Uuser %Ssystem %Eelapsed %PCPU (%Xtext+%Ddata %Mmax)k "};
 
+	#### SET LIBS
 	#### ADD PERL5LIB FOR EXTERNAL SCRIPTS TO FIND Agua MODULES
 	my $aguadir = $self->conf()->getKey("agua", 'INSTALLDIR');
 	my $perl5lib = "$aguadir/lib";
-	
 	#### GET exports FROM ENVARS
 	my $envars = $self->getEnvars();
 	my $exports = $envars->{tostring};
 	$self->logDebug("$$ exports", $exports);
-
-	my $prefix	=	"export PERL5LIB=$perl5lib; $exports ";
-	#$self->logDebug("$$ prefix", $prefix);
+	my $libs	=	"export PERL5LIB=$perl5lib; $exports ";
 	
-	#### SET EXECUTOR AND FILE EXPORTS
+	#### SET EXECUTOR AND FILE $prefix, EXPORTS
+	my $prefix = "";
 	my $executor = $self->executor();
 	$self->logDebug("executor", $executor);
 	if ( $executor =~ /^\S+\.sh\s+&+\s*/ ) {
@@ -204,27 +203,28 @@ method runLocally {
 		my $fileexports	=	$self->getFileExports($file);
 		$prefix .= $fileexports if defined $fileexports;
 	}
-	$prefix .= $executor;
-	$self->logDebug("$$ self->prefix(): " . $prefix);
+	else {
+		$prefix 	=	$executor;
+	}
+	$self->logDebug("$$ prefix" . $prefix);
 	
-#$self->logDebug("DEBUG EXIT") and exit;
-
 	#### PREFIX APPLICATION PATH WITH PACKAGE INSTALLATION DIRECTORY
 	my $application = $self->installdir() . "/" . $self->location();	
 	#$self->logDebug("$$ application", $application);
 	
 	#### SET SYSTEM CALL
-	my @system_call = ($prefix, $usagecommand, $application, @$arguments);
-
+	my @systemcall = ($libs, $usage, $prefix, $application, @$arguments);
+	$self->logDebug("SYSTEMCALL", \@systemcall);
+	
 	####
-	my $redirection	=	$self->containsRedirection(\@system_call);
+	my $redirection	=	$self->containsRedirection(\@systemcall);
 	
 	#### SET STDOUT AND STDERR FILES
 	my $stdoutfile = $self->stdoutfile;
 	my $stderrfile = $self->stderrfile;
-	push @system_call, "1> $stdoutfile" if defined $stdoutfile and not $redirection;
-	push @system_call, "2> $stderrfile" if defined $stderrfile;
-	$self->logDebug("$$ system_call: @system_call");
+	push @systemcall, "1> $stdoutfile" if defined $stdoutfile and not $redirection;
+	push @systemcall, "2> $stderrfile" if defined $stderrfile;
+	$self->logDebug("$$ systemcall: @systemcall");
 
 	#### CLEAN UP BEFOREHAND
 	`rm $stdoutfile` if -f $stdoutfile;
@@ -234,14 +234,12 @@ method runLocally {
     $self->logDebug("$$ application", $application);
     my ($changedir) = $application =~ /^(.+?)\/[^\/]+$/;
 	$self->logDebug("$$ changedir", $changedir);
-    
-#	$self->logDebug("$$ \$self->db()->dbh(): " . $self->db()->dbh());
 	
 	#### NO BUFFERING
 	$| = 1;
 
 	#### COMMAND
-	my $command = join " ", @system_call;
+	my $command = join " ", @systemcall;
 
 	#### SET STAGE PID
 	my $stagepid = $$;
@@ -404,8 +402,8 @@ method setStageJob {
 	}
 
 	#### SET SYSTEM CALL
-	my @system_call = ($application, @$arguments);
-	my $command = "$executor @system_call";
+	my @systemcall = ($application, @$arguments);
+	my $command = "$executor @systemcall";
 	
     #### GET OUTPUT DIR
     my $outputdir = $self->outputdir();
@@ -422,7 +420,7 @@ method setStageJob {
 	$self->logNote("samplehash", $samplehash);
 	if ( defined $samplehash ) {
 		my $id		=	$samplehash->{sample};
-		$label		=	"sample-$id.$label";
+		$label		=	"$id.$label";
 	}
 
 	#### SET JOB 
@@ -492,8 +490,8 @@ method runOnCluster {
 	}
 
 	#### SET SYSTEM CALL
-	my @system_call = ($application, @$arguments);
-	my $command = "$executor @system_call";
+	my @systemcall = ($application, @$arguments);
+	my $command = "$executor @systemcall";
 	
     #### GET OUTPUT DIR
     my $outputdir = $self->outputdir();

@@ -205,6 +205,8 @@ sub runJobs {
 	### EXECUTE JOBS	
 	$self->execute($jobs, $label);
 	
+=head2
+
 	#### CHECK JOBS HAVE COMPLETED
 	my $status = "completed";
 	my $sublabels 	= '';
@@ -271,10 +273,13 @@ sub runJobs {
 	{
 		$self->logDebug("cleanup not defined. Leaving scriptfiles.");
 	}
-	
+
+=cut
+
 	$self->logDebug("END OF Agua::Cluster::Jobs::runJobs");
-	
-	return ($status, $sublabels);
+
+	return ("completed", "");	
+	#return ($status, $sublabels);
 }
 
 sub execute {
@@ -536,7 +541,7 @@ sub executeCluster {
 				#### THE LIMIT OF MAX CONCURRENT JOBS
 				while ( scalar(@$jobids) >= $maxjobs )
 				{
-					$self->logDebug("Sleeping $sleep seconds...");
+					#$self->logDebug("Sleeping $sleep seconds...");
 					sleep($sleep);
 					
 					
@@ -569,7 +574,6 @@ sub executeCluster {
 	return $scriptfiles;
 }
 
-
 sub setJob {
 =head2
 
@@ -589,9 +593,11 @@ sub setJob {
 	my $stdoutfile		=	shift;
 	my $stderrfile		=	shift;
 	my $lockfile		=	shift;
+	#$self->logCaller("");
 	#$self->logDebug("label", $label);
 	#$self->logDebug("outputdir", $outputdir);
-	#$self->logDebug("commands: @$commands");
+	##$self->logDebug("commands: @$commands");
+	#$self->logDebug("stdoutfile", $stdoutfile);
 
 	#### SANITY CHECK
 	$self->logCritical("commands not defined") and exit if not defined $commands;
@@ -616,7 +622,7 @@ sub setJob {
 	$stdoutfile = "$stdoutdir/$label.out" if not defined $stdoutfile;
 	$stderrfile = "$stdoutdir/$label.err" if not defined $stderrfile;
 	$lockfile = "$lockdir/$label.lock" if not defined $lockfile;
-	
+
 	#### SET JOB LABEL, COMMANDS, ETC.
 	my $job;
 	$job->{label} = $label;
@@ -871,6 +877,10 @@ echo QUEUE:    	       	\$QUEUE
 	#### PRINT LOCK FILE
 	print SHFILE qq{date > $lockfile\n};
 
+	#### CREATE stdout DIR
+	my ($stdoutdir)	=	$stdoutfile	=~	/^(.+?)\/[^\/]+$/;
+	print SHFILE qq{mkdir -p $stdoutdir\n};
+	
 	my $command = join "\n", @$commands;
 	print SHFILE "$command\n";
 

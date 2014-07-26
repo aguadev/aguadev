@@ -559,7 +559,7 @@ method runInParallel ($workflowhash, $sampledata) {
 	$self->logDebug("$$ workflow", $workflow);
 	$self->logDebug("$$ workflownumber", $workflownumber);
 	$self->logDebug("$$ cluster", $cluster);
-		
+	
 	print "Running workflow $project.$workflow\n";
 
 	#### GET CLUSTER
@@ -574,6 +574,7 @@ method runInParallel ($workflowhash, $sampledata) {
 	#### CREATE UNIQUE QUEUE FOR WORKFLOW
 	my $envars = $self->getEnvars($username, $cluster);
 	$self->logDebug("$$ envars", $envars);
+
 	$self->createQueue($username, $cluster, $project, $workflow, $envars);
 
 	my $stages	=	$self->setStages($username, $cluster, $workflowhash, $project, $workflow, $workflownumber, undef);
@@ -1107,6 +1108,7 @@ method runStages ($stages) {
 		}
 		else {
 			my $status	=	"error: $exitcode";
+			
 			$stage->setStatus('error');
 		$self->bigDisplayEnd("'$project.$workflow' stage $stage_number $stage_name status: ERROR");
 
@@ -1161,7 +1163,7 @@ method setStages ($username, $cluster, $data, $project, $workflow, $workflownumb
 	#my $queue_options = $self->data()->{queue_options};
 	
 	#### SET OUTPUT DIR
-	my $outputdir =  "$fileroot/$project/$workflow/";
+	my $outputdir =  "$fileroot/$project/$workflow";
 
 	#### GET ENVIRONMENT VARIABLES
 	my $envars = $self->getEnvars($username, $cluster);
@@ -1549,6 +1551,7 @@ method createQueue ($username, $cluster, $project, $workflow, $envars) {
 	$self->logDebug("$$ workflow", $workflow);
 	$self->logDebug("$$ username", $username);
 	$self->logDebug("$$ cluster", $cluster);
+	$self->logDebug("$$ envars", $envars);
 	
 	$self->logError("Agua::Workflow::createQueue    project not defined") if not defined $project;
 	$self->logError("Agua::Workflow::createQueue    workflow not defined") if not defined $workflow;
@@ -1565,6 +1568,14 @@ method createQueue ($username, $cluster, $project, $workflow, $envars) {
 	$self->execdport($envars->{execdport});
 	$self->sgecell($envars->{sgecell});
 	$self->sgeroot($envars->{sgeroot});
+
+	#### CREATE QUEUE FOLDER IF NOT EXISTS
+	my $sgeroot		=	$envars->{sgeroot};
+	my $sgecell		=	$envars->{sgecell};
+	
+	my $queuedirectory	=	"$sgeroot/$sgecell";
+	$self->logDebug("queuedirectory", $queuedirectory);
+	`cp -r $sgeroot/default $queuedirectory` if not -d $queuedirectory;
 	
 	#### SET CONFIGFILE
 	my $adminkey = $self->getAdminKey($username);
@@ -1593,7 +1604,7 @@ method createQueue ($username, $cluster, $project, $workflow, $envars) {
 
 	#### SET QUEUE
 	$self->logDebug("$$ Doing self->setQueue($queue)\n");
-	$self->setQueue($queue, $qmasterport, $execdport);
+	$self->setQueue($queue, $qmasterport, $execdport, $instancetype);
 
 	$self->logGroupEnd("Agua::Workflow::createQueue    COMPLETED");
 }
@@ -1639,9 +1650,10 @@ method deleteQueue ($project, $workflow, $username, $cluster, $envars) {
 }
 
 #### QUEUE
-method setQueue ($queue, $qmasterport, $execdport) {
+method setQueue ($queue, $qmasterport, $execdport, $instancetype) {
+	$self->logDebug("instancetype", $instancetype);
 
-	$self->logDebug("$$ DOING self->setSlotNumber, self->instancetype()", $self->instancetype());
+	$self->logDebug("$$ DOING self->setSlotNumber");
 	my $slots = $self->setSlotNumber($self->instancetype());
 	$slots = 1 if not defined $slots;
 	$self->logDebug("$$ slots", $slots);

@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS stage (
     type                VARCHAR(40),
 
     location            VARCHAR(255) NOT NULL default '',
-    executor            VARCHAR(40) NOT NULL default '',
+    executor            VARCHAR(255) NOT NULL default '',
     cluster             VARCHAR(20)NOT NULL default '',
     submit              INT(1),
 
