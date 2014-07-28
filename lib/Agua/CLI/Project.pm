@@ -115,8 +115,6 @@ class Agua::CLI::Project with (Logger, Agua::CLI::Timer, Agua::CLI::Util, Agua::
         $self->logDebug("outputfile must end in '.proj'") and exit
             if $self->outputfile()
             and not $self->outputfile() =~ /\.proj$/;
-
-        #$self->read();
     }
 
     method getopts {

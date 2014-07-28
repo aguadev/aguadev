@@ -813,8 +813,6 @@ method load ($table, $file, $extra) {
 }
 
 
-
-
 method loadNoDups ($table, $file) {
 #### LOAD DATA FROM FILE INTO TABLE AND IGNORE DUPLICATES
 

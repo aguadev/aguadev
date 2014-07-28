@@ -58,6 +58,8 @@ has 'number'		=>  ( isa => 'Str', is => 'rw');
 has 'workflownumber'=>  ( isa => 'Str', is => 'rw');
 has 'start'     	=>  ( isa => 'Int', is => 'rw' );
 has 'submit'     	=>  ( isa => 'Int|Undef', is => 'rw' );
+has 'slots'     	=>  ( isa => 'Int|Undef', is => 'rw' );
+has 'maxjobs'     	=>  ( isa => 'Int|Undef', is => 'rw' );
 
 # Strings
 has 'username'  	=>  ( isa => 'Str', is => 'rw', required => 1  );
@@ -350,6 +352,8 @@ method setStageJob {
 			outputfile	:	Location of outputfile
 
 =cut
+
+	#$self->logCaller("");
 
 	#### CLUSTER MONITOR
 	my $monitor		=	$self->monitor();	

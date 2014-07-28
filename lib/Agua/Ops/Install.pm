@@ -424,20 +424,24 @@ method gitInstall ($installdir, $version) {
 	
 	##### CHECKOUT SPECIFIC VERSION
 	if ( not defined $version ) {
-		print "Version not defined. Getting latest version from cloned repo\n";
+		#print "Version not defined. Getting latest version from cloned repo\n";
 		$self->logDebug("Doing changeToRepo targetdir", "$targetdir");
-		my $change = $self->changeToRepo($targetdir);
+		my $change 		= 	$self->changeToRepo($targetdir);
 		$self->logDebug("change", $change);
 		$version		=	$self->currentLocalTag();
 		$self->logDebug("version", $version);
 		$self->version($version);
+
+		#### REPORT STATUS
+		print "Latest version: $version\n" if defined $version;
+		print "Can't find latest version\n" if not defined $version;
 		
 		#### IF DEFINED VERSION, CHANGE TARGET DIRECTORY NAME FROM latest TO version
 		if ( defined $version ) {
 			my $versiondir	=	"$installdir/$version";
-			my $command	=	"rm -fr $versiondir";
+			my $command		=	"rm -fr $versiondir";
 			$self->runCommand($command);
-			$command	=	"mv $targetdir $versiondir";
+			$command		=	"mv $targetdir $versiondir";
 			$self->runCommand($command);
 			$self->changeToRepo($versiondir);
 		}

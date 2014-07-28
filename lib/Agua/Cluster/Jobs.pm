@@ -625,13 +625,13 @@ sub setJob {
 
 	#### SET JOB LABEL, COMMANDS, ETC.
 	my $job;
-	$job->{label} = $label;
-	$job->{commands} = $commands;
-	$job->{outputdir} = $outputdir;
-	$job->{scriptfile} = $scriptfile;
-	$job->{stdoutfile} = $stdoutfile;
-	$job->{stderrfile} = $stderrfile;
-	$job->{lockfile} = $lockfile;
+	$job->{label} 		= $label;
+	$job->{commands} 	= $commands;
+	$job->{outputdir} 	= $outputdir;
+	$job->{scriptfile} 	= $scriptfile;
+	$job->{stdoutfile} 	= $stdoutfile;
+	$job->{stderrfile} 	= $stderrfile;
+	$job->{lockfile} 	= $lockfile;
 	
 	#$self->logDebug("job", $job);	
 	
@@ -803,6 +803,10 @@ sub printSgeScriptfile {
 
 	$self->logDebug("scriptfile", $scriptfile);
 
+	#### GET SLOTS
+	my $slots		= $self->slots();
+	$self->logDebug("slots", $slots);	
+
 	my $queue = $self->queue();
 	my $cpus = $self->cpus();
 	$cpus = 1 if not defined $cpus or not $cpus;
@@ -828,6 +832,16 @@ sub printSgeScriptfile {
 	
 	#### ADD QUEUE
 	print SHFILE qq{#\$ -q $queue\n};
+
+	#### ADD SLOTS
+	#print SHFILE qq{#\$ -pe threaded $slots\n};
+	
+	##### ADD RESERVATIOIN
+	#print SHFILE qq{#\$ -R y\n};
+
+	#### ADD RESERVATIOIN
+	print SHFILE qq{#\$ -l h=annaisystems0*\n};
+
 
 	#### ADD WALLTIME IF DEFINED
 	my $walltime = $self->walltime();

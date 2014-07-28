@@ -546,6 +546,8 @@ method runInParallel ($workflowhash, $sampledata) {
 
 =cut
 
+	$self->logCaller("");
+
 	my $username 	=	$self->username();
 	my $cluster 	=	$self->cluster();
 	my $project 	=	$self->project();
@@ -571,12 +573,14 @@ method runInParallel ($workflowhash, $sampledata) {
 	my $scheduler	=	$self->scheduler() || $self->conf()->getKey("agua:SCHEDULER", undef);
 	$self->logDebug("scheduler", $scheduler);
 
-	#### CREATE UNIQUE QUEUE FOR WORKFLOW
+	#### GET ENVIRONMENT VARIABLES
 	my $envars = $self->getEnvars($username, $cluster);
 	$self->logDebug("$$ envars", $envars);
 
+	#### CREATE QUEUE FOR WORKFLOW
 	$self->createQueue($username, $cluster, $project, $workflow, $envars);
 
+	#### GET STAGES
 	my $stages	=	$self->setStages($username, $cluster, $workflowhash, $project, $workflow, $workflownumber, undef);
 	$self->logDebug("no. stages", scalar(@$stages));
 	#$self->logDebug("stages", $stages);
@@ -598,6 +602,7 @@ method runInParallel ($workflowhash, $sampledata) {
 	#### WORKFLOW PROCESS ID
 	my $workflowpid = $self->workflowpid();
 
+	$self->logDebug("DOING ALL STAGES stage->setStageJob()");
 	foreach my $stage ( @$stages )  {
 		#$self->logDebug("stage", $stage);
 		my $installdir		=	$stage->installdir();
@@ -1135,6 +1140,9 @@ method setStages ($username, $cluster, $data, $project, $workflow, $workflownumb
 	$self->logDebug("$$ project", $project);
 	$self->logDebug("$$ workflow", $workflow);
 	
+	#### GET SLOTS (NUMBER OF CPUS ALLOCATED TO CLUSTER JOB)
+	my $slots	=	$self->getSlots($username, $cluster);
+	
 	#### SET STAGES
 	my $stages = $self->getStages($data);
 	
@@ -1223,8 +1231,13 @@ method setStages ($username, $cluster, $data, $project, $workflow, $workflownumb
 		#### MAX JOBS
 		$stage->{maxjobs}		=	$self->maxjobs();
 
+		#### SLOTS
+		$stage->{slots}			=	$slots;
 
+		#### QUEUE
 		$stage->{queue}			=  	$queue;
+
+		#### SAMPLE HASH
 		$stage->{samplehash}	=  	$samplehash;
 		#### LATER: REPLACE
 		#$stage->{queue_options}	=  	$queue_options;
@@ -1254,6 +1267,30 @@ method setStages ($username, $cluster, $data, $project, $workflow, $workflownumb
 	$self->logGroupEnd("Agua::Workflow::setStages");
 
 	return $stageobjects;
+}
+
+method getSlots ($username, $cluster) {
+	$self->logCaller("");
+
+	return if not defined $username;
+	return if not defined $cluster;
+	
+	$self->logDebug("username", $username);
+	$self->logDebug("cluster", $cluster);
+	
+	#### SET INSTANCETYPE
+	my $clusterobject = $self->getCluster($username, $cluster);
+	$self->logDebug("clusterobject", $clusterobject);
+	my $instancetype = $clusterobject->{instancetype};
+	$self->logDebug("$$ instancetype", $instancetype);
+	$self->instancetype($instancetype);
+
+	$self->logDebug("$$ DOING self->setSlotNumber");
+	my $slots = $self->setSlotNumber($instancetype);
+	$slots = 1 if not defined $slots;
+	$self->logDebug("$$ slots", $slots);
+
+	return $slots;	
 }
 
 method setFileDirs ($fileroot, $project, $workflow) {
@@ -1651,17 +1688,27 @@ method deleteQueue ($project, $workflow, $username, $cluster, $envars) {
 
 #### QUEUE
 method setQueue ($queue, $qmasterport, $execdport, $instancetype) {
+	$self->logCaller("");
 	$self->logDebug("instancetype", $instancetype);
 
+	$self->logDebug("$$ DOING self->setPE()");
+	$self->setPE("threaded", $queue);
+
 	$self->logDebug("$$ DOING self->setSlotNumber");
-	my $slots = $self->setSlotNumber($self->instancetype());
+	my $slots = $self->setSlotNumber($instancetype);
 	$slots = 1 if not defined $slots;
 	$self->logDebug("$$ slots", $slots);
 	$self->logDebug("$$ self->qmasterport", $self->qmasterport());
 	
+	my $maxjobs		=	$self->maxjobs();
+	$self->logDebug("maxjobs", $maxjobs);
+
+	#### SET QUEUE SLOTS (MAX TOTAL CPUS AVAILABLE IN THE QUEUE)
+	my $queueslots	=	$slots * $maxjobs;
+	
 	my $parameters = {
 		qname			=>	$queue,
-		slots			=>	$slots,
+		slots			=>	$queueslots,
 		shell			=>	"/bin/bash",
 		hostlist		=>	"\@allhosts",
 		load_thresholds	=>	"np_load_avg=20"
@@ -1670,7 +1717,9 @@ method setQueue ($queue, $qmasterport, $execdport, $instancetype) {
 	my $queuefile = $self->getQueuefile("queue-$queue");
 	$self->logDebug("$$ queuefile", $queuefile);
 	
-	my $exists = $self->queueExists($queue, $qmasterport, $execdport);
+	my $exists = undef;
+	
+	#my $exists = $self->queueExists($queue, $qmasterport, $execdport);
 	$self->logDebug("$$ exists", $exists);
 	
 	$self->_addQueue($queue, $queuefile, $parameters) if not $exists;
@@ -1698,7 +1747,7 @@ method setPE ($pe, $queue) {
 
 	$self->addPE($pe, $pefile, $slots);
 
-	#$self->addPEToQueue($pe, $queue, $queuefile);
+	$self->addPEToQueue($pe, $queue, $queuefile);
 
 	$self->logDebug("$$ Completed"); 
 }
