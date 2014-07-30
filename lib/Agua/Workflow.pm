@@ -524,12 +524,64 @@ method executeWorkflow {
 		}
 	}
 
+	$self->logDebug("success", $success);
+	my $status	=	"completed";
+	$status		=	"error" if not $success;
+
+	#### SET WORKFLOW STATUS
+	$self->setWorkflowStatus($status, $data);
+
+	#### ADD QUEUE SAMPLE
+	my $uuid	=	$samplehash->{sample};
+	$self->addQueueSample($uuid, $status, $data) if defined $uuid;
+		
 	print "Completed workflow $project.$workflow\n";
 
 	$self->logGroupEnd("$$ Agua::Workflow::executeWorkflow    COMPLETED");
 
 #	#### HANDLE ANY EXIT CALLS IN THE MODULES    
 #    EXITLABEL: { warn "EXITLABEL\n"; };
+}
+
+method setWorkflowStatus ($status, $data) {
+	$self->logDebug("status", $status);
+	$self->logDebug("data", $data);
+	
+	my $query = qq{UPDATE workflow
+SET
+status = '$status',
+WHERE username = '$data->{username}'
+AND project = '$data->{project}'
+AND name = '$data->{workflow}'
+AND number = '$data->{workflownumber}'};
+	$self->logDebug("$query");
+
+	my $success = $self->db()->do($query);
+	if ( not $success )
+	{
+		$self->logError("Can't update workflow $data->{workflow} (project: $data->{project}) with status: $status");
+		exit;
+	}
+}
+
+method addQueueSample ($uuid, $status, $data) {
+	$self->logDebug("uuid", $uuid);
+	$self->logDebug("status", $status);
+	
+	#### SET STATUS
+	$data->{status}	=	$status;
+	
+	#### SET SAMPLE
+	$data->{sample}	=	$data->{samplehash}->{sample};
+
+	#### SET TIME
+	my $time		=	$self->getMysqlTime();
+	$data->{time}	=	$time;
+
+	my $table		=	"queuesample";
+	my $keys		=	["username", "project", "workflow", "sample" ];
+	
+	return $self->_addToTable($table, $data, $keys);
 }
 
 #### EXECUTE SAMPLE WORKFLOWS IN PARALLEL

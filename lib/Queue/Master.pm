@@ -1558,7 +1558,7 @@ ORDER BY queuesample.username, queuesample.project, queuesample.workflownumber, 
 	return	$self->db()->queryhasharray($query);
 }
 
-#### LISTEN FOR TOPICS 
+#### LISTEN FOR TOPICS
 method listenTopics {
 	$self->logDebug("");
 	my $childpid = fork;

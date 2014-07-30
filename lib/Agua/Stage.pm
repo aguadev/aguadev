@@ -180,9 +180,10 @@ method runLocally {
 	#### ADD USAGE COMMAND
 	my $usagefile	=	$self->stdoutfile();
 	$usagefile		=~	s/stdout$/usage/;
-	my $usage		=	qq{time /usr/bin/time \\
+	my $usage		=	qq{/usr/bin/time \\
 -o $usagefile \\
--f "%Uuser %Ssystem %Eelapsed %PCPU (%Xtext+%Ddata %Mmax)k "};
+-f "%Uuser %Ssystem %Eelapsed %PCPU (%Xtext+%Ddata %Mmax)k " \\
+};
 
 	#### SET LIBS
 	#### ADD PERL5LIB FOR EXTERNAL SCRIPTS TO FIND Agua MODULES
@@ -198,7 +199,7 @@ method runLocally {
 	my $prefix = "";
 	my $executor = $self->executor();
 	$self->logDebug("executor", $executor);
-	if ( $executor =~ /^\S+\.sh\s+&+\s*/ ) {
+	if ( $executor =~ /^\s*\S+\.sh\s+&+\s*/ ) {
 		my ($file)	=	$executor	=~ /^(\S+\.sh)/;
 		$self->logDebug("file", $file);
 		$executor	=~ s/^\S+\.sh\s+&+\s*//;
@@ -208,14 +209,14 @@ method runLocally {
 	else {
 		$prefix 	=	$executor;
 	}
-	$self->logDebug("$$ prefix" . $prefix);
+	$self->logDebug("$$ prefix", $prefix);
 	
 	#### PREFIX APPLICATION PATH WITH PACKAGE INSTALLATION DIRECTORY
 	my $application = $self->installdir() . "/" . $self->location();	
 	#$self->logDebug("$$ application", $application);
 	
 	#### SET SYSTEM CALL
-	my @systemcall = ($libs, $usage, $prefix, $application, @$arguments);
+	my @systemcall = ($libs, $prefix, $usage, $application, @$arguments);
 	$self->logDebug("SYSTEMCALL", \@systemcall);
 	
 	####
@@ -871,8 +872,6 @@ method isComplete {
 	return 0 if not defined $complete or not $complete;
 	return 1;
 }
-
-
 
 method setRunTimes ($jobid) {
 	$self->logDebug("$$ Stage::setRunTimes(jobid)");
