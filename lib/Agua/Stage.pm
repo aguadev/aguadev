@@ -219,14 +219,14 @@ method runLocally {
 	my @systemcall = ($libs, $prefix, $usage, $application, @$arguments);
 	$self->logDebug("SYSTEMCALL", \@systemcall);
 	
-	####
+	#### REDIRECTION IS 1 IF SYSTEM CALL CONTAINS A ">"
 	my $redirection	=	$self->containsRedirection(\@systemcall);
 	
 	#### SET STDOUT AND STDERR FILES
 	my $stdoutfile = $self->stdoutfile;
 	my $stderrfile = $self->stderrfile;
-	push @systemcall, "1> $stdoutfile" if defined $stdoutfile and not $redirection;
-	push @systemcall, "2> $stderrfile" if defined $stderrfile;
+	push @systemcall, " \\\n1> $stdoutfile" if defined $stdoutfile and not $redirection;
+	push @systemcall, " \\\n2> $stderrfile" if defined $stderrfile;
 	$self->logDebug("$$ systemcall: @systemcall");
 
 	#### CLEAN UP BEFOREHAND

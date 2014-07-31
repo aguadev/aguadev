@@ -1,0 +1,25 @@
+* 37 seconds ago 586909f -Inc lib/Agua/Workflow.pm: Enabled Workflow::setWorkflowStatus call in runLocally
+|  
+* 23 hours ago 79e2b99 [0.8.0-beta.1+build.79] Fully enabled CPU and memory usage report in Agua::Stage
+|  
+* 23 hours ago b29ac66 -Inc lib/Agua/Stage.pm: Minor change to runLocal system call - put time on own lines
+|  
+* 23 hours ago 2386657 -Fix lib/Agua/Stage.pm: Allowed for empty space before 'executor' envars file
+|  
+* 3 days ago 99813e4 [0.8.0-beta.1+build.78] Disabled PE and replaced with maxjobs throttling on SGE
+|  
+* 3 days ago ea6fdc6 -Inc lib/Agua: Minor changes
+|  
+* 3 days ago e507c3b -Inc lib/Agua/Ops/Install.pm: Added output actual version when installing 'max'
+|  
+* 3 days ago d097b95 -Inc lib/Agua/Cluster/Jobs.pm: Disabled PE and enabled maxjobs throttling
+|  
+* 6 days ago 183db8a [0.8.0-beta.1+build.77] Fixed stage table and enabled CLI::Project::runStage
+|  
+* 6 days ago 992ad76 -Inc lib/Agua: Enabled runStage in CLI::Project, removed Cluster::Jobs usage
+|  
+* 6 days ago 73faa1b -Fix bin/sql/stage.sql: Increased executor field length to 255
+|  
+* 8 days ago 41e3c21 [0.8.0-beta.1+build.76] Support missing paramtype in stageparameter
+|  
+* 8 days ago afe7b9e -Inc lib/Agua/Common/Parameter.pm: Added support for stageparameter with undefined paramtype

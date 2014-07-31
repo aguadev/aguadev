@@ -46,9 +46,7 @@ use strict;
 use warnings;
 use Carp;
 
-#class Agua::Workflow with (Logger) {
 class Agua::Workflow with (Logger, Exchange, Agua::Common) {
-#class Agua::Workflow with (Logger, Exchange) {
 
 #### EXTERNAL MODULES
 use Data::Dumper;
@@ -509,7 +507,7 @@ method executeWorkflow {
 	$self->logDebug("scheduler", $scheduler);
 
 	my $success;
-	if ( not defined $cluster or not $cluster ) {
+	if ( not defined $cluster or not $cluster or $scheduler eq "local" or not defined $scheduler ) {
 		$self->logDebug("$$ DOING self->runLocally");
 		$success	=	$self->runLocally($stages, $username, $project, $workflow, $workflownumber, $cluster);
 	}
@@ -549,11 +547,11 @@ method setWorkflowStatus ($status, $data) {
 	
 	my $query = qq{UPDATE workflow
 SET
-status = '$status',
+status = '$status'
 WHERE username = '$data->{username}'
 AND project = '$data->{project}'
 AND name = '$data->{workflow}'
-AND number = '$data->{workflownumber}'};
+AND number = $data->{workflownumber}};
 	$self->logDebug("$query");
 
 	my $success = $self->db()->do($query);
@@ -573,11 +571,13 @@ method addQueueSample ($uuid, $status, $data) {
 	
 	#### SET SAMPLE
 	$data->{sample}	=	$data->{samplehash}->{sample};
-
+	
 	#### SET TIME
 	my $time		=	$self->getMysqlTime();
 	$data->{time}	=	$time;
-
+	
+	$self->logDebug("data", $data);
+	
 	my $table		=	"queuesample";
 	my $keys		=	["username", "project", "workflow", "sample" ];
 	
