@@ -264,7 +264,7 @@ method tsvToHash ($tsvline, $fields) {
 
 method do ($query) {
 #### RETURN 1 IF COMMAND WAS SUCCESSFUL, OTHERWISE RETURN 0	
-	#$self->logCaller("");
+	$self->logCaller("query", $query);
 
 	$self->logNote("query", $query);
 	$self->dbh()->{RaiseError} = 0; # DISABLE TERMINATION ON ERROR

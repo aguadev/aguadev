@@ -747,7 +747,6 @@ class Agua::CLI::Workflow with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::
     }
     
     method create {
-		print "here\n";
 		$self->_getopts();
         $self->logDebug("Workflow::create()");
         my $inputfile = $self->inputfile();

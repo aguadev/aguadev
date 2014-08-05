@@ -698,6 +698,9 @@ method runLocally ($stages, $username, $project, $workflow, $workflownumber, $cl
 		#### SET WORKFLOW STATUS TO 'completed'
 		$self->updateWorkflowStatus($username, $cluster, $project, $workflow, 'completed');
 	}
+	
+$self->logDebug("DEBUG EXIT") and exit;
+
 }
 
 method runSge ($stages, $username, $project, $workflow, $workflownumber, $cluster) {	
@@ -1155,7 +1158,7 @@ method runStages ($stages) {
 		if ( $exitcode == 0 ) {
 			$self->logDebug("$$ Stage $stage_number: '$stage_name' completed successfully");
 			$stage->setStatus('completed');
-		$self->bigDisplayEnd("'$project.$workflow' stage $stage_number $stage_name status: COMPLETED");
+			$self->bigDisplayEnd("'$project.$workflow' stage $stage_number $stage_name status: COMPLETED");
 			
 			my $status	=	"completed";
 			if ( defined $self->worker() ) {
@@ -1167,7 +1170,7 @@ method runStages ($stages) {
 			my $status	=	"error: $exitcode";
 			
 			$stage->setStatus('error');
-		$self->bigDisplayEnd("'$project.$workflow' stage $stage_number $stage_name status: ERROR");
+			$self->bigDisplayEnd("'$project.$workflow' stage $stage_number $stage_name status: ERROR");
 
 			if ( defined $self->worker() ) {
 				$self->updateJobStatus($stage, $status);
@@ -1401,8 +1404,8 @@ method getStageFields {
 	];
 }
 method updateJobStatus ($stage, $status) {
-	$self->logDebug("$$ stage", $stage->name());
 	$self->logDebug("$$ status", $status);
+	$self->logDebug("$$ stage", $stage->name());
 
 	#### POPULATE FIELDS
 	my $data	=	{};
@@ -1410,27 +1413,32 @@ method updateJobStatus ($stage, $status) {
 	foreach my $field ( @$fields ) {
 		$data->{$field}	=	$stage->$field();
 	}
+
+	#### SAMPLE HASH
+	my $samplehash		=	$self->samplehash();
+	$self->logDebug("samplehash", $samplehash);
+	
+	$data->{sample}		=	$samplehash->{sample};
 	
 	#### TIME
-	$data->{time}	=	$self->getMysqlTime();
+	$data->{time}		=	$self->getMysqlTime();
 	
 	#### MODE
-	$data->{mode}	=	"updateJobStatus";
+	$data->{mode}		=	"updateJobStatus";
 	
 	#### ADD stage... TO NAME AND NUMBER
-	$data->{stage}	=	$stage->name();
+	$data->{stage}		=	$stage->name();
 	$data->{stagenumber}	=	$stage->number();
 
 	#### ADD ANCILLARY DATA
-	$data->{status}	=	$status;	
-	$data->{host}	=	$self->getHostName();
-	$self->logDebug("$$ data", $data);
+	$data->{status}		=	$status;	
+	$data->{host}		=	$self->getHostName();
 
 	#### ADD STDOUT AND STDERR
-	my $stdout 		=	"";
-	my $stderr		=	"";
-	$stdout			=	$self->getFileContents($stage->stdoutfile()) if -f $stage->stdoutfile();
-	$stderr			=	$self->getFileContents($stage->stderrfile()) if -f $stage->stderrfile();
+	my $stdout 			=	"";
+	my $stderr			=	"";
+	$stdout				=	$self->getFileContents($stage->stdoutfile()) if -f $stage->stdoutfile();
+	$stderr				=	$self->getFileContents($stage->stderrfile()) if -f $stage->stderrfile();
 	$data->{stderr}		=	$stderr;
 	$data->{stdout}		=	$stdout;
 	
@@ -1439,8 +1447,11 @@ method updateJobStatus ($stage, $status) {
 	
 	#### SEND TOPIC	
 	$self->logDebug("$$ DOING worker->sendTopic");
+	$self->logDebug("$$ sending data", $data);
 	my $key = "update.job.status";
 	$self->worker()->sendTopic($data, $key);
+
+	$self->logDebug("$$ topic sent");
 }
 
 method getHostName {

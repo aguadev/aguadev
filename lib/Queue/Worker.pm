@@ -98,16 +98,16 @@ method heartbeat {
 	}
 	
 	my $cpu		=	$self->getCpu();
-	$self->logDebug("cpu", $cpu);
+	#$self->logDebug("cpu", $cpu);
 	
 	my $io		=	$self->getIo();
-	$self->logDebug("io", $io);
+	#$self->logDebug("io", $io);
 	
 	my $disk		=	$self->getDisk();
-	$self->logDebug("disk", $disk);
+	#$self->logDebug("disk", $disk);
 
 	my $memory		=	$self->getMemory();
-	$self->logDebug("memory", $memory);
+	#$self->logDebug("memory", $memory);
 		
 	my $key	=	"update.host.status";
 	my $data	=	{

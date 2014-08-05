@@ -125,7 +125,6 @@ method biorepo {
     my $basedir		= 	$self->conf()->getKey("agua", "INSTALLDIR");
     my $installdir 	= 	"$basedir/repos/public/$owner/$opsrepo";
 
-
 	$self->username($username);
 	
 	print "Installing opsrepo: $opsrepo\n";

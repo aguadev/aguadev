@@ -23,7 +23,7 @@ my $chan = $conn->open_channel();
 
 my $msg = join(' ', @ARGV) || "info: Hello World!";
 my $exchange	=	'topicexchange';
-my $routingkey	=	"syoung.CU.Download";
+my $routingkey	=	"update.job.status";
 
 $chan->publish(
     exchange => $exchange,

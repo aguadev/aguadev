@@ -479,7 +479,7 @@ ORDER BY number};
 	}
 
     method runStage {
-		$self->log(4);
+		#$self->log(4);
         $self->logDebug("");
 
         #### READ INPUTFILE
@@ -500,7 +500,8 @@ ORDER BY number};
         $self->logDebug("stagenumber", $stagenumber);
 		my $samplestring	=	$self->samplestring();
 		$self->logDebug("samplestring", $samplestring);
-		my $samplehash		=	$self->sampleStringToHash($samplestring);
+		my $samplehash		=	undef;
+		$self->sampleStringToHash($samplestring) if defined $samplestring;
 		$self->logDebug("samplehash", $samplehash);
 
 		#### VERIFY INPUTS

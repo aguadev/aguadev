@@ -216,7 +216,7 @@ method runLocally {
 	#$self->logDebug("$$ application", $application);
 	
 	#### SET SYSTEM CALL
-	my @systemcall = ($libs, $prefix, $usage, $application, @$arguments);
+	my @systemcall = ($libs, $usage, $prefix, $application, @$arguments);
 	$self->logDebug("SYSTEMCALL", \@systemcall);
 	
 	#### REDIRECTION IS 1 IF SYSTEM CALL CONTAINS A ">"
