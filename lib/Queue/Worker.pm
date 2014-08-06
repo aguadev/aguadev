@@ -148,14 +148,14 @@ method listenTasks {
 	my $taskqueue =	$self->conf()->getKey("queue:taskqueue", undef);
 	$self->logDebug("$$ taskqueue", $taskqueue);
 
-	my $childpid = fork;
-	if ( $childpid ) #### ****** Parent ****** 
-	{
-		$self->logDebug("$$ PARENT childpid", $childpid);
-	}
-	elsif ( defined $childpid ) {
+	#my $childpid = fork;
+	#if ( $childpid ) #### ****** Parent ****** 
+	#{
+	#	$self->logDebug("$$ PARENT childpid", $childpid);
+	#}
+	#elsif ( defined $childpid ) {
 		$self->receiveTask($taskqueue);	
-	}		
+	#}		
 }
 
 method receiveTask ($taskqueue) {
@@ -236,6 +236,72 @@ method handleTask ($json) {
 	#### SHUT DOWN TASK LISTENER IF SPECIFIED IN config.yaml
 	$self->verifyShutdown();
 }
+
+method sendTask ($task) {	
+	$self->logDebug("task", $task);
+	my $processid	=	$$;
+	$self->logDebug("processid", $processid);
+	$task->{processid}	=	$processid;
+
+	#### SET QUEUE
+	my $queuename		=	"update.job.status";
+	$task->{queue}		=	$queuename;
+	$self->logDebug("queuename", $queuename);
+	
+	#### ADD UNIQUE IDENTIFIERS
+	$task	=	$self->addTaskIdentifiers($task);
+
+	my $jsonparser = JSON->new();
+	my $json = $jsonparser->encode($task);
+	$self->logDebug("json", $json);
+
+	#### GET CONNECTION
+	my $connection	=	$self->newConnection();
+	$self->logDebug("DOING connection->open_channel()");
+	my $channel = $connection->open_channel();
+	$self->channel($channel);
+	#$self->logDebug("channel", $channel);
+	
+	$channel->declare_queue(
+		queue => $queuename,
+		durable => 1,
+	);
+	
+	#### BIND QUEUE TO EXCHANGE
+	$channel->publish(
+		exchange => '',
+		routing_key => $queuename,
+		body => $json,
+	);
+	
+	print " [x] Sent TASK: '$json'\n";
+}
+
+method addTaskIdentifiers ($task) {
+	
+	#### SET TOKEN
+	$task->{token}		=	$self->token();
+	
+	#### SET SENDTYPE
+	$task->{sendtype}	=	"task";
+	
+	#### SET DATABASE
+	$task->{database} 	= 	$self->db()->database() || "";
+
+	#### SET USERNAME		
+	$task->{username} 	= 	$task->{username};
+
+	#### SET SOURCE ID
+	$task->{sourceid} 	= 	$self->sourceid();
+	
+	#### SET CALLBACK
+	$task->{callback} 	= 	$self->callback();
+	
+	$self->logDebug("Returning task", $task);
+	
+	return $task;
+}
+
 
 ### LISTEN FOR TOPICS 
 method listenTopics {
@@ -390,6 +456,11 @@ method getHostName {
 method sendTopic ($data, $key) {
 	#$self->logDebug("$$ data", $data);
 	#$self->logDebug("$$ key", $key);
+
+	$self->logDebug("DIVERTING TO sendTask()");
+	$self->sendTask($data);
+
+
 
 	my $exchange	=	$self->conf()->getKey("queue:topicexchange", undef);
 	#$self->logDebug("$$ exchange", $exchange);

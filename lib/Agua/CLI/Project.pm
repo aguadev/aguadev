@@ -501,7 +501,7 @@ ORDER BY number};
 		my $samplestring	=	$self->samplestring();
 		$self->logDebug("samplestring", $samplestring);
 		my $samplehash		=	undef;
-		$self->sampleStringToHash($samplestring) if defined $samplestring;
+		$samplehash			=	$self->sampleStringToHash($samplestring) if defined $samplestring;
 		$self->logDebug("samplehash", $samplehash);
 
 		#### VERIFY INPUTS
@@ -643,6 +643,9 @@ ORDER BY number};
 	
 	
 	method _runWorkflow ($workflowhash, $samplehash) {
+		$self->logDebug("workflowhash", $workflowhash);
+		$self->logDebug("samplehash", $samplehash);
+		
 		$workflowhash->{start}		=	1;
 		$workflowhash->{workflow}	=	$workflowhash->{name};
 		$workflowhash->{workflownumber}	=	$workflowhash->{number};

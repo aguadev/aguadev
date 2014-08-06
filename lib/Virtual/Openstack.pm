@@ -219,11 +219,11 @@ method deleteNode ($authfile, $id) {
 	return $success;
 }
 
-method getQuota ($authfile, $tenantid) {
+method getQuotas ($authfile, $tenantid) {
 	$self->logDebug("authfile", $authfile);
 	$self->logDebug("tenantid", $tenantid);
 	
-	my $command	=	". $authfile && nova quota-show $tenantid";
+	my $command	=	". $authfile && nova quota-show";
 	$self->logDebug("command", $command);
 	
 	return `$command`;

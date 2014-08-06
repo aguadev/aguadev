@@ -99,8 +99,9 @@ method manage {
 	#$self->logDebug("shutdown", $shutdown);
 	#$self->listenTopics() if not $shutdown eq "true";
 
-	#### LISTEN FOR REPORTS FROM WORKERS
-	$self->listenTopics();
+	############## MOVED TO Listener.pm
+	############## LISTEN FOR REPORTS FROM WORKERS
+	##########$self->listenTopics();
 
 	#### 
 	#while ( not $shutdown eq "true" ) {
@@ -460,7 +461,7 @@ method balanceInstances ($workflows) {
 	#
 	my $durations	=	$self->getDurations($workflows);
 	$self->logDebug("durations", $durations);
-
+	
 	#### NARROW DOWN TO ONLY QUEUES WITH CLUSTERS
 	$workflows	=	$self->clusterWorkflows($workflows);	
 	$self->logDebug("cluster only workflows", $workflows);
@@ -479,11 +480,17 @@ method balanceInstances ($workflows) {
 	$self->logDebug("latestcompleted", $latestcompleted);
 
 	# 4. GET TOTAL QUOTA FOR RESOURCE (DEFAULT: NO. CPUS)
-	#my $quota	=	$self->getResourceQuota($username, $metric);
+	my $metric	=	$self->metric();	
+	my $quota	=	$self->getResourceQuota($username, $metric);
+	$self->logDebug("quota", $quota);
 
 #### DEBUG
-my $quota		=	1;
-$self->logDebug("quota", $quota);
+
+$quota		=	400;
+$self->logDebug("DEBUG quota", $quota);
+
+#### DEBUG
+
 
 	my $resourcecounts	=	[];
 	my $instancecounts	=	[];
@@ -491,8 +498,8 @@ $self->logDebug("quota", $quota);
 	#### 1. PROJECT WORKFLOWS HAVE JUST STARTED RUNNING, OR
 	#### 2. SAMPLES HAVE JUST BEEN LOADED
 	#### 
-	if ( not defined $latestcompleted ) {
-		
+	if ( not defined $latestcompleted or not %$durations ) {
+		$self->logDebug("Doing getDefaultResource");
 		my $resourcecount	=	$self->getDefaultResource($$workflows[0], $instancetypes, $quota);
 		$self->logDebug("resourcecount", $resourcecount);
 
@@ -508,6 +515,7 @@ $self->logDebug("quota", $quota);
 		$instancecounts	=	[ $instancecount ];
 	}
 	else {
+		$self->logDebug("Doing getResourceCounts");
 		##### GET CURRENT COUNT OF VMS PER QUEUE (queueample STATUS 'started')
 		##### ASSUMES ONE VM PER TASK
 		#my $currentcounts=	$self->getCurrentCounts();
@@ -526,7 +534,17 @@ $self->logDebug("quota", $quota);
 		}
 	}
 	$self->logDebug("resourcecounts", $resourcecounts);
+	$self->logDebug("instancecounts", $instancecounts);
 	
+	$self->addRemoveNodes($workflows, $instancecounts, $currentcounts);
+
+	#   TAILOUT AT END OF SAMPLE RUN:
+	#   NB: maxJobs <= NUMBER OF REMAINING SAMPLES FOR THE WORKFLOW
+}
+
+method addRemoveNodes ($workflows, $instancecounts, $currentcounts) {
+	$self->logDebug("workflows", $workflows);
+	$self->logDebug("instancecounts", $instancecounts);
 	
 	for ( my $i = 0; $i < @$instancecounts; $i++ ) {
 		my $instancecount =	$$instancecounts[$i];
@@ -548,12 +566,8 @@ $self->logDebug("quota", $quota);
 		elsif ( $difference < 0 ) {
 			$self->deleteNodes($$workflows[$i], $difference);
 		}
-	}
-
-	#   TAILOUT AT END OF SAMPLE RUN:
-	#   NB: maxJobs <= NUMBER OF REMAINING SAMPLES FOR THE WORKFLOW
+	}	
 }
-
 method addNodes ($workflow, $number) {
 	my $username	=	$workflow->{username};
 	my $project		=	$workflow->{project};
@@ -940,9 +954,16 @@ method adjustCounts ($queues, $resourcecounts, $latestcompleted) {
 }
 
 method getResourceCounts ($queues, $durations, $instancetypes, $quota) {
-=doc
+
+
+=head2	SUBROUTINE	getResourceCounts
+
+=head2	PURPOSE
+	
+	Allocate resources (e.g., CPUs) to each workflow
 
 =head2	ALGORITHM
+
 	At max throughput:
 	[1] T = t1 = t2 = t3
 	Where T = total throughput, tx = throughput for workflow x
@@ -1074,6 +1095,18 @@ method getResourceCounts ($queues, $durations, $instancetypes, $quota) {
 }
 
 method getInstanceCounts ($queues, $instancetypes, $resourcecounts) {
+
+=head2	SUBROUTINE	getInstanceCounts
+
+=head2	PURPOSE
+	
+	Allocate instances to each workflow
+
+=head2	ALGORITHM
+
+
+=cut
+
 	my $metric	=	$self->metric();
 	$self->logDebug("metric", $metric);
 
@@ -1123,23 +1156,48 @@ method getQueueNames ($queues) {
 }
 
 method getResourceQuota ($username, $metric) {
+=pod
+
+nova quota-show
++-----------------------------+---------+
+| Quota                       | Limit   |
++-----------------------------+---------+
+| instances                   | 100     |
+| cores                       | 576     |
+| ram                         | 4718592 |
+| floating_ips                | 10      |
+| fixed_ips                   | -1      |
+| metadata_items              | 128     |
+| injected_files              | 5       |
+| injected_file_content_bytes | 10240   |
+| injected_file_path_bytes    | 255     |
+| key_pairs                   | 100     |
+| security_groups             | 10      |
+| security_group_rules        | 20      |
++-----------------------------+---------+
+
+=cut
+
 	$self->logCaller("");
 	$self->logDebug("username", $username);
 	$self->logDebug("metric", $metric);
 
-	my $quota	=	$self->getQuota($username);
-	$self->logDebug("quota", $quota);
-	
+	my $quotas	=	$self->getQuotas($username);
+	#$self->logDebug("quotas", $quotas);
+
+	my $quota	=	undef;
 	if ( $metric eq "cpus" ) {
-		$quota	=	$self->getQuota($username);
+		($quota)	=	$quotas	=~	/cores\s+\|\s+(\d+)/ms;
 		$self->logDebug("quota", $quota);
-		
+	}
+	else {
+		print "Master::getResourceQuota    Metric not supported: $metric\n" and exit;
 	}
 
 	return $quota;	
 }
 
-method getQuota ($username) {
+method getQuotas ($username) {
 	$self->logCaller("");
 	$self->logDebug("username", $username);
 	my $tenant	=	$self->getTenant($username);
@@ -1148,10 +1206,10 @@ method getQuota ($username) {
 	$self->printAuth($username) if not -f $authfile;
 	$self->logDebug("authfile", $authfile);
 	
-	my $quota	=	$self->virtual()->getQuota($authfile, $tenant->{os_tenant_id});
-	$self->logDebug("quota", $quota);
+	my $quotas	=	$self->virtual()->getQuotas($authfile, $tenant->{os_tenant_id});
+	#$self->logDebug("quotas", $quotas);
 	
-	return $quota;
+	return $quotas;
 }
 
 method printAuth ($username) {
@@ -1362,7 +1420,8 @@ method getDurations ($queues) {
 		my $duration	=	$self->getQueueDuration($queue);
 		#$self->logDebug("duration", $duration);
 
-		$durations->{$queuename}	= $duration if defined $durations;
+		$durations->{$queuename}	= $duration if defined $duration;
+		last if not defined $duration;
 	}		
 
 	return $durations;
@@ -1373,7 +1432,7 @@ method getQueueDuration ($queue) {
 
 	my $provenance	=	$self->getQueueProvenance($queue);
 	return if not defined $provenance or not @$provenance;
-	$self->logDebug("provenance", $provenance);
+	#$self->logDebug("provenance", $provenance);
 	
 	#### COUNT ALL NON-ERROR start-completed DURATIONS
 	my $samples	=	{};
@@ -1409,6 +1468,7 @@ method getQueueDuration ($queue) {
 	$duration = $duration / scalar(@$totaldurations) if @$totaldurations;
 	#$self->logDebug("FINAL AVERAGE duration", $duration);
 
+	return undef if $duration == 0;
 	return $duration;
 }
 
@@ -1628,7 +1688,8 @@ method listenTopics {
 		$self->logDebug("IN PARENT childpid", $childpid);
 	}
 	elsif ( defined $childpid ) {
-		$self->receiveTopic();
+		#$self->receiveTopic();
+		$self->receiveTask("update.job.status");
 	}
 }
 
@@ -1687,6 +1748,83 @@ method receiveTopic {
 	
 	# Wait forever
 	AnyEvent->condvar->recv;	
+}
+
+method receiveTask ($taskqueue) {
+	$self->logDebug("$$ taskqueue", $taskqueue);
+	
+	#### OPEN CONNECTION
+	my $connection	=	$self->newConnection();	
+	my $channel 	= 	$connection->open_channel();
+	#$self->channel($channel);
+	$channel->declare_queue(
+		queue => $taskqueue,
+		durable => 1,
+	);
+	
+	print "$$ [*] Waiting for tasks in queue: $taskqueue\n";
+	
+	$channel->qos(prefetch_count => 1,);
+	
+	no warnings;
+	my $handler	= *handleTask;
+	use warnings;
+	my $this	=	$self;
+	
+	$channel->consume(
+		on_consume	=>	sub {
+			my $var 	= 	shift;
+			print "$$ Master::receiveTask    DOING CALLBACK";
+		
+			my $body 	= 	$var->{body}->{payload};
+			print " [x] Received $body\n";
+		
+			my @c = $body =~ /\./g;
+		
+			#Coro::async_pool {
+
+				#### RUN TASK
+				&$handler($this, $body);
+				
+				#### SEND ACK AFTER TASK COMPLETED
+				$channel->ack();
+			#}
+		},
+		no_ack => 0,
+	);
+	
+	#### SET self->connection
+	$self->connection($connection);
+	
+	# Wait forever
+	AnyEvent->condvar->recv;	
+}
+
+method handleTask ($json) {
+	#$self->logDebug("json", substr($json, 0, 200));
+
+	my $data = $self->jsonparser()->decode($json);
+	#$self->logDebug("data", $data);
+
+	my $duplicate	=	$self->duplicate();
+	if ( defined $duplicate and not $self->deeplyIdentical($data, $duplicate) ) {
+		#$self->logDebug("Skipping duplicate message");
+		return;
+	}
+	else {
+		$self->duplicate($data);
+	}
+
+	my $mode =	$data->{mode} || "";
+	#$self->logDebug("mode", $mode);
+	
+	if ( $self->can($mode) ) {
+		$self->$mode($data);
+	}
+	else {
+		print "mode not supported: $mode\n";
+		$self->logDebug("mode not supported: $mode");
+	}
 }
 
 method handleTopic ($json) {
