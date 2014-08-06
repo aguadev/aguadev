@@ -844,7 +844,7 @@ method createSourceFiles ($username, $outputdir) {
 	$self->logDebug("no. sources", scalar(@$sources));
 	$self->logDebug("sources", $sources);
 
-$self->logDebug("DEBUG EXIT") and exit;
+#$self->logDebug("DEBUG EXIT") and exit;
 
 	foreach my $source ( @$sources ) {
 
@@ -1012,7 +1012,7 @@ method _syncPackage ($resource, $privacy, $message) {
 	$self->exitRepo();
 
 	
-	$self->logDebug("DEBUG EXIT") and exit;
+	#$self->logDebug("DEBUG EXIT") and exit;
 	
 	
 	return 1;

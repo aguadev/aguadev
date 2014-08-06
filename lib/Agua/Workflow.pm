@@ -698,9 +698,6 @@ method runLocally ($stages, $username, $project, $workflow, $workflownumber, $cl
 		#### SET WORKFLOW STATUS TO 'completed'
 		$self->updateWorkflowStatus($username, $cluster, $project, $workflow, 'completed');
 	}
-	
-$self->logDebug("DEBUG EXIT") and exit;
-
 }
 
 method runSge ($stages, $username, $project, $workflow, $workflownumber, $cluster) {	

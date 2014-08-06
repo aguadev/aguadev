@@ -58,7 +58,7 @@ method mount ($uuid, $gtrepo, $mountdir, $configfile) {
 	$self->logDebug("command", $command);
 
 
-$self->logDebug("DEBUG EXIT") and exit;
+#$self->logDebug("DEBUG EXIT") and exit;
 
 	$self->runCommand($command);
 }
