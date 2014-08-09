@@ -310,7 +310,7 @@ sub _removeFromTable {
 $where};
 	$self->logNote("\n$query");
 	my $result = $self->db()->do($query);
-	$self->logDebug("result", $result);		;
+	$self->logNote("result", $result);		;
 	
 	return 1 if defined $result;
 	return 0;

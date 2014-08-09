@@ -41,7 +41,7 @@ BEGIN {
 
 #### INTERNAL MODULES
 use Conf::Yaml;
-use Queue::Manager;
+use Exchange::Manager;
 
 my $installdir 	=	 $ENV{'installdir'} || "/agua";
 my $configfile	=	"$installdir/conf/config.yaml";
@@ -67,7 +67,7 @@ GetOptions (
     'pass=s'		=> \$pass,
     'message=s'		=> \$message,
     'vhost=s'		=> \$vhost,
-    'log=i'     => \$log,
+    'log=i'     	=> \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
@@ -83,22 +83,20 @@ my $conf = Conf::Yaml->new(
     logfile     =>  $logfile
 );
 
-my $object = Queue::Manager->new({
+my $object = Exchange::Manager->new({
+    host		=>	$host,
+    port		=>	$port,
+    user		=>	$user,
+    pass		=>	$pass,
+    vhost		=>	$vhost,
+
 	conf		=>	$conf,
     log			=>	$log,
     printlog	=>	$printlog,
     logfile     =>  $logfile
 });
 
-	$object->send({
-	mode		=>	$mode,
-    host		=>	$host,
-    port		=>	$port,
-    user		=>	$user,
-    pass		=>	$pass,
-    message		=>	$message,
-    vhost		=>	$vhost,
-});
+	$object->sendFanout($message);
 
 exit 0;
 

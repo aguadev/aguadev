@@ -351,29 +351,5 @@ method closeConnection {
 }
 
 
-#method sendData ($data) {
-#	my $processid	=	$$;
-#	$self->logDebug("processid", $processid);
-#	$data->{processid}	=	$processid;
-#	#$self->logDebug("data", $data);
-#
-#	#### SET TYPE response
-#	$data->{sendtype}	=	$self->sendtype();
-#	
-#	my $jsonparser = JSON->new();
-#	my $json = $jsonparser->encode($data);
-#	$self->logDebug("json", $json);
-#
-#	#$self->logDebug("BEFORE channel->publish, self->channel", $self->channel());
-#	my $result = $self->channel()->publish(
-#		exchange => 'chat',
-#		routing_key => '',
-#		body => $json,
-#	);
-#	$self->logDebug(" [x] Sent message", $json);
-#	$self->logDebug(" [x] Sent message length", length($json));
-#
-#	return $result;
-#}
 
 1;

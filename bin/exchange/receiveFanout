@@ -41,7 +41,7 @@ BEGIN {
 
 #### INTERNAL MODULES
 use Conf::Yaml;
-use Queue::Manager;
+use Exchange::Manager;
 
 my $installdir 	=	 $ENV{'installdir'} || "/agua";
 my $configfile	=	"$installdir/conf/config.yaml";
@@ -83,7 +83,7 @@ my $conf = Conf::Yaml->new(
     logfile     =>  $logfile
 );
 
-my $object = Queue::Manager->new({
+my $object = Exchange::Manager->new({
 	conf		=>	$conf,
     log			=>	$log,
     printlog	=>	$printlog,

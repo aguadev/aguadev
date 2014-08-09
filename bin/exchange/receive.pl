@@ -2,11 +2,11 @@
 
 =head2
 
-APPLICATION 	worker
+APPLICATION 	emit
 
 PURPOSE
 
-	1. Receive tasks and run them
+	1. Send messages to a RabbitMQ fanout queue
 	
 HISTORY
 
@@ -18,8 +18,11 @@ $0 [--user String] [--host String] [--password String] [--vhost String] [--queue
 
 EXAMPLE
 
-# Receive task to run 'Align' workflow on sample XXXXXXXXXXXXXXXX 
-./worker.pl --username syoung --workflow Align --project XXXXXXXXXXXXXXXX 
+# Send message to default queue (user=guest, password=guest, host=localhost, vhost=/)
+./emit.pl "my message"
+
+# Send message to custom queue on localhost
+./emit.pl --user myUserName --password mySecret "
 
 =cut
 
@@ -38,27 +41,17 @@ BEGIN {
 
 #### INTERNAL MODULES
 use Conf::Yaml;
-use Queue::Manager;
+use Exchange::Manager;
 
 my $installdir 	=	 $ENV{'installdir'} || "/agua";
 my $configfile	=	"$installdir/conf/config.yaml";
-my $username;
-my $project;
-my $workflow;
-
-my $host;
-my $port;
-my $user;
-my $pass;
-my $vhost;
-
-#my $host		=	'localhost';
-#my $port		=	5672;
-#my $user		=	'myuser';	
-#my $pass		=	'mypassword';
-#my $vhost		=	'myvhost';
-
-my $notes		=	"";
+my $mode		=	"message";
+my $host		=	'localhost';
+my $port		=	5672;
+my $user		=	'myuser';	
+my $pass		=	'mypassword';
+my $vhost		=	'myvhost';
+my $message		=	"";
 my $log		=	2;
 my $printlog	=	2;
 my $help;
@@ -67,14 +60,12 @@ my $help;
 my $logfile		=	"/tmp/pancancer-volume.$$.log";
 
 GetOptions (
-    'username=s'	=> \$username,
-    'project=s'		=> \$project,
-    'workflow=s'	=> \$workflow,
+    'mode=s'		=> \$mode,
     'host=s'		=> \$host,
     'port=s'		=> \$port,
     'user=s'		=> \$user,
     'pass=s'		=> \$pass,
-    'notes=s'		=> \$notes,
+    'message=s'		=> \$message,
     'vhost=s'		=> \$vhost,
     'log=i'     => \$log,
     'printlog=i'    => \$printlog,
@@ -92,24 +83,21 @@ my $conf = Conf::Yaml->new(
     logfile     =>  $logfile
 );
 
-my $object = Queue::Manager->new({
-    host		=>	$host,
-    port		=>	$port,
-    user		=>	$user,
-    pass		=>	$pass,
-    vhost		=>	$vhost,
-
+my $object = Exchange::Manager->new({
 	conf		=>	$conf,
     log			=>	$log,
     printlog	=>	$printlog,
     logfile     =>  $logfile
 });
 
-$object->receiveTask({
-    username	=>	$username,
-    project		=>	$project,
-    workflow	=>	$workflow,
-    notes		=>	$notes,
+	$object->receive({
+	mode		=>	$mode,
+    host		=>	$host,
+    port		=>	$port,
+    user		=>	$user,
+    pass		=>	$pass,
+    message		=>	$message,
+    vhost		=>	$vhost,
 });
 
 exit 0;

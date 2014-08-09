@@ -1,3 +1,4 @@
+
 use MooseX::Declare;
 
 =head2
@@ -32,8 +33,8 @@ class Queue::Master with (Logger, Exchange, Agua::Common::Database, Agua::Common
 # Integers
 has 'log'	=>  ( isa => 'Int', is => 'rw', default => 2 );
 has 'printlog'	=>  ( isa => 'Int', is => 'rw', default => 5 );
-has 'maxjobs'	=>  ( isa => 'Int', is => 'rw', default => 1 );
-has 'sleep'		=>  ( isa => 'Int', is => 'rw', default => 30 );
+has 'maxjobs'	=>  ( isa => 'Int', is => 'rw', default => 30 );
+has 'sleep'		=>  ( isa => 'Int', is => 'rw', default => 10 );
 
 # Strings
 has 'metric'	=> ( isa => 'Str|Undef', is => 'rw', default	=>	"cpus" );
@@ -79,69 +80,39 @@ method initialise ($args) {
 
 method manage {
 
-	#### MAINTAIN OPTIMAL THROUGHPUT:
-	#
-	#### 1. DECIDE JOB THRESHOLD FOR EACH QUEUE BASED ON THROUGHPUT
-	#    AND AVAILABLE RESOURCES (CPU, MEMORY)
-	#
-	#### 2. ADJUST maxjobs THRESHOLD IN CONFIG FILE
-	#
-	#### 3. ADD/REMOVE VMS TO/FROM QUEUES BASED ON JOB THRESHOLDS
-	#
-	#### 4. REPLENISH NUMBER OF JOBS IN EACH QUEUE IF BELOW THRESHOLD
-
-	####### LATER: REFACTOR DELETE
-	####### INITIALISE/UPDATE queuesample TABLE FROM SYNAPSE
-	####### USE FIRST QUEUE FOR username, project AND workflow INFO
-	###$self->updateSamples($queues);
-
 	#my $shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
 	#$self->logDebug("shutdown", $shutdown);
-	#$self->listenTopics() if not $shutdown eq "true";
-
-	############## MOVED TO Listener.pm
-	############## LISTEN FOR REPORTS FROM WORKERS
-	##########$self->listenTopics();
-
-	#### 
 	#while ( not $shutdown eq "true" ) {
 	while ( 1 ) {
 	
 		my $tenants		=	$self->getTenants();
-		$self->logDebug("tenants", $tenants);
+		#$self->logDebug("tenants", $tenants);
 		foreach my $tenant ( @$tenants ) {
 			my $username	=	$tenant->{username};
+			
+			#### GET PROJECTS
 			my $projects	=	$self->getRunningUserProjects($username);
-			$self->logDebug("projects", $projects);
+			#$self->logDebug("projects", $projects);
 
 			foreach my $project	( @$projects ) {
-				$self->logDebug("project", $project);
+				#$self->logDebug("project", $project);
 	
-				#### GET CURRENT QUEUE SAMPLES
+				#### GET WORKFLOWS
 				my $workflows	=	$self->getWorkflowsByProject({
 					name		=>	$project,
 					username	=>	$username
 				});
 				#$self->logDebug("workflows", $workflows);
-				
 				next if not defined $workflows or not @$workflows;
+				print "Master::manage    project $project workflows:\n";
+				foreach my $workflow ( @$workflows ) {
+					print "Master::manage    $project [$workflow->{number}] $workflow->{name}\n";
+				}
 				
-				##### ADD QUEUES IF QUEUES NOT DEFINED
-				#$workflows		=	$self->addFirstQueues($username, $project) if not defined $workflows;
-		
-				#### 1. DECIDE JOB THRESHOLD FOR EACH QUEUE BASED ON THROUGHPUT
-				#    AND AVAILABLE RESOURCES (CPU, MEMORY)
-				#
-				#### 2. ADJUST maxjobs THRESHOLD IN CONFIG FILE
-				#
-				#### 3. ADD/REMOVE VMS TO/FROM QUEUES BASED ON JOB THRESHOLDS
-
-#### DEBUG
-				
+				#### BALANCE INSTANCES
 				$self->balanceInstances($workflows);
-#### DEBUG
-		
-				#### 4. REPLENISH NUMBER OF JOBS IN EACH QUEUE IF BELOW THRESHOLD		
+	
+				#### MAINTAIN QUEUES
 				$self->maintainQueues($workflows);
 			}
 			
@@ -150,37 +121,17 @@ method manage {
 		#### PAUSE
 		$self->pause();
 
-		##### GET SYSTEM SHUTDOWN (USE FOR TESTING)
+		##### GET SYSTEM SHUTDOWN
 		#$shutdown	=	$self->updateShutdown();
 	}
 	
 	return 1;
 }
 
-method addFirstQueues ($username, $project) {
-	$self->logDebug("username", $username);
-	$self->logDebug("project", $project);
-	
-	my $workflows	=	$self->getWorkflowsByProject({
-		username	=>	$username,
-		name		=>	$project
-	});
-	$self->logDebug("workflows", $workflows);
-	
-	#foreach my $queue
-	
-}
-
-method updateShutdown {
-	$self->logDebug("");
-	
-	return $self->conf()->getKey("agua:SHUTDOWN", undef);
-}
-
 method getTenants {
 	my $query	=	qq{SELECT *
 FROM tenant};
-	$self->logDebug("query", $query);
+	#$self->logDebug("query", $query);
 
 	return $self->db()->queryhasharray($query);
 }
@@ -195,284 +146,33 @@ method getProjects ($username) {
 	return if not defined $username;
 	return $self->db()->queryarray("SELECT * FROM project WHERE username='$username'");
 }
-#### MAINTAIN QUEUES
-method maintainQueues($workflows) {
-	$self->logDebug("");
-	for ( my $i = 0; $i < @$workflows; $i++ ) {
-		my $workflow	=	$$workflows[$i];
-		
-		if ( $i != 0 ) {
-			$self->logDebug("NO COMPLETED JOBS in previous queue") and next if $self->noCompletedJobs($$workflows[$i - 1]);
-		}
-		
-		$self->logDebug("Doing self->maintainQueue()");
-		$self->maintainQueue($workflows, $workflow);
-	}
-}
-
-method noCompletedJobs ($workflow) {
-	my $query	=	qq{SELECT COUNT(*) FROM queuesample
-WHERE username='$workflow->{username}'
-AND project='$workflow->{project}'
-AND workflow='$workflow->{workflow}'
-AND workflownumber='$workflow->{workflownumber}'
-AND status='completed'};
-	$self->logDebug("query", $query);
-	
-	my $completed	=	$self->db()->query($query);
-	$self->logDebug("completed", $completed);
-	
-	return 1 if $completed == 0;
-	return 0;
-}
-
-method maintainQueue ($workflows, $workflowdata) {
-	$self->logDebug("workflowdata", $workflowdata);
-	
-	my $queuename	=	$self->setQueueName($workflowdata);
-	$self->logDebug("queuename", $queuename);
-	
-	my $workflowcompleted	=	$self->workflowCompleted($workflowdata);
-	$self->logDebug("workflowcompleted", $workflowcompleted);
-	$self->logDebug("Skipping completed queue", $queuename) and return if $workflowcompleted;
-	
-	#### GET MAX JOBS
-	my $maxjobs		=	$self->maxJobsForQueue($workflowdata);
-	$self->logDebug("FINAL maxjobs", $maxjobs);
-
-	#### GET NUMBER OF QUEUED JOBS
-	my $queuedjobs	=	$self->getQueuedJobs($workflowdata);
-	my $numberqueued=	scalar(@$queuedjobs);
-	$self->logDebug("numberqueued", $numberqueued);
-
-	#### ADD MORE JOBS TO QUEUE IF LESS THAN maxjobs
-	my $limit	=	$maxjobs - $numberqueued;
-	$self->logDebug("limit", $limit);
-
-	return 0 if $limit <= 0;
-
-	#### QUEUE UP ADDITIONAL SAMPLES
-	my $tasks	=	$self->getTasks($workflows, $workflowdata, $limit);
-	$self->logDebug("tasks", $tasks);
-
-	if ( $numberqueued == 0 and not @$tasks ) {
-		$self->logDebug("Setting workflow $workflowdata->{workflow} status to 'completed'");
-		$self->setWorkflowStatus($workflowdata->{username}, $workflowdata->{project}, $workflowdata->{workflow}, "completed");
-	}
-	elsif ( @$tasks ) {
-		foreach my $task ( @$tasks ) {
-			$self->sendTask($task);
-		
-			$self->updateJobStatus($task);
-		}
-	}
-	
-	return 1;
-}
-
-method workflowCompleted ($workflowdata) {
-	my $query	=	qq{SELECT 1 FROM workflow
-WHERE username='$workflowdata->{username}'
-AND project='$workflowdata->{project}'
-AND name='$workflowdata->{name}'
-AND status='completed'};
-	#$self->logDebug("query", $query);
-	
-	return 1 if defined $self->db()->query($query);
-	return 0;
-}
-
-method getTasks ($queues, $queuedata, $limit) {
-	#### GET ADDITIONAL SAMPLES TO ADD TO QUEUE
-	$self->logDebug("queuedata", $queuedata);
-	$self->logDebug("limit", $limit);
-
-	#### GET SAMPLE TABLE
-	my $sampletable	=	$self->getSampleTable($queuedata);
-	$self->logDebug("sampletable", $sampletable);
-	print "Master::getTasks    sampletable not defined\n" and exit if not defined $sampletable;
-
-	#### POPULATE QUEUE SAMPLE TABLE IF EMPTY	
-	my $workflownumber	=	$queuedata->{workflownumber};
-	$self->logDebug("workflownumber", $workflownumber);
-	if ( $workflownumber == 1 ) {
-		my $hassamples		=	$self->hasQueueSamples($queuedata);
-		$self->logDebug("hassamples", $hassamples);
-		$self->populateQueueSamples($queuedata, $sampletable) if not $hassamples;
-	}
-
-	#### GET TASKS FROM queuesample TABLE
-	my $tasks	=	$self->pullTasks($queues, $queuedata, $limit);
-	$self->logDebug("tasks", $tasks);
-	return if not @$tasks;
-
-	#### DIRECT THE TASK TO EXECUTE A WORKFLOW
-	foreach my $task ( @$tasks ) {
-		$task->{module}		=	"Agua::Workflow";
-		$task->{mode}		=	"executeWorkflow";
-		$task->{database}	=	$queuedata->{database} || $self->database() || $self->conf()->getKey("database:DATABASE", undef);
-		
-		$task->{workflow}	=	$queuedata->{workflow};
-		$task->{workflownumber}=	$queuedata->{workflownumber};
-		
-		#### UPDATE TASK STATUS AS queued
-		$task->{status}		=	"queued";
-		
-		#### SET TIME QUEUED
-		$task->{time}		=	$self->getMysqlTime();
-
-		#### SET SAMPLE HASH
-		$task->{samplehash}	=	$self->getTaskSampleHash($task, $sampletable);
-		#$self->logDebug("task", $task);
-	}
-	
-	return $tasks;
-}
-
-method hasQueueSamples ($queuedata) {
-	$self->logDebug("queuedata", $queuedata);
-	my $query	=	qq{SELECT 1 FROM queuesample
-WHERE username='$queuedata->{username}'
-AND project='$queuedata->{project}'
-AND workflow='$queuedata->{workflow}'};
-	$self->logDebug("query", $query);
-	
-	return 1 if defined $self->db()->query($query);
-	return 0;
-}
-
-method populateQueueSamples($queuedata, $sampletable) {
-
-	$self->logDebug("queuedata", $queuedata);
-	$self->logDebug("sampletable", $sampletable);
-
-	my $query		=	qq{SELECT * FROM $sampletable};
-	$self->logDebug("query", $query);
-	my $samples		=	$self->db()->queryhasharray($query);
-	$self->logDebug("no. samples", scalar(@$samples));
-	my $fields		=	$self->db()->fields("queuesample");
-	$self->logDebug("fields", $fields);
-
-	my $tsvfile		=	"/tmp/queuesample.$sampletable.$$.tsv";
-	$self->logDebug("tsvfile", $tsvfile);
-	open(OUT, ">", $tsvfile) or die "Can't open tsv file: $tsvfile\n";
-	foreach my $sample ( @$samples ) {
-		$sample->{username}	=	$queuedata->{username};
-		$sample->{project}	=	$queuedata->{project};
-		$sample->{workflow}	=	$queuedata->{workflow};
-		$sample->{status}	=	"none";
-		my $line	=	$self->db()->fieldsToTsv($fields, $sample);
-		#$self->logDebug("line", $line);
-
-		print OUT $line;
-	}
-	close(OUT) or die "Can't close tsv file: $tsvfile\n";
-
-	$self->logDebug("loading 'queuesample' table");
-	$self->db()->load("queuesample", $tsvfile, undef);
-	
-}
-
-method getSampleTable ($queuedata) {
-	my $username	=	$queuedata->{username};
-	my $project		=	$queuedata->{project};
-	my $query		=	qq{SELECT sampletable FROM sampletable
-WHERE username='$username'
-AND project='$project'};
-	$self->logDebug("query", $query);
-	
-	return $self->db()->query($query);
-}
-
-method getTaskSampleHash ($task, $sampletable) {
-	my $username	=	$task->{username};
-	my $project		=	$task->{project};
-	my $sample		=	$task->{sample};
-	my $query		=	qq{SELECT * FROM $sampletable
-WHERE username='$username'
-AND project='$project'
-AND sample='$sample'};
-	$self->logDebug("query", $query);
-	
-	return $self->db()->queryhash($query);
-}
-
-method pullTasks ($queues, $queuedata, $limit) {
-	$self->logDebug("queues", $queues);
-	$self->logDebug("queuedata", $queuedata);
-
-	my $workflownumber	=	$queuedata->{workflownumber};
-	my $previous	=	$self->getPrevious($queues, $queuedata);
-	$self->logDebug("previous", $previous);
-
-	#### VERIFY VALUES
-	my $notdefined	=	$self->notDefined($queuedata, ["username", "project", "workflow"]);
-	$self->logCritical("not defined", @$notdefined) and return if scalar(@$notdefined) != 0;
-
-	my $query		=	qq{SELECT * FROM queuesample
-WHERE username='$previous->{username}'
-AND project='$previous->{project}'
-AND workflow='$previous->{workflow}'
-AND workflownumber='$previous->{workflownumber}'
-AND status='$previous->{status}'
-LIMIT $limit};
-	$self->logDebug("query", $query);
-	
-	return $self->db()->queryhasharray($query) || [];
-}
-
-method getPrevious ($queues, $queuedata) {
-	$self->logDebug("queues", $queues);
-	$self->logDebug("queuedata", $queuedata);
-
-	my $workflownumber	=	$queuedata->{workflownumber};
-	$self->logDebug("workflownumber", $workflownumber);
-	
-	my $previous	=	{};
-	if ( $workflownumber == 1 ) {
-		$previous->{status}		=	"none";
-		$previous->{username}	=	$queuedata->{username};
-		$previous->{project}	=	$queuedata->{project};
-		$previous->{workflow}	=	$queuedata->{workflow};
-		$previous->{workflownumber}	=	$queuedata->{workflownumber};
-	}
-	else {
-		my $previousindex		=	$workflownumber - 2;
-		$self->logDebug("previousindex", $previousindex);
-		my $previousdata		=	$$queues[$previousindex];
-		$previous->{status}		=	"completed";
-		$previous->{username}	=	$previousdata->{username};
-		$previous->{project}	=	$previousdata->{project};
-		$previous->{workflow}	=	$previousdata->{workflow};
-		$previous->{workflownumber}	=	$previousdata->{workflownumber};
-	}
-
-	return $previous;	
-}
-
 #### BALANCE INSTANCES
 method balanceInstances ($workflows) {
-	$self->logDebug("workflows", $workflows);
+	print "#### DOING balanceInstances FOR MAXIMAL THROUGHPUT\n";
+	#$self->logDebug("workflows", $workflows);
 
+	my $stopping	=	$self->stoppingInstances();
+	$self->logDebug("stopping", $stopping);
+	return if $stopping;
+	
 	my $username	=	$$workflows[0]->{username};
-	$self->logDebug("username", $username);
+	#$self->logDebug("username", $username);
 
 	# 1. CALCULATE AVERAGE DURATION OF completed SAMPLES IN EACH WORKFLOW/QUEUE
-	#
 	my $durations	=	$self->getDurations($workflows);
 	$self->logDebug("durations", $durations);
 	
 	#### NARROW DOWN TO ONLY QUEUES WITH CLUSTERS
 	$workflows	=	$self->clusterWorkflows($workflows);	
-	$self->logDebug("cluster only workflows", $workflows);
+	#$self->logDebug("cluster only workflows", $workflows);
 
-	#### GET CURRENT COUNTS OF RUNNING INSTANCES PER QUEUE
+	# 2. GET CURRENT COUNTS OF RUNNING INSTANCES PER QUEUE
 	my $currentcounts	=	$self->getCurrentCounts($username);
 	$self->logDebug("currentcounts", $currentcounts);
 
 	#### GET REQUIRED RESOURCES FOR QUEUE INSTANCES (CPUs, RAM, ETC.)
 	my $instancetypes	=	$self->getInstanceTypes($workflows);
-	$self->logDebug("instancetypes", $instancetypes);
+	#$self->logDebug("instancetypes", $instancetypes);
 
 	# 3. IF LATEST RUNNING WORKFLOW HAS NO COMPLETED JOBS, SET
 	#	INSTANCE COUNT FOR NEXT WORKFLOW TO cluster->minnodes
@@ -486,7 +186,7 @@ method balanceInstances ($workflows) {
 
 #### DEBUG
 
-$quota		=	400;
+$quota		=	160;
 $self->logDebug("DEBUG quota", $quota);
 
 #### DEBUG
@@ -499,7 +199,7 @@ $self->logDebug("DEBUG quota", $quota);
 	#### 2. SAMPLES HAVE JUST BEEN LOADED
 	#### 
 	if ( not defined $latestcompleted or not %$durations ) {
-		$self->logDebug("Doing getDefaultResource");
+		print "#### DOING getDefaultResource\n";
 		my $resourcecount	=	$self->getDefaultResource($$workflows[0], $instancetypes, $quota);
 		$self->logDebug("resourcecount", $resourcecount);
 
@@ -515,7 +215,7 @@ $self->logDebug("DEBUG quota", $quota);
 		$instancecounts	=	[ $instancecount ];
 	}
 	else {
-		$self->logDebug("Doing getResourceCounts");
+		print "#### DOING getResourceCounts\n";
 		##### GET CURRENT COUNT OF VMS PER QUEUE (queueample STATUS 'started')
 		##### ASSUMES ONE VM PER TASK
 		#my $currentcounts=	$self->getCurrentCounts();
@@ -525,7 +225,7 @@ $self->logDebug("DEBUG quota", $quota);
 		#
 		$resourcecounts	=	$self->getResourceCounts($workflows, $durations, $instancetypes, $quota);
 		$instancecounts	=	$self->getInstanceCounts($workflows, $instancetypes, $resourcecounts);
-		$self->logDebug("instancecounts", $instancecounts);
+		#$self->logDebug("instancecounts", $instancecounts);
 
 		#### SET DEFAULT INSTANCE COUNTS FOR NEXT WORKFLOW IF IT HAS NO
 		#### COMPLETED JOBS TO PROVIDE DURATION INFO
@@ -542,6 +242,23 @@ $self->logDebug("DEBUG quota", $quota);
 	#   NB: maxJobs <= NUMBER OF REMAINING SAMPLES FOR THE WORKFLOW
 }
 
+method stoppingInstances {
+	my $query	=	qq{SELECT * FROM instance
+WHERE status='stopping'
+};
+	my $stopping	=	$self->db()->queryhasharray($query);
+	$self->logDebug("stopping", $stopping);
+	
+	if ( defined $stopping ) {
+		print "Stopping instances:\n" ;
+		foreach my $stopinstance ( @$stopping ) {
+			print "$stopinstance->{queue}: $stopinstance->{host}\n";
+		}
+	}
+
+	return 1 if defined $stopping and @$stopping;
+	return 0;
+}
 method addRemoveNodes ($workflows, $instancecounts, $currentcounts) {
 	$self->logDebug("workflows", $workflows);
 	$self->logDebug("instancecounts", $instancecounts);
@@ -564,7 +281,7 @@ method addRemoveNodes ($workflows, $instancecounts, $currentcounts) {
 			$self->addNodes($$workflows[$i], $difference);
 		}
 		elsif ( $difference < 0 ) {
-			$self->deleteNodes($$workflows[$i], $difference);
+			$self->deleteNodes($$workflows[$i], abs($difference));
 		}
 	}	
 }
@@ -581,13 +298,12 @@ method addNodes ($workflow, $number) {
 		$self->logDebug("hostname", $hostname);
 	
 		my $id	=	$self->virtual()->launchNode($authfile, $amiid, $number, $instancetype, $userdatafile, $keypair, $hostname);
-		$self->logDebug("id", $id);
+		#$self->logDebug("id", $id);
+		$self->logError("failed to add node") and return 0 if not defined $id;
 
 		my $success	=	0;
-		$success	=	1 if defined $id;
 		$success	=	1 if $id =~ /^[0-9a-z\-]+$/;
-
-		$self->logError("failed to add node") and return 0 if not $success;
+		$self->logDebug("failed to add node") and return 0 if not $success;
 		
 		$self->addHostInstance($workflow, $hostname, $id);
 	}
@@ -595,10 +311,52 @@ method addNodes ($workflow, $number) {
 	return 1;
 }
 
-method addHostInstance ($workflow, $hostname, $id) {
-	$self->logDebug("workflow", $workflow);
-	$self->logDebug("hostname", $hostname);
+method deleteNodes ($workflow, $number) {
+	my $queuename	=	$self->getQueueName($workflow);
+	my $username	=	$workflow->{username};
+	my $query	=	qq{SELECT id FROM instance
+WHERE username='$username'
+AND queue='$queuename'
+AND status='running'
+LIMIT $number};
+	$self->logDebug("query", $query);
+	
+	my $ids		=	$self->db()->queryarray($query);
+	foreach my $id ( @$ids ) {
+		$self->updateInstanceStatus($id, "stopping");
+		$self->shutdownInstance($id);
+	}
+}
+
+method shutdownInstance ($id) {
 	$self->logDebug("id", $id);
+	
+	my $data	=	{
+		host	=>	$id,
+		mode	=>	"doShutdown"
+	};
+	
+	my $key	=	"update.host.status";
+	$self->sendTopic($data, $key);
+}
+
+method updateInstanceStatus ($id, $status) {
+	$self->logNote("id", $id);
+	$self->logNote("status", $status);
+	
+	my $time		=	$self->getMysqlTime();
+	my $query		=	qq{UPDATE instance
+SET status='$status',
+TIME='$time'
+WHERE id='$id'
+};
+	return $self->db()->do($query);
+}
+
+method addHostInstance ($workflow, $hostname, $id) {
+	#$self->logDebug("workflow", $workflow);
+	#$self->logDebug("hostname", $hostname);
+	#$self->logDebug("id", $id);
 	
 	my $time			=	$self->getMysqlTime();
 
@@ -609,7 +367,7 @@ method addHostInstance ($workflow, $hostname, $id) {
 	$data->{id}			=	$id;
 	$data->{status}		=	"running";
 	$data->{time}		=	$time;
-	$self->logDebug("data", $data);
+	#$self->logDebug("data", $data);
 	
 	my $keys	=	[ "username", "queue", "host" ];
 	my $notdefined	=	$self->notDefined($data, $keys);	
@@ -619,6 +377,70 @@ method addHostInstance ($workflow, $hostname, $id) {
 	my $table		=	"instance";
 	my $fields		=	$self->db()->fields($table);
 	$self->_addToTable($table, $data, $keys, $fields);
+}
+
+method printConfig ($workflowobject) {
+	#		GET PACKAGE INSTALLDIR
+	my $stages			=	$self->getStagesByWorkflow($workflowobject);
+	my $object			=	$$stages[0];
+	#$self->logDebug("stages[0]", $object);	
+
+	my $basedir			=	$self->conf()->getKey("agua", "INSTALLDIR");
+	$object->{basedir}	=	$basedir;
+	
+	my $version			=	$object->{version};
+	my $package			=	$object->{package};
+	
+	#		GET TEMPLATE
+	my $installdir		=	$object->{installdir};
+	my $templatefile	=	$self->setTemplateFile($installdir, $version);
+	#$self->logDebug("templatefile", $templatefile);
+	
+	#		SET EXTRA
+	my $queuename		=	$self->getQueueName($workflowobject);
+	#$self->logDebug("queuename", $queuename);
+	my $extra			=	$self->getExtra($installdir, $version);
+	$self->logDebug("extra", $extra);
+
+	#		PRINT TEMPLATE
+	my $username		=	$object->{username};
+	my $project			=	$object->{project};
+	my $workflow		=	$object->{workflow};
+	
+	my $virtualtype		=	$self->conf()->getKey("agua", "VIRTUALTYPE");
+	my $targetfile		= 	undef;
+	if ( $virtualtype eq "openstack" ) {
+		my $targetdir	=	"$basedir/conf/.openstack";
+		`mkdir -p $targetdir` if not -d $targetdir;
+		$targetfile		=	"$targetdir/$username.$project.$workflow.sh";
+	}
+	elsif ( $virtualtype eq "vagrant" ) {
+		my $targetdir	=	"$basedir/conf/.vagrant/$username.$project.$workflow";
+		`mkdir -p $targetdir` if not -d $targetdir;
+		$targetfile		=	"$targetdir/Vagrantfile";
+	}
+	$self->logDebug("targetfile", $targetfile);
+	
+	$self->virtual()->createConfig($object, $templatefile, $targetfile, $extra);
+	
+	return $targetfile;
+}
+
+method getExtra ($installdir, $version) {
+	my $extrafile		=	"$installdir/$version/data/sh/extra";
+	$self->logDebug("extrafile", $extrafile);
+	
+	return "" if not -f $extrafile;
+	
+	my $extra			=	$self->getFileContents($extrafile);
+
+	return $extra;
+}
+
+method setTemplateFile ($installdir, $version) {
+	$self->logDebug("installdir", $installdir);
+	
+	return "$installdir/data/tmpl/userdata.tmpl";
 }
 
 method randomHostname ($name) {
@@ -691,106 +513,39 @@ method getVirtualInputs ($workflow) {
 	return ($authfile, $amiid, $instancetype, $userdatafile, $keypair);
 }
 
-method deleteNodes ($workflow, $number) {
-	my $username	=	$workflow->{username};
-	my $project		=	$workflow->{project};
-	my $name		=	$workflow;
+method printAuth ($username) {
+	$self->logDebug("username", $username);
 	
-	my $shutdowns	=	$self->shutdownInstances($workflow, $number);
-	
-	my ($authfile, $amiid, $instancetype, $userdatafile, $keypair)	=	$self->getVirtualInputs($workflow);
+	#### SET TEMPLATE FILE	
+	my $installdir		=	$self->conf()->getKey("agua", "INSTALLDIR");
+	my $templatefile	=	"$installdir/bin/install/resources/openstack/openrc.sh";
 
-	for ( my $i = 0; $i < $number; $i++ ) {
-		my $success	=	$self->virtual()->deleteNode($authfile, $amiid, $number, $instancetype, $userdatafile, $keypair, $name);
+	#### GET OPENSTACK AUTH INFO
+	my $tenant		=	$self->getTenant($username);
+	$self->logDebug("tenant", $tenant);
 
-		$self->logError("failed to delete node") and return 0 if not $success;
-		
-		my $id	=	$self->getVmId();
-		
-		$self->updateVms($id)
-	}
+	#### GET AUTH FILE
+	my $authfile		=	$self->getAuthFile($username, $tenant);
 
-	return 1;
+	#### PRINT FILE
+	return	$self->virtual()->printAuthFile($tenant, $templatefile, $authfile);
 }
 
-method shutdownInstances ($workflow, $number) {
-	my $queuename	=	$self->getQueueName($workflow);
-	my $username	=	$workflow->{username};
-	my $query	=	qq{SELECT id FROM instance
-WHERE username='$username'
-AND queue='$queuename'
-AND status='running'};
-	$self->logDebug("query", $query);
+method getAuthFile ($username, $tenant) {
+	#$self->logDebug("username", $username);
 	
-	my $ids		=	$self->db()->queryarray($query);
-	foreach my $id ( @$ids ) {
-		my $success		=	$self->shutdownInstance($id);
-		$self->logDebug("success", $success);
-	}
+	my $installdir		=	$self->conf()->getKey("agua", "INSTALLDIR");
+	my $targetdir		=	"$installdir/conf/.openstack";
+	`mkdir -p $targetdir` if not -d $targetdir;
+	my $tenantname		=	$tenant->{os_tenant_name};
+	#$self->logDebug("tenantname", $tenantname);
+	my $authfile		=	"$targetdir/$tenantname-openrc.sh";
+	$self->logDebug("authfile", $authfile);
+
+	return	$authfile;
 }
 
-method shutdownInstance ($id) {
-	$self->logDebug("id", $id);
-	
-	my $data	=	{
-		host	=>	$id,
-		mode	=>	"doShutdown"
-	};
-	
-	my $key	=	"update.host.status";
-	$self->sendTopic($data, $id);
-}
-
-#### SEND TOPIC
-method sendTopic ($data, $key) {
-	$self->logDebug("$$ data", $data);
-	$self->logDebug("$$ key", $key);
-
-	my $exchange	=	$self->conf()->getKey("queue:topicexchange", undef);
-	$self->logDebug("$$ exchange", $exchange);
-
-	my $host		=	$self->host() || $self->conf()->getKey("queue:host", undef);
-	my $user		= 	$self->user() || $self->conf()->getKey("queue:user", undef);
-	my $pass	=	$self->pass() || $self->conf()->getKey("queue:pass", undef);
-	my $vhost		=	$self->vhost() || $self->conf()->getKey("queue:vhost", undef);
-	$self->logNote("$$ host", $host);
-	$self->logNote("$$ user", $user);
-	$self->logNote("$$ pass", $pass);
-	$self->logNote("$$ vhost", $vhost);
-	
-    my $connection = Net::RabbitFoot->new()->load_xml_spec()->connect(
-        host 	=>	$host,
-        port 	=>	5672,
-        user 	=>	$user,
-        pass 	=>	$pass,
-        vhost	=>	$vhost,
-    );
-
-	$self->logNote("$$ connection: $connection");
-	$self->logNote("$$ DOING connection->open_channel");
-	my $channel 	= 	$connection->open_channel();
-	$self->channel($channel);
-
-	$self->logNote("$$ DOING channel->declare_exchange");
-
-	$channel->declare_exchange(
-		exchange => $exchange,
-		type => 'topic',
-	);
-	
-	my $json	=	$self->jsonparser()->encode($data);
-	$self->logDebug("$$ json", $json);
-	$self->channel()->publish(
-		exchange => $exchange,
-		routing_key => $key,
-		body => $json,
-	);
-	
-	print "$$ [x] Sent topic with key '$key'\n";
-
-	$connection->close();
-}
-
+#### RESOURCES
 method getDefaultResource ($queue, $instancetypes, $quota) {
 	$self->logDebug("queue", $queue);
 
@@ -839,80 +594,22 @@ method clusterWorkflows ($workflows) {
 			push @$clusterworkflows, $$workflows[$i];			
 		}
 	}
-	#$self->logDebug("CLUSTER ONLY clusterworkflows", $clusterworkflows);
+	##$self->logDebug("CLUSTER ONLY clusterworkflows", $clusterworkflows);
+	#if ( defined $clusterworkflows ) {
+	#	print "cluster workflows:\n";
+	#	foreach my $clusterworkflow ( @$clusterworkflows ) {
+	#		print "$clusterworkflow->{name}\n";
+	#	}
+	#}
 
 	return $clusterworkflows;
-}
-
-method printConfig ($workflowobject) {
-	#		GET PACKAGE INSTALLDIR
-	my $stages			=	$self->getStagesByWorkflow($workflowobject);
-	my $object			=	$$stages[0];
-	#$self->logDebug("stages[0]", $object);	
-
-	my $basedir			=	$self->conf()->getKey("agua", "INSTALLDIR");
-	$object->{basedir}	=	$basedir;
-	
-	my $version			=	$object->{version};
-	my $package			=	$object->{package};
-	
-	#		GET TEMPLATE
-	my $installdir		=	$object->{installdir};
-	my $templatefile	=	$self->setTemplateFile($installdir, $version);
-	$self->logDebug("templatefile", $templatefile);
-	
-	#		SET EXTRA
-	my $queuename		=	$self->getQueueName($workflowobject);
-	$self->logDebug("queuename", $queuename);
-	my $extra			=	$self->getExtra($installdir, $version);
-	$self->logDebug("extra", $extra);
-
-	#		PRINT TEMPLATE
-	my $username		=	$object->{username};
-	my $project			=	$object->{project};
-	my $workflow		=	$object->{workflow};
-	
-	my $virtualtype		=	$self->conf()->getKey("agua", "VIRTUALTYPE");
-	my $targetfile		= 	undef;
-	if ( $virtualtype eq "openstack" ) {
-		my $targetdir	=	"$basedir/conf/.openstack";
-		`mkdir -p $targetdir` if not -d $targetdir;
-		$targetfile		=	"$targetdir/$username.$project.$workflow.sh";
-	}
-	elsif ( $virtualtype eq "vagrant" ) {
-		my $targetdir	=	"$basedir/conf/.vagrant/$username.$project.$workflow";
-		`mkdir -p $targetdir` if not -d $targetdir;
-		$targetfile		=	"$targetdir/Vagrantfile";
-	}
-	$self->logDebug("targetfile", $targetfile);
-	
-	$self->virtual()->createConfig($object, $templatefile, $targetfile, $extra);
-	
-	return $targetfile;
-}
-
-method getExtra ($installdir, $version) {
-	my $extrafile		=	"$installdir/$version/data/sh/extra";
-	$self->logDebug("extrafile", $extrafile);
-	
-	return "" if not -f $extrafile;
-	
-	my $extra			=	$self->getFileContents($extrafile);
-
-	return $extra;
-}
-
-method setTemplateFile ($installdir, $version) {
-	$self->logDebug("installdir", $installdir);
-	
-	return "$installdir/data/tmpl/userdata.tmpl";
 }
 
 method getTenant ($username) {
 	my $query	=	qq{SELECT *
 FROM tenant
 WHERE username='$username'};
-	$self->logDebug("query", $query);
+	#$self->logDebug("query", $query);
 
 	return $self->db()->queryhash($query);
 }
@@ -955,7 +652,6 @@ method adjustCounts ($queues, $resourcecounts, $latestcompleted) {
 
 method getResourceCounts ($queues, $durations, $instancetypes, $quota) {
 
-
 =head2	SUBROUTINE	getResourceCounts
 
 =head2	PURPOSE
@@ -985,56 +681,30 @@ method getResourceCounts ($queues, $durations, $instancetypes, $quota) {
 		n2 = (n1 . d2) / d1
 
 =cut
-
-	my $username	=	$$queues[0]->{username};
-	my $metric	=	$self->metric();
 	
-	$self->logDebug("username", $username);
-	$self->logDebug("queues", $queues);
-	$self->logDebug("durations", $durations);
-	$self->logDebug("instancetypes", $instancetypes);
-	$self->logDebug("metric", $metric);
+	#$self->logDebug("username", $username);
+	#$self->logDebug("queues", $queues);
+	#$self->logDebug("durations", $durations);
+	#$self->logDebug("instancetypes", $instancetypes);
 	
 	#### GET INDEX OF LATEST RUNNING WORKFLOW
 	my $latestcompleted =	$self->getLatestCompleted($queues);
 	$self->logDebug("latestcompleted", $latestcompleted);
 
+	#### GET FIRST DURATION
 	my $firstqueue		=	$self->getQueueName($$queues[0]);
-	$self->logDebug("firstqueue", $firstqueue);
-	my $instancetype		=	$instancetypes->{$firstqueue};
-	$self->logDebug("instancetype", $instancetype);
+	my $metric	=	$self->metric();
+	my $instancetype	=	$instancetypes->{$firstqueue};
 	my $firstresource	=	$instancetype->{$metric};
 	my $firstduration	=	$durations->{$firstqueue} * $firstresource;
-	$self->logDebug("firstresource", $firstresource);
-	
 	$self->logDebug("firstqueue", $firstqueue);
 	$self->logDebug("firstresource", $firstresource);
 	$self->logDebug("firstduration", $firstduration);
 	
-	my $terms	=	1;
-	for ( my $i = 1; $i < $latestcompleted + 1; $i++ ) {
-		my $queue	=	$$queues[$i];
-		$self->logDebug("queue $i", $queue);
-		my $queuename	=	$self->getQueueName($queue);
-		$self->logDebug("queuename", $queuename);
-
-		my $duration	=	$durations->{$queuename};
-		$self->logDebug("duration", $duration);
-		next if not defined $duration or $duration == 0;
-		
-		my $instancetype	=	$instancetypes->{$queuename};
-		$self->logDebug("instancetype", $instancetype);
-		my $resource	=	$instancetype->{$metric};
-		$self->logDebug("resource ($metric)", $resource);
-
-		my $adjustedduration	=	$duration * $resource;
-		
-		my $term	=	$adjustedduration/$firstduration;
-		$self->logDebug("term", $term);
-		
-		$terms		+=	$term;
-	}
-	$self->logDebug("FINAL terms", $terms);
+	####	1. Solve for n1 using [1], [2] and [3]
+	####	n1 = N/(1 + d2/d1 + d3/d1 + ... + dx/d1)
+	my $terms	=	$self->solveForTerms($queues, $durations, $instancetypes, $latestcompleted);
+	$self->logDebug("terms", $terms);
 	
 	my $firstcount	=	$quota / $terms;
 	$self->logDebug("firstcount", $firstcount);
@@ -1043,16 +713,16 @@ method getResourceCounts ($queues, $durations, $instancetypes, $quota) {
 	$self->logDebug("firstthroughput", $firstthroughput);
 
 	my $queuenames	=	$self->getQueueNames($queues);
-	$self->logDebug("queuenames", $queuenames);
+	#$self->logDebug("queuenames", $queuenames);
 
 	my $resourcecounts	=	[];
 	for ( my $i = 0; $i < $latestcompleted + 1; $i++ ) {
 		my $queuename	=	$$queuenames[$i];
-		$self->logDebug("queuename", $queuename);
+		$self->logDebug("queuename [$i]", $queuename);
 
 		my $duration	=	$durations->{$queuename};
 		$self->logDebug("duration", $duration);
-		push @$resourcecounts, undef if not defined $duration;
+		push @$resourcecounts, undef and last if not defined $duration;
 		
 		my $instancetype	=	$instancetypes->{$queuename};
 		$self->logDebug("instancetype", $instancetype);
@@ -1094,6 +764,49 @@ method getResourceCounts ($queues, $durations, $instancetypes, $quota) {
 	return $resourcecounts;
 }
 
+method solveForTerms ($queues, $durations, $instancetypes, $latestcompleted) {
+	#$self->logDebug("queues", $queues);
+	#$self->logDebug("durations", $durations);
+	#$self->logDebug("instancetypes", $instancetypes);
+
+	#### GET FIRST DURATION
+	my $firstqueue		=	$self->getQueueName($$queues[0]);
+	my $instancetype	=	$instancetypes->{$firstqueue};
+	my $metric			=	$self->metric();
+	my $firstresource	=	$instancetype->{$metric};
+	my $firstduration	=	$durations->{$firstqueue} * $firstresource;
+	$self->logDebug("firstqueue", $firstqueue);
+	$self->logDebug("instancetype", $instancetype);
+	$self->logDebug("firstresource", $firstresource);
+	$self->logDebug("firstduration", $firstduration);
+
+	my $terms	=	1;
+	for ( my $i = 1; $i < $latestcompleted + 1; $i++ ) {
+		my $queue	=	$$queues[$i];
+		#$self->logDebug("queue $i", $queue);
+		my $queuename	=	$self->getQueueName($queue);
+		$self->logDebug("queuename", $queuename);
+
+		my $duration	=	$durations->{$queuename};
+		$self->logDebug("duration", $duration);
+		last if not defined $duration or $duration == 0;
+		
+		my $instancetype	=	$instancetypes->{$queuename};
+		$self->logDebug("instancetype", $instancetype);
+		my $resource	=	$instancetype->{$metric};
+		$self->logDebug("resource ($metric)", $resource);
+
+		my $adjustedduration	=	$duration * $resource;
+		
+		my $term	=	$adjustedduration/$firstduration;
+		$self->logDebug("term", $term);
+		
+		$terms		+=	$term;
+	}
+	$self->logDebug("FINAL terms", $terms);
+	
+	return $terms;	
+}
 method getInstanceCounts ($queues, $instancetypes, $resourcecounts) {
 
 =head2	SUBROUTINE	getInstanceCounts
@@ -1116,8 +829,10 @@ method getInstanceCounts ($queues, $instancetypes, $resourcecounts) {
 	for ( my $i = 0; $i < @$resourcecounts; $i++ ) {
 		my $queuename	=	$self->getQueueName($$queues[$i]);
 		my $resource	=	$instancetypes->{$queuename}->{$metric};
-		$self->logDebug("resource", $resource);
+		$self->logDebug("queuename '$queuename' resource (VM CPUs)", $resource);
 		my $resourcecount 	=	$$resourcecounts[$i] / $resource;
+		
+		push @$instancecounts, 0 and next if not defined $$resourcecounts[$i];
 		
 		#### STASH RUNNING COUNT
 		$resourcetotal		+=	$$resourcecounts[$i];
@@ -1140,14 +855,14 @@ method getInstanceCounts ($queues, $instancetypes, $resourcecounts) {
 }
 
 method getQueueNames ($queues) {
-	$self->logDebug("queues", $queues);
+	#$self->logDebug("queues", $queues);
 	
 	my $queuenames	=	[];
 	for ( my $i = 0; $i < @$queues; $i++ ) {
 		my $queue	=	$$queues[$i];
 		#$self->logDebug("queue $i", $queue);
 		my $queuename	=	$self->getQueueName($queue);
-		$self->logDebug("queuename", $queuename);
+		#$self->logDebug("queuename", $queuename);
 
 		push @$queuenames, $queuename;
 	}
@@ -1155,6 +870,7 @@ method getQueueNames ($queues) {
 	return $queuenames;
 }
 
+#### QUOTAS
 method getResourceQuota ($username, $metric) {
 =pod
 
@@ -1178,17 +894,16 @@ nova quota-show
 
 =cut
 
-	$self->logCaller("");
-	$self->logDebug("username", $username);
-	$self->logDebug("metric", $metric);
+	$self->logNote("username", $username);
+	$self->logNote("metric", $metric);
 
 	my $quotas	=	$self->getQuotas($username);
-	#$self->logDebug("quotas", $quotas);
+	#$self->logNote("quotas", $quotas);
 
 	my $quota	=	undef;
 	if ( $metric eq "cpus" ) {
 		($quota)	=	$quotas	=~	/cores\s+\|\s+(\d+)/ms;
-		$self->logDebug("quota", $quota);
+		$self->logNote("quota", $quota);
 	}
 	else {
 		print "Master::getResourceQuota    Metric not supported: $metric\n" and exit;
@@ -1198,60 +913,31 @@ nova quota-show
 }
 
 method getQuotas ($username) {
-	$self->logCaller("");
-	$self->logDebug("username", $username);
+	#$self->logCaller("");
+	$self->logNote("username", $username);
 	my $tenant	=	$self->getTenant($username);
-	$self->logDebug("tenant", $tenant);
+	$self->logNote("tenant", $tenant);
 	my $authfile	=	$self->getAuthFile($username, $tenant);
 	$self->printAuth($username) if not -f $authfile;
-	$self->logDebug("authfile", $authfile);
+	$self->logNote("authfile", $authfile);
 	
 	my $quotas	=	$self->virtual()->getQuotas($authfile, $tenant->{os_tenant_id});
-	#$self->logDebug("quotas", $quotas);
+	#$self->logNote("quotas", $quotas);
 	
 	return $quotas;
 }
 
-method printAuth ($username) {
-	$self->logDebug("username", $username);
-	
-	#### SET TEMPLATE FILE	
-	my $installdir		=	$self->conf()->getKey("agua", "INSTALLDIR");
-	my $templatefile	=	"$installdir/bin/install/resources/openstack/openrc.sh";
 
-	#### GET OPENSTACK AUTH INFO
-	my $tenant		=	$self->getTenant($username);
-	$self->logDebug("tenant", $tenant);
-
-	#### GET AUTH FILE
-	my $authfile		=	$self->getAuthFile($username, $tenant);
-
-	#### PRINT FILE
-	return	$self->virtual()->printAuthFile($tenant, $templatefile, $authfile);
-}
-
-method getAuthFile ($username, $tenant) {
-	$self->logDebug("username", $username);
-	
-	my $installdir		=	$self->conf()->getKey("agua", "INSTALLDIR");
-	my $targetdir	=	"$installdir/conf/.targetdir";
-	`mkdir -p $targetdir` if not -d $targetdir;
-	my $tenantname		=	$tenant->{os_tenant_name};
-	$self->logDebug("tenantname", $tenantname);
-	my $authfile		=	"$targetdir/$tenantname-openrc.sh";
-	$self->logDebug("authfile", $authfile);
-
-	return	$authfile;
-}
-
+#### INSTANCE TYPE
 method getInstanceTypes ($queues) {
-	$self->logDebug("queues", $queues);
+	
+	#$self->logDebug("queues", $queues);
 	
 	my $instancetypes	=	{};
 	foreach my $queue ( @$queues ) {
-		$self->logDebug("queue", $queue);
+		#$self->logDebug("queue", $queue);
 		my $queuename	=	$self->getQueueName($queue);
-		$self->logDebug("queuename", $queuename);
+		#$self->logDebug("queuename", $queuename);
 		
 		my $instancetype	=	$self->getQueueInstance($queue);
 		$instancetypes->{$queuename}	= $instancetype;
@@ -1268,7 +954,7 @@ method getQueueInstance ($queue) {
 	my $query	=	qq{SELECT * FROM instancetype
 WHERE username='$queue->{username}'
 AND cluster='$queuename'};
-	$self->logDebug("query", $query);
+	#$self->logDebug("query", $query);
 	my $instancetype	=	$self->db()->queryhash($query);
 	#$self->logDebug("instancetype", $instancetype);	
 	
@@ -1306,6 +992,7 @@ method getQueueName ($queue) {
 	return $queue->{username} . "." . $queue->{project} . "." . $queue->{workflow};
 }
 
+#### COUNTS
 method getCurrentCounts ($username) {
 	my $query	=	qq{SELECT queue, COUNT(*) AS count
 FROM instance
@@ -1314,7 +1001,7 @@ AND status='running'
 GROUP BY queue};
 	#$self->logDebug("query", $query);
 	my $entries	=	$self->db()->queryhasharray($query);
-	$self->logDebug("entries", $entries);
+	#$self->logDebug("entries", $entries);
 	my $counts	=	{};
 	foreach my $entry ( @$entries ) {
 		$counts->{$entry->{queue}}	=	$entry->{count}
@@ -1334,11 +1021,11 @@ method setMaxQuota ($queues, $instancecounts, $latestindex) {
 }
 
 method getRunningUserProjects ($username) {
-	$self->logDebug("username", $username);
+	#$self->logDebug("username", $username);
 	my $query	=	qq{SELECT name FROM project
 WHERE username='$username'
 AND status='running'};
-	$self->logDebug("query", $query);
+	#$self->logDebug("query", $query);
 	my $projects	=	$self->db()->queryarray($query);
 	
 	return $projects;
@@ -1428,7 +1115,8 @@ method getDurations ($queues) {
 }
 
 method getQueueDuration ($queue) {
-	$self->logDebug("queue", $queue);
+	
+	#$self->logDebug("queue", $queue);
 
 	my $provenance	=	$self->getQueueProvenance($queue);
 	return if not defined $provenance or not @$provenance;
@@ -1463,6 +1151,7 @@ method getQueueDuration ($queue) {
 	
 	my $duration = 0;
 	foreach my $queueduration ( @$totaldurations ) {
+		#$self->logDebug("queueduration", $queueduration);
 		$duration += $queueduration;
 	}
 	$duration = $duration / scalar(@$totaldurations) if @$totaldurations;
@@ -1520,7 +1209,7 @@ method parseDate ($date) {
 
 	# 2014-06-12 10:41:15
 	my ($year, $month, $day, $hour, $minute, $second);
-	if ( $date =~ m{^(\d{1,4})\W*0*(\d{1,2})\W*0*(\d{1,2})\W*0*\s+(\d{0,2})\W*0*(\d{0,2})\W*0*(\d{0,2})}x) {
+	if ( $date =~ m{^(\d{1,4})\W*0*(\d{1,2})\W*0*(\d{1,2})\W*0?\s+(\d{0,2})\W*0?(\d{0,2})\W*0?(\d{0,2})}x) {
 		$year = $1;  $month = $2;   $day = $3;
 		$hour = $4;  $minute = $5;  $second = $6;
 		$hour |= 0;  $minute |= 0;  $second |= 0;  # defaults.
@@ -1547,114 +1236,6 @@ ORDER BY sample, time};
 	return $provenance;
 }
 
-method getQueueInstances ($queue) {
-	$self->logDebug("queue", $queue);
-
-#	my $query	=	qq{SELECT * FROM instancetype
-#WHERE username='$queue->{username}
-#AND cluster='$queue->{}'};
-#	my $typeobject	=	$self->db()->query($query);
-    #username        VARCHAR(30) NOT NULL,
-    #cluster         VARCHAR(30) NOT NULL,
-    #instancetype    VARCHAR(20),
-    #cpus        	INT(12),
-    #memory        	INT(12),
-    #disk       		INT(12),
-    #ephemeral      	INT(12),
-}
-
-
-#### UPDATE SAMPLES
-method updateSamples ($queues) {
-
-	$self->logDebug("queues", $queues);
-	
-	#### NB: ASSUMES ONLY ONE PROJECT IN queues: PanCancer
-	
-	my $project		=	$$queues[0]->{project};
-	$self->logDebug("project", $project);
-	my $username		=	$$queues[0]->{username};
-	$self->logDebug("username", $username);
-	my $defaultworkflow		=	$$queues[0]->{workflow};
-	$self->logDebug("defaultworkflow", $defaultworkflow);
-
-	my $assignments	=	$self->getSampleList();
-	$self->logDebug("no. assignments", scalar(@$assignments));
-	$self->logDebug("assignements[0]", $$assignments[0]);
-	
-	my $statemap	=	$self->synapse()->reversestatemap();
-	$self->logDebug("statemap", $statemap);
-
-	my $workflowmap;
-	%$workflowmap	=	map { $_->{workflow} => $_->{workflownumber} } @$queues;
-	$self->logDebug("workflowmap", $workflowmap);
-
-	my $counter = 0;
-
-	foreach my $assignment ( @$assignments ) {
-		my ($uuid, $synapsestatus)	=	$assignment	=~ /^(), "\s*(\S+)\s+(\S+)/;
-		$self->logDebug("uuid", $uuid);
-		$self->logDebug("synapsestatus", $synapsestatus);
-
-		my $statusstring	=	$statemap->{$synapsestatus};
-		$self->logDebug("statusstring", $statusstring);
-
-		my ($workflow, $status);
-		if ( $statusstring eq "none", ) {
-			$workflow	=	$defaultworkflow;
-			$status		=	"none";
-		}
-		else {
-			($workflow, $status)	=	$statusstring	=~ /^([^:]+):(.+)$/;
-			$workflow	=	uc(substr($workflow, 0, 1)) . substr($workflow, 1);
-		}
-		
-		$self->logDebug("workflow", $workflow);
-		$self->logDebug("status", $status);
-	
-		my $queuedata	=	{};
-		$queuedata->{project}	=	$project;
-		$queuedata->{username}	=	$username;
-		$queuedata->{workflow}	=	$workflow;
-		$queuedata->{workflownumber}	=	$workflowmap->{$workflow};
-		$queuedata->{status}	=	$status;
-		$queuedata->{sample}	=	$uuid;
-		
-		if ( not $self->inSamples($uuid, $queuedata)) {
-			$self->logDebug("DOING makeAssigned: $uuid, $synapsestatus");
-			$self->addToSamples($uuid, $synapsestatus, $queuedata);
-		}
-	}
-}
-
-method inSamples ($uuid, $queuedata) {
-	my $query	=	qq{SELECT 1 FROM queuesample
-WHERE sample='$uuid'
-AND username='$queuedata->{username}'
-AND project='$queuedata->{project}'
-AND workflow='$queuedata->{workflow}'
-};
-	$self->logDebug("query", $query);
-
-	return $self->db()->query($query);
-}
-
-method addToSamples ($uuid, $state, $queuedata) {
-	$self->logDebug("uuid", $uuid);
-	$self->logDebug("state", $state);
-	
-	my $table	=	"queuesample";
-	my $keys	=	["username", "project", "workflow", "sample" ];
-	
-	return $self->_addToTable($table, $queuedata, $keys);
-}
-
-method getSampleList {
-	$self->logDebug("");
-
-	return $self->synapse()->getSampleLines();
-}
-
 method getQueues {
 	my $query       =	qq{SELECT queuesample.* FROM queuesample,project
 WHERE project.status='running'
@@ -1679,79 +1260,320 @@ ORDER BY queuesample.username, queuesample.project, queuesample.workflownumber, 
 	return	$self->db()->queryhasharray($query);
 }
 
-#### LISTEN FOR TOPICS
-method listenTopics {
-	$self->logDebug("");
-	
-	my $childpid = fork;
-	if ( $childpid ) {
-		$self->logDebug("IN PARENT childpid", $childpid);
-	}
-	elsif ( defined $childpid ) {
-		#$self->receiveTopic();
-		$self->receiveTask("update.job.status");
+#### MAINTAIN QUEUES
+method maintainQueues($workflows) {
+
+	print "#### DOING maintainQueues TO REPLENISH JOBS IN QUEUES\n";
+	for ( my $i = 0; $i < @$workflows; $i++ ) {
+		my $workflow	=	$$workflows[$i];
+		
+		if ( $i != 0 ) {
+			$self->logDebug("NO COMPLETED JOBS in previous queue") and next if $self->noCompletedJobs($$workflows[$i - 1]);
+		}
+		
+		$self->logDebug("Doing self->maintainQueue()");
+		$self->maintainQueue($workflows, $workflow);
 	}
 }
 
-method receiveTopic {
-	$self->logDebug("");
+method maintainQueue ($workflows, $workflowdata) {
 	
-	#### OPEN CONNECTION
-	my $connection	=	$self->newConnection();	
-	my $channel = $connection->open_channel();
+	$self->logDebug("workflowdata", $workflowdata);
 	
+	my $queuename	=	$self->setQueueName($workflowdata);
+	$self->logDebug("queuename", $queuename);
+	
+	my $workflowcompleted	=	$self->workflowCompleted($workflowdata);
+	$self->logDebug("workflowcompleted", $workflowcompleted);
+	$self->logDebug("Skipping completed queue", $queuename) and return if $workflowcompleted;
+	
+	#### GET MAX JOBS
+	my $maxjobs		=	$self->maxJobsForQueue($workflowdata);
+	$self->logDebug("FINAL maxjobs", $maxjobs);
+
+	#### GET NUMBER OF QUEUED JOBS
+	my $queuedjobs	=	$self->getQueuedJobs($workflowdata);
+	my $numberqueued=	scalar(@$queuedjobs);
+	$self->logDebug("numberqueued", $numberqueued);
+
+	#### ADD MORE JOBS TO QUEUE IF LESS THAN maxjobs
+	my $limit	=	$maxjobs - $numberqueued;
+	$self->logDebug("limit", $limit);
+
+	return 0 if $limit <= 0;
+
+	#### QUEUE UP ADDITIONAL SAMPLES
+	my $tasks	=	$self->getTasks($workflows, $workflowdata, $limit);
+	#$self->logDebug("tasks", $tasks);
+	$self->logDebug("no. tasks", scalar(@$tasks));
+	return 0 if not defined $tasks;
+
+	if ( $numberqueued == 0 and not @$tasks ) {
+		$self->logDebug("Setting workflow $workflowdata->{workflow} status to 'completed'");
+		$self->setWorkflowStatus($workflowdata->{username}, $workflowdata->{project}, $workflowdata->{workflow}, "completed");
+	}
+	elsif ( @$tasks ) {
+		foreach my $task ( @$tasks ) {
+			$self->sendTask($task);
+		
+			$self->updateJobStatus($task);
+		}
+	}
+	
+	return 1;
+}
+
+method noCompletedJobs ($workflow) {
+	my $query	=	qq{SELECT COUNT(*) FROM queuesample
+WHERE username='$workflow->{username}'
+AND project='$workflow->{project}'
+AND workflow='$workflow->{workflow}'
+AND workflownumber='$workflow->{workflownumber}'
+AND status='completed'};
+	#$self->logDebug("query", $query);
+	
+	my $completed	=	$self->db()->query($query);
+	#$self->logDebug("completed", $completed);
+	
+	return 1 if $completed == 0;
+	return 0;
+}
+
+method workflowCompleted ($workflowdata) {
+	my $query	=	qq{SELECT 1 FROM workflow
+WHERE username='$workflowdata->{username}'
+AND project='$workflowdata->{project}'
+AND name='$workflowdata->{name}'
+AND status='completed'};
+	#$self->logDebug("query", $query);
+	
+	return 1 if defined $self->db()->query($query);
+	return 0;
+}
+
+method getTasks ($queues, $queuedata, $limit) {
+
+	#### GET ADDITIONAL SAMPLES TO ADD TO QUEUE
+	$self->logDebug("queuedata", $queuedata);
+	$self->logDebug("limit", $limit);
+
+	#### GET SAMPLE TABLE
+	my $sampletable	=	$self->getSampleTable($queuedata);
+	#$self->logDebug("sampletable", $sampletable);
+	print "Master::getTasks    sampletable not defined\n" and exit if not defined $sampletable;
+
+	#### POPULATE QUEUE SAMPLE TABLE IF EMPTY	
+	my $workflownumber	=	$queuedata->{workflownumber};
+	#$self->logDebug("workflownumber", $workflownumber);
+	if ( $workflownumber == 1 ) {
+		my $hassamples		=	$self->hasQueueSamples($queuedata);
+		#$self->logDebug("hassamples", $hassamples);
+		$self->populateQueueSamples($queuedata, $sampletable) if not $hassamples;
+	}
+
+	#### GET TASKS FROM queuesample TABLE
+	my $tasks	=	$self->pullTasks($queues, $queuedata, $limit);
+	#$self->logDebug("tasks", $tasks);
+	#$self->logDebug("no. tasks", scalar(@$tasks));
+	return if not @$tasks;
+
+	#### DIRECT THE TASK TO EXECUTE A WORKFLOW
+	foreach my $task ( @$tasks ) {
+		$task->{module}		=	"Agua::Workflow";
+		$task->{mode}		=	"executeWorkflow";
+		$task->{database}	=	$queuedata->{database} || $self->database() || $self->conf()->getKey("database:DATABASE", undef);
+		
+		$task->{workflow}	=	$queuedata->{workflow};
+		$task->{workflownumber}=	$queuedata->{workflownumber};
+		
+		#### UPDATE TASK STATUS AS queued
+		$task->{status}		=	"queued";
+		
+		#### SET TIME QUEUED
+		$task->{time}		=	$self->getMysqlTime();
+
+		#### SET SAMPLE HASH
+		$task->{samplehash}	=	$self->getTaskSampleHash($task, $sampletable);
+		#$self->logDebug("task", $task);
+	}
+	
+	return $tasks;
+}
+
+method hasQueueSamples ($queuedata) {
+	#$self->logDebug("queuedata", $queuedata);
+	my $query	=	qq{SELECT 1 FROM queuesample
+WHERE username='$queuedata->{username}'
+AND project='$queuedata->{project}'
+AND workflow='$queuedata->{workflow}'};
+	#$self->logDebug("query", $query);
+	
+	return 1 if defined $self->db()->query($query);
+	return 0;
+}
+
+method populateQueueSamples($queuedata, $sampletable) {
+
+	$self->logDebug("queuedata", $queuedata);
+	$self->logDebug("sampletable", $sampletable);
+
+	my $query		=	qq{SELECT * FROM $sampletable};
+	$self->logDebug("query", $query);
+	my $samples		=	$self->db()->queryhasharray($query);
+	$self->logDebug("no. samples", scalar(@$samples));
+	my $fields		=	$self->db()->fields("queuesample");
+	$self->logDebug("fields", $fields);
+
+	my $tsvfile		=	"/tmp/queuesample.$sampletable.$$.tsv";
+	$self->logDebug("tsvfile", $tsvfile);
+	open(OUT, ">", $tsvfile) or die "Can't open tsv file: $tsvfile\n";
+	foreach my $sample ( @$samples ) {
+		$sample->{username}	=	$queuedata->{username};
+		$sample->{project}	=	$queuedata->{project};
+		$sample->{workflow}	=	$queuedata->{workflow};
+		$sample->{status}	=	"none";
+		my $line	=	$self->db()->fieldsToTsv($fields, $sample);
+		#$self->logDebug("line", $line);
+
+		print OUT $line;
+	}
+	close(OUT) or die "Can't close tsv file: $tsvfile\n";
+
+	$self->logDebug("loading 'queuesample' table");
+	$self->db()->load("queuesample", $tsvfile, undef);
+	
+}
+
+method getSampleTable ($queuedata) {
+	my $username	=	$queuedata->{username};
+	my $project		=	$queuedata->{project};
+	my $query		=	qq{SELECT sampletable FROM sampletable
+WHERE username='$username'
+AND project='$project'};
+	#$self->logDebug("query", $query);
+	
+	return $self->db()->query($query);
+}
+
+method getTaskSampleHash ($task, $sampletable) {
+	my $username	=	$task->{username};
+	my $project		=	$task->{project};
+	my $sample		=	$task->{sample};
+	my $query		=	qq{SELECT * FROM $sampletable
+WHERE username='$username'
+AND project='$project'
+AND sample='$sample'};
+	#$self->logDebug("query", $query);
+	
+	return $self->db()->queryhash($query);
+}
+
+method pullTasks ($queues, $queuedata, $limit) {
+	
+	#$self->logDebug("queues", $queues);
+	$self->logDebug("queuedata", $queuedata);
+
+	my $workflownumber	=	$queuedata->{workflownumber};
+	my $previous	=	$self->getPrevious($queues, $queuedata);
+	$self->logDebug("previous", $previous);
+
+	#### VERIFY VALUES
+	my $notdefined	=	$self->notDefined($queuedata, ["username", "project", "workflow"]);
+	$self->logCritical("not defined", @$notdefined) and return if scalar(@$notdefined) != 0;
+
+	my $query		=	qq{SELECT * FROM queuesample
+WHERE username='$previous->{username}'
+AND project='$previous->{project}'
+AND workflow='$previous->{workflow}'
+AND workflownumber='$previous->{workflownumber}'
+AND status='$previous->{status}'
+LIMIT $limit};
+	#$self->logDebug("query", $query);
+	
+	return $self->db()->queryhasharray($query) || [];
+}
+
+method getPrevious ($queues, $queuedata) {
+
+	#$self->logDebug("queues", $queues);
+	#$self->logDebug("queuedata", $queuedata);
+
+	my $workflownumber	=	$queuedata->{workflownumber};
+	#$self->logDebug("workflownumber", $workflownumber);
+	
+	my $previous	=	{};
+	if ( $workflownumber == 1 ) {
+		$previous->{status}		=	"none";
+		$previous->{username}	=	$queuedata->{username};
+		$previous->{project}	=	$queuedata->{project};
+		$previous->{workflow}	=	$queuedata->{workflow};
+		$previous->{workflownumber}	=	$queuedata->{workflownumber};
+	}
+	else {
+		my $previousindex		=	$workflownumber - 2;
+		$self->logDebug("previousindex", $previousindex);
+		my $previousdata		=	$$queues[$previousindex];
+		$previous->{status}		=	"completed";
+		$previous->{username}	=	$previousdata->{username};
+		$previous->{project}	=	$previousdata->{project};
+		$previous->{workflow}	=	$previousdata->{workflow};
+		$previous->{workflownumber}	=	$previousdata->{workflownumber};
+	}
+
+	return $previous;	
+}
+
+#### LISTEN/SEND TOPICS
+method sendTopic ($data, $key) {
+	$self->logDebug("data", $data);
+	#$self->logDebug("key", $key);
+
 	my $exchange	=	$self->conf()->getKey("queue:topicexchange", undef);
-	$self->logDebug("exchange", $exchange);
+	#$self->logDebug("exchange", $exchange);
+
+	my $host		=	$self->host() || $self->conf()->getKey("queue:host", undef);
+	my $user		= 	$self->user() || $self->conf()->getKey("queue:user", undef);
+	my $pass	=	$self->pass() || $self->conf()->getKey("queue:pass", undef);
+	my $vhost		=	$self->vhost() || $self->conf()->getKey("queue:vhost", undef);
+	$self->logNote("host", $host);
+	$self->logNote("user", $user);
+	$self->logNote("pass", $pass);
+	$self->logNote("vhost", $vhost);
+	
+    my $connection = Net::RabbitFoot->new()->load_xml_spec()->connect(
+        host 	=>	$host,
+        port 	=>	5672,
+        user 	=>	$user,
+        pass 	=>	$pass,
+        vhost	=>	$vhost,
+    );
+
+	$self->logNote("connection: $connection");
+	$self->logNote("DOING connection->open_channel");
+	my $channel 	= 	$connection->open_channel();
+	$self->channel($channel);
+
+	$self->logNote("DOING channel->declare_exchange");
 
 	$channel->declare_exchange(
 		exchange => $exchange,
 		type => 'topic',
 	);
 	
-	my $result = $channel->declare_queue(exclusive => 1);
-	my $queuename = $result->{method_frame}->{queue};
-	
-	my $keystring	=	$self->conf()->getKey("queue:topickeys", undef);
-	$self->logDebug("keystring", $keystring);
-	my $keys;
-	@$keys		=	split ",", $keystring;
-	
-	$self->logDebug("exchange", $exchange);
-	
-	for my $key ( @$keys ) {
-		$channel->bind_queue(
-			exchange => $exchange,
-			queue => $queuename,
-			routing_key => $key,
-		);
-	}
-	
-	print " [*] Listening for topics: @$keys\n";
-
-	no warnings;
-	my $handler	= *handleTopic;
-	use warnings;
-	my $this	=	$self;
-
-	$channel->consume(
-        on_consume => sub {
-			my $var = shift;
-			my $body = $var->{body}->{payload};
-			
-			my $excerpt	=	substr($body, 0, 200);
-			
-			#print " [x] Received message: $excerpt\n";
-			&$handler($this, $body);
-		},
-		no_ack => 1,
+	my $json	=	$self->jsonparser()->encode($data);
+	#$self->logDebug("json", $json);
+	$self->channel()->publish(
+		exchange => $exchange,
+		routing_key => $key,
+		body => $json,
 	);
 	
-	# Wait forever
-	AnyEvent->condvar->recv;	
-}
+	print "[x] Sent topic with key '$key'\n";
 
+	$connection->close();
+}
 method receiveTask ($taskqueue) {
-	$self->logDebug("$$ taskqueue", $taskqueue);
+	$self->logDebug("taskqueue", $taskqueue);
 	
 	#### OPEN CONNECTION
 	my $connection	=	$self->newConnection();	
@@ -1762,7 +1584,7 @@ method receiveTask ($taskqueue) {
 		durable => 1,
 	);
 	
-	print "$$ [*] Waiting for tasks in queue: $taskqueue\n";
+	print "[*] Waiting for tasks in queue: $taskqueue\n";
 	
 	$channel->qos(prefetch_count => 1,);
 	
@@ -1774,7 +1596,7 @@ method receiveTask ($taskqueue) {
 	$channel->consume(
 		on_consume	=>	sub {
 			my $var 	= 	shift;
-			print "$$ Master::receiveTask    DOING CALLBACK";
+			print "Master::receiveTask    DOING CALLBACK";
 		
 			my $body 	= 	$var->{body}->{payload};
 			print " [x] Received $body\n";
@@ -1855,26 +1677,23 @@ method handleTopic ($json) {
 }
 
 method updateJobStatus ($data) {
-	$self->logDebug("data", $data);
+	#$self->logDebug("data", $data);
+	$self->logDebug("$data->{sample} $data->{status}");
+
 	my $keys	=	[ "username", "project", "workflow", "workflownumber", "sample" ];
 	my $notdefined	=	$self->notDefined($data, $keys);	
 	$self->logDebug("notdefined", $notdefined) and return if @$notdefined;
-
-	
 
 	#### ADD TO provenance TABLE
 	my $table		=	"provenance";
 	my $fields		=	$self->db()->fields($table);
 	my $success		=	$self->_addToTable($table, $data, $keys, $fields);
-	$self->logDebug("addToTable 'provenance'    success", $success);
+	#$self->logDebug("addToTable 'provenance'    success", $success);
+	$self->logDebug("failed to add to provenance table") if not $success;
 
 	#### UPDATE queuesamples TABLE
-	$self->updateQueueSamples($data);	
-
-	##### UPDATE SYNAPSE
-	#my $synapsestatus	=	$self->getSynapseStatus($data);
-	#my $sample	=	$data->{sample};
-	#$self->synapse()->change($sample, $synapsestatus);
+	$success		=	$self->updateQueueSample($data);	
+	$self->logDebug("failed to add to queuesample table") if not $success;
 }
 
 method updateHeartbeat ($data) {
@@ -1890,8 +1709,8 @@ method updateHeartbeat ($data) {
 	$self->_addToTable($table, $data, $keys, $fields);
 }
 
-method updateQueueSamples ($data) {
-	$self->logDebug("data", $data);	
+method updateQueueSample ($data) {
+	#$self->logDebug("data", $data);	
 	
 	#### UPDATE queuesample TABLE
 	my $table	=	"queuesample";
@@ -1899,7 +1718,8 @@ method updateQueueSamples ($data) {
 	$self->_removeFromTable($table, $data, $keys);
 	
 	$keys	=	["username", "project", "workflow", "workflownumber", "sample", "status" ];
-	$self->_addToTable($table, $data, $keys);
+
+	return $self->_addToTable($table, $data, $keys);
 }
 
 method setConfigMaxJobs ($queuename, $value) {
@@ -1968,13 +1788,15 @@ method copyHash ($hash1) {
 
 method maxJobsForQueue ($queuedata) {
 	my $queuename	=	$self->setQueueName($queuedata);
+	#$self->logDebug("queuename", $queuename);
 	my $maxjobs		=	$self->getConfigMaxJobs($queuename);
-	$self->logDebug("maxjobs", $maxjobs);
+	
 	if ( not defined $maxjobs ) {
 		$maxjobs	=	$self->maxjobs(); #### EITHER DEFAULT OR USER-DEFINED
 		
 		$self->setConfigMaxJobs($queuename, $maxjobs);
 	}
+	$self->logDebug("maxjobs", $maxjobs);
 	
 	return $maxjobs;
 }
@@ -2019,50 +1841,41 @@ method getQueueTaskList {
 }
 
 
-#### DEPRECATE: IN FAVOUR OF getQueuedJobs
-method getNumberQueuedJobs ($queuelist, $queue) {
-	#$self->logDebug("queuelist", $queuelist);
-	$self->logDebug("queue", $queue);
-	
-	my ($jobs)	=	$queuelist	=~ /^$queue(), "\s+(\d+)\s*/ms;
-	$self->logDebug("jobs", $jobs);
-
-	return $jobs;
-}
-
 method getQueuedJobs ($workflowdata) {
 	my $query	=	qq{SELECT * FROM queuesample
 WHERE username='$workflowdata->{username}'
 AND project='$workflowdata->{project}'
 AND workflow='$workflowdata->{workflow}'
 AND status='queued'};
-	$self->logDebug("query", $query);
+	#$self->logDebug("query", $query);
 	
 	return $self->db()->queryhasharray($query) || [];
 }
 
 #### SEND TASK
 method sendTask ($task) {	
-	$self->logDebug("task", $task);
+	#$self->logDebug("task", $task);
+	#$self->logDebug("$task->{workflow} $task->{sample} $task->{status}");
+
 	my $processid	=	$$;
-	$self->logDebug("processid", $processid);
+	#$self->logDebug("processid", $processid);
 	$task->{processid}	=	$processid;
 
 	#### SET QUEUE
 	my $queuename		=	$self->setQueueName($task);
 	$task->{queue}		=	$queuename;
-	$self->logDebug("queuename", $queuename);
+	#$self->logDebug("queuename", $queuename);
 	
 	#### ADD UNIQUE IDENTIFIERS
 	$task	=	$self->addTaskIdentifiers($task);
 
 	my $jsonparser = JSON->new();
 	my $json = $jsonparser->encode($task);
-	$self->logDebug("json", $json);
+	#$self->logDebug("json", $json);
 
 	#### GET CONNECTION
 	my $connection	=	$self->newConnection();
-	$self->logDebug("DOING connection->open_channel()");
+	#$self->logDebug("DOING connection->open_channel()");
 	my $channel = $connection->open_channel();
 	$self->channel($channel);
 	#$self->logDebug("channel", $channel);
@@ -2079,7 +1892,7 @@ method sendTask ($task) {
 		body => $json,
 	);
 	
-	print " [x] Sent TASK: '$json'\n";
+	print " [x] Sent TASK:  $task->{mode} $task->{workflow} $task->{sample}\n";
 }
 
 method addTaskIdentifiers ($task) {
@@ -2102,7 +1915,7 @@ method addTaskIdentifiers ($task) {
 	#### SET CALLBACK
 	$task->{callback} 	= 	$self->callback();
 	
-	$self->logDebug("Returning task", $task);
+	#$self->logDebug("Returning task", $task);
 	
 	return $task;
 }
@@ -2387,6 +2200,5 @@ method deeplyIdentical ($a, $b) {
 	
 	
 	
+
 }
-
-

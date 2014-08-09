@@ -1,0 +1,224 @@
+#!/usr/bin/perl -w
+
+=head2
+
+APPLICATION 	receiveTopic
+
+PURPOSE
+
+	Receive messages on a RabbitMQ topic queue
+	
+HISTORY
+
+	v0.01	Basic options to authenticate user and specify queue name
+
+USAGE
+
+$0 [--user String] [--host String] [--password String] [--vhost String] [--queue String]
+
+EXAMPLE
+
+# Receive message sent to default queue
+
+./receiveTopic
+
+# Receive message sent to 'test' topic on 'test.exchange' exchange
+
+./receiveTopic --exchange test.exchange --key test
+
+
+=cut
+
+#### EXTERNAL MODULES
+use Term::ANSIColor qw(:constants);
+use Getopt::Long;
+use FindBin qw($Bin);
+use AnyEvent;
+use Net::RabbitFoot;
+
+#### USE LIBRARY
+use lib "$Bin/../../lib";	
+BEGIN {
+    my $installdir = $ENV{'installdir'} || "/agua";
+    unshift(@INC, "$installdir/lib");
+}
+
+my $installdir 	=	 $ENV{'installdir'} || "/agua";
+
+#### INTERNAL MODULES
+use Conf::Yaml;
+use Exchange;
+
+my $configfile	=	"$installdir/conf/config.yaml";
+
+my $conf = Conf::Yaml->new(
+    memory      =>  1,
+    inputfile   =>  $configfile,
+);
+
+my $message		=	"";
+my $host		=	$conf->getKey("queue:host", undef) || "localhost";
+my $port		=	$conf->getKey("queue:port", undef) || 5672; 
+my $user		=	$conf->getKey("queue:user", undef) || "guest";
+my $pass		=	$conf->getKey("queue:pass", undef) || "guest";
+my $vhost		=	$conf->getKey("queue:vhost", undef) || "/";
+my $keys		=	$conf->getKey("queue:topickeys", undef) || "test.exchange.topic";
+my $exchange	=	$conf->getKey("queue:topicexchange", undef) || "test.exchange";
+my $help;
+
+GetOptions (
+    'exchange=s'	=> \$exchange,
+    'message=s'		=> \$message,
+    'keys=s@'		=> \$keys,
+
+    'host=s'		=> \$host,
+    'port=s'		=> \$port,
+    'user=s'		=> \$user,
+    'pass=s'		=> \$pass,
+    'vhost=s'		=> \$vhost,
+
+    'help'          => \$help
+) or die "No options specified. Try '--help'\n";
+usage() if defined $help;
+
+print "keys: @$keys\n";
+
+my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
+    host 	=> 	$host,
+    port 	=> 	5672,
+    user 	=> 	$user,
+    pass 	=> 	$pass,
+    vhost 	=> 	$vhost,
+);
+
+my $channel = $conn->open_channel();
+
+$channel->declare_exchange(
+	exchange => $exchange,
+	type => 'topic',
+);
+
+my $result = $channel->declare_queue(exclusive => 1);
+my $queuename = $result->{method_frame}->{queue};
+
+
+for my $routingkey ( @$keys ) {
+	$channel->bind_queue(
+		exchange 	=> $exchange,
+		queue 		=> $queuename,
+		routing_key => $routingkey,
+	);
+}
+
+print " [*] Listening on exchange '$exchange' for topics: @$keys \n";
+
+sub callback {
+    my $var = shift;
+    my $body = $var->{body}->{payload};
+    my $routing_key = $var->{deliver}->{method_frame}->{routing_key};
+	print " [x] Received topic $routing_key: $body\n";
+}
+
+$channel->consume(
+    on_consume => \&callback,
+    no_ack => 1,
+);
+
+# Wait forever
+AnyEvent->condvar->recv;	
+
+
+#GetOptions (
+#    'exchange=s'	=> \$exchange,
+#    'message=s'		=> \$message,
+#    'keys=s'		=> \$keys,
+#
+#    'host=s'		=> \$host,
+#    'port=s'		=> \$port,
+#    'user=s'		=> \$user,
+#    'pass=s'		=> \$pass,
+#    'vhost=s'		=> \$vhost,
+#
+#    'log=i'     	=> \$log,
+#    'printlog=i'    => \$printlog,
+#    'help'          => \$help
+#) or die "No options specified. Try '--help'\n";
+#usage() if defined $help;
+#
+#my $conf = Conf::Yaml->new(
+#    memory      =>  0,
+#    inputfile   =>  $configfile,
+#    backup      =>  1,
+#
+#    log			=>	$log,
+#    printlog	=>	$printlog,
+#    logfile     =>  $logfile
+#);
+#
+#my $object = Exchange::Manager->new({
+#    host		=>	$host,
+#    port		=>	$port,
+#    user		=>	$user,
+#    pass		=>	$pass,
+#    pass		=>	$pass,
+#    vhost		=>	$vhost,
+#
+#	conf		=>	$conf,
+#    log			=>	$log,
+#    printlog	=>	$printlog,
+#    logfile     =>  $logfile
+#});
+#
+#$object->receiveTopic($key, $message);
+
+
+exit 0;
+
+##############################################################
+
+sub usage {
+	print `perldoc $0`;
+	exit;
+}
+
+
+#GetOptions (
+#    'exchange=s'	=> \$exchange,
+#    'message=s'		=> \$message,
+#    'key=s'			=> \$key,
+#    'host=s'		=> \$host,
+#    'port=s'		=> \$port,
+#    'user=s'		=> \$user,
+#    'pass=s'		=> \$pass,
+#    'vhost=s'		=> \$vhost,
+#    'help'          => \$help
+#) or die "No options specified. Try '--help'\n";
+#usage() if defined $help;
+#
+##my $object	=	Exchange->new();
+#
+#my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
+#    host 	=> 	$host,
+#    port 	=> 	5672,
+#    user 	=> 	$user,
+#    pass 	=> 	$pass,
+#    vhost 	=> 	$vhost,
+#);
+#
+#my $channel = $conn->open_channel();
+#
+#$channel->declare_exchange(
+#    exchange => $exchange,
+#    type => 'topic',
+#);
+#
+#$channel->publish(
+#    exchange => $exchange,
+#    routing_key => $key,
+#    body => $message,
+#);
+#
+#print " [x] Sent topic message to routing key $key: $message\n";
+#
+#$conn->close();
+

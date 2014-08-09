@@ -2,11 +2,11 @@
 
 =head2
 
-APPLICATION 	receive
+APPLICATION 	sendTopic
 
 PURPOSE
 
-	1. Receive queues from a RabbitMQ queue
+	Send messages to a RabbitMQ topic queue
 	
 HISTORY
 
@@ -18,8 +18,9 @@ $0 [--user String] [--host String] [--password String] [--vhost String] [--queue
 
 EXAMPLE
 
-# Receive queues sent to queue 'my.queue.name'
-./receive --queue "my.queue.name"
+# Send message to default queue and key
+
+./sendTopic --message '{"mode":"test"}'
 
 =cut
 
@@ -50,26 +51,31 @@ my $conf = Conf::Yaml->new(
     inputfile   =>  $configfile,
 );
 
-my $key			=	"topic.default.key";
 my $message		=	"";
-my $host		=	$conf->getKey("queue:host", undef);
-my $port		=	$conf->getKey("queue:port", undef);
-my $user		=	$conf->getKey("queue:user", undef);
-my $pass		=	$conf->getKey("queue:pass", undef);
-my $vhost		=	$conf->getKey("queue:vhost", undef);
-my $exchange	=	$conf->getKey("queue:topicexchange", undef);
+my $host		=	$conf->getKey("queue:host", undef) || "localhost";
+my $port		=	$conf->getKey("queue:port", undef) || 5672; 
+my $user		=	$conf->getKey("queue:user", undef) || "guest";
+my $pass		=	$conf->getKey("queue:pass", undef) || "guest";
+my $vhost		=	$conf->getKey("queue:vhost", undef) || "/";
+my $keys		=	$conf->getKey("queue:topickeys", undef) || "test.exchange.topic";
+my $exchange	=	$conf->getKey("queue:topicexchange", undef) || "test.exchange";
 my $help;
 
 GetOptions (
     'exchange=s'	=> \$exchange,
     'message=s'		=> \$message,
-    'key=s'			=> \$key,
+    'keys=s'		=> \$keys,
+
     'host=s'		=> \$host,
     'port=s'		=> \$port,
     'user=s'		=> \$user,
     'pass=s'		=> \$pass,
     'vhost=s'		=> \$vhost,
+
+    'log=i'     	=> \$log,
+    'printlog=i'    => \$printlog,
     'help'          => \$help
+
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
 
@@ -92,11 +98,11 @@ $channel->declare_exchange(
 
 $channel->publish(
     exchange => $exchange,
-    routing_key => $key,
+    routing_key => $keys,
     body => $message,
 );
 
-print " [x] Sent topic message to routing key $key: $message\n";
+print " [x] Sent topic message to routing keys $keys: $message\n";
 
 $conn->close();
 

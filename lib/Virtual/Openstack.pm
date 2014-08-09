@@ -46,13 +46,13 @@ method BUILD ($args) {
 }
 
 method initialise ($args) {
-	$self->logDebug("");
+	$self->logNote("");
 }
 
 method createConfig ($object, $templatefile, $targetfile, $extra) {
-	$self->logDebug("object", $object);
-	$self->logDebug("templatefile", $templatefile);
-	$self->logDebug("targetfile", $targetfile);
+	$self->logNote("object", $object);
+	$self->logNote("templatefile", $templatefile);
+	$self->logNote("targetfile", $targetfile);
 
 	# EDIT TEMPLATE 
 	my $template		=	$self->getFileContents($templatefile);
@@ -71,19 +71,19 @@ method createConfig ($object, $templatefile, $targetfile, $extra) {
 
 method printAuthFile ($tenant, $templatefile, $targetfile) {
 	$self->logDebug("tenant", $tenant);
-	$self->logDebug("templatefile", $templatefile);
-	$self->logDebug("targetfile", $targetfile);
+	$self->logNote("templatefile", $templatefile);
+	$self->logNote("targetfile", $targetfile);
 
 	my $template		=	$self->getFileContents($templatefile);
-	#$self->logDebug("template", $template);
+	#$self->logNote("template", $template);
 
 	foreach my $key ( keys %$tenant ) {
 		my $templatekey	=	uc($key);
 		my $value	=	$tenant->{$key};
-		#$self->logDebug("substituting key $key value '$value' into template");
+		#$self->logNote("substituting key $key value '$value' into template");
 		$template	=~ s/<$templatekey>/$value/msg;
 	}
-	#$self->logDebug("template", $template);
+	#$self->logNote("template", $template);
 	
 	$self->printToFile($targetfile, $template);
 
@@ -91,8 +91,8 @@ method printAuthFile ($tenant, $templatefile, $targetfile) {
 }
 
 method launchNode ($authfile, $amiid, $maxnodes, $instancetype, $userdatafile, $keypair, $workflow) {
-	$self->logDebug("authfile", $authfile);
-	$self->logDebug("amiid", $amiid);
+	#$self->logDebug("authfile", $authfile);
+	#$self->logDebug("amiid", $amiid);
 	
 	my $command	=	qq{. $authfile && \\
 nova boot \\
@@ -192,18 +192,6 @@ method addNode {
 	return $nodeid;
 }
 
-method _deleteNode ($authfile, $id) {
-	$self->logDebug("authfile", $authfile);
-	$self->logDebug("id", $id);
-	
-	my $command		=	qq{. $authfile && nova delete $id};
-	my ($out, $err)	=	$self->runCommand($command);
-	$self->logDebug("out", $out);
-	$self->logDebug("err", $err);
-	
-	return $self->parseNovaList($out);
-}
-
 method deleteNode ($authfile, $id) {
 	$self->_deleteNode($authfile, $id);
 	
@@ -214,24 +202,36 @@ method deleteNode ($authfile, $id) {
 	
 	my $success = 0;
 	$success = 1 if not defined $taskstate;
-	$success = 1 if $taskstate eq "deleting";
+	$success = 1 if defined $taskstate and $taskstate eq "deleting";
 
 	return $success;
 }
 
+method _deleteNode ($authfile, $id) {
+	$self->logNote("authfile", $authfile);
+	$self->logNote("id", $id);
+	
+	my $command		=	qq{. $authfile && nova delete $id};
+	my ($out, $err)	=	$self->runCommand($command);
+	$self->logNote("out", $out);
+	$self->logNote("err", $err);
+	
+	return $self->parseNovaList($out);
+}
+
 method getQuotas ($authfile, $tenantid) {
-	$self->logDebug("authfile", $authfile);
-	$self->logDebug("tenantid", $tenantid);
+	$self->logNote("authfile", $authfile);
+	$self->logNote("tenantid", $tenantid);
 	
 	my $command	=	". $authfile && nova quota-show";
-	$self->logDebug("command", $command);
+	$self->logNote("command", $command);
 	
 	return `$command`;
 }
 
 method printToFile ($file, $text) {
-	$self->logDebug("file", $file);
-	$self->logDebug("text", substr($text, 0, 100));
+	$self->logNote("file", $file);
+	$self->logNote("substr text", substr($text, 0, 100));
 
     open(FILE, ">$file") or die "Can't open file: $file\n";
     print FILE $text;    

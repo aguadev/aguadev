@@ -2,11 +2,11 @@
 
 =head2
 
-APPLICATION 	emit
+APPLICATION 	worker
 
 PURPOSE
 
-	1. Send messages to a RabbitMQ fanout queue
+	1. Receive tasks and run them
 	
 HISTORY
 
@@ -18,11 +18,8 @@ $0 [--user String] [--host String] [--password String] [--vhost String] [--queue
 
 EXAMPLE
 
-# Send message to default queue (user=guest, password=guest, host=localhost, vhost=/)
-./emit.pl "my message"
-
-# Send message to custom queue on localhost
-./emit.pl --user myUserName --password mySecret "
+# Receive task to run 'Align' workflow on sample XXXXXXXXXXXXXXXX 
+./worker.pl --username syoung --workflow Align --project XXXXXXXXXXXXXXXX 
 
 =cut
 
@@ -41,7 +38,7 @@ BEGIN {
 
 #### INTERNAL MODULES
 use Conf::Yaml;
-use Queue::Manager;
+use Exchange::Manager;
 
 my $installdir 	=	 $ENV{'installdir'} || "/agua";
 my $configfile	=	"$installdir/conf/config.yaml";
@@ -60,7 +57,8 @@ my $vhost;
 #my $user		=	'myuser';	
 #my $pass		=	'mypassword';
 #my $vhost		=	'myvhost';
-my $message		=	"";
+
+my $notes		=	"";
 my $log		=	2;
 my $printlog	=	2;
 my $help;
@@ -76,7 +74,7 @@ GetOptions (
     'port=s'		=> \$port,
     'user=s'		=> \$user,
     'pass=s'		=> \$pass,
-    'message=s'		=> \$message,
+    'notes=s'		=> \$notes,
     'vhost=s'		=> \$vhost,
     'log=i'     => \$log,
     'printlog=i'    => \$printlog,
@@ -94,7 +92,7 @@ my $conf = Conf::Yaml->new(
     logfile     =>  $logfile
 );
 
-my $object = Queue::Manager->new({
+my $object = Exchange::Manager->new({
     host		=>	$host,
     port		=>	$port,
     user		=>	$user,
@@ -107,11 +105,11 @@ my $object = Queue::Manager->new({
     logfile     =>  $logfile
 });
 
-	$object->sendTask({
-	username	=>	$username,
-	project		=>	$project,
-	workflow	=>	$workflow,
-    message		=>	$message,
+$object->receiveTask({
+    username	=>	$username,
+    project		=>	$project,
+    workflow	=>	$workflow,
+    notes		=>	$notes,
 });
 
 exit 0;

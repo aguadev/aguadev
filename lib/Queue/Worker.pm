@@ -45,18 +45,15 @@ has 'modulestring'	=> ( isa => 'Str|Undef', is => 'rw', default	=> "Agua::Workfl
 
 # Objects
 has 'conf'		=> ( isa => 'Conf::Yaml', is => 'rw', required	=>	0 );
-has 'nova'		=> ( isa => 'Virtual::Openstack', is => 'rw', lazy	=>	1, builder	=>	"setNova" );
-has 'synapse'	=> ( isa => 'Synapse', is => 'rw', lazy	=>	1, builder	=>	"setSynapse" );
 has 'jsonparser'=> ( isa => 'JSON', is => 'rw', lazy	=>	1, builder	=>	"setJsonParser" );
 has 'db'		=> ( isa => 'Agua::DBase::MySQL|Undef', is => 'rw', required	=>	0 );
 has 'channel'	=> ( isa => 'Any', is => 'rw', required	=>	0 );
-
+has 'virtual'	=> ( isa => 'Any', is => 'rw', lazy	=>	1, builder	=>	"setVirtual" );
 
 use FindBin qw($Bin);
 use Test::More;
-
-use Virtual::Openstack;
 use Agua::Workflow;
+use Virtual;
 
 #####////}}}}}
 
@@ -69,19 +66,28 @@ method initialise ($args) {
 }
 
 method listen {
-	#### LISTEN FOR TASKS SENT FROM MASTER
-	$self->listenTasks();
+	$self->logDebug("");
 
-	#### PERIODICALLY SEND 'HEARTBEAT' NODE STATUS INFO
-	my $shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
-	while ( not $shutdown eq "true" ) {
-		my $sleep	=	$self->sleep();
-		print "Queue::Master::manage    Sleeping $sleep seconds\n";
-		sleep($sleep);
-		$self->heartbeat();
-		
-		$shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
-	}	
+	my $childpid = fork;
+	if ( $childpid ) {
+		$self->logDebug("IN PARENT childpid", $childpid);
+		#### LISTEN FOR TASKS SENT FROM MASTER
+		$self->listenTasks();
+
+		#### PERIODICALLY SEND 'HEARTBEAT' NODE STATUS INFO
+		my $shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
+		while ( not $shutdown eq "true" ) {
+			my $sleep	=	$self->sleep();
+			print "Queue::Master::manage    Sleeping $sleep seconds\n";
+			sleep($sleep);
+			$self->heartbeat();
+			
+			$shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
+		}	
+	}
+	elsif ( defined $childpid ) {
+		$self->listenTopics();
+	}
 }
 
 method heartbeat {
@@ -148,19 +154,6 @@ method listenTasks {
 	my $taskqueue =	$self->conf()->getKey("queue:taskqueue", undef);
 	$self->logDebug("$$ taskqueue", $taskqueue);
 
-	#my $childpid = fork;
-	#if ( $childpid ) #### ****** Parent ****** 
-	#{
-	#	$self->logDebug("$$ PARENT childpid", $childpid);
-	#}
-	#elsif ( defined $childpid ) {
-		$self->receiveTask($taskqueue);	
-	#}		
-}
-
-method receiveTask ($taskqueue) {
-	$self->logDebug("$$ taskqueue", $taskqueue);
-	
 	#### OPEN CONNECTION
 	my $connection	=	$self->newConnection();	
 	my $channel 	= 	$connection->open_channel();
@@ -255,26 +248,32 @@ method sendTask ($task) {
 	my $json = $jsonparser->encode($task);
 	$self->logDebug("json", $json);
 
-	#### GET CONNECTION
-	my $connection	=	$self->newConnection();
-	$self->logDebug("DOING connection->open_channel()");
-	my $channel = $connection->open_channel();
-	$self->channel($channel);
-	#$self->logDebug("channel", $channel);
+	Coro::async_pool {
+
+		#### GET CONNECTION
+		my $connection	=	$self->newConnection();
+		$self->logDebug("DOING connection->open_channel()");
+		my $channel = $connection->open_channel();
+		$self->channel($channel);
+		#$self->logDebug("channel", $channel);
+		
+		$channel->declare_queue(
+			queue => $queuename,
+			durable => 1,
+		);
 	
-	$channel->declare_queue(
-		queue => $queuename,
-		durable => 1,
-	);
+
+		#### BIND QUEUE TO EXCHANGE
+		$channel->publish(
+			exchange => '',
+			routing_key => $queuename,
+			body => $json,
+		);
 	
-	#### BIND QUEUE TO EXCHANGE
-	$channel->publish(
-		exchange => '',
-		routing_key => $queuename,
-		body => $json,
-	);
+		print " [x] Sent TASK: '$json'\n";
+
+	}
 	
-	print " [x] Sent TASK: '$json'\n";
 }
 
 method addTaskIdentifiers ($task) {
@@ -286,6 +285,7 @@ method addTaskIdentifiers ($task) {
 	$task->{sendtype}	=	"task";
 	
 	#### SET DATABASE
+	$self->setDbh() if not defined $self->db();
 	$task->{database} 	= 	$self->db()->database() || "";
 
 	#### SET USERNAME		
@@ -305,17 +305,6 @@ method addTaskIdentifiers ($task) {
 
 ### LISTEN FOR TOPICS 
 method listenTopics {
-	$self->logDebug("");
-	my $childpid = fork;
-	if ( $childpid ) {
-		$self->logDebug("IN PARENT childpid", $childpid);
-	}
-	elsif ( defined $childpid ) {
-		$self->receiveTopic();
-	}
-}
-
-method receiveTopic {
 	$self->logDebug("");
 	
 	#### OPEN CONNECTION
@@ -390,17 +379,19 @@ method handleTopic ($json) {
 
 method doShutdown ($data) {
 	$self->logDebug("data", $data);
+	my $targethost	=	lc($data->{host});
+	$self->logDebug("targethost", $targethost);
 	my $hostname	=	$self->getHostname();
-	$self->logDebug("hostname", $hostname);	
+	$self->logDebug("hostname", $hostname);
 	
-	$self->logDebug("No hostname match. Skipping shutdown") and return if $data->{host} ne $hostname;
+	$self->logDebug("No hostname match ($targethost vs $hostname). Skipping shutdown") and return if $targethost ne $hostname;
 	
 	my $status	=	$self->conf()->getKey("agua:STATUS", undef);
 	$self->logDebug("status", $status);
 	
-	#### IF THE INSTANCE IS NOT RUNNING THEN DO SHUTDOWN
+	#### IF NO WORKFLOW IS RUNNING THEN NOTIFY MASTER TO DELETE HOST
 	if ( $status ne "running" ) {
-		$self->shutdown();
+		$self->sendDeleteInstance();
 	}
 	else {
 		#### SET SHUTDOWN TO true
@@ -409,10 +400,25 @@ method doShutdown ($data) {
 		#### 1. RUN shutdown()
 		#### 2. ACCEPT NO MORE TASKS
 		#### 3. AWAIT TERMINATION
-		$self->conf()->setKey("agua:SHUTDOWN", "true");
+		$self->conf()->setKey("agua:SHUTDOWN", undef, "true");
 	}
-	
+}
 
+method getHostname {
+
+	#### GET OPENSTACK HOST NAME
+	#### E.G., split.v2-5.hd800-real-de2e4a8b-7034-4525-ab3e-33fc993797f8.novalocal
+	my $hostname	=	$self->virtual()->getMetaData("hostname");
+	$hostname		=~	s/\.novalocal\s*$//;
+	$self->logDebug("hostname", $hostname);
+	
+	#### OTHERWISE, GET LOCAL HOSTNAME
+	if ( $hostname eq "" ) {
+		$hostname	=	`hostname`;
+		$hostname	=~	s/\s+$//g;
+	}
+
+	return $hostname;	
 }
 
 method verifyShutdown {
@@ -420,30 +426,24 @@ method verifyShutdown {
 	$self->logDebug("shutdown", $shutdown);
 	
 	if ( $shutdown eq "true" ) {
-		$self->logDebug("DOING self->shutdown()");
-		$self->shutdown();
+		$self->logDebug("DOING self->sendDeleteInstance()");
+		$self->sendDeleteInstance();
 	}
 }
 
-method shutdown {
+method sendDeleteInstance {
 	$self->logDebug("");
 	
-	my $key	=	"update.host.status";
-
 	my $time		=	$self->getMysqlTime();
-	my $host		=	$self->getHostName();
+	my $id			=	$self->getHostName();
 	my $data		=	{
 		time		=>	$time,
-		host		=>	$host,
-		status		=>	"shutdown",
-		mode		=>	"updateShutdown"
+		id			=>	$id,
+		mode		=>	"deleteInstance"
 	};
 
 	#### REPORT HOST STATUS TO 
-	$self->sendTopic($data, $key);
-	
-	##### SHUTDOWN TASK CONNECTION
-	#$self->connection()->close();
+	$self->sendTask($data);
 }
 
 method getHostName {
@@ -533,6 +533,31 @@ method getArch {
     $self->logDebug("FINAL arch", $arch);
 	
 	return $arch;
+}
+
+
+#### SET VIRTUALISATION PLATFORM
+method setVirtual {
+	my $virtualtype		=	$self->conf()->getKey("agua", "VIRTUALTYPE");
+	$self->logDebug("virtualtype", $virtualtype);
+
+	#### RETURN IF TYPE NOT SUPPORTED	
+	$self->logDebug("virtualtype not supported: $virtualtype") and return if $virtualtype !~	/^(openstack|vagrant)$/;
+
+   #### CREATE DB OBJECT USING DBASE FACTORY
+    my $virtual = Virtual->new( $virtualtype,
+        {
+			conf		=>	$self->conf(),
+            username	=>  $self->username(),
+			
+			logfile		=>	$self->logfile(),
+			log			=>	$self->log(),
+			printlog	=>	$self->printlog()
+        }
+    ) or die "Can't create virtualtype: $virtualtype. $!\n";
+	$self->logDebug("virtual: $virtual");
+
+	$self->virtual($virtual);
 }
 
 
