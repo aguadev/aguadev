@@ -261,7 +261,6 @@ method sendTask ($task) {
 			queue => $queuename,
 			durable => 1,
 		);
-	
 
 		#### BIND QUEUE TO EXCHANGE
 		$channel->publish(
@@ -388,18 +387,35 @@ method doShutdown ($data) {
 	
 	my $status	=	$self->conf()->getKey("agua:STATUS", undef);
 	$self->logDebug("status", $status);
+
+	my $teardown	=	$data->{teardown};
+	my $teardownfile	=	$data->{teardownfile};
+	$self->logDebug("teardown", $teardown);
+	$self->logDebug("teardownfile", $teardownfile);
+	if ( defined $teardown ) {
+		$self->printToFile($teardownfile, $teardown);
+		`chmod 755 $teardownfile`;
+		$self->conf()->setKey("agua:TEARDOWNFILE", undef, $teardownfile);
+	}
 	
 	#### IF NO WORKFLOW IS RUNNING THEN NOTIFY MASTER TO DELETE HOST
 	if ( $status ne "running" ) {
+		#### DO TEARDOWN
+		my $teardownfile	=	$self->conf()->getKey("agua:TEARDOWNFILE", undef);
+		$self->logDebug("teardownfile", $teardownfile);
+
+		if ( defined $teardownfile ) {
+			$self->logDebug("Running teardownfile", $teardownfile);
+			$self->logDebug("Can't find teardownfile") if not -f $teardownfile;
+			print `cat $teardownfile`;
+			`$teardownfile`;
+		}
+		
+		#### SEND DELETE INSTANCE 
 		$self->sendDeleteInstance();
 	}
 	else {
 		#### SET SHUTDOWN TO true
-		#### WHEN THE CURRENT WORKFLOW ENDS, IF IT SEES THE SHUTDOWN
-		#### FLAG IS true, IT WILL:
-		#### 1. RUN shutdown()
-		#### 2. ACCEPT NO MORE TASKS
-		#### 3. AWAIT TERMINATION
 		$self->conf()->setKey("agua:SHUTDOWN", undef, "true");
 	}
 }
@@ -535,6 +551,15 @@ method getArch {
 	return $arch;
 }
 
+
+method printToFile ($file, $text) {
+	$self->logNote("file", $file);
+	$self->logNote("substr text", substr($text, 0, 100));
+
+    open(FILE, ">$file") or die "Can't open file: $file\n";
+    print FILE $text;    
+    close(FILE) or die "Can't close file: $file\n";
+}
 
 #### SET VIRTUALISATION PLATFORM
 method setVirtual {

@@ -335,7 +335,7 @@ method updateProvenance ($data) {
 	my $table		=	"provenance";
 	my $fields		=	$self->db()->fields($table);
 	my $success		=	$self->_addToTable($table, $data, $keys, $fields);
-	$self->logDebug("addToTable 'provenance'    success", $success);
+	#$self->logDebug("addToTable 'provenance'    success", $success);
 }
 method updateQueueSample ($data) {
 	#$self->logDebug("data", $data);	
@@ -353,7 +353,7 @@ method deleteInstance ($data) {
 	#$self->logDebug("data", $data);
 	my $id			=	$data->{id};
 	$self->logDebug("id", $id);
-	
+
 	my $username	=	$self->getUsernameFromInstance($id);
 
 	my $authfile	=	$self->printAuth($username);

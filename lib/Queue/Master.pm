@@ -186,7 +186,7 @@ method balanceInstances ($workflows) {
 
 #### DEBUG
 
-$quota		=	160;
+$quota		=	0;
 $self->logDebug("DEBUG quota", $quota);
 
 #### DEBUG
@@ -314,30 +314,45 @@ method addNodes ($workflow, $number) {
 method deleteNodes ($workflow, $number) {
 	my $queuename	=	$self->getQueueName($workflow);
 	my $username	=	$workflow->{username};
-	my $query	=	qq{SELECT id FROM instance
+	my $query	=	qq{SELECT * FROM instance
 WHERE username='$username'
 AND queue='$queuename'
 AND status='running'
 LIMIT $number};
 	$self->logDebug("query", $query);
 	
-	my $ids		=	$self->db()->queryarray($query);
-	foreach my $id ( @$ids ) {
-		$self->updateInstanceStatus($id, "stopping");
-		$self->shutdownInstance($id);
+	my $instances	=	$self->db()->queryhasharray($query);
+	foreach my $instance ( @$instances ) {
+		$self->updateInstanceStatus($instance->{id}, "stopping");
+		$self->shutdownInstance($workflow, $instance->{host});
 	}
 }
 
-method shutdownInstance ($id) {
+method shutdownInstance ($workflow, $id) {
 	$self->logDebug("id", $id);
+
+	my $stages			=	$self->getStagesByWorkflow($workflow);
+	my $object			=	$$stages[0];
+	my $installdir		=	$object->{installdir};
+	my $version			=	$object->{version};
+	my $teardownfile	=	$self->setTearDownFile($installdir, $version);
+	#$self->logDebug("teardownfile", $teardownfile);
+	my $teardown			=	$self->getFileContents($teardownfile);
+	$self->logDebug("teardown", substr($teardown, 0, 100));
 	
 	my $data	=	{
-		host	=>	$id,
-		mode	=>	"doShutdown"
+		host			=>	$id,
+		mode			=>	"doShutdown",
+		teardown		=>	$teardown,
+		teardownfile	=>	$teardownfile
 	};
 	
 	my $key	=	"update.host.status";
 	$self->sendTopic($data, $key);
+}
+
+method setTearDownFile($installdir, $version) {
+	return "$installdir/data/sh/teardown.sh";
 }
 
 method updateInstanceStatus ($id, $status) {
@@ -1266,19 +1281,20 @@ method maintainQueues($workflows) {
 	print "#### DOING maintainQueues TO REPLENISH JOBS IN QUEUES\n";
 	for ( my $i = 0; $i < @$workflows; $i++ ) {
 		my $workflow	=	$$workflows[$i];
+		my $label	=	"[" . ($i + 1) . "] ". $$workflows[$i]->{name};
 		
 		if ( $i != 0 ) {
-			$self->logDebug("NO COMPLETED JOBS in previous queue") and next if $self->noCompletedJobs($$workflows[$i - 1]);
+			$self->logDebug("$label NO COMPLETED JOBS in previous queue") and next if $self->noCompletedJobs($$workflows[$i - 1]);
 		}
 		
-		$self->logDebug("Doing self->maintainQueue()");
+		$self->logDebug("$label DOING self->maintainQueue()");
 		$self->maintainQueue($workflows, $workflow);
 	}
 }
 
 method maintainQueue ($workflows, $workflowdata) {
 	
-	$self->logDebug("workflowdata", $workflowdata);
+	#$self->logDebug("workflowdata", $workflowdata);
 	
 	my $queuename	=	$self->setQueueName($workflowdata);
 	$self->logDebug("queuename", $queuename);

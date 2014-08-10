@@ -46,7 +46,7 @@ sub setDbh {
 	$dbtype 	=	$self->conf()->getKey('database', 'DBTYPE') if not defined $dbtype;
 	#$database 	=	$self->conf()->getKey('database', undef) if not defined $database;
 	#$database 	=	$self->conf()->getKey('database:DATABASE', undef) if not defined $database;
-	$self->logDebug("database", $database);
+	$self->logNote("database", $database);
 	$dbuser 		=	$self->conf()->getKey('database', 'USER') if not defined $dbuser;
 	$dbpassword 	=	$self->conf()->getKey('database', 'PASSWORD') if not defined $dbpassword;
 	$database	=	$self->conf()->getKey('database', 'DATABASE') if not defined $database or $database eq "";

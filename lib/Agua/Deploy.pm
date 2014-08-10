@@ -127,7 +127,7 @@ method biorepo {
 
 	$self->username($username);
 	
-	print "Installing opsrepo: $opsrepo\n";
+	print "Installing/updating $opsrepo\n";
     $self->logDebug("opsrepo", $opsrepo);
     $self->logDebug("owner", $owner);
     $self->logDebug("username", $username);

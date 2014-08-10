@@ -290,8 +290,8 @@ method runInstall ($opsdir, $installdir, $package, $version) {
 	#### TERMINAL INSTALL
 	#$self->logger()->write("BEFORE terminalInstall method");
 	$version = $self->version();
-	print "Installed package '$package' (version '$version')\n" if defined $version;
-	print "Installed package '$package'\n" if not defined $version;
+	print "Installed/updated package '$package' (version '$version')\n" if defined $version;
+	print "Installed/updated package '$package'\n" if not defined $version;
 
 	return 0 if not $self->terminalInstall($installdir, $version);
 	#$self->updateReport([$report]) if defined $report and $report;
