@@ -507,9 +507,9 @@ method getClusterByWorkflow ($username, $project, $workflow) {
 WHERE username='$username'
 AND project='$project'
 AND workflow='$workflow'};
-	$self->logDebug("$query");	;
+	#$self->logDebug("$query");
 	my $cluster = $self->db()->query($query);
-	$self->logDebug("cluster", $cluster);
+	#$self->logDebug("cluster", $cluster);
 
 	return $cluster;
 }
@@ -1099,3 +1099,4 @@ method parseInstanceInfo ($info) {
 }
 
 1;
+

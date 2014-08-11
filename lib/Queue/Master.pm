@@ -185,7 +185,7 @@ method balanceInstances ($workflows) {
 
 #### DEBUG
 
-$quota		=	9;
+$quota		=	1;
 $self->logDebug("DEBUG quota", $quota);
 
 #### DEBUG
@@ -228,14 +228,17 @@ $self->logDebug("DEBUG quota", $quota);
 
 		#### IF NOT ALL WORKFLOWS HAVE RUNNING INSTANCES,
 		#### SET DEFAULT INSTANCE COUNTS FOR 2ND TO LAST RUNNING WORKFLOW 
-		#### IF THEY HAVE NO COMPLETED JOBS TO PROVIDE DURATION INFO
-		if ( $latestcompleted < scalar(@$workflows) - 1) {
-			$instancecounts	=	$self->adjustCounts($workflows, $resourcecounts, $latestcompleted);
+		#### IF IT HAS NO COMPLETED JOBS TO PROVIDE DURATION INFO
+		my $lateststarted	=	$self->getLatestStarted($workflows);
+		$self->logDebug("lateststarted", $lateststarted);
+	
+		if ( $lateststarted != $latestcompleted ) {
+			$instancecounts	=	$self->adjustCounts($workflows, $resourcecounts, $lateststarted, $quota);
 		}
 	}
 	$self->logDebug("resourcecounts", $resourcecounts);
 	$self->logDebug("instancecounts", $instancecounts);
-	
+
 	$self->addRemoveNodes($workflows, $instancecounts, $currentcounts);
 
 	#   TAILOUT AT END OF SAMPLE RUN:
@@ -319,7 +322,7 @@ WHERE username='$username'
 AND queue='$queuename'
 AND status='running'
 LIMIT $number};
-	$self->logDebug("query", $query);
+	#$self->logDebug("query", $query);
 	
 	my $instances	=	$self->db()->queryhasharray($query);
 	foreach my $instance ( @$instances ) {
@@ -630,13 +633,13 @@ WHERE username='$username'};
 	return $self->db()->queryhash($query);
 }
 
-method adjustCounts ($queues, $resourcecounts, $latestcompleted) {
+method adjustCounts ($queues, $resourcecounts, $lateststarted, $quota) {
 
 #### SET DEFAULT INSTANCE COUNTS FOR NEXT WORKFLOW IF IT HAS NO
 #### COMPLETED JOBS TO PROVIDE DURATION INFO
 
 	$self->logDebug("resourcecounts", $resourcecounts);
-	my $nextqueue	=	$$queues[$latestcompleted + 1];
+	my $nextqueue	=	$$queues[$lateststarted];
 	$self->logDebug("nextqueue", $nextqueue);
 	my $nextqueuename	=	$self->getQueueName($nextqueue);
 	$self->logDebug("nextqueuename", $nextqueuename);
@@ -658,16 +661,21 @@ method adjustCounts ($queues, $resourcecounts, $latestcompleted) {
 	}
 	$self->logDebug("total", $total);
 	
-	my $latestcount	=	($min * $resource);
-	my $newtotal	=	$total - $latestcount;
-	$self->logDebug("newtotal", $newtotal);
-	
-	foreach my $resourcecount ( @$resourcecounts ) {
-		last if $resourcecount == 0;
-		$resourcecount	=	$resourcecount * ($newtotal/$total);
+	if ( $total == 0 ) {
+		$$resourcecounts[$lateststarted] = $quota;
+	}
+	else {
+		my $latestcount	=	($min * $resource);
+		my $newtotal	=	$total - $latestcount;
+		$self->logDebug("newtotal", $newtotal);
+		
+		foreach my $resourcecount ( @$resourcecounts ) {
+			last if $resourcecount == 0;
+			$resourcecount	=	$resourcecount * ($newtotal/$total);
+		}
+		push @$resourcecounts, $latestcount;
 	}
 	$self->logDebug("resourcecounts", $resourcecounts);
-	push @$resourcecounts, $latestcount;
 	
 	return $self->getInstanceCounts($queues, $instancetypes, $resourcecounts);
 }
@@ -710,8 +718,8 @@ method getResourceCounts ($queues, $durations, $instancetypes, $quota) {
 	#$self->logDebug("instancetypes", $instancetypes);
 	
 	#### GET INDEX OF LATEST RUNNING WORKFLOW
-	my $latestcompleted =	$self->getLatestCompleted($queues);
-	$self->logDebug("latestcompleted", $latestcompleted);
+	my $lateststarted =	$self->getLatestStarted($queues);
+	$self->logDebug("lateststarted", $lateststarted);
 
 	#### GET FIRST DURATION
 	my $firstqueue		=	$self->getQueueName($$queues[0]);
@@ -725,26 +733,32 @@ method getResourceCounts ($queues, $durations, $instancetypes, $quota) {
 	
 	####	1. Solve for n1 using [1], [2] and [3]
 	####	n1 = N/(1 + d2/d1 + d3/d1 + ... + dx/d1)
-	my $terms	=	$self->solveForTerms($queues, $durations, $instancetypes, $latestcompleted);
+	my $terms	=	$self->solveForTerms($queues, $durations, $instancetypes, $lateststarted);
 	$self->logDebug("terms", $terms);
 	
-	my $firstcount	=	$quota / $terms;
+	my $firstcount		=	$quota / $terms;
 	$self->logDebug("firstcount", $firstcount);
 
 	my $firstthroughput	=	($firstduration/3600) * $firstcount;
 	$self->logDebug("firstthroughput", $firstthroughput);
 
-	my $queuenames	=	$self->getQueueNames($queues);
+	my $queuenames		=	$self->getQueueNames($queues);
 	#$self->logDebug("queuenames", $queuenames);
 
+	my $completedworkflows	=	$self->getCompletedWorkflows($queues);	
+	$self->logDebug("completedworkflows", $completedworkflows);
+
 	my $resourcecounts	=	[];
-	for ( my $i = 0; $i < $latestcompleted + 1; $i++ ) {
+	for ( my $i = 0; $i < $lateststarted + 1; $i++ ) {
 		my $queuename	=	$$queuenames[$i];
 		$self->logDebug("queuename [$i]", $queuename);
+		$self->logDebug("completedworkflows [$i]", $$completedworkflows[$i]);
 
+		push @$resourcecounts, 0 and next if $$completedworkflows[$i];
+		
 		my $duration	=	$durations->{$queuename};
 		$self->logDebug("duration", $duration);
-		push @$resourcecounts, undef and last if not defined $duration;
+		push @$resourcecounts, 0 and last if not defined $duration;
 		
 		my $instancetype	=	$instancetypes->{$queuename};
 		$self->logDebug("instancetype", $instancetype);
@@ -784,6 +798,41 @@ method getResourceCounts ($queues, $durations, $instancetypes, $quota) {
 	#$self->logDebug("total", $total);
 	
 	return $resourcecounts;
+}
+
+method getCompletedWorkflows ($queues) {
+	#$self->logDebug("queues", $queues);
+	
+	my $completed	=	[];
+	my $complete	=	1;
+	foreach my $queue ( @$queues ) {
+		#$self->logDebug("queue", $queue);
+		if ( $self->hasNonCompletedSamples($queue) ) {
+			$complete = 0;
+		}
+		push @$completed, $complete;
+	}
+	#$self->logDebug("completed", $completed);
+	
+	return $completed;	
+}
+
+method hasNonCompletedSamples ($queue) {
+	#$self->logDebug("queue", $queue);
+	
+	my $query	=	qq{SELECT 1 FROM queuesample
+WHERE username='$queue->{username}'
+AND project='$queue->{project}'
+AND workflow='$queue->{workflow}'
+AND workflownumber=$queue->{workflownumber}
+AND status!='completed'
+ORDER BY sample};
+	#$self->logDebug("query", $query);
+	my $has	=	$self->db()->query($query);
+	#$self->logDebug("has", $has);
+
+	return 1 if defined $has;
+	return 0;
 }
 
 method solveForTerms ($queues, $durations, $instancetypes, $latestcompleted) {
@@ -1079,9 +1128,9 @@ method getLatestCompleted ($queues) {
 
 	my $latestindex;
 	for ( my $i = 0; $i < @$queues; $i++ ) {
-		my $completed 	=	$self->getCompletedSamples($$queues[$i]);
-		#$self->logDebug("completed", $completed);
-		$latestindex = $i if defined $completed;
+		my $incomplete 	=	$self->hasNonCompletedSamples($$queues[$i]);
+		#$self->logDebug("incomplete", $incomplete);
+		$latestindex = $i if not $incomplete;
 	}
 	
 	return $latestindex;
@@ -1101,17 +1150,35 @@ ORDER BY sample};
 
 	return $samples;	
 }
+
 method getLatestStarted ($queues) {
 	#$self->logDebug("queues", $queues);
 
 	my $latestindex;
 	for ( my $i = 0; $i < @$queues; $i++ ) {
-		my $completed 	=	$self->getStartedSamples($$queues[$i]);
-		#$self->logDebug("completed", $completed);
-		$latestindex = $i if defined $completed;
+		my $started 	=	$self->hasStartedSamples($$queues[$i]);
+		#$self->logDebug("queue [$i] $$queues[$i]->{workflow} started", $started);
+		$latestindex = $i if $started;
 	}
 	
 	return $latestindex;
+}
+
+method hasStartedSamples ($queue) {
+	my $query	=	qq{SELECT 1 FROM queuesample
+WHERE username='$queue->{username}'
+AND project='$queue->{project}'
+AND workflow='$queue->{workflow}'
+AND workflownumber=$queue->{workflownumber}
+AND status!='completed'
+AND status!='none'
+ORDER BY sample};
+	#$self->logDebug("query", $query);
+	my $started	=	$self->db()->query($query);
+	#$self->logDebug("started", $started);
+
+	return 1 if defined $started;
+	return 0;
 }
 
 method getStartedSamples ($queue) {
@@ -1120,7 +1187,7 @@ WHERE username='$queue->{username}'
 AND project='$queue->{project}'
 AND workflow='$queue->{workflow}'
 AND workflownumber=$queue->{workflownumber}
-AND status='started'
+AND status!='completed'
 ORDER BY sample};
 	#$self->logDebug("query", $query);
 	my $samples	=	$self->db()->queryhasharray($query);
@@ -1911,7 +1978,7 @@ AND status='queued'};
 
 #### SEND TASK
 method sendTask ($task) {	
-	#$self->logDebug("task", $task);
+	$self->logDebug("task", $task);
 	#$self->logDebug("$task->{workflow} $task->{sample} $task->{status}");
 
 	my $processid	=	$$;

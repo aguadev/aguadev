@@ -72,7 +72,7 @@ method listen {
 	if ( $childpid ) {
 		$self->logDebug("IN PARENT childpid", $childpid);
 		#### LISTEN FOR TASKS SENT FROM MASTER
-		$self->listenTasks();
+		$self->receiveTask();
 
 		#### PERIODICALLY SEND 'HEARTBEAT' NODE STATUS INFO
 		my $shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
@@ -86,7 +86,7 @@ method listen {
 		}	
 	}
 	elsif ( defined $childpid ) {
-		$self->listenTopics();
+		$self->receiveTopic();
 	}
 }
 
@@ -127,7 +127,7 @@ method heartbeat {
 	};
 	#$self->logDebug("data", $data);
 	
-	$self->sendTopic($data, $key);
+	$self->sendTask($data, $key);
 }
 
 method getHost {
@@ -149,8 +149,8 @@ method getMemory {
 	return `sar -r 1 1`;
 }
 
-#### LISTEN FOR TASKS
-method listenTasks {
+#### TASKS
+method receiveTask {
 	my $taskqueue =	$self->conf()->getKey("queue:taskqueue", undef);
 	$self->logDebug("$$ taskqueue", $taskqueue);
 
@@ -233,13 +233,13 @@ method handleTask ($json) {
 method sendTask ($task) {	
 	$self->logDebug("task", $task);
 	my $processid	=	$$;
-	$self->logDebug("processid", $processid);
+	#$self->logDebug("processid", $processid);
 	$task->{processid}	=	$processid;
 
 	#### SET QUEUE
 	my $queuename		=	"update.job.status";
 	$task->{queue}		=	$queuename;
-	$self->logDebug("queuename", $queuename);
+	#$self->logDebug("queuename", $queuename);
 	
 	#### ADD UNIQUE IDENTIFIERS
 	$task	=	$self->addTaskIdentifiers($task);
@@ -296,14 +296,13 @@ method addTaskIdentifiers ($task) {
 	#### SET CALLBACK
 	$task->{callback} 	= 	$self->callback();
 	
-	$self->logDebug("Returning task", $task);
+	#$self->logDebug("Returning task", $task);
 	
 	return $task;
 }
 
-
-### LISTEN FOR TOPICS 
-method listenTopics {
+### TOPICS 
+method receiveTopic {
 	$self->logDebug("");
 	
 	#### OPEN CONNECTION
@@ -359,7 +358,7 @@ method listenTopics {
 }
 
 method handleTopic ($json) {
-	$self->logDebug("json", $json);
+	#$self->logDebug("json", $json);
 
 	my $data = $self->jsonparser()->decode($json);
 	#$self->logDebug("data", $data);
@@ -412,7 +411,7 @@ method doShutdown ($data) {
 		}
 		
 		#### SEND DELETE INSTANCE 
-		$self->sendDeleteInstance();
+		$self->sendDeleteInstance($data->{host});
 	}
 	else {
 		#### SET SHUTDOWN TO true
@@ -447,14 +446,13 @@ method verifyShutdown {
 	}
 }
 
-method sendDeleteInstance {
+method sendDeleteInstance ($host) {
 	$self->logDebug("");
 	
 	my $time		=	$self->getMysqlTime();
-	my $id			=	$self->getHostName();
 	my $data		=	{
 		time		=>	$time,
-		id			=>	$id,
+		id			=>	$host,
 		mode		=>	"deleteInstance"
 	};
 
@@ -467,60 +465,6 @@ method getHostName {
 	$hostname		=~ 	s/\s+$//;
 	
 	return $hostname;
-}
-
-method sendTopic ($data, $key) {
-	#$self->logDebug("$$ data", $data);
-	#$self->logDebug("$$ key", $key);
-
-	$self->logDebug("DIVERTING TO sendTask()");
-	$self->sendTask($data);
-
-
-
-	my $exchange	=	$self->conf()->getKey("queue:topicexchange", undef);
-	#$self->logDebug("$$ exchange", $exchange);
-
-	my $host		=	$self->host() || $self->conf()->getKey("queue:host", undef);
-	my $user		= 	$self->user() || $self->conf()->getKey("queue:user", undef);
-	my $pass	=	$self->pass() || $self->conf()->getKey("queue:pass", undef);
-	my $vhost		=	$self->vhost() || $self->conf()->getKey("queue:vhost", undef);
-	$self->logNote("$$ host", $host);
-	$self->logNote("$$ user", $user);
-	$self->logNote("$$ pass", $pass);
-	$self->logNote("$$ vhost", $vhost);
-	
-    my $connection = Net::RabbitFoot->new()->load_xml_spec()->connect(
-        host 	=>	$host,
-        port 	=>	5672,
-        user 	=>	$user,
-        pass 	=>	$pass,
-        vhost	=>	$vhost,
-    );
-
-	$self->logNote("$$ connection: $connection");
-	$self->logNote("$$ DOING connection->open_channel");
-	my $channel 	= 	$connection->open_channel();
-	$self->channel($channel);
-
-	$self->logNote("$$ DOING channel->declare_exchange");
-
-	$channel->declare_exchange(
-		exchange => $exchange,
-		type => 'topic',
-	);
-	
-	my $json	=	$self->jsonparser()->encode($data);
-	#$self->logDebug("$$ json", $json);
-	$self->channel()->publish(
-		exchange => $exchange,
-		routing_key => $key,
-		body => $json,
-	);
-	
-	print "$$ [x] Sent topic with key '$key'\n";
-
-	$connection->close();
 }
 
 method setJsonParser {

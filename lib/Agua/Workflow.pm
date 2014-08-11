@@ -546,13 +546,12 @@ method setWorkflowStatus ($status, $data) {
 	$self->logDebug("data", $data);
 	
 	my $query = qq{UPDATE workflow
-SET
-status = '$status'
+SET status = '$status'
 WHERE username = '$data->{username}'
 AND project = '$data->{project}'
 AND name = '$data->{workflow}'
 AND number = $data->{workflownumber}};
-	$self->logDebug("$query");
+	#$self->logDebug("$query");
 
 	my $success = $self->db()->do($query);
 	if ( not $success )
@@ -1400,8 +1399,13 @@ method getStageFields {
 		'completed'
 	];
 }
+
 method updateJobStatus ($stage, $status) {
-	$self->logDebug("$$ status", $status);
+	#$self->logDebug("$$ status", $status);
+	
+	#### FLUSH
+	$| = 1;
+	
 	$self->logDebug("$$ stage", $stage->name());
 
 	#### POPULATE FIELDS
@@ -1413,12 +1417,15 @@ method updateJobStatus ($stage, $status) {
 
 	#### SAMPLE HASH
 	my $samplehash		=	$self->samplehash();
-	$self->logDebug("samplehash", $samplehash);
+	#$self->logDebug("samplehash", $samplehash);
+	my $sample		=	$self->sample();
+	#$self->logDebug("sample", $sample);
 	
-	$data->{sample}		=	$samplehash->{sample};
+	$data->{sample}		=	$sample;
 	
 	#### TIME
 	$data->{time}		=	$self->getMysqlTime();
+	#$self->logDebug("$$ after time", $data);
 	
 	#### MODE
 	$data->{mode}		=	"updateJobStatus";
@@ -1430,6 +1437,7 @@ method updateJobStatus ($stage, $status) {
 	#### ADD ANCILLARY DATA
 	$data->{status}		=	$status;	
 	$data->{host}		=	$self->getHostName();
+	#$self->logDebug("$$ after host", $data);
 
 	#### ADD STDOUT AND STDERR
 	my $stdout 			=	"";
@@ -1440,23 +1448,28 @@ method updateJobStatus ($stage, $status) {
 	$data->{stdout}		=	$stdout;
 	
 	#### RETURN IF CLI
+	$self->logDebug("self->worker not defined. Returning") if not defined $self->worker();
 	return if not defined $self->worker();
 	
 	#### SEND TOPIC	
-	$self->logDebug("$$ DOING worker->sendTopic");
+	#$self->logDebug("$$ DOING worker->sendTopic");
 	$self->logDebug("$$ sending data", $data);
 	my $key = "update.job.status";
-	$self->worker()->sendTopic($data, $key);
+	$self->worker()->sendTask($data);
 
-	$self->logDebug("$$ topic sent");
+	#$self->logDebug("$$ topic sent");
 }
-
 method getHostName {
-	my $hostname	=	`facter ipaddress`;
+	my $facter		=	`which facter`;
+	$facter			=~	s/\s+$//;
+	#$self->logDebug("facter", $facter);
+	my $hostname	=	`$facter ipaddress`;	
 	$hostname		=~ 	s/\s+$//;
-	
-	return $hostname;
+	#$self->logDebug("hostname", $hostname);
+
+	return $hostname;	
 }
+
 method getWorkflowStages ($json) {
 	$self->logDebug("$$ Agua::Workflow::getWorkflowStages(json)");
     

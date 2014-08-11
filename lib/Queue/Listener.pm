@@ -298,6 +298,8 @@ method handleTopic ($json) {
 
 method updateJobStatus ($data) {
 	$self->logDebug("data", $data);
+	$self->logDebug("data not defined") and return if not defined $data;
+	$self->logDebug("sample not defined") and return if not defined $data->{sample};
 	$self->logDebug("$data->{sample} $data->{status} $data->{time}");
 	
 	#### UPDATE queuesamples TABLE
