@@ -34,7 +34,7 @@ use lib "/agua/lib";
 
 #### INTERNAL MODULES
 use Conf::Yaml;
-use Virtual::Openstack::Nova;
+use Virtual::Openstack;
 
 my $installdir = $ENV{'installdir'} || "/agua";
 my $configfile	=	"$installdir/conf/config.yaml";
@@ -75,7 +75,7 @@ my $conf = Conf::Yaml->new(
 );
 
 
-my $object = Virtual::Openstack::Nova->new({
+my $object = Virtual::Openstack->new({
 	conf		=>	$conf,
     log			=>	$log,
     printlog	=>	$printlog,
