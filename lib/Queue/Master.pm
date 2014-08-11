@@ -59,7 +59,7 @@ has 'duplicate'	=> ( isa => 'HashRef|Undef', is => 'rw');
 #### EXTERNAL MODULES
 use FindBin qw($Bin);
 use Test::More;
-use POSIX qw(ceil);
+use POSIX qw(ceil floor);
 
 #### INTERNAL MODULES
 use Virtual::Openstack;
@@ -79,7 +79,6 @@ method initialise ($args) {
 }
 
 method manage {
-
 	#my $shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
 	#$self->logDebug("shutdown", $shutdown);
 	#while ( not $shutdown eq "true" ) {
@@ -148,7 +147,7 @@ method getProjects ($username) {
 }
 #### BALANCE INSTANCES
 method balanceInstances ($workflows) {
-	print "#### DOING balanceInstances FOR MAXIMAL THROUGHPUT\n";
+	print "\n\n#### DOING balanceInstances\n";
 	#$self->logDebug("workflows", $workflows);
 
 	my $stopping	=	$self->stoppingInstances();
@@ -186,7 +185,7 @@ method balanceInstances ($workflows) {
 
 #### DEBUG
 
-$quota		=	0;
+$quota		=	9;
 $self->logDebug("DEBUG quota", $quota);
 
 #### DEBUG
@@ -227,8 +226,9 @@ $self->logDebug("DEBUG quota", $quota);
 		$instancecounts	=	$self->getInstanceCounts($workflows, $instancetypes, $resourcecounts);
 		#$self->logDebug("instancecounts", $instancecounts);
 
-		#### SET DEFAULT INSTANCE COUNTS FOR NEXT WORKFLOW IF IT HAS NO
-		#### COMPLETED JOBS TO PROVIDE DURATION INFO
+		#### IF NOT ALL WORKFLOWS HAVE RUNNING INSTANCES,
+		#### SET DEFAULT INSTANCE COUNTS FOR 2ND TO LAST RUNNING WORKFLOW 
+		#### IF THEY HAVE NO COMPLETED JOBS TO PROVIDE DURATION INFO
 		if ( $latestcompleted < scalar(@$workflows) - 1) {
 			$instancecounts	=	$self->adjustCounts($workflows, $resourcecounts, $latestcompleted);
 		}
@@ -531,7 +531,8 @@ method getVirtualInputs ($workflow) {
 method printAuth ($username) {
 	$self->logDebug("username", $username);
 	
-	#### SET TEMPLATE FILE	
+	#### SET TEMPLATE FILE
+	#### NB: 
 	my $installdir		=	$self->conf()->getKey("agua", "INSTALLDIR");
 	my $templatefile	=	"$installdir/bin/install/resources/openstack/openrc.sh";
 
@@ -630,6 +631,11 @@ WHERE username='$username'};
 }
 
 method adjustCounts ($queues, $resourcecounts, $latestcompleted) {
+
+#### SET DEFAULT INSTANCE COUNTS FOR NEXT WORKFLOW IF IT HAS NO
+#### COMPLETED JOBS TO PROVIDE DURATION INFO
+
+	$self->logDebug("resourcecounts", $resourcecounts);
 	my $nextqueue	=	$$queues[$latestcompleted + 1];
 	$self->logDebug("nextqueue", $nextqueue);
 	my $nextqueuename	=	$self->getQueueName($nextqueue);
@@ -657,6 +663,7 @@ method adjustCounts ($queues, $resourcecounts, $latestcompleted) {
 	$self->logDebug("newtotal", $newtotal);
 	
 	foreach my $resourcecount ( @$resourcecounts ) {
+		last if $resourcecount == 0;
 		$resourcecount	=	$resourcecount * ($newtotal/$total);
 	}
 	$self->logDebug("resourcecounts", $resourcecounts);
@@ -791,7 +798,7 @@ method solveForTerms ($queues, $durations, $instancetypes, $latestcompleted) {
 	my $firstresource	=	$instancetype->{$metric};
 	my $firstduration	=	$durations->{$firstqueue} * $firstresource;
 	$self->logDebug("firstqueue", $firstqueue);
-	$self->logDebug("instancetype", $instancetype);
+	#$self->logDebug("instancetype", $instancetype);
 	$self->logDebug("firstresource", $firstresource);
 	$self->logDebug("firstduration", $firstduration);
 
@@ -828,7 +835,7 @@ method getInstanceCounts ($queues, $instancetypes, $resourcecounts) {
 
 =head2	PURPOSE
 	
-	Allocate instances to each workflow
+	Given the CPU allocations (resourceallocations), allocate instances to each workflow
 
 =head2	ALGORITHM
 
@@ -844,20 +851,39 @@ method getInstanceCounts ($queues, $instancetypes, $resourcecounts) {
 	for ( my $i = 0; $i < @$resourcecounts; $i++ ) {
 		my $queuename	=	$self->getQueueName($$queues[$i]);
 		my $resource	=	$instancetypes->{$queuename}->{$metric};
-		$self->logDebug("queuename '$queuename' resource (VM CPUs)", $resource);
 		my $resourcecount 	=	$$resourcecounts[$i] / $resource;
+		$self->logDebug("$queuename instance $resource CPUs resourcecount", $resourcecount);
 		
 		push @$instancecounts, 0 and next if not defined $$resourcecounts[$i];
 		
 		#### STASH RUNNING COUNT
 		$resourcetotal		+=	$$resourcecounts[$i];
 
+		$self->logDebug("");
 		if ( $i == scalar(@$resourcecounts) - 1) {
-			push @$instancecounts, int( ($resourcetotal - $integertotal) / $resource );
+			$self->logDebug("pushing to instancecounts int( ($resourcetotal - $integertotal) / $resource )", int( ($resourcetotal - $integertotal) / $resource ));
+
+			my $instancecount	=	int( ($resourcetotal - $integertotal) / $resource );
+			$self->logDebug("instancecount", $instancecount);
+			if ( $instancecount <= 0 ) {
+				$instancecount		=	0;
+			}
+			elsif ( $instancecount < 1 ) {
+				$instancecount		=	1 ;
+			}
+
+			push @$instancecounts, $instancecount;
 		}
 		else {
-			my $instancecount	=	ceil($$resourcecounts[$i]/$resource);
-			$instancecount		=	1 if $instancecount < 1;
+			my $instancecount	=	floor($$resourcecounts[$i]/$resource);
+			$self->logDebug("pushing to instancecounts floor($$resourcecounts[$i]/$resource)", $instancecount);
+			$self->logDebug("instancecount", $instancecount);
+			if ( $instancecount <= 0 ) {
+				$instancecount		=	0;
+			}
+			elsif ( $instancecount < 1 ) {
+				$instancecount		=	1 ;
+			}
 
 			#### STASH RUNNING INTEGER COUNT
 			$integertotal	+=	$instancecount * $resource;
@@ -865,7 +891,9 @@ method getInstanceCounts ($queues, $instancetypes, $resourcecounts) {
 			push @$instancecounts, $instancecount;
 		}
 	}
-	
+	$self->logDebug("integertotal", $integertotal);
+	$self->logDebug("instancecounts", $instancecounts);
+
 	return $instancecounts;
 }
 
@@ -1278,7 +1306,7 @@ ORDER BY queuesample.username, queuesample.project, queuesample.workflownumber, 
 #### MAINTAIN QUEUES
 method maintainQueues($workflows) {
 
-	print "#### DOING maintainQueues TO REPLENISH JOBS IN QUEUES\n";
+	print "\n\n#### DOING maintainQueues\n";
 	for ( my $i = 0; $i < @$workflows; $i++ ) {
 		my $workflow	=	$$workflows[$i];
 		my $label	=	"[" . ($i + 1) . "] ". $$workflows[$i]->{name};
@@ -1321,7 +1349,8 @@ method maintainQueue ($workflows, $workflowdata) {
 	#### QUEUE UP ADDITIONAL SAMPLES
 	my $tasks	=	$self->getTasks($workflows, $workflowdata, $limit);
 	#$self->logDebug("tasks", $tasks);
-	$self->logDebug("no. tasks", scalar(@$tasks));
+	$self->logDebug("no. tasks", scalar(@$tasks)) if defined $tasks;
+	$self->logDebug("tasks: undefined") if not defined $tasks;
 	return 0 if not defined $tasks;
 
 	if ( $numberqueued == 0 and not @$tasks ) {
@@ -1353,6 +1382,18 @@ AND status='completed'};
 	
 	return 1 if $completed == 0;
 	return 0;
+}
+
+method setWorkflowCompleted ($workflowdata) {
+	my $query	=	qq{UPDATE workflow
+SET status='completed'
+WHERE username='$workflowdata->{username}'
+AND project='$workflowdata->{project}'
+AND name='$workflowdata->{name}'
+};
+	$self->logDebug("query", $query);
+
+	return $self->db()->do($query);
 }
 
 method workflowCompleted ($workflowdata) {

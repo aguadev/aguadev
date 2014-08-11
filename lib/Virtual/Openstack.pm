@@ -122,12 +122,12 @@ method parseNovaBoot ($output) {
 }
 
 method getNovaList ($authfile) {
-	$self->logDebug("authfile", $authfile);
+	#$self->logDebug("authfile", $authfile);
 	
 	my $command		=	qq{. $authfile && nova list};
 	my ($out, $err)	=	$self->runCommand($command);
-	$self->logDebug("out", $out);
-	$self->logDebug("err", $err);
+	#$self->logDebug("out", $out);
+	#$self->logDebug("err", $err);
 	
 	return $self->parseNovaList($out);
 }

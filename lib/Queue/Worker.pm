@@ -252,7 +252,7 @@ method sendTask ($task) {
 
 		#### GET CONNECTION
 		my $connection	=	$self->newConnection();
-		$self->logDebug("DOING connection->open_channel()");
+		#$self->logDebug("DOING connection->open_channel()");
 		my $channel = $connection->open_channel();
 		$self->channel($channel);
 		#$self->logDebug("channel", $channel);
@@ -269,7 +269,7 @@ method sendTask ($task) {
 			body => $json,
 		);
 	
-		print " [x] Sent TASK: '$json'\n";
+		print " [x] Sent TASK (queue: $queuename) $task->{mode} $task->{id}\n";
 
 	}
 	

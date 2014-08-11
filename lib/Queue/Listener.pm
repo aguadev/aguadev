@@ -297,7 +297,7 @@ method handleTopic ($json) {
 }
 
 method updateJobStatus ($data) {
-	#$self->logDebug("data", $data);
+	$self->logDebug("data", $data);
 	$self->logDebug("$data->{sample} $data->{status} $data->{time}");
 	
 	#### UPDATE queuesamples TABLE
@@ -305,11 +305,6 @@ method updateJobStatus ($data) {
 
 	#### UPDATE provenance TABLE
 	$self->updateProvenance($data);	
-
-	##### UPDATE SYNAPSE
-	#my $synapsestatus	=	$self->getSynapseStatus($data);
-	#my $sample	=	$data->{sample};
-	#$self->synapse()->change($sample, $synapsestatus);
 }
 
 method updateHeartbeat ($data) {
@@ -383,7 +378,7 @@ method getAuthFile ($username, $tenant) {
 	my $tenantname		=	$tenant->{os_tenant_name};
 	#$self->logDebug("tenantname", $tenantname);
 	my $authfile		=	"$targetdir/$tenantname-openrc.sh";
-	$self->logDebug("authfile", $authfile);
+	#$self->logDebug("authfile", $authfile);
 
 	return	$authfile;
 }
@@ -392,18 +387,18 @@ method getUsernameFromInstance ($id) {
 	my $query		=	qq{SELECT queue FROM instance
 WHERE host='$id'
 };
-	$self->logDebug("query", $query);
+	#$self->logDebug("query", $query);
 	my $queue		=	$self->db()->query($query);
-	$self->logDebug("queue", $queue);
+	#$self->logDebug("queue", $queue);
 	
 	my ($username)	=	$queue	=~	/^([^\.]+)\./;
-	$self->logDebug("username", $username);
+	#$self->logDebug("username", $username);
 	
 	return $username;
 }
 
 method printAuth ($username) {
-	$self->logDebug("username", $username);
+	#$self->logDebug("username", $username);
 	
 	#### SET TEMPLATE FILE	
 	my $installdir		=	$self->conf()->getKey("agua", "INSTALLDIR");
@@ -411,7 +406,7 @@ method printAuth ($username) {
 
 	#### GET OPENSTACK AUTH INFO
 	my $tenant		=	$self->getTenant($username);
-	$self->logDebug("tenant", $tenant);
+	#$self->logDebug("tenant", $tenant);
 
 	#### GET AUTH FILE
 	my $authfile		=	$self->getAuthFile($username, $tenant);
