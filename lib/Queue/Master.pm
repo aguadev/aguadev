@@ -414,11 +414,11 @@ method printConfig ($workflowobject) {
 	my $templatefile	=	$self->setTemplateFile($installdir, $version);
 	#$self->logDebug("templatefile", $templatefile);
 	
-	#		SET EXTRA
-	my $queuename		=	$self->getQueueName($workflowobject);
-	#$self->logDebug("queuename", $queuename);
-	my $extra			=	$self->getExtra($installdir, $version);
-	$self->logDebug("extra", $extra);
+	#		SET PREDATA AND POSTDATA
+	my $predata			=	$self->getPreData($installdir, $version);
+	$self->logDebug("predata", $predata);
+	my $postdata			=	$self->getPostData($installdir, $version);
+	$self->logDebug("postdata", $postdata);
 
 	#		PRINT TEMPLATE
 	my $username		=	$object->{username};
@@ -439,20 +439,31 @@ method printConfig ($workflowobject) {
 	}
 	$self->logDebug("targetfile", $targetfile);
 	
-	$self->virtual()->createConfig($object, $templatefile, $targetfile, $extra);
+	$self->virtual()->createConfig($object, $templatefile, $targetfile, $predata, $postdata);
 	
 	return $targetfile;
 }
 
-method getExtra ($installdir, $version) {
-	my $extrafile		=	"$installdir/data/sh/extra";
-	$self->logDebug("extrafile", $extrafile);
+method getPreData ($installdir, $version) {
+	my $predatafile		=	"$installdir/data/sh/predata";
+	$self->logDebug("predatafile", $predatafile);
 	
-	return "" if not -f $extrafile;
+	return "" if not -f $predatafile;
 	
-	my $extra			=	$self->getFileContents($extrafile);
+	my $predata			=	$self->getFileContents($predatafile);
 
-	return $extra;
+	return $predata;
+}
+
+method getPostData ($installdir, $version) {
+	my $postdatafile		=	"$installdir/data/sh/postdata";
+	$self->logDebug("postdatafile", $postdatafile);
+	
+	return "" if not -f $postdatafile;
+	
+	my $postdata			=	$self->getFileContents($postdatafile);
+
+	return $postdata;
 }
 
 method setTemplateFile ($installdir, $version) {

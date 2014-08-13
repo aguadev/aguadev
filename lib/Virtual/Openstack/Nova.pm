@@ -76,7 +76,7 @@ method command ($args) {
 	}
 }
 
-method attach ($instanceid, $volumeid, $device, $size, $type, $mountpoint) {
+method attachVolume ($instanceid, $volumeid, $device, $size, $type, $mountpoint) {
 	$self->logDebug("size", $size);
 	$self->logDebug("type", $type);
 	
@@ -92,16 +92,25 @@ method attach ($instanceid, $volumeid, $device, $size, $type, $mountpoint) {
 		$self->logDebug("volumeid", $volumeid);
 	
 		$self->_attachVolume($instanceid, $volumeid, $device);
-		sleep(4);
+		sleep(10);
 	
 		$self->formatVolume($device);
 	}
 	else {
 		$self->logDebug("volumeid DEFINED. DOING ATTACH");
-		$self->attachVolume($instanceid, $volumeid, $device);
+		$self->_attachVolume($instanceid, $volumeid, $device);
 	}
 	
 	$self->mountVolume($device, $mountpoint);
+}
+
+method _attachVolume ($instanceid, $volumeid, $device) {
+#### nova volume-attach SERVER VOLUME DEVICE
+	my $exports	=	$self->getExports();
+	my $command	=	"$exports nova volume-attach $instanceid $volumeid $device";
+	$self->logDebug("command", $command);
+
+	return `$command`;
 }
 
 method describeHost ($instanceid) {
@@ -219,15 +228,6 @@ method parseVolumeId ($output) {
 	$self->logDebug("volumeid", $volumeid);
 
 	return $volumeid;
-}
-
-method _attachVolume ($instanceid, $volumeid, $device) {
-#### nova volume-attach SERVER VOLUME DEVICE
-	my $exports	=	$self->getExports();
-	my $command	=	"$exports nova volume-attach $instanceid $volumeid $device";
-	$self->logDebug("command", $command);
-
-	return `$command`;
 }
 
 method deleteVolume ($instanceid, $volumeid, $device, $size, $type, $mountpoint) {
