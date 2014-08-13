@@ -2,27 +2,27 @@
 
 =head2
 
-APPLICATION 	emit
+APPLICATION 	synapse
 
 PURPOSE
 
-	1. Send messages to a RabbitMQ fanout queue
+	1. Get data from and push data to a Synapses instance
 	
 HISTORY
 
-	v0.01	Basic options to authenticate user and specify queue name
+	v0.01	Basic wrapper around synapseICGCMonitor
 
 USAGE
 
-$0 [--user String] [--host String] [--password String] [--vhost String] [--queue String]
+$0 <--mode String> <--uuid Int> <--state (SSD|HD)> [--assignee String]
 
-EXAMPLE
-
-# Send message to default queue (user=guest, password=guest, host=localhost, vhost=/)
-./emit.pl "my message"
-
-# Send message to custom queue on localhost
-./emit.pl --user myUserName --password mySecret "
+	mode:
+		list
+		getAssignments
+		changeState
+		returnAssignment
+		assignError
+		clearErrors
 
 =cut
 
@@ -30,8 +30,7 @@ EXAMPLE
 use Term::ANSIColor qw(:constants);
 use Getopt::Long;
 use FindBin qw($Bin);
-use Net::RabbitFoot;
-	
+
 #### USE LIBRARY
 use lib "$Bin/../../lib";	
 BEGIN {
@@ -41,32 +40,26 @@ BEGIN {
 
 #### INTERNAL MODULES
 use Conf::Yaml;
-use Exchange::Manager;
+use Synapse;
 
 my $installdir 	=	 $ENV{'installdir'} || "/agua";
 my $configfile	=	"$installdir/conf/config.yaml";
-my $mode		=	"message";
-my $host		=	'localhost';
-my $port		=	5672;
-my $user		=	'myuser';	
-my $pass		=	'mypassword';
-my $vhost		=	'myvhost';
-my $message		=	"";
-my $log		=	2;
+
+my $mode;
+my $uuid;
+my $assignee	=	"ucsc_biofarm";
+my $state;
+my $target;
+my $log			=	2;
 my $printlog	=	2;
-my $help;
-
-#### SET LOGFILE
 my $logfile		=	"/tmp/pancancer-volume.$$.log";
-
+my $help;
 GetOptions (
     'mode=s'		=> \$mode,
-    'host=s'		=> \$host,
-    'port=s'		=> \$port,
-    'user=s'		=> \$user,
-    'pass=s'		=> \$pass,
-    'message=s'		=> \$message,
-    'vhost=s'		=> \$vhost,
+    'instanceid=s'	=> \$instanceid,
+    'state=s'		=> \$state,
+    'target=s'		=> \$target,
+    'uuid=s'		=> \$uuid,
     'log=i'     	=> \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
@@ -83,20 +76,20 @@ my $conf = Conf::Yaml->new(
     logfile     =>  $logfile
 );
 
-my $object = Exchange::Manager->new({
-    host		=>	$host,
-    port		=>	$port,
-    user		=>	$user,
-    pass		=>	$pass,
-    vhost		=>	$vhost,
-
+my $object = Synapse->new({
 	conf		=>	$conf,
+	assignee	=>	$assignee,
     log			=>	$log,
     printlog	=>	$printlog,
     logfile     =>  $logfile
 });
 
-	$object->sendFanout($message);
+$object->$mode({
+	instanceid	=>	$instanceid,
+	uuid		=>	$uuid,
+	state		=>	$state,
+	target		=> 	$target
+});
 
 exit 0;
 

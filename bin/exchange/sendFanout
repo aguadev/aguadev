@@ -2,7 +2,7 @@
 
 =head2
 
-APPLICATION 	emit
+APPLICATION 	sendFanout
 
 PURPOSE
 
@@ -43,23 +43,16 @@ BEGIN {
 use Conf::Yaml;
 use Exchange::Manager;
 
-    host => 'localhost',
-    port => 5672,
-    user => 'guest',
-    pass => 'guest',
-    vhost => '/',
-
-
 my $installdir 	=	 $ENV{'installdir'} || "/agua";
 my $configfile	=	"$installdir/conf/config.yaml";
-my $mode		=	"message";
-my $host		=	'localhost';
-my $port		=	5672;
-my $user		=	'guest';	
-my $pass		=	'guest';
-my $vhost		=	'/';
+my $exchange	=	"message";
 my $message		=	"";
-my $log		=	2;
+my $host		=	$conf->getKey("queue:host", undef) || "localhost";
+my $port		=	$conf->getKey("queue:port", undef) || 5672; 
+my $user		=	$conf->getKey("queue:user", undef) || "guest";
+my $pass		=	$conf->getKey("queue:pass", undef) || "guest";
+my $vhost		=	$conf->getKey("queue:vhost", undef) || "/";
+my $log			=	2;
 my $printlog	=	2;
 my $help;
 
@@ -67,13 +60,15 @@ my $help;
 my $logfile		=	"/tmp/pancancer-volume.$$.log";
 
 GetOptions (
-    'mode=s'		=> \$mode,
+    'exchange=s'	=> \$exchange,
+    'message=s'		=> \$message,
+
     'host=s'		=> \$host,
     'port=s'		=> \$port,
     'user=s'		=> \$user,
     'pass=s'		=> \$pass,
-    'message=s'		=> \$message,
     'vhost=s'		=> \$vhost,
+
     'log=i'     	=> \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
@@ -103,7 +98,7 @@ my $object = Exchange::Manager->new({
     logfile     =>  $logfile
 });
 
-$object->sendFanout($message);
+$object->sendFanout($exchange, $message);
 
 exit 0;
 

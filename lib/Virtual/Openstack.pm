@@ -63,7 +63,7 @@ method createConfig ($object, $templatefile, $targetfile, $extra) {
 		$template	=~ s/<$templatekey>/$value/msg;
 	}
 	
-	$template		.=	$extra;
+	$template	=~ s/<EXTRA>/$extra/msg;
 	
 	# PRINT TEMPLATE
 	$self->printToFile($targetfile, $template);

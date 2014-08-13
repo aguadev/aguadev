@@ -139,7 +139,7 @@ GetOptions (
     'version=s'      => \$version,
     'repository=s'  => \$repository,
     'logfile=s'     => \$logfile,
-    'log=i'     => \$log,
+    'log=i'     	=> \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";

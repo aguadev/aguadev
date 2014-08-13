@@ -246,27 +246,35 @@ method runLocally {
 
 	#### SET STAGE PID
 	my $stagepid = $$;
-	$self->logDebug("$$ stagepid", $stagepid);
+	$self->logDebug("$$ stagepid XXX", $stagepid);
 	$self->setStagePid($stagepid);
 	
 	#### RUN APP BY FORKING
 	my $childpid = fork;
+	$self->logDebug("DOING FORK");
+	$self->logDebug("childpid", $childpid);
+
 	if ( $childpid ) { #### ****** Parent ****** 
 		$self->logDebug("$$ PARENT childpid", $childpid);
 	}
 	elsif ( defined $childpid ) { #### ****** Child ******
-		#### SET InactiveDestroy ON DATABASE HANDLE
-		$self->db()->dbh()->{InactiveDestroy} = 1;
-		my $dbh = $self->db()->dbh();
-		undef $dbh;
+		$self->logDebug("$$ CHILD doing command: $command");
+		##### SET InactiveDestroy ON DATABASE HANDLE
+		#$self->db()->dbh()->{InactiveDestroy} = 1;
+		#my $dbh = $self->db()->dbh();
+		#undef $dbh;
 		
 		my $resultfile	=	$self->resultfile();
+		$self->logDebug("resultfile", $resultfile);
+		
 		`rm -fr $resultfile` if -f $resultfile;
 		my $commandfile	=	"/tmp/command.$$.txt";
+		$self->logDebug("commandfile", $commandfile);
 		`echo '$command' > $commandfile`;
 		`echo "echo \\\$\? > $resultfile" >> $commandfile`;
 		`chmod 755 $commandfile`;
 		`$commandfile`;
+		$self->logDebug("$$ CHILD command submitted");
 		
 		exit;
 	}
@@ -279,13 +287,19 @@ method runLocally {
     }
 
 	#### UPDATE STATUS TO 'running'
+	$self->logDebug("BEFORE NOW");
+	#$self->logDebug("self->db", $self->db());
 	my $now = $self->db()->now();
+	$self->logDebug("now", $now);
+
 	my $set = qq{
 	status='running',
 started=$now,
 queued=$now,
 completed=''};
 	$self->setFields($set);
+	$self->logDebug("AFTER NOW");
+
 	
 	#### WAIT FOR JOB TO FINISH
 	$self->logDebug("$$ Doing wait for command to complete");
@@ -301,18 +315,22 @@ completed=''};
 	$self->logDebug("$$ exitcodefile", $exitcodefile);
 	$self->logDebug("$$ exitcode", $exitcode);
 	
-	#### SET STATUS TO 'error' IF exitcode IS NOT ZERO
-	if ( defined $exitcode and $exitcode == 0 ) {
-		$self->setStatus('completed') ;
-	}
-	else {
-		$self->setStatus('error');
-	}
-	$exitcode	=~ 	s/\s+$// if defined $exitcode;
+	##### SET STATUS TO 'error' IF exitcode IS NOT ZERO
+	#if ( defined $exitcode and $exitcode == 0 ) {
+	#	$self->setStatus('completed') ;
+	#}
+	#else {
+	#	$self->setStatus('error');
+	#}
+	#$exitcode	=~ 	s/\s+$// if defined $exitcode;
+	#
+	#$self->logDebug("$$ Returning exitcode", $exitcode);
+	#
+	#return $exitcode;
 
-	$self->logDebug("$$ Returning exitcode", $exitcode);
 
-	return $exitcode;
+$self->logDebug("DEBUG EXIT") and exit;
+
 }
 
 method containsRedirection ($arguments) {
@@ -954,8 +972,8 @@ completed 	= 	''};
 }
 
 method setFields ($set) {
-	$self->logNote("Stage::setFields(set)");
-    $self->logNote("set", $set);
+	$self->logDebug("Stage::setFields(set)");
+    $self->logDebug("set", $set);
 
 	#### GET TABLE KEYS
 	my $username 	= 	$self->username();
@@ -970,14 +988,16 @@ WHERE username = '$username'
 AND project = '$project'
 AND workflow = '$workflow'
 AND number = '$number'};	
-	$self->logNote("$query");
+	$self->logDebug("$query");
 	my $success = $self->db()->do($query);
 	$self->logError("Could not set fields for stage (project: $project, workflow: $workflow, number: $number) set : '$set'") and exit if not $success;
 
-	$self->logNote("setFields successful!");
+	$self->logDebug("setFields successful!");
 }
 
 method setStagePid ($stagepid) {
+	$self->logDebug("stagepid", $stagepid);
+	
 	#### GET TABLE KEYS
 	my $username 	= $self->username();
 	my $project 	= $self->project();
@@ -991,8 +1011,9 @@ WHERE username = '$username'
 AND project = '$project'
 AND workflow = '$workflow'
 AND number = '$number'};
-	$self->logNote("$query");
-	my $success = $self->db()->do($query);	
+	$self->logDebug("$query");
+	my $success = $self->db()->do($query);
+	$self->logDebug("success", $success);
 	$self->logError("Could not update stage table with stagepid: $stagepid") and exit if not $success;
 }
 

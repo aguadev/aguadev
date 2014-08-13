@@ -2,11 +2,11 @@
 
 =head2
 
-APPLICATION 	socket
+APPLICATION 	sendTask
 
 PURPOSE
 
-	1. Send messages to or receive messages from a RabbitMQ fanout queue
+	1. Send tasks to a RabbitMQ task queue
 	
 HISTORY
 
@@ -14,24 +14,15 @@ HISTORY
 
 USAGE
 
-$0 [--mode String] [--user String] [--host String] [--pass String] [--vhost String] [--queue String]
-
-mode: 		Supported modes: 'send' or 'receive'
-user:		RabbitMQ username
-host:		RabbitMQ host
-pass:		RabbitMQ password
-vhost:		RabbitMQ virtual host
-message:	Message to send (if mode 'send')
-log:	Log level to STDOUT (1 for less, up to 5 for more information)
-printlog:	Log level to logfile (1 for less, up to 5 for more information)
+$0 [--user String] [--host String] [--password String] [--vhost String] [--queue String]
 
 EXAMPLE
 
-# Send message to default queue (user=guest, password=guest, host=localhost, vhost=/)
-./socket.pl --message '{"message":"my message"}'
+# Send task to default task queue
+./sendTask '{"task":"my JSON task"}'
 
-# Send message to localhost with log level 4 to STDOUT
-./socket.pl --mode send --message '{"username":"testuser","log":4}' --log 4
+# Send message to custom queue on localhost
+./emit.pl --user myUserName --password mySecret "
 
 =cut
 
@@ -50,17 +41,24 @@ BEGIN {
 
 #### INTERNAL MODULES
 use Conf::Yaml;
+use Exchange::Manager;
 
 my $installdir 	=	 $ENV{'installdir'} || "/agua";
 my $configfile	=	"$installdir/conf/config.yaml";
-my $mode		=	"message";
+my $username;
+my $project;
+my $workflow;
+my $queue;
+
 my $host		=	'localhost';
 my $port		=	5672;
 my $user		=	'guest';	
 my $pass		=	'guest';
 my $vhost		=	'/';
 my $message		=	"";
-my $log		=	2;
+my $callback	=	"";
+
+my $log			=	2;
 my $printlog	=	2;
 my $help;
 
@@ -68,24 +66,24 @@ my $help;
 my $logfile		=	"/tmp/pancancer-volume.$$.log";
 
 GetOptions (
-    'mode=s'		=> \$mode,
+    'username=s'	=> \$username,
+    'project=s'		=> \$project,
+    'workflow=s'	=> \$workflow,
+    'message=s'		=> \$message,
+    'queue=s'		=> \$queue,
+
     'host=s'		=> \$host,
     'port=s'		=> \$port,
     'user=s'		=> \$user,
     'pass=s'		=> \$pass,
-    'message=s'		=> \$message,
     'vhost=s'		=> \$vhost,
-    'log=i'     => \$log,
+    'callback=s'	=> \$callback,
+
+    'log=i'     	=> \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
-
-print "Mode not defined (must be 'send' or 'receive'\n" if not defined $mode;
-print "Mode not supported: $mode (must be 'send' or 'receive'\n" if $mode !~ /^(send|receive)$/;
-$mode = "receiveSocket" if $mode eq "receive";
-$mode = "sendSocket" if $mode eq "send";
-print "mode: $mode\n";
 
 my $conf = Conf::Yaml->new(
     memory      =>  0,
@@ -97,26 +95,26 @@ my $conf = Conf::Yaml->new(
     logfile     =>  $logfile
 );
 
-package Object;
-use Moose;
-with 'Exchange';
-with 'Logger';
-has 'conf'	=> ( isa => 'Conf::Yaml|Undef', is => 'rw' );
+my $object = Exchange::Manager->new({
+    host		=>	$host,
+    port		=>	$port,
+    user		=>	$user,
+    pass		=>	$pass,
+    vhost		=>	$vhost,
+    callback	=>	$callback,
 
-my $object = Object->new({
 	conf		=>	$conf,
     log			=>	$log,
     printlog	=>	$printlog,
     logfile     =>  $logfile
 });
 
-$object->$mode({
-    host		=>	$host,
-    port		=>	$port,
-    user		=>	$user,
-    pass		=>	$pass,
+$object->sendTask({
+	username	=>	$username,
+	project		=>	$project,
+	workflow	=>	$workflow,
     message		=>	$message,
-    vhost		=>	$vhost,
+    queue		=>	$queue,
 });
 
 exit 0;

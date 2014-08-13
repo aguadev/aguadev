@@ -2,11 +2,11 @@
 
 =head2
 
-APPLICATION 	emit
+APPLICATION 	receiveTask
 
 PURPOSE
 
-	1. Send messages to a RabbitMQ fanout queue
+	1. Receive tasks and run them
 	
 HISTORY
 
@@ -18,11 +18,8 @@ $0 [--user String] [--host String] [--password String] [--vhost String] [--queue
 
 EXAMPLE
 
-# Send message to default queue (user=guest, password=guest, host=localhost, vhost=/)
-./emit.pl "my message"
-
-# Send message to custom queue on localhost
-./emit.pl --user myUserName --password mySecret "
+# Receive task to run 'Align' workflow on sample XXXXXXXXXXXXXXXX 
+./receiveTask --username syoung --workflow Align --project XXXXXXXXXXXXXXXX 
 
 =cut
 
@@ -49,19 +46,14 @@ my $username;
 my $project;
 my $workflow;
 
-my $host;
-my $port;
-my $user;
-my $pass;
-my $vhost;
+my $host		=	$conf->getKey("queue:host", undef) || "localhost";
+my $port		=	$conf->getKey("queue:port", undef) || 5672; 
+my $user		=	$conf->getKey("queue:user", undef) || "guest";
+my $pass		=	$conf->getKey("queue:pass", undef) || "guest";
+my $vhost		=	$conf->getKey("queue:vhost", undef) || "/";
 
-#my $host		=	'localhost';
-#my $port		=	5672;
-#my $user		=	'myuser';	
-#my $pass		=	'mypassword';
-#my $vhost		=	'myvhost';
-my $message		=	"";
-my $log		=	2;
+my $notes		=	"";
+my $log			=	2;
 my $printlog	=	2;
 my $help;
 
@@ -76,9 +68,9 @@ GetOptions (
     'port=s'		=> \$port,
     'user=s'		=> \$user,
     'pass=s'		=> \$pass,
-    'message=s'		=> \$message,
+    'notes=s'		=> \$notes,
     'vhost=s'		=> \$vhost,
-    'log=i'     => \$log,
+    'log=i'     	=> \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
@@ -107,11 +99,11 @@ my $object = Exchange::Manager->new({
     logfile     =>  $logfile
 });
 
-	$object->sendTask({
-	username	=>	$username,
-	project		=>	$project,
-	workflow	=>	$workflow,
-    message		=>	$message,
+$object->receiveTask({
+    username	=>	$username,
+    project		=>	$project,
+    workflow	=>	$workflow,
+    notes		=>	$notes,
 });
 
 exit 0;

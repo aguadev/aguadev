@@ -190,6 +190,34 @@ method receiveTopic {
 	AnyEvent->condvar->recv;	
 }
 
+method handleTopic ($json) {
+	#$self->logDebug("json", substr($json, 0, 200));
+
+	my $data = $self->jsonparser()->decode($json);
+	#$self->logDebug("data", $data);
+
+	my $duplicate	=	$self->duplicate();
+	if ( defined $duplicate and not $self->deeplyIdentical($data, $duplicate) ) {
+		#$self->logDebug("Skipping duplicate message");
+		return;
+	}
+	else {
+		$self->duplicate($data);
+	}
+
+	my $mode =	$data->{mode} || "";
+	#$self->logDebug("mode", $mode);
+	
+	if ( $self->can($mode) ) {
+		$self->$mode($data);
+	}
+	else {
+		print "mode not supported: $mode\n";
+		$self->logDebug("mode not supported: $mode");
+	}
+}
+
+#### TASKS
 method receiveTask ($taskqueue) {
 	$self->logDebug("taskqueue", $taskqueue);
 	
@@ -269,33 +297,94 @@ method handleTask ($json) {
 	}
 }
 
-method handleTopic ($json) {
-	#$self->logDebug("json", substr($json, 0, 200));
+method sendTask ($task) {
+	$self->logDebug("task", $task);
+	my $processid	=	$$;
+	$self->logDebug("processid", $processid);
+	$task->{processid}	=	$processid;
 
-	my $data = $self->jsonparser()->decode($json);
-	#$self->logDebug("data", $data);
-
-	my $duplicate	=	$self->duplicate();
-	if ( defined $duplicate and not $self->deeplyIdentical($data, $duplicate) ) {
-		#$self->logDebug("Skipping duplicate message");
-		return;
-	}
-	else {
-		$self->duplicate($data);
-	}
-
-	my $mode =	$data->{mode} || "";
-	#$self->logDebug("mode", $mode);
+	#### SET QUEUE
+	my $queuename		=	$self->setQueueName($task);
+	$task->{queue}		=	$queuename;
+	$self->logDebug("queuename", $queuename);
 	
-	if ( $self->can($mode) ) {
-		$self->$mode($data);
-	}
-	else {
-		print "mode not supported: $mode\n";
-		$self->logDebug("mode not supported: $mode");
-	}
+	#### ADD UNIQUE IDENTIFIERS
+	$task	=	$self->addTaskIdentifiers($task);
+
+	my $jsonparser = JSON->new();
+	my $json = $jsonparser->encode($task);
+	$self->logDebug("json", $json);
+
+	#### GET CONNECTION
+	my $connection	=	$self->newConnection();
+	$self->logDebug("DOING connection->open_channel()");
+	my $channel = $connection->open_channel();
+	$self->channel($channel);
+	#$self->logDebug("channel", $channel);
+	
+	$channel->declare_queue(
+		queue => $queuename,
+		durable => 1,
+	);
+	
+	#### BIND QUEUE TO EXCHANGE
+	$channel->publish(
+		exchange => '',
+		routing_key => $queuename,
+		body => $json,
+	);
+	
+	print " [x] Sent TASK: '$json'\n";
 }
 
+method addTaskIdentifiers ($task) {
+	
+	#### SET TOKEN
+	$task->{token}		=	$self->token();
+	
+	#### SET SENDTYPE
+	$task->{sendtype}	=	"task";
+	
+	#### SET DATABASE
+	$task->{database} 	= 	$self->db()->database() || "";
+
+	#### SET SOURCE ID
+	$task->{sourceid} 	= 	$self->sourceid();
+	
+	#### SET CALLBACK
+	$task->{callback} 	= 	$self->callback();
+	
+	$self->logDebug("Returning task", $task);
+	
+	return $task;
+}
+method setQueueName ($task) {
+	#### VERIFY VALUES
+	my $notdefined	=	$self->notDefined($task, ["username", "project", "workflow"]);
+	$self->logCritical("not defined", $notdefined) and return if @$notdefined;
+	
+	my $username	=	$task->{username};
+	my $project		=	$task->{project};
+	my $workflow	=	$task->{workflow};
+	my $queue		=	"$username.$project.$workflow";
+	#$self->logDebug("queue", $queue);
+	
+	return $queue;	
+}
+
+method notDefined ($hash, $fields) {
+	return [] if not defined $hash or not defined $fields or not @$fields;
+	
+	my $notDefined = [];
+    for ( my $i = 0; $i < @$fields; $i++ ) {
+        push( @$notDefined, $$fields[$i]) if not defined $$hash{$$fields[$i]};
+    }
+
+    return $notDefined;
+}
+
+
+#### UPDATE
 method updateJobStatus ($data) {
 	$self->logDebug("data", $data);
 	$self->logDebug("data not defined") and return if not defined $data;
@@ -346,6 +435,7 @@ method updateQueueSample ($data) {
 	$keys	=	["username", "project", "workflow", "workflownumber", "sample", "status" ];
 	$self->_addToTable($table, $data, $keys);
 }
+#### DELETE
 method deleteInstance ($data) {
 	#$self->logDebug("data", $data);
 	my $id			=	$data->{id};
@@ -430,97 +520,6 @@ WHERE id='$id'
 	$self->logDebug("query", $query);
 	
 	return $self->db()->do($query);
-}
-
-
-#### TASKS
-method sendTask ($task) {	
-	$self->logDebug("task", $task);
-	my $processid	=	$$;
-	$self->logDebug("processid", $processid);
-	$task->{processid}	=	$processid;
-
-	#### SET QUEUE
-	my $queuename		=	$self->setQueueName($task);
-	$task->{queue}		=	$queuename;
-	$self->logDebug("queuename", $queuename);
-	
-	#### ADD UNIQUE IDENTIFIERS
-	$task	=	$self->addTaskIdentifiers($task);
-
-	my $jsonparser = JSON->new();
-	my $json = $jsonparser->encode($task);
-	$self->logDebug("json", $json);
-
-	#### GET CONNECTION
-	my $connection	=	$self->newConnection();
-	$self->logDebug("DOING connection->open_channel()");
-	my $channel = $connection->open_channel();
-	$self->channel($channel);
-	#$self->logDebug("channel", $channel);
-	
-	$channel->declare_queue(
-		queue => $queuename,
-		durable => 1,
-	);
-	
-	#### BIND QUEUE TO EXCHANGE
-	$channel->publish(
-		exchange => '',
-		routing_key => $queuename,
-		body => $json,
-	);
-	
-	print " [x] Sent TASK: '$json'\n";
-}
-
-method addTaskIdentifiers ($task) {
-	
-	#### SET TOKEN
-	$task->{token}		=	$self->token();
-	
-	#### SET SENDTYPE
-	$task->{sendtype}	=	"task";
-	
-	#### SET DATABASE
-	$task->{database} 	= 	$self->db()->database() || "";
-
-	#### SET USERNAME		
-	$task->{username} 	= 	$task->{username};
-
-	#### SET SOURCE ID
-	$task->{sourceid} 	= 	$self->sourceid();
-	
-	#### SET CALLBACK
-	$task->{callback} 	= 	$self->callback();
-	
-	$self->logDebug("Returning task", $task);
-	
-	return $task;
-}
-method setQueueName ($task) {
-	#### VERIFY VALUES
-	my $notdefined	=	$self->notDefined($task, ["username", "project", "workflow"]);
-	$self->logCritical("not defined", $notdefined) and return if @$notdefined;
-	
-	my $username	=	$task->{username};
-	my $project		=	$task->{project};
-	my $workflow	=	$task->{workflow};
-	my $queue		=	"$username.$project.$workflow";
-	#$self->logDebug("queue", $queue);
-	
-	return $queue;	
-}
-
-method notDefined ($hash, $fields) {
-	return [] if not defined $hash or not defined $fields or not @$fields;
-	
-	my $notDefined = [];
-    for ( my $i = 0; $i < @$fields; $i++ ) {
-        push( @$notDefined, $$fields[$i]) if not defined $$hash{$$fields[$i]};
-    }
-
-    return $notDefined;
 }
 
 

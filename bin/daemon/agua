@@ -24,7 +24,7 @@ my $printlog    =   4;
 my $logfile		=	"$installdir/log/agua.log";
 my $help;
 GetOptions (
-    'log=i'     => \$log,
+    'log=i'     	=> \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";

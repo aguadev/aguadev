@@ -50,7 +50,7 @@ my $username	=	"ubuntu";
 my $name;
 my $regex;
 my $command;
-my $log		=	2;
+my $log			=	2;
 my $printlog	=	2;
 my $logfile		=	"/tmp/pancancer-volume.$$.log";
 my $help;
@@ -60,7 +60,7 @@ GetOptions (
     'name=s'		=> \$name,
     'regex=s'		=> \$regex,
     'command=s'		=> \$command,
-    'log=i'     => \$log,
+    'log=i'     	=> \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";

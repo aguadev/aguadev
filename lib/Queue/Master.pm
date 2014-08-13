@@ -1,4 +1,3 @@
-
 use MooseX::Declare;
 
 =head2
@@ -185,7 +184,8 @@ method balanceInstances ($workflows) {
 
 #### DEBUG
 
-$quota		=	1;
+$quota		=	2;
+
 $self->logDebug("DEBUG quota", $quota);
 
 #### DEBUG
@@ -332,7 +332,7 @@ LIMIT $number};
 }
 
 method shutdownInstance ($workflow, $id) {
-	$self->logDebug("id", $id);
+	#$self->logDebug("id", $id);
 
 	my $stages			=	$self->getStagesByWorkflow($workflow);
 	my $object			=	$$stages[0];
@@ -341,7 +341,7 @@ method shutdownInstance ($workflow, $id) {
 	my $teardownfile	=	$self->setTearDownFile($installdir, $version);
 	#$self->logDebug("teardownfile", $teardownfile);
 	my $teardown			=	$self->getFileContents($teardownfile);
-	$self->logDebug("teardown", substr($teardown, 0, 100));
+	#$self->logDebug("teardown", substr($teardown, 0, 100));
 	
 	my $data	=	{
 		host			=>	$id,
@@ -445,7 +445,7 @@ method printConfig ($workflowobject) {
 }
 
 method getExtra ($installdir, $version) {
-	my $extrafile		=	"$installdir/$version/data/sh/extra";
+	my $extrafile		=	"$installdir/data/sh/extra";
 	$self->logDebug("extrafile", $extrafile);
 	
 	return "" if not -f $extrafile;
@@ -661,6 +661,7 @@ method adjustCounts ($queues, $resourcecounts, $lateststarted, $quota) {
 	}
 	$self->logDebug("total", $total);
 	
+	#### IF 
 	if ( $total == 0 ) {
 		$$resourcecounts[$lateststarted] = $quota;
 	}
@@ -669,11 +670,16 @@ method adjustCounts ($queues, $resourcecounts, $lateststarted, $quota) {
 		my $newtotal	=	$total - $latestcount;
 		$self->logDebug("newtotal", $newtotal);
 		
-		foreach my $resourcecount ( @$resourcecounts ) {
-			last if $resourcecount == 0;
-			$resourcecount	=	$resourcecount * ($newtotal/$total);
+		if ( $newtotal == $total ) {
+			$$resourcecounts[$lateststarted] = $quota;
 		}
-		push @$resourcecounts, $latestcount;
+		else {
+			foreach my $resourcecount ( @$resourcecounts ) {
+				last if $resourcecount == 0;
+				$resourcecount	=	$resourcecount * ($newtotal/$total);
+			}
+			$$resourcecounts[$lateststarted] = $latestcount;
+		}		
 	}
 	$self->logDebug("resourcecounts", $resourcecounts);
 	
@@ -1647,8 +1653,9 @@ method getPrevious ($queues, $queuedata) {
 	return $previous;	
 }
 
-#### LISTEN/SEND TOPICS
+#### TOPICS
 method sendTopic ($data, $key) {
+
 	$self->logDebug("data", $data);
 	#$self->logDebug("key", $key);
 
@@ -1657,7 +1664,7 @@ method sendTopic ($data, $key) {
 
 	my $host		=	$self->host() || $self->conf()->getKey("queue:host", undef);
 	my $user		= 	$self->user() || $self->conf()->getKey("queue:user", undef);
-	my $pass	=	$self->pass() || $self->conf()->getKey("queue:pass", undef);
+	my $pass		=	$self->pass() || $self->conf()->getKey("queue:pass", undef);
 	my $vhost		=	$self->vhost() || $self->conf()->getKey("queue:vhost", undef);
 	$self->logNote("host", $host);
 	$self->logNote("user", $user);
@@ -1696,6 +1703,8 @@ method sendTopic ($data, $key) {
 
 	$connection->close();
 }
+
+#### TASKS
 method receiveTask ($taskqueue) {
 	$self->logDebug("taskqueue", $taskqueue);
 	
@@ -1773,31 +1782,95 @@ method handleTask ($json) {
 	}
 }
 
-method handleTopic ($json) {
-	#$self->logDebug("json", substr($json, 0, 200));
+method sendTask ($task) {	
+	$self->logDebug("task", $task);
+	#$self->logDebug("$task->{workflow} $task->{sample} $task->{status}");
 
-	my $data = $self->jsonparser()->decode($json);
-	#$self->logDebug("data", $data);
+	my $processid	=	$$;
+	#$self->logDebug("processid", $processid);
+	$task->{processid}	=	$processid;
 
-	my $duplicate	=	$self->duplicate();
-	if ( defined $duplicate and not $self->deeplyIdentical($data, $duplicate) ) {
-		#$self->logDebug("Skipping duplicate message");
-		return;
-	}
-	else {
-		$self->duplicate($data);
-	}
-
-	my $mode =	$data->{mode} || "";
-	#$self->logDebug("mode", $mode);
+	#### SET QUEUE
+	my $queuename		=	$self->setQueueName($task);
+	$task->{queue}		=	$queuename;
+	#$self->logDebug("queuename", $queuename);
 	
-	if ( $self->can($mode) ) {
-		$self->$mode($data);
-	}
-	else {
-		print "mode not supported: $mode\n";
-		$self->logDebug("mode not supported: $mode");
-	}
+	#### ADD UNIQUE IDENTIFIERS
+	$task	=	$self->addTaskIdentifiers($task);
+
+	my $jsonparser = JSON->new();
+	my $json = $jsonparser->encode($task);
+	#$self->logDebug("json", $json);
+
+	#### GET CONNECTION
+	my $connection	=	$self->newConnection();
+	#$self->logDebug("DOING connection->open_channel()");
+	my $channel = $connection->open_channel();
+	$self->channel($channel);
+	#$self->logDebug("channel", $channel);
+	
+	$channel->declare_queue(
+		queue => $queuename,
+		durable => 1,
+	);
+	
+	#### BIND QUEUE TO EXCHANGE
+	$channel->publish(
+		exchange => '',
+		routing_key => $queuename,
+		body => $json,
+	);
+	
+	print " [x] Sent TASK:  $task->{mode} $task->{workflow} $task->{sample}\n";
+}
+
+method addTaskIdentifiers ($task) {
+	
+	#### SET TOKEN
+	$task->{token}		=	$self->token();
+	
+	#### SET SENDTYPE
+	$task->{sendtype}	=	"task";
+	
+	#### SET DATABASE
+	$task->{database} 	= 	$self->db()->database() || "";
+
+	#### SET USERNAME		
+	$task->{username} 	= 	$task->{username};
+
+	#### SET SOURCE ID
+	$task->{sourceid} 	= 	$self->sourceid();
+	
+	#### SET CALLBACK
+	$task->{callback} 	= 	$self->callback();
+	
+	#$self->logDebug("Returning task", $task);
+	
+	return $task;
+}
+method setQueueName ($task) {
+	#### VERIFY VALUES
+	my $notdefined	=	$self->notDefined($task, ["username", "project", "workflow"]);
+	$self->logCritical("not defined", $notdefined) and return if @$notdefined;
+	
+	my $username	=	$task->{username};
+	my $project		=	$task->{project};
+	my $workflow	=	$task->{workflow};
+	my $queue		=	"$username.$project.$workflow";
+	#$self->logDebug("queue", $queue);
+	
+	return $queue;	
+}
+
+method notDefined ($hash, $fields) {
+	return [] if not defined $hash or not defined $fields or not @$fields;
+	
+	my $notDefined = [];
+    for ( my $i = 0; $i < @$fields; $i++ ) {
+        push( @$notDefined, $$fields[$i]) if not defined $$hash{$$fields[$i]};
+    }
+
+    return $notDefined;
 }
 
 method updateJobStatus ($data) {
@@ -1977,97 +2050,6 @@ AND status='queued'};
 }
 
 #### SEND TASK
-method sendTask ($task) {	
-	$self->logDebug("task", $task);
-	#$self->logDebug("$task->{workflow} $task->{sample} $task->{status}");
-
-	my $processid	=	$$;
-	#$self->logDebug("processid", $processid);
-	$task->{processid}	=	$processid;
-
-	#### SET QUEUE
-	my $queuename		=	$self->setQueueName($task);
-	$task->{queue}		=	$queuename;
-	#$self->logDebug("queuename", $queuename);
-	
-	#### ADD UNIQUE IDENTIFIERS
-	$task	=	$self->addTaskIdentifiers($task);
-
-	my $jsonparser = JSON->new();
-	my $json = $jsonparser->encode($task);
-	#$self->logDebug("json", $json);
-
-	#### GET CONNECTION
-	my $connection	=	$self->newConnection();
-	#$self->logDebug("DOING connection->open_channel()");
-	my $channel = $connection->open_channel();
-	$self->channel($channel);
-	#$self->logDebug("channel", $channel);
-	
-	$channel->declare_queue(
-		queue => $queuename,
-		durable => 1,
-	);
-	
-	#### BIND QUEUE TO EXCHANGE
-	$channel->publish(
-		exchange => '',
-		routing_key => $queuename,
-		body => $json,
-	);
-	
-	print " [x] Sent TASK:  $task->{mode} $task->{workflow} $task->{sample}\n";
-}
-
-method addTaskIdentifiers ($task) {
-	
-	#### SET TOKEN
-	$task->{token}		=	$self->token();
-	
-	#### SET SENDTYPE
-	$task->{sendtype}	=	"task";
-	
-	#### SET DATABASE
-	$task->{database} 	= 	$self->db()->database() || "";
-
-	#### SET USERNAME		
-	$task->{username} 	= 	$task->{username};
-
-	#### SET SOURCE ID
-	$task->{sourceid} 	= 	$self->sourceid();
-	
-	#### SET CALLBACK
-	$task->{callback} 	= 	$self->callback();
-	
-	#$self->logDebug("Returning task", $task);
-	
-	return $task;
-}
-method setQueueName ($task) {
-	#### VERIFY VALUES
-	my $notdefined	=	$self->notDefined($task, ["username", "project", "workflow"]);
-	$self->logCritical("not defined", $notdefined) and return if @$notdefined;
-	
-	my $username	=	$task->{username};
-	my $project		=	$task->{project};
-	my $workflow	=	$task->{workflow};
-	my $queue		=	"$username.$project.$workflow";
-	#$self->logDebug("queue", $queue);
-	
-	return $queue;	
-}
-
-method notDefined ($hash, $fields) {
-	return [] if not defined $hash or not defined $fields or not @$fields;
-	
-	my $notDefined = [];
-    for ( my $i = 0; $i < @$fields; $i++ ) {
-        push( @$notDefined, $$fields[$i]) if not defined $$hash{$$fields[$i]};
-    }
-
-    return $notDefined;
-}
-
 method setModules {
     my $installdir = $self->conf()->getKey("agua", "INSTALLDIR");
     my $modulestring = $self->modulestring();

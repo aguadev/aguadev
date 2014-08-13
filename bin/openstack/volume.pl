@@ -46,7 +46,7 @@ my $type		=	"Standard";
 my $size;
 my $device;
 my $mode;
-my $log		=	2;
+my $log			=	2;
 my $printlog	=	2;
 my $logfile		=	"/tmp/pancancer-volume.$$.log";
 my $help;
@@ -58,7 +58,7 @@ GetOptions (
     'type=s'		=> \$type,
     'size=i'		=> \$size,
     'device=s'		=> \$device,
-    'log=i'     => \$log,
+    'log=i'     	=> \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
@@ -81,6 +81,9 @@ my $object = Virtual::Openstack->new({
     printlog	=>	$printlog,
     logfile     =>  $logfile
 });
+
+$mode .= "Volume";
+
 $object->$mode($instanceid, $volumeid, $device, $size, $type, $mountpoint);
 
 exit 0;

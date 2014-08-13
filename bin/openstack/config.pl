@@ -51,7 +51,7 @@ my $mode;
 my $section;
 my $key;
 my $value;
-my $log		=	2;
+my $log			=	2;
 my $printlog	=	2;
 my $configfile	=	"$installdir/conf/config.yaml";
 my $logfile		=	"/tmp/pancancer-config.$$.log";
@@ -61,7 +61,7 @@ GetOptions (
     'section=s'		=> \$section,
     'key=s'			=> \$key,
     'value=s'		=> \$value,
-    'log=i'     => \$log,
+    'log=i'     	=> \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";

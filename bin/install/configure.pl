@@ -115,7 +115,7 @@ GetOptions (
     'configfile=s'  => \$configfile,
     'dumpfile=s'    => \$dumpfile,
     'logfile=s'     => \$logfile,
-    'log=i'     => \$log,
+    'log=i'     	=> \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";

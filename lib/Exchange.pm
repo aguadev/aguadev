@@ -15,12 +15,13 @@ use Data::Dumper;
 has 'sendtype'	=> 	( isa => 'Str|Undef', is => 'rw', default => "response" );
 has 'sourceid'	=>	( isa => 'Undef|Str', is => 'rw', default => "" );
 has 'callback'	=>	( isa => 'Undef|Str', is => 'rw', default => "" );
+has 'queue'		=>	( isa => 'Undef|Str', is => 'rw', default => undef );
 has 'token'		=> ( isa => 'Str|Undef', is => 'rw' );
 has 'user'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0 );
 has 'pass'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0 );
 has 'host'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0 );
 has 'vhost'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0 );
-has 'port'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0 );
+has 'port'		=> ( isa => 'Str|Undef', is => 'rw', default	=>	5672 );
 
 #### Objects
 has 'connection'=> ( isa => 'Net::RabbitFoot', is => 'rw', lazy	=> 1, builder => "openConnection" );
@@ -133,59 +134,7 @@ method sendData ($data) {
 	$connection->close();
 }
 
-method addIdentifiers ($data) {
-	$self->logDebug("data", $data);
-	
-	#### SET TOKEN
-	$data->{token}		=	$self->token();
-	
-	#### SET SENDTYPE
-	$data->{sendtype}	=	"data";
-	
-	#### SET DATABASE
-	$data->{database} 	= 	$self->db()->database() || "";
-
-	#### SET USERNAME		
-	$data->{username} 	= 	$data->{username};
-
-	#### SET SOURCE ID
-	$data->{sourceid} 	= 	$self->sourceid();
-	
-	#### SET CALLBACK
-	$data->{callback} 	= 	$self->callback();
-	
-	$self->logDebug("Returning data", $data);
-
-	return $data;
-}
-
-method newSocketConnection ($args) {
-	$self->logCaller("");
-	$self->logDebug("args", $args);
-
-	my $host = $args->{host} || $self->conf()->getKey("socket:host", undef);
-	my $port = $args->{port} || $self->conf()->getKey("socket:port", undef);
-	my $user = $args->{user} || $self->conf()->getKey("socket:user", undef);
-	my $pass = $args->{pass} || $self->conf()->getKey("socket:pass", undef);
-	my $vhost = $args->{vhost} || $self->conf()->getKey("socket:vhost", undef);
-	$self->logDebug("host", $host);
-	$self->logDebug("port", $port);
-	$self->logDebug("user", $user);
-	$self->logDebug("pass", $pass);
-	$self->logDebug("host", $host);
-
-	my $connection = Net::RabbitFoot->new()->load_xml_spec()->connect(
-		host => $host,
-		port => $port,
-		user => $user,	
-		pass => $pass,
-		vhost => $vhost,
-	);
-	
-	return $connection;	
-}
-
-method receiveSocket ($data, $handler) {
+method receiveSocket ($data) {
 
 	$data 	=	{}	if not defined $data;
 	$self->logDebug("data", $data);
@@ -229,6 +178,309 @@ method receiveSocket ($data, $handler) {
 	);
 	
 	AnyEvent->condvar->recv;
+}
+
+method addIdentifiers ($data) {
+	$self->logDebug("data", $data);
+	
+	#### SET TOKEN
+	$data->{token}		=	$self->token();
+	
+	#### SET SENDTYPE
+	$data->{sendtype}	=	"data";
+	
+	#### SET DATABASE
+	$self->setDbh() if not defined $self->db();
+	$data->{database} 	= 	$self->db()->database() || "";
+
+	#### SET USERNAME		
+	$data->{username} 	= 	$data->{username};
+
+	#### SET SOURCE ID
+	$data->{sourceid} 	= 	$self->sourceid();
+	
+	#### SET CALLBACK
+	$data->{callback} 	= 	$self->callback();
+	
+	$self->logDebug("Returning data", $data);
+
+	return $data;
+}
+
+method newSocketConnection ($args) {
+	$self->logCaller("");
+	$self->logDebug("args", $args);
+
+	my $host = $args->{host} || $self->conf()->getKey("socket:host", undef);
+	my $port = $args->{port} || $self->conf()->getKey("socket:port", undef);
+	my $user = $args->{user} || $self->conf()->getKey("socket:user", undef);
+	my $pass = $args->{pass} || $self->conf()->getKey("socket:pass", undef);
+	my $vhost = $args->{vhost} || $self->conf()->getKey("socket:vhost", undef);
+	$self->logDebug("host", $host);
+	$self->logDebug("port", $port);
+	$self->logDebug("user", $user);
+	$self->logDebug("pass", $pass);
+	$self->logDebug("host", $host);
+
+	my $connection = Net::RabbitFoot->new()->load_xml_spec()->connect(
+		host => $host,
+		port => $port,
+		user => $user,	
+		pass => $pass,
+		vhost => $vhost,
+	);
+	
+	return $connection;	
+}
+
+
+#### TASK
+method receiveTask ($taskqueue) {
+	$self->logDebug("taskqueue", $taskqueue);
+	
+	#### OPEN CONNECTION
+	my $connection	=	$self->newConnection();	
+	my $channel 	= 	$connection->open_channel();
+	#$self->channel($channel);
+	$channel->declare_queue(
+		queue => $taskqueue,
+		durable => 1,
+	);
+	
+	print "[*] Waiting for tasks in queue: $taskqueue\n";
+	
+	$channel->qos(prefetch_count => 1,);
+	
+	no warnings;
+	my $handler	= *handleTask;
+	use warnings;
+	my $this	=	$self;
+	
+	$channel->consume(
+		on_consume	=>	sub {
+			my $var 	= 	shift;
+			#print "Listener::receiveTask    DOING CALLBACK";
+		
+			my $body 	= 	$var->{body}->{payload};
+			print " [x] Received task in taskqueue '$taskqueue'\n";
+		
+			my @c = $body =~ /\./g;
+		
+			#### RUN TASK
+			&$handler($this, $body);
+			
+			my $sleep	=	$self->sleep();
+			print "Sleeping $sleep seconds\n";
+			sleep($sleep);
+			
+			#### SEND ACK AFTER TASK COMPLETED
+			print "Listener::receiveTask    sending ack\n";
+			$channel->ack();
+		},
+		no_ack => 0,
+	);
+	
+	#### SET self->connection
+	$self->connection($connection);
+	
+	# Wait forever
+	AnyEvent->condvar->recv;	
+}
+
+method handleTask ($json) {
+	$self->logDebug("json", substr($json, 0, 1000));
+
+	#my $data = $self->jsonparser()->decode($json);
+	##$self->logDebug("data", $data);
+	#
+	######my $duplicate	=	$self->duplicate();
+	######if ( defined $duplicate and not $self->deeplyIdentical($data, $duplicate) ) {
+	######	$self->logDebug("Skipping duplicate message");
+	######	return;
+	######}
+	######else {
+	######	$self->duplicate($data);
+	######}
+	#
+	#my $mode =	$data->{mode} || "";
+	##$self->logDebug("mode", $mode);
+	#
+	#if ( $self->can($mode) ) {
+	#	$self->$mode($data);
+	#}
+	#else {
+	#	print "mode not supported: $mode\n";
+	#	$self->logDebug("mode not supported: $mode");
+	#}
+}
+
+method sendTask ($task) {
+	$self->logDebug("task", $task);
+	my $processid	=	$$;
+	$self->logDebug("processid", $processid);
+	$task->{processid}	=	$processid;
+
+	#### SET QUEUE
+	my $queuename		=	$task->{queue} || $self->setQueueName($task);
+	$task->{queue}		=	$queuename;
+	$self->logDebug("queuename", $queuename);
+	
+	#### ADD UNIQUE IDENTIFIERS
+	$task	=	$self->addTaskIdentifiers($task);
+
+	my $jsonparser = JSON->new();
+	my $json = $jsonparser->encode($task);
+	$self->logDebug("json", $json);
+
+	#### GET CONNECTION
+	my $connection	=	$self->newConnection();
+	$self->logDebug("DOING connection->open_channel()");
+	my $channel = $connection->open_channel();
+	$self->channel($channel);
+	#$self->logDebug("channel", $channel);
+	
+	$channel->declare_queue(
+		queue => $queuename,
+		durable => 1,
+	);
+	
+	#### BIND QUEUE TO EXCHANGE
+	$channel->publish(
+		exchange 		=> '',
+		routing_key 	=> $queuename,
+		body 			=> $json
+	);
+	
+	print " [x] Sent TASK: '$json'\n";
+}
+
+method addTaskIdentifiers ($task) {
+	
+	#### SET TOKEN
+	$task->{token}		=	$self->token();
+	
+	#### SET SENDTYPE
+	$task->{sendtype}	=	"task";
+	
+	#### SET DATABASE
+	$self->setDbh() if not defined $self->db();
+	$task->{database} 	= 	$self->db()->database() || "";
+
+	#### SET SOURCE ID
+	$task->{sourceid} 	= 	$self->sourceid();
+	
+	#### SET CALLBACK
+	$task->{callback} 	= 	$self->callback();
+	
+	$self->logDebug("Returning task", $task);
+	
+	return $task;
+}
+method setQueueName ($task) {
+	#### VERIFY VALUES
+	my $notdefined	=	$self->notDefined($task, ["username", "project", "workflow"]);
+	$self->logCritical("not defined", $notdefined) and return if @$notdefined;
+	
+	my $username	=	$task->{username};
+	my $project		=	$task->{project};
+	my $workflow	=	$task->{workflow};
+	my $queue		=	"$username.$project.$workflow";
+	#$self->logDebug("queue", $queue);
+	
+	return $queue;	
+}
+
+method notDefined ($hash, $fields) {
+	return [] if not defined $hash or not defined $fields or not @$fields;
+	
+	my $notDefined = [];
+    for ( my $i = 0; $i < @$fields; $i++ ) {
+        push( @$notDefined, $$fields[$i]) if not defined $$hash{$$fields[$i]};
+    }
+
+    return $notDefined;
+}
+
+
+
+#### TOPIC
+#method sendTopic 
+
+#### FANOUT
+method sendFanout ($exchange, $message) {
+	my $host	=	$self->host();
+	my $port	=	$self->port();
+	my $user	=	$self->user();
+	my $pass	=	$self->pass();
+	my $vhost	=	$self->vhost();
+
+	my $connection = Net::RabbitFoot->new()->load_xml_spec()->connect(
+		host 	=> $host,
+		port 	=> $port,
+		user 	=> $user,
+		pass 	=> $pass,
+		vhost 	=> $vhost
+	);
+	
+	my $chan = $connection->open_channel();
+	
+	$chan->publish(
+		exchange => '',
+		routing_key => 'hello',
+		#routing_key => 'chat',
+		body => 'Hello World!',
+	);
+	
+	print " [x] Sent 'Hello World!'\n";
+	
+	$connection->close();	
+}
+
+method receiveFanout ($message) {
+	my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
+		host => 'localhost',
+		port => 5672,
+		user => 'myuser',
+		pass => 'mypassword',
+		vhost => 'myvhost',
+	);
+	
+	my $channel = $conn->open_channel();
+	
+	$channel->declare_exchange(
+		#exchange => 'logs',
+		exchange => 'chat',
+		type => 'fanout',
+	);
+	
+	my $result = $channel->declare_queue( exclusive => 1, );
+	
+	my $queue_name = $result->{method_frame}->{queue};
+	
+	$channel->bind_queue(
+		exchange => 'chat',
+		queue => $queue_name,
+	);
+	
+	print " [*] Waiting for logs. To exit press CTRL-C\n";
+	
+	no warnings;
+	sub callback {
+		my $var = shift;
+		my $body = $var->{body}->{payload};
+	
+		print " [x] $body\n";
+	}
+	use warnings;
+		
+	$channel->consume(
+		on_consume => \&callback,
+		queue => $queue_name,
+		no_ack => 1,
+	);
+	
+	AnyEvent->condvar->recv;
+
 }
 
 #### CONNECTION
@@ -353,3 +605,72 @@ method closeConnection {
 
 
 1;
+
+#method sendTask ($task) {	
+#	$self->logDebug("task", $task);
+#	my $processid	=	$$;
+#	$self->logDebug("processid", $processid);
+#	$task->{processid}	=	$processid;
+#
+#	#### SET QUEUE
+#	my $queuename		=	$task->{queue} || $self->setQueueName($task);
+#	$task->{queue}	=	$queuename;	
+#	$self->logDebug("queuename", $queuename);
+#
+#	#### ADD UNIQUE IDENTIFIERS
+#	$task	=	$self->addIdentifiers($task);
+#
+#	my $jsonparser = JSON->new();
+#	my $json = $jsonparser->encode($task);
+#	$self->logDebug("json", $json);
+#
+#	#### GET CONNECTION
+#	my $connection	=	$self->newConnection();
+#	$self->logDebug("DOING connection->open_channel()");
+#	my $channel = $connection->open_channel();
+#	$self->channel($channel);
+#	#$self->logDebug("channel", $channel);
+#	
+#	$channel->declare_queue(
+#		queue => $queuename,
+#		durable => 1,
+#	);
+#	
+#	#### BIND QUEUE TO EXCHANGE
+#	$self->channel()->publish(
+#		exchange => '',
+#		routing_key => $queuename,
+#		body => $json,
+#	);
+#	
+#	print " [x] Sent TASK: '$json'\n";
+#}
+#
+#method sendFanout ($message) {
+#	$self->logDebug("message", $message);
+#	my $data	=	$self->jsonparser()->decode($message);
+#	$self->logDebug("data", $data);
+#	my $processid	=	$$;
+#	$self->logDebug("processid", $processid);
+#	$data->{processid}	=	$processid;
+#	#$self->logDebug("data", $data);
+#
+#	#### SET TYPE response
+#	$data->{sendtype}	=	$self->sendtype();
+#	
+#	my $jsonparser = JSON->new();
+#	my $json = $jsonparser->encode($data);
+#	$self->logDebug("json", $json);
+#
+#	#$self->logDebug("BEFORE channel->publish, self->channel", $self->channel());
+#	my $result = $self->channel()->publish(
+#		exchange => 'chat',
+#		routing_key => '',
+#		body => $json,
+#	);
+#	$self->logDebug(" [x] Sent message", $json);
+#	$self->logDebug(" [x] Sent message length", length($json));
+#
+#	return $result;
+#}
+#

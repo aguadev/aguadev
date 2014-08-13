@@ -99,6 +99,8 @@ $channel->declare_exchange(
 );
 
 my $result = $channel->declare_queue(exclusive => 1);
+
+
 my $queuename = $result->{method_frame}->{queue};
 
 
@@ -127,6 +129,7 @@ $channel->consume(
 # Wait forever
 AnyEvent->condvar->recv;	
 
+exit 0;
 
 #GetOptions (
 #    'exchange=s'	=> \$exchange,

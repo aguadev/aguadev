@@ -58,7 +58,7 @@ my $max			=	0;
 my $sleep		=	10;
 my $commands;
 my $commandfile;
-my $log		=	2;
+my $log			=	2;
 my $printlog	=	2;
 my $logfile		=	"/tmp/agua-shepherd.log";
 my $help;
@@ -68,7 +68,7 @@ GetOptions (
     'message=s'  	=> \$message,
     'max=i'  		=> \$max,
     'sleep=i'  		=> \$sleep,
-    'log=i'     => \$log,
+    'log=i'     	=> \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";

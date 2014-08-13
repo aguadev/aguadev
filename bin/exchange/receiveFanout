@@ -45,14 +45,14 @@ use Exchange::Manager;
 
 my $installdir 	=	 $ENV{'installdir'} || "/agua";
 my $configfile	=	"$installdir/conf/config.yaml";
-my $mode		=	"message";
+my $exchange	=	"chat";
 my $host		=	'localhost';
 my $port		=	5672;
 my $user		=	'myuser';	
 my $pass		=	'mypassword';
 my $vhost		=	'myvhost';
 my $message		=	"";
-my $log		=	2;
+my $log			=	2;
 my $printlog	=	2;
 my $help;
 
@@ -60,14 +60,14 @@ my $help;
 my $logfile		=	"/tmp/pancancer-volume.$$.log";
 
 GetOptions (
-    'mode=s'		=> \$mode,
+    'exchange=s'	=> \$exchange,
     'host=s'		=> \$host,
     'port=s'		=> \$port,
     'user=s'		=> \$user,
     'pass=s'		=> \$pass,
     'message=s'		=> \$message,
     'vhost=s'		=> \$vhost,
-    'log=i'     => \$log,
+    'log=i'     	=> \$log,
     'printlog=i'    => \$printlog,
     'help'          => \$help
 ) or die "No options specified. Try '--help'\n";
@@ -84,20 +84,21 @@ my $conf = Conf::Yaml->new(
 );
 
 my $object = Exchange::Manager->new({
+    host		=>	$host,
+    port		=>	$port,
+    user		=>	$user,
+    pass		=>	$pass,
+    vhost		=>	$vhost,
+
 	conf		=>	$conf,
     log			=>	$log,
     printlog	=>	$printlog,
     logfile     =>  $logfile
 });
 
-	$object->receive({
-	mode		=>	$mode,
-    host		=>	$host,
-    port		=>	$port,
-    user		=>	$user,
-    pass		=>	$pass,
+$object->receiveFanout({
+	exchange	=>	$exchange,
     message		=>	$message,
-    vhost		=>	$vhost,
 });
 
 exit 0;

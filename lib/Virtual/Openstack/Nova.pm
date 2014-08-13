@@ -91,7 +91,7 @@ method attach ($instanceid, $volumeid, $device, $size, $type, $mountpoint) {
 		$volumeid	=	$self->createVolume($size, $type);
 		$self->logDebug("volumeid", $volumeid);
 	
-		$self->attachVolume($instanceid, $volumeid, $device);
+		$self->_attachVolume($instanceid, $volumeid, $device);
 		sleep(4);
 	
 		$self->formatVolume($device);
@@ -104,6 +104,11 @@ method attach ($instanceid, $volumeid, $device, $size, $type, $mountpoint) {
 	$self->mountVolume($device, $mountpoint);
 }
 
+method describeHost ($instanceid) {
+	my $exports	=	$self->getExports();
+	my $command	=	"$exports nova host-list $instanceid";
+	$self->logDebug("command", $command);	
+}
 method formatVolume ($device) {
 	my $command	=	"mkfs.ext4 $device";
 	$self->logDebug("command", $command);
@@ -111,7 +116,7 @@ method formatVolume ($device) {
 	return `$command`;
 }
 
-method detach ($instanceid, $volumeid, $device, $size, $type, $mountpoint) {
+method detachVolume ($instanceid, $volumeid, $device, $size, $type, $mountpoint) {
 	print "Virtual::Openstack::detach    volumeid not defined. Exiting\n" and exit if not defined $volumeid;
 	$self->logDebug("volumeid", $volumeid);
 
@@ -120,7 +125,72 @@ method detach ($instanceid, $volumeid, $device, $size, $type, $mountpoint) {
 	
 	$device		=	$self->getDevice() if not defined $device;
 
-	$self->attachVolume($instanceid, $volumeid, $device);
+	$self->_detachVolume($instanceid, $volumeid, $device);
+}
+
+method _detachVolume ($instanceid, $volumeid, $device) {
+#### nova volume-detach SERVER VOLUME
+	my $exports	=	$self->getExports();
+	my $command	=	"$exports nova volume-detach $instanceid $volumeid $device";
+	$self->logDebug("command", $command);
+
+	return `$command`;
+}
+
+method trashVolume ($instanceid, $volumeid, $device, $size, $type, $mountpoint) {
+	$self->logDebug("mountpoint", $mountpoint);
+	
+	$instanceid	=	$self->getInstanceId();
+	$self->logDebug("instanceid", $instanceid);
+	
+	$volumeid	=	$self->getVolumeByInstance($instanceid);
+	$self->logDebug("volumeid", $volumeid);
+	
+	$device 	=	$self->getDeviceByMountpoint($mountpoint);
+	$self->logDebug("device", $device);
+
+	#### UNMOUNT
+	my $command	=	"umount -f $mountpoint";
+	$self->logDebug("command", $command);
+	`$command`;
+	
+	#### DETACH
+	$self->_detachVolume($instanceid, $volumeid, $device);
+
+	#### DELETE
+	$self->_deleteVolume($volumeid);
+
+	$self->logDebug("COMPLETED");
+}
+
+method getVolumeByInstance ($instanceid) {
+	$self->logDebug("instanceid", $instanceid);	
+
+	my $exports	=	$self->getExports();
+	my $command	=	"$exports nova volume-list";
+	$self->logDebug("command", $command);
+	my $output	=	`$command`;
+
+	#| ID                                   | Status    | Display Name | Size | Volume Type | Attached to                          |
+	#| 41dd473d-0840-4e21-b170-3b96efc03610 | in-use    | -            | 100  | Standard    | be0a67bd-bb64-4cb5-92b7-d716bd101632 |
+
+	my ($volumeid)	=	$output	=~	/\n\s*\|\s+(\S+)[^\n]+$instanceid\s*\|\s*\n/msg;
+	$self->logDebug("volumeid", $volumeid);
+
+	return $volumeid;
+}
+
+method getDeviceByMountpoint ($mountpoint) {
+	#$self->logDebug("mountpoint", $mountpoint);
+	
+	my $df		=	`df -ah`;
+#	$self->logDebug("df", $df);
+	
+	my ($device)	=	$df	=~	/\n(\S+)[^\n]+$mountpoint\s*\n/msg;
+	$device	=~	s/\d+$//;
+#	$self->logDebug("device", $device);
+
+	return $device;
 }
 
 method createVolume ($size, $type) {
@@ -151,13 +221,27 @@ method parseVolumeId ($output) {
 	return $volumeid;
 }
 
-method attachVolume ($instanceid, $volumeid, $device) {
+method _attachVolume ($instanceid, $volumeid, $device) {
 #### nova volume-attach SERVER VOLUME DEVICE
 	my $exports	=	$self->getExports();
 	my $command	=	"$exports nova volume-attach $instanceid $volumeid $device";
 	$self->logDebug("command", $command);
 
 	return `$command`;
+}
+
+method deleteVolume ($instanceid, $volumeid, $device, $size, $type, $mountpoint) {
+	$self->_deleteVolume($volumeid);	
+}
+
+
+method _deleteVolume ($volumeid) {
+	my $exports	=	$self->getExports();
+	my $command	=	"$exports nova volume-delete $volumeid";
+	$self->logDebug("command", $command);
+	my $output	=	`$command`;
+	
+	return 1;	
 }
 
 method getDevice {
@@ -174,7 +258,7 @@ method getDevice {
 
 method getInstanceId {
 	my $command		=	"curl curl http://169.254.169.254/openstack/latest/meta_data.json 2> /dev/null";
-	$self->logDebug("command", $command);
+	#$self->logDebug("command", $command);
 
 	my $json	=	`$command 2&>1`;
 	#$self->logDebug("json", $json);
@@ -183,7 +267,7 @@ method getInstanceId {
 	#$self->logDebug("data", $data);
 	
 	my $instanceid	=	$data->{uuid};
-	$self->logDebug("instanceid", $instanceid);
+	#$self->logDebug("instanceid", $instanceid);
 	
 	return $instanceid;
 }
@@ -372,14 +456,6 @@ method setUsername {
 
 	return $self->conf()->getKey("openstack:username", undef);
 }
-
-#method runCommand ($command) {
-#	$self->logDebug("command", $command);
-#	
-#	return `$command`;
-#}
-
-
 
 method setJsonParser {
 	return JSON->new->allow_nonref;
