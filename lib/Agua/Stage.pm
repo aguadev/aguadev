@@ -243,10 +243,12 @@ method runLocally {
 
 	#### COMMAND
 	my $command = join " ", @systemcall;
+	####$command		=	"sleep 10";
+	$self->logDebug("command", $command);
 
 	#### SET STAGE PID
 	my $stagepid = $$;
-	$self->logDebug("$$ stagepid XXX", $stagepid);
+	$self->logDebug("$$ stagepid", $stagepid);
 	$self->setStagePid($stagepid);
 	
 	#### RUN APP BY FORKING
@@ -259,10 +261,10 @@ method runLocally {
 	}
 	elsif ( defined $childpid ) { #### ****** Child ******
 		$self->logDebug("$$ CHILD doing command: $command");
-		##### SET InactiveDestroy ON DATABASE HANDLE
-		#$self->db()->dbh()->{InactiveDestroy} = 1;
-		#my $dbh = $self->db()->dbh();
-		#undef $dbh;
+		#### SET InactiveDestroy ON DATABASE HANDLE
+		$self->db()->dbh()->{InactiveDestroy} = 1;
+		my $dbh = $self->db()->dbh();
+		undef $dbh;
 		
 		my $resultfile	=	$self->resultfile();
 		$self->logDebug("resultfile", $resultfile);
@@ -300,7 +302,6 @@ completed=''};
 	$self->setFields($set);
 	$self->logDebug("AFTER NOW");
 
-	
 	#### WAIT FOR JOB TO FINISH
 	$self->logDebug("$$ Doing wait for command to complete");
 	wait;
@@ -315,22 +316,18 @@ completed=''};
 	$self->logDebug("$$ exitcodefile", $exitcodefile);
 	$self->logDebug("$$ exitcode", $exitcode);
 	
-	##### SET STATUS TO 'error' IF exitcode IS NOT ZERO
-	#if ( defined $exitcode and $exitcode == 0 ) {
-	#	$self->setStatus('completed') ;
-	#}
-	#else {
-	#	$self->setStatus('error');
-	#}
-	#$exitcode	=~ 	s/\s+$// if defined $exitcode;
-	#
-	#$self->logDebug("$$ Returning exitcode", $exitcode);
-	#
-	#return $exitcode;
-
-
-$self->logDebug("DEBUG EXIT") and exit;
-
+	#### SET STATUS TO 'error' IF exitcode IS NOT ZERO
+	if ( defined $exitcode and $exitcode == 0 ) {
+		$self->setStatus('completed') ;
+	}
+	else {
+		$self->setStatus('error');
+	}
+	$exitcode	=~ 	s/\s+$// if defined $exitcode;
+	
+	$self->logDebug("$$ Returning exitcode", $exitcode);
+	
+	return $exitcode;
 }
 
 method containsRedirection ($arguments) {
