@@ -385,28 +385,6 @@ sub executeLocal {
 		my $oldout;
 		my $olderr;
 
-		#if ( defined $stdoutfile )
-		#{
-		#	$self->logDebug("diverting STDOUT to", $stdoutfile);
-		#	open my $oldout, ">&STDOUT"  or die "Can't duplicate STDOUT: $!";
-		#	open my $olderr, ">&STDERR"  or die "Can't duplicate STDERR: $!";
-		#	#open OLDERR,     ">&", \*STDERR or die "Can't dup STDERR: $!";
-		#	
-		#	#### REMOVE OLD FILES
-		#	`rm -fr $stdoutfile` if defined $stdoutfile;
-		#	`rm -fr $stderrfile` if defined $stderrfile;
-		#	
-		#	#### REDIRECT OUTPUT/ERROR
-		#	open(STDOUT, ">$stdoutfile") or die "Can't redirect STDOUT to file: $stdoutfile" if defined $stdoutfile;
-		#	open(STDERR, ">$stderrfile") or die "Can't redirect STDOUT to file: $stderrfile" if defined $stderrfile;
-		#	open(STDERR, ">$stdoutfile") or die "Can't redirect STDERR to file: $stdoutfile\n" if defined $stdoutfile and not defined $stderrfile;
-		#	
-		#	#### ALTERNATELY, DO THIS
-		#	##push @system_call, "1> $stdoutfile" if defined $stdoutfile;
-		#	##push @system_call, "2> $stderrfile" if defined $stderrfile;
-		#	##push @system_call, "2> $stdoutfile" if not defined $stderrfile and defined $stdoutfile;
-		#}
-
 		#### execute COMMANDS
 		print `date > $lockfile`;
 		foreach my $command ( @$commands )
@@ -605,7 +583,7 @@ sub setJob {
 	$self->logCritical("outputdir not defined") and exit if not defined $outputdir;
 
 	#### SET DIRS
-	my $scriptdir = "$outputdir/scripts";
+	my $scriptdir = "$outputdir/script";
 	my $stdoutdir = "$outputdir/stdout";
 	my $lockdir = "$outputdir/lock";
 

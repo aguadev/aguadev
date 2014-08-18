@@ -708,7 +708,7 @@ sub getEnvars {
 	my $workflow	=	$self->workflow();
 	my $sgecell 	= 	$cluster if defined $cluster;
 	$sgecell = '' if not defined $sgecell;
-	$self->logDebug("sgecell", $sgecell);
+	$self->logNote("sgecell", $sgecell);
 	
 	#### IF THE INITIAL (PARENT) WORKFLOW JOB WAS RUN LOCALLY MUST PICK UP THE SGE 
 	#### ENVIRONMENT VARIABLES FROM THE SHELL IN ORDER TO IDENTIFY WHERE TO SUBMIT JOBS TO
@@ -746,11 +746,11 @@ sub getEnvars {
 FROM clustervars
 WHERE username = '$username'
 AND cluster = '$sgecell'};
-		$self->logDebug("$query");
+		$self->logNote("$query");
 		$qmasterport 	= 	$self->db()->query($query);
 		$execdport 		= 	$qmasterport + 1 if defined $qmasterport;
-		$self->logDebug("qmasterport", $qmasterport);
-		$self->logDebug("execdport", $execdport);
+		$self->logNote("qmasterport", $qmasterport);
+		$self->logNote("execdport", $execdport);
 	}
 
 	#### IF project AND workflow ARE NOT DEFINED, USE SLOTS IF FILLED
@@ -790,7 +790,7 @@ AND cluster = '$sgecell'};
 	$envars->{tostring} 	.= "export PROJECT=$project; " if defined $project;
 	$envars->{tostring} 	.= "export WORKFLOW=$workflow; " if defined $workflow;
 	$envars->{tostring} 	.= "export SESSION_ID=$sessionid; " if defined $sessionid;
-	$self->logDebug("envars->{tostring}", $envars->{tostring});
+	$self->logNote("envars->{tostring}", $envars->{tostring});
 
 	$self->envars($envars);
 

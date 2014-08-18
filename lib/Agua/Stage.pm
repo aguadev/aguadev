@@ -189,6 +189,7 @@ method runLocally {
 	#### ADD PERL5LIB FOR EXTERNAL SCRIPTS TO FIND Agua MODULES
 	my $aguadir = $self->conf()->getKey("agua", 'INSTALLDIR');
 	my $perl5lib = "$aguadir/lib";
+
 	#### GET exports FROM ENVARS
 	my $envars = $self->getEnvars();
 	my $exports = $envars->{tostring};
@@ -223,8 +224,8 @@ method runLocally {
 	my $redirection	=	$self->containsRedirection(\@systemcall);
 	
 	#### SET STDOUT AND STDERR FILES
-	my $stdoutfile = $self->stdoutfile;
-	my $stderrfile = $self->stderrfile;
+	my $stdoutfile = $self->stdoutfile();
+	my $stderrfile = $self->stderrfile();
 	push @systemcall, " \\\n1> $stdoutfile" if defined $stdoutfile and not $redirection;
 	push @systemcall, " \\\n2> $stderrfile" if defined $stderrfile;
 	$self->logDebug("$$ systemcall: @systemcall");
@@ -243,64 +244,38 @@ method runLocally {
 
 	#### COMMAND
 	my $command = join " ", @systemcall;
-	####$command		=	"sleep 10";
 	$self->logDebug("command", $command);
 
-	#### SET STAGE PID
-	my $stagepid = $$;
-	$self->logDebug("$$ stagepid", $stagepid);
-	$self->setStagePid($stagepid);
+	#### CREATE stdout DIR
+	$self->logDebug("stdoutfile", $stdoutfile);
+	my ($outputdir, $label)	=	$stdoutfile	=~	/^(.+?)\/[^\/]+\/([^\/]+)\.stdout$/;
+	$self->logDebug("outputdir", $outputdir);
+	$self->logDebug("label", $label);
+
+	my $scriptfile	=	"$outputdir/script/$label.sh";
+	my $exitfile	=	"$outputdir/stdout/$label.exit";
+	my $lockfile	=	"$outputdir/stdout/$label.lock";
+	$self->logDebug("scriptfile", $scriptfile);
+	$self->logDebug("exitfile", $exitfile);
+	$self->logDebug("lockfile", $lockfile);
+
+	$self->printScriptFile($scriptfile, $command, $exitfile, $lockfile);
+	$self->logDebug("$$ BEFORE SUBMIT command");
+	`$scriptfile`;
+	$self->logDebug("$$ AFTER SUBMIT command");
 	
-	#### RUN APP BY FORKING
-	my $childpid = fork;
-	$self->logDebug("DOING FORK");
-	$self->logDebug("childpid", $childpid);
-
-	if ( $childpid ) { #### ****** Parent ****** 
-		$self->logDebug("$$ PARENT childpid", $childpid);
-	}
-	elsif ( defined $childpid ) { #### ****** Child ******
-		$self->logDebug("$$ CHILD doing command: $command");
-		#### SET InactiveDestroy ON DATABASE HANDLE
-		$self->db()->dbh()->{InactiveDestroy} = 1;
-		my $dbh = $self->db()->dbh();
-		undef $dbh;
-		
-		my $resultfile	=	$self->resultfile();
-		$self->logDebug("resultfile", $resultfile);
-		
-		`rm -fr $resultfile` if -f $resultfile;
-		my $commandfile	=	"/tmp/command.$$.txt";
-		$self->logDebug("commandfile", $commandfile);
-		`echo '$command' > $commandfile`;
-		`echo "echo \\\$\? > $resultfile" >> $commandfile`;
-		`chmod 755 $commandfile`;
-		`$commandfile`;
-		$self->logDebug("$$ CHILD command submitted");
-		
-		exit;
-	}
-    
-    #### IF NEITHER CHILD NOR PARENT THEN COULDN'T OPEN PIPE
-    else
-    {
-        $self->logError("Could not open pipe (fork failed): $!");
-		return;
-    }
-
+	#### DISABLE STDOUT BUFFERING ON PARENT
+	$| = 1;
+	
 	#### UPDATE STATUS TO 'running'
-	$self->logDebug("BEFORE NOW");
-	#$self->logDebug("self->db", $self->db());
 	my $now = $self->db()->now();
 	$self->logDebug("now", $now);
-
 	my $set = qq{
 	status='running',
 started=$now,
 queued=$now,
 completed=''};
 	$self->setFields($set);
-	$self->logDebug("AFTER NOW");
 
 	#### WAIT FOR JOB TO FINISH
 	$self->logDebug("$$ Doing wait for command to complete");
@@ -309,11 +284,10 @@ completed=''};
 	#### PAUSE FOR RESULT FILE TO BE WRITTEN 
 	sleep(3);
 	$self->logDebug("$$ Finished wait for command to complete");
-	my $exitcodefile = $self->resultfile();
-	open(RESULT, $exitcodefile);
+	open(RESULT, $exitfile);
 	my $exitcode = <RESULT>;
 	close(RESULT);
-	$self->logDebug("$$ exitcodefile", $exitcodefile);
+	$self->logDebug("$$ exitfile", $exitfile);
 	$self->logDebug("$$ exitcode", $exitcode);
 	
 	#### SET STATUS TO 'error' IF exitcode IS NOT ZERO
@@ -324,8 +298,6 @@ completed=''};
 		$self->setStatus('error');
 	}
 	$exitcode	=~ 	s/\s+$// if defined $exitcode;
-	
-	$self->logDebug("$$ Returning exitcode", $exitcode);
 	
 	return $exitcode;
 }
@@ -613,6 +585,56 @@ AND workflow = '$workflow'
 	}
 }
 
+method printScriptFile ($scriptfile, $command, $exitfile, $lockfile) {
+	$self->logNote("scriptfile", $scriptfile);
+
+	#### CREATE DIR COMMANDS
+	$self->mkdirCommand($scriptfile);
+	$self->mkdirCommand($exitfile);
+	$self->mkdirCommand($lockfile);
+
+	my $contents	=	qq{#!/bin/bash
+
+echo "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
+echo USERNAME: 	     	\$USERNAME
+echo PROJECT:  	       	\$PROJECT
+echo WORKFLOW: 	       	\$WORKFLOW
+echo QUEUE:    	       	\$QUEUE
+echo "-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*"
+
+hostname -f
+date
+
+# OPEN LOCKFILE
+date > $lockfile
+
+$command
+
+#### REMOVE LOCKFILE
+echo \$? > $exitfile
+
+# REMOVE LOCKFILE
+unlink $lockfile;
+
+exit 0;
+
+};
+	$self->logDebug("contents", $contents);
+
+	open(OUT, ">$scriptfile") or die "Can't open script file: $scriptfile\n";
+	print OUT $contents;
+	close(OUT);
+	chmod(0777, $scriptfile);
+	$self->logNote("scriptfile printed", $scriptfile);
+}
+
+method mkdirCommand ($file) {
+	my ($dir)	=	$file	=~	/^(.+?)\/[^\/]+$/;
+	my $command	=	"mkdir -p $dir";
+	$self->logDebug("command", $command);
+	
+	`$command`;
+}
 
 method setArguments ($stageparameters) {
 #### SET ARGUMENTS AND GET VALUES FOR ALL PARAMETERS
@@ -969,8 +991,7 @@ completed 	= 	''};
 }
 
 method setFields ($set) {
-	$self->logDebug("Stage::setFields(set)");
-    $self->logDebug("set", $set);
+    #$self->logDebug("set", $set);
 
 	#### GET TABLE KEYS
 	my $username 	= 	$self->username();
@@ -985,11 +1006,9 @@ WHERE username = '$username'
 AND project = '$project'
 AND workflow = '$workflow'
 AND number = '$number'};	
-	$self->logDebug("$query");
+	#$self->logDebug("$query");
 	my $success = $self->db()->do($query);
 	$self->logError("Could not set fields for stage (project: $project, workflow: $workflow, number: $number) set : '$set'") and exit if not $success;
-
-	$self->logDebug("setFields successful!");
 }
 
 method setStagePid ($stagepid) {

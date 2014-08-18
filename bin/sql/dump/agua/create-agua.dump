@@ -105,17 +105,17 @@ DROP TABLE IF EXISTS `cluster`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cluster` (
-  `username` varchar(30) NOT NULL,
-  `cluster` varchar(30) NOT NULL,
+  `username` varchar(40) NOT NULL,
+  `cluster` varchar(80) NOT NULL,
   `minnodes` int(12) DEFAULT NULL,
   `maxnodes` int(12) DEFAULT NULL,
-  `instancetype` varchar(20) DEFAULT NULL,
-  `amiid` varchar(20) DEFAULT NULL,
-  `availzone` varchar(20) DEFAULT NULL,
+  `instancetype` varchar(40) DEFAULT NULL,
+  `amiid` varchar(40) DEFAULT NULL,
+  `availzone` varchar(40) DEFAULT NULL,
   `description` text,
   `datetime` datetime NOT NULL,
   PRIMARY KEY (`username`,`cluster`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -150,13 +150,13 @@ DROP TABLE IF EXISTS `clustervars`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `clustervars` (
   `username` varchar(30) NOT NULL,
-  `cluster` varchar(30) NOT NULL,
+  `cluster` varchar(80) NOT NULL,
   `qmasterport` int(12) DEFAULT NULL,
   `execdport` int(12) DEFAULT NULL,
-  `root` varchar(30) NOT NULL,
-  `cell` varchar(30) NOT NULL,
+  `root` varchar(60) NOT NULL,
+  `cell` varchar(60) NOT NULL,
   PRIMARY KEY (`username`,`cluster`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -500,6 +500,26 @@ CREATE TABLE `queuesample` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `sample`
+--
+
+DROP TABLE IF EXISTS `sample`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sample` (
+  `username` varchar(30) NOT NULL,
+  `project` varchar(40) NOT NULL,
+  `workflow` varchar(40) NOT NULL,
+  `workflownumber` int(8) NOT NULL,
+  `sample` varchar(40) NOT NULL,
+  `filename` varchar(40) NOT NULL,
+  `filesize` int(40) NOT NULL,
+  `status` varchar(40) NOT NULL,
+  PRIMARY KEY (`username`,`project`,`workflow`,`workflownumber`,`sample`,`filename`,`filesize`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `samplefile`
 --
 
@@ -515,6 +535,21 @@ CREATE TABLE `samplefile` (
   `filename` varchar(40) NOT NULL,
   `filesize` int(40) NOT NULL,
   PRIMARY KEY (`username`,`project`,`workflow`,`workflownumber`,`sample`,`filename`,`filesize`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `sampletable`
+--
+
+DROP TABLE IF EXISTS `sampletable`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sampletable` (
+  `username` varchar(30) NOT NULL,
+  `project` varchar(30) NOT NULL,
+  `sampletable` varchar(40) NOT NULL,
+  PRIMARY KEY (`username`,`project`,`sampletable`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -703,6 +738,27 @@ CREATE TABLE `viewfeature` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `viralsample`
+--
+
+DROP TABLE IF EXISTS `viralsample`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `viralsample` (
+  `username` varchar(30) NOT NULL,
+  `project` varchar(40) NOT NULL,
+  `workflow` varchar(40) NOT NULL,
+  `workflownumber` int(8) NOT NULL,
+  `plan` varchar(40) NOT NULL,
+  `groupid` varchar(40) NOT NULL,
+  `type` varchar(40) NOT NULL,
+  `sample` varchar(40) NOT NULL,
+  `status` varchar(40) NOT NULL,
+  PRIMARY KEY (`username`,`project`,`workflow`,`workflownumber`,`plan`,`groupid`,`type`,`sample`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `volume`
 --
 
@@ -752,4 +808,4 @@ CREATE TABLE `workflow` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-06-18 23:00:18
+-- Dump completed on 2014-08-16 23:16:29

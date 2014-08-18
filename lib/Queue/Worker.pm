@@ -115,8 +115,8 @@ method heartbeat {
 	my $memory		=	$self->getMemory();
 	#$self->logDebug("memory", $memory);
 		
-	my $key	=	"update.host.status";
 	my $data	=	{
+		queue	=>	"update.host.status",
 		host	=>	$host,
 		cpu		=>	$cpu,
 		io		=>	$io,
@@ -127,7 +127,7 @@ method heartbeat {
 	};
 	#$self->logDebug("data", $data);
 	
-	$self->sendTask($data, $key);
+	$self->sendTask($data);
 }
 
 method getHost {

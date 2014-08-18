@@ -42,6 +42,7 @@ BEGIN {
 #### INTERNAL MODULES
 use Conf::Yaml;
 use Exchange::Manager;
+use JSON;
 
 my $installdir 	=	 $ENV{'installdir'} || "/agua";
 my $configfile	=	"$installdir/conf/config.yaml";
@@ -109,13 +110,10 @@ my $object = Exchange::Manager->new({
     logfile     =>  $logfile
 });
 
-$object->sendTask({
-	username	=>	$username,
-	project		=>	$project,
-	workflow	=>	$workflow,
-    message		=>	$message,
-    queue		=>	$queue,
-});
+
+my $jsonparser	=	JSON->new();
+my $data		=	$jsonparser->decode($message);
+$object->sendTask($data);
 
 exit 0;
 

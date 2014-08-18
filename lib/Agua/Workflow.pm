@@ -564,6 +564,7 @@ AND number = $data->{workflownumber}};
 method addQueueSample ($uuid, $status, $data) {
 	$self->logDebug("uuid", $uuid);
 	$self->logDebug("status", $status);
+	$self->logDebug("data", $data);
 	
 	#### SET STATUS
 	$data->{status}	=	$status;
@@ -1471,8 +1472,6 @@ method getHostName {
 }
 
 method getWorkflowStages ($json) {
-	$self->logDebug("$$ Agua::Workflow::getWorkflowStages(json)");
-    
 	my $username = $json->{username};
     my $project = $json->{project};
     my $workflow = $json->{workflow};
@@ -1488,11 +1487,11 @@ WHERE username ='$username'
 AND project = '$project'
 AND workflow = '$workflow'
 ORDER BY number};
-    $self->logDebug("$$ $query");
+    $self->logNote("$$ $query");
     my $stages = $self->db()->queryhasharray($query);
 	$self->logError("stages not defined for username: $username") and return if not defined $stages;	
 
-	$self->logDebug("$$ stages:");
+	$self->logNote("$$ stages:");
 	foreach my $stage ( @$stages )
 	{
 		my $stage_number = $stage->number();
@@ -1551,8 +1550,7 @@ $where AND paramtype='input'};
 }
 
 method setStartStop ($stages, $json) {
-	$self->logDebug("$$ Agua::Workflow::setStartStop(stages, json)");
-	$self->logDebug("$$ No. stages: " . scalar(@$stages));
+	$self->logNote("$$ No. stages: " . scalar(@$stages));
 	$self->logError("stages is empty") and return if not scalar(@$stages);
 
 	my $start = $self->start();
@@ -1576,8 +1574,8 @@ method setStartStop ($stages, $json) {
 		$self->logError("start ($start) is greater than stop ($stop)");
 	}
 
-	$self->logDebug("$$ Setting start: $start");	
-	$self->logDebug("$$ Setting stop: $stop");	
+	$self->logNote("$$ Setting start: $start");	
+	$self->logNote("$$ Setting stop: $stop");	
 	
 	$self->start($start);
 	$self->stop($stop);

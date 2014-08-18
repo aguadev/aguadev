@@ -133,7 +133,7 @@ sub currentTimeToMysql {
 
 sub getMysqlTime {
 	my $self	=	shift;
-	my $time	=	`date`;
+	my $time	=	`/bin/date`;
 	#$self->logDebug("$$ time", $time);
 	
 	my $mysqltime	=	$self->datetimeToMysql($time);
@@ -199,7 +199,7 @@ sub statDatetimeCreated {
 
 	my $filename					=	shift;
 	
-	my $stat_string = `stat $filename`;
+	my $stat_string = `/usr/bin/stat $filename`;
 	my $tokens = $self->tokeniseString($stat_string); # DATA ENTRIES ARE DELIMITED WITH " " IF THEY CONTAIN SPACES
 	# 234881035 24271102 -rwxrwxrwx 1 young young 0 10000 "Apr 25 15:31:06 2006" "Jan 19 20:28:37 2006" "Jan 25 14:51:27 2006" 4096 24 0 /Users/young/FUNNYBASE/pipeline/151-158/phd_dir/151-001-A01.ab1.phd.1
 
@@ -228,7 +228,7 @@ sub statDatetimeModified {
 
 	my $filename					=	shift;
 	
-	my $stat_string = `stat $filename`;
+	my $stat_string = `/usr/bin/stat $filename`;
 	my $tokens = $self->tokeniseString($stat_string); # DATA ENTRIES ARE DELIMITED WITH " " IF THEY CONTAIN SPACES
 	# 234881035 24271102 -rwxrwxrwx 1 young young 0 10000 "Apr 25 15:31:06 2006" "Jan 19 20:28:37 2006" "Jan 25 14:51:27 2006" 4096 24 0 /Users/young/FUNNYBASE/pipeline/151-158/phd_dir/151-001-A01.ab1.phd.1
 

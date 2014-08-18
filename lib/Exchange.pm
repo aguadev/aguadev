@@ -377,9 +377,15 @@ method addTaskIdentifiers ($task) {
 	return $task;
 }
 method setQueueName ($task) {
+	$self->logDebug("task", $task);
+	
 	#### VERIFY VALUES
 	my $notdefined	=	$self->notDefined($task, ["username", "project", "workflow"]);
-	$self->logCritical("not defined", $notdefined) and return if @$notdefined;
+	$self->logDebug("notdefined", $notdefined);
+	
+$self->logDebug("DEBUG EXIT") and exit;
+
+	$self->logCritical("not defined XXX", @$notdefined) and return if @$notdefined;
 	
 	my $username	=	$task->{username};
 	my $project		=	$task->{project};
