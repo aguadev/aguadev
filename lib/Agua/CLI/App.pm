@@ -34,6 +34,7 @@ class Agua::CLI::App with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::Statu
     has 'linkurl'	=> ( isa => 'Str|Undef', is => 'rw', required => 0, documentation => q{URL for application usage information (e.g., man pages, help)} );
     has 'location'	=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'executor'	=> ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'envarfile'	=> ( isa => 'Str|Undef', is => 'rw', default => undef );
     has 'description'	=> ( isa => 'Str|Undef', is => 'rw', default => undef );
     has 'notes'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
     has 'submit'	=> ( isa => 'Maybe', is => 'rw', default => undef );
@@ -68,10 +69,10 @@ class Agua::CLI::App with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::Statu
     has 'paramname'	=> ( isa => 'Str', is => 'rw', required => 0 );
     has 'field'	    => ( isa => 'Str', is => 'rw', required => 0 );
     has 'value'	    => ( isa => 'Str', is => 'rw', required => 0 );
-    has 'fields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['name', 'number', 'owner', 'package', 'version', 'installdir', 'type', 'location', 'executor', 'description', 'notes', 'url', 'linkurl', 'ordinal', 'status', 'submit', 'appfile', 'field', 'value', 'cmdfile', 'inputfile', 'outputfile', 'paramname', 'scrapefile', 'stdoutfile', 'stderrfile', 'queued', 'started', 'completed', 'duration', 'stagepid', 'stagejobid', 'workflowpid'] } );
-    has 'savefields'    => ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { ['name', 'number', 'owner', 'package', 'version', 'installdir', 'ordinal', 'status', 'queued', 'started', 'completed', 'duration', 'locked', 'type', 'location', 'executor', 'description', 'notes', 'submit', 'url', 'linkurl', 'localonly', 'stdoutfile', 'stderrfile', 'stagepid', 'stagejobid', 'workflowpid'] } );
-    has 'exportfields'    => ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { ['name', 'number', 'owner', 'package', 'version', 'installdir', 'ordinal', 'status', 'submit', 'type', 'location', 'executor', 'description', 'notes', 'url', 'linkurl', 'localonly', 'stdoutfile', 'stderrfile', 'queued', 'started', 'completed', 'duration', 'stagepid', 'stagejobid', 'workflowpid'] } );
-    has 'appfields'    => ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { ['name', 'number', 'owner', 'package', 'version', 'installdir', 'ordinal', 'type', 'location', 'executor', 'description', 'notes', 'url', 'linkurl', 'localonly'] } );
+    has 'fields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['name', 'number', 'owner', 'package', 'version', 'installdir', 'type', 'location', 'executor', 'envarfile', 'description', 'notes', 'url', 'linkurl', 'ordinal', 'status', 'submit', 'appfile', 'field', 'value', 'cmdfile', 'inputfile', 'outputfile', 'paramname', 'scrapefile', 'stdoutfile', 'stderrfile', 'queued', 'started', 'completed', 'duration', 'stagepid', 'stagejobid', 'workflowpid'] } );
+    has 'savefields'    => ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { ['name', 'number', 'owner', 'package', 'version', 'installdir', 'ordinal', 'status', 'queued', 'started', 'completed', 'duration', 'locked', 'type', 'location', 'executor', 'envarfile', 'description', 'notes', 'submit', 'url', 'linkurl', 'localonly', 'stdoutfile', 'stderrfile', 'stagepid', 'stagejobid', 'workflowpid'] } );
+    has 'exportfields'    => ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { ['name', 'number', 'owner', 'package', 'version', 'installdir', 'ordinal', 'status', 'submit', 'type', 'location', 'executor', 'envarfile', 'description', 'notes', 'url', 'linkurl', 'localonly', 'stdoutfile', 'stderrfile', 'queued', 'started', 'completed', 'duration', 'stagepid', 'stagejobid', 'workflowpid'] } );
+    has 'appfields'    => ( isa => 'ArrayRef[Str]', is => 'rw', default => sub { ['name', 'number', 'owner', 'package', 'version', 'installdir', 'ordinal', 'type', 'location', 'executor', 'envarfile', 'description', 'notes', 'url', 'linkurl', 'localonly'] } );
     has 'inputfile'=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
     has 'appfile'=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
     has 'cmdfile'=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );

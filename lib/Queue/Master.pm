@@ -184,7 +184,7 @@ method balanceInstances ($workflows) {
 
 #### DEBUG
 
-$quota		=	10;
+$quota		=	2;
 
 $self->logDebug("DEBUG quota", $quota);
 
@@ -401,16 +401,19 @@ method printConfig ($workflowobject) {
 	#		GET PACKAGE INSTALLDIR
 	my $stages			=	$self->getStagesByWorkflow($workflowobject);
 	my $object			=	$$stages[0];
+	my $package			=	$object->{package};
+	my $version			=	$object->{version};
+	$self->logDebug("package", $package);
 	#$self->logDebug("stages[0]", $object);	
 
+	my $installdir		=	$self->getInstallDir($package);
+	$self->logDebug("installdir", $installdir);
+	$object->{installdir}=	$installdir;
+	
 	my $basedir			=	$self->conf()->getKey("agua", "INSTALLDIR");
 	$object->{basedir}	=	$basedir;
-	
-	my $version			=	$object->{version};
-	my $package			=	$object->{package};
-	
+
 	#		GET TEMPLATE
-	my $installdir		=	$object->{installdir};
 	my $templatefile	=	$self->setTemplateFile($installdir, $version);
 	#$self->logDebug("templatefile", $templatefile);
 	
@@ -439,9 +442,28 @@ method printConfig ($workflowobject) {
 	}
 	$self->logDebug("targetfile", $targetfile);
 	
+	$self->logDebug("object", $object);
+	
 	$self->virtual()->createConfig($object, $templatefile, $targetfile, $predata, $postdata);
 	
 	return $targetfile;
+}
+
+method getInstallDir ($packagename) {
+	$self->logDebug("packagename", $packagename);
+
+	my $packages = $self->conf()->getKey("packages:$packagename", undef);
+	$self->logDebug("packages", $packages);
+	my $version	=	undef;
+	foreach my $key ( %$packages ) {
+		$version	=	$key;
+		last;
+	}
+
+	my $installdir	=	$packages->{$version}->{INSTALLDIR};
+	$self->logDebug("installdir", $installdir);
+	
+	return $installdir;
 }
 
 method getPreData ($installdir, $version) {
@@ -525,7 +547,8 @@ method getVirtualInputs ($workflow) {
 	
 	#	2. PRINT USERDATA FILE
 	my $userdatafile	=	$self->printConfig($workflow);
-	
+	$self->logDebug("userdatafile", $userdatafile);
+		
 	# 	3. PRINT OPENSTACK AUTHENTICATION *-openrc.sh FILE
 	my $virtualtype		=	$self->conf()->getKey("agua", "VIRTUALTYPE");
 	my $authfile;
@@ -1389,10 +1412,12 @@ ORDER BY queuesample.username, queuesample.project, queuesample.workflownumber, 
 
 #### MAINTAIN QUEUES
 method maintainQueues($workflows) {
-
+	$self->logDebug("workflows", $workflows);
+	
 	print "\n\n#### DOING maintainQueues\n";
 	for ( my $i = 0; $i < @$workflows; $i++ ) {
 		my $workflow	=	$$workflows[$i];
+		$self->logDebug("workflow $i", $workflow->{name});
 		my $label	=	"[" . ($i + 1) . "] ". $$workflows[$i]->{name};
 		
 		if ( $i != 0 ) {
@@ -1459,7 +1484,7 @@ AND project='$workflow->{project}'
 AND workflow='$workflow->{workflow}'
 AND workflownumber='$workflow->{workflownumber}'
 AND status='completed'};
-	#$self->logDebug("query", $query);
+	$self->logDebug("query", $query);
 	
 	my $completed	=	$self->db()->query($query);
 	#$self->logDebug("completed", $completed);

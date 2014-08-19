@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS stage (
 
     location            VARCHAR(255) NOT NULL default '',
     executor            VARCHAR(255) NOT NULL default '',
+    envarfile           VARCHAR(255) NOT NULL default '',
     cluster             VARCHAR(20)NOT NULL default '',
     submit              INT(1),
 

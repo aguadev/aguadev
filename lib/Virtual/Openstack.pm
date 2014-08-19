@@ -50,7 +50,7 @@ method initialise ($args) {
 }
 
 method createConfig ($object, $templatefile, $targetfile, $predata, $postdata) {
-	$self->logNote("object", $object);
+	$self->logDebug("object", $object);
 	$self->logNote("templatefile", $templatefile);
 	$self->logNote("targetfile", $targetfile);
 

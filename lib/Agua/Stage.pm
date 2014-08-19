@@ -74,7 +74,8 @@ has 'version'   	=>  ( isa => 'Str', is => 'rw', required => 1  );
 
 has 'clustertype'	=>  ( isa => 'Str|Undef', is => 'rw', default => "SGE" );
 has 'fileroot'		=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
-has 'executor'		=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
+has 'executor'		=> 	( isa => 'Str|Undef', is => 'rw', default => undef );
+has 'envarfile'		=> 	( isa => 'Str|Undef', is => 'rw', default => undef );
 has 'location'		=> 	( isa => 'Str|Undef', is => 'rw', default => '' );
 
 has 'setuid'		=>  ( isa => 'Str|Undef', is => 'rw', default => '' );
@@ -190,34 +191,33 @@ method runLocally {
 	my $aguadir = $self->conf()->getKey("agua", 'INSTALLDIR');
 	my $perl5lib = "$aguadir/lib";
 
-	#### GET exports FROM ENVARS
-	my $envars = $self->getEnvars();
-	my $exports = $envars->{tostring};
+	#### GET ENVARS
+	my $envars 			= $self->getEnvars();
+	my $exports 		= $envars->{tostring};
 	$self->logDebug("$$ exports", $exports);
-	my $libs	=	"export PERL5LIB=$perl5lib; $exports ";
+	my $libs			=	"export PERL5LIB=$perl5lib; $exports";
+	my $envarfile		=	$self->envarfile();
+	$self->logDebug("envarfile", $envarfile);
+	if ( defined $envarfile and $envarfile ne "" ) {
+		my $fileexports	=	$self->getFileExports($envarfile);
+		$libs .= $fileexports if defined $fileexports;
+	}
 	
-	#### SET EXECUTOR AND FILE $prefix, EXPORTS
-	my $prefix = "";
+	#### SET EXECUTOR 
 	my $executor = $self->executor();
 	$self->logDebug("executor", $executor);
-	if ( $executor =~ /^\s*\S+\.sh\s+&+\s*/ ) {
-		my ($file)	=	$executor	=~ /^(\S+\.sh)/;
-		$self->logDebug("file", $file);
-		$executor	=~ s/^\S+\.sh\s+&+\s*//;
-		my $fileexports	=	$self->getFileExports($file);
-		$prefix .= $fileexports if defined $fileexports;
-	}
-	else {
-		$prefix 	=	$executor;
-	}
-	$self->logDebug("$$ prefix", $prefix);
 	
 	#### PREFIX APPLICATION PATH WITH PACKAGE INSTALLATION DIRECTORY
 	my $application = $self->installdir() . "/" . $self->location();	
 	#$self->logDebug("$$ application", $application);
 	
 	#### SET SYSTEM CALL
-	my @systemcall = ($libs, $usage, $prefix, $application, @$arguments);
+	my @systemcall = ();
+	push @systemcall, $libs;
+	push @systemcall, $usage;
+	push @systemcall, $executor if defined $executor and $executor ne "";
+	push @systemcall, $application;
+	push @systemcall, @$arguments;
 	$self->logDebug("SYSTEMCALL", \@systemcall);
 	
 	#### REDIRECTION IS 1 IF SYSTEM CALL CONTAINS A ">"
@@ -379,7 +379,7 @@ method setStageJob {
 	
 	#### SET EXECUTOR
 	my $executor	.=	"export PERL5LIB=$perl5lib; ";
-	$executor 		.= 	$self->executor() if $self->executor();
+	$executor 		.= 	$self->executor() if defined $self->executor();
 	#$self->logDebug("$$ self->executor(): " . $self->executor());
 
 	#### SET APPLICATION

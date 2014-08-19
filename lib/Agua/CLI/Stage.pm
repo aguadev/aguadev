@@ -24,6 +24,7 @@ class Stage with (MooseX::Getopt, MooseX::LogDispatch) extends App {
     has 'location'	=> ( isa => 'Str|Undef', is => 'rw', required => 0 );
     has 'submit'	=> ( isa => 'Maybe', is => 'rw', default => 0 );
     has 'executor'	=> ( isa => 'Str|Undef', is => 'rw', default => 0 );
+    has 'envarfile'	=> ( isa => 'Str|Undef', is => 'rw', default => 0 );
     has 'version'	=> ( isa => 'Str|Undef', is => 'rw', default => 0 );
     has 'installdir'=> ( isa => 'Str|Undef', is => 'rw', default => 0 );
     has 'cluster'	=> ( isa => 'Str|Undef', is => 'rw', default => 0 );
@@ -36,7 +37,7 @@ class Stage with (MooseX::Getopt, MooseX::LogDispatch) extends App {
     has 'param'	    => ( isa => 'Str', is => 'rw', required => 0 );
     has 'field'	    => ( isa => 'Str', is => 'rw', required => 0 );
     has 'value'	    => ( isa => 'Str', is => 'rw', required => 0 );
-    has 'fields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['owner', 'name', 'number', 'type', 'location', 'submit', 'executor', 'cluster', 'description', 'notes'] } );
+    has 'fields'    => ( isa => 'ArrayRef[Str|Undef]', is => 'rw', default => sub { ['owner', 'name', 'number', 'type', 'location', 'submit', 'executor', 'envarfile', 'cluster', 'description', 'notes'] } );
     has 'inputfile'	=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
     has 'outputfile'=> ( isa => 'Str|Undef', is => 'rw', required => 0, default => '' );
     has 'dbfile'    => ( isa => 'Str|Undef', is => 'rw', required => 0 );
