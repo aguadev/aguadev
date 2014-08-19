@@ -279,7 +279,7 @@ completed=''};
 
 	#### WAIT FOR JOB TO FINISH
 	$self->logDebug("$$ Doing wait for command to complete");
-	wait;
+	#wait;
 
 	#### PAUSE FOR RESULT FILE TO BE WRITTEN 
 	sleep(3);
