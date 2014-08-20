@@ -230,7 +230,10 @@ method receiveTask ($taskqueue) {
 		durable => 1,
 	);
 	
-	print "[*] Waiting for tasks in queue: $taskqueue\n";
+	#### GET HOST
+	my $host		=	$self->conf()->getKey("queue:host", undef);
+
+	print "[*] Waiting for tasks in host $host taskqueue '$taskqueue'\n";
 	
 	$channel->qos(prefetch_count => 1,);
 	
@@ -245,7 +248,7 @@ method receiveTask ($taskqueue) {
 			#print "Listener::receiveTask    DOING CALLBACK";
 		
 			my $body 	= 	$var->{body}->{payload};
-			print " [x] Received task in taskqueue '$taskqueue'\n";
+			print " [x] Received task in host $host taskqueue '$taskqueue'\n";
 		
 			my @c = $body =~ /\./g;
 		
@@ -334,7 +337,10 @@ method sendTask ($task) {
 		body => $json,
 	);
 	
-	print " [x] Sent TASK: '$json'\n";
+	#### GET HOST
+	my $host		=	$self->conf()->getKey("queue:host", undef);
+
+	print " [x] Sent TASK in host $host taskqueue '$queuename': '$json'\n";
 }
 
 method addTaskIdentifiers ($task) {
@@ -438,16 +444,16 @@ method updateQueueSample ($data) {
 #### DELETE
 method deleteInstance ($data) {
 	#$self->logDebug("data", $data);
-	my $id			=	$data->{id};
-	$self->logDebug("id", $id);
+	my $host			=	$data->{host};
+	$self->logDebug("host", $host);
 
-	my $username	=	$self->getUsernameFromInstance($id);
+	my $username	=	$self->getUsernameFromInstance($host);
 
 	my $authfile	=	$self->printAuth($username);
-	my $success		=	$self->virtual()->deleteNode($authfile, $id);
+	my $success		=	$self->virtual()->deleteNode($authfile, $host);
 	$self->logDebug("success", $success);
 
-	$self->updateInstanceStatus($id, "deleted");
+	$self->updateInstanceStatus($host, "deleted");
 
 	return $success;
 }
@@ -475,9 +481,9 @@ method getAuthFile ($username, $tenant) {
 	return	$authfile;
 }
 
-method getUsernameFromInstance ($id) {
+method getUsernameFromInstance ($host) {
 	my $query		=	qq{SELECT queue FROM instance
-WHERE host='$id'
+WHERE host='$host'
 };
 	#$self->logDebug("query", $query);
 	my $queue		=	$self->db()->query($query);

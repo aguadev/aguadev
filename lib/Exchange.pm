@@ -255,6 +255,11 @@ method receiveTask ($taskqueue) {
 	my $handler	= *handleTask;
 	use warnings;
 	my $this	=	$self;
+
+	#### GET HOST
+	my $host		=	$self->conf()->getKey("queue:host", undef);
+	
+	print " [x] Receiving tasks in host $host taskqueue '$taskqueue'\n";
 	
 	$channel->consume(
 		on_consume	=>	sub {
@@ -262,7 +267,7 @@ method receiveTask ($taskqueue) {
 			#print "Listener::receiveTask    DOING CALLBACK";
 		
 			my $body 	= 	$var->{body}->{payload};
-			print " [x] Received task in taskqueue '$taskqueue'\n";
+			print " [x] Received task in host $host taskqueue '$taskqueue': $body\n";
 		
 			my @c = $body =~ /\./g;
 		
@@ -350,8 +355,10 @@ method sendTask ($task) {
 		routing_key 	=> $queuename,
 		body 			=> $json
 	);
+
+	my $host		=	$self->conf()->getKey("queue:host", undef);
 	
-	print " [x] Sent TASK: '$json'\n";
+	print " [x] Sent task in host $host taskqueue '$queuename': '$json'\n";
 }
 
 method addTaskIdentifiers ($task) {
@@ -383,9 +390,7 @@ method setQueueName ($task) {
 	my $notdefined	=	$self->notDefined($task, ["username", "project", "workflow"]);
 	$self->logDebug("notdefined", $notdefined);
 	
-$self->logDebug("DEBUG EXIT") and exit;
-
-	$self->logCritical("not defined XXX", @$notdefined) and return if @$notdefined;
+	$self->logCritical("notdefined", @$notdefined) and return if @$notdefined;
 	
 	my $username	=	$task->{username};
 	my $project		=	$task->{project};
@@ -414,6 +419,9 @@ method notDefined ($hash, $fields) {
 
 #### FANOUT
 method sendFanout ($exchange, $message) {
+	
+	my $key	=	"chat";
+	
 	my $host	=	$self->host();
 	my $port	=	$self->port();
 	my $user	=	$self->user();
@@ -432,17 +440,19 @@ method sendFanout ($exchange, $message) {
 	
 	$chan->publish(
 		exchange => '',
-		routing_key => 'hello',
-		#routing_key => 'chat',
-		body => 'Hello World!',
+		routing_key => '$key',
+		body => '$message',
 	);
 	
-	print " [x] Sent 'Hello World!'\n";
+	print " [x] Sent fanout on host $host routing key '$key': $message\n";
 	
 	$connection->close();	
 }
 
 method receiveFanout ($message) {
+	
+	my $key	=	"chat";
+	
 	my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
 		host => 'localhost',
 		port => 5672,
@@ -468,14 +478,17 @@ method receiveFanout ($message) {
 		queue => $queue_name,
 	);
 	
-	print " [*] Waiting for logs. To exit press CTRL-C\n";
+	#### GET HOST
+	my $host		=	$self->conf()->getKey("queue:host", undef);
+	
+	print " [*] Waiting for fanout on host $host routing key '$key'\n";
 	
 	no warnings;
 	sub callback {
 		my $var = shift;
 		my $body = $var->{body}->{payload};
 	
-		print " [x] $body\n";
+		print " [x] Received fanout on host $host routing key '$key'$body\n";
 	}
 	use warnings;
 		

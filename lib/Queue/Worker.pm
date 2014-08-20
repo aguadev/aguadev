@@ -163,7 +163,10 @@ method receiveTask {
 		durable => 1,
 	);
 	
-	print "$$ [*] Waiting for tasks in queue: $taskqueue\n";
+	#### GET HOST
+	my $host		=	$self->conf()->getKey("queue:host", undef);
+
+	print "$$ [*] Waiting for tasks in host $host taskqueue '$taskqueue'\n";
 	
 	$channel->qos(prefetch_count => 1,);
 	
@@ -175,10 +178,10 @@ method receiveTask {
 	$channel->consume(
 		on_consume	=>	sub {
 			my $var 	= 	shift;
-			print "$$ Exchange::receiveTask    DOING CALLBACK";
+			#print "$$ Exchange::receiveTask    DOING CALLBACK";
 		
 			my $body 	= 	$var->{body}->{payload};
-			print " [x] Received $body\n";
+			print " [x] Received task in host $host taskqueue '$taskqueue': $body\n";
 		
 			my @c = $body =~ /\./g;
 		
@@ -232,15 +235,15 @@ method handleTask ($json) {
 
 method sendTask ($task) {	
 	$self->logDebug("task", $task);
+
+	#### GET QUEUE
+	my $queuename	=	$task->{queue};
+	$self->logDebug("queuename", $queuename);
+
 	my $processid	=	$$;
 	#$self->logDebug("processid", $processid);
 	$task->{processid}	=	$processid;
 
-	#### SET QUEUE
-	my $queuename		=	"update.job.status";
-	$task->{queue}		=	$queuename;
-	#$self->logDebug("queuename", $queuename);
-	
 	#### ADD UNIQUE IDENTIFIERS
 	$task	=	$self->addTaskIdentifiers($task);
 
@@ -248,7 +251,10 @@ method sendTask ($task) {
 	my $json = $jsonparser->encode($task);
 	$self->logDebug("json", $json);
 
-	Coro::async_pool {
+	#### GET HOST
+	my $host		=	$self->conf()->getKey("queue:host", undef);
+	$self->logDebug("host", $host);
+	#Coro::async_pool {
 
 		#### GET CONNECTION
 		my $connection	=	$self->newConnection();
@@ -269,14 +275,20 @@ method sendTask ($task) {
 			body => $json,
 		);
 	
-		print " [x] Sent TASK (queue: $queuename) $task->{mode} $task->{id}\n";
-
-	}
+		print " [x] Sent TASK in host $host taskqueue '$queuename': $task->{mode}\n";
+	#}
 	
 }
 
 method addTaskIdentifiers ($task) {
+	#### SET TIME
+	$task->{time}		=	$self->getMysqlTime();
 	
+	#### SET HOST
+	my $host			=	`facter ipaddress`;
+	$host				=~	s/\s+$//;
+	$task->{host}		=	$host;
+
 	#### SET TOKEN
 	$task->{token}		=	$self->token();
 	
@@ -335,7 +347,10 @@ method receiveTopic {
 		);
 	}
 	
-	print " [*] Listening for topics: @$keys\n";
+	#### GET HOST
+	my $host		=	$self->conf()->getKey("queue:host", undef);
+
+	print " [*] Listening for host $host topics: @$keys\n";
 
 	no warnings;
 	my $handler	= *handleTopic;
@@ -347,7 +362,7 @@ method receiveTopic {
 			my $var = shift;
 			my $body = $var->{body}->{payload};
 		
-			print " [x] Received message: $body\n";
+			print " [x] Received host $host message: $body\n";
 			&$handler($this, $body);
 		},
 		no_ack => 1,
@@ -447,13 +462,11 @@ method verifyShutdown {
 }
 
 method sendDeleteInstance ($host) {
-	$self->logDebug("");
+	$self->logDebug("host", $host);
 	
-	my $time		=	$self->getMysqlTime();
 	my $data		=	{
-		time		=>	$time,
-		id			=>	$host,
-		mode		=>	"deleteInstance"
+		mode		=>	"deleteInstance",
+		queue		=>	"update.host.status"
 	};
 
 	#### REPORT HOST STATUS TO 

@@ -1416,12 +1416,16 @@ method updateJobStatus ($stage, $status) {
 		$data->{$field}	=	$stage->$field();
 	}
 
+	#### SET QUEUE IF NOT DEFINED
+	my $queue		=	"update.job.status";
+	$self->logDebug("queue", $queue);
+	$data->{queue}	=	$queue;
+	
 	#### SAMPLE HASH
 	my $samplehash		=	$self->samplehash();
 	#$self->logDebug("samplehash", $samplehash);
-	my $sample		=	$self->sample();
+	my $sample			=	$self->sample();
 	#$self->logDebug("sample", $sample);
-	
 	$data->{sample}		=	$sample;
 	
 	#### TIME
@@ -1433,7 +1437,7 @@ method updateJobStatus ($stage, $status) {
 	
 	#### ADD stage... TO NAME AND NUMBER
 	$data->{stage}		=	$stage->name();
-	$data->{stagenumber}	=	$stage->number();
+	$data->{stagenumber}=	$stage->number();
 
 	#### ADD ANCILLARY DATA
 	$data->{status}		=	$status;	
@@ -1453,12 +1457,9 @@ method updateJobStatus ($stage, $status) {
 	return if not defined $self->worker();
 	
 	#### SEND TOPIC	
-	#$self->logDebug("$$ DOING worker->sendTopic");
 	$self->logDebug("$$ sending data", $data);
-	my $key = "update.job.status";
 	$self->worker()->sendTask($data);
-
-	#$self->logDebug("$$ topic sent");
+	$self->logDebug("$$ topic sent");
 }
 method getHostName {
 	my $facter		=	`which facter`;

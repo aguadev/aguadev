@@ -194,12 +194,12 @@ method addNode {
 	return $nodeid;
 }
 
-method deleteNode ($authfile, $id) {
-	$self->_deleteNode($authfile, $id);
+method deleteNode ($authfile, $host) {
+	$self->_deleteNode($authfile, $host);
 	
 	my $novalist	=	$self->getNovaList($authfile);
 	
-	my $taskstate	=	$novalist->{$id}->{taskstate};	
+	my $taskstate	=	$novalist->{$host}->{taskstate};	
 	$self->logDebug("taskstate", $taskstate);
 	
 	my $success = 0;
@@ -209,11 +209,11 @@ method deleteNode ($authfile, $id) {
 	return $success;
 }
 
-method _deleteNode ($authfile, $id) {
+method _deleteNode ($authfile, $host) {
 	$self->logNote("authfile", $authfile);
-	$self->logNote("id", $id);
+	$self->logNote("host", $host);
 	
-	my $command		=	qq{. $authfile && nova delete $id};
+	my $command		=	qq{. $authfile && nova delete $host};
 	my ($out, $err)	=	$self->runCommand($command);
 	$self->logNote("out", $out);
 	$self->logNote("err", $err);
