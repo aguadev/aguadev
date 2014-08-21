@@ -255,7 +255,7 @@ method setExchange () {
 	
 	my $exchange	=	Exchange->new({
 		logfile		=>	$self->logfile(),
-		log		=>	$self->log(),
+		log			=>	$self->log(),
 		printlog	=>	$self->printlog(),
 		conf		=>	$self->conf()
 	});

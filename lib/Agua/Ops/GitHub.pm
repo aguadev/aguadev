@@ -269,7 +269,7 @@ method disableHostKeyChecking ($hubtype) {
 	my $host		=	"github.com";
 	$host			=	"bitbucket.org" if $hubtype eq "bitbucket";
 	
-	my $homedir		=	$ENV{'HOME'};
+	my $homedir		=	$ENV{'HOME'} || "/root";
 	my $sshconfig	=	"$homedir/.ssh/config";
 	my $found	=	"";
 	if ( -f $sshconfig ) {

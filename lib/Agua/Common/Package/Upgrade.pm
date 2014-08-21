@@ -121,7 +121,7 @@ method upgrade {
 		owner		=>	$owner,
 		conf		=>	$self->conf(),
 		db			=>	$self->db(),
-		log		=>	$self->log(),
+		log			=>	$self->log(),
 		printlog	=>	$self->printlog(),
 		showreport	=>	0,
 		logfile		=>	$self->logfile()

@@ -184,7 +184,7 @@ method balanceInstances ($workflows) {
 
 #### DEBUG
 
-$quota		=	40;
+$quota		=	2;
 
 $self->logDebug("DEBUG quota", $quota);
 
@@ -759,8 +759,9 @@ method getResourceCounts ($queues, $durations, $instancetypes, $quota) {
 	#$self->logDebug("instancetypes", $instancetypes);
 	
 	#### GET INDEX OF LATEST RUNNING WORKFLOW
-	my $lateststarted =	$self->getLatestStarted($queues);
+	my $lateststarted 	=	$self->getLatestStarted($queues);
 	$self->logDebug("lateststarted", $lateststarted);
+	$lateststarted		=	$self->getLatestCompleted($queues) if not defined $lateststarted;
 
 	#### GET FIRST DURATION
 	my $firstqueue		=	$self->getQueueName($$queues[0]);
