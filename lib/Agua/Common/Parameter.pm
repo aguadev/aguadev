@@ -26,7 +26,8 @@ sub getParametersByStage {
 	my $required = ["username", "project", "workflow", "appname", "appnumber"];
 	my $where = $self->db()->where($stageobject, $required);
 	my $query = qq{SELECT * FROM stageparameter
-$where};
+$where
+ORDER BY ordinal};
 	#$self->logDebug("$query");
 
 	my $parameters = $self->db()->queryhasharray($query);
@@ -147,7 +148,7 @@ sub _removeStageParameter {
 
 	#### SET TABLE AND REQUIRED FIELDS	
 	my $table = "stageparameter";
-	my $required_fields = ["username", "project", "workflow", "appname", "appnumber", "name"];
+	my $required_fields = ["username", "project", "workflow", "appname", "appnumber", "name", "ordinal"];
 
 	#### CHECK REQUIRED FIELDS ARE DEFINED
 	my $not_defined = $self->db()->notDefined($data, $required_fields);

@@ -184,7 +184,7 @@ method balanceInstances ($workflows) {
 
 #### DEBUG
 
-$quota		=	2;
+$quota		=	40;
 
 $self->logDebug("DEBUG quota", $quota);
 
@@ -336,7 +336,8 @@ method shutdownInstance ($workflow, $id) {
 
 	my $stages			=	$self->getStagesByWorkflow($workflow);
 	my $object			=	$$stages[0];
-	my $installdir		=	$object->{installdir};
+	my $package			=	$object->{package};
+	my $installdir		=	$self->getInstallDir($package);
 	my $version			=	$object->{version};
 	my $teardownfile	=	$self->setTearDownFile($installdir, $version);
 	#$self->logDebug("teardownfile", $teardownfile);

@@ -870,6 +870,22 @@ sub byRegex {
 	$aa <=> $bb;
 }
 
+sub sortByNumber {
+	my $self		=	shift;
+	my $array		=	shift;
+	
+	my $numbersort	=	sub {
+		my ($aa) = $a =~ /(\d+)/;
+		my ($bb) = $b =~ /(\d+)/;
+	
+		$aa <=> $bb;
+	};
+	
+	@$array	=	sort $numbersort @$array;
+	
+	return $array;
+}
+
 
 1;
 

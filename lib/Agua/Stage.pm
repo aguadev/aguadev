@@ -644,7 +644,7 @@ method setArguments ($stageparameters) {
 	#### SANITY CHECK
 	return if not defined $stageparameters;
 	return if ref($stageparameters) eq '';
-	
+
 	#### GET FILEROOT
 	my $username 	= $self->username();
 	my $cluster 	= $self->cluster();
@@ -656,7 +656,7 @@ method setArguments ($stageparameters) {
 	$self->logNote("version", $version);
 	
 	#### SORT BY ORDINALS
-	@$stageparameters = sort { $a->{ordinal} cmp $b->{ordinal} } @$stageparameters;
+	@$stageparameters = sort { $a->{ordinal} <=> $b->{ordinal} } @$stageparameters;
 	#$self->logNote("SORTED stageparameters", $stageparameters);
 	
 	#### GENERATE ARGUMENTS ARRAY
@@ -784,7 +784,6 @@ method setArguments ($stageparameters) {
 
 	return $arguments;
 }
-
 
 method registerRunInfo {
 =head2

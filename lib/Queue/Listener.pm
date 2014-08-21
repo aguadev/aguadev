@@ -256,11 +256,11 @@ method receiveTask ($taskqueue) {
 			&$handler($this, $body);
 			
 			my $sleep	=	$self->sleep();
-			print "Sleeping $sleep seconds\n";
+			#print "Sleeping $sleep seconds\n";
 			sleep($sleep);
 			
 			#### SEND ACK AFTER TASK COMPLETED
-			print "Listener::receiveTask    sending ack\n";
+			#print "Listener::receiveTask    sending ack\n";
 			$channel->ack();
 		},
 		no_ack => 0,
@@ -392,10 +392,10 @@ method notDefined ($hash, $fields) {
 
 #### UPDATE
 method updateJobStatus ($data) {
-	$self->logDebug("data", $data);
+	$self->logNote("data", $data);
 	$self->logDebug("data not defined") and return if not defined $data;
 	$self->logDebug("sample not defined") and return if not defined $data->{sample};
-	$self->logDebug("$data->{sample} $data->{status} $data->{time}");
+	$self->logDebug("$data->{host} $data->{sample} $data->{status} $data->{time}");
 	
 	#### UPDATE queuesamples TABLE
 	$self->updateQueueSample($data);	

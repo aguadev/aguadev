@@ -518,6 +518,13 @@ method printToFile ($file, $text) {
     close(FILE) or die "Can't close file: $file\n";
 }
 
+method runCommand ($data) {
+	my $commands	=	$data->{commands};
+	foreach my $command ( @$commands ) {
+		print `$command`;
+	}
+}
+
 #### SET VIRTUALISATION PLATFORM
 method setVirtual {
 	my $virtualtype		=	$self->conf()->getKey("agua", "VIRTUALTYPE");

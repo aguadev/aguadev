@@ -1539,7 +1539,8 @@ method setStageParameters ($stages, $data) {
 		my $keys = ["username", "project", "workflow", "appname", "appnumber"];
 		my $where = $self->db()->where($$stages[$i], $keys);
 		my $query = qq{SELECT * FROM stageparameter
-$where AND paramtype='input'};
+$where AND paramtype='input'
+ORDER BY ordinal};
 		#$self->logDebug("$$ query", $query);
 
 		my $stageparameters = $self->db()->queryhasharray($query);
