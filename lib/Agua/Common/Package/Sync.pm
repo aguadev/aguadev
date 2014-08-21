@@ -547,7 +547,7 @@ method stageParameterToDatabase ($username, $package, $installdir, $stage, $para
 	$paramdata->{appname}		=	$stage->name();
 	$paramdata->{version}		=	$stage->version();
 	$paramdata->{type}			=	$stage->type();
-	$paramdata->{ordinal}		=	"" if not defined $paramdata->{ordinal};
+	$paramdata->{ordinal}		=	0 if not defined $paramdata->{ordinal};
 	$self->logDebug("AFTER paramdata", $paramdata);	
 
 	#### REMOVE STAGE PARAMETER

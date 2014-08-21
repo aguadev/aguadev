@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS parameter
     paramtype       VARCHAR(40) NOT NULL default '',  
     category        VARCHAR(40) NOT NULL default '',  
     valuetype       VARCHAR(20) NOT NULL default '',  
-    argument        VARCHAR(40) NOT NULL default '',  
+    argument        VARCHAR(255) NOT NULL default '',  
     value           TEXT,
     discretion      VARCHAR(10) NOT NULL default '',
     format          VARCHAR(40),                      
