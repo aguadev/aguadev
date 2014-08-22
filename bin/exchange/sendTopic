@@ -59,6 +59,9 @@ my $pass		=	$conf->getKey("queue:pass", undef) || "guest";
 my $vhost		=	$conf->getKey("queue:vhost", undef) || "/";
 my $keys		=	$conf->getKey("queue:topickeys", undef) || "test.exchange.topic";
 my $exchange	=	$conf->getKey("queue:topicexchange", undef) || "test.exchange";
+
+my $log			=	2;
+my $printlog	=	2;
 my $help;
 
 GetOptions (
@@ -102,7 +105,7 @@ $channel->publish(
     body => $message,
 );
 
-print " [x] Sent topic message to routing keys $keys: $message\n";
+print " [x] Sent topic message on host $host exchange $exchange to routing keys $keys: $message\n";
 
 $conn->close();
 

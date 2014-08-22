@@ -166,7 +166,7 @@ method parseNovaList ($output) {
 }
 
 method parseOutputColumns ($output) {
-	#$self->logDebug("output", $output);
+	$self->logDebug("output", $output);
 	my ($line)	=	$output	=~ /^.+?(\|\s+ID[^\n]+)/msg;
 	$self->logDebug("line", $line);
 

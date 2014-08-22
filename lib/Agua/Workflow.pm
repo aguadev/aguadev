@@ -531,8 +531,9 @@ method executeWorkflow {
 
 	#### ADD QUEUE SAMPLE
 	my $uuid	=	$samplehash->{sample};
-	$self->addQueueSample($uuid, $status, $data) if defined $uuid;
-		
+	my $success	=	$self->addQueueSample($uuid, $status, $data) if defined $uuid;
+	$self->logDebug("success", $success);
+	
 	print "Completed workflow $project.$workflow\n";
 
 	$self->logGroupEnd("$$ Agua::Workflow::executeWorkflow    COMPLETED");
@@ -1461,11 +1462,12 @@ method updateJobStatus ($stage, $status) {
 	$self->worker()->sendTask($data);
 	$self->logDebug("$$ topic sent");
 }
+
 method getHostName {
 	my $facter		=	`which facter`;
 	$facter			=~	s/\s+$//;
 	#$self->logDebug("facter", $facter);
-	my $hostname	=	`$facter ipaddress`;	
+	my $hostname	=	`$facter hostname`;	
 	$hostname		=~ 	s/\s+$//;
 	#$self->logDebug("hostname", $hostname);
 

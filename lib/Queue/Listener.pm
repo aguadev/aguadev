@@ -80,7 +80,8 @@ method initialise ($args) {
 method listen {
 	$self->logDebug("");
 	
-	$self->receiveTask("update.job.status");
+	my $taskqueues	=	["update.job.status", "update.host.status"];
+	$self->receiveTask($taskqueues);
 }
 
 #### TOPICS
@@ -218,53 +219,61 @@ method handleTopic ($json) {
 }
 
 #### TASKS
-method receiveTask ($taskqueue) {
-	$self->logDebug("taskqueue", $taskqueue);
+method receiveTask ($taskqueues) {
+
+	#$self->logDebug("taskqueues", $taskqueues);
 	
 	#### OPEN CONNECTION
 	my $connection	=	$self->newConnection();	
 	my $channel 	= 	$connection->open_channel();
-	#$self->channel($channel);
-	$channel->declare_queue(
-		queue => $taskqueue,
-		durable => 1,
-	);
-	
-	#### GET HOST
-	my $host		=	$self->conf()->getKey("queue:host", undef);
 
-	print "[*] Waiting for tasks in host $host taskqueue '$taskqueue'\n";
+	foreach my $taskqueue ( @$taskqueues ) {
+		#$self->logDebug("taskqueue", $taskqueue);
 	
-	$channel->qos(prefetch_count => 1,);
+		#$self->channel($channel);
+		$channel->declare_queue(
+			queue => $taskqueue,
+			durable => 1,
+		);
+		
+		#### GET HOST
+		my $host		=	$self->conf()->getKey("queue:host", undef);
 	
-	no warnings;
-	my $handler	= *handleTask;
-	use warnings;
-	my $this	=	$self;
-	
-	$channel->consume(
-		on_consume	=>	sub {
-			my $var 	= 	shift;
-			#print "Listener::receiveTask    DOING CALLBACK";
+		print "[*] Waiting for tasks in host $host taskqueue '$taskqueue'\n";
 		
-			my $body 	= 	$var->{body}->{payload};
-			print " [x] Received task in host $host taskqueue '$taskqueue'\n";
+		$channel->qos(prefetch_count => 1,);
 		
-			my @c = $body =~ /\./g;
+		no warnings;
+		my $handler	= *handleTask;
+		use warnings;
+		my $this	=	$self;
 		
-			#### RUN TASK
-			&$handler($this, $body);
+		$channel->consume(
+			on_consume	=>	sub {
+				my $var 	= 	shift;
+				#print "Listener::receiveTask    DOING CALLBACK";
 			
-			my $sleep	=	$self->sleep();
-			#print "Sleeping $sleep seconds\n";
-			sleep($sleep);
+				my $body 	= 	$var->{body}->{payload};
+				print " [x] Received task in host $host taskqueue '$taskqueue'\n";
+				print "body: $body\n";
 			
-			#### SEND ACK AFTER TASK COMPLETED
-			#print "Listener::receiveTask    sending ack\n";
-			$channel->ack();
-		},
-		no_ack => 0,
-	);
+				my @c = $body =~ /\./g;
+			
+				#### RUN TASK
+				&$handler($this, $body);
+				
+				my $sleep	=	$self->sleep();
+				#print "Sleeping $sleep seconds\n";
+				sleep($sleep);
+				
+				#### SEND ACK AFTER TASK COMPLETED
+				#print "Listener::receiveTask    sending ack\n";
+				$channel->ack();
+			},
+			no_ack => 0,
+		);
+		
+	}
 	
 	#### SET self->connection
 	$self->connection($connection);
@@ -448,8 +457,11 @@ method deleteInstance ($data) {
 	$self->logDebug("host", $host);
 
 	my $username	=	$self->getUsernameFromInstance($host);
+	$self->logDebug("username", $username);
 
 	my $authfile	=	$self->printAuth($username);
+	$self->logDebug("authfile", $authfile);
+
 	my $success		=	$self->virtual()->deleteNode($authfile, $host);
 	$self->logDebug("success", $success);
 
@@ -482,10 +494,11 @@ method getAuthFile ($username, $tenant) {
 }
 
 method getUsernameFromInstance ($host) {
+	$self->logDebug("host", $host);
 	my $query		=	qq{SELECT queue FROM instance
-WHERE host='$host'
+WHERE LOWER(host) LIKE LOWER('$host')
 };
-	#$self->logDebug("query", $query);
+	$self->logDebug("query", $query);
 	my $queue		=	$self->db()->query($query);
 	#$self->logDebug("queue", $queue);
 	

@@ -218,8 +218,6 @@ method handleTask ($json) {
 	$self->setDbh() if not defined $self->db();
 
 	my $workflow = Agua::Workflow->new($data);
-	print "$$ workflow: $workflow\n";
-	$self->logDebug("new Agua::Workflow object: $workflow");
 
 	#### SET STATUS TO running
 	$self->conf()->setKey("agua", "STATUS", "running");
@@ -254,7 +252,7 @@ method sendTask ($task) {
 	#### GET HOST
 	my $host		=	$self->conf()->getKey("queue:host", undef);
 	$self->logDebug("host", $host);
-	#Coro::async_pool {
+	Coro::async_pool {
 
 		#### GET CONNECTION
 		my $connection	=	$self->newConnection();
@@ -276,7 +274,7 @@ method sendTask ($task) {
 		);
 	
 		print " [x] Sent TASK in host $host taskqueue '$queuename': $task->{mode}\n";
-	#}
+	}
 	
 }
 
@@ -284,10 +282,10 @@ method addTaskIdentifiers ($task) {
 	#### SET TIME
 	$task->{time}		=	$self->getMysqlTime();
 	
-	#### SET HOST
-	my $host			=	`facter ipaddress`;
-	$host				=~	s/\s+$//;
-	$task->{host}		=	$host;
+	##### SET IP ADDRESS
+	my $ipaddress			=	`facter ipaddress`;
+	$ipaddress				=~	s/\s+$//;
+	$task->{ipaddress}		=	$ipaddress;
 
 	#### SET TOKEN
 	$task->{token}		=	$self->token();
@@ -392,17 +390,20 @@ method handleTopic ($json) {
 
 method doShutdown ($data) {
 	$self->logDebug("data", $data);
-	my $targethost	=	lc($data->{host});
+	my $targethost		=	lc($data->{host});
 	$self->logDebug("targethost", $targethost);
-	my $hostname	=	$self->getHostname();
+	my $hostname		=	$self->getHostname();
 	$self->logDebug("hostname", $hostname);
 	
 	$self->logDebug("No hostname match ($targethost vs $hostname). Skipping shutdown") and return if $targethost ne $hostname;
 	
-	my $status	=	$self->conf()->getKey("agua:STATUS", undef);
+	#### SET HOSTNAME IN CONFIG
+	$self->conf()->setKey("agua:HOSTNAME", undef, $hostname);
+
+	my $status			=	$self->conf()->getKey("agua:STATUS", undef);
 	$self->logDebug("status", $status);
 
-	my $teardown	=	$data->{teardown};
+	my $teardown		=	$data->{teardown};
 	my $teardownfile	=	$data->{teardownfile};
 	$self->logDebug("teardown", $teardown);
 	$self->logDebug("teardownfile", $teardownfile);
@@ -412,8 +413,12 @@ method doShutdown ($data) {
 		$self->conf()->setKey("agua:TEARDOWNFILE", undef, $teardownfile);
 	}
 	
+	$self->logDebug("status", $status);
+	
 	#### IF NO WORKFLOW IS RUNNING THEN NOTIFY MASTER TO DELETE HOST
 	if ( $status ne "running" ) {
+		$self->logDebug("Executing teardownfile: $teardownfile");
+	
 		#### DO TEARDOWN
 		my $teardownfile	=	$self->conf()->getKey("agua:TEARDOWNFILE", undef);
 		$self->logDebug("teardownfile", $teardownfile);
@@ -425,28 +430,22 @@ method doShutdown ($data) {
 			`$teardownfile`;
 		}
 		
-		#### SEND DELETE INSTANCE 
+		#### SEND DELETE INSTANCE
+		$self->logDebug("DOING self->sendDeleteInstance()");
 		$self->sendDeleteInstance($data->{host});
 	}
 	else {
 		#### SET SHUTDOWN TO true
 		$self->conf()->setKey("agua:SHUTDOWN", undef, "true");
 	}
+	$self->logDebug("completed");
 }
 
 method getHostname {
 
-	#### GET OPENSTACK HOST NAME
-	#### E.G., split.v2-5.hd800-real-de2e4a8b-7034-4525-ab3e-33fc993797f8.novalocal
-	my $hostname	=	$self->virtual()->getMetaData("hostname");
-	$hostname		=~	s/\.novalocal\s*$//;
-	$self->logDebug("hostname", $hostname);
-	
-	#### OTHERWISE, GET LOCAL HOSTNAME
-	if ( $hostname eq "" ) {
-		$hostname	=	`hostname`;
-		$hostname	=~	s/\s+$//g;
-	}
+	#### GET LOCAL HOSTNAME
+	my $hostname	=	`facter hostname`;
+	$hostname		=~	s/\s+$//g;
 
 	return $hostname;	
 }
@@ -455,9 +454,13 @@ method verifyShutdown {
 	my $shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
 	$self->logDebug("shutdown", $shutdown);
 	
+	#### GET HOSTNAME FROM CONFIG
+	my $host		=	$self->conf()->getKey("agua:HOSTNAME", undef);
+	$self->logDebug("host", $host);
+
 	if ( $shutdown eq "true" ) {
-		$self->logDebug("DOING self->sendDeleteInstance()");
-		$self->sendDeleteInstance();
+		$self->logDebug("DOING self->sendDeleteInstance($host)");
+		$self->sendDeleteInstance($host);
 	}
 }
 
@@ -465,6 +468,7 @@ method sendDeleteInstance ($host) {
 	$self->logDebug("host", $host);
 	
 	my $data		=	{
+		host		=>	$host,
 		mode		=>	"deleteInstance",
 		queue		=>	"update.host.status"
 	};
@@ -476,6 +480,9 @@ method sendDeleteInstance ($host) {
 method getHostName {
 	my $hostname	=	`facter hostname`;
 	$hostname		=~ 	s/\s+$//;
+	
+	$hostname		=	uc(substr($hostname, 0, 1)) . substr($hostname, 1);
+	$self->logDebug("hostname", $hostname);
 	
 	return $hostname;
 }
