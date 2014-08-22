@@ -274,7 +274,7 @@ method runLocally {
 	status='running',
 started=$now,
 queued=$now,
-completed=''};
+completed='0000-00-00 00:00:00'};
 	$self->setFields($set);
 
 	#### WAIT FOR JOB TO FINISH

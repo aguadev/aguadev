@@ -170,6 +170,12 @@ sub _addStageParameter {
 
 	#### DEFAULT PARAMTYPE IS 'input'
 	$data->{paramtype}	=	"input" if not defined $data->{paramtype};
+
+	#### ADD DEFAULTS
+	$data->{submit}		=	0 if not defined $data->{submit};
+	$data->{locked}		=	0 if not defined $data->{locked};
+	$data->{queued}		=	0 if not defined $data->{queued};
+	$data->{chained}	=	0 if not defined $data->{chained};
 	
 	#### CHECK REQUIRED FIELDS ARE DEFINED
 	my $not_defined = $self->db()->notDefined($data, $required_fields);

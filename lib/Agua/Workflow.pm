@@ -531,7 +531,7 @@ method executeWorkflow {
 
 	#### ADD QUEUE SAMPLE
 	my $uuid	=	$samplehash->{sample};
-	my $success	=	$self->addQueueSample($uuid, $status, $data) if defined $uuid;
+	$success	=	$self->addQueueSample($uuid, $status, $data) if defined $uuid;
 	$self->logDebug("success", $success);
 	
 	print "Completed workflow $project.$workflow\n";

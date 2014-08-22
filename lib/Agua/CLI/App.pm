@@ -48,15 +48,15 @@ class Agua::CLI::App with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::Statu
     #### STORED STATUS VARIABLES
     has 'status'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
     has 'locked'	    => ( isa => 'Int|Undef', is => 'rw', default => "0");
-    has 'queued'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
-    has 'started'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
-    has 'completed'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
+    has 'queued'	    => ( isa => 'Str|Undef', is => 'rw', default => "0000-00-00 00:00:00" );
+    has 'started'	    => ( isa => 'Str|Undef', is => 'rw', default => "0000-00-00 00:00:00" );
+    has 'completed'	    => ( isa => 'Str|Undef', is => 'rw', default => "0000-00-00 00:00:00" );
     has 'duration'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
     has 'epochqueued'	=> ( isa => 'Maybe', is => 'rw', default => undef );
     has 'epochstarted'	=> ( isa => 'Int|Undef', is => 'rw', default => undef );
     has 'epochstopped'  => ( isa => 'Int|Undef', is => 'rw', default => undef );
     has 'epochduration'	=> ( isa => 'Int|Undef', is => 'rw', default => undef );
-    has 'stagepid'	    => ( isa => 'Int|Undef', is => 'rw', default => undef );
+    has 'stagepid'	    => ( isa => 'Int|Undef', is => 'rw', default => 0 );
     has 'stagejobid'	=> ( isa => 'Int|Undef', is => 'rw', default => undef );
     has 'workflowpid'	=> ( isa => 'Int|Undef', is => 'rw', default => undef );
 

@@ -162,6 +162,9 @@ sub addStage {
 	my $self		=	shift;
  	$self->logNote("$$ Common::addStage()");
 
+	
+	
+	
 	#### VALIDATE    
     $self->logError("User session not validated") and exit unless $self->validate();
 
@@ -422,6 +425,13 @@ sub _addStage {
 	my $data		=	shift;
  	$self->logNote("$$ data", $data);	
 	
+	$data->{queued}	=	0 if not defined $data->{queued};
+	$data->{completed}	=	0 if not defined $data->{completed};
+	$data->{started}	=	0 if not defined $data->{started};
+	$data->{workflowpid}	=	0 if not defined $data->{workflowpid};
+	$data->{stagepid}	=	0 if not defined $data->{stagepid};
+	$data->{stagejobid}	=	0 if not defined $data->{stagejobid};
+
 	#### SET TABLE AND REQUIRED FIELDS	
 	my $table = "stage";
 	my $required_fields = ["username", "project", "workflow", "workflownumber", "name", "number", "type"];
