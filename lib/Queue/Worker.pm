@@ -398,7 +398,7 @@ method doShutdown ($data) {
 	$self->logDebug("No hostname match ($targethost vs $hostname). Skipping shutdown") and return if $targethost ne $hostname;
 	
 	#### SET HOSTNAME IN CONFIG
-	$self->conf()->setKey("agua:HOSTNAME", undef, $hostname);
+	$self->conf()->setKey("agua:HOSTNAME", undef, $data->{host});
 
 	my $status			=	$self->conf()->getKey("agua:STATUS", undef);
 	$self->logDebug("status", $status);
