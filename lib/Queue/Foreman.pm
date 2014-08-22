@@ -25,7 +25,7 @@ TO DO
 use strict;
 use warnings;
 
-class Queue::Worker with (Logger, Exchange, Agua::Common::Database, Agua::Common::Timer) {
+class Queue::Foreman with (Logger, Exchange, Agua::Common::Database, Agua::Common::Timer) {
 
 #####////}}}}}
 
@@ -68,85 +68,7 @@ method initialise ($args) {
 method listen {
 	$self->logDebug("");
 
-	my $childpid = fork;
-	if ( $childpid ) {
-		$self->logDebug("IN PARENT childpid", $childpid);
-		#### LISTEN FOR TASKS SENT FROM MASTER
-		$self->receiveTask();
-
-		#### PERIODICALLY SEND 'HEARTBEAT' NODE STATUS INFO
-		my $shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
-		while ( not $shutdown eq "true" ) {
-			my $sleep	=	$self->sleep();
-			print "Queue::Master::manage    Sleeping $sleep seconds\n";
-			sleep($sleep);
-			$self->heartbeat();
-			
-			$shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
-		}	
-	}
-	elsif ( defined $childpid ) {
-		$self->receiveTopic();
-	}
-}
-
-method heartbeat {
-	
-	my $time		=	$self->getMysqlTime();
-	my $host		=	$self->getHostName();
-
-	my $arch	=	$self->getArch();
-	if ( $arch eq "ubuntu" ) {
-		`if [ ! -f /usr/bin/mpstat ]; then  apt-get install -y sysstat; fi`;
-	}
-	elsif ( $arch eq "centos" ) {
-		`if [ ! -f /usr/bin/mpstat ]; then  yum install -y sysstat; fi`;
-	}
-	
-	my $cpu		=	$self->getCpu();
-	#$self->logDebug("cpu", $cpu);
-	
-	my $io		=	$self->getIo();
-	#$self->logDebug("io", $io);
-	
-	my $disk		=	$self->getDisk();
-	#$self->logDebug("disk", $disk);
-
-	my $memory		=	$self->getMemory();
-	#$self->logDebug("memory", $memory);
-		
-	my $data	=	{
-		queue	=>	"update.host.status",
-		host	=>	$host,
-		cpu		=>	$cpu,
-		io		=>	$io,
-		disk	=>	$disk,
-		memory	=>	$memory,
-		time	=>	$time,
-		mode	=>	"updateHeartbeat"
-	};
-	#$self->logDebug("data", $data);
-	
-	$self->sendTask($data);
-}
-
-method getHost {
-	return `hostname`;
-}
-method getIo {
-	return `iostat`;
-}
-
-method getCpu {
-	return `mpstat`;
-}
-
-method getDisk {
-	return `df -ah`;
-}
-
-method getMemory {
-	return `sar -r 1 1`;
+	$self->receiveTopic();
 }
 
 #### TASKS
@@ -461,15 +383,6 @@ method verifyShutdown {
 	if ( $shutdown eq "true" ) {
 		$self->logDebug("DOING self->sendDeleteInstance($host)");
 		$self->sendDeleteInstance($host);
-
-		$self->logDebug("DOING self->connection()->close()");
-		$self->connection()->close();
-
-		$self->logDebug("DOING service worker stop");
-		`service worker stop`;
-		
-		$self->logDebug("SHOULD NOT REACH HERE");
-		exit;
 	}
 }
 

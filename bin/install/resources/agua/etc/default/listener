@@ -1,0 +1,11 @@
+# Listener Upstart and SysVinit configuration file
+
+# Customize location of Listener binary (especially for development testing).
+#LISTENER="/usr/local/bin/listener"
+
+# Use LISTENER_OPTS to modify the daemon startup options.
+#LISTENER_OPTS="--showlog 4 --printlog 5"
+
+# If you need Listener to use a specific environment variable, it can also be specified here.
+export SOME_ENVIRONMENT_VARIABLE=somevalue
+

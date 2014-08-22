@@ -37,7 +37,7 @@ class Agua::CLI::App with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::Statu
     has 'envarfile'	=> ( isa => 'Str|Undef', is => 'rw', default => undef );
     has 'description'	=> ( isa => 'Str|Undef', is => 'rw', default => undef );
     has 'notes'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
-    has 'submit'	=> ( isa => 'Maybe', is => 'rw', default => undef );
+    has 'submit'	=> ( isa => 'Maybe', is => 'rw', default => "0"	);
     has 'parameters'=> ( isa => 'ArrayRef[Agua::CLI::Parameter]', is => 'rw', default => sub { [] } );
     has 'ordinal'	=> ( isa => 'Int|Undef', is => 'rw', default => undef, required => 0, documentation => q{Set order of appearance: 1, 2, ..., N} );
     has 'scrapefile'=> ( isa => 'Str|Undef', is => 'rw', default => undef );
@@ -47,7 +47,7 @@ class Agua::CLI::App with (Agua::CLI::Logger, Agua::CLI::Timer, Agua::CLI::Statu
     
     #### STORED STATUS VARIABLES
     has 'status'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
-    has 'locked'	    => ( isa => 'Int|Undef', is => 'rw', default => undef );
+    has 'locked'	    => ( isa => 'Int|Undef', is => 'rw', default => "0");
     has 'queued'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
     has 'started'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );
     has 'completed'	    => ( isa => 'Str|Undef', is => 'rw', default => undef );

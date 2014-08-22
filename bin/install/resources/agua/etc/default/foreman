@@ -1,0 +1,11 @@
+# Foreman Upstart and SysVinit configuration file
+
+# Customize location of Foreman binary (especially for development testing).
+#FOREMAN="/usr/local/bin/foreman"
+
+# Use FOREMAN_OPTS to modify the daemon startup options.
+#FOREMAN_OPTS="--showlog 4 --printlog 5"
+
+# If you need Foreman to use a specific environment variable, it can also be specified here.
+export SOME_ENVIRONMENT_VARIABLE=somevalue
+

@@ -1,14 +1,14 @@
 #!/bin/sh
 
 ### BEGIN INIT INFO
-# Provides:           master
+# Provides:           foreman
 # Required-Start:     $syslog $remote_fs
 # Required-Stop:      $syslog $remote_fs
 # Default-Start:      2 3 4 5
 # Default-Stop:       0 1 6
 # Short-Description:  Cloud-enabled bioinformatics workflow platform
 # Description:
-#  Master is an open-source bioinformatics workflow platform that can be used in
+#  Agua is an open-source bioinformatics workflow platform that can be used in
 #  local installations, the AWS cloud, OpenStack clusters and other settings.
 ### END INIT INFO
 
@@ -16,12 +16,12 @@ export PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
 
 BASE=$(basename $0)
 
-# modify these in /etc/default/$BASE (/etc/default/master)
-MASTER=/usr/bin/$BASE
-MASTER_PIDFILE=/var/run/$BASE.pid
-MASTER_LOGFILE=/var/log/$BASE.log
-MASTER_OPTS=
-MASTER_DESC="Master"
+# modify these in /etc/default/$BASE (/etc/default/foreman)
+FOREMAN=/usr/bin/$BASE
+FOREMAN_PIDFILE=/var/run/$BASE.pid
+FOREMAN_LOGFILE=/var/log/$BASE.log
+FOREMAN_OPTS=
+FOREMAN_DESC="Foreman"
 
 # Get lsb functions
 . /lib/lsb/init-functions
@@ -32,19 +32,19 @@ fi
 
 # see also init_is_upstart in /lib/lsb/init-functions (which isn't available in Ubuntu 12.04, or we'd use it)
 if [ -x /sbin/initctl ] && /sbin/initctl version 2>/dev/null | grep -q upstart; then
-	log_failure_msg "$MASTER_DESC is managed via upstart, try using service $BASE $1"
+	log_failure_msg "$FOREMAN_DESC is managed via upstart, try using service $BASE $1"
 	exit 1
 fi
 
-# Check master is present
-if [ ! -x $MASTER ]; then
-	log_failure_msg "$MASTER not present or not executable"
+# Check foreman is present
+if [ ! -x $FOREMAN ]; then
+	log_failure_msg "$FOREMAN not present or not executable"
 	exit 1
 fi
 
 fail_unless_root() {
 	if [ "$(id -u)" != '0' ]; then
-		log_failure_msg "$MASTER_DESC must be run as root"
+		log_failure_msg "$FOREMAN_DESC must be run as root"
 		exit 1
 	fi
 }
@@ -78,33 +78,33 @@ case "$1" in
 
 		cgroupfs_mount
 
-		touch "$MASTER_LOGFILE"
-		chgrp master "$MASTER_LOGFILE"
+		touch "$FOREMAN_LOGFILE"
+		chgrp foreman "$FOREMAN_LOGFILE"
 
-		log_begin_msg "Starting $MASTER_DESC: $BASE"
+		log_begin_msg "Starting $FOREMAN_DESC: $BASE"
 		start-stop-daemon --start --background \
 			--no-close \
-			--exec "$MASTER" \
-			--pidfile "$MASTER_PIDFILE" \
+			--exec "$FOREMAN" \
+			--pidfile "$FOREMAN_PIDFILE" \
 			-- \
-				-d -p "$MASTER_PIDFILE" \
-				$MASTER_OPTS \
-					>> "$MASTER_LOGFILE" 2>&1
+				-d -p "$FOREMAN_PIDFILE" \
+				$FOREMAN_OPTS \
+					>> "$FOREMAN_LOGFILE" 2>&1
 		log_end_msg $?
 		;;
 
 	stop)
 		fail_unless_root
-		log_begin_msg "Stopping $MASTER_DESC: $BASE"
-		start-stop-daemon --stop --pidfile "$MASTER_PIDFILE"
+		log_begin_msg "Stopping $FOREMAN_DESC: $BASE"
+		start-stop-daemon --stop --pidfile "$FOREMAN_PIDFILE"
 		log_end_msg $?
 		;;
 
 	restart)
 		fail_unless_root
-		master_pid=`cat "$MASTER_PIDFILE" 2>/dev/null`
-		[ -n "$master_pid" ] \
-			&& ps -p $master_pid > /dev/null 2>&1 \
+		foreman_pid=`cat "$FOREMAN_PIDFILE" 2>/dev/null`
+		[ -n "$foreman_pid" ] \
+			&& ps -p $foreman_pid > /dev/null 2>&1 \
 			&& $0 stop
 		$0 start
 		;;
@@ -115,7 +115,7 @@ case "$1" in
 		;;
 
 	status)
-		status_of_proc -p "$MASTER_PIDFILE" "$MASTER" mastery
+		status_of_proc -p "$FOREMAN_PIDFILE" "$FOREMAN" foreman
 		;;
 
 	*)
