@@ -215,7 +215,7 @@ method handleTask ($json) {
 	#### SET STATUS TO running
 	$self->conf()->setKey("agua", "STATUS", "running");
 
-	#$workflow->executeWorkflow();	
+	$workflow->executeWorkflow();	
 
 	#### SET STATUS TO completed
 	$self->conf()->setKey("agua", "STATUS", "completed");
