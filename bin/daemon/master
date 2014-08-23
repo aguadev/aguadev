@@ -20,7 +20,7 @@ use Queue::Master;
 
 #### SET LOG
 my $mode;
-my $log     =   2;
+my $log     	=   2;
 my $printlog    =   4;
 my $logfile	=	"$installdir/log/master.log";
 my $help;
@@ -36,7 +36,7 @@ my $configfile	=	"$installdir/conf/config.yaml";
 my $conf = Conf::Yaml->new(
     inputfile	=>	$configfile,
     backup		=>	1,
-    log     =>  2,
+    log     	=>  2,
     printlog    =>  4,
 	logfile		=>	$logfile
 );

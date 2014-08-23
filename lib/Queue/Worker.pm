@@ -68,26 +68,19 @@ method initialise ($args) {
 method listen {
 	$self->logDebug("");
 
-	my $childpid = fork;
-	if ( $childpid ) {
-		$self->logDebug("IN PARENT childpid", $childpid);
-		#### LISTEN FOR TASKS SENT FROM MASTER
-		$self->receiveTask();
+	#### LISTEN FOR TASKS SENT FROM MASTER
+	$self->receiveTask();
 
-		#### PERIODICALLY SEND 'HEARTBEAT' NODE STATUS INFO
-		my $shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
-		while ( not $shutdown eq "true" ) {
-			my $sleep	=	$self->sleep();
-			print "Queue::Master::manage    Sleeping $sleep seconds\n";
-			sleep($sleep);
-			$self->heartbeat();
-			
-			$shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
-		}	
-	}
-	elsif ( defined $childpid ) {
-		$self->receiveTopic();
-	}
+	#### PERIODICALLY SEND 'HEARTBEAT' NODE STATUS INFO
+	my $shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
+	while ( not $shutdown eq "true" ) {
+		my $sleep	=	$self->sleep();
+		print "Queue::Master::manage    Sleeping $sleep seconds\n";
+		sleep($sleep);
+		$self->heartbeat();
+		
+		$shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
+	}	
 }
 
 method heartbeat {
@@ -185,14 +178,14 @@ method receiveTask {
 		
 			my @c = $body =~ /\./g;
 		
-			Coro::async_pool {
+			#Coro::async_pool {
 
 				#### RUN TASK
 				&$handler($this, $body);
 				
 				#### SEND ACK AFTER TASK COMPLETED
 				$channel->ack();
-			}
+			#}
 		},
 		no_ack => 0,
 	);
@@ -222,17 +215,19 @@ method handleTask ($json) {
 	#### SET STATUS TO running
 	$self->conf()->setKey("agua", "STATUS", "running");
 
-	$workflow->executeWorkflow();	
+	#$workflow->executeWorkflow();	
 
 	#### SET STATUS TO completed
 	$self->conf()->setKey("agua", "STATUS", "completed");
 
 	#### SHUT DOWN TASK LISTENER IF SPECIFIED IN config.yaml
 	$self->verifyShutdown();
+	
+	$self->logDebug("END handletask");
 }
 
 method sendTask ($task) {	
-	$self->logDebug("task", $task);
+	$self->logDebug("task", substr($task, 0, 300));
 
 	#### GET QUEUE
 	my $queuename	=	$task->{queue};

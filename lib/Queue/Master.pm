@@ -184,8 +184,7 @@ method balanceInstances ($workflows) {
 
 #### DEBUG
 
-$quota		=	10;
-
+$quota		=	80;
 $self->logDebug("DEBUG quota", $quota);
 
 #### DEBUG
@@ -262,6 +261,7 @@ WHERE status='stopping'
 	return 1 if defined $stopping and @$stopping;
 	return 0;
 }
+
 method addRemoveNodes ($workflows, $instancecounts, $currentcounts) {
 	#$self->logDebug("workflows", $workflows);
 	$self->logDebug("instancecounts", $instancecounts);

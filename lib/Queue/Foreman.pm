@@ -72,87 +72,6 @@ method listen {
 }
 
 #### TASKS
-method receiveTask {
-	my $taskqueue =	$self->conf()->getKey("queue:taskqueue", undef);
-	$self->logDebug("$$ taskqueue", $taskqueue);
-
-	#### OPEN CONNECTION
-	my $connection	=	$self->newConnection();	
-	my $channel 	= 	$connection->open_channel();
-	#$self->channel($channel);
-	$channel->declare_queue(
-		queue => $taskqueue,
-		durable => 1,
-	);
-	
-	#### GET HOST
-	my $host		=	$self->conf()->getKey("queue:host", undef);
-
-	print "$$ [*] Waiting for tasks in host $host taskqueue '$taskqueue'\n";
-	
-	$channel->qos(prefetch_count => 1,);
-	
-	no warnings;
-	my $handler	= *handleTask;
-	use warnings;
-	my $this	=	$self;
-	
-	$channel->consume(
-		on_consume	=>	sub {
-			my $var 	= 	shift;
-			#print "$$ Exchange::receiveTask    DOING CALLBACK";
-		
-			my $body 	= 	$var->{body}->{payload};
-			print " [x] Received task in host $host taskqueue '$taskqueue': $body\n";
-		
-			my @c = $body =~ /\./g;
-		
-			Coro::async_pool {
-
-				#### RUN TASK
-				&$handler($this, $body);
-				
-				#### SEND ACK AFTER TASK COMPLETED
-				$channel->ack();
-			}
-		},
-		no_ack => 0,
-	);
-	
-	#### SET self->connection
-	$self->connection($connection);
-	
-	# Wait forever
-	AnyEvent->condvar->recv;	
-}
-
-method handleTask ($json) {
-	$self->logDebug("$$ json", $json);
-	my $data = $self->jsonparser()->decode($json);    
-
-	$data->{start}		=  	1;
-	$data->{conf}		=   $self->conf();
-	$data->{log}		=   $self->log();
-	$data->{logfile}	=   $self->logfile();
-	$data->{printlog}	=   $self->printlog();	
-	$data->{worker}		=	$self;
-
-	$self->setDbh() if not defined $self->db();
-
-	my $workflow = Agua::Workflow->new($data);
-
-	#### SET STATUS TO running
-	$self->conf()->setKey("agua", "STATUS", "running");
-
-	$workflow->executeWorkflow();	
-
-	#### SET STATUS TO completed
-	$self->conf()->setKey("agua", "STATUS", "completed");
-
-	#### SHUT DOWN TASK LISTENER IF SPECIFIED IN config.yaml
-	$self->verifyShutdown();
-}
-
 method sendTask ($task) {	
 	$self->logDebug("task", $task);
 
@@ -256,10 +175,13 @@ method receiveTopic {
 	$self->logDebug("keystring", $keystring);
 	my $keys;
 	@$keys		=	split ",", $keystring;
-	
-	$self->logDebug("exchange", $exchange);
-	
+
+	#### GET HOST
+	my $host		=	$self->conf()->getKey("queue:host", undef);
+
 	for my $key ( @$keys ) {
+		print " [*] Listening for host $host topic: $key\n";
+
 		$channel->bind_queue(
 			exchange => $exchange,
 			queue => $queuename,
@@ -267,11 +189,6 @@ method receiveTopic {
 		);
 	}
 	
-	#### GET HOST
-	my $host		=	$self->conf()->getKey("queue:host", undef);
-
-	print " [*] Listening for host $host topics: @$keys\n";
-
 	no warnings;
 	my $handler	= *handleTopic;
 	use warnings;
