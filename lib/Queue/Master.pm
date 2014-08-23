@@ -184,7 +184,7 @@ method balanceInstances ($workflows) {
 
 #### DEBUG
 
-$quota		=	10;
+$quota		=	30;
 $self->logDebug("DEBUG quota", $quota);
 
 #### DEBUG

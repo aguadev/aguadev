@@ -277,10 +277,6 @@ queued=$now,
 completed='0000-00-00 00:00:00'};
 	$self->setFields($set);
 
-	#### WAIT FOR JOB TO FINISH
-	$self->logDebug("$$ Doing wait for command to complete");
-	#wait;
-
 	#### PAUSE FOR RESULT FILE TO BE WRITTEN 
 	sleep(3);
 	$self->logDebug("$$ Finished wait for command to complete");

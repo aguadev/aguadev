@@ -227,11 +227,11 @@ method handleTask ($json) {
 }
 
 method sendTask ($task) {	
-	$self->logDebug("task", substr($task, 0, 300));
+	#$self->logDebug("task", $task);
 
 	#### GET QUEUE
-	my $queuename	=	$task->{queue};
-	$self->logDebug("queuename", $queuename);
+	my $taskqueue	=	$task->{queue};
+	$self->logDebug("taskqueue", $taskqueue);
 
 	my $processid	=	$$;
 	#$self->logDebug("processid", $processid);
@@ -247,7 +247,8 @@ method sendTask ($task) {
 	#### GET HOST
 	my $host		=	$self->conf()->getKey("queue:host", undef);
 	$self->logDebug("host", $host);
-	#Coro::async_pool {
+
+	Coro::async_pool {
 
 		#### GET CONNECTION
 		my $connection	=	$self->newConnection();
@@ -257,21 +258,19 @@ method sendTask ($task) {
 		#$self->logDebug("channel", $channel);
 		
 		$channel->declare_queue(
-			queue => $queuename,
+			queue 	=> $taskqueue,
 			durable => 1,
 		);
 
 		#### BIND QUEUE TO EXCHANGE
 		$channel->publish(
-			exchange => '',
-			routing_key => $queuename,
-			body => $json,
+			exchange 	=> '',
+			routing_key => $taskqueue,
+			body 		=> $json
 		);
 	
-		print " [x] Sent TASK in host $host taskqueue '$queuename': $task->{mode}\n";
-
-	#}
-	
+		print " [x] Sent TASK in host $host taskqueue '$taskqueue': $task->{mode}\n";
+	}
 }
 
 method addTaskIdentifiers ($task) {
