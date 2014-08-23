@@ -133,18 +133,21 @@ sub currentTimeToMysql {
 
 sub getMysqlTime {
 	my $self	=	shift;
+	$self->logDebug("");
+	
 	my $time	=	`/bin/date`;
-	#$self->logDebug("$$ time", $time);
+	$self->logDebug("$$ time", $time);
 	
 	my $mysqltime	=	$self->datetimeToMysql($time);
-	#$self->logDebug("$$ mysqltime", $mysqltime);
+	$self->logDebug("$$ mysqltime", $mysqltime);
 	
 	return $mysqltime;
 }
 
 sub datetimeToMysql {
 	my $self		=	shift;
-
+	$self->logDebug("");
+	
     # CONVERT FROM DATETIME
 	#
 	# date DATE: 	Sat May 3 	19:24:16 UTC 2014
@@ -159,20 +162,21 @@ sub datetimeToMysql {
 	# 
 	
 	my $datetime      =   shift;
-	#$self->logNote("datetime", $datetime);
+	$self->logNote("datetime", $datetime);
  
     my ( $month, $date, $hour, $minutes, $seconds, $timezone, $year) = $datetime =~ /^\s*\S+\s+(\S+)\s+(\d+)\s+(\d+):(\d+):(\d+)\s+(\w+)?\s+(\d+)\s*/;
 
-	#$self->logNote("timezone", $timezone);
-	#$self->logNote("month", $month);
+	$self->logNote("timezone", $timezone);
+	$self->logNote("month", $month);
     $month = $self->monthNumber($month);
-	#$self->logNote("month number", $month);
+	$self->logNote("month number", $month);
 	
 	$date = "0" . $date if length($date) == 1;
 	
-    my $mysql_datetime = "$year-$month-$date $hour:$minutes:$seconds";
+    my $mysqldatetime = "$year-$month-$date $hour:$minutes:$seconds";
+	$self->logDebug("mysqldatetime", $mysqldatetime);
     
-    return $mysql_datetime;
+    return $mysqldatetime;
 }
 
 sub monthNumber {

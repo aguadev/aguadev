@@ -242,7 +242,7 @@ method sendTask ($task) {
 
 	my $jsonparser = JSON->new();
 	my $json = $jsonparser->encode($task);
-	$self->logDebug("json", substr($json, 0, 300));
+	$self->logDebug("json", substr($json, 0, 600));
 
 	#### GET HOST
 	my $host		=	$self->conf()->getKey("queue:host", undef);

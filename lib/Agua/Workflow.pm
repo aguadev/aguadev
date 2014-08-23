@@ -532,7 +532,7 @@ method executeWorkflow {
 	#### ADD QUEUE SAMPLE
 	my $uuid	=	$samplehash->{sample};
 	$success	=	$self->addQueueSample($uuid, $status, $data) if defined $uuid;
-	$self->logDebug("success", $success);
+	$self->logDebug("addQueueSample success", $success);
 	
 	print "Completed workflow $project.$workflow\n";
 
@@ -576,8 +576,11 @@ method addQueueSample ($uuid, $status, $data) {
 	#### SET TIME
 	my $time		=	$self->getMysqlTime();
 	$data->{time}	=	$time;
-	
 	$self->logDebug("data", $data);
+
+	$self->logDebug("BEFORE setDbh    self->db()", $self->db());
+	$self->setDbh() if not defined $self->db();
+	$self->logDebug("AFTER setDbh    self->db()", $self->db());
 	
 	my $table		=	"queuesample";
 	my $keys		=	["username", "project", "workflow", "sample" ];
@@ -1139,6 +1142,12 @@ method runStages ($stages) {
 		my $mysqltime	=	$self->getMysqlTime();
 		$stage->queued($mysqltime);
 		$stage->started($mysqltime);
+		
+		#### CLEAR STDOUT/STDERR FILES
+		my $stdoutfile	=	$stage->stdoutfile();
+		`rm -fr $stdoutfile` if -f $stdoutfile;
+		my $stderrfile	=	$stage->stderrfile();
+		`rm -fr $stderrfile` if -f $stderrfile;
 		
 		#### REPORT STARTING STAGE
 		$self->updateJobStatus($stage, "started");

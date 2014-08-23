@@ -42,40 +42,13 @@ use Exchange::Manager;
 
 my $installdir 	=	 $ENV{'installdir'} || "/agua";
 my $configfile	=	"$installdir/conf/config.yaml";
-my $username;
-my $project;
-my $workflow;
-
-my $host		=	$conf->getKey("queue:host", undef) || "localhost";
-my $port		=	$conf->getKey("queue:port", undef) || 5672; 
-my $user		=	$conf->getKey("queue:user", undef) || "guest";
-my $pass		=	$conf->getKey("queue:pass", undef) || "guest";
-my $vhost		=	$conf->getKey("queue:vhost", undef) || "/";
-
-my $notes		=	"";
-my $log			=	2;
-my $printlog	=	2;
-my $help;
 
 #### SET LOGFILE
 my $logfile		=	"/tmp/pancancer-volume.$$.log";
+my $log			=	2;
+my $printlog	=	2;
 
-GetOptions (
-    'username=s'	=> \$username,
-    'project=s'		=> \$project,
-    'workflow=s'	=> \$workflow,
-    'host=s'		=> \$host,
-    'port=s'		=> \$port,
-    'user=s'		=> \$user,
-    'pass=s'		=> \$pass,
-    'notes=s'		=> \$notes,
-    'vhost=s'		=> \$vhost,
-    'log=i'     	=> \$log,
-    'printlog=i'    => \$printlog,
-    'help'          => \$help
-) or die "No options specified. Try '--help'\n";
-usage() if defined $help;
-
+#### SET CONF
 my $conf = Conf::Yaml->new(
     memory      =>  0,
     inputfile   =>  $configfile,
@@ -85,6 +58,31 @@ my $conf = Conf::Yaml->new(
     printlog	=>	$printlog,
     logfile     =>  $logfile
 );
+
+#### GET OPTIONS
+my $queue;
+my $host		=	$conf->getKey("queue:host", undef) || "localhost";
+my $port		=	$conf->getKey("queue:port", undef) || 5672; 
+my $user		=	$conf->getKey("queue:user", undef) || "guest";
+my $pass		=	$conf->getKey("queue:pass", undef) || "guest";
+my $vhost		=	$conf->getKey("queue:vhost", undef) || "/";
+my $help;
+
+GetOptions (
+    'queue=s'		=> \$queue,
+
+    'host=s'		=> \$host,
+    'port=s'		=> \$port,
+    'user=s'		=> \$user,
+    'pass=s'		=> \$pass,
+    'vhost=s'		=> \$vhost,
+
+    'log=i'     	=> \$log,
+    'printlog=i'    => \$printlog,
+    'help'          => \$help
+) or die "No options specified. Try '--help'\n";
+usage() if defined $help;
+
 
 my $object = Exchange::Manager->new({
     host		=>	$host,
@@ -99,12 +97,7 @@ my $object = Exchange::Manager->new({
     logfile     =>  $logfile
 });
 
-$object->receiveTask({
-    username	=>	$username,
-    project		=>	$project,
-    workflow	=>	$workflow,
-    notes		=>	$notes,
-});
+$object->receiveTask($queue);
 
 exit 0;
 
