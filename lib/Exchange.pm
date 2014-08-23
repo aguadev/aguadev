@@ -326,8 +326,8 @@ method sendTask ($task) {
 	$task->{processid}	=	$processid;
 
 	#### SET QUEUE
-	my $queuename		=	$task->{queue} || $self->setQueueName($task);
-	$task->{queue}		=	$queuename;
+	$task->{queue} = $self->setQueueName($task) if not defined $task->{queue};
+	my $queuename		=	$task->{queue};
 	$self->logDebug("queuename", $queuename);
 	
 	#### ADD UNIQUE IDENTIFIERS

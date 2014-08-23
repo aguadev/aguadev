@@ -184,7 +184,7 @@ method balanceInstances ($workflows) {
 
 #### DEBUG
 
-$quota		=	0;
+$quota		=	10;
 
 $self->logDebug("DEBUG quota", $quota);
 
@@ -263,22 +263,22 @@ WHERE status='stopping'
 	return 0;
 }
 method addRemoveNodes ($workflows, $instancecounts, $currentcounts) {
-	$self->logDebug("workflows", $workflows);
+	#$self->logDebug("workflows", $workflows);
 	$self->logDebug("instancecounts", $instancecounts);
 	
 	for ( my $i = 0; $i < @$instancecounts; $i++ ) {
 		my $instancecount =	$$instancecounts[$i];
-		$self->logDebug("instancecount", $instancecount);
+		$self->logDebug("instancecount [$i]", $instancecount);
 
 		my $queuename	=	$self->getQueueName($$workflows[$i]);
-		$self->logDebug("queuename", $queuename);
+		$self->logDebug("queuename [$i]", $queuename);
 		
 		my $currentcount =	$currentcounts->{$queuename} || 0;
-		$self->logDebug("currentcount", $currentcount);
+		$self->logDebug("currentcount [$i]", $currentcount);
 		
 		my $difference	=	$instancecount - $currentcount;
 		$self->logDebug("difference	= $instancecount - $currentcount");
-		$self->logDebug("difference", $difference);
+		$self->logDebug("difference [$i]", $difference);
 		
 		if ( $difference > 0 ) {
 			$self->addNodes($$workflows[$i], $difference);

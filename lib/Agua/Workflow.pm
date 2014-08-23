@@ -1458,9 +1458,9 @@ method updateJobStatus ($stage, $status) {
 	return if not defined $self->worker();
 	
 	#### SEND TOPIC	
-	$self->logDebug("$$ sending data", $data);
+	$self->logDebug("$$ DOING self->worker->sendTask(data)");
 	$self->worker()->sendTask($data);
-	$self->logDebug("$$ topic sent");
+	$self->logDebug("$$ AFTER self->worker->sendTask(data)");
 }
 
 method getHostName {

@@ -526,15 +526,15 @@ method printAuth ($username) {
 	return	$self->virtual()->printAuthFile($tenant, $templatefile, $authfile);
 }
 
-method updateInstanceStatus ($id, $status) {
-	$self->logNote("id", $id);
+method updateInstanceStatus ($host, $status) {
+	$self->logNote("host", $host);
 	$self->logNote("status", $status);
 	
 	my $time		=	$self->getMysqlTime();
 	my $query		=	qq{UPDATE instance
 SET status='$status',
 TIME='$time'
-WHERE id='$id'
+WHERE host='$host'
 };
 	$self->logDebug("query", $query);
 	

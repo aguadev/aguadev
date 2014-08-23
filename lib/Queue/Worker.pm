@@ -247,12 +247,12 @@ method sendTask ($task) {
 
 	my $jsonparser = JSON->new();
 	my $json = $jsonparser->encode($task);
-	$self->logDebug("json", $json);
+	$self->logDebug("json", substr($json, 0, 300));
 
 	#### GET HOST
 	my $host		=	$self->conf()->getKey("queue:host", undef);
 	$self->logDebug("host", $host);
-	Coro::async_pool {
+	#Coro::async_pool {
 
 		#### GET CONNECTION
 		my $connection	=	$self->newConnection();
@@ -274,7 +274,8 @@ method sendTask ($task) {
 		);
 	
 		print " [x] Sent TASK in host $host taskqueue '$queuename': $task->{mode}\n";
-	}
+
+	#}
 	
 }
 

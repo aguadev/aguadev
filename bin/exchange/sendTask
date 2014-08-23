@@ -46,17 +46,14 @@ use JSON;
 
 my $installdir 	=	 $ENV{'installdir'} || "/agua";
 my $configfile	=	"$installdir/conf/config.yaml";
-my $username;
-my $project;
-my $workflow;
-my $queue;
+
+my $message		=	"";
 
 my $host		=	'localhost';
 my $port		=	5672;
-my $user		=	'guest';	
+my $user		=	'guest';
 my $pass		=	'guest';
 my $vhost		=	'/';
-my $message		=	"";
 my $callback	=	"";
 
 my $log			=	2;
@@ -67,11 +64,7 @@ my $help;
 my $logfile		=	"/tmp/pancancer-volume.$$.log";
 
 GetOptions (
-    'username=s'	=> \$username,
-    'project=s'		=> \$project,
-    'workflow=s'	=> \$workflow,
     'message=s'		=> \$message,
-    'queue=s'		=> \$queue,
 
     'host=s'		=> \$host,
     'port=s'		=> \$port,
