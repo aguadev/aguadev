@@ -578,14 +578,18 @@ method addQueueSample ($uuid, $status, $data) {
 	$data->{time}	=	$time;
 	$self->logDebug("data", $data);
 
-	$self->logDebug("BEFORE setDbh    self->db()", $self->db());
+	$self->logDebug("BEFORE setDbh    self->db(): " . $self->db());
 	$self->setDbh() if not defined $self->db();
-	$self->logDebug("AFTER setDbh    self->db()", $self->db());
+	$self->logDebug("AFTER setDbh    self->db(): " . $self->db());
 	
 	my $table		=	"queuesample";
-	my $keys		=	["username", "project", "workflow", "sample" ];
+	my $keys		=	["username", "project", "workflow", "sample"];
 	
-	return $self->_addToTable($table, $data, $keys);
+	$self->logDebug("BEFORE addToTable");
+	my $success	=	$self->_addToTable($table, $data, $keys);
+	$self->logDebug("AFTER addToTable success", $success);
+	
+	return $success;
 }
 
 #### EXECUTE SAMPLE WORKFLOWS IN PARALLEL

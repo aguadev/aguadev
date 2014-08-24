@@ -8,7 +8,7 @@
 # Default-Stop:       0 1 6
 # Short-Description:  Cloud-enabled bioinformatics workflow platform
 # Description:
-#  Master is an open-source bioinformatics workflow platform that can be used in
+#  Agua is an open-source bioinformatics workflow platform that can be used in
 #  local installations, the AWS cloud, OpenStack clusters and other settings.
 ### END INIT INFO
 

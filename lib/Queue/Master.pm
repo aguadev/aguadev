@@ -184,7 +184,7 @@ method balanceInstances ($workflows) {
 
 #### DEBUG
 
-$quota		=	40;
+$quota		=	2;
 $self->logDebug("DEBUG quota", $quota);
 
 #### DEBUG
@@ -230,6 +230,7 @@ $self->logDebug("DEBUG quota", $quota);
 		#### IF IT HAS NO COMPLETED JOBS TO PROVIDE DURATION INFO
 		my $lateststarted	=	$self->getLatestStarted($workflows);
 		$self->logDebug("lateststarted", $lateststarted);
+		$lateststarted		=	$latestcompleted if not defined $lateststarted;
 	
 		if ( $lateststarted != $latestcompleted ) {
 			$instancecounts	=	$self->adjustCounts($workflows, $resourcecounts, $lateststarted, $quota);
@@ -262,6 +263,7 @@ WHERE status='stopping'
 	return 0;
 }
 
+#### ADD NODES
 method addRemoveNodes ($workflows, $instancecounts, $currentcounts) {
 	#$self->logDebug("workflows", $workflows);
 	$self->logDebug("instancecounts", $instancecounts);
@@ -312,64 +314,6 @@ method addNodes ($workflow, $number) {
 	}
 	
 	return 1;
-}
-
-method deleteNodes ($workflow, $number) {
-	my $queuename	=	$self->getQueueName($workflow);
-	my $username	=	$workflow->{username};
-	my $query	=	qq{SELECT * FROM instance
-WHERE username='$username'
-AND queue='$queuename'
-AND status='running'
-LIMIT $number};
-	#$self->logDebug("query", $query);
-	
-	my $instances	=	$self->db()->queryhasharray($query);
-	foreach my $instance ( @$instances ) {
-		$self->updateInstanceStatus($instance->{id}, "stopping");
-		$self->shutdownInstance($workflow, $instance->{host});
-	}
-}
-
-method shutdownInstance ($workflow, $id) {
-	#$self->logDebug("id", $id);
-
-	my $stages			=	$self->getStagesByWorkflow($workflow);
-	my $object			=	$$stages[0];
-	my $package			=	$object->{package};
-	my $installdir		=	$self->getInstallDir($package);
-	my $version			=	$object->{version};
-	my $teardownfile	=	$self->setTearDownFile($installdir, $version);
-	#$self->logDebug("teardownfile", $teardownfile);
-	my $teardown			=	$self->getFileContents($teardownfile);
-	#$self->logDebug("teardown", substr($teardown, 0, 100));
-	
-	my $data	=	{
-		host			=>	$id,
-		mode			=>	"doShutdown",
-		teardown		=>	$teardown,
-		teardownfile	=>	$teardownfile
-	};
-	
-	my $key	=	"update.host.status";
-	$self->sendTopic($data, $key);
-}
-
-method setTearDownFile($installdir, $version) {
-	return "$installdir/data/sh/teardown.sh";
-}
-
-method updateInstanceStatus ($id, $status) {
-	$self->logNote("id", $id);
-	$self->logNote("status", $status);
-	
-	my $time		=	$self->getMysqlTime();
-	my $query		=	qq{UPDATE instance
-SET status='$status',
-TIME='$time'
-WHERE id='$id'
-};
-	return $self->db()->do($query);
 }
 
 method addHostInstance ($workflow, $hostname, $id) {
@@ -599,6 +543,64 @@ method getAuthFile ($username, $tenant) {
 	return	$authfile;
 }
 
+method updateInstanceStatus ($id, $status) {
+	$self->logNote("id", $id);
+	$self->logNote("status", $status);
+	
+	my $time		=	$self->getMysqlTime();
+	my $query		=	qq{UPDATE instance
+SET status='$status',
+TIME='$time'
+WHERE id='$id'
+};
+	return $self->db()->do($query);
+}
+
+#### DELETE NODES
+method deleteNodes ($workflow, $number) {
+	my $queuename	=	$self->getQueueName($workflow);
+	my $username	=	$workflow->{username};
+	my $query	=	qq{SELECT * FROM instance
+WHERE username='$username'
+AND queue='$queuename'
+AND status='running'
+LIMIT $number};
+	#$self->logDebug("query", $query);
+	
+	my $instances	=	$self->db()->queryhasharray($query);
+	foreach my $instance ( @$instances ) {
+		$self->updateInstanceStatus($instance->{id}, "stopping");
+		$self->shutdownInstance($workflow, $instance->{host});
+	}
+}
+method shutdownInstance ($workflow, $id) {
+	#$self->logDebug("id", $id);
+
+	my $stages			=	$self->getStagesByWorkflow($workflow);
+	my $object			=	$$stages[0];
+	my $package			=	$object->{package};
+	my $installdir		=	$self->getInstallDir($package);
+	my $version			=	$object->{version};
+	my $teardownfile	=	$self->setTearDownFile($installdir, $version);
+	#$self->logDebug("teardownfile", $teardownfile);
+	my $teardown			=	$self->getFileContents($teardownfile);
+	#$self->logDebug("teardown", substr($teardown, 0, 100));
+	
+	my $data	=	{
+		host			=>	$id,
+		mode			=>	"doShutdown",
+		teardown		=>	$teardown,
+		teardownfile	=>	$teardownfile
+	};
+	
+	my $key	=	"update.host.status";
+	$self->sendTopic($data, $key);
+}
+
+method setTearDownFile($installdir, $version) {
+	return "$installdir/data/sh/teardown.sh";
+}
+
 #### RESOURCES
 method getDefaultResource ($queue, $instancetypes, $quota) {
 	$self->logDebug("queue", $queue);
@@ -716,8 +718,9 @@ method adjustCounts ($queues, $resourcecounts, $lateststarted, $quota) {
 			$$resourcecounts[$lateststarted] = $latestcount;
 		}		
 	}
-	$self->logDebug("resourcecounts", $resourcecounts);
+	$self->logDebug("FINAL resourcecounts", $resourcecounts);
 	
+	$self->logDebug("RETURNING RERUN OF self->getInstanceCounts");
 	return $self->getInstanceCounts($queues, $instancetypes, $resourcecounts);
 }
 
@@ -1414,7 +1417,7 @@ ORDER BY queuesample.username, queuesample.project, queuesample.workflownumber, 
 
 #### MAINTAIN QUEUES
 method maintainQueues($workflows) {
-	$self->logDebug("workflows", $workflows);
+	#$self->logDebug("workflows", $workflows);
 	
 	print "\n\n#### DOING maintainQueues\n";
 	for ( my $i = 0; $i < @$workflows; $i++ ) {
@@ -1911,6 +1914,7 @@ method notDefined ($hash, $fields) {
     return $notDefined;
 }
 
+#### JOB STATUS
 method updateJobStatus ($data) {
 	#$self->logDebug("data", $data);
 	$self->logDebug("$data->{sample} $data->{status}");
@@ -1931,19 +1935,6 @@ method updateJobStatus ($data) {
 	$self->logDebug("failed to add to queuesample table") if not $success;
 }
 
-method updateHeartbeat ($data) {
-	$self->logDebug("host $data->{host} [$data->{time}]");
-	#$self->logDebug("data", $data);
-	my $keys	=	[ "host", "time" ];
-	my $notdefined	=	$self->notDefined($data, $keys);	
-	$self->logDebug("notdefined", $notdefined) and return if @$notdefined;
-
-	#### ADD TO TABLE
-	my $table		=	"heartbeat";
-	my $fields		=	$self->db()->fields($table);
-	$self->_addToTable($table, $data, $keys, $fields);
-}
-
 method updateQueueSample ($data) {
 	#$self->logDebug("data", $data);	
 	
@@ -1957,26 +1948,22 @@ method updateQueueSample ($data) {
 	return $self->_addToTable($table, $data, $keys);
 }
 
-method setConfigMaxJobs ($queuename, $value) {
-	return $self->conf()->setKey("queue:maxjobs", $queuename, $value);
+#### HEARTBEAT
+method updateHeartbeat ($data) {
+	$self->logDebug("host $data->{host} [$data->{time}]");
+	#$self->logDebug("data", $data);
+	my $keys	=	[ "host", "time" ];
+	my $notdefined	=	$self->notDefined($data, $keys);	
+	$self->logDebug("notdefined", $notdefined) and return if @$notdefined;
+
+	#### ADD TO TABLE
+	my $table		=	"heartbeat";
+	my $fields		=	$self->db()->fields($table);
+	$self->_addToTable($table, $data, $keys, $fields);
 }
 
-method getSynapseStatus ($data) {
-	#### UPDATE SYNAPSE
-	my $sample	=	$data->{sample};
-	my $stage	=	lc($data->{workflow});
-	my $status	=	$data->{status};
-	$status		=~	s/^error.+$/error/;
-
-	$self->logDebug("sample", $sample);
-	$self->logDebug("stage", $stage);
-	$self->logDebug("status", $status);
-
-	my $statemap		=	$self->synapse()->statemap();
-	my $synapsestatus	=	$statemap->{"$stage:$status"};
-	$self->logDebug("synapsestatus", $synapsestatus);
-
-	return $synapsestatus;	
+method setConfigMaxJobs ($queuename, $value) {
+	return $self->conf()->setKey("queue:maxjobs", $queuename, $value);
 }
 
 method getConfigMaxJobs ($queuename) {
@@ -2034,13 +2021,6 @@ method maxJobsForQueue ($queuedata) {
 	$self->logDebug("maxjobs", $maxjobs);
 	
 	return $maxjobs;
-}
-
-method getSampleFromSynapse ($maxjobs) {
-	my $samples	=	$self->synapse()->getBamForWork($maxjobs);
-	$self->logDebug("samples", $samples);
-	
-	return $samples;
 }
 
 method getQueueTasks {	
@@ -2346,3 +2326,30 @@ method deeplyIdentical ($a, $b) {
 	
 
 }
+
+
+#method getSynapseStatus ($data) {
+#	#### UPDATE SYNAPSE
+#	my $sample	=	$data->{sample};
+#	my $stage	=	lc($data->{workflow});
+#	my $status	=	$data->{status};
+#	$status		=~	s/^error.+$/error/;
+#
+#	$self->logDebug("sample", $sample);
+#	$self->logDebug("stage", $stage);
+#	$self->logDebug("status", $status);
+#
+#	my $statemap		=	$self->synapse()->statemap();
+#	my $synapsestatus	=	$statemap->{"$stage:$status"};
+#	$self->logDebug("synapsestatus", $synapsestatus);
+#
+#	return $synapsestatus;	
+#}
+#
+#method getSampleFromSynapse ($maxjobs) {
+#	my $samples	=	$self->synapse()->getBamForWork($maxjobs);
+#	$self->logDebug("samples", $samples);
+#	
+#	return $samples;
+#}
+#

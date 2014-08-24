@@ -74,8 +74,9 @@ method listen {
 	#### PERIODICALLY SEND 'HEARTBEAT' NODE STATUS INFO
 	my $shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
 	while ( not $shutdown eq "true" ) {
+		print "Queue::Worker::listen    DOING sleep\n";
 		my $sleep	=	$self->sleep();
-		print "Queue::Master::manage    Sleeping $sleep seconds\n";
+		print "Queue::Worker::listen    Sleeping $sleep seconds\n";
 		sleep($sleep);
 		$self->heartbeat();
 		
@@ -227,6 +228,7 @@ method handleTask ($json) {
 }
 
 method sendTask ($task) {	
+
 	#$self->logDebug("task", $task);
 
 	#### GET QUEUE
@@ -242,7 +244,7 @@ method sendTask ($task) {
 
 	my $jsonparser = JSON->new();
 	my $json = $jsonparser->encode($task);
-	$self->logDebug("json", substr($json, 0, 600));
+	$self->logDebug("json", substr($json, 0, 1000));
 
 	#### GET HOST
 	my $host		=	$self->conf()->getKey("queue:host", undef);
@@ -306,83 +308,7 @@ method addTaskIdentifiers ($task) {
 	return $task;
 }
 
-### TOPICS 
-method receiveTopic {
-	$self->logDebug("");
-	
-	#### OPEN CONNECTION
-	my $connection	=	$self->newConnection();	
-	my $channel = $connection->open_channel();
-	
-	my $exchange	=	$self->conf()->getKey("queue:topicexchange", undef);
-	$self->logDebug("exchange", $exchange);
-
-	$channel->declare_exchange(
-		exchange => $exchange,
-		type => 'topic',
-	);
-	
-	my $result = $channel->declare_queue(exclusive => 1);
-	my $queuename = $result->{method_frame}->{queue};
-	
-	my $keystring	=	$self->conf()->getKey("queue:topickeys", undef);
-	$self->logDebug("keystring", $keystring);
-	my $keys;
-	@$keys		=	split ",", $keystring;
-	
-	$self->logDebug("exchange", $exchange);
-	
-	for my $key ( @$keys ) {
-		$channel->bind_queue(
-			exchange => $exchange,
-			queue => $queuename,
-			routing_key => $key,
-		);
-	}
-	
-	#### GET HOST
-	my $host		=	$self->conf()->getKey("queue:host", undef);
-
-	print " [*] Listening for host $host topics: @$keys\n";
-
-	no warnings;
-	my $handler	= *handleTopic;
-	use warnings;
-	my $this	=	$self;
-
-	$channel->consume(
-        on_consume => sub {
-			my $var = shift;
-			my $body = $var->{body}->{payload};
-		
-			print " [x] Received host $host message: $body\n";
-			&$handler($this, $body);
-		},
-		no_ack => 1,
-	);
-	
-	# Wait forever
-	AnyEvent->condvar->recv;	
-}
-
-method handleTopic ($json) {
-	#$self->logDebug("json", $json);
-
-	my $data = $self->jsonparser()->decode($json);
-	#$self->logDebug("data", $data);
-
-	my $mode =	$data->{mode} || "";
-	$self->logDebug("mode", $mode);
-	
-	if ( $self->can($mode) ) {
-		$self->$mode($data);
-	}
-	else {
-		print "mode not supported: $mode\n";
-		$self->logDebug("mode not supported: $mode");
-	}
-}
-
+#### SHUTDOWN
 method doShutdown ($data) {
 	$self->logDebug("data", $data);
 	my $targethost		=	lc($data->{host});
@@ -481,6 +407,7 @@ method sendDeleteInstance ($host) {
 	$self->sendTask($data);
 }
 
+#### UTILS
 method getHostName {
 	my $hostname	=	`facter hostname`;
 	$hostname		=~ 	s/\s+$//;

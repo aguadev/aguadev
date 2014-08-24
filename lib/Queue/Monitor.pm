@@ -32,6 +32,7 @@ class Queue::Monitor with (Logger, Agua::Common::Util, Exchange) {
 # Integers
 has 'log'	=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);  
 has 'printlog'	=> ( isa => 'Int', 		is => 'rw', default	=> 	2	);
+has 'sleep'		=>  ( isa => 'Int', is => 'rw', default => 300 );
 
 # Strings
 has 'command'	=> ( isa => 'Str|Undef', is => 'rw'	);
@@ -53,84 +54,67 @@ method initialise ($hash) {
 	$self->logDebug("AFTER self->setSlots()");
 }
 
-method systemCommand {
+method monitor {
 	$self->logDebug("");
-	my $command	=	$self->command();
-	$self->logDebug("command", $command);
-	#my $ops	=	$self->ops();
-	#print Dumper $ops;
-	
-	my ($stdout, $stderr)	=	$self->runCommand($command);
-	$self->logDebug("stdout", $stdout);
-	$self->logDebug("stderr", $stderr);
-	
-	$self->notifyStatus({
-		#username	=>	$self->username(),
-		status		=>	"ready",
-		error		=>	"",
-		queue		=> 	"routing",
-		data 		=> {
-			stdout => $stdout,
-			stderr => $stderr,
-		}
-	});
-	print "AFTERRRRRRRRRRRRRR notifyStatus\n";
-	
-	return 1;
+
+	#### PERIODICALLY CHECK FOR WORKER UPSTART HEARTBEAT
+	while ( 1 ) {
+		$self->logDebug("DOING self->checkWorker");
+		$self->checkWorker();
+		my $sleep	=	$self->sleep();
+		print "Queue::Monitor::monitor    Sleeping $sleep seconds before checkWorker\n";
+		sleep($sleep);
+	}	
 }
 
-method runCommand ($command) {
-#### RUN COMMAND LOCALLY OR ON REMOTE HOST
-	#### ADD ENVIRONMENT VARIABLES IF EXIST
-	$self->log(4);
+method checkWorker {
+	my $name		=	"worker";
+	my $logfile		=	"/var/log/upstart/$name.log";
+	
+	$self->logDebug("logfile", $logfile);
+	print "Returning. Can't find logfile: $logfile\n" and return if not -f $logfile;
+
+	my $command		=	"tail $logfile";
 	$self->logDebug("command", $command);
-
-	my $stdoutfile = "/tmp/$$.out";
-	my $stderrfile = "/tmp/$$.err";
-	my $output = '';
-	my $error = '';
-	
-	#### TAKE REDIRECTS IN THE COMMAND INTO CONSIDERATION
-	if ( $command =~ />\s+/ ) {
-		#### DO NOTHING, ERROR AND OUTPUT ALREADY REDIRECTED
-		if ( $command =~ /\s+&>\s+/
-			or ( $command =~ /\s+1>\s+/ and $command =~ /\s+2>\s+/)
-			or ( $command =~ /\s+1>\s+/ and $command =~ /\s+2>&1\s+/) ) {
-			print `$command`;
-		}
-		#### STDOUT ALREADY REDIRECTED - REDIRECT STDERR ONLY
-		elsif ( $command =~ /\s+1>\s+/ or $command =~ /\s+>\s+/ ) {
-			$command .= " 2> $stderrfile";
-			print `$command`;
-			$error = `cat $stderrfile`;
-		}
-		#### STDERR ALREADY REDIRECTED - REDIRECT STDOUT ONLY
-		elsif ( $command =~ /\s+2>\s+/ or $command =~ /\s+2>&1\s+/ ) {
-			$command .= " 1> $stdoutfile";
-			print `$command`;
-			$output = `cat $stdoutfile`;
-		}
+	my $log	=	`$command`;
+	$self->logDebug("log", $log);
+	if ( $log =~	/Heartbeat lost/msi ) {
+		print "HEARTBEAT LOST. Doing restartUpstart($name, $logfile)\n";
+		$self->logDebug("HEARTBEAT LOST    Doing restartUpstart($name, $logfile)");	
+		$self->restartUpstart($name, $logfile);
 	}
-	else {
-		$command .= " 1> $stdoutfile 2> $stderrfile";
-		print `$command`;
-		$output = `cat $stdoutfile`;
-		$error = `cat $stderrfile`;
+}
+
+method restartUpstart ($name, $logfile) {
+	$self->logDebug("name", $name);
+	$self->logDebug("logfile", $logfile);
+
+	my $command		=	qq{ps aux | grep "perl /usr/bin/$name"};
+	$self->logDebug("ps command", $command);
+	my $output	=	`$command`;
+	#$self->logDebug("output", $output);
+	my $processes;
+	@$processes	=	split "\n", $output;
+	#$self->logDebug("processes", $processes);
+	foreach my $process ( @$processes ) {
+		#$self->logDebug("process", $process);
+		my ($pid)	=	$process	=~	/^\S+\s+(\S+)/;
+		my $command	=	"kill -9 $pid";
+		$self->logDebug("KILL command", $command);
+		`$command`;
 	}
 	
-	$self->logNote("output", $output) if $output;
-	$self->logNote("error", $error) if $error;
-		
-	##### CHECK FOR PROCESS ERRORS
-	$self->logError("Error with command: $command ... $@") and exit if defined $@ and $@ ne "" and $self->can('warn') and not $self->warn();
-
-	#### CLEAN UP
-	`rm -fr $stdoutfile`;
-	`rm -fr $stderrfile`;
-	chomp($output);
-	chomp($error);
+	#### REMOVE LOG FILE
+	$command	=	"rm -fr $logfile";
+	$self->logDebug("DELETE command", $command);
+	`$command`;
 	
-	return $output, $error;
+	#### RESTART UPSTART PROCESS
+	$command	=	"service $name restart";
+	$self->logDebug("RESTART command", $command);
+	`$command`;
+	
+	$self->logDebug("END");
 }
 
 

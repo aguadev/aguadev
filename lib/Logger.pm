@@ -56,7 +56,7 @@ has 'errpid' 	=> ( isa => 'Int', 		is => 'rw', required => 0 );
 has 'indent'	=> ( isa => 'Int', 		is => 'rw', default	=>	4 );
 
 # Strings
-has 'logtype'	=> ( isa => 'Str', 		is => 'rw', default	=> 	"json"	);  
+has 'logtype'	=> ( isa => 'Str', 		is => 'rw', default	=> 	"cli"	);  
 has 'logfile'	=> ( isa => 'Str|Undef', is => 'rw', default => '' );
 has 'username' 	=> ( isa => 'Str|Undef', 		is => 'rw', required => 0 );
 

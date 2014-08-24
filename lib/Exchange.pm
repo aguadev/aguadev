@@ -22,6 +22,7 @@ has 'pass'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0 );
 has 'host'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0 );
 has 'vhost'		=> ( isa => 'Str|Undef', is => 'rw', required	=>	0 );
 has 'port'		=> ( isa => 'Str|Undef', is => 'rw', default	=>	5672 );
+has 'sleep'		=>  ( isa => 'Int', is => 'rw', default => 2 );
 
 #### Objects
 has 'connection'=> ( isa => 'Net::RabbitFoot', is => 'rw', lazy	=> 1, builder => "openConnection" );
@@ -48,7 +49,7 @@ around logError => sub {
     my $self 	= 	shift;
 	my $error	=	shift;
 	
-	$self->logCaller("");
+	$self->logCaller("XXXXXXXXXXXXXXXX");
 	$self->logDebug("self->logtype", $self->logtype());
 
 	#### DO logError
@@ -275,7 +276,7 @@ method receiveTask ($taskqueue) {
 			&$handler($this, $body);
 			
 			my $sleep	=	$self->sleep();
-			print "Sleeping $sleep seconds\n";
+			#print "Sleeping $sleep seconds\n";
 			sleep($sleep);
 			
 			#### SEND ACK AFTER TASK COMPLETED

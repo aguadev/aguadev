@@ -255,7 +255,7 @@ method receiveTask ($taskqueues) {
 			
 				my $body 	= 	$var->{body}->{payload};
 				print " [x] Received task in host $host taskqueue '$taskqueue'\n";
-				print "body: $body\n";
+				#print "body: $body\n";
 			
 				my @c = $body =~ /\./g;
 			

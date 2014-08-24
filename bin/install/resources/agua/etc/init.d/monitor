@@ -1,7 +1,7 @@
 #!/bin/sh
 
 ### BEGIN INIT INFO
-# Provides:           agua
+# Provides:           monitor
 # Required-Start:     $syslog $remote_fs
 # Required-Stop:      $syslog $remote_fs
 # Default-Start:      2 3 4 5
@@ -16,12 +16,12 @@ export PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
 
 BASE=$(basename $0)
 
-# modify these in /etc/default/$BASE (/etc/default/agua)
-AGUA=/usr/bin/$BASE
-AGUA_PIDFILE=/var/run/$BASE.pid
-AGUA_LOGFILE=/var/log/$BASE.log
-AGUA_OPTS=
-AGUA_DESC="Agua"
+# modify these in /etc/default/$BASE (/etc/default/monitor)
+MONITOR=/usr/bin/$BASE
+MONITOR_PIDFILE=/var/run/$BASE.pid
+MONITOR_LOGFILE=/var/log/$BASE.log
+MONITOR_OPTS=
+MONITOR_DESC="Monitor"
 
 # Get lsb functions
 . /lib/lsb/init-functions
@@ -32,19 +32,19 @@ fi
 
 # see also init_is_upstart in /lib/lsb/init-functions (which isn't available in Ubuntu 12.04, or we'd use it)
 if [ -x /sbin/initctl ] && /sbin/initctl version 2>/dev/null | grep -q upstart; then
-	log_failure_msg "$AGUA_DESC is managed via upstart, try using service $BASE $1"
+	log_failure_msg "$MONITOR_DESC is managed via upstart, try using service $BASE $1"
 	exit 1
 fi
 
-# Check agua is present
-if [ ! -x $AGUA ]; then
-	log_failure_msg "$AGUA not present or not executable"
+# Check monitor is present
+if [ ! -x $MONITOR ]; then
+	log_failure_msg "$MONITOR not present or not executable"
 	exit 1
 fi
 
 fail_unless_root() {
 	if [ "$(id -u)" != '0' ]; then
-		log_failure_msg "$AGUA_DESC must be run as root"
+		log_failure_msg "$MONITOR_DESC must be run as root"
 		exit 1
 	fi
 }
@@ -78,33 +78,33 @@ case "$1" in
 
 		cgroupfs_mount
 
-		touch "$AGUA_LOGFILE"
-		chgrp agua "$AGUA_LOGFILE"
+		touch "$MONITOR_LOGFILE"
+		chgrp monitor "$MONITOR_LOGFILE"
 
-		log_begin_msg "Starting $AGUA_DESC: $BASE"
+		log_begin_msg "Starting $MONITOR_DESC: $BASE"
 		start-stop-daemon --start --background \
 			--no-close \
-			--exec "$AGUA" \
-			--pidfile "$AGUA_PIDFILE" \
+			--exec "$MONITOR" \
+			--pidfile "$MONITOR_PIDFILE" \
 			-- \
-				-d -p "$AGUA_PIDFILE" \
-				$AGUA_OPTS \
-					>> "$AGUA_LOGFILE" 2>&1
+				-d -p "$MONITOR_PIDFILE" \
+				$MONITOR_OPTS \
+					>> "$MONITOR_LOGFILE" 2>&1
 		log_end_msg $?
 		;;
 
 	stop)
 		fail_unless_root
-		log_begin_msg "Stopping $AGUA_DESC: $BASE"
-		start-stop-daemon --stop --pidfile "$AGUA_PIDFILE"
+		log_begin_msg "Stopping $MONITOR_DESC: $BASE"
+		start-stop-daemon --stop --pidfile "$MONITOR_PIDFILE"
 		log_end_msg $?
 		;;
 
 	restart)
 		fail_unless_root
-		agua_pid=`cat "$AGUA_PIDFILE" 2>/dev/null`
-		[ -n "$agua_pid" ] \
-			&& ps -p $agua_pid > /dev/null 2>&1 \
+		monitor_pid=`cat "$MONITOR_PIDFILE" 2>/dev/null`
+		[ -n "$monitor_pid" ] \
+			&& ps -p $monitor_pid > /dev/null 2>&1 \
 			&& $0 stop
 		$0 start
 		;;
@@ -115,7 +115,7 @@ case "$1" in
 		;;
 
 	status)
-		status_of_proc -p "$AGUA_PIDFILE" "$AGUA" agua
+		status_of_proc -p "$MONITOR_PIDFILE" "$MONITOR" monitor
 		;;
 
 	*)
