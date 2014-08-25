@@ -1456,6 +1456,7 @@ method updateJobStatus ($stage, $status) {
 	#### ADD ANCILLARY DATA
 	$data->{status}		=	$status;	
 	$data->{host}		=	$self->getHostName();
+	$data->{ipaddress}	=	$self->getIpAddress();
 	#$self->logDebug("$$ after host", $data);
 
 	#### ADD STDOUT AND STDERR
@@ -1474,6 +1475,14 @@ method updateJobStatus ($stage, $status) {
 	$self->logDebug("$$ DOING self->worker->sendTask(data)");
 	$self->worker()->sendTask($data);
 	$self->logDebug("$$ AFTER self->worker->sendTask(data)");
+}
+
+method getIpAddress {
+	my $ipaddress	=	`facter ipaddress`;
+	$ipaddress		=~ 	s/\s+$//;
+	$self->logDebug("ipaddress", $ipaddress);
+	
+	return $ipaddress;
 }
 
 method getHostName {

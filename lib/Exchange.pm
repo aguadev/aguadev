@@ -265,7 +265,7 @@ method receiveTask ($taskqueue) {
 	$channel->consume(
 		on_consume	=>	sub {
 			my $var 	= 	shift;
-			#print "Listener::receiveTask    DOING CALLBACK";
+			#print "Exchange::receiveTask    DOING CALLBACK";
 		
 			my $body 	= 	$var->{body}->{payload};
 			print " [x] Received task in host $host taskqueue '$taskqueue': $body\n";
@@ -280,7 +280,7 @@ method receiveTask ($taskqueue) {
 			sleep($sleep);
 			
 			#### SEND ACK AFTER TASK COMPLETED
-			print "Listener::receiveTask    sending ack\n";
+			print "Exchange::receiveTask    sending ack\n";
 			$channel->ack();
 		},
 		no_ack => 0,
@@ -360,6 +360,9 @@ method sendTask ($task) {
 	my $host		=	$self->conf()->getKey("queue:host", undef);
 	
 	print " [x] Sent task in host $host taskqueue '$queuename': '$json'\n";
+
+	$self->logDebug("closing connection");
+	$connection->close();
 }
 
 method addTaskIdentifiers ($task) {

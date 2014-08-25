@@ -30,6 +30,7 @@ use Getopt::Long;
 use FindBin qw($Bin);
 use AnyEvent;
 use Net::RabbitFoot;
+use JSON;
 
 #### USE LIBRARY
 use lib "$Bin/../../lib";	
@@ -82,7 +83,12 @@ GetOptions (
 ) or die "No options specified. Try '--help'\n";
 usage() if defined $help;
 
-#my $object	=	Exchange->new();
+
+my $jsonparser	=	JSON->new();
+my $data		=	$jsonparser->decode($message);
+my $key			=	$data->{queue};
+print "key: $key\n";
+print "Exiting. No queue defined in message: $message\n" and exit if not defined $key;
 
 my $conn = Net::RabbitFoot->new()->load_xml_spec()->connect(
     host 	=> 	$host,
@@ -101,11 +107,11 @@ $channel->declare_exchange(
 
 $channel->publish(
     exchange => $exchange,
-    routing_key => $keys,
+    routing_key => $key,
     body => $message,
 );
 
-print " [x] Sent topic message on host $host exchange $exchange to routing keys $keys: $message\n";
+print " [x] Sent topic message on host $host exchange $exchange to key $key: $message\n";
 
 $conn->close();
 

@@ -404,7 +404,7 @@ method updateJobStatus ($data) {
 	$self->logNote("data", $data);
 	$self->logDebug("data not defined") and return if not defined $data;
 	$self->logDebug("sample not defined") and return if not defined $data->{sample};
-	$self->logDebug("$data->{host} $data->{sample} $data->{status} $data->{time}");
+	$self->logDebug("$data->{host} $data->{sample} $data->{status}");
 	
 	#### UPDATE queuesamples TABLE
 	$self->updateQueueSample($data);	
@@ -414,7 +414,7 @@ method updateJobStatus ($data) {
 }
 
 method updateHeartbeat ($data) {
-	$self->logDebug("host $data->{host} [$data->{time}]");
+	$self->logDebug("host $data->{host} $data->{ipaddress} [$data->{time}]");
 	#$self->logDebug("data", $data);
 	my $keys	=	[ "host", "time" ];
 	my $notdefined	=	$self->notDefined($data, $keys);	

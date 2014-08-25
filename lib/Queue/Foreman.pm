@@ -174,6 +174,8 @@ method sendTask ($task) {
 	#### GET HOST
 	my $host		=	$self->conf()->getKey("queue:host", undef);
 	$self->logDebug("host", $host);
+
+	$self->logDebug("Entering Coro::async_pool");
 	Coro::async_pool {
 
 		#### GET CONNECTION
@@ -196,6 +198,9 @@ method sendTask ($task) {
 		);
 	
 		print " [x] Sent TASK in host $host taskqueue '$queuename': $task->{mode}\n";
+		
+		$self->logDebug("closing connection");
+		$connection->close();
 	}
 	
 }

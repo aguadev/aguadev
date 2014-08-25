@@ -71,76 +71,17 @@ method listen {
 	#### LISTEN FOR TASKS SENT FROM MASTER
 	$self->receiveTask();
 
-	#### PERIODICALLY SEND 'HEARTBEAT' NODE STATUS INFO
-	my $shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
-	while ( not $shutdown eq "true" ) {
-		print "Queue::Worker::listen    DOING sleep\n";
-		my $sleep	=	$self->sleep();
-		print "Queue::Worker::listen    Sleeping $sleep seconds\n";
-		sleep($sleep);
-		$self->heartbeat();
-		
-		$shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
-	}	
-}
-
-method heartbeat {
-	
-	my $time		=	$self->getMysqlTime();
-	my $host		=	$self->getHostName();
-
-	my $arch	=	$self->getArch();
-	if ( $arch eq "ubuntu" ) {
-		`if [ ! -f /usr/bin/mpstat ]; then  apt-get install -y sysstat; fi`;
-	}
-	elsif ( $arch eq "centos" ) {
-		`if [ ! -f /usr/bin/mpstat ]; then  yum install -y sysstat; fi`;
-	}
-	
-	my $cpu		=	$self->getCpu();
-	#$self->logDebug("cpu", $cpu);
-	
-	my $io		=	$self->getIo();
-	#$self->logDebug("io", $io);
-	
-	my $disk		=	$self->getDisk();
-	#$self->logDebug("disk", $disk);
-
-	my $memory		=	$self->getMemory();
-	#$self->logDebug("memory", $memory);
-		
-	my $data	=	{
-		queue	=>	"update.host.status",
-		host	=>	$host,
-		cpu		=>	$cpu,
-		io		=>	$io,
-		disk	=>	$disk,
-		memory	=>	$memory,
-		time	=>	$time,
-		mode	=>	"updateHeartbeat"
-	};
-	#$self->logDebug("data", $data);
-	
-	$self->sendTask($data);
-}
-
-method getHost {
-	return `hostname`;
-}
-method getIo {
-	return `iostat`;
-}
-
-method getCpu {
-	return `mpstat`;
-}
-
-method getDisk {
-	return `df -ah`;
-}
-
-method getMemory {
-	return `sar -r 1 1`;
+	##### PERIODICALLY SEND 'HEARTBEAT' NODE STATUS INFO
+	#my $shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
+	#while ( not $shutdown eq "true" ) {
+	#	print "Queue::Worker::listen    DOING sleep\n";
+	#	my $sleep	=	$self->sleep();
+	#	print "Queue::Worker::listen    Sleeping $sleep seconds\n";
+	#	sleep($sleep);
+	#	$self->heartbeat();
+	#	
+	#	$shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
+	#}	
 }
 
 #### TASKS
@@ -179,14 +120,14 @@ method receiveTask {
 		
 			my @c = $body =~ /\./g;
 		
-			#Coro::async_pool {
+			Coro::async_pool {
 
 				#### RUN TASK
 				&$handler($this, $body);
 				
 				#### SEND ACK AFTER TASK COMPLETED
 				$channel->ack();
-			#}
+			}
 		},
 		no_ack => 0,
 	);
@@ -250,7 +191,7 @@ method sendTask ($task) {
 	my $host		=	$self->conf()->getKey("queue:host", undef);
 	$self->logDebug("host", $host);
 
-	Coro::async_pool {
+#	Coro::async_pool {
 
 		#### GET CONNECTION
 		my $connection	=	$self->newConnection();
@@ -272,7 +213,10 @@ method sendTask ($task) {
 		);
 	
 		print " [x] Sent TASK in host $host taskqueue '$taskqueue': $task->{mode}\n";
-	}
+
+		$self->logDebug("closing connection");
+		$connection->close();
+#	}
 }
 
 method addTaskIdentifiers ($task) {

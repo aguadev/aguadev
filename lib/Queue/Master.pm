@@ -184,7 +184,7 @@ method balanceInstances ($workflows) {
 
 #### DEBUG
 
-$quota		=	2;
+$quota		=	4;
 $self->logDebug("DEBUG quota", $quota);
 
 #### DEBUG
@@ -1740,8 +1740,9 @@ method sendTopic ($data, $key) {
 		body => $json,
 	);
 	
-	print "[x] Sent topic with key '$key'\n";
+	print "[x] Sent topic with key '$key' mode '$data->{mode}'\n";
 
+	$self->logDebug("closing connection");
 	$connection->close();
 }
 

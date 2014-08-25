@@ -413,7 +413,6 @@ method setVirtual {
         }
     ) or die "Can't create virtual of type: $type. $!\n";
 	$self->logDebug("virtual", $virtual);
-$self->logDebug("DEBUG EXIT") and exit;
 	$self->virtual($virtual);
 }
 
