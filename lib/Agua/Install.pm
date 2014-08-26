@@ -89,17 +89,17 @@ method install {
 	#### SET CONF
 	$self->setConf();
 
-	#### SET PUPPET DIRS
-	$self->setPuppetDirs();
+	##### SET PUPPET DIRS
+	#$self->setPuppetDirs();
 	
     ##### INSTALL APACHE
     #$self->installApache();
 
-    #### GENERATE NEW PUBLIC CERTIFICATE (HTTPS)
-    $self->enableHttps();
+    ##### GENERATE NEW PUBLIC CERTIFICATE (HTTPS)
+    #$self->enableHttps();
     
-    #### INSTALL NODE, RABBIT AND AMQP EXCHANGE
-    $self->installExchange();
+    ##### INSTALL NODE, RABBIT AND AMQP EXCHANGE
+    #$self->installExchange();
     
     ##### FIX /etc/fstab SO MICRO INSTANCE CAN REBOOT
     #$self->enableReboot();

@@ -32,7 +32,7 @@ class Queue::Master with (Logger, Exchange, Agua::Common::Database, Agua::Common
 # Integers
 has 'log'	=>  ( isa => 'Int', is => 'rw', default => 2 );
 has 'printlog'	=>  ( isa => 'Int', is => 'rw', default => 5 );
-has 'maxjobs'	=>  ( isa => 'Int', is => 'rw', default => 30 );
+has 'maxjobs'	=>  ( isa => 'Int', is => 'rw', default => 50 );
 has 'sleep'		=>  ( isa => 'Int', is => 'rw', default => 10 );
 
 # Strings
@@ -78,22 +78,19 @@ method initialise ($args) {
 }
 
 method manage {
-	#my $shutdown	=	$self->conf()->getKey("agua:SHUTDOWN", undef);
-	#$self->logDebug("shutdown", $shutdown);
-	#while ( not $shutdown eq "true" ) {
 	while ( 1 ) {
 	
 		my $tenants		=	$self->getTenants();
-		#$self->logDebug("tenants", $tenants);
+		$self->logDebug("tenants", $tenants);
 		foreach my $tenant ( @$tenants ) {
 			my $username	=	$tenant->{username};
 			
 			#### GET PROJECTS
 			my $projects	=	$self->getRunningUserProjects($username);
-			#$self->logDebug("projects", $projects);
+			$self->logDebug("projects", $projects);
 
 			foreach my $project	( @$projects ) {
-				#$self->logDebug("project", $project);
+				$self->logDebug("project", $project);
 	
 				#### GET WORKFLOWS
 				my $workflows	=	$self->getWorkflowsByProject({
@@ -118,9 +115,6 @@ method manage {
 		
 		#### PAUSE
 		$self->pause();
-
-		##### GET SYSTEM SHUTDOWN
-		#$shutdown	=	$self->updateShutdown();
 	}
 	
 	return 1;
@@ -184,7 +178,7 @@ method balanceInstances ($workflows) {
 
 #### DEBUG
 
-$quota		=	4;
+$quota		=	240;
 $self->logDebug("DEBUG quota", $quota);
 
 #### DEBUG

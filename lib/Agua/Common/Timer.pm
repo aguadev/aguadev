@@ -49,7 +49,7 @@ sub runtime {
 	
 	my $run_time = $end_time - $start_time;
 	($run_time) = $self->hoursMinsSecs($run_time);
-#	$self->logDebug("\nRUN TIME", $run_time);
+#	$self->logNote("\nRUN TIME", $run_time);
 
 	return $run_time;	
 }
@@ -133,20 +133,20 @@ sub currentTimeToMysql {
 
 sub getMysqlTime {
 	my $self	=	shift;
-	$self->logDebug("");
+	$self->logNote("");
 	
 	my $time	=	`/bin/date`;
-	$self->logDebug("$$ time", $time);
+	$self->logNote("$$ time", $time);
 	
 	my $mysqltime	=	$self->datetimeToMysql($time);
-	$self->logDebug("$$ mysqltime", $mysqltime);
+	$self->logNote("$$ mysqltime", $mysqltime);
 	
 	return $mysqltime;
 }
 
 sub datetimeToMysql {
 	my $self		=	shift;
-	$self->logDebug("");
+	$self->logNote("");
 	
     # CONVERT FROM DATETIME
 	#
@@ -174,7 +174,7 @@ sub datetimeToMysql {
 	$date = "0" . $date if length($date) == 1;
 	
     my $mysqldatetime = "$year-$month-$date $hour:$minutes:$seconds";
-	$self->logDebug("mysqldatetime", $mysqldatetime);
+	$self->logNote("mysqldatetime", $mysqldatetime);
     
     return $mysqldatetime;
 }
@@ -262,13 +262,13 @@ sub tokeniseString {
 	my $string						=	shift;
 	
 	chomp($string);
-#	$self->logDebug("STRING", $string);
+#	$self->logNote("STRING", $string);
 		
 	my $tokens;	
 	my $token_counter = 0;
 	while ( $string !~ /^\s*$/ )
 	{
-#		$self->logDebug("Do quote check");
+#		$self->logNote("Do quote check");
 		my $token = '';
 		if ( $string =~ s/^\s*"// )
 		{
@@ -277,16 +277,16 @@ sub tokeniseString {
 				$string =~ s/^\s*([^"^\s]+)//;
 				($token) .= "$1 ";
 				$token_counter++;	
-#				$self->logDebug("Token counter (inner): $token_counter", $token);
+#				$self->logNote("Token counter (inner): $token_counter", $token);
 			}
 			$string =~ s/^\s*"//;
-#			$self->logDebug("String at end (inner)", $string);
+#			$self->logNote("String at end (inner)", $string);
 		}
 		else
 		{
 			$string =~ s/^\s*(\S+)\s*//;
 			($token) .= $1;
-#			$self->logDebug("No-quote token", $token);
+#			$self->logNote("No-quote token", $token);
 		}
 		
 		push @$tokens, $token;

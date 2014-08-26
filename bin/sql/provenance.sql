@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS provenance
 	location		VARCHAR(255) NOT NULL,
 
 	host			VARCHAR(40) NOT NULL,
+	ipaddress		VARCHAR(40) NOT NULL,
 	status			VARCHAR(40) NOT NULL,
 	time			datetime,
 	stdout			TEXT,
